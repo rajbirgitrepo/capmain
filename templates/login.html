@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
+	<title>CAPXP Login</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+<!--===============================================================================================-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!--===============================================================================================-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha512-rRQtF4V2wtAvXsou4iUAs2kXHi3Lj9NE7xJR77DE7GHsxgY9RTWy93dzMXgDIG8ToiRTD45VsDNdTiUagOFeZA==" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<!--===============================================================================================-->
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/login_util.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/login_main.css') }}">
+<!--===============================================================================================-->
+
+</head>
+<style>
+
+</style>
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<form method="POST" action="/login" class="login100-form validate-form login">
+					<div style="
+					margin-bottom: 32px;;">
+						<img src="{{ url_for('static',filename='images/Black and Yellow Typographic Art & Design Logo (2).png') }}" style="    width: 29rem;margin-top: 0;">
+						<p style="    margin-left: 22%;">version 5.6 | Innerexplorer</p>
+					</div>
+					<span class="login100-form-title p-b-26">
+						Welcome
+                    </span>
+                    
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
+						<input class="input100" type="text" name="username">
+						<span class="focus-input100" data-placeholder="Email"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Enter password">
+						<span class="btn-show-pass">
+							<i class="zmdi zmdi-eye"></i>
+						</span>
+						<input class="input100" type="password" name="password">
+						<span class="focus-input100" data-placeholder="Password"></span>
+					</div>
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          <div class="notification is-danger" style="margin-top: -27px; color:#e21f46;margin-bottom: 20px;">
+            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+            {{ messages[0] }}
+          </div>
+          {% endif %}
+          {% endwith %}
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<button type="submit" class="login100-form-btn">
+								Login
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<footer>
+		<svg viewBox="0 0 120 28">
+		 <defs> 
+		   <mask id="xxx">
+			 <circle cx="7" cy="12" r="40" fill="#fff" />
+		   </mask>
+		   
+		   <filter id="goo">
+			  <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+			  
+			  <feBlend in="SourceGraphic" in2="goo" />
+			  </filter>
+			 <path id="wave" d="M 0,10 C 30,10 30,15 60,15 90,15 90,10 120,10 150,10 150,15 180,15 210,15 210,10 240,10 v 28 h -240 z" />
+		  </defs> 
+		
+		   <use id="wave3" class="wave" xlink:href="#wave" x="0" y="-2" ></use> 
+		   <use id="wave2" class="wave" xlink:href="#wave" x="0" y="0" ></use>
+		   
+		  <g class="gooeff">
+			<use id="wave1" class="wave" xlink:href="#wave" x="0" y="1" />
+		  
+			<!-- g mask="url(#xxx)">
+			<path   id="wave1"  class="wave" d="M 0,10 C 30,10 30,15 60,15 90,15 90,10 120,10 150,10 150,15 180,15 210,15 210,10 240,10 v 28 h -240 z" />
+			</g>
+		  </g -->
+		
+		</svg>
+		
+		</footer>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		<script src="{{ url_for('static',filename='js/login.js') }}"></script>
+
+	
+
+</body>
+</html>

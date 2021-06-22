@@ -1,0 +1,325 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+          <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+    </head>
+    <style>
+        * {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font: 14px/18px Tahoma, Arial, sans-serif;
+  font-family: 'Poppins', sans-serif !important;
+  background: #f0f7f9;
+}
+
+.container {
+  width: 40vw;
+  margin: auto auto;
+  box-shadow: grey;
+}
+.container6 {
+  width: 40vw;
+  margin: auto auto;
+  box-shadow: grey;
+}
+
+h1 {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px #40361E solid;
+  line-height: 1;
+  font-weight: normal;
+  color: #40361E;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table th,
+table td {
+  font-size: 10px;
+  padding: 20px 10px;
+  text-align: left;
+border-left:20px;
+}
+
+
+table th {
+  padding: 10px 10px;
+  background-color: #00a651;
+  position: relative;
+  cursor: pointer;
+  color: #f2fbfa;
+  border-bottom: solid 15px;
+}
+table th:after {
+  content: "";
+  display: none;
+  width: 0;
+  height: 0;
+  margin-top: -5px;
+  position: absolute;
+  top: 50%;
+  right: 20px;
+}
+table th.asc:after {
+  display: block;
+  border-style: solid;
+  border-width: 0 5px 10px 5px;
+  border-color: transparent transparent #E2E2E2 transparent;
+}
+
+table th.desc:after {
+  display: block;
+  border-style: solid;
+  border-width: 10px 5px 0 5px;
+  border-color: #E2E2E2 transparent transparent transparent;
+}
+
+table tr:nth-child(odd) td {
+  background-color: #efeeee;
+}
+.up,
+.down{
+position: relative;
+}
+.up:before,
+.down:before{
+content:"";
+position: absolute; 
+width: 0; 
+height: 0; 
+border-left: 5px solid transparent;
+border-right: 5px solid transparent;
+top:5px;
+margin-left:5px;
+}
+.up:before{
+border-bottom: 5px solid black;
+}
+.down:before{
+border-top: 5px solid #000;
+}
+.filter-table{
+padding-bottom: 30px;
+}
+.filter-table input{
+width: 60%;
+padding: 15px;
+}
+div.material-table .table-footer {
+  
+  padding-left: 24px;
+  padding-right: 14px;
+  display: -webkit-flex;
+  display: flex;
+  position: absolute;
+  width: 95%;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+  -webkit-align-items: center;
+  align-items: center;
+  font-size: 12px !important;
+  background-color: 
+  #00a651;
+  color: white;
+}
+
+div.material-table .table-footer .dataTables_length {
+  display: -webkit-flex;
+  display: flex;
+  color: #000;
+}
+
+div.material-table .table-footer label {
+  font-size: 16px;
+  
+  color: white;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  /* works with row or column */
+  
+  flex-direction: row;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+div.material-table .table-footer .select-wrapper {
+  display: -webkit-flex;
+  display: flex;
+  
+  background-color: white;
+  -webkit-flex-direction: row;
+  /* works with row or column */
+  
+  flex-direction: row;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+div.material-table .table-footer .dataTables_info,
+div.material-table .table-footer .dataTables_length {
+  margin-right: 32px;
+}
+
+div.material-table .table-footer .material-pagination {
+  display: flex;
+  -webkit-display: flex;
+  margin: 0;
+}
+
+div.material-table .table-footer .material-pagination li:first-child {
+  margin-right: 24px;
+}
+
+div.material-table .table-footer .material-pagination li a {
+  color: white;
+}
+
+div.material-table .table-footer .select-wrapper input.select-dropdown {
+  margin: 0;
+  border-bottom: none;
+  background-color: greenyellow;
+  height: auto;
+  line-height: normal;
+  font-size: 12px;
+  width: 40px;
+  text-align: right;
+}
+
+div.material-table .table-footer select {
+  background-color: transparent;
+  width: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  height: auto;
+  margin-left: 20px;
+}
+
+div.material-table .table-title {
+  font-size: 20px;
+  color: #00a651;
+}
+    </style>
+    <body>
+
+
+
+        <section>
+            <div class="welcome2">
+              <div class="container-fluid">
+           <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
+              <div class="row">
+                  <div id="admin" class="col-md-12" >
+                    <div class="card material-table">
+                      <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"  download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
+                      </a>
+                      <div class="table-header" >
+                        <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
+                      </div>
+                      
+                         <div class="custyle" id ="next" >
+                         </div>
+                         <div class="custyle" id ="next1" ></div>
+                    </div>
+                  </div>
+              </div>
+           </div>
+           </div>
+           </div>
+           </section>
+
+
+        <script>
+
+createDynamic('https://capapi.innerexplorer.org/word_cloud_chart/Cloud/5/2020-11-01/2021-03-01');
+
+            function createDynamic(url) {
+  var settings = {
+    async: true,
+    crossDomain: true,
+    url: url,
+    method: "GET",
+  };
+  $.ajax(settings).done(function (response) {
+    var data1 = JSON.parse(response);
+
+    $("#next").prepend(
+      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL ID</th><th>DEVICE USED</th><th>MODE OF PAYMENT</th><th>TYPE OF PAYMENT</th><th>PAYMENT DATE</th><th>AMOUNT</th></tr ></thead ><tbody>'
+    );
+    for (var i = 0; i < data1.positivetable.length; i++) {
+      var datain = data1.positivetable[i];
+      var resultDiv = createDynamicDiv(datain);
+
+      $("#dataTable").append(resultDiv);
+    }
+    //$('#dataTable1').append('</tbody></table>');
+    $("#dataTable").append("</tbody></table>");
+    dataTab();
+
+    $("#next1").prepend(
+      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>EMAIL ID</th><th>DEVICE USED</th><th>MODE OF PAYMENT</th><th>TYPE OF PAYMENT</th><th>PAYMENT DATE</th><th>AMOUNT</th></tr ></thead ><tbody>'
+    );
+    for (var i = 0; i < data1.data.length; i++) {
+      var datain = data1.data[i];
+
+      var resultDiv = createDynamicDiv(datain);
+      $("#dataTable1").append(resultDiv);
+    }
+    $("#dataTable1").append("</tbody></table>");
+  });
+}
+function dataTab() {
+  $("#dataTable").DataTable({
+    pageLength: 50,
+  });
+}
+function createDynamicDiv(userList) {
+  var dynamicDiv = "";
+  console.log(userList);
+
+  dynamicDiv +=
+    "<tr >" +
+    "<td>" +
+    userList[0] +
+    "</td>" +
+    "<td>" +
+    userList[1] +
+    "</td>" +
+    "<td>" +
+    userList[2] +
+    "</td>" +
+    "<td>" +
+    userList[3] +
+    "</td>" +
+    "<td>" +
+    userList[4] +
+    "</td>" +
+    "<td>" +
+    userList[5] +
+    "</td>" +
+    "<td>" +
+    userList[6] +
+    "</td>" +
+    "</tr>";
+
+  return dynamicDiv;
+}
+        </script>
+    </body>
+</html>

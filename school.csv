@@ -1,0 +1,92 @@
+,USER_NAME,EMAIL_ID,DEVICE_USED,MODE_OF_PAYMENT,TYPE_OF_PAYMENT,Last_Payment_Date,Payment_Amount
+0,Delna Bliss,delna.bliss@millardk12.org,WEBAPP,SQUARE PAYMENT,SCHOOL,2021-01-25,1400.0
+2,SUPER ADMIN,lbakosh@innerexplorer.org,WEBAPP,PAYPAL,SCHOOL,2020-10-23,1400.0
+3,Sarah Castro,scastro@bridge-rayn.org,WEBAPP,SIGNUP,SCHOOL,2021-01-12,1000.0
+5,Tracy Schenk,tschenk@pagosa.k12.co.us,WEBAPP,SQUARE PAYMENT,SCHOOL,2020-09-22,1000.0
+10,MARLENE RAMIREZ,MER0800@LAUSD.NET,WEBAPP,OTHERS,SCHOOL,2020-10-28,1000.0
+13,Jen McDonald,j_mcdonald@ludlowps.org,WEBAPP,PAYPAL,SCHOOL,2020-11-02,1000.0
+14,Ricardo Tamayo,ricardo.tamayo@vistamiddle.net,WEBAPP,SIGNUP,SCHOOL,2020-08-31,990.0
+15,Jill DeVane,Jill.DeVane@hhchealth.org,WEBAPP,SIGNUP,SCHOOL,2020-08-28,210.0
+20,Judy,jxiong@canyon.k12.ca.us,WEBAPP,SIGNUP,SCHOOL,2020-08-30,1000.0
+21,MarciTaylor,mtaylor3@graniteschools.org,WEBAPP,SQUARE PAYMENT,SCHOOL,2020-11-09,1000.02001953125
+31,Griffin Snider,jensnider530@gmail.com,WEBAPP,SQUARE PAYMENT,SCHOOL,2020-07-02,2100.0
+36,Joshua Nichols,jnichols@amboy.net,WEBAPP,SQUARE PAYMENT,SCHOOL,2021-01-27,1400.0
+37,Artrice Shine,artrice.shine@browardschools.com,WEBAPP,SIGNUP,SCHOOL,2020-08-21,1400.0
+40,Rollin Dubois,rdubois@englewoodcliffs.org,NO INFO,APPLE,SCHOOL,2021-03-18,59.9900016784668
+41,amela backes,nicolehigel@hotmail.com,WEBAPP,PAYPAL,SCHOOL,2020-08-31,2079.0
+42,L,henleykindergarten@icloud.com,NO INFO,APPLE,SCHOOL,2021-01-26,59.9900016784668
+44,Jeffrey R Schommer,jschommer@nwphs.org,WEBAPP,SIGNUP,SCHOOL,2020-09-03,1000.0
+46,alex,alexvann@gmail.com,WEBAPP,SIGNUP,SCHOOL,2020-07-18,1000.0
+48,Shannon New,shannonnew@mays.k12.in.us,WEBAPP,SQUARE PAYMENT,SCHOOL,2020-07-28,2100.0
+50,Diane Richards,drichard@hamadyhawks.net,WEBAPP,SIGNUP,SCHOOL,2020-09-15,1000.0
+57,Rita Bergquist,rita_bergquist@bismarckschools.org,WEBAPP,SQUARE PAYMENT,SCHOOL,2020-10-27,1000.0
+58,Jenny Gempeler,jgempeler@ssummit.org,WEBAPP,SQUARE PAYMENT,SCHOOL,2020-10-29,1400.0
+65,Heather Young,heatheryoung@alpinedistrict.org,WEBAPP,SQUARE PAYMENT,SCHOOL,2021-01-20,1000.0
+68,LaShonda Tillmon ,ltillmon@psusd.us,WEBAPP,SQUARE PAYMENT,SCHOOL,2021-03-31,1400.0
+69,Northwood,dixonbs@fultonschools.org,WEBAPP,SQUARE PAYMENT,SCHOOL,2021-04-19,1400.0
+0,Amanda Suraci,asuraci@pleasantonusd.net,OFFLINE,CHEQUE,SCHOOL,2020-08-01,1000.0
+1,Staci Anderson,stacianderson@mtsd.us,OFFLINE,CHEQUE,SCHOOL,2020-07-24,1000.0
+2,Carla Peterson,cpeterson@rvschools.org,OFFLINE,CHEQUE,SCHOOL,2021-03-01,1000.0
+3,Jennifer,jenn.andes@alturaprep.org,OFFLINE,CHEQUE,SCHOOL,2020-08-25,1000.0
+4,Denise Fenton,dfenton@psusd.us,OFFLINE,CHEQUE,SCHOOL,2020-07-01,1000.0
+5,Heidi Thompson,hthompson@melissaisd.org,OFFLINE,CHEQUE,SCHOOL,2020-08-06,1000.0
+6,Kaitlin ODonnell,kodonnell@mtsd.us,OFFLINE,CHEQUE,SCHOOL,2020-08-18,1000.0
+7,Nadalee Daves,nadalee.daves@krumisd.net,OFFLINE,CHEQUE,SCHOOL,2020-08-19,1400.0
+8,Jacquelyn Cunningham,Jacquelyn.cunningham@stockdaleisd.org,OFFLINE,CHEQUE,SCHOOL,2020-08-24,1000.0
+9,North Star Counseling Center,edservices@inyocoe.org,OFFLINE,CHEQUE,SCHOOL,2020-07-19,1000.0
+10,Stacey B Ward,sward@psusd.us,OFFLINE,CHEQUE,SCHOOL,2020-08-21,1000.0
+11,Teresa Patterson,pattersont@pcsb.org,OFFLINE,CHEQUE,SCHOOL,2020-09-01,2800.0
+12,Andy Stotz,andy.stotz@swcsd.us,OFFLINE,CHEQUE,SCHOOL,2020-08-23,1000.0
+13,Dr Cathy Cervantes,cathy_cervantes@cjusd.net,OFFLINE,CHEQUE,SCHOOL,2020-10-17,1000.0
+14,Cynthia Orr,cynthia.orr@cvesd.org,OFFLINE,CHEQUE,SCHOOL,2020-09-14,1000.0
+15,Kelsey Schatte,kelsey.schatte@elginisd.net,OFFLINE,CHEQUE,SCHOOL,2020-09-25,1400.0
+16,Wanda Vinson,wanda.vinson@sdhc.k12.fl.us,OFFLINE,CHEQUE,SCHOOL,2020-09-25,1000.0
+17,Sonja Davidson,davidsons@ogdensd.org,OFFLINE,CHEQUE,SCHOOL,2020-09-30,1400.0
+18,Alyson Reid,alyson.reid@schoolsofwestfield.org,OFFLINE,CHEQUE,SCHOOL,2020-09-30,1000.0
+19,iamoneTruTH.org,iamoneTruTH.org,OFFLINE,CHEQUE,SCHOOL,2020-10-01,500.0
+20,Angelica Torres,cni@besd.org,OFFLINE,CHEQUE,SCHOOL,2020-08-25,1400.0
+21,Jenna Miller,jenna.miller@canyonsdistrict.org,OFFLINE,CHEQUE,SCHOOL,2020-10-06,999.0
+22,Diane Brown,browndi@springfieldpublicschools.com,OFFLINE,CHEQUE,SCHOOL,2020-10-23,1000.0
+23,Dr Barbara Rountree,brountree@thecapitolschool.com,OFFLINE,CHEQUE,SCHOOL,2020-10-14,1000.0
+24,Brian,blewy@cocsd.k12.az.us,OFFLINE,CHEQUE,SCHOOL,2020-10-22,1000.0
+25,Andrew Sanchez,andrew.sanchez@rpcsaz.org,OFFLINE,CHEQUE,SCHOOL,2020-10-15,1000.0
+26,Rebecca Quisenberry,rebecca.quisenberry@nisd.net,OFFLINE,CHEQUE,SCHOOL,2020-10-21,1400.0
+27,Pamela Horton,phorton@psusd.us,OFFLINE,CHEQUE,SCHOOL,2020-10-27,1000.0
+29,Nina Odatalia,nodatalla@teaneckschools.org,OFFLINE,CHEQUE,SCHOOL,2020-10-26,1400.0
+30,Maria,maria.fajardocorrea@students.teaneckschools.org,OFFLINE,CHEQUE,SCHOOL,2020-10-26,1400.0
+31,Greg Moffitt,gmoffitt@vacavilleusd.org,OFFLINE,CHEQUE,SCHOOL,2020-10-16,1000.0
+32,Misti Warner,warnermi@tcapsstudent.net,OFFLINE,CHEQUE,SCHOOL,2020-09-30,210.0
+33,Margarita Belmares,margaritabelmares@gisd.org,OFFLINE,CHEQUE,SCHOOL,2020-11-18,1400.0
+34,Sabrina Hendrickson,sabrina.hendrickson@krumisd.net,OFFLINE,CHEQUE,SCHOOL,2020-11-01,1000.0
+35,Attention Lorraine Tallman,lorraine@amandahope.org,OFFLINE,CHEQUE,SCHOOL,2020-12-15,1400.0
+36,Eileen,belastocke@nausetschools.org,OFFLINE,CHEQUE,SCHOOL,2021-01-01,1000.0
+37,Andrew Peterson,apeterson@tooeleschools.org,OFFLINE,CHEQUE,SCHOOL,2021-01-01,1000.0
+38,Nancy Sirski,nancy_sirski@mtbaldy.k12.ca.us,OFFLINE,CHEQUE,SCHOOL,2021-01-04,1000.0
+39,Zach Eagar,zeagar@alpinedistrict.org,OFFLINE,CHEQUE,SCHOOL,2021-01-15,1000.0
+40,Stacia Lemond,slemondflaherty@bostonpublicschools.org,OFFLINE,CHEQUE,SCHOOL,2021-03-26,1000.0
+182,Angela Krampitz,akrampitz@graceschool.org,OFFLINE,CHEQUE,SCHOOL,2021-01-26,1000.0
+183,Denise Martell,martelld@sfusd.edu,OFFLINE,CHEQUE,SCHOOL,2021-01-21,1400.0
+184,Delna Bliss,delna.bliss@millardk12.org,OFFLINE,CHEQUE,SCHOOL,2021-01-22,1400.0
+185,Dina Winterton,dwinterton@sandi.net,OFFLINE,CHEQUE,SCHOOL,2021-01-26,1250.0
+186,Ilene Strong,istrong@alpinedistrict.org,OFFLINE,CHEQUE,SCHOOL,2021-01-20,1000.0
+187,Lisa Buley,lbuley@lacrossesd.org,OFFLINE,CHEQUE,SCHOOL,2021-02-02,2000.0
+188,Steve Elizondo,selizondo@sandi.net,OFFLINE,CHEQUE,SCHOOL,2021-02-11,1200.0
+189,Oscar Zenteno Romero,novato1979@gmail.com,OFFLINE,CHEQUE,SCHOOL,2021-02-12,1000.0
+193,Sue,Sue_Audibert@needham.k12.ma.us,OFFLINE,CHEQUE,SCHOOL,2021-03-01,1400.0
+194,Joann Akrawi,akrawi@gesd.us,OFFLINE,CHEQUE,SCHOOL,2021-03-15,1400.0
+196,Pam Thatcher,pthatcher@alpinedistrict.org,OFFLINE,CHEQUE,SCHOOL,2021-03-03,999.0
+197,Joshua Nichols,jnichols@amboy.net,OFFLINE,CHEQUE,SCHOOL,2021-03-05,1000.0
+199,Chris Platamone,cplatamone@psusd.us,OFFLINE,CHEQUE,SCHOOL,2021-03-25,1400.0
+200,Debbie Lerner,dlerner@thermalito.org,OFFLINE,CHEQUE,SCHOOL,2021-04-01,1400.0
+201,Aaron Tarzian,atarzian@psusd.us,OFFLINE,CHEQUE,SCHOOL,2021-04-06,1400.0
+202,Jamie Wright,jamie.wright@rogueriver.k12.or.us,OFFLINE,CHEQUE,SCHOOL,2021-04-08,1400.0
+204,Jocie Zaja,jzaja@lacrossesd.org,OFFLINE,CHEQUE,SCHOOL,2021-04-14,1000.0
+205,Tanya Vaughn,tvaughn@lacrossesd.org,OFFLINE,CHEQUE,SCHOOL,2021-04-14,1000.0
+206,Nadia Tovar,ntovar@psusd.us,OFFLINE,CHEQUE,SCHOOL,2021-04-15,1400.0
+207,Ross,lross@psusd.us,OFFLINE,CHEQUE,SCHOOL,2021-04-19,1400.0
+209,LaShonda Tillmon,ltillmon@psusd.us,OFFLINE,CHEQUE,SCHOOL,2021-04-19,1400.0
+210,Adam Hoover,adhoover@colonialsd.org,OFFLINE,CHEQUE,SCHOOL,2021-04-19,1000.0
+211,Lisa D Roberts,LRoberts13@schools.nyc.gov,OFFLINE,CHEQUE,SCHOOL,2021-04-21,1754.0
+212,Kimberly Starks,Kimberly_Starks@mcpsmd.org,OFFLINE,CHEQUE,SCHOOL,2021-04-27,1400.0
+213,liz,ebarric@schools.nyc.gov,OFFLINE,CHEQUE,SCHOOL,2021-04-30,1400.0
+214,Angela Stornaiuolo,ps102uft@gmail.com,OFFLINE,CHEQUE,SCHOOL,2021-05-03,1400.0

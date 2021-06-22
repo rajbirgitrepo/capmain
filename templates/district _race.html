@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<!-- partial:index.partial.html -->
+<html lang="en">
+  <head>
+  <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
+    <meta charset="UTF-8">
+    <title>CAPXP RACE CHART</title>
+    <link rel='stylesheet' href='https://cdnjs 
+.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'> <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/search2.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/exbarchat.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/mainpractice.css') }}">
+    
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/journeystyle.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-EWVQZSV89G');
+</script>
+</head>
+
+  <style>
+ 
+ @import "https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css";
+#container {
+    height: 900px;
+    width: 1200px;
+    margin: 0 auto;
+}
+.loading {
+    margin-top: 10em;
+    text-align: center;
+    color: gray;
+}
+#play-controls {
+    text-align: center;
+    min-width: 310px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 5px 0 1em 0;
+    top: 440px;
+}
+#play-controls * {
+    display: inline-block;
+    vertical-align: middle;
+}
+#play-pause-button {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    font-size: 15px;
+    cursor: pointer;
+    border: 1px solid silver;
+    border-radius: 3px;
+    background: #f8f8f8;
+}
+
+
+#play-range {
+  transform: translateY(2.5px);
+   height: 22px;
+   width: 600px;
+
+}
+
+#steplist {
+	display: flex;
+	width: 66.5%;
+	justify-content: space-between;
+	margin-top: -10px;
+  margin-left: 170px;
+	padding-top: -10px;
+	opacity: 1;
+}
+
+#steplist option {
+	width: 2ex;
+	display: flex;
+	justify-content: center;
+	height: auto;
+	align-items: end;
+	background-image: url("tick.png");
+	background-position-y: -15px;
+	background-position-x: center;
+	z-index: -1;
+}
+
+#play-output {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 101px;
+height: 39px;
+  border: 3px solid black;
+  padding: 8px;
+  margin: 6px;
+}
+  </style>
+  <body class="body">
+    <nav class="navbar navbar-default">
+      <div class="">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="page_Heading" href="#">DISTRCIT RACE CHART</a>
+          <a href="homepage">
+            <img src="{{ url_for('static',filename='images/capwhite.png') }}" alt=""
+              class="logo">
+          </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li style="left: 2px;
+            top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true" style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i><p style="float: right;">Views</p><p id="count" style="float: right;margin-right: 3px;"></p></li>
+             <!--<li style="left: 10px;
+            top: 34px;
+            color: #fff;
+            cursor: pointer;" id="myBtn"><i class="fa fa-lightbulb-o" style="margin-top:2px;"></i><p style="float: right;">Insights</p><p style="float: right;margin-right: 3px; margin-left: 5px;">3</p></li>-->
+            <li style="left:10px;top:18px;" ><a id="share" href="#"><i class="fa fa-share" aria-hidden="true" style="margin-top:2px;margin-right: 3px;"></i></a></li>
+            <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1" class="fa fa-bars show-side-btn"></i></a></li>
+            <li style="margin-top: 27px;">
+              <div class="dropdown">
+                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid" style="display: none;">{{g.user.id}}</span></button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a></li>  
+                  <hr />
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>   
+                </ul>
+              </div>
+          </ul>
+        </div>
+        <div class="input-Container ui-widget">
+        <i class="fa fa-search Icon"></i>
+        <div id="iid" class="input-Field">
+        </div>
+        <button class="search_Bt" onclick=search() id="hel">SEARCH</button>
+        <p style="display: none;" id="tagdescription" ></p>
+        <p style="display: none;" id="tagdescription" ></p>
+        <!--<div class="select_Bt">
+        <select id="myselect" style="margin-top: 7px;">
+          <option value="1">DASHBAORD</option>
+          <option value="2">SCHOOL</option>
+        </div>
+      </select>-->
+      </div>     
+      </div>
+    </div>
+    </nav>
+    <aside class="side-nav" id="show-side-navigation1">
+      <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
+      <ul class="categories" style="margin-top:100px;">
+        <li>
+          <i class="fa fa-home" aria-hidden="true"></i>
+          <a href="#">EXECUTIVE SUMMARY</a>
+          <ul class="side-nav-dropdown">
+            <li>
+              <a href="Executive_Dashboard">CAP SUMMARY</a></li>
+            <li><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
+            <li><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
+            <li><a href="aws_releases">COMPASS RELEASES</a></li>
+<li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
+            <li><a href="awsmain">AWS ANALYTICS</a></li>
+            <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
+                        <li><a href="21daystreak">21 Day Streak</a></li>
+            
+          </ul>
+        </li>
+        <li class="active"><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
+          <ul class="side-nav-dropdown">
+            <li class="active2"><a href="School_Analytics">SCHOOL ANALYTICS</a></li>
+            <li class="active2"><a href="School_Search">SCHOOL SEARCH</a></li>
+            <li class="active2"><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
+            <li class="active2"><a href="Disctrictfilter">DISTRICT 360</a></li>
+          <li class="active2"><a href="partner">PARTNER PORTAL</a></li>
+
+            <!-- <li><a href="District_level_view_RUSD">DISTRICT SPYDER VIEW</a></li> -->
+             <li class="active2"><a href="ddt">DISTRICT DDT</a></li>
+<li class="active2"><a href="district _race">DISTRICT RACE CHART</a></li>
+          </ul>
+        </li>
+        <li><i class="fa fa-history"></i><a href="#">PRACTICE ANALYTICS</a>
+          <ul class="side-nav-dropdown">
+            <li><a href="Practice_Analytics">SCHOOL PRACTICE ANALYTICS</a></li>
+            <li><a href="Scoology">SCHOOLOGY</a></li>
+            <li><a href="Family_practice_analytics">APP PRACTICE ANALYTICS</a></li>
+            <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
+              <li><a href="audio_analytics">AUDIO ANALYTICS</a></li>
+            <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
+            <li><a href="Practice_streak">PRACTICE STREAK</a></li>
+            <li><a href="pracbifurcation">PRACTICE BIFURCATION</a></li>
+          </ul>
+        </li>
+        <li>
+          <i class="fa fa-dollar"></i><a href="#">REVENUE DASHBOARDS</a>
+          <ul class="side-nav-dropdown">
+            <li><a href="Transaction_Reporting">REVENUE OVERVIEW</a></li>
+            <li><a href="Donation">DONATION DASHBOARD</a></li>
+            <li><a href="School_Revenue">SCHOOL REVENUE</a></li><li><a href="Bill_later">BILL ME LATER</a></li>
+          </ul>
+        </li>
+<li><i class="fa fa-bolt"></i><a href="#">FEEDBACK AND SURVEY</a>
+          <ul class="side-nav-dropdown">
+            <li><a href="feedback_Analyitcs">FEEDBACK ANAYLTICS</a></li>
+            <li><a href="sentiment">SENTIMENT ANAYLTICS</a></li>
+            <li><a href="feedback_Trends">FEEDBACK TRENDS</a></li>
+            <li><a href="Family_SURVEY">HOME SURVEY ANALYTICS</a></li>
+            <li><a href="feedback_Analyitcs_family">HOME FEEDBACK ANALYTICS</a></li>
+          </ul>
+        </li>
+        <li>
+          <i class="fa fa-users "></i><a href="#">SUBSCRIPTION DASHBOARDS</a>
+          <ul class="side-nav-dropdown">
+                        <li><a href="Upcoming_Renewals">UPCOMING RENEWAL</a></li>
+            <li><a href="d1districts">D1 Districts</a></li>
+<li><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
+            <li><a href="Sms_analytics">SMS ANALYTICS</a></li>
+            
+          </ul>
+        </li>
+        
+        <li><i class="fa fa-star"></i><a href="#">APP ANALYTICS</a>
+          <ul class="side-nav-dropdown">
+            <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
+            <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
+            <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>
+            <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
+            <li><a href="Android_analytics">ANDROID ANALYTICS</a></li>
+            <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
+          </ul>
+        </li>
+        <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">5.7.2</span></a>
+      </li>
+<!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
+</aside>
+  <section id="contents">
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+    
+      <!-- Modal content -->
+      <div class="modal-content">
+        <button onclick="cose()">Close X</button>
+        <section class="mtsection">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header no-border">
+                    <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil" aria-hidden="true" style="float: right;cursor: pointer;" ></i></a></h4>
+                    
+        
+                  </div>
+                  <div class="card-body card-contentt">
+                    <div class="card-block">
+                      <p id = "schoolname"></p>
+                      <p id = "admin"></p>
+                      <p id = "email"></p>
+                      <p id = "adress"></p>
+                       <p id = "city"></p>
+                      <p id = "state"></p>
+                      <p id = "country"></p>
+                      <p style="float: left;margin-right: 9px;"><b>Renewal Date:</b> <p id = "renewal"></p> </p>                           
+                      </a>
+                      </p>
+                          
+                          
+                          
+        
+                    </div>
+                  </div>
+                </div>
+              </div>
+        
+              <div class="col-md-6">
+              
+               
+               
+               <section class="mtsection">
+          <div class="">
+            <div class="pcard">
+              <div class="col-md-6 col-sm-6">
+                <div class="card card-stats">
+                  <div class="card-header" data-background-color="rose1">
+                    <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
+                  </div>
+                  <div class="card-content">
+                    <p class="category">Total Users</p>
+                    <h3 class="card-title" id="ucount"></h3>
+                    
+                                      
+                  </div>
+                
+                </div>
+              </div>
+        
+              <div class="col-md-6 col-sm-6">
+                <div class="card card-stats">
+                  <div class="card-header" data-background-color="rose">
+                      <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                  </div>
+                  <div class="card-content">
+                    <p class="category">Practice Count</p>
+                    <h3 class="card-title" id="pcount"></h3>
+                  </div>
+        
+                </div>
+              </div>
+        
+              <div class="col-md-6 col-sm-6">
+                <div class="card card-stats">
+                  <div class="card-header" data-background-color="green">
+                    <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
+                  </div>
+                  <div class="card-content">
+                    <p class="category"> Mindful Minutes</p>
+                    <h3 class="card-title" id="mindfulness_minutes"></h3>
+                  </div>
+                  <!-- <div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons text-danger">warning</i> <a href="#pablo">Get More Space...</a>
+                </div>
+              </div> -->
+                </div>
+              </div>
+        
+              <div class="col-md-6 col-sm-6">
+                <div class="card card-stats">
+                  <div class="card-header" data-background-color="blue">
+                    <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
+                  </div>
+                  <div class="card-content">
+                    <p class="category">5 Star Ratings</p>
+                    <h3 class="card-title" id="ratings"></h3>
+                  </div>
+                  <!-- 	<div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons text-danger">warning</i> <a href="#pablo">Get More Space...</a>
+                </div>
+              </div> -->
+                </div>
+              </div>
+
+              <button class="ex_Button" onclick="explore()">Explore School</button>
+        
+            </div>
+        
+          </div>
+        
+          </section>
+               
+               
+               
+               </div>
+            </div>
+          </div>
+          </section>
+      </div>
+    
+    </div>
+
+      
+          
+          
+        </div>
+        <div style="margin-top: 20px;" id="container"></div>
+        <div id="play-controls">
+            <button id="play-pause-button" class="fa fa-play" title="play"></button>
+            <input id="play-range" type="range" value="0" min="0" max="19" >
+          
+            <output id="play-output" for="play-range" name="year">START</output>
+        </div>
+        
+  
+              
+</section>
+
+<!-- <div id="popup1" class="overlay">
+  <div class="popup">
+    <h2 style="margin-left: 40px;">CONTACT US</h2>
+    <a class="close" href="#" style="right: 67px !important;">&times;</a>
+    <div class="content">
+      <form class="form" id="contactForm">
+        
+        <p type="Name:"><input name="name" id="name" placeholder="Name"></input></p>
+        <p type="Email:"><input  name="subject"  id="subject" placeholder="Please Add Subject"></input></p>							
+          <textarea class="textbox" name="description" id="description" cols="30" rows="7" placeholder="Description"></textarea>
+        <button class="contactbutton">Send Query</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div id="popup2" class="overlay">
+  <div class="popup">
+    <h2>Insights</h2>
+    <a class="close" href="#" style="right: 120px !important; opacity: 100% !important;">&times;</a>
+    <div class="content">
+     
+
+                     
+      <div class="toast" id="clonemother">
+        <div class="toast-content">
+          <div class="before"></div>
+          <div class="icon">&#x2714</div>
+          <div class="text">
+            <p>PRACTICE ANALYTICS</p>
+            <p class="message" id="Practice_Analytics"></p>
+          </div>
+          <div onclick="deletethis()" class="close">&#x00D7</div>
+        </div>
+      </div>
+  
+              <div class="toast" id="clonemother">
+                <div class="toast-content">
+                  <div class="before"></div>
+                  <div class="icon">&#x2714</div>
+                  <div class="text">
+                    <p>Practice Trend</p>
+                    <p class="message" id="Practice_Trend"></p>
+                  </div>
+                  <div onclick="deletethis()" class="close">&#x00D7</div>
+                </div>
+              </div>
+              
+              <div class="toast" id="clonemother">
+                <div class="toast-content">
+                  <div class="before"></div>
+                  <div class="icon">&#x2714</div>
+                  <div class="text">
+                    <p>Active User Trend</p>
+                    <p class="message" id="Active_User_Trend"></p>
+                  </div>
+                  <div onclick="deletethis()" class="close">&#x00D7</div>
+                </div>
+              </div>
+
+              <div class="toast" id="clonemother">
+                <div class="toast-content">
+                  <div class="before"></div>
+                  <div class="icon">&#x2714</div>
+                  <div class="text">
+                    <p>Program Wise Practice Trend</p>
+                    <p class="message" id="Program_Wise_Practice_Trend"></p>
+                  </div>
+                  <div onclick="deletethis()" class="close">&#x00D7</div>
+                </div>
+              </div>
+
+              <div class="toast" id="clonemother">
+                <div class="toast-content">
+                  <div class="before"></div>
+                  <div class="icon">&#x2714</div>
+                  <div class="text">
+                    <p>Program Wise Active Users Trend</p>
+                    <p class="message" id="Program_Wise_Active_Users_Trend"></p>
+                  </div>
+                  <div onclick="deletethis()" class="close">&#x00D7</div>
+                </div>
+              </div>
+
+              <div class="toast" id="clonemother">
+                <div class="toast-content">
+                  <div class="before"></div>
+                  <div class="icon">&#x2714</div>
+                  <div class="text">
+                    <p>Day Wise Practice Count</p>
+                    <p class="message" id="Day_Wise_Practice_Count"></p>
+                  </div>
+                  <div onclick="deletethis()" class="close">&#x00D7</div>
+                </div>
+              </div>
+
+              <div class="toast" id="clonemother">
+                <div class="toast-content">
+                  <div class="before"></div>
+                  <div class="icon">&#x2714</div>
+                  <div class="text">
+                    <p>Day Wise Active Users Count</p>
+                    <p class="message" id="Day_Wise_Active_Users_Count"></p>
+                  </div>
+                  <div onclick="deletethis()" class="close">&#x00D7</div>
+                </div>
+              </div>
+
+              <div class="toast" id="clonemother">
+                <div class="toast-content">
+                  <div class="before"></div>
+                  <div class="icon">&#x2714</div>
+                  <div class="text">
+                    <p>Average Practice Trend</p>
+                    <p class="message" id="Average_Practice_Trend"></p>
+                  </div>
+                  <div onclick="deletethis()" class="close">&#x00D7</div>
+                </div>
+              </div>
+                 
+
+                   
+                
+                    
+          
+   
+        <section>
+ 
+    </div>
+    
+    
+  </div>
+</div> -->
+
+  <!-- <div class="botIcon">
+    <div class="botIconContainer">
+      <div class="iconInner">
+        <img src="{{ url_for('static',filename='images/compasslogo.png') }}">
+      </div>
+    </div>
+    <div class="Layout Layout-open Layout-expand">
+      <div class="Messenger_messenger">
+        <div class="Messenger_header">
+          <h4 class="Messenger_prompt" style="color: #fff;">CAPXP Bot</h4> <span class="chat_close_icon"><i
+              class="fa fa-window-close" aria-hidden="true"></i></span>
+        </div>
+        <div class="Messenger_content">
+          <div class="Messages">
+            <div class="Messages_list"></div>
+          </div>
+          <form id="messenger">
+            <div class="Input Input-blank">
+          
+              <input name="msg" class="Input_field" placeholder="Send a message..." autocomplete="off">
+              <button type="submit" class="Input_button Input_button-send">
+                <div class="Icon">
+                  <svg viewBox="1496 193 57 54" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g id="Group-9-Copy-3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
+                      transform="translate(1523.000000, 220.000000) rotate(-270.000000) translate(-1523.000000, -220.000000) translate(1499.000000, 193.000000)">
+                      <path
+                        d="M5.42994667,44.5306122 L16.5955554,44.5306122 L21.049938,20.423658 C21.6518463,17.1661523 26.3121212,17.1441362 26.9447801,20.3958097 L31.6405465,44.5306122 L42.5313185,44.5306122 L23.9806326,7.0871633 L5.42994667,44.5306122 Z M22.0420732,48.0757124 C21.779222,49.4982538 20.5386331,50.5306122 19.0920112,50.5306122 L1.59009899,50.5306122 C-1.20169244,50.5306122 -2.87079654,47.7697069 -1.64625638,45.2980459 L20.8461928,-0.101616237 C22.1967178,-2.8275701 25.7710778,-2.81438868 27.1150723,-0.101616237 L49.6075215,45.2980459 C5.08414042,47.7885641 49.1422456,50.5306122 46.3613062,50.5306122 L29.1679835,50.5306122 C27.7320366,50.5306122 26.4974445,49.5130766 26.2232033,48.1035608 L24.0760553,37.0678766 L22.0420732,48.0757124 Z"
+                        id="sendicon" fill="#96AAB4" fill-rule="nonzero"></path>
+                    </g>
+                  </svg>
+                </div>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+       
+<script src='http://code.jquery.com/jquery-latest.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js'></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
+
+<script src='js/main.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://code.highcharts.com/highcharts.js'></script>
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+<script  src="{{ url_for('static',filename='js/racechartpractice.js') }}"></script>
+<script  src="{{ url_for('static',filename='js/practicemain.js') }}"></script>
+<!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
+<script src="{{ url_for('static',filename='js/countapi.js') }}"></script>
+<script src="{{ url_for('static',filename='js/search.js') }}"></script>
+<script src="{{ url_for('static',filename='js/exscriptbar.js') }}"></script>
+
+<script src="{{ url_for('static',filename='js/mail.js') }}"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+</script>
+<script>   
+$(function() {
+
+     var settings = {
+ "async": true,
+ "crossDomain": true,
+ "url": "http://127.0.0.1:5000/proguser",
+ "method": "GET"
+}
+$.ajax(settings).done(function (response) {
+ var dataa=JSON.parse(response); 
+  console.log(dataa,"hello");
+
+Highcharts.chart('container6', {
+    chart: {
+        type: 'column'
+    },
+  colors: [
+               '#00A651',
+               '#2C9905',
+               '#8AE02B',
+               '#B9FF4F',
+               '#FF8300',
+               
+               
+            ],
+    title: {
+        text: 'PROGRAM WISE ACTIVE USER TREND'
+    },
+    xAxis: {
+        categories: [
+            'AUG',
+             'SEP',
+              'OCT',
+               'NOV',
+                'DEC',
+                'JAN',
+                  'FEB',
+                  'MAR',
+                  'APR',
+                  'MAY',
+                  'JUN',
+                   'JUL'
+        ],
+        crosshair: false
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'User Count'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span>{point.x}</span><br>',
+        pointFormat: '<span>{series.name}</span><span{point.name}></span>: <b>{point.y}<b>{series.data2}'
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        },
+       },
+   series: [{
+                name: 'PRE-K',
+                data: dataa[0].prek
+            },
+     
+     {
+                name: 'ELEMENTARY',
+                data: dataa[0].elem
+            }, 
+          
+           {
+                name: 'MIDDLE',
+                data: dataa[0].mid
+            },
+           {
+                name: 'HIGH',
+                data: dataa[0].high
+            },
+             {
+                name: 'SOUND PRACTICE /TRANSITION/ ALL',
+                data: dataa[0].all
+            }
+           ]
+});
+
+},
+)});
+                      
+
+                      
+$(function() {
+
+     var settings = {
+ "async": true,
+ "crossDomain": true,
+ "url": "http://127.0.0.1:5000/weekprac",
+ "method": "GET"
+}
+$.ajax(settings).done(function (response) {
+ var dataa=JSON.parse(response); 
+ 
+ 
+var options = {
+   chart: {
+     zoomType: 'xy',
+     renderTo: 'container13'},
+   title: {
+     text: "DAY WISE PRACTICE COUNT"
+   },
+   xAxis: [{
+     categories: dataa.data.week
+   }],
+   yAxis: [{ //Primary yAxis
+     labels: {
+       format: '{value}',
+       style: {
+         color: '#000'
+       }
+     },
+     title: {
+       text: 'PRACTICE COUNT',
+       style: {
+         color: '#000'
+       }
+     }
+   }, {//Secondary yAxis
+     title: {
+       text: '',
+       style: {
+         color: '#4572A7'
+       }
+     },
+     labels: {
+       format: '{value}',
+       style: {
+         color: '#4572A7'
+       }
+     },
+     opposite: false
+   }],
+   tooltip: {
+     shared: true
+   },
+   legend: {
+     layout: 'vertical',
+     align: 'left',
+     x: 400,
+     verticalAlign: 'top',
+     y: 30,
+     floating: true,
+     backgroundColor: '#FFFFFF'
+   },
+   series: [{
+     name: 'SY 2020-21',
+     color: '#01a451',
+     type: 'column',
+     yAxis: 0,
+     data: dataa.data.prac1920,
+     tooltip: {
+      
+     }
+   }, {
+     name:'SY 2019-20',
+     color: '#ff8300',
+     type: 'spline',
+     yAxis: 0,
+     data: dataa.data.prac1819,
+     tooltip: true
+       
+     
+  }]
+ };
+  var chart = new Highcharts.Chart(options);
+});
+ });
+ $(function() {
+
+     var settings = {
+ "async": true,
+ "crossDomain": true,
+ "url": "http://127.0.0.1:5000/weekprac",
+ "method": "GET"
+}
+$.ajax(settings).done(function (response) {
+ var dataa=JSON.parse(response); 
+ 
+ 
+var options = {
+   chart: {
+     zoomType: 'xy',
+     renderTo: 'container12'},
+   title: {
+     text: "DAY WISE ACTIVE USER COUNT"
+   },
+   xAxis: [{
+     categories: dataa.data.week
+   }],
+   yAxis: [{ //Primary yAxis
+     labels: {
+       format: '{value}',
+       style: {
+         color: '#000'
+       }
+     },
+     title: {
+       text: 'USER COUNT',
+       style: {
+         color: '#000'
+       }
+     }
+   }, {//Secondary yAxis
+     title: {
+       text: '',
+       style: {
+         color: '#4572A7'
+       }
+     },
+     labels: {
+       format: '{value}',
+       style: {
+         color: '#4572A7'
+       }
+     },
+     opposite: false
+   }],
+   tooltip: {
+     shared: true
+   },
+   legend: {
+     layout: 'vertical',
+     align: 'left',
+     x: 400,
+     verticalAlign: 'top',
+     y: 30,
+     floating: true,
+     backgroundColor: '#FFFFFF'
+   },
+   series: [{
+     name: 'SY 2020-21',
+     color: '#01a451',
+     type: 'column',
+     yAxis: 0,
+     data: dataa.data.user1920,
+     tooltip: {
+      
+     }
+   }, {
+     name:'SY 2019-20',
+     color: '#ff8300',
+     type: 'spline',
+     yAxis: 0,
+     data: dataa.data.user1819,
+     tooltip: true
+       
+     
+  }]
+ };
+  var chart = new Highcharts.Chart(options);
+});
+ });
+ var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url":             "http://127.0.0.1:5000/activetrendnew",
+  "method": "GET"
+ }
+  $.ajax(settings).done(function (response) {
+  var dataa=JSON.parse(response); 
+    console.log(dataa[0].bar,"data")
+   
+
+
+
+
+Highcharts.chart('container33', {
+  chart: {
+      type: 'column'
+  },
+  credits: {
+    enabled: false,
+  },
+  title: {
+      text: 'Active User Trend'
+    
+  },colors: ['#3158D7','#0677BA','#8AE02B','#01A451',],
+  xAxis: {
+      categories: ['Aug', 'Sep', 'Oct','Nov', 'Dec','Jan', 'Feb', 'Mar', 'Apr', 'May','Jun','Jul']
+  },
+  yAxis: {lineWidth:1,
+      min: 0,
+      title: {
+          text: 'User Count'
+      },
+      stackLabels: {
+          enabled: false,
+          style: {
+              fontWeight: 'bold',
+              color: ( // theme
+                  Highcharts.defaultOptions.title.style &&
+                  Highcharts.defaultOptions.title.style.color
+              ) || 'gray'
+          }
+      }
+  },
+  tooltip: {
+      headerFormat: '<b>{point.x}</b><br/>',
+      pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+  },
+  plotOptions: {series: {point: {
+           
+          }},
+      column: {
+          stacking: 'normal',
+          dataLabels: {
+              enabled: false
+          }
+      }
+  },
+  legend: {
+    enabled: true,
+    itemStyle: {
+      fontSize: '10px',
+      fontWeight: '200'
+  }
+  },
+  series: [{
+    name: 'User Count(SY2020-2021)',
+    data: dataa[3].barc
+},
+{
+  name: 'User Count(SY2020-2021)',
+  data: dataa[2].bars
+},{
+      name: 'Family Count((SY2020-2021)',
+      fontSize:'8px',
+      data: dataa[1].bar2
+    
+  }, {
+      name: 'User Count(SY2020-2021)',
+      data: dataa[0].bar
+  },
+  
+    {type:'spline',
+     color:'#FF8300',
+      name: '(SY 2019-2020)',
+      data: dataa[0].curve
+  }]
+});});
+
+
+
+
+function heatnew(b){
+  console.log(b);
+var min, max, colorScale, temps, tempsArr;
+var colors =  ["#EFF7F2","#DBEEE1","#B3DFC1","#8ECAA0","#76C28D","#65B87E","#52AB6D","#42A862","#329B52","#278845"]
+var months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var table, thead, tbody, rows, headCells, cells;
+var data = d3.json("http://127.0.0.1:5000/"+b, function(error, data){
+
+  temps = data.meanTemp;
+  tempsArr = createTempArr(temps);
+  initScale();
+  initTable();
+  addTopHeader();
+  addRows();
+  setColorTransition();
+
+  addLegend();
+});
+
+function initTable(){
+  table = d3.select('#heat-map').append('table');
+  table.append("caption")
+  .html("");
+  thead = table.append('thead');
+  tbody = table.append('tbody');
+}
+
+function initScale(){
+  min = d3.min(d3.values(temps), function(d) { return d3.min(d); });
+  max = d3.max(d3.values(temps), function(d) { return d3.max(d); });
+  colorScale = d3.scaleQuantile()
+       .domain([min, max])
+       .range(colors);
+}
+
+function addTopHeader(){
+  //make top heading
+  thead.append('tr')
+       .selectAll('th')
+       .data(months)
+    .enter()
+    .append("th")
+    .text(function(d){return d;});
+}
+
+function addRows(){
+  // create a row for each object in the data
+  rows = tbody.selectAll('tr')
+  .data(tempsArr).enter()
+  .append('tr');
+
+  // create vertical heading (first col of each row)
+  headCells = rows.append('th')
+  .text(function (d) { return d.year; });
+
+  //create a data cell for each monthly tempature
+   cells = rows.selectAll('td')
+     .data(function (row, i) {
+       return row.temps;
+     })
+     .enter()
+     .append('td')
+     .text(function (d) { return d + '%'; })
+     .style("background-color", colors[0]);
+}
+
+function createTempArr(){
+  var tempsArr = [];
+  for(var k in temps){
+    if (temps.hasOwnProperty(k)) {
+           tempsArr.push({year: k, temps: temps[k]});
+    }
+  }
+  return tempsArr;
+}
+
+function setColorTransition(){
+  cells.transition()
+    .duration(1000)
+    .style("background-color", function(d) { return colorScale(d); });
+}
+
+function addLegend(){
+  var rangeValues = [min];
+  rangeValues = rangeValues.concat(colorScale.quantiles());
+
+  var legend = d3.select('caption').append('div');
+  legend.attr("class", "legend");
+
+  var colorSq = legend.append("div");
+
+  colorSq.selectAll("div")
+            .data(rangeValues).enter()
+            .append("div")
+            .attr("class", "color-square")
+            .style("background-color", function(d, i) {return colors[i];});
+            //.text(function(d) { return "≥ " + Math.round(d); }); //add range
+
+  var labels = legend.append("div");
+  labels.append("div")
+  .attr("class", "align-left")
+  .text("");
+
+  labels.append("div")
+  .attr("class", "align-right")
+  .text("");
+
+}
+} 
+
+function heatnew2(b){
+  console.log(b);
+var min, max, colorScale, temps, tempsArr;
+var colors =  ["#EFF7F2","#DBEEE1","#B3DFC1","#8ECAA0","#76C28D","#65B87E","#52AB6D","#42A862","#329B52","#278845"]
+var months = ["","Aug", "Sep", "Oct", "Nov", "Dec","Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
+var table, thead, tbody, rows, headCells, cells;
+var data = d3.json("http://127.0.0.1:5000/"+b, function(error, data){
+
+  temps = data.meanTemp;
+  tempsArr = createTempArr(temps);
+  initScale();
+  initTable();
+  addTopHeader();
+  addRows();
+  setColorTransition();
+
+  addLegend();
+});
+
+function initTable(){
+  table = d3.select('#heat-map').append('table');
+  table.append("caption")
+  .html("");
+  thead = table.append('thead');
+  tbody = table.append('tbody');
+}
+
+function initScale(){
+  min = d3.min(d3.values(temps), function(d) { return d3.min(d); });
+  max = d3.max(d3.values(temps), function(d) { return d3.max(d); });
+  colorScale = d3.scaleQuantile()
+       .domain([min, max])
+       .range(colors);
+}
+
+function addTopHeader(){
+  //make top heading
+  thead.append('tr')
+       .selectAll('th')
+       .data(months)
+    .enter()
+    .append("th")
+    .text(function(d){return d;});
+}
+
+function addRows(){
+  // create a row for each object in the data
+  rows = tbody.selectAll('tr')
+  .data(tempsArr).enter()
+  .append('tr');
+
+  // create vertical heading (first col of each row)
+  headCells = rows.append('th')
+  .text(function (d) { return d.year; });
+
+  //create a data cell for each monthly tempature
+   cells = rows.selectAll('td')
+     .data(function (row, i) {
+       return row.temps;
+     })
+     .enter()
+     .append('td')
+     .text(function (d) { return d ; })
+     .style("background-color", colors[0]);
+}
+
+function createTempArr(){
+  var tempsArr = [];
+  for(var k in temps){
+    if (temps.hasOwnProperty(k)) {
+           tempsArr.push({year: k, temps: temps[k]});
+    }
+  }
+  return tempsArr;
+}
+
+function setColorTransition(){
+  cells.transition()
+    .duration(1000)
+    .style("background-color", function(d) { return colorScale(d); });
+}
+
+function addLegend(){
+  var rangeValues = [min];
+  rangeValues = rangeValues.concat(colorScale.quantiles());
+
+  var legend = d3.select('caption').append('div');
+  legend.attr("class", "legend");
+
+  var colorSq = legend.append("div");
+
+  colorSq.selectAll("div")
+            .data(rangeValues).enter()
+            .append("div")
+            .attr("class", "color-square")
+            .style("background-color", function(d, i) {return colors[i];});
+            //.text(function(d) { return "≥ " + Math.round(d); }); //add range
+
+  var labels = legend.append("div");
+  labels.append("div")
+  .attr("class", "align-left")
+  .text("");
+
+  labels.append("div")
+  .attr("class", "align-right")
+  .text("");
+
+}
+} 
+$("#heat").val(1);
+$('#heat-map').empty()
+  var type = "heatmapweekly"
+  heatnew(type);
+  $('#chartname').text("Weekly practice Heat Map")
+
+$('#heat').change(function(){
+  if (this.value == '1') {
+  $('#heat-map').empty()
+  var type = "heatmapweekly"
+  heatnew(type);
+  $('#chartname').text("Weekly practice Heat Map")
+  }
+ else if (this.value == '2') {
+  $('#heat-map').empty()
+  var type = "heatmapweeklyfamily"
+  heatnew(type);
+  $('#chartname').text("Weekly practice Family heat Map")
+  }
+  else if (this.value == '3') {
+  $('#heat-map').empty()
+  var type = "heatmapweeklyteachers"
+  heatnew(type);
+  $('#chartname').text("Weekly practice Teacher heat Map")
+  }
+  else if (this.value == '4') {
+  $('#heat-map').empty()
+  var type = "heatmapweeklycsy"
+  heatnew2(type);
+  $('#chartname').text("Weekly practice Heat Map CSY")
+  }
+  else if (this.value == '5') {
+  $('#heat-map').empty()
+  var type = "familyheatmapweeklycsy"
+  heatnew2(type);
+  $('#chartname').text("Weekly practice Family heat Map CSY")
+  }
+  else if (this.value == '6') {
+  $('#heat-map').empty()
+  var type = "teachersheatmapweeklycsy"
+  heatnew2(type);
+  $('#chartname').text("Weekly practice Teacher heat Map CSY")
+  }
+})
+
+</script>
+      
+     
+   
+<!-- partial -->
+<script  src="{{ url_for('static',filename='js/script.js') }}"></script>
+<script  src="{{ url_for('static',filename='js/counts.js') }}"></script>
+
+</body>
+</html>
