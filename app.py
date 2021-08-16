@@ -60332,9 +60332,8 @@ def avg_audio_completed_____(datestr):
 # blaaaa
     # client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@52.41.36.115:27017/')
 
-
 @app.route('/ratingcardsdaily_card/<datestr>')
-def dailyratings___(datestr):
+def dailyfeedback_ratings___(datestr):
     import datetime
     import math
     username = urllib.parse.quote_plus('admin')
@@ -60523,9 +60522,9 @@ def dailyratings___(datestr):
     
     TEACHER_Comment_per_feedbackchange=[]
     teacher_PERCENTAGE_change=[]
-    if comments_per_feedback_teacher['rating'].iloc[0] > comments_per_feedback_before_last_week_teachers['rating'].iloc[0]:
-        xx=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
-        yy= xx/comments_per_feedback_teacher['rating'].iloc[0]
+    if comments_per_feedback_before_last_week_teachers['rating'].iloc[0]> comments_per_feedback_teacher['rating'].iloc[0]:
+        xx=comments_per_feedback_before_last_week_teachers['rating'].iloc[0]-comments_per_feedback_teacher['rating'].iloc[0]
+        yy= xx/comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
         if math.isnan(yy):
             yy=0
         else:
@@ -60546,7 +60545,7 @@ def dailyratings___(datestr):
         teacher_PERCENTAGE_change.append(zz)
 
     else:
-        xx=comments_per_feedback_before_last_week_teachers['rating'].iloc[0]-comments_per_feedback_teacher['rating'].iloc[0]
+        xx=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
         yy= xx/comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
         if math.isnan(yy):
             yy=0
@@ -60559,9 +60558,9 @@ def dailyratings___(datestr):
 
     PARENT_Comment_per_feedbackchange=[]
     parent_PERCENTAGE_change=[]
-    if comments_per_feedback_parents['rating'].iloc[0] > comments_per_feedback_before_last_week_parents['rating'].iloc[0]:
-        pp=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
-        qq= pp/comments_per_feedback_parents['rating'].iloc[0]
+    if comments_per_feedback_before_last_week_parents['rating'].iloc[0]> comments_per_feedback_parents['rating'].iloc[0]:
+        pp=comments_per_feedback_before_last_week_parents['rating'].iloc[0]- comments_per_feedback_parents['rating'].iloc[0]
+        qq= pp/comments_per_feedback_before_last_week_parents['rating'].iloc[0]
         if math.isnan(qq):
             qq=0
         else:
@@ -60582,7 +60581,7 @@ def dailyratings___(datestr):
         parent_PERCENTAGE_change.append(rr)
 
     else:
-        pp=comments_per_feedback_before_last_week_parents['rating'].iloc[0]-comments_per_feedback_parents['rating'].iloc[0]
+        pp=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
         qq= pp/comments_per_feedback_before_last_week_parents['rating'].iloc[0]
         if math.isnan(qq):
             qq=0
@@ -60595,9 +60594,9 @@ def dailyratings___(datestr):
 
     Average_FEEDBACK_Rating_change=[]
     Average_feedback_PERCENTAGE=[]
-    if avg_ratings_last_week['avg_ratings_lastweek'].iloc[0] > avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]:
-        aa=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
-        bb= aa/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
+    if avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]> avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]:
+        aa=avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]- avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
+        bb= aa/avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
         if math.isnan(bb):
             bb=0
         else:
@@ -60619,7 +60618,7 @@ def dailyratings___(datestr):
         Average_feedback_PERCENTAGE.append(cc)
 
     else:
-        aa=avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]-avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
+        aa=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
         bb= aa/avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
         if math.isnan(bb):
             bb=0
@@ -60658,11 +60657,9 @@ def dailyratings___(datestr):
 
 
 
-# dailyratings('2020-03-20')
-
 
 @app.route('/last_day_pr/<datestr>')
-def pract_cards_24hr____(datestr):
+def practice_cards_24hr____(datestr):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
@@ -60756,7 +60753,7 @@ def pract_cards_24hr____(datestr):
 
     else:
         xx=df_atm1['parents_playback_24hr'].iloc[0]-df_atm2['parents_playback_48hrs'].iloc[0]
-        yy= xx/df_atm1['parents_playback_24hr'].iloc[0]
+        yy= xx/df_atm2['parents_playback_48hrs'].iloc[0]
         if math.isnan(yy):
             yy=0
         else:
@@ -60794,7 +60791,7 @@ def pract_cards_24hr____(datestr):
 
     else:
         aa=df_atm1['teachers_playback_24hr'].iloc[0]-df_atm2['teachers_playback_48hrs'].iloc[0]
-        bb= aa/df_atm1['teachers_playback_24hr'].iloc[0]
+        bb= aa/df_atm2['teachers_playback_48hrs'].iloc[0]
         if math.isnan(bb):
             bb=0
         else:
@@ -60832,7 +60829,7 @@ def pract_cards_24hr____(datestr):
 
     else: 
         pp=df_atm1['total_playback_24hr'].iloc[0]-df_atm2['total_playback_48hrs'].iloc[0]
-        qq= pp/df_atm1['total_playback_24hr'].iloc[0]
+        qq= pp/df_atm2['total_playback_48hrs'].iloc[0]
         if math.isnan(qq):
             qq=0
         else:
@@ -60860,8 +60857,9 @@ def pract_cards_24hr____(datestr):
     return json.dumps(temp)
 
 
+
 @app.route('/SIGNUPS_dailycomparsion/<datestr>') #test3
-def SIGNUP_24hr___(datestr):
+def SIGNUP_cards_24hr___(datestr):
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -60949,7 +60947,7 @@ def SIGNUP_24hr___(datestr):
 
     else:
         xx=df_atm1['parents_signup_last_week'].iloc[0]-df_atm2['parents_signup_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['parents_signup_last_week'].iloc[0]
+        yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
         zz= round(yy*100,2)
         parentschange.append('1')
         parents_Percentage_Change.append(zz)
@@ -60973,7 +60971,7 @@ def SIGNUP_24hr___(datestr):
 
     else:
         xx=df_atm1['teachers_signup_last_week'].iloc[0]-df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['teachers_signup_last_week'].iloc[0]
+        yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
         zz= round(yy*100,2)
         teacherschange.append('1')
         Teacher_percentage_change.append(zz)
@@ -60995,7 +60993,7 @@ def SIGNUP_24hr___(datestr):
         Total_percentage_change.append(zz)
     else:
         xx=df_atm1['total_signup_last_week'].iloc[0]-df_atm2['total_signup_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['teachers_signup_last_week'].iloc[0]
+        yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
         zz= round(yy*100,2)
         totalchange.append('1')
         Total_percentage_change.append(zz)
@@ -61019,6 +61017,8 @@ def SIGNUP_24hr___(datestr):
         value=[str(data[data.columns[j]].iloc[0])]
         temp2.update({key:value})
     return json.dumps(temp2)
+
+
 
 
 @app.route('/AVG_audio_completion_weekly_less_50/<datestr>')
@@ -61363,7 +61363,7 @@ def power_users_weekly___(datestr):
 
 
 @app.route('/playback_cards_week/<datestr>')
-def practice_cards_weeklyPandT__(datestr):
+def practice_cards_WEEKLY__(datestr):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -61457,7 +61457,7 @@ def practice_cards_weeklyPandT__(datestr):
         
     else:
         xx=df_atm1['parents_playback_last_week'].iloc[0]-df_atm2['parents_playback_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['parents_playback_last_week'].iloc[0]
+        yy= xx/df_atm2['parents_playback_last_to_lastweek'].iloc[0]
         zz= round(yy*100,2)
         parentschange.append('1')
         parents_percentage_change.append(zz)
@@ -61482,7 +61482,7 @@ def practice_cards_weeklyPandT__(datestr):
 
     else:
         xx=df_atm1['teachers_playback_last_week'].iloc[0]-df_atm2['teachers_playback_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['teachers_playback_last_week'].iloc[0]
+        yy= xx/df_atm2['teachers_playback_last_to_lastweek'].iloc[0]
         zz= round(yy*100,2)
         teacherschange.append('1')
         teachers_percentage_change.append(zz)
@@ -61507,7 +61507,7 @@ def practice_cards_weeklyPandT__(datestr):
 
     else:
         xx=df_atm1['total_playback_last_week'].iloc[0]-df_atm2['total_playback_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['total_playback_last_week'].iloc[0]
+        yy= xx/df_atm2['total_playback_last_to_lastweek'].iloc[0]
         zz= round(yy*100,2)
         totalchange.append('1')
         total_percentage_change.append(zz)
@@ -61518,7 +61518,11 @@ def practice_cards_weeklyPandT__(datestr):
     'total_playback_last_week':df_atm1['total_playback_last_week'].tolist(),
                        'parentschange':parentschange,'parents_percentage_change':parents_percentage_change,
                        'teacherschange':teacherschange, 'teachers_percentage_change':teachers_percentage_change,
-          'totalchange':totalchange, 'total_percentage_change':total_percentage_change})  
+          'totalchange':totalchange, 'total_percentage_change':total_percentage_change,
+                      'teachers_playback_last_to_lastweek':df_atm2['teachers_playback_last_to_lastweek'].iloc[0],
+         'parents_playback_last_to_lastweek':df_atm2['parents_playback_last_to_lastweek'].iloc[0]              
+                       
+                      })  
     
     
     temp2={}
@@ -61531,8 +61535,10 @@ def practice_cards_weeklyPandT__(datestr):
     return json.dumps(temp2)
 
 
+
+
 @app.route('/SIGNUPS_WEEK/<datestr>') #test3
-def SIGNUP_cards_WEEK__(datestr):
+def SIGNUP_cards_WEEKLYY__(datestr):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -61607,7 +61613,7 @@ def SIGNUP_cards_WEEK__(datestr):
 
     else:
         xx=df_atm1['parents_playback_last_week'].iloc[0]-df_atm2['parents_playback_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['parents_playback_last_week'].iloc[0]
+        yy= xx/df_atm2['parents_playback_last_to_lastweek'].iloc[0]
         zz= round(yy*100,2)
         parentschange.append('1')
         parents_percentage_change.append(zz)
@@ -61631,7 +61637,7 @@ def SIGNUP_cards_WEEK__(datestr):
     
     else:
         xx=df_atm1['teachers_playback_last_week'].iloc[0]-df_atm2['teachers_playback_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['teachers_playback_last_week'].iloc[0]
+        yy= xx/df_atm2['teachers_playback_last_to_lastweek'].iloc[0]
         zz= round(yy*100,2)
         teacherschange.append('1')
         teachers_percentage_change.append(zz)
@@ -61656,7 +61662,7 @@ def SIGNUP_cards_WEEK__(datestr):
         
     else:
         xx=df_atm1['total_playback_last_week'].iloc[0]-df_atm2['total_playback_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['total_playback_last_week'].iloc[0]
+        yy= xx/df_atm2['total_playback_last_to_lastweek'].iloc[0]
         zz= round(yy*100,2)
         totalchange.append('1')
         total_percentage_change.append(zz)
@@ -61666,13 +61672,19 @@ def SIGNUP_cards_WEEK__(datestr):
     'total_signup_last_week':df_atm1['total_playback_last_week'].tolist(),
                        'parentschanged':parentschange, 'parents_percentage_change':parents_percentage_change,
                        'teacherschanged':teacherschange, 'teachers_percentage_change':teachers_percentage_change,
-          'totalchanged':totalchange, 'total_percentage_change':total_percentage_change})  
+          'totalchanged':totalchange, 'total_percentage_change':total_percentage_change,
+                    'teachers_signup_last_to_last_week'  :df_atm2['teachers_playback_last_to_lastweek'],
+                       'parents_signup_last_to_last_week':df_atm2['teachers_playback_last_to_lastweek'],
+                       
+                      })  
     temp2={}
     for j in range(len(data.columns)):
         key= data.columns[j]
         value=[str(data[data.columns[j]].iloc[0])]
         temp2.update({key:value})
     return json.dumps(temp2)
+
+
 
 @app.route('/comparison1/<datestr>') #test2
 def weekly_compare_chart___(datestr):
@@ -62404,9 +62416,8 @@ def weekly__compare__chart__(datestr,charttype):
 
 
 
-
 @app.route('/weeklyfeedcard/<datestr>')
-def feedweekcardssss___(datestr):
+def feedbackweekcardssss___(datestr):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -62597,9 +62608,9 @@ def feedweekcardssss___(datestr):
     
     TEACHER_Comment_per_feedbackchange=[]
     teacher_PERCENTAGE_change=[]
-    if comments_per_feedback_teacher['rating'].iloc[0] > comments_per_feedback_before_last_week_teachers['rating'].iloc[0]:
-        xx=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
-        yy= xx/comments_per_feedback_teacher['rating'].iloc[0]
+    if comments_per_feedback_before_last_week_teachers['rating'].iloc[0]> comments_per_feedback_teacher['rating'].iloc[0]:
+        xx=comments_per_feedback_before_last_week_teachers['rating'].iloc[0]-comments_per_feedback_teacher['rating'].iloc[0]
+        yy= xx/comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
         zz= round(yy*100,2)
         TEACHER_Comment_per_feedbackchange.append('-1')
         teacher_PERCENTAGE_change.append(zz)
@@ -62612,7 +62623,7 @@ def feedweekcardssss___(datestr):
         teacher_PERCENTAGE_change.append(zz)
         
     else:
-        xx=comments_per_feedback_before_last_week_teachers['rating'].iloc[0]-comments_per_feedback_teacher['rating'].iloc[0]
+        xx=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
         yy= xx/comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
         zz= round(yy*100,2)
         TEACHER_Comment_per_feedbackchange.append('1')
@@ -62638,7 +62649,7 @@ def feedweekcardssss___(datestr):
         
     else:
         xx=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
-        yy= xx/comments_per_feedback_parents['rating'].iloc[0]
+        yy= xx/comments_per_feedback_before_last_week_parents['rating'].iloc[0]
         zz= round(yy*100,2)
         PARENT_Comment_per_feedbackchange.append('1')
         parent_PERCENTAGE_change.append(zz)
@@ -62664,7 +62675,7 @@ def feedweekcardssss___(datestr):
         
     else:
         xx=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
-        yy= xx/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
+        yy= xx/avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
         zz= round(yy*100,2)
         Average_FEEDBACK_Rating_change.append('1')
         Average_feedback_PERCENTAGE.append(zz)
@@ -62694,6 +62705,8 @@ def feedweekcardssss___(datestr):
         value = [str(data_final[data_final.columns[j]].iloc[0])]
         temp.update({key:value})
     return json.dumps(temp)
+
+
 
 
 @app.route('/dailyfeedratingtable_TEACHERS/<datestr>')

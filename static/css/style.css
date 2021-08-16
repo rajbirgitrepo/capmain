@@ -6,14 +6,17 @@
   outline: none;
 
 }
+
 @font-face {
   font-family: Product-Sans-Bold;
   src: url(/static/fonts/Product-Sans-Bold.ttf);
 }
+
 @font-face {
   font-family: Product-Sans-Regular;
   src: url(/static/fonts/Product-Sans-Regular.ttf);
 }
+
 ::-webkit-scrollbar {
   background: transparent;
   width: 5px;
@@ -317,7 +320,8 @@ body {
 
 /* End search */
 .side-nav .active {
-  background-color: #02a45a2e;;
+  background-color: #02a45a2e;
+  ;
   border-radius: 0 50px 50px 0;
   color: #fff;
 }
@@ -692,7 +696,8 @@ body {
 }
 
 .navbar-default {
-  background-image: linear-gradient(to bottom, #5ac764, #049730);;
+  background-image: linear-gradient(to bottom, #5ac764, #049730);
+  ;
   border: none !important;
   border-radius: 0 !important;
   margin: 0 !important;
@@ -1125,6 +1130,13 @@ span {
     transform: translate(0, -10px);
     opacity: 0;
   }
+}
+
+.drop-api {
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px;
+  color: grey;
 }
 
 .toast-area {
@@ -1735,6 +1747,7 @@ span.avtr figure {
   color: white;
   min-width: 66px;
 }
+
 .modal2 {
   display: none;
   /* Hidden by default */

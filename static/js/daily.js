@@ -69,6 +69,7 @@ var settings = {
    function charts(a){
 // INCLUDE JQUERY & JQUERY UI 1.12.1
 
+<<<<<<< Updated upstream
 // var settings = {
 //   "async": true,
 //   "crossDomain": true,
@@ -79,6 +80,34 @@ var settings = {
 //   var dataa=JSON.parse(response); 
 //    console.log(dataa,"hello frnd")
 //   var a = parseInt();
+=======
+playbackTrendChart2('playback', 'Playback')
+$("#practice_topChart").val('playback');
+$(document).on('change', '#practice_topChart', function () {
+  $('#container10').empty();
+  console.log(this.value)
+  if (this.value == 'practice') {
+    document.getElementById('topdistrict').title = 'your new title';
+    playbackTrendChart2(this.value, 'Practice')
+  }
+  else {
+    playbackTrendChart2(this.value, 'Playback')
+  }
+});  
+
+function playbackTrendChart2(selectValue2, t) {
+
+var settings = {
+  async: true,
+  crossDomain: true,
+  url:             "/top_20_district_daily/"+a+ "/" +selectValue2,
+  method: "GET",
+  };
+  $.ajax(settings).done(function (response) {
+  var dataa=JSON.parse(response); 
+   console.log(dataa,"hello frnd")
+  var a = parseInt();
+>>>>>>> Stashed changes
   
 //   Highcharts.chart('container10', {
 //   chart: {
@@ -89,6 +118,7 @@ var settings = {
 // '#00a651', '#8ae02b',
          
          
+<<<<<<< Updated upstream
 //       ],
 //   title: {
 //   text: 'Top 20 District Playbacks'
@@ -119,6 +149,38 @@ var settings = {
 //          point: {
 //           events: {
 //               click: function () {
+=======
+      ],
+  title: {
+  text: 'Top 20 District ' + t
+  },
+  xAxis: {
+  categories: dataa.district,
+  crosshair: false
+  },
+  yAxis: {
+  min: 0,
+  title: {
+      text: t + ' Count'
+  }
+  },  
+  legend: {
+    enabled: false,
+  },
+  tooltip: {
+  headerFormat: '<span>{point.x}</span><br>',
+  pointFormat: '<span>{series.name}</span><span{point.name}></span>: <b>{point.y}'
+  },
+  plotOptions: {
+  column: {
+      pointPadding: 0.2,
+      borderWidth: 0
+  },
+  series: {
+         point: {
+          events: {
+              click: function () {
+>>>>>>> Stashed changes
             
 //                $('#next').empty();
 //                $('#next1').empty();
@@ -129,6 +191,7 @@ var settings = {
 //                createDynamic(URL)
              
             
+<<<<<<< Updated upstream
 //               }}}
 //       }},
 //   series: [{
@@ -138,6 +201,17 @@ var settings = {
 //     ]
 //   });
 //   }
+=======
+              }}}
+      }},
+  series: [{
+          name: t +  ' Count',
+          data: dataa.practice
+      }
+    ]
+  });
+  }
+>>>>>>> Stashed changes
   
   
 //   );
@@ -220,12 +294,30 @@ var settings = {
     
     );
 
+}
+
+
+  playbackTrendChart('playback', 'Playback')
+  $("#practice_comparisonChart").val('playback');
+  $(document).on('change', '#practice_comparisonChart', function () {
+    $('#container2').empty();
+    console.log(this.value)
+    if (this.value == 'practice') {
+      document.getElementById('dailyInsight').title = 'your new title';
+      playbackTrendChart(this.value, 'Practice')
+    }
+    else {
+      playbackTrendChart(this.value, 'Playback')
+    }
+  });  
+
+  function playbackTrendChart(selectValue, tx) {
 var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url":             "/programPRACTICE_dailycomparsion/"+a,
-    "method": "GET"
-   }
+    async: true,
+    crossDomain: true,
+    url: "/programPRACTICE_dailycomparsion/"+a+ "/" +selectValue,
+    method: "GET",
+   };
     $.ajax(settings).done(function (response) {
     var dataa=JSON.parse(response); 
      console.log(dataa,"hello frnd")
@@ -244,7 +336,7 @@ Highcharts.chart('container2', {
              ],
 
              title: {
-    text: 'Playback Comparison by Program(DAILY)'
+    text: tx + ' Comparison by Program(DAILY)'
     },
     xAxis: {
     categories:dataa.progname,
@@ -253,7 +345,7 @@ Highcharts.chart('container2', {
   yAxis: {
     min: 0,
     title: {
-      text: 'Playback Count'
+      text: tx + ' Count'
     }
   },
   tooltip: {
@@ -277,28 +369,28 @@ Highcharts.chart('container2', {
     }
   },
   series: [{
-    name: 'HOME PLAYBACK LAST WEEK 24HRS',
+    name: 'HOME ' + tx + ' LAST WEEK 24HRS',
     data: dataa.parentspractice_lastweek24hrs,
     stack: 0
   },
           {
-    name: 'HOME PLAYBACK',
+    name: 'HOME ' + tx,
     data: dataa.parentspractice,
     stack: 1
   },
   {
-    name: 'CLASSROOM PLAYBACK LAST WEEK 24HRS',
+    name: 'CLASSROOM ' + tx + ' LAST WEEK 24HRS',
     data: dataa.teacherspractice_lastweek24hrs,
     stack: 0
   }, {
-    name: 'CLASSROOM PLAYBACK',
+    name: 'CLASSROOM ' + tx,
     data: dataa.teacherspractice,
     stack: 1
   },]
 });
 
     });
-
+  }
 
     var settings = {
     "async": true,

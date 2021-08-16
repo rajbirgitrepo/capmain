@@ -580,7 +580,7 @@
                 <span style="float: right;" class="material-icons">
                   insights
                 </span>
-                <select name="Trends" id="practice_trendChart" >
+                <select name="Trends" id="practice_trendChart" class="drop-api">
                   <option value="playback" class="">Playback Trend</option>
                   <option value="practice">Practice Trend</option>
                 </select>
@@ -598,12 +598,16 @@
           <div class="col-md-6">
             <div
               style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
-              <div style="padding-bottom: 44px;" title="Active Trend">
+              <div style="padding-bottom: 44px;" title="Active Trend" id="activeInsight">
                 <p style="float: right;">View Insights
                 </p>
                 <span style="float: right;" class="material-icons">
                   insights
                 </span>
+                <select name="Trends" id="practice_activeChart" class="drop-api">
+                  <option value="playback" class="">Active Playback Trend</option>
+                  <option value="practice">Active Practice Trend</option>
+                </select>
               </div>
               <div id="container33"></div>
               <hr />
@@ -622,12 +626,16 @@
       <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;">
         <div
           style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
-          <div style="padding-bottom: 44px;" title="PLAYBACK History CSY">
+          <div style="padding-bottom: 44px;" title="PLAYBACK History CSY" id="historyInsight">
             <p style="float: right;">View Insights
             </p>
             <span style="float: right;" class="material-icons">
               insights
             </span>
+            <select name="Trends" id="practice_historyChart" class="drop-api">
+              <option value="playback" class="">Playback History CSY</option>
+              <option value="practice">Practice History CSY</option>
+            </select>
           </div>
           <div id="containerhistory2" style="height: 400px; width: 100%; "></div>
           <hr />

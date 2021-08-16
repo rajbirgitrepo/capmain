@@ -312,13 +312,27 @@ console.log(feedurl);
   });
   });
 
-
-  var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url":             "/top_20_district_weekly/"+a,
-    "method": "GET"
+  playbackTrendChart('playback', 'Playback')
+  $("#practice_weeklyTopChart").val('playback');
+  $(document).on('change', '#practice_weeklyTopChart', function () {
+    $('#container10').empty();
+    console.log(this.value)
+    if (this.value == 'practice') {
+      document.getElementById('weeklytop').title = 'your new title';
+      playbackTrendChart(this.value, 'Practice')
     }
+    else {
+      playbackTrendChart(this.value, 'Playback')
+    }
+  });  
+
+  function playbackTrendChart(selectValue, tx) {
+  var settings = {
+    async: true,
+    crossDomain: true,
+    url: "/top_20_district_weekly/"+a+ "/" +selectValue,
+    method: "GET",
+    };
     $.ajax(settings).done(function (response) {
     var dataa=JSON.parse(response); 
      console.log(dataa,"hello frnd")
@@ -335,7 +349,7 @@ console.log(feedurl);
            
         ],
     title: {
-    text: 'Top 20 District Plackback'
+    text: 'Top 20 District ' + tx
     },
     xAxis: {
     categories: dataa.district,
@@ -350,7 +364,7 @@ console.log(feedurl);
     yAxis: {
     min: 0,
     title: {
-        text: 'Playback Count'
+        text: tx + ' Count'
     }
     },
     tooltip: {
@@ -379,7 +393,7 @@ console.log(feedurl);
                 }}}
         }},
     series: [{
-            name: 'Playback Count',
+            name: tx +  ' Count',
             data: dataa.practice
         }
       ]
@@ -388,14 +402,34 @@ console.log(feedurl);
     
     
     );
-
-
-var settings = {
-  "async": true,
-  "crossDomain": true,
-  "url":             "/comparison1/"+a,
-  "method": "GET"
   }
+
+
+
+
+
+    playbackTrendChart2('playback', 'Playback')
+    $("#practice_weeklyChart").val('playback');
+    $(document).on('change', '#practice_weeklyChart', function () {
+      $('#container').empty();
+      console.log(this.value)
+      if (this.value == 'practice') {
+        document.getElementById('weeklyCount').title = 'your new title';
+        playbackTrendChart2(this.value, 'Practice')
+      }
+      else {
+        playbackTrendChart2(this.value, 'Playback')
+      }
+    });  
+    
+    function playbackTrendChart2(selectValue2, t) {
+    
+var settings = {
+  async: true,
+  crossDomain: true,
+  url: "/comparison1/"+a+ "/" +selectValue2,
+  method: "GET",
+  };
   $.ajax(settings).done(function (response) {
   var dataa=JSON.parse(response); 
    console.log(dataa,"hello frnd")
@@ -410,7 +444,7 @@ var settings = {
          
       ],
   title: {
-  text: 'Playback Count Weekly Comparison'
+  text: t + ' Count Weekly Comparison'
   },
   xAxis: {
   categories: dataa.weekdata.day,
@@ -419,7 +453,7 @@ var settings = {
   yAxis: {
   min: 0,
   title: {
-      text: 'Playback Count'
+      text: t + ' Count'
   }
   
   },
@@ -487,7 +521,7 @@ var settings = {
   //             }}}
   //     }},
   series: [{
-          name: 'Teacher Playback Count Last to Last week',
+          name: 'Teacher ' + t + ' Count Last to Last week',
           data: dataa.weekdata.count_last_to_last_week_teachers,
           stack: 'Last to Last week'
                 },
@@ -495,40 +529,40 @@ var settings = {
 
                 
           {
-            name: 'Clever Playback Count Last to Last week',
+            name: 'Clever ' + t + ' Count Last to Last week',
             data: dataa.weekdata.count_last_to_last_week_clever,
             stack: 'Last to Last week'
           },
 
           {
-            name: 'Schoology Playback Count Last to Last week',
+            name: 'Schoology ' + t + ' Count Last to Last week',
             data: dataa.weekdata.count_last_to_last_week_schoology,
             stack: 'Last to Last week'
           },
 
           {
-            name: 'Parents Playback Count Last to Last week',
+            name: 'Parents ' + t + ' Count Last to Last week',
             data: dataa.weekdata.count_last_to_lastweek_parents,
             stack: 'Last to Last week'
           },
       
       {
-          name: 'Teacher Playback Count Last Week',
+          name: 'Teacher ' + t + ' Count Last Week',
           data: dataa.weekdata.count_last_week_teachers,
           stack: 'Last week'
       },
       {
-        name: 'Clever Playback Count Last Week',
+        name: 'Clever ' + t + ' Count Last Week',
         data: dataa.weekdata.ount_last_week_clever,
         stack: 'Last week'
     },
     {
-      name: 'Parent Playback Count Last Week',
+      name: 'Parent ' + t + ' Count Last Week',
       data: dataa.weekdata.count_last_week_parents,
       stack: 'Last week'
   },
   {
-    name: 'Schoology Playback Count Last Week',
+    name: 'Schoology ' + t + ' Count Last Week',
     data: dataa.weekdata.count_last_week_schoology,
     stack: 'Last week'
 },
@@ -538,7 +572,7 @@ var settings = {
   
   
   );
-  
+}
   var settings = {
   "async": true,
   "crossDomain": true,

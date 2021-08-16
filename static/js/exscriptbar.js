@@ -1,23 +1,23 @@
-playbackTrendChart('playback' , 'Playback')
+playbackTrendChart2('playback' , 'Playback')
 $("#practice_trendChart").val('playback');
         $(document).on('change','#practice_trendChart',function(){
           $('#container1').empty();
           console.log(this.value)
           if(this.value == 'practice'){
             document.getElementById('practinsight').title = 'your new title';
-            playbackTrendChart(this.value , 'Practice')
+            playbackTrendChart2(this.value , 'Practice')
           }
           else{
-            playbackTrendChart(this.value , 'Playback')
+            playbackTrendChart2(this.value , 'Playback')
           }
           });
 
-function playbackTrendChart(selectValue , t) {
+function playbackTrendChart2(selectValue2 , t) {
 
 var settings = {
   async: true,
   crossDomain: true,
-  url: "/practicetrendnew/" +selectValue,
+  url: "/practicetrendnew/" +selectValue2,
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
