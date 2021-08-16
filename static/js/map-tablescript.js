@@ -63,7 +63,7 @@ $(function () {
                 URL = "/map/" + e.point.name;
 
                 console.log(URL);
-                createDynamic(URL);
+                createDynamic2(URL);
               }
             },
           },

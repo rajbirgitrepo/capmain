@@ -188,6 +188,21 @@ $('#container').highcharts({
       //       }
       //     }
       //   }); 
+
+
+      function cards2(URL) {
+        var mainURL = URL;
+        $('#next').empty();
+        console.log(mainURL);
+        var modal2 = document.getElementById("myModal2");
+        modal2.style.display = "block";
+        $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+        var gif = document.getElementById("gif");
+      gif.style.display = "block";
+        $('#btnExport').show();
+        createDynamic2(mainURL)
+      }
+
 $("#exc").val("USA");
 function executive(a){
       Highcharts.setOptions({
@@ -396,7 +411,7 @@ function executive(a){
                   
                   
               //     var datain = data1.data[i];
-              //     var resultDiv = createDynamicDiv(datain);
+              //     var resultDiv = createDynamicDiv2(datain);
                   
               //     $("#dataTable").append(resultDiv);
                   
@@ -739,6 +754,83 @@ function executive(a){
                               "</tr>";
                             
                             return dynamicDiv;
+                            }
+
+
+
+
+
+                            function createDynamic2(url) {
+                              var settings = {
+                                async: true,
+                                crossDomain: true,
+                                url: url,
+                                method: "GET",
+                              };
+                              $.ajax(settings).done(function (response) {
+                                var data1 = JSON.parse(response);
+                            
+                                $("#next").prepend(
+                                  '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th> <th>SCHOOL PLAYBACK COUNT</th> <th>LAST PLAYBACK DATE</th> <th>USER COUNT</th></tr ></thead ><tbody>'
+                                );
+                            
+                                for (var i = 0; i < data1.data.length; i++) {
+                                  var datain = data1.data[i];
+                                  var resultDiv = createDynamicDiv2(datain);
+                            
+                                  $("#dataTable").append(resultDiv);
+                                }
+                                //$('#dataTable1').append('</tbody></table>');
+                                $("#dataTable").append("</tbody></table>");
+                                dataTab();
+                            
+                                $("#next1").prepend(
+                                  '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th> <th>SCHOOL PLAYBACK COUNT</th> <th>LAST PLAYBACK DATE</th> <th>USER COUNT</th></tr ></thead ><tbody>'
+                                );
+                                for (var i = 0; i < data1.data.length; i++) {
+                                  var datain = data1.data[i];
+                            
+                                  var resultDiv = createDynamicDiv2(datain);
+                                  $("#dataTable1").append(resultDiv);
+                                }
+                                $("#dataTable1").append("</tbody></table>");
+                              });
+                            }
+                            function dataTab() {
+                              $("#dataTable").DataTable({
+                                pageLength: 50,
+                              });
+                            }
+                            function createDynamicDiv2(userList) {
+                              var dynamicDiv = "";
+                              console.log(userList);
+                            
+                              dynamicDiv +=
+                                "<tr >" +
+                                
+                               
+                                "<td>" +
+                                userList[0] +
+                                "</td>" +
+                                                    '<td>'+userList[1]+'</td>'+		    	
+                                                    '<td class="tablelink2" onclick="search22(\''+userList[2]+'\')"><a>' +
+                                userList[2] +
+                                "</a></td>" +
+                                "<td>" +
+                                userList[3] +
+                                "</td>" +
+                                "<td>" +
+                                userList[4] +
+                                "</td>" +
+                                "<td>" +
+                                userList[5] +
+                                "</td>" +
+                                "<td>" +
+                                userList[6] +
+                                "</td>" +
+                                "</tr>";
+                            
+                              return dynamicDiv;
                             }
                             function getdtes(f,a,b,c,d,e){
                               $('.modal2').show();

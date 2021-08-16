@@ -394,15 +394,13 @@
               <p class="boxvalue2" id="usercount1"></p>
               <hr />
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-              <p class="boxHeading2">Home Signups<span style="margin-left: 5px !important;" id="updownsignt"></span></p>
+              <p class="boxHeading2">Home Signups<span style="margin-left: 5px !important;" id="updownsignteacher"></span></p>
               <p class="boxvalue" id="neverlogged1" onclick="cards2('/parents_signup_table_weekly')"
                 style="cursor:pointer;"></p>
               <br />
               <hr />
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-              <p class="boxHeading2">Classroom Signups<span style="margin-left: 5px !important;"
-                  id="updownsignp"></span></p>
-
+              <p class="boxHeading2">Classroom Signups<span style="margin-left: 5px !important;" id="updownsignp"></span></p>
               <p class="boxvalue" id="totalstudent1" onclick="cards2('/teacher_signup_table_weekly')"
                 style="cursor:pointer;"></p>
               <br />
@@ -422,14 +420,14 @@
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
               <p class="boxHeading2">Classroom Playback<span style="margin-left: 5px !important;"
                   id="updownpract"></span></p>
-              <p class="boxvalue" onclick="cards('/classroom_practice_WEEKLY')" id="neverlogged"></p>
+              <p class="boxvalue" onclick="cards3('/classroom_practice_WEEKLY')" id="neverlogged"></p>
               <br />
               <hr />
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
               <p class="boxHeading2">Home Playback<span style="margin-left: 5px !important;" id="updownpracp"></span>
               </p>
 
-              <p class="boxvalue" onclick="cards('/PARENTS_practice_WEEKLY')" id="totalstudent"></p>
+              <p class="boxvalue" onclick="cards3('/PARENTS_practice_WEEKLY')" id="totalstudent"></p>
               <br />
               <hr />
 
@@ -566,7 +564,7 @@
 
     <div class="col-md-10" style="margin-top: 40px;">
       <div id="container10"
-        style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+        style="height: 600px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
     </div>
 
     <!-- <div class="col-md-10" style="margin-top: 40px;">            
@@ -753,7 +751,7 @@
   <script src="{{ url_for('static',filename='js/Weekly_feedback.js') }}"></script>
 
   <!-- partial -->
-  <script src="{{ url_for('static',filename='js/Information_icon.js') }}"></script>
+  <!-- <script src="{{ url_for('static',filename='js/Information_icon.js') }}"></script> -->
   <script src="{{ url_for('static',filename='js/script.js') }}"></script>
 
 

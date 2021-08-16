@@ -885,164 +885,252 @@ alert(a);
 
 
 
+function createDynamic3(url){
+
+  var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": url,
+  "method": "GET",
+  success: function() {
+    var gif = document.getElementById("gif");
+    gif.style.display = "none";
+    },
+  }
+  $.ajax(settings).done(function (response) {
+  var data1=JSON.parse(response);
+  
+  $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
+  for(var i=0;i<data1.data.length;i++){
+  
+  
+  var datain = data1.data[i];
+  var resultDiv = createDynamicDiv3(datain);
+  
+  $("#dataTable").append(resultDiv);
+  
+  
+  
+  
+  }
+  //$('#dataTable1').append('</tbody></table>');
+  $('#dataTable').append('</tbody></table>');
+  dataTab();
+  
+  
+  
+  $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
+  for(var i=0;i<data1.data.length;i++){
+  
+  
+  var datain = data1.data[i];
+  
+  var resultDiv = createDynamicDiv3(datain);
+  $("#dataTable1").append(resultDiv);
+  }
+  
+  
+  $('#dataTable1').append('</tbody></table>');
+  })
+  }
+  
+  function dataTab()
+  {
+  
+  $("#dataTable").DataTable( {
+    "pageLength": 50
+  } );
+  
+  }
+  
+  
+  function createDynamicDiv3(userList){
+  var dynamicDiv = '';
+  console.log(userList)
+  
+  
+  
+  
+  dynamicDiv +=   '<tr >'+
+            '<td>'+userList[0]+'</td>'+
+          '<td>'+userList[1]+'</td>'+
+          '<td>'+userList[2]+'</td>'+
+          '<td>'+userList[3]+'</td>'+
+            '<td style="font-size: 12px;font-weight: 900;">'+userList[4]+'</td>'+
+          '<td >'+userList[5]+'</td>'+
+          '<td>'+userList[6]+'</td>'+
+          '<td>'+userList[7]+'</td>'+
+
+          '</tr>'
+  
+        
+  return dynamicDiv;
+  }
 function createDynamic(url){
 
-var settings = {
-"async": true,
-"crossDomain": true,
-"url": url,
-"method": "GET",
-success: function() {
-  var gif = document.getElementById("gif");
-  gif.style.display = "none";
-  },
-}
-$.ajax(settings).done(function (response) {
-var data1=JSON.parse(response);
+  var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": url,
+  "method": "GET",
+  success: function() {
+    var gif = document.getElementById("gif");
+    gif.style.display = "none";
+    },
+  }
+  $.ajax(settings).done(function (response) {
+  var data1=JSON.parse(response);
+  
+  $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
+  for(var i=0;i<data1.data.length;i++){
+  
+  
+  var datain = data1.data[i];
+  var resultDiv = createDynamicDiv(datain);
+  
+  $("#dataTable").append(resultDiv);
+  
+  
+  
+  
+  }
+  //$('#dataTable1').append('</tbody></table>');
+  $('#dataTable').append('</tbody></table>');
+  dataTab();
+  
+  
+  
+  $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
+  for(var i=0;i<data1.data.length;i++){
+  
+  
+  var datain = data1.data[i];
+  
+  var resultDiv = createDynamicDiv(datain);
+  $("#dataTable1").append(resultDiv);
+  }
+  
+  
+  $('#dataTable1').append('</tbody></table>');
+  })
+  }
+  
+  function dataTab()
+  {
+  
+  $("#dataTable").DataTable( {
+    "pageLength": 50
+  } );
+  
+  }
+  
+  
+  function createDynamicDiv(userList){
+  var dynamicDiv = '';
+  console.log(userList)
+  
+  
+  
+  
+  dynamicDiv +=   '<tr >'+
+            '<td>'+userList[0]+'</td>'+
+          '<td>'+userList[1]+'</td>'+
+          '<td>'+userList[2]+'</td>'+
+          '<td>'+userList[3]+'</td>'+
+            '<td style="font-size: 12px;font-weight: 900;">'+userList[4]+'</td>'+
+          '<td >'+userList[5]+'</td>'+
+          '<td>'+userList[6]+'</td>'+
+          '<td>'+userList[7]+'</td>'+
 
-$('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>LAST PLAYBACK DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>PLAYBACK TIME PERCENT</th></thead ><tbody>');
-for(var i=0;i<data1.data.length;i++){
+          '</tr>'
+  
+        
+  return dynamicDiv;
+  }
+    function createDynamic2(url){
 
-
-var datain = data1.data[i];
-var resultDiv = createDynamicDiv(datain);
-$("#dataTable").append(resultDiv);
-}
-//$('#dataTable1').append('</tbody></table>');
-$('#dataTable').append('</tbody></table>');
-dataTab();
-
-
-
-$('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATION DATE</th><th>RATING</th></thead ><tbody>');
-for(var i=0;i<data1.data.length;i++){
-
-
-var datain = data1.data[i];
-
-var resultDiv = createDynamicDiv(datain);
-$("#dataTable1").append(resultDiv);
-}
-
-
-$('#dataTable1').append('</tbody></table>');
-})
-}
-
-function dataTab()
-{
-
-$("#dataTable").DataTable( {
-  "pageLength": 50
-} );
-
-}
-
-
-function createDynamicDiv(userList){
-var dynamicDiv = '';
-console.log(userList)
-
-
-
-
-dynamicDiv +=   '<tr >'+
-          '<td>'+userList[0]+'</td>'+
-        '<td>'+userList[1]+'</td>'+
-        '<td>'+userList[2]+'</td>'+
-        '<td>'+userList[3]+'</td>'+
-        '<td style="font-size: 12px;font-weight: 900;">'+userList[4]+'</td>'+
-          '<td>'+userList[5]+'</td>'+
-        '<td>'+userList[6]+'</td>'+
-        '<td>'+userList[7]+'</td>'+
-        '</tr>'
-
+      var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": url,
+      "method": "GET",
+      success: function() {
+        var gif = document.getElementById("gif");
+        gif.style.display = "none";
+        },
       
-return dynamicDiv;
-}
-
-function createDynamic2(url){
-
-var settings = {
-"async": true,
-"crossDomain": true,
-"url": url,
-"method": "GET",
-success: function() {
-  var gif = document.getElementById("gif");
-  gif.style.display = "none";
-  },
-}
-$.ajax(settings).done(function (response) {
-var data1=JSON.parse(response);
-
-$('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
-for(var i=0;i<data1.data.length;i++){
-
-
-var datain = data1.data[i];
-var resultDiv = createDynamicDiv2(datain);
-
-$("#dataTable").append(resultDiv);
-
-
-
-
-}
-//$('#dataTable1').append('</tbody></table>');
-$('#dataTable').append('</tbody></table>');
-dataTab();
-
-
-
-$('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
-for(var i=0;i<data1.data.length;i++){
-
-
-var datain = data1.data[i];
-
-var resultDiv = createDynamicDiv2(datain);
-$("#dataTable1").append(resultDiv);
-}
-
-
-$('#dataTable1').append('</tbody></table>');
-})
-}
-
-function dataTab()
-{
-
-$("#dataTable").DataTable( {
-  "pageLength": 50
-} );
-
-}
-
-
-function createDynamicDiv2(userList){
-var dynamicDiv = '';
-console.log(userList)
-
-
-
-
-dynamicDiv += '<tr >'+
-          '<td>'+userList[0]+'</td>'+
-        '<td>'+userList[1]+'</td>'+
-        '<td>'+userList[2]+'</td>'+
-        '<td>'+userList[3]+'</td>'+
-          '<td>'+userList[4]+'</td>'+
-        '<td>'+userList[5]+'</td>'+
-        '<td>'+userList[6]+'</td>'+
-        '<td>'+userList[7]+'</td>'+
-        '<td>'+userList[8]+'</td>'+
-        '<td>'+userList[9]+'</td>'+     
-        '</tr>'
-
+      }
+      $.ajax(settings).done(function (response) {
+      var data1=JSON.parse(response);
       
-return dynamicDiv;
-}
+      $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
+      for(var i=0;i<data1.data.length;i++){
+      
+      
+      var datain = data1.data[i];
+      var resultDiv = createDynamicDiv2(datain);
+      
+      $("#dataTable").append(resultDiv);
+      
+      
+      
+      
+      }
+      //$('#dataTable1').append('</tbody></table>');
+      $('#dataTable').append('</tbody></table>');
+      dataTab();
+      
+      
+      
+      $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
+        for(var i=0;i<data1.data.length;i++){
+      
+      
+      var datain = data1.data[i];
+      
+      var resultDiv = createDynamicDiv2(datain);
+      $("#dataTable1").append(resultDiv);
+      }
+      
+      
+      $('#dataTable1').append('</tbody></table>');
+      })
+      }
+      
+      function dataTab()
+      {
+      
+      $("#dataTable").DataTable( {
+          "pageLength": 50
+      } );
+      
+      }
+      
+      
+      function createDynamicDiv2(userList){
+      var dynamicDiv = '';
+      console.log(userList)
+      
+      
+        
+        
+        dynamicDiv +=   '<tr >'+
+                  '<td>'+userList[0]+'</td>'+
+                '<td>'+userList[1]+'</td>'+
+                '<td>'+userList[2]+'</td>'+
+                '<td>'+userList[3]+'</td>'+
+                  '<td>'+userList[4]+'</td>'+
+                '<td>'+userList[5]+'</td>'+
+                '<td>'+userList[6]+'</td>'+
+                '<td>'+userList[7]+'</td>'+
+                '<td>'+userList[8]+'</td>'+
+                '<td>'+userList[9]+'</td>'+
+               
+                '</tr>'
+      
+              
+      return dynamicDiv;
+      }
 
 function cardscount(a){
 var settings = {
@@ -1123,7 +1211,9 @@ else if(c===-1) {
 else {
   document.getElementById("updownsigntotal").style.color = "grey";
   }
-var t = parseInt(dataa.parentschanged[0]);
+
+
+var t = parseInt(dataa.teacherschanged[0]);
 
 
 if(t===1){
@@ -1137,21 +1227,21 @@ else if(t===-1) {
 else {
   document.getElementById("updownsignp").style.color = "grey";
 }
-var v = parseInt(dataa.teacherschanged[0]);
+var v = parseInt(dataa.parentschanged[0]);
 
 if(v===1){
-console.log("hello2")
-document.getElementById("updownsignt").style.color = "green";
+console.log("hello2 sarthka")
+document.getElementById("updownsignteacher").style.color = "green";
 }
 else if(v===-1) {
-console.log("h2i")
-document.getElementById("updownsignt").style.color = "#ff0000";
+console.log("h2icm dc")
+document.getElementById("updownsignteacher").style.color = "#ff0000";
 }
 else {
-  document.getElementById("updownsignt").style.color = "grey";
+  document.getElementById("updownsignteacher").style.color = "grey";
 }
 $("#updownsigntotal").text(parseFloat(dataa.total_percentage_change[0]).toFixed(0) + "%");
-$("#updownsignt").text(parseFloat(dataa.parents_percentage_change[0]).toFixed(0) + "%");
+$("#updownsignteacher").text(parseFloat(dataa.parents_percentage_change[0]).toFixed(0) + "%");
 $("#updownsignp").text(parseFloat(dataa.teachers_percentage_change[0]).toFixed(0) + "%");
 $("#usercount1").text(dataa.total_signup_last_week[0]);
 $("#neverlogged1").text(dataa.parents_signup_last_week[0]);
@@ -1231,4 +1321,31 @@ function cards(URL) {
 gif.style.display = "block";
   $('#btnExport').show();
   createDynamic(mainURL)
+}
+function cards2(URL) {
+  var dated = document.getElementById("stardate").innerText;
+  var mainURL = URL + '/' + dated;
+  $('#next').empty();
+  console.log(mainURL);
+  var modal2 = document.getElementById("myModal2");
+  modal2.style.display = "block";
+  $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+  var gif = document.getElementById("gif");
+gif.style.display = "block";
+  $('#btnExport').show();
+  createDynamic2(mainURL)
+}
+
+function cards3(URL) {
+  var dated = document.getElementById("stardate").innerText;
+  var mainURL = URL + '/' + dated;
+  $('#next').empty();
+  console.log(mainURL);
+  var modal2 = document.getElementById("myModal2");
+  modal2.style.display = "block";
+  $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+  var gif = document.getElementById("gif");
+gif.style.display = "block";
+  $('#btnExport').show();
+  createDynamic3(mainURL)
 }
