@@ -1,7 +1,7 @@
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/_executive_dashbaord_",
+  url: "/_executive_dashbaord_",
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -29,7 +29,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/new_dash_count",
+  url: "/new_dash_count",
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -56,7 +56,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/executive_count_productwise_lelo",
+  url: "/executive_count_productwise_lelo",
   method: "GET",
 };
 $.ajax(settings).done(function (response) {

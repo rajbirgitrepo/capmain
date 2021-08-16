@@ -4,7 +4,7 @@ var previous = null;
   var settings = {
      "async": true,
      "crossDomain": true,
-     "url":             "http://127.0.0.1:5000/rtusercount",
+     "url":             "/rtusercount",
      "method": "GET"
     }
      $.ajax(settings).done(function (response) {
@@ -28,7 +28,7 @@ var current = null;
  var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/rtmapcount",
+    "url":             "/rtmapcount",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {

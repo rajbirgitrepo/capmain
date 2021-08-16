@@ -2,7 +2,7 @@ $(function () {
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/averagetrend/",
+    url: "/averagetrend/",
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -15,7 +15,7 @@ $(function () {
         renderTo: "container5",
       },
       title: {
-        text: "Average Practice Trend",
+        text: "Average Playback Trend",
       },
       xAxis: [
         {
@@ -45,7 +45,7 @@ $(function () {
             },
           },
           title: {
-            text: "Average Practice Count",
+            text: "Average Playback Count",
             style: {
               color: "#000",
             },
@@ -82,7 +82,7 @@ $(function () {
       },
       series: [
         {
-          name: "SY 2020-21",
+          name: "SY 2021-22",
           color: "#01a451",
           type: "column",
           yAxis: 0,
@@ -90,7 +90,7 @@ $(function () {
           tooltip: {},
         },
         {
-          name: "SY 2019-20",
+          name: "SY 2021-2022",
           color: "#ff8300",
           type: "spline",
           yAxis: 0,

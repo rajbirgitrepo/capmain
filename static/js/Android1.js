@@ -5,7 +5,7 @@ function P() {
   var settings = {
 "async": true,
 "crossDomain": true,
-"url": 'http://127.0.0.1:5000/appandroid',
+"url": '/appandroid',
 "method": "GET"
 }
 $.ajax(settings).done(function (response) {
@@ -23,7 +23,7 @@ $('#uninstallcard').text(dataa.uninstallcard);
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/appandroid",
+    "url":             "/appandroid",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -111,7 +111,7 @@ dataGrouping: {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/appandroid",
+  "url":             "/appandroid",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -200,7 +200,7 @@ enabled: false,
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/appandroid",
+  "url":             "/appandroid",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {

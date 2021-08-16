@@ -1,5 +1,5 @@
-$("#gifcards").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
-$("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+$("#gifcards").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+$("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
 var gif = document.getElementById("gifcards");
 gif.style.display = "none";
 function cards(URL) {
@@ -7,7 +7,7 @@ function cards(URL) {
   console.log(URL);
   var modal2 = document.getElementById("myModal2");
   modal2.style.display = "block";
-  $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+  $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
   var gif = document.getElementById("gif");
 gif.style.display = "block";
   $('#btnExport').show();
@@ -27,7 +27,7 @@ $( "#stardate" ).text(dateText);
    }
   });
   $( "#datepicker" ).datepicker("setDate", 
-  new Date(2020, 06, 01),)
+  new Date(2021, 06, 01),)
 });
 
 $(function() {
@@ -77,7 +77,7 @@ var currMonth = d.getMonth()+1;
 
            var startDate = new Date(currYear, currMonth, currDate);
            console.log(startDate);
-var e = "2020-07-01";
+var e = "2021-07-01";
 var f = currYear +"-"+currMonth +"-"+currDate;
 var gif = document.getElementById("gifcards");
 gif.style.display = "block";
@@ -90,11 +90,11 @@ $("#fromd").text(e);
 
 
 function cardscount(a,b){
-  console.log("http://127.0.0.1:5000/modetype/"+a + "/" + b)
+  console.log("/modetype/"+a + "/" + b)
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/modetype/"+a + "/" + b,
+    url: "/modetype/"+a + "/" + b,
     method: "GET",
     success: function() {
       var gif = document.getElementById("gifcards");
@@ -151,7 +151,7 @@ function charts(a,b){
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/hpayment/"+a + "/" + b,
+  url: "/hpayment/"+a + "/" + b,
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -214,7 +214,7 @@ $.ajax(settings).done(function (response) {
             click: function () {
     
               URL =
-                "http://127.0.0.1:5000/web/history/" +
+                "/web/history/" +
                 new Date(this.x).toLocaleString("sv-SE", {
                   day: "numeric",
                   month: "numeric",
@@ -262,7 +262,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/hpayment/"+a + "/" + b,
+  url: "/hpayment/"+a + "/" + b,
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -324,7 +324,7 @@ $.ajax(settings).done(function (response) {
           events: {
             click: function () {
               URL =
-                "http://127.0.0.1:5000/mobile/history/" +
+                "/mobile/history/" +
                 new Date(this.x).toLocaleString("sv-SE", {
                   day: "numeric",
                   month: "numeric",
@@ -337,7 +337,7 @@ $.ajax(settings).done(function (response) {
                 console.log(URL);
                 var modal2 = document.getElementById("myModal2");
                 modal2.style.display = "block";
-                $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+                $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
                 var gif = document.getElementById("gif");
                 gif.style.display = "block";
                 $('#btnExport').show();
@@ -388,7 +388,7 @@ function createDynamic(url){
   $.ajax(settings).done(function (response) {
   var data1=JSON.parse(response);
   
-  $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL ID</th><th>DEVICE USED</th><th>MODE OF PAYMENT</th><th>TYPE OF PAYMENT</th><th>PAYMENT DATE</th><th>AMOUNT</th></tr ></thead ><tbody>');
+  $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>TYPE OF PAYMENT</th><th>USER NAME</th><th>EMAIL ID</th><th>DEVICE USED</th><th>MODE OF PAYMENT</th><th>PAYMENT DATE</th><th>AMOUNT</th></tr ></thead ><tbody></tbody>');
                         
   for(var i=0;i<data1.data.length;i++){
   
@@ -408,7 +408,7 @@ function createDynamic(url){
   
   
   
-  $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>USER NAME</th><th>EMAIL ID</th><th>DEVICE USED</th><th>MODE OF PAYMENT</th><th>TYPE OF PAYMENT</th><th>PAYMENT DATE</th><th>AMOUNT</th></tr ></thead ><tbody>');
+  $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>TYPE OF PAYMENT</th><th>USER NAME</th><th>EMAIL ID</th><th>DEVICE USED</th><th>MODE OF PAYMENT</th><th>PAYMENT DATE</th><th>AMOUNT</th></tr ></thead ><tbody></tbody>');
   for(var i=0;i<data1.data.length;i++){
   
   

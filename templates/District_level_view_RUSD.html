@@ -16,7 +16,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 
@@ -344,7 +346,7 @@ border-radius: 20px;
         <i class="fa fa-search Icon"></i>
         <div id="iid" class="input-Field">
         </div>
-        <button class="search_Bt" onclick=search() id="hel">SEARCH</button>
+        <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
         <p style="display: none;" id="tagdescription" ></p>
         <p style="display: none;" id="tagdescription" ></p> -->
         <!--<div class="select_Bt">
@@ -359,7 +361,7 @@ border-radius: 20px;
     </nav>
     <aside class="side-nav" id="show-side-navigation1">
       <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-      <ul class="categories" style="margin-top:100px;">
+      <ul class="categories" style="margin-top:35px;">
         <li>
           <i class="fa fa-home" aria-hidden="true"></i>
           <a href="#">EXECUTIVE SUMMARY</a>
@@ -372,13 +374,13 @@ border-radius: 20px;
 <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
             <li><a href="awsmain">AWS ANALYTICS</a></li>
             <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                        <li><a href="21daystreak">21 Day Streak</a></li>
+                        
             
           </ul>
         </li>
         <li class="active"><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
           <ul class="side-nav-dropdown">
-            <li class="active2"><a href="School_Analytics">SCHOOL ANALYTICS</a></li>
+            <!-- <li class="active2"><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->
             <li class="active2"><a href="School_Search">SCHOOL SEARCH</a></li>
             <li class="active2"><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
             <li class="active2"><a href="Disctrictfilter">DISTRICT 360</a></li>
@@ -386,19 +388,19 @@ border-radius: 20px;
 
             <!-- <li><a href="District_level_view_RUSD">DISTRICT SPYDER VIEW</a></li> -->
            <li class="active2"><a href="ddt">DISTRICT DDT</a></li>
-<li class="active2"><a href="district _race">DISTRICT RACE CHART</a></li>
+<!-- <li class="active2"><a href="district _race">DISTRICT RACE CHART</a></li>--><li class="active2"><a href="21daystreak">21 Day Streak</a></li>
           </ul>
         </li>
-        <li><i class="fa fa-history"></i><a href="#">PRACTICE ANALYTICS</a>
+        <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
           <ul class="side-nav-dropdown">
-            <li><a href="Practice_Analytics">SCHOOL PRACTICE ANALYTICS</a></li>
+            <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
             <li><a href="Scoology">SCHOOLOGY</a></li>
-            <li><a href="Family_practice_analytics">APP PRACTICE ANALYTICS</a></li>
+            <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
             <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-            <li><a href="audio_analytics">AUDIO ANALYTICS</a></li>
+            <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
             <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
-            <li><a href="Practice_streak">PRACTICE STREAK</a></li>
-            <li><a href="pracbifurcation">PRACTICE BIFURCATION</a></li>
+            <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
+            <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
           </ul>
         </li>
         <li>
@@ -433,13 +435,13 @@ border-radius: 20px;
           <ul class="side-nav-dropdown">
             <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
             <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-            <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>
+            <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
             <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
-            <li><a href="Android_analytics">ANDROID ANALYTICS</a></li>
+            <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
             <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
           </ul>
         </li>
-        <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">5.7.2</span></a>
+        <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
       </li>
 <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
 </aside>
@@ -1053,7 +1055,7 @@ border-radius: 20px;
     <th>LAST PRACTICE DATE</th>
     
     <th>RENEWAL DATE</th>
-    <th>PRACTICE COUNT</th>
+    <th>PLAYBACK COUNT</th>
           </tr>
           <div class="table-footer">
         
@@ -1223,8 +1225,8 @@ else if (this.value == '2') {
   $("#active3").empty();
   $("#passive3").empty();
   $("#dormant3").empty();
-  spyder("http://127.0.0.1:5000/mongo/5f2609807a1c0000950bb471");
-  count("http://127.0.0.1:5000/card/5f2609807a1c0000950bb471");
+  spyder("/mongo/5f2609807a1c0000950bb471");
+  count("/card/5f2609807a1c0000950bb471");
   }
 else if (this.value == '2') {
   $("#viz").empty();
@@ -1238,8 +1240,8 @@ else if (this.value == '2') {
   $("#active3").empty();
   $("#passive3").empty();
   $("#dormant3").empty();
-  spyder("http://127.0.0.1:5000/mongo/5f2609807a1c0000950bb476");
-  count("http://127.0.0.1:5000/card/5f2609807a1c0000950bb476");
+  spyder("/mongo/5f2609807a1c0000950bb476");
+  count("/card/5f2609807a1c0000950bb476");
 }
 else if (this.value == '3') {
   $("#viz").empty();
@@ -1253,8 +1255,8 @@ else if (this.value == '3') {
   $("#active3").empty();
   $("#passive3").empty();
   $("#dormant3").empty();
-  spyder("http://127.0.0.1:5000/mongo/5f2609807a1c0000950bb45e");
-  count("http://127.0.0.1:5000/card/5f2609807a1c0000950bb45e");
+  spyder("/mongo/5f2609807a1c0000950bb45e");
+  count("/card/5f2609807a1c0000950bb45e");
 }
 else if (this.value == '4') {
   $("#viz").empty();
@@ -1268,8 +1270,8 @@ else if (this.value == '4') {
   $("#active3").empty();
   $("#passive3").empty();
   $("#dormant3").empty();
-  spyder("http://127.0.0.1:5000/mongo/5f2609807a1c0000950bb45a");
-  count("http://127.0.0.1:5000/card/5f2609807a1c0000950bb45a");
+  spyder("/mongo/5f2609807a1c0000950bb45a");
+  count("/card/5f2609807a1c0000950bb45a");
 }
 else if (this.value == '5') {
   $("#viz").empty();
@@ -1283,8 +1285,8 @@ else if (this.value == '5') {
   $("#active3").empty();
   $("#passive3").empty();
   $("#dormant3").empty();
-  spyder("http://127.0.0.1:5000/mongo/5f2609807a1c0000950bb46d");
-  count("http://127.0.0.1:5000/card/5f2609807a1c0000950bb46d");
+  spyder("/mongo/5f2609807a1c0000950bb46d");
+  count("/card/5f2609807a1c0000950bb46d");
 }
 else if (this.value == '6') {
   $("#viz").empty();
@@ -1298,8 +1300,8 @@ else if (this.value == '6') {
   $("#active3").empty();
   $("#passive3").empty();
   $("#dormant3").empty();
-  spyder("http://127.0.0.1:5000/mongo/5f2609807a1c0000950bb45d");
-  count("http://127.0.0.1:5000/card/5f2609807a1c0000950bb45d");
+  spyder("/mongo/5f2609807a1c0000950bb45d");
+  count("/card/5f2609807a1c0000950bb45d");
 }
 else if (this.value == '7') {
   $("#viz").empty();
@@ -1313,8 +1315,8 @@ else if (this.value == '7') {
   $("#active3").empty();
   $("#passive3").empty();
   $("#dormant3").empty();
-  spyder("http://127.0.0.1:5000/mongo/5f2609807a1c0000950bb461");
-  count("http://127.0.0.1:5000/card/5f2609807a1c0000950bb461");
+  spyder("/mongo/5f2609807a1c0000950bb461");
+  count("/card/5f2609807a1c0000950bb461");
 }
 else if (this.value == '8') {
   $("#viz").empty();
@@ -1343,8 +1345,8 @@ else if (this.value == '9') {
   $("#active3").empty();
   $("#passive3").empty();
   $("#dormant3").empty();
-  spyder("http://127.0.0.1:5000/mongo/5f2609807a1c0000950bb473");
-  count("http://127.0.0.1:5000/card/5f2609807a1c0000950bb473");
+  spyder("/mongo/5f2609807a1c0000950bb473");
+  count("/card/5f2609807a1c0000950bb473");
 }
 })
 </script>

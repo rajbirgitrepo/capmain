@@ -1,7 +1,23 @@
+playbackTrendChart('playback' , 'Playback')
+$("#practice_trendChart").val('playback');
+        $(document).on('change','#practice_trendChart',function(){
+          $('#container1').empty();
+          console.log(this.value)
+          if(this.value == 'practice'){
+            document.getElementById('practinsight').title = 'your new title';
+            playbackTrendChart(this.value , 'Practice')
+          }
+          else{
+            playbackTrendChart(this.value , 'Playback')
+          }
+          });
+
+function playbackTrendChart(selectValue , t) {
+
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/practicetrendnew",
+  url: "/practicetrendnew/" +selectValue,
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -16,7 +32,7 @@ $.ajax(settings).done(function (response) {
       enabled: false,
     },
     title: {
-      text: "Practice Trend",
+      text: t + "Trend",
     },
     colors: ['#4F1FAF','#462CEE','#8AE02B','#01A451'],
     xAxis: {
@@ -39,7 +55,7 @@ $.ajax(settings).done(function (response) {
       lineWidth: 1,
       min: 0,
       title: {
-        text: "Practice Count",
+        text: t + " Count",
       },
       stackLabels: {
         enabled: false,
@@ -83,29 +99,30 @@ $.ajax(settings).done(function (response) {
         data: dataa[2].bars,
       },
       {
-        name: "Family Practice Count(SY2020-2021)",
+        name: "Family" + t + " Count(CSY2021-2022)",
         data: dataa[1].bar2,
       },
       {
-        name: "User Practice Count(SY2020-2021)",
+        name: "User" + t + "Count(CSY2021-2022)",
         data: dataa[0].bar,
       },
      
       {
         type: "spline",
         color: "#FF8300",
-        name: "Practice Count(SY 2019-2020)",
+        name:  t + " Count(LSY 2020-2021)",
         data: dataa[0].curve,
       },
     ],
   });
 });
+}
 
 $(function () {
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/progprac",
+    url: "/progprac",
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -118,7 +135,7 @@ $(function () {
       },
       colors: ["#00A651", "#2C9905", "#8AE02B", "#B9FF4F", "#FF8300"],
       title: {
-        text: "PROGRAM WISE PRACTICE TREND",
+        text: "PROGRAM WISE PLAYBACK TREND",
       },
       xAxis: {
         categories: [
@@ -140,7 +157,7 @@ $(function () {
       yAxis: {
         min: 0,
         title: {
-          text: "Practice Count",
+          text: "Playback Count",
         },
       },
       tooltip: {
@@ -174,7 +191,7 @@ $(function () {
           data: dataa[0].high,
         },
         {
-          name: "SOUND PRACTICE /TRANSITION/ ALL",
+          name: "SOUND PLAYBACK /TRANSITION/ ALL",
           data: dataa[0].all,
         },
       ],

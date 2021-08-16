@@ -1,7 +1,7 @@
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url": "http://127.0.0.1:5000/top_20",
+  "url": "/top_20",
   "method": "GET"
 }
 $.ajax(settings).done(function (response) {
@@ -36,7 +36,7 @@ max:2000,
     }
   }, { // Secondary yAxis
     title: {
-      text: 'School Practice Count',
+      text: 'School Playback Count',
       style: {
         color: Highcharts.getOptions().colors[1]
       }
@@ -75,7 +75,7 @@ max:2000,
       'rgba(255,255,255,0.25)'
   },
   series: [{
-    name: 'School Practice Count',
+    name: 'School Playback Count',
     type: 'bar',
     color:'#01a451',
     yAxis: 1,
@@ -101,14 +101,14 @@ max:2000,
     var settings = {
       async: true,
       crossDomain: true,
-      url: "http://127.0.0.1:5000/schengtop20table",
+      url: "/schengtop20table",
       method: "GET",
     };
     $.ajax(settings).done(function (response) {
       var data1 = JSON.parse(response);
     
       $("#next").prepend(
-        '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>ADMIN NAME</th><th style="width: 130px !important;">ADMIN EMAIL</th><th>SIGNUP DATE</th><th>LAST PRACTICE DATE</th><th>RENEWAL DATE</th><th>PRACTICE COUNT</th></tr ></thead ><tbody>'
+        '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>ADMIN NAME</th><th style="width: 130px !important;">ADMIN EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
       );
       for (var i = 0; i < data1.data.length; i++) {
         var datain = data1.data[i];
@@ -121,7 +121,7 @@ max:2000,
       dataTab();
     
       $("#next1").prepend(
-        '<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>ADMIN NAME</th><th style="width: 130px !important;">ADMIN EMAIL</th><th>SIGNUP DATE</th><th>LAST PRACTICE DATE</th><th>RENEWAL DATE</th><th>PRACTICE COUNT</th></tr ></thead ><tbody>'
+        '<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>ADMIN NAME</th><th style="width: 130px !important;">ADMIN EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
       );
       for (var i = 0; i < data1.data.length; i++) {
         var datain = data1.data[i];

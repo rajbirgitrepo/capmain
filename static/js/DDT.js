@@ -2,7 +2,7 @@ imgd('3');
 function imgd(a){
   console.log("iamge", a);
   $("#imgdis").empty();
-  $("#imgdis").append('<img src="http://127.0.0.1:5000/static/images/'+ a +'.png" class="img-responsive" alt="School" style="color: #797979; width: 100%;">');
+  $("#imgdis").append('<img src="/static/images/'+ a +'.png" class="img-responsive" alt="School" style="color: #797979; width: 100%;">');
 }
 function modal2(){
     var modal = document.getElementById("myModal");
@@ -34,7 +34,7 @@ function charts(a){
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/districtddtchart/"+a,
+    "url":             "/districtddtchart/"+a,
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -99,7 +99,7 @@ series: [{
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": 'http://127.0.0.1:5000/districtddtcard/'+a,
+    "url": '/districtddtcard/'+a,
     "method": "GET"
    }
    $.ajax(settings).done(function (response) {
@@ -113,7 +113,7 @@ var settings = {
 };
 
 function cardcount(id){
-    URL = "http://127.0.0.1:5000/districtcardsinfo/" + id + "/2015-03-01/2021-4-3";
+    URL = "/districtcardsinfo/" + id + "/2015-03-01/2021-4-3";
     console.log(URL);
     var settings = {
 async: true,

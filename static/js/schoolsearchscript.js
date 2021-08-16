@@ -2,7 +2,7 @@ let str = window.location.href;
 console.log(str.substr(str.lastIndexOf("?")+1));
 var urlid = str.substr(str.lastIndexOf("?")+1);
 // if(urlid !== ''){
-//   URL = "http://127.0.0.1:5000/schoolsearchid/"+urlid
+//   URL = "/schoolsearchid/"+urlid
 //   $("#schoolname").empty();
 //   $("#practice").empty();
 //   $("#state").empty();
@@ -45,7 +45,7 @@ $.ajax(settings).done(function (response) {
   var data1 = JSON.parse(response);
 
   $("#next").prepend(
-    '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PRACTICE DATE</th> <th>RENEWAL DATE</th> <th>PRACTICE COUNT</th><th>PRACTICE COUNT(CSY)</th></tr ></thead ><tbody>'
+    '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th> <th>RENEWAL DATE</th> <th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th></tr ></thead ><tbody>'
   );
   for (var i = 0; i < data1.data.length; i++) {
     var datain = data1.data[i];
@@ -58,7 +58,7 @@ $.ajax(settings).done(function (response) {
   dataTab();
 
   $("#next1").prepend(
-    '<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PRACTICE DATE</th> <th>RENEWAL DATE</th> <th>PRACTICE COUNT</th><th>PRACTICE COUNT(CSY)</th></tr ></thead ><tbody>'
+    '<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th> <th>RENEWAL DATE</th> <th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th></tr ></thead ><tbody>'
   );
   for (var i = 0; i < data1.data.length; i++) {
     var datain = data1.data[i];
@@ -119,7 +119,7 @@ return dynamicDiv;
       var data1 = JSON.parse(response);
     
       $("#next").prepend(
-        '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PRACTICE DATE</th><th>RENEWAL DATE</th> <th>PRACTICE COUNT</th></tr ></thead ><tbody>'
+        '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th> <th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
       );
       for (var i = 0; i < data1.data.length; i++) {
         var datain = data1.data[i];
@@ -132,7 +132,7 @@ return dynamicDiv;
       dataTab();
     
       $("#next1").prepend(
-        '<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PRACTICE DATE</th> <th>RENEWAL DATE</th> <th>PRACTICE COUNT</th></tr ></thead ><tbody>'
+        '<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th> <th>RENEWAL DATE</th> <th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
       );
       for (var i = 0; i < data1.data.length; i++) {
         var datain = data1.data[i];
@@ -184,7 +184,7 @@ function schoolsearch(){
 var a = document.getElementById("searchinputdescription").innerText;
 console.log(a);
 if(a !== '' ){
-URL = "http://127.0.0.1:5000/schoolsearchid/"+a
+URL = "/schoolsearchid/"+a
 $("#schoolname").empty();
 $("#practice").empty();
 $("#state").empty();
@@ -216,7 +216,7 @@ $("#searchinputdescription").empty();
 else
 {
   var a = document.getElementById("searchinput").value;
-  URL = "http://127.0.0.1:5000/schoolsearchid/"+a
+  URL = "/schoolsearchid/"+a
 $("#schoolname").empty();
 $("#practice").empty();
 $("#state").empty();
@@ -248,8 +248,8 @@ createDynamic(URL);
 
 function schoolsearch2(){
   var a = document.getElementById("searchinput").value;
-  URL = "http://127.0.0.1:5000/journey/"+a;
-  URL2 = "http://127.0.0.1:5000/usersearch/"+a;
+  URL = "/journey/"+a;
+  URL2 = "/usersearch/"+a;
   $("#schoolname").empty();
   $("#practice").empty();
   $("#state").empty();
@@ -326,7 +326,7 @@ $.ajax(settings).done(function (response) {
   $("#city").text("CITY: " + dataa.city);
   $("#admin").text("ADMIN NAME: " + dataa.admin_name);
   $("#plan").text(dataa.plan);
-  var url1 = "http://127.0.0.1:5000/journey/"+dataa.admin_email;
+  var url1 = "/journey/"+dataa.admin_email;
   jou(url1);
   historychart(dataa.admin_email)
 });
@@ -420,7 +420,7 @@ $.ajax(settings).done(function (response) {
     },
     series: [
       {
-        name: "PRACTICE TREND",
+        name: "PLAYBACK TREND",
         data: (function () {
           // generate an array of random data
           var data = [];
@@ -549,7 +549,7 @@ function jou2(url1){
     $("#practicecount").text(practice);
     $("#uniqueusercount").text(datain[0].unique_user);
     $("#months").text(datain[0].month);
-    var url2 = "http://127.0.0.1:5000/schoolsearchid/"+datain[0].schoolid;
+    var url2 = "/schoolsearchid/"+datain[0].schoolid;
     P2(url2);
     console.log(datain[0].city);
     console.log(datain[0].students_impacted);
@@ -588,7 +588,7 @@ function jou2(url1){
       },
       series: [
         {
-          name: "PRACTICE TREND",
+          name: "PLAYBACK TREND",
           data: (function () {
             // generate an array of random data
             var data = [];
@@ -666,7 +666,7 @@ function jou2(url1){
     var a = document.getElementById("fsearchinputdescription").innerText;
     console.log(a);
     if(a !== '' ){
-    URL = "http://127.0.0.1:5000/familysearchid/"+a
+    URL = "/familysearchid/"+a
     $("#fschoolname").empty();
     $("#fpractice").empty();
     $("#fstate").empty();
@@ -698,7 +698,7 @@ function jou2(url1){
     else
     {
       var a = document.getElementById("searchinputfamily").value;
-      URL = "http://127.0.0.1:5000/familysearchid/"+a
+      URL = "/familysearchid/"+a
     $("#fschoolname").empty();
     $("#fpractice").empty();
     $("#fstate").empty();
@@ -777,7 +777,7 @@ function jou2(url1){
         $("#city").text("CITY: " + dataa.city);
         $("#admin").text("ADMIN NAME: " + dataa.admin_name);
         $("#plan").text(dataa.plan);
-        var url1 = "http://127.0.0.1:5000/journey/"+dataa.admin_email;
+        var url1 = "/journey/"+dataa.admin_email;
         joufam(url1);
         historychartfam(dataa.admin_email)
       });
@@ -847,7 +847,7 @@ function jou2(url1){
             },
             series: [
               {
-                name: "PRACTICE TREND",
+                name: "PLAYBACK TREND",
                 data: (function () {
                   // generate an array of random data
                   var data = [];
@@ -928,7 +928,7 @@ function jou2(url1){
 
         function usersearch(){
           $("#gif3").empty();
-          $("#gif3").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+          $("#gif3").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
           var gif = document.getElementById("gif3");
           gif.style.display = "block";
           $("#schoolname").empty();
@@ -959,7 +959,7 @@ function jou2(url1){
               $("#container1").empty();
           var a = document.getElementById("searchinputuser").value;
           // var b = document.getElementById("searchinputuser2").value;
-          var URL = "http://127.0.0.1:5000/user_journey_score/"+a;
+          var URL = "/user_journey_score/"+a;
           console.log(URL);
           var settings = {
               async: true,
@@ -1012,7 +1012,7 @@ function jou2(url1){
                   },
                 
                   title: {
-                    text: 'USERS PRACTICE COMPARISON'
+                    text: 'USERS PLAYBACK COMPARISON'
                   },credits:false,
                     xAxis: {
                         minRange: 1
@@ -1038,13 +1038,13 @@ function jou2(url1){
                         lineWidth: 1,
                         opposite: false,
                         title: {
-                            text: 'Practice Count'
+                            text: 'Playback Count'
                         }
                     },{
                         lineWidth: 1,
                         opposite: true,
                         title: {
-                            text: 'Practice Count'
+                            text: 'Playback Count'
                         }
                     }],
                 
@@ -1069,7 +1069,7 @@ function jou2(url1){
                   },
                 
                   title: {
-                    text: 'USERS PRACTICE CUMULATIVE'
+                    text: 'USERS PLAYBACK CUMULATIVE'
                   },credits:false,
                     xAxis: {
                         minRange: 1
@@ -1095,13 +1095,13 @@ function jou2(url1){
                         lineWidth: 1,
                         opposite: false,
                         title: {
-                            text: 'Practice Count'
+                            text: 'Playback Count'
                         }
                     },{
                         lineWidth: 1,
                         opposite: true,
                         title: {
-                            text: 'Practice Count'
+                            text: 'Playback Count'
                         }
                     }],
                 

@@ -1,443 +1,747 @@
 <!--Hey! This is the original version
 of Simple CSS Waves-->
 <html>
+
 <head>
   <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
-  <title>CAPXP 2020</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <title>CAPi6 2021</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/journeystyle.css') }}">
+  <script src="https://code.highcharts.com/stock/highstock.js"></script>
+  <script src="https://code.highcharts.com/maps/modules/map.js"></script>
+  <script src="https://code.highcharts.com/maps/modules/data.js"></script>
+  <script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
+  <script src="https://code.highcharts.com/mapdata/countries/us/custom/us-all-territories.js"></script>
 
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/bootstrap.min.css') }}">
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/journeystyle.css') }}">
-
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-EWVQZSV89G');
-</script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-EWVQZSV89G');
+  </script>
 </head>
 
 <style>
-    @import url(//https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap);
-body {
-  margin:0;
-}
-h1 {
-  font-family: 'Poppins', sans-serif;
-  font-weight:300;
-  letter-spacing: 2px;
-  font-size:48px;
-}
-p {
+  @import url(//https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap);
+
+  body {
+    margin: 0;
+  }
+
+  .input-Field {
+    width: 59%;
+    outline: none;
+    border-radius: 25px 0px 0px 25px;
+    border: 0;
+    background-color: #fff;
+  }
+
+  .search_Bt {
+    background-color: #fff;
+    outline: 0;
+    color: #5cb85c;
+    border: 0;
+    padding-right: 2px;
+    border-radius: 0 20px 20px 0;
+  }
+
+  .icon {
+    /* transform: translate(30px,0); */
+    margin-left: 1px;
+    width: 35px;
+    height: 36px;
+    background: #79d70f;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    min-width: 66px;
+  }
+
+  h1 {
     font-family: 'Poppins', sans-serif;
-  letter-spacing: 1px;
-  font-size:14px;
-  color: #333333;
-}
-.header {
-  position:relative;
-  background-image: linear-gradient(to bottom, #4da555, #83D475);
-  color:white;
-  border-radius: 0 0 50px 50px;
-}
-.logo {
+    font-weight: 300;
+    letter-spacing: 2px;
+    font-size: 48px;
+  }
+
+  p {
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+    font-size: 14px;
+    color: #333333;
+  }
+
+  .header {
+    position: relative;
+    background-image: linear-gradient(to bottom, #5ac764, #049730);;
+    color: white;
+    border-radius: 0 0 50px 50px;
+  }
+
+  /*.logo {
   width: 193px;
 fill: white;
 padding-right: 15px;
 margin-top: 0px;
 margin-left: 610px;
 padding-top: 36px;
-}
-.inner-header {
-  height: 550px;
-  width:100%;
-  margin: 0;
-  padding: 0;
-}
-.flex { /*Flexbox for containers*/
-display: flex;
-}
-.waves {
-  position:relative;
-  width: 100%;
-  height:15vh;
-  margin-bottom:-7px; /*Fix for safari gap*/
-  min-height:100px;
-  max-height:150px;
-}
-.content {
-  position:relative;
-  height:20vh;
-  text-align:center;
-  background-color: white;
-}
-/* Animation */
-.parallax > use {
-  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
-}
-.parallax > use:nth-child(1) {
-  animation-delay: -2s;
-  animation-duration: 7s;
-}
-.parallax > use:nth-child(2) {
-  animation-delay: -3s;
-  animation-duration: 10s;
-}
-.parallax > use:nth-child(3) {
-  animation-delay: -4s;
-  animation-duration: 13s;
-}
-.parallax > use:nth-child(4) {
-  animation-delay: -5s;
-  animation-duration: 20s;
-}
-@keyframes move-forever {
-  0% {
-   transform: translate3d(-90px,0,0);
+} */
+  .inner-header {
+    height: 550px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
-  100% { 
-    transform: translate3d(85px,0,0);
+
+  .flex {
+    /*Flexbox for containers*/
+    display: flex;
   }
-}
-/*Shrinking for mobile*/
-@media (max-width: 768px) {
+
   .waves {
-    height:40px;
-    min-height:40px;
-  } 
+    position: relative;
+    width: 100%;
+    height: 15vh;
+    margin-bottom: -7px;
+    /*Fix for safari gap*/
+    min-height: 100px;
+    max-height: 150px;
+  }
+
   .content {
-    height:30vh;
+    position: relative;
+    height: 20vh;
+    text-align: center;
+    background-color: white;
   }
-  h1 {
-    font-size:24px;
+
+  /* Animation */
+  .parallax>use {
+    animation: move-forever 25s cubic-bezier(.55, .5, .45, .5) infinite;
   }
-}
+
+  .parallax>use:nth-child(1) {
+    animation-delay: -2s;
+    animation-duration: 7s;
+  }
+
+  .parallax>use:nth-child(2) {
+    animation-delay: -3s;
+    animation-duration: 10s;
+  }
+
+  .parallax>use:nth-child(3) {
+    animation-delay: -4s;
+    animation-duration: 13s;
+  }
+
+  .parallax>use:nth-child(4) {
+    animation-delay: -5s;
+    animation-duration: 20s;
+  }
+
+  @keyframes move-forever {
+    0% {
+      transform: translate3d(-90px, 0, 0);
+    }
+
+    100% {
+      transform: translate3d(85px, 0, 0);
+    }
+  }
+
+  /*Shrinking for mobile*/
+  @media (max-width: 768px) {
+    .waves {
+      height: 40px;
+      min-height: 40px;
+    }
+
+    .content {
+      height: 30vh;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+  }
+
+  .threebox {
+    float: left;
+    width: 100%;
+    padding: 40px 0
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .box-outer-nw {
+    float: left;
+    width: 100%;
+    padding: 0;
+    background: #ffffff none repeat scroll 0 0;
+    -moz-box-shadow: 0 0 10px #cccccc;
+    -webkit-box-shadow: 0 0 10px #cccccc;
+    -o-box-shadow: 0 0 10px #cccccc;
+    box-shadow: 0 0 10px #cccccc;
+    text-align: center
+  }
+
+  .box-outer-nw img {
+    width: 120px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 1px;
+    opacity: 0.7;
+  }
+
+  .text-s {
+    float: left;
+    color: #464b48;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+
+    padding: 15px 0
+  }
+
+  .threebox .col-md-4 a {
+    color: rgb(236, 236, 236)
+  }
+
+  .box-outer-nw:hover {
+    box-shadow: 0 0 18px #b1b1b1;
+  }
+
+  .box-outer-nw:hover img {
+    opacity: 1
+  }
+
+  .box_outer_color {
+    float: left;
+    width: 100%;
+  }
+
+  .portalBox {
+    width: 13.66%;
+  }
+
+  .box-outer-nw {
+    float: left;
+    width: 100%;
+    padding: 0;
+    background: #ffffff none repeat scroll 0 0;
+    -moz-box-shadow: 0 0 10px #cccccc;
+    -webkit-box-shadow: 0 0 10px #cccccc;
+    -o-box-shadow: 0 0 10px #cccccc;
+    box-shadow: 0 0 10px #cccccc;
+    text-align: center
+  }
+
+  .whatnew {
+    margin-left: 28%;
+    margin-top: 2%;
+    font-weight: 200;
+    right: 108%;
+    margin-right: 32%;
+    opacity: 80%;
+    border-radius: 10px;
+    text-align: center;
+  }
 
 
+  .overlay {
+    position: fixed;
+    top: 0;
+    bottom: 90px;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    visibility: hidden;
+    opacity: 0;
+  }
 
- 
-.threebox {
-  float: left;
-  width: 100%;
-  padding: 40px 0
-}
+  .overlay:target {
+    visibility: visible;
+    opacity: 1;
+    height: 800px;
+  }
 
-html {
-scroll-behavior: smooth;
-}
-.box-outer-nw {
-  float: left;
-  width: 100%;
-  padding: 0;
-  background: #ffffff none repeat scroll 0 0;
-  -moz-box-shadow: 0 0 10px #cccccc;
-  -webkit-box-shadow: 0 0 10px #cccccc;
-  -o-box-shadow: 0 0 10px #cccccc;
-  box-shadow: 0 0 10px #cccccc;
-  text-align: center
-}
+  .popup {
+    margin: 120px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 20px;
+    width: 53%;
+    height: 62%;
+    position: relative;
+    transition: all 5s ease-in-out;
+  }
 
-.box-outer-nw img {
-  width: 120px; 
-  margin: 0 auto;
-  padding: 20px;
-  min-height: 1px;
-  opacity: 0.7; 
-}
+  .popup h2 {
+    margin-top: 0;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    margin-bottom: 30px;
 
-.text-s {
-  float: left;
-  color: #464b48;
-  width: 100%;
-  margin: 0;
-  text-align: center;
-  font-size: 11px;
-  text-transform: uppercase;
- 
-  padding: 15px 0
-}
+    color: #797979;
+  }
 
-.threebox .col-md-4 a {
-  color: rgb(236, 236, 236)
-}
+  .popup li {
+    margin-top: 0;
+    color: #333;
+    font-family: 'Poppins', sans-serif;
+    font-size: 218x;
+    margin-bottom: 5px;
 
-.box-outer-nw:hover {
-  box-shadow: 0 0 18px #b1b1b1;
-}
+    color: #8d8d8d;
+  }
 
-.box-outer-nw:hover img {
-  opacity: 1
-}
+  .popup .close {
+    position: absolute;
+    top: 3px;
+    right: 19px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+    z-index: 1;
+  }
 
-.box_outer_color {
-  float: left;
-  width: 100%;
-}
+  .popup .close:hover {
+    color: #06d85f;
+  }
 
-.portalBox{
-  width: 13.66%;
-}
-.box-outer-nw {
-  float: left;
-  width: 100%;
-  padding: 0;
-  background: #ffffff none repeat scroll 0 0;
-  -moz-box-shadow: 0 0 10px #cccccc;
-  -webkit-box-shadow: 0 0 10px #cccccc;
-  -o-box-shadow: 0 0 10px #cccccc;
-  box-shadow: 0 0 10px #cccccc;
-  text-align: center
-}
+  .popup .content {
+    max-height: 50%;
+    overflow: unset;
+  }
 
+  .image {
+    float: right;
+    width: 107px;
+    height: 38px;
+    opacity: 100%;
+    margin-top: 15px;
+  }
 
+  .image2 {
+    float: left;
+    width: 1%;
+    opacity: 100%;
+    margin-top: 4px;
+    margin-right: 10px;
+  }
 
+  .statistics .boxExecutive {
 
+    box-shadow: none;
+  }
 
+  .insight-cards {
+    background-color: #ffffff;
+    padding: 6px 30px;
+  }
 
-.whatnew{
-  margin-left: 54%;
-margin-top: 2%;
-font-weight: 200;
-right: 108%;
-margin-right: 32%;
-opacity: 80%;
-border-radius: 10px;
-text-align: center;
-}
+  .border-insight {
+    box-shadow: 7px 3px 32px rgb(0 0 0 / 10%);
+    border-radius: 20px;
+  }
 
+  .inline-text {
+    width: 95%;
+    float: left;
+    margin-top: 8px;
+    margin-left: 11px;
+    color: black;
+  }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  bottom: 90px;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.7);
-  transition: opacity 500ms;
-  visibility: hidden;
-  opacity: 0;
-}
-.overlay:target {
-  visibility: visible;
-  opacity: 1;
-  height: 800px;
-}
+  .insight hr {
+    float: left;
+    width: 100%;
+  }
 
-.popup {
-  margin: 120px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 20px;
-  width: 50%;
-  height: 23%;
-  position: relative;
-  transition: all 5s ease-in-out;
-}
-
-.popup h2 {
-  margin-top: 0;
-  color: #333;
-  font-family: 'Poppins', sans-serif;
-  font-size: 30px;
-  margin-bottom: 30px;
-
-  color: #797979;
-}
-.popup li {
-  margin-top: 0;
-  color: #333;
-  font-family: 'Poppins', sans-serif;
-  font-size: 218x;
-  margin-bottom: 5px;
-
-  color: #8d8d8d;
-}
-.popup .close {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  transition: all 200ms;
-  font-size: 30px;
-  font-weight: bold;
-  text-decoration: none;
-  color: #333;
-}
-.popup .close:hover {
-  color: #06d85f;
-}
-.popup .content {
-  max-height: 69%;
-  overflow: auto;
-}
-
+  .f-12 {
+    font-size: 12px;
+  }
 </style>
 
 <body class="body">
-<div class="header">
 
+  <div class="header">
+    <nav class="navbar">
+      <div class="">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a href="homepage">
+              <img src="/static/images/capwhite.png" alt="" class="logo">
+            </a>
+          </div>
+
+          <div class="input-Container ui-widget">
+
+            <div id="iid" class="input-Field">
+              <input id="searchinput"
+                style="width: 100%;padding: 10px 20px;outline: none;border-radius: 0 0 0 0;border: 0; color: black;"
+                placeholder="Try Searching school or email" class="ui-autocomplete-input" autocomplete="off">
+            </div>
+            <button class="search_Bt" onclick="search()" id="hel"><i class="fa fa-search Icon"></i></button>
+            <p style="display: none;" id="tagdescription"></p>
+          </div>
+        </div>
+      </div>
+    </nav>
     <!--Content before waves-->
-    <div class="inner-header flex">
-    <!--Just the logo.. Don't mind this-->
- 
-      
-
-
-    <section class="sboxes">
-        <div class="container"  >
-            <div class="row">
-                <img src="http://127.0.0.1:5000/static/images/capwhite.png" class="logo">
-                <h1 style="margin-left: 350px;margin-top: 60px;">Welcome to CAPXP Analytics</h1>
-                <a href="#popup1">
-                <div class="whatnew">
-                <h3 style="color:#fff;text-align: center;" ><i class="fa fa-star" aria-hidden="true"></i>What's New! 
-                </h3></div></a>
-                <div class="items row">
-                  <div class="container" style="
-                  margin-left: 13%;">
-                    <div class="row">
-                       <div class="threebox p0">
-                          <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title="" data-original-title="">
-                          </a>
-                          <div class="col-md-2 portalBox">
-                             <a href="Executive_Dashboard" onclick="idbased()">
-                                 <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()">
-                                  
-                                     <img src="http://127.0.0.1:5000/static/images/thinking.png" class="img-responsive" alt="School">
-                                     <p class="text-s" style="border-radius: 20px;">
-                                         EXECUTIVE SUMMARY
-                                     </p>
-                                 </div>
-                             </a>
-                         </div>
-                          <div class="col-md-2 portalBox">
-                              <a href="School_Analytics">
-                                  <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="gettin()">
-                                      <img src="http://127.0.0.1:5000/static/images/shuttle.png" class="img-responsive" alt="School" style="color: #797979;">
-                                      <p class="text-s" style="border-radius: 20px;">
-                                         ENGAGEMENT DASHBOARDS
-                                      </p>
-                                  </div>
-                              </a>
-                          </div>
-                          <div class="col-md-2 portalBox">
-                              <a href="Practice_Analytics">
-                                  <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="best()">
-                                      <img src="http://127.0.0.1:5000/static/images/badge.png" style="padding: 26px;" class="img-responsive" alt="School">
-                                      <p class="text-s" style="border-radius: 20px;">
-                                         PRACTICE ANALYTICS
-                                      </p>
-                                  </div>
-                              </a>
-                          </div>
-                          <div class="col-md-2 portalBox">
-                            <a href="Transaction_Reporting">
-                                <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="technical()" >
-                                    <img src="http://127.0.0.1:5000/static/images/compass.png" class="img-responsive" alt="School" style="color: #797979;">
-                                    <p class="text-s" style="border-radius: 20px;">
-                                       REVENUE DASHBOARDS
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
-                          <div class="col-md-2 portalBox">
-                             <a href="feedback_Analyitcs">
-                                 <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="technical()">
-                                     <img src="http://127.0.0.1:5000/static/images/technical-support.png" class="img-responsive" alt="School" style="color: #797979;">
-                                     <p class="text-s" style="border-radius: 20px;">
-                                        FEEDBACK AND SURVEY
-                                     </p>
-                                 </div>
-                             </a>
-                         </div>
-                          <div class="col-md-2 portalBox">
-                             <a href="Upcoming_Renewals">
-                                 <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="faq()">
-                                     <img src="http://127.0.0.1:5000/static/images/users.png" class="img-responsive" alt="School" style="width: 158px;margin-top: 18px;color: #797979;">
-                                     <p class="text-s" style="border-radius: 20px;"style="border-radius: 20px;">
-                                        SUBSCRIPTION DASHBOARDS
-                                     </p>
-                                 </div>
-                             </a>
-                         </div>
-                         <div class="col-md-2 portalBox">
-                          <a href="Familyapp_school">
-                              <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="resources()">
-                                  <img src="http://127.0.0.1:5000/static/images/target.png" class="img-responsive" alt="School" style="color: #797979;">
-                                  <p class="text-s" style="border-radius: 20px;">
-                                     APP <br/> ANALYTICS
-                                  </p>
-                              </div>
-                          </a>
-                      </div>
-                      </div>
+    <div class="inner-header">
+      <!--Just the logo.. Don't mind this-->
+<section>
+  <div class="container">
+    <div class="row">
+      <div>
+        <a href="#popup1">
+          <div class="whatnew">
+            <h3 style="color:#fff;text-align: center;"><i class="fa fa-star" aria-hidden="true"></i> What's New!
+            </h3>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+      <section class="statistics">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="row">
+                <div class="col-lg-3">
+                  <div class="boxExecutive">
+                    <div>
+                      <img src="/static/images/Bar_Chartnew.png" class="image">
+                      <p style="font-size: 11px;">Daily Analytics</p>
+                      <p class="boxvalue2" id="dailydate" style="font-size: 15px;
+                      "></p>
+                      <br>
+                      <hr>
+                      <img src="/static/images/green.png" class="image2">
+                      <p class="boxHeading2" style="font-size: 9px !important;">New Signups<span
+                          style="color: rgb(255, 0, 0); margin-left: 5px !important;" id="updownsigntotalDaily"></span>
+                      </p>
+                      <p class="boxvalue" id="d1"></p>
+                      <br>
+                      <hr>
+                      <img src="/static/images/green.png" class="image2">
+                      <p class="boxHeading2" style="font-size: 9px !important;">Total Practice<span
+                          style="margin-left: 5px !important; color: rgb(255, 0, 0);" id="updownpractotalDaily"></span>
+                      </p>
+                      <p class="boxvalue" id="d2"></p>
+                      <br>
+                      <hr>
+                      <img src="/static/images/green.png" class="image2" style="visibility: hidden;">
+                      <p class="boxHeading2" style="font-size: 9px !important;visibility: hidden;">Average Practice<span
+                          style="margin-left: 5px !important; color: rgb(255, 0, 0);" id="updownfbtotalDaily"></span>
+                      </p>
+                      <p class="boxvalue" id="avgfb" style="visibility: hidden;"></p>
+                      <br>
+                      <hr>
+                      <a href="Daily_Analytics">
+                        <p class="boxvalue" style="color: green;font-size: 11px !important;">View Daily Analytics<i
+                            class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </p>
+                      </a>
+                      <br>
                     </div>
                   </div>
                 </div>
+                <div class="col-lg-3">
+                  <div class="boxExecutive">
+                    <div>
+                      <img src="/static/images/Bar_Chartnew.png" class="image">
+                      <p style="font-size: 11px;">Weekly Analytics</p>
+                      <p class="boxvalue2" id="weeklydate" style="font-size: 15px;
+                      "></p>
+                      <br>
+                      <hr>
+                      <img src="/static/images/green.png" class="image2">
+                      <p class="boxHeading2" style="font-size: 9px !important;">New Signups<span
+                          style="margin-left: 5px !important; color: rgb(255, 0, 0);" id="updownsigntotalWeekly"></span>
+                      </p>
+                      <p class="boxvalue" id="w1"></p>
+                      <br>
+                      <hr>
+                      <img src="/static/images/green.png" class="image2">
+                      <p class="boxHeading2" style="font-size: 9px !important;">Total Practice<span
+                          style="margin-left: 5px !important; color: rgb(255, 0, 0);" id="updownpractotalWeekly"></span>
+                      </p>
+                      <p class="boxvalue" id="w2"></p>
+                      <br>
+                      <hr>
+                      <img src="/static/images/green.png" class="image2" style="visibility: hidden;">
+                      <p class="boxHeading2" style="font-size: 9px !important;visibility: hidden;">Average Practice<span
+                          style="margin-left: 5px !important; color: rgb(255, 0, 0);" id="updownfbtotalWeekly"></span>
+                      </p>
+                      <p class="boxvalue" id="avgfb1" style="visibility: hidden;"></p>
+                      <br>
+                      <hr>
+                      <a href="Weekly_Analytics">
+                        <p class="boxvalue" style="color: green;font-size: 11px !important;">View Weekly Analytics<i
+                            class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </p>
+                      </a>
+                      <br>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="boxExecutive">
+                    <div>
+                      <img src="/static/images/Bar_Chartnew.png" class="image">
+                      <p style="font-size: 11px;margin-bottom: 0px;">Server health</p>
+                      <h4 style="color: #4da555;margin-bottom: 27px;">Healthy</h4>
+                      <hr>
+                      <br>
+                      <img src="/static/images/green.png" class="image2">
+                      <p class="boxHeading2" style="font-size: 9px !important;">Total JIRA requests</p>
+                      <p class="boxvalue" id="jira"></p>
+                      <br>
+                      <hr>
+                      <img src="/static/images/green.png" class="image2">
+                      <p class="boxHeading2" style="font-size: 9px !important;">Resolved JIRA requests</p>
+                      <p class="boxvalue" id="jirac" style="cursor:pointer;"></p>
+                      <br>
+                      <hr>
+                      <img src="/static/images/green.png" class="image2">
+                      <p class="boxHeading2" style="font-size: 9px !important;">Escalated JIRA requests</p>
+                      <p class="boxvalue" id="jirae" style="cursor:pointer;"></p>
+                      <br>
+                      <hr>
+                      <a href="Daily_Analytics">
+                        <p class="boxvalue" style="color: green;font-size: 11px !important;">View Daily Analytics<i
+                            class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </p>
+                      </a>
+                      <br>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="boxExecutive">
+                    <p style="margin: 0; text-align: center;">Total Revenue (CSY)</p>
+                    <p id="Total_amount2" style="margin: 0; text-align: center;">
+                    </p>
+                    <div id="containerpie" style="margin-left: 15px; height:180px;"></div>
+                    <hr />
+                    <a href="Transaction_Reporting">
+                      <p class="boxvalue" style="color: green;font-size: 11px !important;">View Revenue Overview<i
+                          class="fa fa-chevron-right" aria-hidden="true"></i>
+                      </p>
+                    </a>
+                    <br />
+
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </section>
+      </section>
+
+
+      <section class="sboxes">
+        <div class="">
+          <div class="">
+            
+            <div class="">
+              <!--Remove class="items row" -->
+              <div class="container">
+                <div class="row">
+                  <div class="threebox p0">
+                    <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title=""
+                      data-original-title="">
+                    </a>
+                    <div class="col-md-2 portalBox">
+                      <a href="Executive_Dashboard" onclick="idbased()">
+                        <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()">
+
+                          <img src="/static/images/thinking.png" class="img-responsive" alt="School">
+                          <p class="text-s" style="border-radius: 20px;">
+                            EXECUTIVE SUMMARY
+                          </p>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-md-2 portalBox">
+                      <a href="School_Analytics">
+                        <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="gettin()">
+                          <img src="/static/images/shuttle.png" class="img-responsive" alt="School"
+                            style="color: #797979;">
+                          <p class="text-s" style="border-radius: 20px;">
+                            ENGAGEMENT DASHBOARDS
+                          </p>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-md-2 portalBox">
+                      <a href="Practice_Analytics">
+                        <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="best()">
+                          <img src="/static/images/badge.png" style="padding: 26px;" class="img-responsive"
+                            alt="School">
+                          <p class="text-s" style="border-radius: 20px;">
+                            PLAYBACK ANALYTICS
+                          </p>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-md-2 portalBox">
+                      <a href="Transaction_Reporting">
+                        <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="technical()">
+                          <img src="/static/images/compass.png" class="img-responsive" alt="School"
+                            style="color: #797979;">
+                          <p class="text-s" style="border-radius: 20px;">
+                            REVENUE DASHBOARDS
+                          </p>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-md-2 portalBox">
+                      <a href="feedback_Analyitcs">
+                        <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="technical()">
+                          <img src="/static/images/technical-support.png" class="img-responsive" alt="School"
+                            style="color: #797979;">
+                          <p class="text-s" style="border-radius: 20px;">
+                            FEEDBACK AND SURVEY
+                          </p>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-md-2 portalBox">
+                      <a href="Upcoming_Renewals">
+                        <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="faq()">
+                          <img src="/static/images/users.png" class="img-responsive" alt="School"
+                            style="width: 158px;margin-top: 18px;color: #797979;">
+                          <p class="text-s" style="border-radius: 20px;" style="border-radius: 20px;">
+                            SUBSCRIPTION DASHBOARDS
+                          </p>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-md-2 portalBox">
+                      <a href="Familyapp_school">
+                        <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="resources()">
+                          <img src="/static/images/target.png" class="img-responsive" alt="School"
+                            style="color: #797979;">
+                          <p class="text-s" style="border-radius: 20px;">
+                            APP <br /> ANALYTICS
+                          </p>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="insight">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12 insight-cards border-insight">
+              <div class="" style="padding: 20px 1px 0px 15px;">
+                <img src="/static/images/insight.png" class="img-responsive" alt="School"
+                  style="width: 3%;float: left;">
+                <p style="font-size: 20px;font-weight: 500;margin-top: 0px;" class="inline-text">Weekly Highlights</p>
+                <!-- <span style="float: right;" class="material-icons">
+                  insights
+                </span> -->
+                <hr>
+
+
+                <ul id="insightmain">
+
+                </ul>
+
+              </div>
+
+
+
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
- 
+
     <div id="popup1" class="overlay">
       <div class="popup">
-        <h2>Release Notes version 5.6 <span id="Release_notes_date"></span></h2>
+        <!-- <h2>Release Notes version 6.0 <span id="Release_notes_date"></span></h2> -->
         <a class="close" href="#">&times;</a>
-        <div class="content" style="text-align: left;"  >
-     <p id="Whats_new1">UI Fixes</p>
-     <p id="Whats_new2">Android/IOS Analytics Update</p>
-     <p id="Whats_new2">Search Implementation</p>
-     <p id="Whats_new3">Bug Fixes</p>
-   
+        <div class="content" style="text-align: left;">
+          <img src="/static/images/greeting.png" alt="" class="img-responsive">
+
         </div>
       </div>
     </div>
     <!--Waves Container-->
     <div>
-    <svg class="waves" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"
-    viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-    <defs>
-    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-    </defs>
-    <g class="parallax">
-    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7"  style="background-color: black;"/>
-    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
-    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
-    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
-    </g>
-    </svg>
+      <svg class="waves" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"
+        viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" style="background-color: black;" />
+          <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+          <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+          <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+        </g>
+      </svg>
     </div>
     <!--Waves end-->
-    
-    </div>
 
-    <!--Header ends-->
-    
-    <!--Content starts-->
-    <div class="content flex">
-    <p  style="margin-left: 546px;margin-top: 30px;font-size: 16px;">CAPXP | 2020 | version 5.6 | page visit : <span id="count"></span></p>
-    </div>
-    <!--Content ends-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="{{ url_for('static',filename='js/insight.js') }}"></script>
-    <script>
-      const countEl = document.getElementById('count');
+  </div>
 
-updateVisitCount();
+  <!--Header ends-->
 
-function updateVisitCount() {
-	fetch('https://api.countapi.xyz/update/compass/myspace/?amount=1')
-	.then(res => res.json())
-	.then(res => {
-		countEl.innerHTML = res.value;
-	})
-}
-    </script>
-<script>
+  <!--Content starts-->
+  <div class="content flex">
+    <p style="margin-left: 460px;margin-top: 30px;font-size: 16px;">CAPi6 | 2021 | version 6.0 | page visit : <span
+        id="count"></span></p>
+  </div>
+  <!--Content ends-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/insight.js') }}"></script>
+  <script>
+    const countEl = document.getElementById('count');
+
+    updateVisitCount();
+
+    function updateVisitCount() {
+      fetch('https://api.countapi.xyz/update/compass/myspace/?amount=1')
+        .then(res => res.json())
+        .then(res => {
+          countEl.innerHTML = res.value;
+        })
+    }
+  </script>
+  <!-- <script>
   var e = document.getElementById("log").textContent;
   console.log(e);
   function idbased()
@@ -452,6 +756,11 @@ function updateVisitCount() {
 
     }
   }
-</script>
+</script> -->
+  <!-- <script src="{{ url_for('static',filename='js/search.js') }}"></script> -->
+  <!-- <script  src="{{ url_for('static',filename='js/Weekly_feedback.js') }}"></script> -->
+  <script src="{{ url_for('static',filename='js/home.js') }}"></script>
+  <script src="{{ url_for('static',filename='js/pie.js') }}"></script>
 </body>
+
 </html>

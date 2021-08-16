@@ -2,7 +2,7 @@ imgd('3');
 function imgd(a){
   console.log("iamge", a);
   $("#imgdis").empty();
-  $("#imgdis").append('<img src="http://127.0.0.1:5000/static/images/'+ a +'.png" class="img-responsive" alt="School" style="color: #797979; width: 100%;">');
+  $("#imgdis").append('<img src="/static/images/'+ a +'.png" class="img-responsive" alt="School" style="color: #797979; width: 100%;">');
 }
 function charts(a){
     $("#container").empty();
@@ -17,7 +17,7 @@ function charts(a){
 
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/90daysuserloggedindetail/"+a,
+    url: "/90daysuserloggedindetail/"+a,
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -91,7 +91,7 @@ console.log(dataa);
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/90daysuserpractising/"+a,
+    url: "/90daysuserpractising/"+a,
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -103,7 +103,7 @@ console.log(dataa);
           zoomType: "xy",
         },
         title: {
-          text: "User Practice History",
+          text: "User Playback History",
         },
         xAxis: [
           {
@@ -125,7 +125,7 @@ console.log(dataa);
               },
             },
             title: {
-              text: "PRACTICE COUNT",
+              text: "PLAYBACK COUNT",
               style: {
                 color: "#000",
               },
@@ -154,7 +154,7 @@ console.log(dataa);
         plotOptions: { borderWidth: 2, series: { point: {} } },
         series: [
           {
-            name: "PRACTICE COUNT",
+            name: "PLAYBACK COUNT",
             showInLegend: false,
             color: "#01a451",
             type: "column",
@@ -169,7 +169,7 @@ console.log(dataa);
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/monthwisepracticedistrict/"+a,
+    url: "/monthwisepracticedistrict/"+a,
     method: "GET",
     error: function(){
       zerochart();
@@ -184,7 +184,7 @@ console.log(dataa);
           zoomType: "xy",
         },
         title: {
-          text: "Practice Trend By Month",
+          text: "Playback Trend By Month",
         },
         xAxis: [
           {
@@ -202,7 +202,7 @@ console.log(dataa);
               },
             },
             title: {
-              text: "PRACTICE COUNT",
+              text: "PLAYBACK COUNT",
               style: {
                 color: "#000",
               },
@@ -231,7 +231,7 @@ console.log(dataa);
         plotOptions: { borderWidth: 2, series: { point: {} } },
         series: [
           {
-            name: "Practice Count",
+            name: "Playback Count",
             color: "#01a451",
             type: "column",
             data: dataa.practice_count,
@@ -249,7 +249,7 @@ function zerochart(){
         zoomType: "xy",
       },
       title: {
-        text: "Practice Trend By Month",
+        text: "Playback Trend By Month",
       },
       xAxis: [
         {
@@ -267,7 +267,7 @@ function zerochart(){
             },
           },
           title: {
-            text: "PRACTICE COUNT",
+            text: "PLAYBACK COUNT",
             style: {
               color: "#000",
             },
@@ -296,7 +296,7 @@ function zerochart(){
       plotOptions: { borderWidth: 2, series: { point: {} } },
       series: [
         {
-          name: "Practice Count",
+          name: "Playback Count",
           showInLegend: false,
           color: "#01a451",
           type: "column",
@@ -312,7 +312,7 @@ function zerochart(){
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/schoolwiseusercounttop20/"+a,
+    url: "/schoolwiseusercounttop20/"+a,
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -391,7 +391,7 @@ function zerochart(){
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/top20userspractisinginfo/"+a,
+    url: "/top20userspractisinginfo/"+a,
     method: "GET",
     error: function(){
       zerochart2();
@@ -406,7 +406,7 @@ function zerochart(){
           zoomType: "xy",
         },
         title: {
-          text: "Top 20 User Practice Count",
+          text: "Top 20 User Playback Count",
         },
         xAxis: [
           {
@@ -429,7 +429,7 @@ function zerochart(){
               },
             },
             title: {
-              text: "PRACTICE COUNT",
+              text: "PLAYBACK COUNT",
               style: {
                 color: "#000",
               },
@@ -458,7 +458,7 @@ function zerochart(){
         plotOptions: { borderWidth: 2, series: { point: {} } },
         series: [
           {
-            name: "Practice Count",
+            name: "Playback Count",
             showInLegend: false,
             color: "#01a451",
             type: "bar",
@@ -476,7 +476,7 @@ function zerochart(){
           zoomType: "xy",
         },
         title: {
-          text: "Top 20 User Practice Count",
+          text: "Top 20 User Playback Count",
         },
         xAxis: [
           {
@@ -499,7 +499,7 @@ function zerochart(){
               },
             },
             title: {
-              text: "PRACTICE COUNT",
+              text: "PLAYBACK COUNT",
               style: {
                 color: "#000",
               },
@@ -528,7 +528,7 @@ function zerochart(){
         plotOptions: { borderWidth: 2, series: { point: {} } },
         series: [
           {
-            name: "Practice Count",
+            name: "Playback Count",
             showInLegend: false,
             color: "#01a451",
             type: "bar",
@@ -542,7 +542,7 @@ function zerochart(){
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/schoolwisepracticecounttop20/"+a,
+    url: "/schoolwisepracticecounttop20/"+a,
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -554,7 +554,7 @@ function zerochart(){
           zoomType: "xy",
         },
         title: {
-          text: "Top 20 School Practice Count",
+          text: "Top 20 School Playback Count",
         },
         xAxis: [
           {
@@ -577,7 +577,7 @@ function zerochart(){
               },
             },
             title: {
-              text: "PRACTICE COUNT",
+              text: "PLAYBACK COUNT",
               style: {
                 color: "#000",
               },
@@ -606,7 +606,7 @@ function zerochart(){
         plotOptions: { borderWidth: 2, series: { point: {} } },
         series: [
           {
-            name: "PRACTICE Count",
+            name: "Playback Count",
             showInLegend: false,
             color: "#01a451",
             type: "bar",
@@ -622,7 +622,7 @@ function zerochart(){
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/schoolwisefamilycount/"+a,
+    url: "/schoolwisefamilycount/"+a,
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -701,7 +701,7 @@ function zerochart(){
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/schoolwisefamilypracticecount/"+a,
+    url: "/schoolwisefamilypracticecount/"+a,
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -713,7 +713,7 @@ function zerochart(){
           zoomType: "xy",
         },
         title: {
-          text: "Family Practice Count by School",
+          text: "Family Playback Count by School",
         },
         xAxis: [
           {
@@ -731,7 +731,7 @@ function zerochart(){
               },
             },
             title: {
-              text: "FAMILY PRACTICE COUNT",
+              text: "FAMILY PLAYBACK COUNT",
               style: {
                 color: "#000",
               },
@@ -760,7 +760,7 @@ function zerochart(){
         plotOptions: { borderWidth: 2, series: { point: {} } },
         series: [
           {
-            name: "Family practice Count",
+            name: "Family Playback Count",
             showInLegend: false,
             color: "#01a451",
             type: "bar",
@@ -792,7 +792,7 @@ function createDynamic(url) {
     var data1 = JSON.parse(response);
 
     $("#next").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];
@@ -805,7 +805,7 @@ function createDynamic(url) {
     dataTab();
 
     $("#next1").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];
@@ -874,7 +874,7 @@ function createDynamic2(url) {
     var data1 = JSON.parse(response);
 
     $("#next").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PRACTICE COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>CATEGORY</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>CATEGORY</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];
@@ -887,7 +887,7 @@ function createDynamic2(url) {
     dataTab();
 
     $("#next1").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PRACTICE COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>CATEGORY</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>CATEGORY</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];
@@ -998,10 +998,10 @@ function idtype(a){
 $('#heat-map').empty()
 var type = "districtheatmappractice/"+a
 heatnew(type);
-$('#chartname').text("Overall District Practice Heat Map")
+$('#chartname').text("Overall District Playback Heat Map")
 }
 function cardcount(id){
-      URL = "http://127.0.0.1:5000/districtcardsinfo/" + id;
+      URL = "/districtcardsinfo/" + id;
       var settings = {
   async: true,
   crossDomain: true,
@@ -1096,7 +1096,7 @@ function bubble2(a){
             "%{yaxis.title.text}: %{y:}<br>" +
             "%{xaxis.title.text}: %{x:}<br>" +
             "User Count: %{marker.color:}<br>" +
-				"Practice Count: %{marker.size:}" +
+				"PLAYBACK COUNT: %{marker.size:}" +
             "<extra></extra>",
 			type: "scatter",
    mode: "markers",
@@ -1324,7 +1324,7 @@ function bubble(a){
             "%{yaxis.title.text}: %{y:}<br>" +
             "%{xaxis.title.text}: %{x:}<br>" +
             "User Count: %{marker.color:}<br>" +
-				"Practice Count: %{marker.size:}" +
+				"PLAYBACK COUNT: %{marker.size:}" +
             "<extra></extra>",
 			type: "scatter",
    mode: "markers",
@@ -1487,7 +1487,7 @@ var min, max, colorScale, temps, tempsArr;
 var colors =  ["#EFF7F2","#DBEEE1","#B3DFC1","#8ECAA0","#76C28D","#65B87E","#52AB6D","#42A862","#329B52","#278845"]
 var months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 var table, thead, tbody, rows, headCells, cells;
-var data = d3.json("http://127.0.0.1:5000/"+b, function(error, data){
+var data = d3.json("/"+b, function(error, data){
 
   temps = data.meanTemp;
   tempsArr = createTempArr(temps);
@@ -1619,21 +1619,21 @@ else if (this.value == '4') {
   let textContent = document.getElementById('disdetails').innerText; 
   var type = "districtheatmappractice/"+textContent;
   heatnew(type);
-  $('#chartname').text("Overall District Practice Heat Map")
+  $('#chartname').text("Overall District Playback Heat Map")
 }
 else if (this.value == '5') {
   $('#heat-map').empty()
   let textContent = document.getElementById('disdetails').innerText; 
   var type = "districtheatmappracteacher/"+textContent;
   heatnew(type);
-  $('#chartname').text("Teacher Wise Practice Heat Map")
+  $('#chartname').text("Teacher Wise Playback Heat Map")
 }
 else if (this.value == '6') {
   $('#heat-map').empty()
   let textContent = document.getElementById('disdetails').innerText; 
   var type = "districtheatmappracfamily/"+textContent;
   heatnew(type);
-  $('#chartname').text("Family Wise Practice Heat Map")
+  $('#chartname').text("Family Wise Playback Heat Map")
 }
 })
 function takeid(){

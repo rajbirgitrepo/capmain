@@ -28,7 +28,6 @@ $('#searchfield2').append('<i class="fa fa-search Icon" style="margin-left:2%;">
         var dataa=JSON.parse(response);
         $( function() {
       var projects = dataa.data;
-   
       $( "#searchinput" ).autocomplete({
         minLength: 0,
         source: projects,
@@ -133,7 +132,7 @@ function school1(){
 
       function compare(){
         $("#gif").empty();
-        $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+        $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
         var gif = document.getElementById("gif");
         gif.style.display = "block";
         $("#schoolname").empty();
@@ -164,7 +163,7 @@ function school1(){
             $("#container1").empty();
         var a = document.getElementById("searchinputdescription").innerText;
         var b = document.getElementById("searchinput2description").innerText;
-        var URL = "http://127.0.0.1:5000/schoolcomparison/"+a+"/"+b;
+        var URL = "/schoolcomparison/"+a+"/"+b;
         console.log(URL);
         var settings = {
             async: true,
@@ -220,7 +219,7 @@ function school1(){
                   inputEnabled: false
                 },
                 title: {
-                  text: 'SCHOOL PRACTICE COMPARISON'
+                  text: 'SCHOOL PLAYBACK COMPARISON'
                 },credits:false,
                   xAxis: {
                       minRange: 1
@@ -246,13 +245,13 @@ function school1(){
                       lineWidth: 1,
                       opposite: false,
                       title: {
-                          text: 'Practice Count'
+                          text: 'Playback Count'
                       }
                   },{
                       lineWidth: 1,
                       opposite: true,
                       title: {
-                          text: 'Practice Count'
+                          text: 'Playback Count'
                       }
                   }],
               
@@ -290,7 +289,7 @@ function school1(){
                   inputEnabled: false
                 },
                 title: {
-                  text: 'SCHOOL PRACTICE CUMULATIVE'
+                  text: 'SCHOOL PLAYBACK CUMULATIVE'
                 },credits:false,
                   xAxis: {
                       minRange: 1
@@ -316,13 +315,13 @@ function school1(){
                       lineWidth: 1,
                       opposite: false,
                       title: {
-                          text: 'Practice Count'
+                          text: 'Playback Count'
                       }
                   },{
                       lineWidth: 1,
                       opposite: true,
                       title: {
-                          text: 'Practice Count'
+                          text: 'Playback Count'
                       }
                   }],
               
@@ -797,7 +796,7 @@ function distselect2(a){
 }
 function compare2(){
   $("#gif2").empty();
-  $("#gif2").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+  $("#gif2").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
   var gif = document.getElementById("gif2");
   gif.style.display = "block";
   $("#schoolname").empty();
@@ -806,7 +805,7 @@ function compare2(){
       $("#container1").empty();
   var a = document.getElementById("districtid1").innerText;
   var b = document.getElementById("districtid2").innerText;
-  var URL = "http://127.0.0.1:5000/districtcomparison/"+a+"/"+b;
+  var URL = "/districtcomparison/"+a+"/"+b;
   console.log(URL);
   var settings = {
       async: true,
@@ -840,7 +839,7 @@ function compare2(){
           },
         
           title: {
-            text: 'DISTRICT PRACTICE COMPARISON'
+            text: 'DISTRICT PLAYBACK COMPARISON'
           },credits:false,
             xAxis: {
                 minRange: 1
@@ -866,13 +865,13 @@ function compare2(){
                 lineWidth: 1,
                 opposite: false,
                 title: {
-                    text: 'Practice Count'
+                    text: 'Playback Count'
                 }
             },{
                 lineWidth: 1,
                 opposite: true,
                 title: {
-                    text: 'Practice Count'
+                    text: 'Playback Count'
                 }
             }],
         
@@ -907,7 +906,7 @@ function compare2(){
           },
         
           title: {
-            text: 'DISTRICT PRACTICE CUMULATIVE'
+            text: 'DISTRICT PLAYBACK CUMULATIVE'
           },credits:false,
             xAxis: {
                 minRange: 1
@@ -933,13 +932,13 @@ function compare2(){
                 lineWidth: 1,
                 opposite: false,
                 title: {
-                    text: 'Practice Count'
+                    text: 'Playback Count'
                 }
             },{
                 lineWidth: 1,
                 opposite: true,
                 title: {
-                    text: 'Practice Count'
+                    text: 'Playback Count'
                 }
             }],
         
@@ -977,7 +976,7 @@ function compare2(){
 
 function compare3(){
   $("#gif3").empty();
-  $("#gif3").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+  $("#gif3").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
   var gif = document.getElementById("gif3");
   gif.style.display = "block";
   $("#schoolname").empty();
@@ -1008,7 +1007,7 @@ function compare3(){
       $("#container1").empty();
   var a = document.getElementById("searchinputuser").value;
   var b = document.getElementById("searchinputuser2").value;
-  var URL = "http://127.0.0.1:5000/usercomparison/"+a+"/"+b;
+  var URL = "/usercomparison/"+a+"/"+b;
   console.log(URL);
   var settings = {
       async: true,
@@ -1061,7 +1060,7 @@ function compare3(){
           },
         
           title: {
-            text: 'USERS PRACTICE COMPARISON'
+            text: 'USERS PLAYBACK COMPARISON'
           },credits:false,
             xAxis: {
                 minRange: 1
@@ -1087,13 +1086,13 @@ function compare3(){
                 lineWidth: 1,
                 opposite: false,
                 title: {
-                    text: 'Practice Count'
+                    text: 'Playback Count'
                 }
             },{
                 lineWidth: 1,
                 opposite: true,
                 title: {
-                    text: 'Practice Count'
+                    text: 'Playback Count'
                 }
             }],
         
@@ -1128,7 +1127,7 @@ function compare3(){
           },
         
           title: {
-            text: 'USERS PRACTICE CUMULATIVE'
+            text: 'USERS PLAYBACK CUMULATIVE'
           },credits:false,
             xAxis: {
                 minRange: 1
@@ -1154,13 +1153,13 @@ function compare3(){
                 lineWidth: 1,
                 opposite: false,
                 title: {
-                    text: 'Practice Count'
+                    text: 'Playback Count'
                 }
             },{
                 lineWidth: 1,
                 opposite: true,
                 title: {
-                    text: 'Practice Count'
+                    text: 'Playback Count'
                 }
             }],
         

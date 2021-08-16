@@ -2,7 +2,7 @@
         var settings = {
     "async": true,
     "crossDomain": true,
-    "url": 'http://127.0.0.1:5000/chartdesc2',
+    "url": '/chartdesc2',
     "method": "GET"
    }
    $.ajax(settings).done(function (response) {

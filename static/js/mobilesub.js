@@ -3,7 +3,7 @@
 var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/MOBILE_APP_SUBSCRIPTION_CARDSSSS",
+    url: "/MOBILE_APP_SUBSCRIPTION_CARDSSSS",
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -23,7 +23,7 @@ var settings = {
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/mobile_app_USERR",
+    "url":             "/mobile_app_USERR",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -67,9 +67,9 @@ plotOptions: {
             events: {
                 click: function () {
                   
-                     // alert("http://127.0.0.1:5000/"+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category);
+                     // alert("/"+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category);
                   
-                 URL = 'http://127.0.0.1:5000/d3renewaltable/'+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category;
+                 URL = '/d3renewaltable/'+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category;
       console.log(URL);
                   Table();
                 }
@@ -127,7 +127,7 @@ var chart = new Highcharts.Chart(options);
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/mobile_app_SCH",
+    "url":             "/mobile_app_SCH",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -171,9 +171,9 @@ plotOptions: {
             events: {
                 click: function () {
                   
-                     // alert("http://127.0.0.1:5000/"+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category);
+                     // alert("/"+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category);
                   
-                 URL = 'http://127.0.0.1:5000/d3renewaltable/'+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category;
+                 URL = '/d3renewaltable/'+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category;
       console.log(URL);
                   Table();
                 }

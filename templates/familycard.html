@@ -14,7 +14,9 @@
 <title>School Journey Score - Inner Explorer</title>
 
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/search2.css') }}">  
@@ -56,7 +58,7 @@
 	class="vertical-layout vertical-menu 2-columns  fixed-navbar" style="background-color: #fff !important;">
   <aside class="side-nav" id="show-side-navigation1">
     <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-    <ul class="categories" style="margin-top:100px;">
+    <ul class="categories" style="margin-top:35px;">
       <li>
         <i class="fa fa-home" aria-hidden="true"></i>
         <a href="#">EXECUTIVE SUMMARY</a>
@@ -69,7 +71,7 @@
 <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
           <li><a href="awsmain">AWS ANALYTICS</a></li>
             <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                        <li><a href="21daystreak">21 Day Streak</a></li>
+                        
             
         </ul>
       </li>
@@ -78,22 +80,23 @@
           <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li> 
 <li><a href="Disctrictfilter">DISTRICT 360</a></li>
 <li><a href="partner">PARTNER PORTAL</a></li>
-          <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li>
- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li>        
+          <!-- <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
+ <!-- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->        
             <li><a href="School_Search">SCHOOL SEARCH</a></li>
           <li><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
+<li><a href="21daystreak">21 Day Streak</a></li>
         </ul>
       </li>
-      <li><i class="fa fa-history"></i><a href="#">PRACTICE ANALYTICS</a>
+      <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
         <ul class="side-nav-dropdown">
-          <li><a href="Practice_Analytics">SCHOOL PRACTICE ANALYTICS</a></li>
+          <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
           <li><a href="Scoology">SCHOOLOGY</a></li>
-          <li><a href="Family_practice_analytics">APP PRACTICE ANALYTICS</a></li>
+          <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
           <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-            <li><a href="audio_analytics">AUDIO ANALYTICS</a></li>
+            <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
             <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
-            <li><a href="Practice_streak">PRACTICE STREAK</a></li>
-            <li><a href="pracbifurcation">PRACTICE BIFURCATION</a></li>
+            <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
+            <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
         </ul>
       </li>
       <li>
@@ -127,13 +130,13 @@
         <ul class="side-nav-dropdown">
           <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
           <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-          <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>
+          <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
           <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
-          <li><a href="Android_analytics">ANDROID ANALYTICS</a></li>
+          <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
           <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
         </ul>
       </li>
-      <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">5.7.2</span></a>
+      <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
       </li>
 <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
 </aside>
@@ -203,7 +206,7 @@
                       <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
                   </div>
                   <div class="card-content">
-                    <p class="category">Practice Count</p>
+                    <p class="category">Playback Count</p>
                     <h3 class="card-title" id="pcount"></h3>
                   </div>
         
@@ -424,7 +427,7 @@
  console.log(url);
  var params = url.split('?')[1];
  console.log(params);
- var url1 = "http://127.0.0.1:5000/familyjourney/"+params;
+ var url1 = "/familyjourney/"+params;
  console.log(url1);
  var settings = {
     "async": true,
@@ -451,7 +454,7 @@ Highcharts.chart('container', {
                         }
                     }
     },title: {
-    text: 'PROGRAM WISE PRACTICE TREND'
+    text: 'PROGRAM WISE PLAYBACK TREND'
 },
     xAxis: {
         type: 'category',
@@ -469,7 +472,7 @@ Highcharts.chart('container', {
     }
   },
   title: {
-    text: 'PRACTICE COUNT',
+    text: 'PLAYBACK COUNT',
     style: {
       color: '#000'
     }
@@ -487,9 +490,9 @@ Highcharts.chart('container', {
 },
         data: [
             {
-                name: "DAILY PRACTICE",
+                name: "DAILY PLAYBACK",
                 y: dataa.program.dtotal,
-                drilldown: "DAILY PRACTICE"
+                drilldown: "DAILY PLAYBACK"
               
               
             },
@@ -515,8 +518,8 @@ drilldown: {
     series: [
       
         {
-            name: "DAILY PRACTICE",
-            id: "DAILY PRACTICE",
+            name: "DAILY PLAYBACK",
+            id: "DAILY PLAYBACK",
           tooltip: {
     headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
     pointFormat: '<span style="color:{point.color}">{point.name}</span>:<b>{point.y}<br>'
@@ -626,7 +629,7 @@ var chart = Highcharts.stockChart('container3', {
   },
 
   title: {
-    text: 'APP PRACTICE'
+    text: 'APP PLAYBACK'
   },
     xAxis: {
     	minRange: 1
@@ -652,7 +655,7 @@ var chart = Highcharts.stockChart('container3', {
         lineWidth: 1,
         opposite: false,
         title: {
-            text: 'PRACTICE COUNT'
+            text: 'PLAYBACK COUNT'
         }
     },{
         lineWidth: 1,
@@ -665,7 +668,7 @@ var chart = Highcharts.stockChart('container3', {
   series: [{
     type:'column',
   	color: '#01a451',
-    name: 'Practice Count',
+    name: 'Playback Count',
     data: dataa.pbar, //Fri, 14 Jul 2017 00:00:00 GMT
     dataGrouping: {
       enabled: false,
@@ -675,7 +678,7 @@ var chart = Highcharts.stockChart('container3', {
           {
     type:'line',
   	color: '#FF9933',
-    name: 'Total Practice Count',
+    name: 'Total Playback Count',
     data: dataa.pline, yAxis: 1, //Fri, 14 Jul 2017 00:00:00 GMT
     dataGrouping: {
       enabled: false,
@@ -751,7 +754,7 @@ Highcharts.chart('graph1', {
         }
     },
     series: [{
-        name: "PRACTICE TREND", 
+        name: "PLAYBACK TREND", 
         data: (function () {
       // generate an array of random data
       var data = [];

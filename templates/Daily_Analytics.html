@@ -1,211 +1,225 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
+
 <head>
   <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>CAPXP DAILY ANALYTICS</title>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}"> 
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
 
   <link rel="stylesheet" href="{{ url_for('static',filename='css/map-table.css') }}">
   <link rel="stylesheet" href="{{ url_for('static',filename='css/datatable_bootstrap.css') }}">
   <link rel="stylesheet" href="{{ url_for('static',filename='css/map-table.css') }}">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="{{ url_for('static',filename='css/calender.css') }}">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/search2.css') }}">
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/bootstrap.min.css') }}">
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/journeystyle.css') }}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css'>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/search2.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/journeystyle.css') }}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/reset.min.css') }}">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    
-   
+  <link rel='stylesheet'
+    href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css'>
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/reset.min.css') }}">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
   <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-  
-    <script src="{{ url_for('static',filename='js/bottstarp.js') }}"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <script src="{{ url_for('static',filename='js/bottstarp.js') }}"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-EWVQZSV89G');
-</script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-EWVQZSV89G');
+  </script>
 </head>
 
 <style>
-.image{
-  float: right;
-width: 107px;
-height: 38px;
-opacity: 100%;
-margin-top: 15px;
-}
-.image2{
-  float: left;
-width: 1%;
-opacity: 100%;
-margin-top: 4px;
-margin-right: 10px;
+  .image {
+    float: right;
+    width: 107px;
+    height: 38px;
+    opacity: 100%;
+    margin-top: 15px;
+  }
 
-}
+  .image2 {
+    float: left;
+    width: 1%;
+    opacity: 100%;
+    margin-top: 4px;
+    margin-right: 10px;
 
-
+  }
 </style>
 
 
 
-  <body class="body">
-   
-    <nav class="navbar navbar-default">
-      <div class="">
+<body class="body">
+
+  <nav class="navbar navbar-default">
+    <div class="">
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="page_Heading" href="#">DAILY ANALYTICS</a>
           <a href="homepage">
-            <img src="{{ url_for('static',filename='images/capwhite.png') }}" alt=""
-              class="logo">
+            <img src="{{ url_for('static',filename='images/capwhite.png') }}" alt="" class="logo">
           </a>
         </div>
         <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li style="left: 2px;
-            top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true" style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i><p style="float: right;">Views</p><p id="count" style="float: right;margin-right: 3px;"></p></li>
-             <!--<li style="left: 10px;
+            top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true"
+                style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i>
+              <p style="float: right;">Views</p>
+              <p id="count" style="float: right;margin-right: 3px;"></p>
+            </li>
+            <!--<li style="left: 10px;
             top: 34px;
             color: #fff;
             cursor: pointer;" id="myBtn"><i class="fa fa-lightbulb-o" style="margin-top:2px;"></i><p style="float: right;">Insights</p><p style="float: right;margin-right: 3px; margin-left: 5px;">3</p></li>-->
-            <li style="left:10px;top:18px;" ><a id="share" href="#"><i class="fa fa-share" aria-hidden="true" style="margin-top:2px;margin-right: 3px;"></i></a></li>
-            <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1" class="fa fa-bars show-side-btn"></i></a></li>
+            <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true"
+                  style="margin-top:2px;margin-right: 3px;"></i></a></li>
+            <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1"
+                  class="fa fa-bars show-side-btn"></i></a></li>
             <li style="margin-top: 27px;">
               <div class="dropdown">
-                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid" style="display: none;">{{g.user.id}}</span></button>
+                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown"
+                  style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid"
+                    style="display: none;">{{g.user.id}}</span></button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a></li>  
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a></li>
                   <hr />
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>   
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>
                 </ul>
               </div>
           </ul>
         </div>
         <div class="input-Container ui-widget">
-        <i class="fa fa-search Icon"></i>
-        <div id="iid" class="input-Field">
-        </div>
-        <button class="search_Bt" onclick=search() id="hel">SEARCH</button>
-        <p style="display: none;" id="tagdescription" ></p>
-        <p style="display: none;" id="tagdescription" ></p>
-        <!--<div class="select_Bt">
+          <i class="fa fa-search Icon"></i>
+          <div id="iid" class="input-Field">
+          </div>
+          <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
+          <p style="display: none;" id="tagdescription"></p>
+          <p style="display: none;" id="tagdescription"></p>
+          <!--<div class="select_Bt">
         <select id="myselect" style="margin-top: 7px;">
           <option value="1">DASHBAORD</option>
           <option value="2">SCHOOL</option>
         </div>
       </select>-->
-      </div>  
+        </div>
       </div>
     </div>
-    </nav>
-    <aside class="side-nav" id="show-side-navigation1">
-      <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-      <ul class="categories" style="margin-top:100px;">
-        <li class="active">
-          <i class="fa fa-home" aria-hidden="true"></i>
-          <a href="#">EXECUTIVE SUMMARY</a>
-          <ul class="side-nav-dropdown">
-            <li class="active2">
-              <a href="Executive_Dashboard">CAP SUMMARY</a></li>
-            <li class="active2"><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
-            <li class="active2"><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
-            <li class="active2"><a href="aws_releases">COMPASS RELEASES</a></li>
-<li class="active2"><a href="schoolsummary">SCHOOL SUMMARY</a></li>
-            <li class="active2"><a href="aws">AWS ANALYTICS</a></li>
-                        <li class="active2"><a href="21daystreak">21 Day Streak</a></li>
-            <li class="active2"><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
-          </ul>
-        </li>
-        <li><i class="fa fa-book "></i><a href="#">DISTRICT DASHBOARDS</a>
-          <ul class="side-nav-dropdown">
-            <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li> 
-<li><a href="Disctrictfilter">DISTRICT 360</a></li>
-<li><a href="partner">PARTNER PORTAL</a></li>
-          <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li>
- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li>        
-            <li><a href="School_Search">SCHOOL SEARCH</a></li>
-          <li><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
-          </ul>
-        </li>
-        <li><i class="fa fa-history"></i><a href="#">PRACTICE ANALYTICS</a>
-          <ul class="side-nav-dropdown">
-            <li><a href="Practice_Analytics">SCHOOL PRACTICE ANALYTICS</a></li>
-            <li><a href="Scoology">SCHOOLOGY</a></li>
-            <li><a href="Family_practice_analytics">APP PRACTICE ANALYTICS</a></li>
-            <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-            <li><a href="audio_analytics">AUDIO ANALYTICS</a></li>
-            <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
-            <li><a href="Practice_streak">PRACTICE STREAK</a></li>
-            <li><a href="pracbifurcation">PRACTICE BIFURCATION</a></li>
-          </ul>
-        </li>
-        <li>
-          <i class="fa fa-dollar"></i><a href="#">REVENUE DASHBOARDS</a>
-          <ul class="side-nav-dropdown">
-            <li><a href="Transaction_Reporting">REVENUE OVERVIEW</a></li>
-            <li><a href="Donation">DONATION DASHBOARD</a></li>
-            <li><a href="School_Revenue">SCHOOL REVENUE</a></li><li><a href="Bill_later">BILL ME LATER</a></li>
-          </ul>
-        </li>
-<li><i class="fa fa-bolt"></i><a href="#">FEEDBACK AND SURVEY</a>
-          <ul class="side-nav-dropdown">
-            <li><a href="feedback_Analyitcs">FEEDBACK ANAYLTICS</a></li>
-            <li><a href="sentiment">SENTIMENT ANAYLTICS</a></li>
-            <li><a href="feedback_Trends">FEEDBACK TRENDS</a></li>
-            <li><a href="Family_SURVEY">HOME SURVEY ANALYTICS</a></li>
-            <li><a href="feedback_Analyitcs_family">HOME FEEDBACK ANALYTICS</a></li>
-          </ul>
-        </li>
-        <li>
-          <i class="fa fa-users "></i><a href="#">SUBSCRIPTION DASHBOARDS</a>
-          <ul class="side-nav-dropdown">
-                        <li><a href="Upcoming_Renewals">UPCOMING RENEWAL</a></li>
-            <li><a href="d1districts">D1 Districts</a></li>
-<li><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
-            <li><a href="Sms_analytics">SMS ANALYTICS</a></li>
-            
-          </ul>
-        </li>
-        
-        <li><i class="fa fa-star"></i><a href="#">APP ANALYTICS</a>
-          <ul class="side-nav-dropdown">
-            <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
-            <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-            <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>
-            <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
-            <li><a href="Android_analytics">ANDROID ANALYTICS</a></li>
-            <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
-          </ul>
-        </li>
-        <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">5.7.2</span></a>
+  </nav>
+  <aside class="side-nav" id="show-side-navigation1">
+    <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
+    <ul class="categories" style="margin-top:35px;">
+      <li class="active">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        <a href="#">EXECUTIVE SUMMARY</a>
+        <ul class="side-nav-dropdown">
+          <li class="active2">
+            <a href="Executive_Dashboard">CAP SUMMARY</a>
+          </li>
+          <li class="active2"><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
+          <li class="active2"><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
+          <li class="active2"><a href="aws_releases">COMPASS RELEASES</a></li>
+          <li class="active2"><a href="schoolsummary">SCHOOL SUMMARY</a></li>
+          <li class="active2"><a href="aws">AWS ANALYTICS</a></li>
+          
+          <!-- <li class="active2"><a href="NameEScore">DISTRICT ENGAGEMENT</a></li> -->
+        </ul>
       </li>
-<!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
-</aside>
+      <li><i class="fa fa-book "></i><a href="#">DISTRICT DASHBOARDS</a>
+        <ul class="side-nav-dropdown">
+          <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
+          <li><a href="Disctrictfilter">DISTRICT 360</a></li>
+          <li><a href="partner">PARTNER PORTAL</a></li>
+          <!-- <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
+          <!-- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->
+          <li><a href="School_Search">SCHOOL SEARCH</a></li>
+          <li><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
+<li><a href="21daystreak">21 Day Streak</a></li>
+        </ul>
+      </li>
+      <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
+        <ul class="side-nav-dropdown">
+          <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
+          <li><a href="Scoology">SCHOOLOGY</a></li>
+          <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
+          <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
+          <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
+          <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
+          <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
+          <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
+        </ul>
+      </li>
+      <li>
+        <i class="fa fa-dollar"></i><a href="#">REVENUE DASHBOARDS</a>
+        <ul class="side-nav-dropdown">
+          <li><a href="Transaction_Reporting">REVENUE OVERVIEW</a></li>
+          <li><a href="Donation">DONATION DASHBOARD</a></li>
+          <li><a href="School_Revenue">SCHOOL REVENUE</a></li>
+          <li><a href="Bill_later">BILL ME LATER</a></li>
+        </ul>
+      </li>
+      <li><i class="fa fa-bolt"></i><a href="#">FEEDBACK AND SURVEY</a>
+        <ul class="side-nav-dropdown">
+          <li><a href="feedback_Analyitcs">FEEDBACK ANAYLTICS</a></li>
+          <li><a href="sentiment">SENTIMENT ANAYLTICS</a></li>
+          <li><a href="feedback_Trends">FEEDBACK TRENDS</a></li>
+          <li><a href="Family_SURVEY">HOME SURVEY ANALYTICS</a></li>
+          <li><a href="feedback_Analyitcs_family">HOME FEEDBACK ANALYTICS</a></li>
+        </ul>
+      </li>
+      <li>
+        <i class="fa fa-users "></i><a href="#">SUBSCRIPTION DASHBOARDS</a>
+        <ul class="side-nav-dropdown">
+          <li><a href="Upcoming_Renewals">UPCOMING RENEWAL</a></li>
+          <li><a href="d1districts">D1 Districts</a></li>
+          <li><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
+          <li><a href="Sms_analytics">SMS ANALYTICS</a></li>
+
+        </ul>
+      </li>
+
+      <li><i class="fa fa-star"></i><a href="#">APP ANALYTICS</a>
+        <ul class="side-nav-dropdown">
+          <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
+          <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
+          <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
+          <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
+          <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
+          <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
+        </ul>
+      </li>
+      <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
+            style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
+      </li>
+      <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
+  </aside>
   <section id="contents">
     <!-- The Modal -->
     <div id="myModal" class="modal">
-    
+
       <!-- Modal content -->
       <div class="modal-content">
         <button onclick="cose()">Close X</button>
@@ -215,127 +229,136 @@ margin-right: 10px;
               <div class="col-md-6">
                 <div class="card">
                   <div class="card-header no-border">
-                    <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil" aria-hidden="true" style="float: right;cursor: pointer;" ></i></a></h4>
-                    
-        
+                    <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil" aria-hidden="true"
+                          style="float: right;cursor: pointer;"></i></a></h4>
+
+
                   </div>
                   <div class="card-body card-contentt">
                     <div class="card-block">
-                      <p id = "schoolname"></p>
-                      <p id = "admin"></p>
-                      <p id = "email"></p>
-                      <p id = "adress"></p>
-                       <p id = "city"></p>
-                      <p id = "state"></p>
-                      <p id = "country"></p>
-                      <p style="float: left;margin-right: 9px;"><b>Renewal Date:</b> <p id = "renewal"></p> </p>                           
+                      <p id="schoolname"></p>
+                      <p id="admin"></p>
+                      <p id="email"></p>
+                      <p id="adress"></p>
+                      <p id="city"></p>
+                      <p id="state"></p>
+                      <p id="country"></p>
+                      <p style="float: left;margin-right: 9px;"><b>Renewal Date:</b>
+                      <p id="renewal"></p>
+                      </p>
                       </a>
                       </p>
-                          
-                          
-                          
-        
+
+
+
+
                     </div>
                   </div>
                 </div>
               </div>
-        
+
               <div class="col-md-6">
-              
-               
-               
-               <section class="mtsection">
-          <div class="">
-            <div class="pcard">
-              <div class="col-md-6 col-sm-6">
-                <div class="card card-stats">
-                  <div class="card-header" data-background-color="rose1">
-                    <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
-                  </div>
-                  <div class="card-content">
-                    <p class="category">Total Users</p>
-                    <h3 class="card-title" id="ucount"></h3>
-                    
-                                      
-                  </div>
-                
-                </div>
-              </div>
-        
-              <div class="col-md-6 col-sm-6">
-                <div class="card card-stats">
-                  <div class="card-header" data-background-color="rose">
-                      <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
-                  </div>
-                  <div class="card-content">
-                    <p class="category">Practice Count</p>
-                    <h3 class="card-title" id="pcount"></h3>
-                  </div>
-        
-                </div>
-              </div>
-        
-              <div class="col-md-6 col-sm-6">
-                <div class="card card-stats">
-                  <div class="card-header" data-background-color="green">
-                    <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
-                  </div>
-                  <div class="card-content">
-                    <p class="category"> Mindful Minutes</p>
-                    <h3 class="card-title" id="mindfulness_minutes"></h3>
-                  </div>
-                  <!-- <div class="card-footer">
-                <div class="stats">
-                  <i class="material-icons text-danger">warning</i> <a href="#pablo">Get More Space...</a>
-                </div>
-              </div> -->
-                </div>
-              </div>
-        
-              <div class="col-md-6 col-sm-6">
-                <div class="card card-stats">
-                  <div class="card-header" data-background-color="blue">
-                    <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
-                  </div>
-                  <div class="card-content">
-                    <p class="category">5 Star Ratings</p>
-                    <h3 class="card-title" id="ratings"></h3>
-                  </div>
-                  <!-- 	<div class="card-footer">
-                <div class="stats">
-                  <i class="material-icons text-danger">warning</i> <a href="#pablo">Get More Space...</a>
-                </div>
-              </div> -->
-                </div>
-              </div>
 
-              <button class="ex_Button" onclick="explore()">Explore School</button>
-        
+
+
+                <section class="mtsection">
+                  <div class="">
+                    <div class="pcard">
+                      <div class="col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                          <div class="card-header" data-background-color="rose1">
+                            <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;"
+                              class="img-responsive">
+                          </div>
+                          <div class="card-content">
+                            <p class="category">Total Users</p>
+                            <h3 class="card-title" id="ucount"></h3>
+
+
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                          <div class="card-header" data-background-color="rose">
+                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;"
+                              class="img-responsive">
+                          </div>
+                          <div class="card-content">
+                            <p class="category">Playback Count</p>
+                            <h3 class="card-title" id="pcount"></h3>
+                          </div>
+
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                          <div class="card-header" data-background-color="green">
+                            <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;"
+                              class="img-responsive">
+                          </div>
+                          <div class="card-content">
+                            <p class="category"> Mindful Minutes</p>
+                            <h3 class="card-title" id="mindfulness_minutes"></h3>
+                          </div>
+                          <!-- <div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons text-danger">warning</i> <a href="#pablo">Get More Space...</a>
+                </div>
+              </div> -->
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                          <div class="card-header" data-background-color="blue">
+                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;"
+                              class="img-responsive">
+                          </div>
+                          <div class="card-content">
+                            <p class="category">5 Star Ratings</p>
+                            <h3 class="card-title" id="ratings"></h3>
+                          </div>
+                          <!-- 	<div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons text-danger">warning</i> <a href="#pablo">Get More Space...</a>
+                </div>
+              </div> -->
+                        </div>
+                      </div>
+
+                      <button class="ex_Button" onclick="explore()">Explore School</button>
+
+                    </div>
+
+                  </div>
+
+                </section>
+
+
+
+              </div>
             </div>
-        
           </div>
-        
-          </section>
-               
-               
-               
-               </div>
-            </div>
-          </div>
-          </section>
+        </section>
       </div>
-    
-    </div>
-    
-    <div class="input-Container ui-widget">
-      <input class="Date" style="    width: 13%;margin-left: 75%;padding: 10px;background-color: #fff;border-radius: 20px 0 0 20px;" type="text" id="datepicker" size="30">
-      <p style="display: none;"  id="stardate"></p>
-      <button class="search_Bt" onclick="sub()">Submit</button>
-    </div>  
 
-            <section class="statistics">
-              <div class="container-fluid">
-                <!--
+    </div>
+
+    <div class="input-Container ui-widget" style="margin-top: 0 !important; padding-top: 25px !important;">
+      <input class="Date"
+        style="    width: 20%;margin-left: 71%;padding: 10px;background-color: #fff;border-radius: 20px 0 0 20px;"
+        type="text" id="datepicker" size="30">
+      <p style="display: none;" id="stardate"></p>
+      <button class="search_Bt" onclick="sub()">Submit</button>
+    </div>
+
+    <section class="statistics">
+      <div class="container-fluid">
+        <!--
                 <div class="col-md-3">
                   <div class="boxExecutive">
                     <div >
@@ -360,78 +383,92 @@ margin-right: 10px;
                     </div>
                   </div>
                 </div>-->
-                <div class="col-md-3">
-                  <div class="boxExecutive">
-                    <div >
-                      <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
-                      <p style="font-size: 11px;">New Signups<span style="margin-left: 5px !important;" id="updownsigntotal"></span></p>
-                      <p class="boxvalue2" id="usercount1"></p>
-                      <hr />
-                      <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                      <p class="boxHeading2">Home Signups<span style="margin-left: 5px !important;" id="updownsignt"></span></p>
-                      <p class="boxvalue" id="neverlogged1" onclick="cards2('http://127.0.0.1:5000/parents_signup_table_daily')" style="cursor:pointer;"></p>
-                      <br />
-                      <hr />
-                      <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                      <p class="boxHeading2">Classroom Signups<span style="margin-left: 5px !important;" id="updownsignp"></span></p>
-
-                      <p class="boxvalue" id="totalstudent1" onclick="cards2('http://127.0.0.1:5000/teacher_signup_table_daily')" style="cursor:pointer;"></p>
-                      <br />
-                      <hr />
-                      
-                      
-
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="boxExecutive">
-                    <div >
-                      <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
-                      <p style="font-size: 11px;">Total Practice<span style="margin-left: 5px !important;" id="updownpractotal"></span></p>
-                      <p class="boxvalue2"  id="usercount"></p>
-                      <hr />
-                      <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                      <p class="boxHeading2">Classroom Practice<span style="margin-left: 5px !important;" id="updownpract"></span></p>
-                      <p class="boxvalue" style="cursor:pointer;" onclick="cards('http://127.0.0.1:5000/classroom_practice_table_DAILY')" id="neverlogged"></p>
-                      <br />
-                      <hr />
-                      <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                      <p class="boxHeading2">Home Practice<span style="margin-left: 5px !important;" id="updownpracp"></span></p>
-
-                      <p class="boxvalue" style="cursor:pointer;" onclick="cards('http://127.0.0.1:5000/FAMILY_practice_table_DAILY')" id="totalstudent"></p>
-                      <br />
-                      <hr />
-                     
-                      
-
-                    </div>
-                  </div>
-                </div>
+        <div class="col-md-3">
+          <div class="boxExecutive">
             <div>
-           
-              <div class="col-md-3">
-                <div class="boxExecutive">
-                  <div >
-                    <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
-                    <p style="font-size: 11px;">Avg. Feedback<span style="margin-left: 5px !important;" id="updownfbtotal"></span></p>
-                    <p class="boxvalue2" id="avgfb"></p>
-                    <hr />
-                    <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                    <p class="boxHeading2" >No. of Home Feedbacks<span style="margin-left: 5px !important;" id="updownfbcomment"></span></p>
-                    <p class="boxvalue" id="comments" onclick="cards('http://127.0.0.1:5000/dailyfeedratingtable_PARENTS')" style="cursor:pointer;"></p>
-                    <br />
-                    <hr />
-                    <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                    <p class="boxHeading2" >No. of Teacher Feedbacks<span style="margin-left: 5px !important;" id="updownfbper"></span></p>
-                    <p class="boxvalue" id="comments2" onclick="cards('http://127.0.0.1:5000/dailyfeedratingtable_TEACHERS')" style="cursor:pointer;"></p>
-                    <br />
-                    <hr/>
-                  </div>
-                </div>
+              <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
+              <p style="font-size: 11px;">New Signups<span style="margin-left: 5px !important;"
+                  id="updownsigntotal"></span></p>
+              <p class="boxvalue2" id="usercount1"></p>
+              <hr />
+              <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
+              <p class="boxHeading2">Home Signups<span style="margin-left: 5px !important;" id="updownsignt"></span></p>
+              <p class="boxvalue" id="neverlogged1" onclick="cards2('/parents_signup_table_daily')"
+                style="cursor:pointer;"></p>
+              <br />
+              <hr />
+              <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
+              <p class="boxHeading2">Classroom Signups<span style="margin-left: 5px !important;"
+                  id="updownsignp"></span></p>
+
+              <p class="boxvalue" id="totalstudent1" onclick="cards2('/teacher_signup_table_daily')"
+                style="cursor:pointer;"></p>
+              <br />
+              <hr />
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="boxExecutive">
+            <div>
+              <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
+              <p style="font-size: 11px;">Total Playback<span style="margin-left: 5px !important;"
+                  id="updownpractotal"></span></p>
+              <p class="boxvalue2" id="usercount"></p>
+              <hr />
+              <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
+              <p class="boxHeading2">Classroom Playback<span style="margin-left: 5px !important;"
+                  id="updownpract"></span></p>
+              <p class="boxvalue" style="cursor:pointer;" onclick="cards('/classroom_practice_table_DAILY')"
+                id="neverlogged"></p>
+              <br />
+              <hr />
+              <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
+              <p class="boxHeading2">Home Playback<span style="margin-left: 5px !important;" id="updownpracp"></span>
+              </p>
+
+              <p class="boxvalue" style="cursor:pointer;" onclick="cards('/FAMILY_practice_table_DAILY')"
+                id="totalstudent"></p>
+              <br />
+              <hr />
+
+
+
+            </div>
+          </div>
+        </div>
+        <div>
+
+          <div class="col-md-3">
+            <div class="boxExecutive">
+              <div>
+                <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
+                <p style="font-size: 11px;">Avg. Feedback<span style="margin-left: 5px !important;"
+                    id="updownfbtotal"></span></p>
+                <p class="boxvalue2" id="avgfb"></p>
+                <hr />
+                <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
+                <p class="boxHeading2">No. of Home Feedbacks<span style="margin-left: 5px !important;"
+                    id="updownfbcomment"></span></p>
+                <p class="boxvalue" id="comments" onclick="cards('/dailyfeedratingtable_PARENTS')"
+                  style="cursor:pointer;"></p>
+                <br />
+                <hr />
+                <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
+                <p class="boxHeading2">No. of Teacher Feedbacks<span style="margin-left: 5px !important;"
+                    id="updownfbper"></span></p>
+                <p class="boxvalue" id="comments2" onclick="cards('/dailyfeedratingtable_TEACHERS')"
+                  style="cursor:pointer;"></p>
+                <br />
+                <hr />
               </div>
-           
-              <!-- <div class="col-md-3">
+            </div>
+          </div>
+
+          <!-- <div class="col-md-3">
                 <div class="boxExecutive">
                   <div >
                     <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
@@ -453,53 +490,66 @@ margin-right: 10px;
               </div> -->
           <div>
 
-             
-          <div>
-            
-            
-             
 
-            </section>
-      <hr />
-      <div class="col-md-10" style="margin-top: 40px;">            
-        <div id="container2" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div></div>
-
-        <div class="col-md-10" style="margin-top: 40px;">            
-          <div id="container" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div></div>
-
-          <div class="col-md-10" style="margin-top: 40px;">            
-            <div id="container10" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div></div>
-            <div class="col-md-10" style="margin-top: 40px;">            
-              <div id="container5" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div></div>
-    
-
-        
-               
-              <!-- <div id="container"></div> -->
+            <div>
 
 
-              <div id="myModal2" class="modal2">
-                <!-- Modal content -->
-                <div class="modal2-content">
-                            <div id="admin" class="col-md-12" >
-                              <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
-                                <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;"  onclick="gif2()" style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o" aria-hidden="true"></i></a>
-                                <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"  download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a>
-                                
-                                <div class="table-header" >
-                                  <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
-                                </div>
-                                <div id="gif"></div>
-                                <div class="custyle" id ="next" ></div>
-                                <div class="custyle" id ="next1" ></div>
-                              </div>
-                            </div>
-                </div>
-              </div>
-             
-      </section>
 
-      <!-- <div id="popup1" class="overlay">
+
+    </section>
+    <hr />
+    <div class="col-md-10" style="margin-top: 40px;">
+      <div id="container2"
+        style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+    </div>
+
+    <div class="col-md-10" style="margin-top: 40px;" style="display: none;">
+      <div id="container"
+        style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+    </div>
+
+    <div class="col-md-10" style="margin-top: 40px;">
+      <div id="container10"
+        style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+    </div>
+    <div class="col-md-10" style="margin-top: 40px;">
+      <div id="container5"
+        style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+    </div>
+
+
+
+
+    <!-- <div id="container"></div> -->
+
+
+    <div id="myModal2" class="modal2">
+      <!-- Modal content -->
+      <div class="modal2-content">
+        <div id="admin" class="col-md-12">
+          <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
+            <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()"
+              style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o"
+                aria-hidden="true"></i></a>
+            <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"
+              download="CapdataExecutivedashboard.csv" id="btnExport"
+              onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;"
+              href=""><i class="fa fa-download" aria-hidden="true"></i></a>
+
+            <div class="table-header">
+              <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
+            </div>
+            <div id="gif"></div>
+            <div class="custyle" id="next"></div>
+            <div class="custyle" id="next1"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- <div id="popup1" class="overlay">
         <div class="popup">
           <h2 style="margin-left: 40px;">CONTACT US</h2>
           <a class="close" href="#" style="right: 67px !important;">&times;</a>
@@ -583,7 +633,7 @@ margin-right: 10px;
         </div>
       </div> -->
 
-        <!-- <div class="botIcon">
+  <!-- <div class="botIcon">
     <div class="botIconContainer">
       <div class="iconInner">
         <img src="{{ url_for('static',filename='images/compasslogo.png') }}">
@@ -622,29 +672,30 @@ margin-right: 10px;
       </div>
     </div>
   </div> -->
-<!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
-<script src="{{ url_for('static',filename='js/countapi.js') }}"></script>
-<script src="{{ url_for('static',filename='js/search.js') }}"></script>
+  <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
+  <script src="{{ url_for('static',filename='js/countapi.js') }}"></script>
+  <script src="{{ url_for('static',filename='js/search.js') }}"></script>
 
-<script src="{{ url_for('static',filename='js/mail.js') }}"></script>
+  <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
 
-<script src="https://code.highcharts.com/stock/highstock.js"></script>
-<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
-    
-     
-
-<script  src="{{ url_for('static',filename='js/daily.js') }}"></script>
+  <script src="https://code.highcharts.com/stock/highstock.js"></script>
+  <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 
 
 
-    
-<!-- partial -->
-<script  src="{{ url_for('static',filename='js/Information_icon.js') }}"></script>
-<script  src="{{ url_for('static',filename='js/script.js') }}"></script>
-<script  src="{{ url_for('static',filename='js/transactions.js') }}"></script> 
+  <script src="{{ url_for('static',filename='js/daily.js') }}"></script>
+
+
+
+
+  <!-- partial -->
+  <script src="{{ url_for('static',filename='js/Information_icon.js') }}"></script>
+  <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+  <script src="{{ url_for('static',filename='js/transactions.js') }}"></script>
 
 
 
 
 </body>
+
 </html>

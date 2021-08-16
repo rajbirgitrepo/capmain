@@ -108,7 +108,7 @@ table.dataTable thead .sorting_desc_disabled:after {
     bottom: 8px;
     right: 8px;
     display: block;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     opacity: 0.5
 }
 

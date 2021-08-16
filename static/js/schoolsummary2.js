@@ -1,9 +1,6 @@
 Highcharts.setOptions({
-  colors: ['#67BCE6'],
   chart: {
-     zoomType: 'x',
     style: {
-      fontFamily: 'sans-serif',
       color: '#fff'
     }
   }
@@ -11,7 +8,7 @@ Highcharts.setOptions({
   var settings = {
       "async": true,
       "crossDomain": true,
-      "url":             "http://127.0.0.1:5000/progschoolcount",
+      "url":             "/progschoolcount",
       "method": "GET"
      }
       $.ajax(settings).done(function (response) {
@@ -66,12 +63,12 @@ $('#container').highcharts({
     series: {point: {
               events: {
                   click: function () {   
-                   URL = 'http://127.0.0.1:5000/schoolsummaryprog/'+this.category ;          
+                   URL = '/schoolsummaryprog/'+this.category ;          
         $('#next').empty();
         console.log(URL);
         var modal2 = document.getElementById("myModal2");
         modal2.style.display = "block";
-        $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+        $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
         var gif = document.getElementById("gif");
       gif.style.display = "block";
         $('#btnExport').show();
@@ -88,20 +85,20 @@ $('#container').highcharts({
 });
       });
 
-      Highcharts.setOptions({
-        colors: ['#67BCE6'],
-        chart: {
-           zoomType: 'x',
-          style: {
-            fontFamily: 'sans-serif',
-            color: '#fff'
-          }
-        }
-      }); 
+      // Highcharts.setOptions({
+      //   colors: ['#67BCE6'],
+      //   chart: {
+      //      zoomType: 'x',
+      //     style: {
+      //       fontFamily: 'sans-serif',
+      //       color: '#fff'
+      //     }
+      //   }
+      // }); 
         var settings = {
             "async": true,
             "crossDomain": true,
-            "url":             "http://127.0.0.1:5000/progschoolexclusivelyunitedstates",
+            "url":             "/progschoolexclusivelyunitedstates",
             "method": "GET"
            }
             $.ajax(settings).done(function (response) {
@@ -157,12 +154,12 @@ $('#container').highcharts({
                     events: {
                         click: function () {
 
-                         URL = 'http://127.0.0.1:5000/progschooltableusa/'+this.category ;
+                         URL = '/progschooltableusa/'+this.category ;
                          $('#next').empty();
                          console.log(URL);
                          var modal2 = document.getElementById("myModal2");
                          modal2.style.display = "block";
-                         $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+                         $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
                          var gif = document.getElementById("gif");
                        gif.style.display = "block";
                          $('#btnExport').show();
@@ -181,16 +178,16 @@ $('#container').highcharts({
     
     
 
-      Highcharts.setOptions({
-          colors: ['#67BCE6'],
-          chart: {
-             zoomType: 'x',
-            style: {
-              fontFamily: 'sans-serif',
-              color: '#fff'
-            }
-          }
-        }); 
+      // Highcharts.setOptions({
+      //     colors: ['#67BCE6'],
+      //     chart: {
+      //        zoomType: 'x',
+      //       style: {
+      //         fontFamily: 'sans-serif',
+      //         color: '#fff'
+      //       }
+      //     }
+      //   }); 
 $("#exc").val("USA");
 function executive(a){
       Highcharts.setOptions({
@@ -206,7 +203,7 @@ function executive(a){
         var settings = {
             "async": true,
             "crossDomain": true,
-            "url":             "http://127.0.0.1:5000/"+a,
+            "url":             "/"+a,
             "method": "GET"
            }
             $.ajax(settings).done(function (response) {
@@ -264,13 +261,13 @@ function executive(a){
 
                             
                           
-                         URL = 'http://127.0.0.1:5000/schoolsummaryprog/'+this.category ;
+                         URL = '/schoolsummaryprog/'+this.category ;
        
               $('#next').empty();
               console.log(URL);
               var modal2 = document.getElementById("myModal2");
               modal2.style.display = "block";
-              $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+              $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
               var gif = document.getElementById("gif");
             gif.style.display = "block";
               $('#btnExport').show();
@@ -289,23 +286,23 @@ function executive(a){
     
     
 
-      Highcharts.setOptions({
-          colors: ['#67BCE6'],
-          chart: {
-             zoomType: 'x',
-            style: {
-              fontFamily: 'sans-serif',
-              color: '#fff'
-            }
-          }
-        }); 
+      // Highcharts.setOptions({
+      //     colors: ['#67BCE6'],
+      //     chart: {
+      //        zoomType: 'x',
+      //       style: {
+      //         fontFamily: 'sans-serif',
+      //         color: '#fff'
+      //       }
+      //     }
+      //   }); 
 
       }
 
           var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "http://127.0.0.1:5000/planschoolcount",
+              "url": "/planschoolcount",
               "method": "GET"
              }
               $.ajax(settings).done(function (response) {
@@ -360,12 +357,12 @@ function executive(a){
             series: {point: {
                       events: {
                           click: function () {
-                           URL = 'http://127.0.0.1:5000/schoolsummaryplan/'+this.category ;
+                           URL = '/schoolsummaryplan/'+this.category ;
                            $('#next').empty();
                            console.log(URL);
                            var modal2 = document.getElementById("myModal2");
                            modal2.style.display = "block";
-                           $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+                           $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
                            var gif = document.getElementById("gif");
                          gif.style.display = "block";
                            $('#btnExport').show();
@@ -393,7 +390,7 @@ function executive(a){
               //     $.ajax(settings).done(function (response) {
               //     var data1=JSON.parse(response);
                   
-              //     $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>USER COUNT</th><th>CITY</th><th>STATE</th><th>COUNTRY</th><th>SUBSCRIPTION EXPIRY</th><th>LAST PRACTICE</th><th>PRACTICE COUNT</th></tr></thead ><tbody>');
+              //     $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>USER COUNT</th><th>CITY</th><th>STATE</th><th>COUNTRY</th><th>SUBSCRIPTION EXPIRY</th><th>LAST PRACTICE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
                                         
               //     for(var i=0;i<data1.data.length;i++){
                   
@@ -413,7 +410,7 @@ function executive(a){
                   
                   
                   
-              //     $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>USER COUNT</th><th>CITY</th><th>STATE</th><th>COUNTRY</th><th>SUBSCRIPTION EXPIRY</th><th>LAST PRACTICE</th><th>PRACTICE COUNT</th></tr></thead ><tbody>');
+              //     $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>USER COUNT</th><th>CITY</th><th>STATE</th><th>COUNTRY</th><th>SUBSCRIPTION EXPIRY</th><th>LAST PRACTICE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
               //     for(var i=0;i<data1.data.length;i++){
                   
                   
@@ -468,7 +465,7 @@ function executive(a){
                   var settings = {
                     "async": true,
                     "crossDomain": true,
-                    "url":             "http://127.0.0.1:5000/weeklysummaryprog",
+                    "url":             "/weeklysummaryprog",
                     "method": "GET"
                    }
                     $.ajax(settings).done(function (response) {
@@ -489,7 +486,7 @@ function executive(a){
              
           ],
                              title: {
-                    text: 'Weekly Practice Comprision by Program'
+                    text: 'Weekly Playback Comprision by Program'
                     },
                   xAxis: {
                     
@@ -577,20 +574,20 @@ function executive(a){
                     });
                 
 
-                    Highcharts.setOptions({
-                      colors: ['#67BCE6'],
-                      chart: {
-                         zoomType: 'x',
-                        style: {
-                          fontFamily: 'sans-serif',
-                          color: '#fff'
-                        }
-                      }
-                    }); 
+                    // Highcharts.setOptions({
+                    //   colors: ['#67BCE6'],
+                    //   chart: {
+                    //      zoomType: 'x',
+                    //     style: {
+                    //       fontFamily: 'sans-serif',
+                    //       color: '#fff'
+                    //     }
+                    //   }
+                    // }); 
                       var settings = {
                           "async": true,
                           "crossDomain": true,
-                          "url":             "http://127.0.0.1:5000/pracprogramsummary",
+                          "url":             "/pracprogramsummary",
                           "method": "GET"
                          }
                           $.ajax(settings).done(function (response) {
@@ -602,7 +599,7 @@ function executive(a){
                         backgroundColor: '#FFFFF'
                       },
                       title: {
-                        text: 'Practice Count by Program',
+                        text: 'Playback Count by Program',
                         style: {  
                          color: '#000000'
                         }
@@ -652,7 +649,7 @@ function executive(a){
                       },
                       series: [{
                           color: '#01a451',
-                        name: 'Practice Count',
+                        name: 'Playback Count',
                         data: dataa.parcount
                       }]
                     });
@@ -673,7 +670,7 @@ function executive(a){
                               var data1 = JSON.parse(response);
                             
                               $("#next").prepend(
-                                '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM</th><th>PRACTICE COUNT</th><th>USER COUNT</th><th>RENEWAL DATE</th><th>LAST PRACTICE DATE</th><th>MODIFY</th></tr></thead ><tbody>'
+                                '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM</th><th>PLAYBACK COUNT</th><th>USER COUNT</th><th>RENEWAL DATE</th><th>LAST PLAYBACK DATE</th><th>MODIFY</th></tr></thead ><tbody>'
                               );
                               for (var i = 0; i < data1.data.length; i++) {
                                 var datain = data1.data[i];
@@ -686,7 +683,7 @@ function executive(a){
                               dataTab();
                             
                               $("#next1").prepend(
-                                '<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>SCHOOL NAME</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM</th><th>PRACTICE COUNT</th><th>USER COUNT</th><th>RENEWAL DATE</th><th>LAST PRACTICE DATE</th></tr></thead ><tbody>'
+                                '<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>SCHOOL NAME</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM</th><th>PLAYBACK COUNT</th><th>USER COUNT</th><th>RENEWAL DATE</th><th>LAST PLAYBACK DATE</th></tr></thead ><tbody>'
                               );
                               for (var i = 0; i < data1.data.length; i++) {
                                 var datain = data1.data[i];
@@ -800,7 +797,7 @@ var settings = {
         }  
 
 
-        $("#Counrty").val('CALIFORNIA');
+        $("#Counrty").val('ALABAMA');
         $(document).on('change','#country',function(){
           $('#container6').empty();
           console.log(this.value)
@@ -809,23 +806,23 @@ var settings = {
           });
 
 
-        chartcountry('CALIFORNIA')
+        chartcountry('ALABAMA')
         function chartcountry(a){
 
-        Highcharts.setOptions({
-          colors: ['#67BCE6'],
-          chart: {
-             zoomType: 'x',
-            style: {
-              fontFamily: 'sans-serif',
-              color: '#fff'
-            }
-          }
-        }); 
+        // Highcharts.setOptions({
+        //   colors: ['#67BCE6'],
+        //   chart: {
+        //      zoomType: 'x',
+        //     style: {
+        //       fontFamily: 'sans-serif',
+        //       color: '#fff'
+        //     }
+        //   }
+        // }); 
           var settings = {
               "async": true,
               "crossDomain": true,
-              "url":             "http://127.0.0.1:5000/progschoolexclusivelystate/"+a,
+              "url":             "/progschoolexclusivelystate/"+a,
               "method": "GET"
              }
               $.ajax(settings).done(function (response) {
@@ -880,12 +877,12 @@ var settings = {
             series: {point: {
                       events: {
                           click: function () {
-                           URL = 'http://127.0.0.1:5000/schoolsummaryprog/'+this.category ;
+                           URL = '/schoolsummaryprog/'+this.category ;
                            $('#next').empty();
                            console.log(URL);
                            var modal2 = document.getElementById("myModal2");
                            modal2.style.display = "block";
-                           $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+                           $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
                            var gif = document.getElementById("gif");
                          gif.style.display = "block";
                            $('#btnExport').show();
@@ -910,7 +907,7 @@ var settings = {
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url":             "http://127.0.0.1:5000/progschoolexclusivelylgpartner",
+              "url":             "/progschoolexclusivelylgpartner",
               "method": "GET"
              }
               $.ajax(settings).done(function (response) {
@@ -979,7 +976,7 @@ var settings = {
               var settings = {
                 "async": true,
                 "crossDomain": true,
-                "url":             "http://127.0.0.1:5000/progschoolexclusivelybeforeafter",
+                "url":             "/progschoolexclusivelybeforeafter",
                 "method": "GET"
                }
                 $.ajax(settings).done(function (response) {

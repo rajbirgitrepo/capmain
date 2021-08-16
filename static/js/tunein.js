@@ -1,7 +1,7 @@
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/tuneincsycard",
+  url: "/tuneincsycard",
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -23,7 +23,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/tuneingraph",
+  "url":             "/tuneingraph",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -70,7 +70,7 @@ plotOptions: {
                   click: function () {
                     // console.log("hellooooo",this.category);
              
-                    URL = 'http://127.0.0.1:5000/tuneintable/CSY/'+this.category+"/"+this.series.name;
+                    URL = '/tuneintable/CSY/'+this.category+"/"+this.series.name;
                    
                     console.log(URL);
                     
@@ -90,7 +90,7 @@ series: [{
   data:  dataa.CSY.Opt_Out,
   stack: 0
 }, {
-  name: 'Practice',
+  name: 'Playback',
   data:  dataa.CSY.practicing_parent,
   stack: 0
 }]
@@ -101,7 +101,7 @@ series: [{
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/tuneingraph",
+  "url":             "/tuneingraph",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -148,7 +148,7 @@ plotOptions: {
                   click: function () {
                     // console.log("hellooooo",this.category);
              
-                    URL = 'http://127.0.0.1:5000/tuneintable/CSY/'+this.category+"/"+this.series.name;
+                    URL = '/tuneintable/CSY/'+this.category+"/"+this.series.name;
                    
                     console.log(URL);
                     
@@ -168,7 +168,7 @@ series: [{
   data:  dataa.LSY.Opt_Out,
   stack: 0
 }, {
-  name: 'Practice',
+  name: 'Playback',
   data:  dataa.LSY.practicing_parent,
   stack: 0
 }]
@@ -191,7 +191,7 @@ function spyderchart(a){
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/tuneinspider/"+a,
+  "url":             "/tuneinspider/"+a,
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {

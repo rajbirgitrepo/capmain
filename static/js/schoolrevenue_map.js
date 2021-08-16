@@ -2,7 +2,7 @@
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/schoolpaymentmap",
+  "url": "/schoolpaymentmap",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -44,7 +44,7 @@ var settings = {
                   click: function (e) {
                       {
 // alert(e.point.name); //changes here
-URL = 'http://127.0.0.1:5000/schoolpaymentmaptable/'+e.point.name;
+URL = '/schoolpaymentmaptable/'+e.point.name;
                         console.log(URL);
                        
                         $("#next").empty();

@@ -1,7 +1,7 @@
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/fastcards",
+  url: "/fastcards",
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -90,9 +90,9 @@ series: {point: {
           events: {
               click: function () {
                 
-                   // alert("http://127.0.0.1:5000/"+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category);
+                   // alert("/"+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category);
                 
-               URL = 'http://127.0.0.1:5000/d3renewaltable/'+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category;
+               URL = '/d3renewaltable/'+this.series.name.slice(5,8)+"/"+this.series.name.slice(0,4)+"/"+this.category;
     console.log(URL);
                 Table();
               }

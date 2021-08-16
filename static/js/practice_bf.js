@@ -3,7 +3,7 @@
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":   "http://127.0.0.1:5000/districtupcuser/Agawam School district/csy",
+    "url":   "/districtupcuser/Agawam School district/csy",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -19,7 +19,7 @@ chart: {
   zoomType: 'xy'
 },
 title: {
-  text: "District Level Practice Usage Pattern"
+  text: "District Level Playback Usage Pattern"
 },credits:{enabled:false},
 xAxis: [{visible:false
   
@@ -84,7 +84,7 @@ series: [{
       var settings = {
         "async": true,
         "crossDomain": true,
-        "url":            "http://127.0.0.1:5000/programupcuser/MIDDLE/csy",
+        "url":            "/programupcuser/MIDDLE/csy",
         "method": "GET"
        }
         $.ajax(settings).done(function (response) {
@@ -98,7 +98,7 @@ series: [{
       zoomType: 'xy'
     },
     title: {
-      text: "Program Level Practice Usage Pattern"
+      text: "Program Level Playback Usage Pattern"
     },credits:{enabled:false},
     xAxis: [{visible:false
       
@@ -168,7 +168,7 @@ function chartsublit(){
     var settings = {
         "async": true,
         "crossDomain": true,
-        "url":   "http://127.0.0.1:5000/districtupcuser/"+a+"/"+b,
+        "url":   "/districtupcuser/"+a+"/"+b,
         "method": "GET",
         error: function(){
             $("#container").append('<div style="background-color: #fff;color: green;width: 50%;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><p style="margin-top:4px;">No data available in lsy for this district </p></div>');
@@ -187,7 +187,7 @@ function chartsublit(){
       zoomType: 'xy'
     },
     title: {
-      text: "District Level Practice Usage Pattern"
+      text: "District Level Playback Usage Pattern"
     },credits:{enabled:false},
     xAxis: [{visible:false
       
@@ -259,7 +259,7 @@ function chartsublit2(){
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":            "http://127.0.0.1:5000/programupcuser/"+a+"/"+b,
+    "url":            "/programupcuser/"+a+"/"+b,
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -273,7 +273,7 @@ chart: {
   zoomType: 'xy'
 },
 title: {
-  text: "Program Level Practice Usage Pattern"
+  text: "Program Level Playback Usage Pattern"
 },credits:{enabled:false},
 xAxis: [{visible:false
   
@@ -341,7 +341,7 @@ series: [{
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":   "http://127.0.0.1:5000/districtupcfamily/Agawam School district/csy",
+    "url":   "/districtupcfamily/Agawam School district/csy",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -356,7 +356,7 @@ chart: {
   zoomType: 'xy'
 },
 title: {
-  text: "District Level Family Practice Usage Pattern"
+  text: "District Level Family Playback Usage Pattern"
 },credits:{enabled:false},
 xAxis: [{visible:false
   
@@ -421,7 +421,7 @@ series: [{
       var settings = {
         "async": true,
         "crossDomain": true,
-        "url":            "http://127.0.0.1:5000/programupcfamily/MIDDLE/csy",
+        "url":            "/programupcfamily/MIDDLE/csy",
         "method": "GET"
        }
         $.ajax(settings).done(function (response) {
@@ -435,7 +435,7 @@ series: [{
       zoomType: 'xy'
     },
     title: {
-      text: "Program Level Family Practice Usage Pattern"
+      text: "Program Level Family Playback Usage Pattern"
     },credits:{enabled:false},
     xAxis: [{visible:false
       
@@ -505,7 +505,7 @@ function chartsublitfam(){
     var settings = {
         "async": true,
         "crossDomain": true,
-        "url":   "http://127.0.0.1:5000/districtupcfamily/"+a+"/"+b,
+        "url":   "/districtupcfamily/"+a+"/"+b,
         "method": "GET",
         error: function(){
             $("#container3").append('<div style="background-color: #fff;color: green;width: 50%;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><p style="margin-top:4px;">No data available in lsy for this district </p></div>');
@@ -524,7 +524,7 @@ function chartsublitfam(){
       zoomType: 'xy'
     },
     title: {
-      text: "District Level Family Practice Usage Pattern"
+      text: "District Level Family Playback Usage Pattern"
     },credits:{enabled:false},
     xAxis: [{visible:false
       
@@ -593,12 +593,12 @@ function chartsublitsc(){
     var a = document.getElementById("firstName6").value;
     var b = document.getElementById("firstName7").value;
     console.log(a,b)
-    console.log("http://127.0.0.1:5000/schoolupcfamily/"+a+"/"+b)
+    console.log("/schoolupcfamily/"+a+"/"+b)
     $("#container4").empty();     
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":            "http://127.0.0.1:5000/programupcfamily/"+a+"/"+b,
+    "url":            "/programupcfamily/"+a+"/"+b,
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -612,7 +612,7 @@ chart: {
   zoomType: 'xy'
 },
 title: {
-  text: "Program Level Family Practice Usage Pattern"
+  text: "Program Level Family Playback Usage Pattern"
 },credits:{enabled:false},
 xAxis: [{visible:false
   

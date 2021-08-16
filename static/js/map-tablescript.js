@@ -2,7 +2,7 @@
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/schoolsmap",
+  url: "/schoolsmap",
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -20,7 +20,7 @@ $(function () {
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/mapinfo",
+    url: "/mapinfo",
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -60,7 +60,7 @@ $(function () {
                 $("#next").empty();
                 $("#btnExport").show();
 
-                URL = "http://127.0.0.1:5000/map/" + e.point.name;
+                URL = "/map/" + e.point.name;
 
                 console.log(URL);
                 createDynamic(URL);

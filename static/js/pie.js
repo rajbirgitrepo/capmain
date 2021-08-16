@@ -5,13 +5,13 @@ var currMonth = d.getMonth()+1;
 
            var startDate = new Date(currYear, currMonth, currDate);
            console.log(startDate);
-var e = "2020-07-01";
+var e = "2021-07-01";
 var f = currYear +"-"+currMonth +"-"+currDate;
 
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/modetype"+"/"+e+"/"+f,
+  url: "/modetype"+"/"+e+"/"+f,
   method: "GET",
 };
 $.ajax(settings).done(function (response) {

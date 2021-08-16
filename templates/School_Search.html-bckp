@@ -25,7 +25,9 @@
     <script src="https://code.highcharts.com/maps/modules/map.js"></script>
     <script src="https://code.highcharts.com/maps/modules/data.js"></script>
     <script src="https://code.highcharts.com/mapdata/countries/us/custom/us-all-territories.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
 <script>
@@ -217,7 +219,7 @@ opacity: 20%;
     </nav>
     <aside class="side-nav" id="show-side-navigation1">
       <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-      <ul class="categories" style="margin-top:100px;">
+      <ul class="categories" style="margin-top:35px;">
         <li>
           <i class="fa fa-home" aria-hidden="true"></i>
           <a href="#">EXECUTIVE SUMMARY</a>
@@ -230,13 +232,13 @@ opacity: 20%;
 <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
             <li><a href="awsmain">AWS ANALYTICS</a></li>
             <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                        <li><a href="21daystreak">21 Day Streak</a></li>
+                        
             
           </ul>
         </li>
         <li class="active"><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
           <ul class="side-nav-dropdown">
-            <li class="active2"><a href="School_Analytics">SCHOOL ANALYTICS</a></li>
+            <!-- <li class="active2"><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->
             <li class="active2"><a href="School_Search">SCHOOL SEARCH</a></li>
             <li class="active2"><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
             <li class="active2"><a href="Disctrictfilter">DISTRICT 360</a></li>
@@ -244,19 +246,19 @@ opacity: 20%;
 
             <!-- <li><a href="District_level_view_RUSD">DISTRICT SPYDER VIEW</a></li> -->
            <li class="active2"><a href="ddt">DISTRICT DDT</a></li>
-<li class="active2"><a href="district _race">DISTRICT RACE CHART</a></li>
+<!-- <li class="active2"><a href="district _race">DISTRICT RACE CHART</a></li>--><li class="active2"><a href="21daystreak">21 Day Streak</a></li>
           </ul>
         </li>
-        <li><i class="fa fa-history"></i><a href="#">PRACTICE ANALYTICS</a>
+        <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
           <ul class="side-nav-dropdown">
-            <li><a href="Practice_Analytics">SCHOOL PRACTICE ANALYTICS</a></li>
+            <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
             <li><a href="Scoology">SCHOOLOGY</a></li>
-            <li><a href="Family_practice_analytics">APP PRACTICE ANALYTICS</a></li>
+            <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
             <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-            <li><a href="audio_analytics">AUDIO ANALYTICS</a></li>
+            <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
             <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
-            <li><a href="Practice_streak">PRACTICE STREAK</a></li>
-            <li><a href="pracbifurcation">PRACTICE BIFURCATION</a></li>
+            <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
+            <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
           </ul>
         </li>
         <li>
@@ -291,9 +293,9 @@ opacity: 20%;
           <ul class="side-nav-dropdown">
             <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
             <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-            <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>
+            <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
             <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
-            <li><a href="Android_analytics">ANDROID ANALYTICS</a></li>
+            <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
             <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
           </ul>
         </li>
@@ -618,7 +620,7 @@ $("#searchinput").empty();
 //   }
 //   console.log(params);
 //  // create the chart
-//   var URL = "http://127.0.0.1:5000/schoolsearch/"+params
+//   var URL = "/schoolsearch/"+params
 //   console.log(URL)
 //   P(URL);
 //   createDynamic(URL);
@@ -724,7 +726,7 @@ console.log("practice hstory   "+ a)
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/journeyprachis/"+a,
+  "url":             "/journeyprachis/"+a,
   "method": "GET",
   error: function(){
     zerochart();
@@ -780,7 +782,7 @@ navigator: {
                     
         //                var a = new Date(this.x ).toLocaleString('sv-SE', { day:'numeric',month:'numeric', year:'numeric', hour12:false } );
                     
-        //            URL = 'http://127.0.0.1:5000/donationcsytable/'+a ;
+        //            URL = '/donationcsytable/'+a ;
         // console.log(URL);               
         // $("#next").empty();
         // $("#btnExport").show();
@@ -868,7 +870,7 @@ navigator: {
                     
         //                var a = new Date(this.x ).toLocaleString('sv-SE', { day:'numeric',month:'numeric', year:'numeric', hour12:false } );
                     
-        //            URL = 'http://127.0.0.1:5000/donationcsytable/'+a ;
+        //            URL = '/donationcsytable/'+a ;
         // console.log(URL);               
         // $("#next").empty();
         // $("#btnExport").show();

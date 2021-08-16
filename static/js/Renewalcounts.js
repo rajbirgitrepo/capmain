@@ -1,37 +1,37 @@
 P();
 P2();
-ut = "http://127.0.0.1:5000/upcomingtable";
-ud = "http://127.0.0.1:5000/upcomingzeropractable";
-uo = "http://127.0.0.1:5000/upcomingonbtable";
+ut = "/upcomingtable";
+ud = "/upcomingzeropractable";
+uo = "/upcomingonbtable";
 
 //expired current school year
-rt = "http://127.0.0.1:5000/cloudtable";
-rd = "http://127.0.0.1:5000/cloudpractice";
-ro = "http://127.0.0.1:5000/cloudonboard";
+rt = "/cloudtable";
+rd = "/cloudpractice";
+ro = "/cloudonboard";
 
 //trial
-tt = "http://127.0.0.1:5000/trialtable";
-td = "http://127.0.0.1:5000/trialzeropracticetable";
-to = "http://127.0.0.1:5000/trialtableonbording";
+tt = "/trialtable";
+td = "/trialzeropracticetable";
+to = "/trialtableonbording";
 
 //after current school year
-at = "http://127.0.0.1:5000/aftercsytable";
-ad = "http://127.0.0.1:5000/aftercsytableozeroprac";
-ao = "http://127.0.0.1:5000/aftercsytableoonbording";
+at = "/aftercsytable";
+ad = "/aftercsytableozeroprac";
+ao = "/aftercsytableoonbording";
 
-ct = "http://127.0.0.1:5000/expcsytable";
-cd = "http://127.0.0.1:5000/expcsytabledatazeropractice";
-co = " http://127.0.0.1:5000/expcsytableonboarding";
+ct = "/expcsytable";
+cd = "/expcsytabledatazeropractice";
+co = " /expcsytableonboarding";
 
-lt = "http://127.0.0.1:5000/lifetimetable";
-ld = "http://127.0.0.1:5000/lifetimezeropracticetable";
-lo = "http://127.0.0.1:5000/lifetimetableonbording";
+lt = "/lifetimetable";
+ld = "/lifetimezeropracticetable";
+lo = "/lifetimetableonbording";
 
 function P2() {
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/dashcount",
+    url: "/dashcount",
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -45,7 +45,7 @@ function P() {
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/renewalcardnew",
+    url: "/renewalcardnew",
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -258,7 +258,7 @@ function createDynamic(url) {
     var data1 = JSON.parse(response);
 
     $("#next").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>STATE</th><th>CITY</th><th>RENEWAL DATE</th><th>USER COUNT</th><th>PRACTICE COUNT</th><th>LAST PRACTICE DATE</th></tr></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>STATE</th><th>CITY</th><th>RENEWAL DATE</th><th>USER COUNT</th><th>PLAYBACK COUNT</th><th>LAST PLAYBACK DATE</th></tr></thead ><tbody>'
     );
 
     for (var i = 0; i < data1.data.length; i++) {
@@ -272,7 +272,7 @@ function createDynamic(url) {
     dataTab();
 
     $("#next1").prepend(
-      '<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>STATE</th><th>CITY</th><th>RENEWAL DATE</th><th>USER COUNT</th><th>PRACTICE COUNT</th><th>LAST PRACTICE DATE</th></tr></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>STATE</th><th>CITY</th><th>RENEWAL DATE</th><th>USER COUNT</th><th>PLAYBACK COUNT</th><th>LAST PLAYBACK DATE</th></tr></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];

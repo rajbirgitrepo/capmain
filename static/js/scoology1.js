@@ -1,7 +1,7 @@
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/signuphistortyschoology",
+    "url":             "/signuphistortyschoology",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -27,13 +27,13 @@ plotOptions: {
               events: {
                   click: function () {
                     
-                   URL = 'http://127.0.0.1:5000/signuptableschoology/'+this.x ;
+                   URL = '/signuptableschoology/'+this.x ;
         
                    $('#next').empty();
                    console.log(URL);
                    var modal2 = document.getElementById("myModal2");
                    modal2.style.display = "block";
-                   $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+                   $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
                    var gif = document.getElementById("gif");
                  gif.style.display = "block";
                    $('#btnExport').show();
@@ -114,7 +114,7 @@ function createDynamic2(url){
     $.ajax(settings).done(function (response) {
     var data1=JSON.parse(response);
     
-    $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>SCHOOL NAME</th><th>PRACTICE SESSIONS</th><th>COMPLETED SESSIONS</th><th>RENEWAL DATE</th><th>LAST PRACTICE DATE</th><th>MINDFUL MINUTES</th></tr></thead ><tbody>');
+    $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>SCHOOL NAME</th><th>PLAYBACK SESSIONS</th><th>COMPLETED SESSIONS</th><th>RENEWAL DATE</th><th>LAST PLAYBACK DATE</th><th>MINDFUL MINUTES</th></tr></thead ><tbody>');
                           
     for(var i=0;i<data1.data.length;i++){
     
@@ -134,7 +134,7 @@ function createDynamic2(url){
     
     
     
-     $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>SCHOOL NAME</th><th>PRACTICE SESSIONS</th><th>COMPLETED SESSIONS</th><th>RENEWAL DATE</th><th>LAST PRACTICE DATE</th><th>MINDFUL MINUTES</th></tr></thead ><tbody>');
+     $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>SCHOOL NAME</th><th>PLAYBACK SESSIONS</th><th>COMPLETED SESSIONS</th><th>RENEWAL DATE</th><th>LAST PLAYBACK DATE</th><th>MINDFUL MINUTES</th></tr></thead ><tbody>');
     for(var i=0;i<data1.data.length;i++){
     
     

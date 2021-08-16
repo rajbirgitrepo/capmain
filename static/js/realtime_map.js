@@ -5,7 +5,7 @@
   var settings = {
      "async": true,
      "crossDomain": true,
-     "url":             "http://127.0.0.1:5000/rtusercount",
+     "url":             "/rtusercount",
      "method": "GET"
     }
      $.ajax(settings).done(function (response) {
@@ -30,7 +30,7 @@ var current = null;
  var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/rtmapcount",
+    "url":             "/rtmapcount",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -65,7 +65,7 @@ var dataa= dataa
     },
     credits:{enabled:false},
     title: {
-      text: 'Realtime Practice Sessions (USA)',
+      text: 'Realtime Playback Sessions (USA)',
     },
     exporting: {
       sourceWidth: 600,

@@ -4496,7 +4496,7 @@
 //   $("#next").empty();
 //   $("#next1").empty();
 
-//   URL = "http://127.0.0.1:5000/pschoolsearchchart/" + input.value;
+//   URL = "/pschoolsearchchart/" + input.value;
 //   URL1 = URL;
 //   graph();
 //   cardscroll();
@@ -8745,7 +8745,7 @@ var availableTagsfam = [ "GEORGE PEABODY ELEMENTARY",
 
     function schoolsearch(){
       var a = document.getElementById("searchinputfamily").value;
-      URL = "http://127.0.0.1:5000/pschoolsearchchart/"+a
+      URL = "/pschoolsearchchart/"+a
       console.log(URL);
       graph(URL);
       cardscroll();
@@ -8772,7 +8772,7 @@ function graph(url) {
       },
 
       title: {
-        text: "USer Practice History",
+        text: "USer Playback History",
       },
       credits: { enabled: false },
       xAxis: {
@@ -8810,7 +8810,7 @@ function graph(url) {
           lineWidth: 1,
           opposite: false,
           title: {
-            text: "PRACTICE COUNT",
+            text: "PLAYBACK COUNT",
           },
         },
         {
@@ -8826,7 +8826,7 @@ function graph(url) {
         {
           type: "column",
           color: "#01a451",
-          name: "Practice Count",
+          name: "Playback Count",
           data: dataa.data.school_data, //Fri, 14 Jul 2017 00:00:00 GMT
           dataGrouping: {
             enabled: false,
@@ -8858,7 +8858,7 @@ function createDynamic(url) {
     var data1 = JSON.parse(response);
 
     $("#next").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PRACTICE DATE</th> <th>RENEWAL DATE</th> <th>PRACTICE COUNT</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th> <th>RENEWAL DATE</th> <th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];
@@ -8871,7 +8871,7 @@ function createDynamic(url) {
     dataTab();
 
     $("#next1").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PRACTICE DATE</th> <th>RENEWAL DATE</th> <th>PRACTICE COUNT</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th> <th>RENEWAL DATE</th> <th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];

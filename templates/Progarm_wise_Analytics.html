@@ -23,7 +23,9 @@
 
 
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -123,7 +125,7 @@
     <div class="">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="page_Heading" href="#">PROGRAM WISE PRACTICE ANALYTICS</a>
+        <a class="page_Heading" href="#">PROGRAM WISE PLAYBACK ANALYTICS</a>
         <a href="homepage">
           <img src="{{ url_for('static',filename='images/capwhite.png') }}" alt=""
             class="logo">
@@ -154,7 +156,7 @@
         <i class="fa fa-search Icon"></i>
         <div id="iid" class="input-Field">
         </div>
-        <button class="search_Bt" onclick=search() id="hel">SEARCH</button>
+        <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
         <p style="display: none;" id="tagdescription" ></p>
         <p style="display: none;" id="tagdescription" ></p>
         <!--<div class="select_Bt">
@@ -169,7 +171,7 @@
   </nav>
   <aside class="side-nav" id="show-side-navigation1">
     <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-    <ul class="categories" style="margin-top:100px;">
+    <ul class="categories" style="margin-top:35px;">
       <li>
         <i class="fa fa-home" aria-hidden="true"></i>
         <a href="#">EXECUTIVE SUMMARY</a>
@@ -182,7 +184,7 @@
 <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
           <li><a href="awsmain">AWS ANALYTICS</a></li>
             <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                        <li><a href="21daystreak">21 Day Streak</a></li>
+                        
             
         </ul>
       </li>
@@ -191,22 +193,23 @@
           <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li> 
 <li><a href="Disctrictfilter">DISTRICT 360</a></li>
 <li><a href="partner">PARTNER PORTAL</a></li>
-          <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li>
- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li>        
+          <!-- <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
+ <!-- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->        
             <li><a href="School_Search">SCHOOL SEARCH</a></li>
           <li><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
+<li><a href="21daystreak">21 Day Streak</a></li>
         </ul>
       </li>
-      <li class="active"><i class="fa fa-history"></i><a href="#">PRACTICE ANALYTICS</a>
+      <li class="active"><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
         <ul class="side-nav-dropdown">
-          <li class="active2"><a href="Practice_Analytics">SCHOOL PRACTICE ANALYTICS</a></li>
+          <li class="active2"><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
           <li class="active2"><a href="Scoology">SCHOOLOGY</a></li>
-          <li class="active2"><a href="Family_practice_analytics">APP PRACTICE ANALYTICS</a></li>
+          <li class="active2"><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
           <li class="active2"><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-            <li class="active2"><a href="audio_analytics">AUDIO ANALYTICS</a></li>
+            <!-- <li class="active2"><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
             <li class="active2"><a href="tunein">TUNE_IN DASHBAORD</a></li>
-<li class="active2"><a href="Practice_streak">PRACTICE STREAK</a></li>
-            <li class="active2"><a href="pracbifurcation">PRACTICE BIFURCATION</a></li>
+<li class="active2"><a href="Practice_streak">PLAYBACK STREAK</a></li>
+            <!-- <li class="active2"><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
         </ul>
       </li>
       <li>
@@ -241,13 +244,13 @@
         <ul class="side-nav-dropdown">
           <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
           <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-          <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>
+          <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
           <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
-          <li><a href="Android_analytics">ANDROID ANALYTICS</a></li>
+          <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
           <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
         </ul>
       </li>
-      <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">5.7.2</span></a>
+      <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
       </li>
 <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
 </aside>
@@ -317,7 +320,7 @@
                       <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
                   </div>
                   <div class="card-content">
-                    <p class="category">Practice Count</p>
+                    <p class="category">Playback Count</p>
                     <h3 class="card-title" id="pcount"></h3>
                   </div>
         
@@ -387,7 +390,7 @@
                   <button class="buttoninfo" data-toggle="popover"
                     data-content="Number of users who have practised atleast once.">i</button>
                   <p style="font-size: 10px;">Families Engaged</p>
-                  <p style="margin: 15px 4px; font-size: 28px; " id="totalparents"></p>
+                  <p style="font-size: 21px; " id="totalparents"></p>
 
 
 
@@ -401,7 +404,7 @@
                   <button class="buttoninfo" data-toggle="popover"
                     data-content="Number of users who have practised atleast 50% of a track">i</button>
                   <p style="font-size: 10px;">Active<br /></p>
-                  <p style="margin: 15px 4px; font-size: 28px; " id="signup"></p>
+                  <p style="font-size: 21px; " id="signup"></p>
 
 
 
@@ -417,7 +420,7 @@
                       <button class="buttoninfo" data-toggle="popover"
                         data-content="Number of users who have not practiced atleast 50% of a track.">i</button>
                       <p style="font-size: 10px;">Passive</p>
-                      <p style="margin: 15px 4px; font-size: 28px; " id="activeparents"></p>
+                      <p style="font-size: 21px; " id="activeparents"></p>
 
 
 
@@ -428,7 +431,7 @@
 
                     <div class="box2 ">
                       <p style="font-size: 10px;">Total Playbacks<br /></p>
-                      <p style="margin: 15px 4px; font-size: 28px; " id="playbackpractice"></p>
+                      <p style="font-size: 21px; " id="playbackpractice"></p>
 
 
 
@@ -439,7 +442,7 @@
 
                     <div class="box2 ">
                       <p style="font-size: 10px;">Mindfulness Minutes</p>
-                      <p style="margin: 15px 4px; font-size: 28px; " id="minutespractice"></p>
+                      <p style="font-size: 21px;" id="minutespractice"></p>
 
 
 
@@ -713,7 +716,7 @@ else if (this.value == '2') {
     var settings = {
       "async": true,
       "crossDomain": true,
-      "url": "http://127.0.0.1:5000/parpracprog",
+      "url": "/parpracprog",
       "method": "GET"
     }
     $.ajax(settings).done(function (response) {
@@ -730,7 +733,7 @@ else if (this.value == '2') {
               drilldown: function (e) {
                 $('#next').empty();
 
-                URL = 'http://127.0.0.1:5000/parpracticeprogg/' + e.point.name.slice(0, 1);
+                URL = '/parpracticeprogg/' + e.point.name.slice(0, 1);
                 console.log(URL);
 
 
@@ -743,7 +746,7 @@ else if (this.value == '2') {
               }
             }
           }, title: {
-            text: 'Unique User Practicing by Program'
+            text: 'Unique User playback by Program'
           },
           xAxis: {
             type: 'category',
@@ -761,7 +764,7 @@ else if (this.value == '2') {
               }
             },
             title: {
-              text: 'USER COUNT',
+              text: 'User Count',
               style: {
                 color: '#000'
               }
@@ -787,7 +790,7 @@ else if (this.value == '2') {
 
               data: [
                 {
-                  name: "DAILY PRACTICE",
+                  name: "DAILY PLAYBACK",
                   y: dataa.dtotal,
                   drilldown: "NAME1"
 
@@ -815,7 +818,7 @@ else if (this.value == '2') {
             series: [
 
               {
-                name: "DAILY PRACTICE",
+                name: "DAILY PLAYBACK",
                 id: "NAME1",
                 tooltip: {
                   headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
@@ -874,7 +877,7 @@ else if (this.value == '2') {
                 ]
               },
               {
-                name: "SOUND PRACTICE",
+                name: "SOUND PLAYBACK",
 
                 tooltip: {
                   headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
@@ -890,7 +893,7 @@ else if (this.value == '2') {
     var settings = {
       "async": true,
       "crossDomain": true,
-      "url": "http://127.0.0.1:5000/parpracticeprogg",
+      "url": "/parpracticeprogg",
       "method": "GET"
     }
     $.ajax(settings).done(function (response) {
@@ -905,7 +908,7 @@ else if (this.value == '2') {
           chart: {
             type: 'column'
           }, title: {
-            text: 'Family Practice Trend by Program'
+            text: 'Family Playback Trend by Program'
           },
           xAxis: {
             type: 'category',
@@ -923,7 +926,7 @@ else if (this.value == '2') {
               }
             },
             title: {
-              text: 'PRACTICE COUNT',
+              text: 'Playback Count',
               style: {
                 color: '#000'
               }
@@ -941,7 +944,7 @@ else if (this.value == '2') {
               },
               data: [
                 {
-                  name: "DAILY PRACTICE",
+                  name: "DAILY PLAYBACK",
                   y: dataa.dtotal,
                   drilldown: "NAME1"
 
@@ -969,7 +972,7 @@ else if (this.value == '2') {
             series: [
 
               {
-                name: "DAILY PRACTICE",
+                name: "DAILY PLAYBACK",
                 id: "NAME1",
                 tooltip: {
                   headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
@@ -1028,7 +1031,7 @@ else if (this.value == '2') {
                 ]
               },
               {
-                name: "SOUND PRACTICE",
+                name: "SOUND PLAYBACK",
 
                 tooltip: {
                   headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
@@ -1045,7 +1048,7 @@ else if (this.value == '2') {
     var settings = {
       "async": true,
       "crossDomain": true,
-      "url": "http://127.0.0.1:5000/activeprogchart",
+      "url": "/activeprogchart",
       "method": "GET"
     }
     $.ajax(settings).done(function (response) {
@@ -1062,7 +1065,7 @@ else if (this.value == '2') {
               drilldown: function (e) {
                 $('#next').empty();
 
-                URL = 'http://127.0.0.1:5000/activeprogcharttable/' + e.point.name.slice(0, 1);
+                URL = '/activeprogcharttable/' + e.point.name.slice(0, 1);
                 console.log(URL);
 
 
@@ -1094,7 +1097,7 @@ else if (this.value == '2') {
               }
             },
             title: {
-              text: 'FAMILY COUNT',
+              text: 'Family Count',
               style: {
                 color: '#000'
               }
@@ -1112,7 +1115,7 @@ else if (this.value == '2') {
               },
               data: [
                 {
-                  name: "DAILY PRACTICE",
+                  name: "DAILY PLAYBACK",
                   y: dataa.dtotal,
                   drilldown: "NAME1"
 
@@ -1140,7 +1143,7 @@ else if (this.value == '2') {
             series: [
 
               {
-                name: "DAILY PRACTICE",
+                name: "DAILY PLAYBACK",
                 id: "NAME1",
                 tooltip: {
                   headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
@@ -1199,7 +1202,7 @@ else if (this.value == '2') {
                 ]
               },
               {
-                name: "SOUND PRACTICE",
+                name: "SOUND PLAYBACK",
 
                 tooltip: {
                   headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
@@ -1215,7 +1218,7 @@ else if (this.value == '2') {
     var settings = {
       "async": true,
       "crossDomain": true,
-      "url": "http://127.0.0.1:5000/parpracticeprograme",
+      "url": "/parpracticeprograme",
       "method": "GET"
     }
     $.ajax(settings).done(function (response) {
@@ -1235,7 +1238,7 @@ else if (this.value == '2') {
               }
             }
           }, title: {
-            text: 'Active Family Practice Trend by Program'
+            text: 'Active Family playback Trend by Program'
           },
           xAxis: {
             type: 'category',
@@ -1253,7 +1256,7 @@ else if (this.value == '2') {
               }
             },
             title: {
-              text: 'PRACTICE COUNT',
+              text: 'Playback Count',
               style: {
                 color: '#000'
               }
@@ -1271,9 +1274,9 @@ else if (this.value == '2') {
               },
               data: [
                 {
-                  name: "DAILY PRACTICE",
+                  name: "DAILY PLAYBACK",
                   y: dataa.dtotal,
-                  drilldown: "DAILY PRACTICE"
+                  drilldown: "DAILY PLAYBACK"
 
 
                 },
@@ -1299,8 +1302,8 @@ else if (this.value == '2') {
             series: [
 
               {
-                name: "DAILY PRACTICE",
-                id: "DAILY PRACTICE",
+                name: "DAILY PLAYBACK",
+                id: "DAILY PLAYBACK",
                 tooltip: {
                   headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
                   pointFormat: '<span style="color:{point.color}">{point.name}</span>:<b>{point.y}<br>'
@@ -1385,7 +1388,7 @@ else if (this.value == '2') {
       $.ajax(settings).done(function (response) {
         var data1 = JSON.parse(response);
 
-        $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>USER NAME</th><th>USER EMAIL</th><th>PHONE</th><th>SCHOOL AFFILIATION</th><th>CITY</th><th>STATE</th><th>REGISTERED ON</th><th>LAST PRACTICE</th><th>Mindful Minutes</th></tr></thead ><tbody>');
+        $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>USER NAME</th><th>USER EMAIL</th><th>PHONE</th><th>SCHOOL AFFILIATION</th><th>CITY</th><th>STATE</th><th>REGISTERED ON</th><th>LAST PLAYBACK</th><th>Mindful Minutes</th></tr></thead ><tbody>');
 
         for (var i = 0; i < data1.data.length; i++) {
 
@@ -1405,7 +1408,7 @@ else if (this.value == '2') {
 
 
 
-        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>USER NAME</th><th>USER EMAIL</th><th>PHONE</th><th>SCHOOL AFFILIATION</th><th>CITY</th><th>STATE</th><th>REGISTERED ON</th><th>LAST PRACTICE</th><th>Mindful Minutes</th></tr></thead ><tbody>');
+        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>USER NAME</th><th>USER EMAIL</th><th>PHONE</th><th>SCHOOL AFFILIATION</th><th>CITY</th><th>STATE</th><th>REGISTERED ON</th><th>LAST PLAYBACK</th><th>Mindful Minutes</th></tr></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
@@ -1455,7 +1458,7 @@ else if (this.value == '2') {
       var settings = {
         "async": true,
         "crossDomain": true,
-        "url": 'http://127.0.0.1:5000/newcardpar',
+        "url": '/newcardpar',
         "method": "GET"
       }
       $.ajax(settings).done(function (response) {

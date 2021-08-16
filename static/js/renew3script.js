@@ -1,7 +1,7 @@
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/upcomingnewgraph",
+  "url":             "/upcomingnewgraph",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -56,7 +56,7 @@ plotOptions: {
                $('#next').empty();
                $('#next1').empty();
                       
-               URL = 'http://127.0.0.1:5000/renewal20/'+this.category+"/"+this.series.name.slice(18,24)+this.series.name.slice(28,30);
+               URL = '/renewal20/'+this.category+"/"+this.series.name.slice(18,24)+this.series.name.slice(28,30);
                $('#btnExport').show();
                console.log(URL);
                createDynamic(URL)
@@ -87,7 +87,7 @@ function createDynamic(url){
 $.ajax(settings).done(function (response) {
 var data1=JSON.parse(response);
 
-$('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th><th>LAST PRACTICE DATE</th><th>SCHOOL PRACTICE COUNT</th><th>USER COUNT</th></tr ></thead ><tbody>');
+$('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th><th>LAST PLAYBACK DATE</th><th>SCHOOL PLAYBACK COUNT</th><th>USER COUNT</th></tr ></thead ><tbody>');
 for(var i=0;i<data1.data.length;i++){
 
 
@@ -106,7 +106,7 @@ $('#dataTable').append('</tbody></table>');
 
 
 
-  $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th><th>LAST PRACTICE DATE</th><th>SCHOOL PRACTICE COUNT</th><th>USER COUNT</th></tr ></thead ><tbody>');for(var i=0;i<data1.data.length;i++){
+  $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th><th>LAST PLAYBACK DATE</th><th>SCHOOL PLAYBACK COUNT</th><th>USER COUNT</th></tr ></thead ><tbody>');for(var i=0;i<data1.data.length;i++){
 
 
 var datain = data1.data[i];

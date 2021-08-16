@@ -30,7 +30,9 @@
     
 
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
@@ -279,7 +281,7 @@ left: 78%;
         <i class="fa fa-search Icon"></i>
         <div id="iid" class="input-Field">
         </div>
-        <button class="search_Bt" onclick=search() id="hel">SEARCH</button>
+        <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
         <p style="display: none;" id="tagdescription" ></p>
         <p style="display: none;" id="tagdescription" ></p>
       </div>      
@@ -288,7 +290,7 @@ left: 78%;
   </nav>
   <aside class="side-nav" id="show-side-navigation1">
     <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-    <ul class="categories" style="margin-top:100px;">
+    <ul class="categories" style="margin-top:35px;">
       <li>
         <i class="fa fa-home" aria-hidden="true"></i>
         <a href="#">EXECUTIVE SUMMARY</a>
@@ -301,7 +303,7 @@ left: 78%;
 <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
           <li><a href="awsmain">AWS ANALYTICS</a></li>
             <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                        <li><a href="21daystreak">21 Day Streak</a></li>
+                        
             
         </ul>
       </li>
@@ -310,22 +312,23 @@ left: 78%;
           <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li> 
 <li><a href="Disctrictfilter">DISTRICT 360</a></li>
 <li><a href="partner">PARTNER PORTAL</a></li>
-          <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li>
- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li>        
+          <!-- <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
+ <!-- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->        
             <li><a href="School_Search">SCHOOL SEARCH</a></li>
           <li><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
+<li><a href="21daystreak">21 Day Streak</a></li>
         </ul>
       </li>
-      <li><i class="fa fa-history"></i><a href="#">PRACTICE ANALYTICS</a>
+      <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
         <ul class="side-nav-dropdown">
-          <li><a href="Practice_Analytics">SCHOOL PRACTICE ANALYTICS</a></li>
+          <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
           <li><a href="Scoology">SCHOOLOGY</a></li>
-          <li><a href="Family_practice_analytics">APP PRACTICE ANALYTICS</a></li>
+          <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
           <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-          <li><a href="audio_analytics">AUDIO ANALYTICS</a></li>
+          <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
           <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
-            <li><a href="Practice_streak">PRACTICE STREAK</a></li>
-          <li><a href="pracbifurcation">PRACTICE BIFURCATION</a></li>
+            <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
+          <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
         </ul>
       </li>
       <li>
@@ -352,7 +355,7 @@ left: 78%;
           <li class="active2"><a href="d1districts">D1 Districts</a></li>
 <li class="active2"><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
           <li class="active2"><a href="Sms_analytics">SMS ANALYTICS</a></li>
-          <li class="active2"><a href="Bill_later">BILL ME LATER</a></li>
+          <!-- <li class="active2"><a href="Bill_later">BILL ME LATER</a></li> -->
         </ul>
       </li>
       
@@ -360,9 +363,9 @@ left: 78%;
         <ul class="side-nav-dropdown">
           <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
           <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-          <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>
+          <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
           <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
-          <li><a href="Android_analytics">ANDROID ANALYTICS</a></li>
+          <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
           <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
         </ul>
       </li>
@@ -441,7 +444,7 @@ left: 78%;
                               class="img-responsive">
                           </div>
                           <div class="card-content">
-                            <p class="category">Practice Count</p>
+                            <p class="category">Playback Count</p>
                             <h3 class="card-title" id="pcount"></h3>
                           </div>
     
@@ -508,22 +511,22 @@ left: 78%;
           <div class="boxExecutive">
             <div >
               <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
-              <p style="font-size: 11px;" onclick="cards('http://127.0.0.1:5000/executive_community')" >School Count</p>
+              <p style="font-size: 11px;" onclick="cards('/executive_community')" >School Count</p>
               <p class="boxvalue2" id="schoolcount77"></p>
               <hr />
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
               <p class="boxHeading2">D1</p>
-              <p class="boxvalue" id="trial"  style="cursor: pointer;" onclick="cards('http://127.0.0.1:5000/executive_community')"></p>
+              <p class="boxvalue" id="trial"  style="cursor: pointer;" onclick="cards('/executive_community')"></p>
               <br />
               <hr />
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
               <p class="boxHeading2">D2<br /></p>
-              <p class="boxvalue" id="lsy" style="cursor: pointer;" onclick="cards('http://127.0.0.1:5000/executive_cloud')"></p>
+              <p class="boxvalue" id="lsy" style="cursor: pointer;" onclick="cards('/executive_cloud')"></p>
               <br />
               <hr />
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
               <p class="boxHeading2">D3<br /></p>
-              <p class="boxvalue" id="next6" style="cursor: pointer;" onclick="cards('http://127.0.0.1:5000/executive_explorer')"></p>
+              <p class="boxvalue" id="next6" style="cursor: pointer;" onclick="cards('/executive_explorer')"></p>
               <br />
               <br />
             </div>
@@ -538,17 +541,17 @@ left: 78%;
               <hr />
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
               <p class="boxHeading2">Cloud (D3)</p>
-              <p class="boxvalue" id="c2"  style="cursor: pointer;" onclick="cards('http://127.0.0.1:5000/explorertabled3')"></p>
+              <p class="boxvalue" id="c2"  style="cursor: pointer;" onclick="cards('/explorertabled3')"></p>
               <br />
               <hr />
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
               <p class="boxHeading2">Community (D3)<br /></p>
-              <p class="boxvalue" id="c3" style="cursor: pointer;" onclick="cards('http://127.0.0.1:5000/communitytabled3')"></p>
+              <p class="boxvalue" id="c3" style="cursor: pointer;" onclick="cards('/communitytabled3')"></p>
               <br />
               <hr />
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
               <p class="boxHeading2">Explorer (D3)<br /></p>
-              <p class="boxvalue" id="c4" style="cursor: pointer;" onclick="cards('http://127.0.0.1:5000/explorertabled3')"></p>
+              <p class="boxvalue" id="c4" style="cursor: pointer;" onclick="cards('/explorertabled3')"></p>
               <br />  
               <br />
             </div>
@@ -563,7 +566,7 @@ left: 78%;
               <hr />
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
               <p class="boxHeadingyear">Lifetime</p>
-              <p class="boxvalue textcolor2" style="cursor: pointer;" id="active" onclick="cards('http://127.0.0.1:5000/executive_lifetime')"></p>
+              <p class="boxvalue textcolor2" style="cursor: pointer;" id="active" onclick="cards('/executive_lifetime')"></p>
               <br />
               <hr />
               <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
@@ -598,7 +601,7 @@ left: 78%;
               <br />
               <hr />
               <img src="/static/images/green.png" class="image2">
-              <p class="boxHeading2">Practice Count</p>
+              <p class="boxHeading2">Playback Count</p>
               <p class="boxvalue" id="neverlogged"></p>
               <br />
               <br />
@@ -849,7 +852,7 @@ left: 78%;
     var modal2 = document.getElementById("myModal2");
 
     modal2.style.display = "block";
-    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
     var gif = document.getElementById("gif");
   gif.style.display = "block";
     $('#btnExport').show();
@@ -879,7 +882,7 @@ success: function() {
 $.ajax(settings).done(function (response) {
 var data1=JSON.parse(response);
 
-$('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PRACTICE DATE</th><th>RENEWAL DATE</th><th>PRACTICE COUNT</th></tr></thead ><tbody>');
+$('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
                       
 for(var i=0;i<data1.data.length;i++){
 
@@ -899,7 +902,7 @@ dataTab();
 
 
 
-$('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PRACTICE DATE</th><th>RENEWAL DATE</th><th>PRACTICE COUNT</th></tr></thead ><tbody>');
+$('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
 for(var i=0;i<data1.data.length;i++){
 
 

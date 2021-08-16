@@ -84,7 +84,7 @@
         <i class="fa fa-search Icon"></i>
         <div id="iid" class="input-Field">
         </div>
-        <button class="search_Bt" onclick=search() id="hel">SEARCH</button>
+        <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
         <p style="display: none;" id="tagdescription" ></p>
         <p style="display: none;" id="tagdescription" ></p>
         <!--<div class="select_Bt">
@@ -99,7 +99,7 @@
     </nav>
     <aside class="side-nav" id="show-side-navigation1">
       <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-      <ul class="categories" style="margin-top:100px;">
+      <ul class="categories" style="margin-top:35px;">
         <li>
           <i class="fa fa-home" aria-hidden="true"></i>
           <a href="#">EXECUTIVE SUMMARY</a>
@@ -112,7 +112,7 @@
 <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
             <li><a href="awsmain">AWS ANALYTICS</a></li>
             <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                        <li><a href="21daystreak">21 Day Streak</a></li>
+                        
             
           </ul>
         </li>
@@ -121,22 +121,23 @@
             <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li> 
 <li><a href="Disctrictfilter">DISTRICT 360</a></li>
 <li><a href="partner">PARTNER PORTAL</a></li>
-          <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li>
- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li>        
+          <!-- <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
+ <!-- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->        
             <li><a href="School_Search">SCHOOL SEARCH</a></li>
           <li><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
+<li><a href="21daystreak">21 Day Streak</a></li>
           </ul>
         </li>
-        <li class="active"><i class="fa fa-history"></i><a href="#">PRACTICE ANALYTICS</a>
+        <li class="active"><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
           <ul class="side-nav-dropdown">
-            <li class="active2"><a href="Practice_Analytics">SCHOOL PRACTICE ANALYTICS</a></li>
+            <li class="active2"><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
             <li class="active2"><a href="Scoology">SCHOOLOGY</a></li>
-            <li class="active2"><a href="Family_practice_analytics">APP PRACTICE ANALYTICS</a></li>
+            <li class="active2"><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
             <li class="active2"><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-            <li class="active2"><a href="audio_analytics">AUDIO ANALYTICS</a></li>
+            <!-- <li class="active2"><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
             <li class="active2"><a href="tunein">TUNE_IN DASHBAORD</a></li>
-<li class="active2"><a href="Practice_streak">PRACTICE STREAK</a></li>
-            <li class="active2"><a href="pracbifurcation">PRACTICE BIFURCATION</a></li>
+<li class="active2"><a href="Practice_streak">PLAYBACK STREAK</a></li>
+            <!-- <li class="active2"><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
           </ul>
         </li>
         <li>
@@ -171,13 +172,13 @@
           <ul class="side-nav-dropdown">
             <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
             <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-            <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>
+            <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
             <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
-            <li><a href="Android_analytics">ANDROID ANALYTICS</a></li>
+            <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
             <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
           </ul>
         </li>
-        <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">5.7.2</span></a>
+        <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
       </li>
 <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
 </aside>
@@ -247,7 +248,7 @@
                       <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
                   </div>
                   <div class="card-content">
-                    <p class="category">Practice Count</p>
+                    <p class="category">Playback Count</p>
                     <h3 class="card-title" id="pcount"></h3>
                   </div>
         
@@ -349,7 +350,7 @@
                         <div class="col-md-2">
                          
                           <div class="box2 ">
-                            <p style="font-size: 10px;">Practice Sessions</p>
+                            <p style="font-size: 10px;">Playback Sessions</p>
                               <p  style="margin: 0 4px; font-size: 21px; " id="practice"></p>
                              
                               
@@ -591,7 +592,7 @@ function P() {
       var settings = {
   "async": true,
   "crossDomain": true,
-  "url": 'http://127.0.0.1:5000/schoology_cards',
+  "url": '/schoology_cards',
   "method": "GET"
  }
  $.ajax(settings).done(function (response) {

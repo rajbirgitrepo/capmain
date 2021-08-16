@@ -1,7 +1,7 @@
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/practicehistoryschoology",
+    "url":             "/practicehistoryschoology",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -17,7 +17,7 @@ type: 'column'
 },
 
 title: {
-text: 'Practice History'
+text: 'Playback History'
 },credits:{enabled:false},
 legend: {
     enabled: true,
@@ -39,7 +39,7 @@ plotOptions: {
                    console.log(URL);
                    var modal2 = document.getElementById("myModal2");
                    modal2.style.display = "block";
-                   $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+                   $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
                    var gif = document.getElementById("gif");
                  gif.style.display = "block";
                    $('#btnExport').show();
@@ -63,7 +63,7 @@ xAxis: {
     lineWidth: 1,
     opposite: false,
     title: {
-        text: 'PRACTICE COUNT'
+        text: 'PLAYBACK COUNT'
     }
 },{
     lineWidth: 1,
@@ -76,7 +76,7 @@ xAxis: {
 series: [{
 type:'column',
   color: '#01a451',
-name: 'Practice Count',
+name: 'Playback Count',
 data: dataa.data.pracdata, //Fri, 14 Jul 2017 00:00:00 GMT
 dataGrouping: {
   enabled: false,
@@ -86,7 +86,7 @@ dataGrouping: {
       {
 type:'line',
   color: '#FF9933',
-name: 'Total Practice Count',
+name: 'Total Playback Count',
 data: dataa.data.pracdatacum, yAxis: 1, //Fri, 14 Jul 2017 00:00:00 GMT
 dataGrouping: {
   enabled: false,
@@ -113,7 +113,7 @@ function createDynamic(url){
     $.ajax(settings).done(function (response) {
     var data1=JSON.parse(response);
     
-    $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>SCHOOL NAME</th><th>SIGNUP DATE</th><th>PRACTICE SESSIONS</th><th>COMPLETED SESSIONS</th><th>MINDFUL MINUTES</th></tr></thead ><tbody>');
+    $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>SCHOOL NAME</th><th>SIGNUP DATE</th><th>PLAYBACK SESSIONS</th><th>COMPLETED SESSIONS</th><th>MINDFUL MINUTES</th></tr></thead ><tbody>');
                           
     for(var i=0;i<data1.data.length;i++){
     
@@ -133,7 +133,7 @@ function createDynamic(url){
     
     
     
-     $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>SCHOOL NAME</th><th>SIGNUP DATE</th><th>PRACTICE SESSIONS</th><th>COMPLETED SESSIONS</th><th>MINDFUL MINUTES</th></tr></thead ><tbody>');
+     $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>SCHOOL NAME</th><th>SIGNUP DATE</th><th>PLAYBACK SESSIONS</th><th>COMPLETED SESSIONS</th><th>MINDFUL MINUTES</th></tr></thead ><tbody>');
     for(var i=0;i<data1.data.length;i++){
     
     

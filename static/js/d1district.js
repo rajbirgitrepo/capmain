@@ -2,7 +2,7 @@
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/d1_chart",
+    "url":             "/d1_chart",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -60,13 +60,13 @@ tooltip: {
                 click: function () {
                   
                   
-                 URL = 'http://127.0.0.1:5000/d1_admin/'+this.category ;           
+                 URL = '/d1_admin/'+this.category ;           
       console.log(URL);               
           $('#next').empty();
           console.log(URL);
           var modal2 = document.getElementById("myModal2");
           modal2.style.display = "block";
-          $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+          $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
           var gif = document.getElementById("gif");
         gif.style.display = "block";
           $('#btnExport').show();
@@ -140,13 +140,13 @@ $(function() {
                 events: {
                     click: function () {
             
-        URL = 'http://127.0.0.1:5000/d1_admin/'+this.category ;
+        URL = '/d1_admin/'+this.category ;
           console.log(URL);               
           $('#next').empty();
           console.log(URL);
           var modal2 = document.getElementById("myModal2");
           modal2.style.display = "block";
-          $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+          $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
           var gif = document.getElementById("gif");
         gif.style.display = "block";
           $('#btnExport').show();
@@ -204,7 +204,7 @@ function createDynamic(url){
     $.ajax(settings).done(function (response) {
     var data1=JSON.parse(response);
     
-    $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th><th>PRACTICE COUNT</th><th>LAST PRACTICE DATE</th><th>USER COUNT</th></tr></thead ><tbody>');
+    $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th><th>LAST PLAYBACK DATE</th><th>USER COUNT</th></tr></thead ><tbody>');
                           
     for(var i=0;i<data1.data.length;i++){
     
@@ -224,7 +224,7 @@ function createDynamic(url){
     
     
     
-    $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th><th>PRACTICE COUNT</th><th>LAST PRACTICE DATE</th><th>USER COUNT</th></tr></thead ><tbody>');
+    $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th><th>LAST PLAYBACK DATE</th><th>USER COUNT</th></tr></thead ><tbody>');
     for(var i=0;i<data1.data.length;i++){
     var datain = data1.data[i];
     var resultDiv = createDynamicDiv(datain);

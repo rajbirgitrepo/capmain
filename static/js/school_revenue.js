@@ -1,7 +1,7 @@
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/schoolpaymentcard",
+  url: "/schoolpaymentcard",
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -22,7 +22,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/schoolmapcard",
+  url: "/schoolmapcard",
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -31,19 +31,13 @@ $.ajax(settings).done(function (response) {
   console.log(dataa.other);
   $("#0c").text("$" + dataa.data[0][1]);
   $("#1c").text("$" +dataa.data[1][1]);
-  $("#2c").text("$" + dataa.data[2][1]);
-  $("#3c").text("$" +dataa.data[3][1]);
-  $("#4c").text("$" +dataa.data[4][1]);
   $("#0h").text(dataa.data[0][0]);
   $("#1h").text(dataa.data[1][0]);
-  $("#2h").text(dataa.data[2][0]);
-  $("#3h").text(dataa.data[3][0]);
-  $("#4h").text(dataa.data[4][0]);
 });
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/schoolpaymentcsy",
+  "url":             "/schoolpaymentcsy",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -96,7 +90,7 @@ navigator: {
                     
                        var a = new Date(this.x ).toLocaleString('sv-SE', { day:'numeric',month:'numeric', year:'numeric', hour12:false } );
                     
-                   URL = 'http://127.0.0.1:5000/schoolpaymentcsytable/'+a ;
+                   URL = '/schoolpaymentcsytable/'+a ;
         console.log(URL);               
         $("#next").empty();
         $("#btnExport").show();
@@ -134,7 +128,7 @@ series: [{
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/schoolpaymentweekly",
+  "url":             "/schoolpaymentweekly",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -163,7 +157,7 @@ labels: {
   }
 },
 title: {
-  text: 'SCHOOL AMOUNT (USD)',
+  text: 'School Amount (USD)',
   style: {
     color: '#000'
   }
@@ -198,7 +192,7 @@ series: {point: {
       }}
 },
 series: [{
-name: 'AMOUNT',
+name: 'Amount',
 color: '#01a451',
 type: 'column',
 yAxis: 0,
@@ -296,7 +290,7 @@ function createDynamic(url) {
     console.log(URL);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";
-    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
     var gif = document.getElementById("gif");
     gif.style.display = "block";
     $('#btnExport').show();

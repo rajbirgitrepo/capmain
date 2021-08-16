@@ -58,7 +58,7 @@ function P2() {
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/parentsmap",
+    url: "/parentsmap",
     method: "GET",
   };
   $.ajax(settings).done(function (response) {

@@ -1,7 +1,7 @@
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/modetype",
+  url: "/modetype",
   method: "GET",
   success: function() {
     var gif = document.getElementById("gif");
@@ -64,7 +64,7 @@ $.ajax(settings).done(function (response) {
             click: function () {
               $("#next").empty();
               URL =
-                "http://127.0.0.1:5000/pmode/" + this.category;
+                "/pmode/" + this.category;
               $("#btnExport").show();
               console.log(URL);
               createDynamic(URL);

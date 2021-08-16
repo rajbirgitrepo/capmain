@@ -25,7 +25,9 @@
     <script src="https://code.highcharts.com/maps/modules/map.js"></script>
     <script src="https://code.highcharts.com/maps/modules/data.js"></script>
     <script src="https://code.highcharts.com/mapdata/countries/us/custom/us-all-territories.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
 <script>
@@ -217,7 +219,7 @@ opacity: 20%;
     </nav>
     <aside class="side-nav" id="show-side-navigation1">
       <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-      <ul class="categories" style="margin-top:100px;">
+      <ul class="categories" style="margin-top:35px;">
         <li>
           <i class="fa fa-home" aria-hidden="true"></i>
           <a href="#">EXECUTIVE SUMMARY</a>
@@ -230,33 +232,32 @@ opacity: 20%;
 <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
             <li><a href="awsmain">AWS ANALYTICS</a></li>
             <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                        <li><a href="21daystreak">21 Day Streak</a></li>
+                        
             
           </ul>
         </li>
         <li class="active"><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
           <ul class="side-nav-dropdown">
-            <li class="active2"><a href="School_Analytics">SCHOOL ANALYTICS</a></li>
+            <!-- <li class="active2"><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->
             <li class="active2"><a href="School_Search">SCHOOL SEARCH</a></li>
             <li class="active2"><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
             <li class="active2"><a href="Disctrictfilter">DISTRICT 360</a></li>
           <li class="active2"><a href="partner">PARTNER PORTAL</a></li>
-
             <!-- <li><a href="District_level_view_RUSD">DISTRICT SPYDER VIEW</a></li> -->
            <li class="active2"><a href="ddt">DISTRICT DDT</a></li>
-<li class="active2"><a href="district _race">DISTRICT RACE CHART</a></li>
+<!-- <li class="active2"><a href="district _race">DISTRICT RACE CHART</a></li>--><li class="active2"><a href="21daystreak">21 Day Streak</a></li>
           </ul>
         </li>
-        <li><i class="fa fa-history"></i><a href="#">PRACTICE ANALYTICS</a>
+        <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
           <ul class="side-nav-dropdown">
-            <li><a href="Practice_Analytics">SCHOOL PRACTICE ANALYTICS</a></li>
+            <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
             <li><a href="Scoology">SCHOOLOGY</a></li>
-            <li><a href="Family_practice_analytics">APP PRACTICE ANALYTICS</a></li>
+            <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
             <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-            <li><a href="audio_analytics">AUDIO ANALYTICS</a></li>
+            <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
             <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
-            <li><a href="Practice_streak">PRACTICE STREAK</a></li>
-            <li><a href="pracbifurcation">PRACTICE BIFURCATION</a></li>
+            <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
+            <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
           </ul>
         </li>
         <li>
@@ -291,13 +292,13 @@ opacity: 20%;
           <ul class="side-nav-dropdown">
             <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
             <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-            <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>
+            <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
             <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
-            <li><a href="Android_analytics">ANDROID ANALYTICS</a></li>
+            <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
             <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
           </ul>
         </li>
-        <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">5.7.2</span></a>
+        <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
       </li>
 <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
 </aside>
@@ -310,7 +311,7 @@ opacity: 20%;
     <div id="error">
     </div>
 
-    <div id="exTab1" class="container" style="margin-top: 30px;">	
+    <div id="exTab1" class="container" style="padding-top: 30px;">	
       <ul  class="nav nav-pills">
             <li class="active">
               <a  href="#1a" data-toggle="tab">By School</a>
@@ -396,7 +397,7 @@ opacity: 20%;
                               <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
                           </div>
                           <div class="card-content">
-                            <p class="category" style="font-size: 12px;">Practice Count (CSY)</p>
+                            <p class="category" style="font-size: 12px;">Playback Count (CSY)</p>
                             <h3 class="card-title" id="pcount"></h3>
                           </div>
                 
@@ -457,7 +458,7 @@ opacity: 20%;
                         <div class="col-md-6">
                           <div class="card">
                             <div class="card-header no-border">
-                              <h4 class="card-title">Practice Trend (Last 6 Months)</h4>
+                              <h4 class="card-title">Playback Trend (Last 6 Months)</h4>
                             </div>
                             <div class="card-body ">
                               <div class="card-block">
@@ -471,7 +472,7 @@ opacity: 20%;
                         <div class="col-md-6">
                           <div class="card">
                             <div class="card-header no-border">
-                              <h4 class="card-title">Unique User Practice Trend (Last 6
+                              <h4 class="card-title">Unique User Playback Trend (Last 6
                                 Months)</h4>
                             </div>
                             <div class="card-body ">
@@ -563,7 +564,7 @@ opacity: 20%;
                               <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
                           </div>
                           <div class="card-content">
-                            <p class="category" style="font-size: 12px;">Practice Count (CSY)</p>
+                            <p class="category" style="font-size: 12px;">Playback Count (CSY)</p>
                             <h3 class="card-title" id="fpcount"></h3>
                           </div>
                 
@@ -622,7 +623,7 @@ opacity: 20%;
                         <div class="col-md-6">
                           <div class="card">
                             <div class="card-header no-border">
-                              <h4 class="card-title">Practice Trend (Last 6 Months)</h4>
+                              <h4 class="card-title">Playback Trend (Last 6 Months)</h4>
                             </div>
                             <div class="card-body ">
                               <div class="card-block">
@@ -636,7 +637,7 @@ opacity: 20%;
                         <div class="col-md-6">
                           <div class="card">
                             <div class="card-header no-border">
-                              <h4 class="card-title">Unique User Practice Trend (Last 6
+                              <h4 class="card-title">Unique User Playback Trend (Last 6
                                 Months)</h4>
                             </div>
                             <div class="card-body ">
@@ -713,7 +714,7 @@ opacity: 20%;
                                  <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
                                </div>
                                <div class="card-content">
-                                 <p class="category">Last Practice Date</p>
+                                 <p class="category">Last Playback Date</p>
                                  <h3 class="card-title" id="uucount" style="font-size: 19px !important;"></h3>
                                  
                                                    
@@ -728,7 +729,7 @@ opacity: 20%;
                                    <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
                                </div>
                                <div class="card-content">
-                                 <p class="category">Practice Count</p>
+                                 <p class="category">Playback Count</p>
                                  <h3 class="card-title" id="upcount"></h3>
                                </div>
                      
@@ -1022,7 +1023,7 @@ $("#searchinput").empty();
     $("#fsid").append('<button onclick=familysearch() style="background-color: #fff;border: 0;" id="hel">SEARCH</button>');
     $("#usid").append('<button onclick=usersearch() style="background-color: #fff;border: 0;" id="hel">SEARCH</button>');
 function historychart(a){
-console.log("practice hstory   "+ a)
+console.log("Playback hstory   "+ a)
 var settings = {
   "async": true,
   "crossDomain": true,
@@ -1044,7 +1045,7 @@ rangeSelector : {
                   inputEnabled: false
                 },
 title: {
-  text: 'Practice History'
+  text: 'Playback History'
 },credits:false,
   xAxis: {
     minRange: 1
@@ -1070,7 +1071,7 @@ navigator: {
       lineWidth: 1,
       opposite: false,
       title: {
-          text: 'Practice History'
+          text: 'Playback History'
       }
   },{
       lineWidth: 1,
@@ -1100,7 +1101,7 @@ navigator: {
 series: [{
   type:'column',
   color: '#01a451',
-  name: 'Practice count',
+  name: 'Playback count',
   data: dataa.data.shp, //Fri, 14 Jul 2017 00:00:00 GMT
   dataGrouping: {
     enabled: false,
@@ -1110,7 +1111,7 @@ series: [{
         {
   type:'line',
   color: '#FF9933',
-  name: 'Cumalative practice count',
+  name: 'Cumalative Playback count',
   data:  dataa.data.shpcum,
    yAxis: 1, //Fri, 14 Jul 2017 00:00:00 GMT
   dataGrouping: {
@@ -1132,7 +1133,7 @@ chart: {
 },
 
 title: {
-  text: 'Practice History'
+  text: 'Playback History'
 },credits:false,
   xAxis: {
     minRange: 1
@@ -1158,7 +1159,7 @@ navigator: {
       lineWidth: 1,
       opposite: false,
       title: {
-          text: 'Practice History'
+          text: 'Playback History'
       }
   },{
       lineWidth: 1,
@@ -1188,7 +1189,7 @@ navigator: {
 series: [{
   type:'column',
   color: '#01a451',
-  name: 'Practice count',
+  name: 'Playback count',
   data: [], //Fri, 14 Jul 2017 00:00:00 GMT
   dataGrouping: {
     enabled: false,
@@ -1198,7 +1199,7 @@ series: [{
         {
   type:'line',
   color: '#FF9933',
-  name: 'Cumalative practice count',
+  name: 'Cumalative Playback count',
   data:  [],
    yAxis: 1, //Fri, 14 Jul 2017 00:00:00 GMT
   dataGrouping: {

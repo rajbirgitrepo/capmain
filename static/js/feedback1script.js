@@ -1,7 +1,7 @@
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/feedbacktrend/",
+    "url":             "/feedbacktrend/",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -72,10 +72,10 @@ $(function () {
             }
             },
             series: [{
-                name: '2019-2020 SY',
+                name: '2020-2021 SY',
                 data: dataa.curve
             }, {
-                name: '2020-2021 SY',
+                name: '2021-2022 SY',
                 data: dataa.bar
             }]
         });

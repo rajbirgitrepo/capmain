@@ -51,7 +51,7 @@ $(function () {
             yAxis: {
         allowDecimals: false,
         title: {
-            text: ' SENTIMENT %'
+            text: ' Sentiment %'
           
         }
               

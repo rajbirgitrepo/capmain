@@ -4,7 +4,7 @@
   <head>
   <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
     <meta charset="UTF-8">
-    <title>CAPXP PRACTICE ANALYTICS</title>
+    <title>CAPXP PLAYBACK ANALYTICS</title>
     <link rel='stylesheet' href='https://cdnjs 
 .cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'> <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/search2.css') }}"> 
@@ -16,7 +16,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -213,7 +215,7 @@ td{
       <div class="">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="page_Heading" href="#">SCHOOL PRACTICE ANALYTICS</a>
+          <a class="page_Heading" href="#">SCHOOL PLAYBACK ANALYTICS</a>
           <a href="homepage">
             <img src="{{ url_for('static',filename='images/capwhite.png') }}" alt=""
               class="logo">
@@ -244,7 +246,7 @@ td{
         <i class="fa fa-search Icon"></i>
         <div id="iid" class="input-Field">
         </div>
-        <button class="search_Bt" onclick=search() id="hel">SEARCH</button>
+        <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
         <p style="display: none;" id="tagdescription" ></p>
         <p style="display: none;" id="tagdescription" ></p>
         <!--<div class="select_Bt">
@@ -259,7 +261,7 @@ td{
     </nav>
     <aside class="side-nav" id="show-side-navigation1">
       <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-      <ul class="categories" style="margin-top:100px;">
+      <ul class="categories" style="margin-top:35px;">
         <li>
           <i class="fa fa-home" aria-hidden="true"></i>
           <a href="#">EXECUTIVE SUMMARY</a>
@@ -272,7 +274,7 @@ td{
 <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
             <li><a href="awsmain">AWS ANALYTICS</a></li>
             <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                        <li><a href="21daystreak">21 Day Streak</a></li>
+                        
             
           </ul>
         </li>
@@ -281,22 +283,23 @@ td{
             <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li> 
 <li><a href="Disctrictfilter">DISTRICT 360</a></li>
 <li><a href="partner">PARTNER PORTAL</a></li>
-          <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li>
- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li>        
+          <!-- <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
+ <!-- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->        
             <li><a href="School_Search">SCHOOL SEARCH</a></li>
           <li><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
+<li><a href="21daystreak">21 Day Streak</a></li>
           </ul>
         </li>
-        <li class="active"><i class="fa fa-history"></i><a href="#">PRACTICE ANALYTICS</a>
+        <li class="active"><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
           <ul class="side-nav-dropdown">
-            <li class="active2"><a href="Practice_Analytics">SCHOOL PRACTICE ANALYTICS</a></li>
+            <li class="active2"><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
             <li class="active2"><a href="Scoology">SCHOOLOGY</a></li>
-            <li class="active2"><a href="Family_practice_analytics">APP PRACTICE ANALYTICS</a></li>
+            <li class="active2"><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
             <li class="active2"><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-            <li class="active2"><a href="audio_analytics">AUDIO ANALYTICS</a></li>
+            <!-- <li class="active2"><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
             <li class="active2"><a href="tunein">TUNE_IN DASHBAORD</a></li>
-<li class="active2"><a href="Practice_streak">PRACTICE STREAK</a></li>
-            <li class="active2"><a href="pracbifurcation">PRACTICE BIFURCATION</a></li>
+<li class="active2"><a href="Practice_streak">PLAYBACK STREAK</a></li>
+            <!-- <li class="active2"><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
           </ul>
         </li>
         <li>
@@ -331,13 +334,13 @@ td{
           <ul class="side-nav-dropdown">
             <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
             <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-            <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>
+            <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
             <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
-            <li><a href="Android_analytics">ANDROID ANALYTICS</a></li>
+            <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
             <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
           </ul>
         </li>
-        <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">5.7.2</span></a>
+        <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
       </li>
 <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
 </aside>
@@ -407,7 +410,7 @@ td{
                       <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
                   </div>
                   <div class="card-content">
-                    <p class="category">Practice Count</p>
+                    <p class="category">Playback Count</p>
                     <h3 class="card-title" id="pcount"></h3>
                   </div>
         
@@ -495,12 +498,12 @@ td{
               margin: 20px;
               padding: 10px;">
               <select id="heat" style="margin-top: 7px;">
-                      <option value="1" selected>Practice Weekly </option>
-                      <option value="2">Practice Family Weekly</option>
-                      <option value="3">Practice Teachers Weekly</option>
-                      <option value="4">Practice Weekly CSY</option>
-                      <option value="5">Practice Family Weekly CSY</option>
-                      <option value="6">Practice Teacher Weekly CSY</option>
+                      <option value="1" selected>Playback Weekly </option>
+                      <option value="2">Playback Family Weekly</option>
+                      <option value="3">Playback Teachers Weekly</option>
+                      <option value="4">Playback Weekly CSY</option>
+                      <option value="5">Playback Family Weekly CSY</option>
+                      <option value="6">Playback Teacher Weekly CSY</option>
               </select>
               <p id="chartname" style="text-align: center;"></p>
                 <div id="heat-map"></div>
@@ -596,7 +599,7 @@ td{
           <div class="before"></div>
           <div class="icon">&#x2714</div>
           <div class="text">
-            <p>PRACTICE ANALYTICS</p>
+            <p>PLAYBACK ANALYTICS</p>
             <p class="message" id="Practice_Analytics"></p>
           </div>
           <div onclick="deletethis()" class="close">&#x00D7</div>
@@ -763,14 +766,14 @@ td{
 
 <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
-</script>
+
 <script>   
 
 
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "http://127.0.0.1:5000/practicehistorychart",
+    "url": "/practicehistorychart",
     "method": "GET"
   }
   $.ajax(settings).done(function (response) {
@@ -781,7 +784,7 @@ var settings = {
         zoomType: 'x'
       },
       title: {
-        text: 'Practice History (2018-2020)'
+        text: 'Playback History (2018-2020)'
       },
       subtitle: {
         text: ''
@@ -891,7 +894,7 @@ $(function() {
      var settings = {
  "async": true,
  "crossDomain": true,
- "url": "http://127.0.0.1:5000/proguser",
+ "url": "/proguser",
  "method": "GET"
 }
 $.ajax(settings).done(function (response) {
@@ -966,7 +969,7 @@ Highcharts.chart('container6', {
                 data: dataa[0].high
             },
              {
-                name: 'SOUND PRACTICE /TRANSITION/ ALL',
+                name: 'SOUND PLAYBACK /TRANSITION/ ALL',
                 data: dataa[0].all
             }
            ]
@@ -982,7 +985,7 @@ $(function() {
      var settings = {
  "async": true,
  "crossDomain": true,
- "url": "http://127.0.0.1:5000/weekprac",
+ "url": "/weekprac",
  "method": "GET"
 }
 $.ajax(settings).done(function (response) {
@@ -994,7 +997,7 @@ var options = {
      zoomType: 'xy',
      renderTo: 'container13'},
    title: {
-     text: "Practice Count by Day"
+     text: "Playback Count by Day"
    },
    xAxis: [{
      categories: dataa.data.week
@@ -1007,7 +1010,7 @@ var options = {
        }
      },
      title: {
-       text: 'PRACTICE COUNT',
+       text: 'PLAYBACK COUNT',
        style: {
          color: '#000'
        }
@@ -1040,7 +1043,7 @@ var options = {
      backgroundColor: '#FFFFFF'
    },
    series: [{
-     name: 'SY 2020-21',
+     name: 'SY 2021-2022',
      color: '#01a451',
      type: 'column',
      yAxis: 0,
@@ -1049,7 +1052,7 @@ var options = {
       
      }
    }, {
-     name:'SY 2019-20',
+     name:'SY  2020-2021',
      color: '#ff8300',
      type: 'spline',
      yAxis: 0,
@@ -1067,7 +1070,7 @@ var options = {
      var settings = {
  "async": true,
  "crossDomain": true,
- "url": "http://127.0.0.1:5000/weekprac",
+ "url": "/weekprac",
  "method": "GET"
 }
 $.ajax(settings).done(function (response) {
@@ -1125,7 +1128,7 @@ var options = {
      backgroundColor: '#FFFFFF'
    },
    series: [{
-     name: 'SY 2020-21',
+     name: 'SY 2021-2022',
      color: '#01a451',
      type: 'column',
      yAxis: 0,
@@ -1134,7 +1137,7 @@ var options = {
       
      }
    }, {
-     name:'SY 2019-20',
+     name:'SY  2020-2021',
      color: '#ff8300',
      type: 'spline',
      yAxis: 0,
@@ -1150,7 +1153,7 @@ var options = {
  var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/activetrendnew",
+  "url":             "/activetrendnew",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -1213,25 +1216,25 @@ Highcharts.chart('container33', {
   }
   },
   series: [{
-    name: 'User Count(SY2020-2021)',
+    name: 'User Count(SY 2021-2022)',
     data: dataa[3].barc
 },
 {
-  name: 'User Count(SY2020-2021)',
+  name: 'User Count(SY 2021-2022)',
   data: dataa[2].bars
 },{
-      name: 'Family Count((SY2020-2021)',
+      name: 'Family Count((SY 2021-2022)',
       fontSize:'8px',
       data: dataa[1].bar2
     
   }, {
-      name: 'User Count(SY2020-2021)',
+      name: 'User Count(SY 2021-2022)',
       data: dataa[0].bar
   },
   
     {type:'spline',
      color:'#FF8300',
-      name: '(SY 2019-2020)',
+      name: '(SY  2020-2021)',
       data: dataa[0].curve
   }]
 });});
@@ -1245,7 +1248,7 @@ var min, max, colorScale, temps, tempsArr;
 var colors = ["#AF7AC5","#7FB3D5 ","#7DCEA0","#F4D03F","#F5B041","#EB984E","#DC7633"];
 var months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 var table, thead, tbody, rows, headCells, cells;
-var data = d3.json("http://127.0.0.1:5000/"+b, function(error, data){
+var data = d3.json("/"+b, function(error, data){
 
   temps = data.meanTemp;
   tempsArr = createTempArr(temps);
@@ -1355,7 +1358,7 @@ var min, max, colorScale, temps, tempsArr;
 var colors = ["#AF7AC5","#7FB3D5 ","#7DCEA0","#F4D03F","#F5B041","#EB984E","#DC7633"];
 var months = ["","Aug", "Sep", "Oct", "Nov", "Dec","Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
 var table, thead, tbody, rows, headCells, cells;
-var data = d3.json("http://127.0.0.1:5000/"+b, function(error, data){
+var data = d3.json("/"+b, function(error, data){
 
   temps = data.meanTemp;
   tempsArr = createTempArr(temps);
@@ -1462,44 +1465,44 @@ $("#heat").val(1);
 $('#heat-map').empty()
   var type = "heatmapweekly"
   heatnew(type);
-  $('#chartname').text("Weekly practice Heat Map")
+  $('#chartname').text("Weekly Playback Heat Map")
 
 $('#heat').change(function(){
   if (this.value == '1') {
   $('#heat-map').empty()
   var type = "heatmapweekly"
   heatnew(type);
-  $('#chartname').text("Weekly practice Heat Map")
+  $('#chartname').text("Weekly Playback Heat Map")
   }
  else if (this.value == '2') {
   $('#heat-map').empty()
   var type = "heatmapweeklyfamily"
   heatnew(type);
-  $('#chartname').text("Weekly practice Family heat Map")
+  $('#chartname').text("Weekly Playback Family Heat Map")
   }
   else if (this.value == '3') {
   $('#heat-map').empty()
   var type = "heatmapweeklyteachers"
   heatnew(type);
-  $('#chartname').text("Weekly practice Teacher heat Map")
+  $('#chartname').text("Weekly Playback Teacher Heat Map")
   }
   else if (this.value == '4') {
   $('#heat-map').empty()
   var type = "heatmapweeklycsy"
   heatnew2(type);
-  $('#chartname').text("Weekly practice Heat Map CSY")
+  $('#chartname').text("Weekly Playback Heat Map CSY")
   }
   else if (this.value == '5') {
   $('#heat-map').empty()
   var type = "familyheatmapweeklycsy"
   heatnew2(type);
-  $('#chartname').text("Weekly practice Family heat Map CSY")
+  $('#chartname').text("Weekly Playback Family heat Map CSY")
   }
   else if (this.value == '6') {
   $('#heat-map').empty()
   var type = "teachersheatmapweeklycsy"
   heatnew2(type);
-  $('#chartname').text("Weekly practice Teacher heat Map CSY")
+  $('#chartname').text("Weekly Playback Teacher heat Map CSY")
   }
 })
 

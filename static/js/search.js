@@ -77,7 +77,7 @@ function search(){
   var a = document.getElementById("tagdescription").innerText;
   console.log(a);
   if(a != ''){
-  URL = "http://127.0.0.1:5000/schoolsearchid/"+a;
+  URL = "/schoolsearchid/"+a;
   console.log(URL)
   $("#schoolname").empty();
   $("#practice").empty();
@@ -104,7 +104,7 @@ function search(){
 }
 else{
   var a = document.getElementById("tag").value;
-  URL = "http://127.0.0.1:5000/schoolsearchid/"+a;
+  URL = "/schoolsearchid/"+a;
   console.log(URL)
   $("#schoolname").empty();
   $("#practice").empty();
@@ -133,7 +133,7 @@ else{
 
 function search2(){
   var a = document.getElementById("tag").value;
-  URL = "http://127.0.0.1:5000/schoolsearch/"+a
+  URL = "/schoolsearch/"+a
   console.log(URL)
   $("#schoolname").empty();
   $("#practice").empty();
@@ -219,7 +219,7 @@ $.ajax(settings).done(function (response) {
   $("#country").text("COUNTRY: " + dataa.country);
   $("#city").text("CITY: " + dataa.city);
   $("#admin").text("ADMIN NAME: " + dataa.admin_name);
-  var url1 = "http://127.0.0.1:5000/journey/"+dataa.admin_email;
+  var url1 = "/journey/"+dataa.admin_email;
   jou(url1);
 });
 };
@@ -358,7 +358,7 @@ function jou2(url1){
     $("#practicecount").text(practice);
     $("#uniqueusercount").text(datain[0].unique_user);
     $("#months").text(datain[0].month);
-    var url2 = "http://127.0.0.1:5000/schoolsearch/"+datain[0].school_name;
+    var url2 = "/schoolsearch/"+datain[0].school_name;
     console.log(url2)
     Pc2(url2);
   });

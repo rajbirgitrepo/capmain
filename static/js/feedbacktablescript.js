@@ -1,7 +1,7 @@
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/schoolfeedbackrating",
+  url: "/schoolfeedbackrating",
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -33,7 +33,7 @@ $.ajax(settings).done(function (response) {
       {
         lineWidth: 1,
         title: {
-          text: "FEEDBACK RATING COUNT",
+          text: "Feedback Rating Count",
         },
       },
     ],
@@ -61,7 +61,7 @@ $.ajax(settings).done(function (response) {
               $("#btnExport").show();
 
               URL =
-                "http://127.0.0.1:5000/schoolsearch/" +
+                "/schoolsearch/" +
                 this.name +
                 "/" +
                 this.series.name[0];
@@ -159,7 +159,7 @@ function createDynamic(url) {
     var data1 = JSON.parse(response);
 
     $("#next").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>PRACTICE COUNT</th><th>USER NAME</th><th>USER EMAIL</th><th>AUDIO NAME</th><th>COMMENT</th><th>COMMENT DATE</th><th>LAST PRACTICE DATE</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>USER NAME</th><th>USER EMAIL</th><th>AUDIO NAME</th><th>COMMENT</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];
@@ -172,7 +172,7 @@ function createDynamic(url) {
     dataTab();
 
     $("#next1").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable" style="display:none;"><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>PRACTICE COUNT</th><th>USER NAME</th><th>USER EMAIL</th><th>AUDIO NAME</th><th>COMMENT</th><th>COMMENT DATE</th><th>LAST PRACTICE DATE</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable" style="display:none;"><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>USER NAME</th><th>USER EMAIL</th><th>AUDIO NAME</th><th>COMMENT</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];

@@ -3,7 +3,7 @@
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/questtimeseries",
+    "url":             "/questtimeseries",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -85,7 +85,7 @@ dataGrouping: {
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/queststreak",
+    "url":             "/queststreak",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -132,7 +132,7 @@ Highcharts.chart('container1', {
                     click: function () {
                       // console.log("hellooooo",this.category);
                       
-                      URL = 'http://127.0.0.1:5000/queststreaktable/'+this.category;
+                      URL = '/queststreaktable/'+this.category;
                       
                       console.log(URL);
                        Table2()
@@ -149,7 +149,7 @@ Highcharts.chart('container1', {
       var settings = {
         "async": true,
         "crossDomain": true,
-        "url":             "http://127.0.0.1:5000/questactivestreak",
+        "url":             "/questactivestreak",
         "method": "GET"
        }
         $.ajax(settings).done(function (response) {
@@ -193,7 +193,7 @@ Highcharts.chart('container1', {
                         click: function () {
                           // console.log("hellooooo",this.category);
                           
-                          URL = 'http://127.0.0.1:5000/questactivestreaktable/'+this.category;
+                          URL = '/questactivestreaktable/'+this.category;
                           
                           console.log(URL);
                            Table2()
@@ -212,7 +212,7 @@ Highcharts.chart('container1', {
           var settings = {
             "async": true,
             "crossDomain": true,
-            "url":             "http://127.0.0.1:5000/questusercounts",
+            "url":             "/questusercounts",
             "method": "GET"
            }
             $.ajax(settings).done(function (response) {
@@ -255,7 +255,7 @@ Highcharts.chart('container1', {
                             click: function () {
                               // console.log("hellooooo",this.category);
                               
-                              URL = 'http://127.0.0.1:5000/queststreaktable/'+this.category;
+                              URL = '/queststreaktable/'+this.category;
                               
                               console.log(URL);
                                Table2()
@@ -270,14 +270,14 @@ Highcharts.chart('container1', {
         
               $('#firstnametable').val('5f2609807a1c0000950bb477');
               $("#gif").empty();
-              $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
-              createDynamic('http://127.0.0.1:5000/dis_streak_report/5f2609807a1c0000950bb477')
+              $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+              createDynamic('/dis_streak_report/5f2609807a1c0000950bb477')
               $('#firstnametable').change(function(){
                 giftable();
                 $('#next').empty();
                 $('#next1').empty();
                 var value = $(this).val();
-                var url = 'http://127.0.0.1:5000/dis_streak_report/' + value;
+                var url = '/dis_streak_report/' + value;
                 createDynamic(url)
             });
 
@@ -304,7 +304,7 @@ Highcharts.chart('container1', {
                   var data1 = JSON.parse(response);
               
                   $("#next").prepend(
-                    '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr> <th>USER NAME</th><th>EMAIL ID</th><th>SIGNUP DATE</th><th>SCHOOL NAME</th><th>STATE</th><th>PRACTICE COUNT</th><th>MINDFUL MINUTES</th><th>LAST PRACTICE DATE</th><th>LAST LOGIN DATE</th><th>RENEWABLE DATE</th><th>QUEST OBTAINED DATE</th><th>QUEST STREAK</th></tr ></thead ><tbody>'
+                    '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr> <th>USER NAME</th><th>EMAIL ID</th><th>SIGNUP DATE</th><th>SCHOOL NAME</th><th>STATE</th><th>PLAYBACK COUNT</th><th>MINDFUL MINUTES</th><th>LAST PLAYBACK DATE</th><th>LAST LOGIN DATE</th><th>RENEWABLE DATE</th><th>QUEST OBTAINED DATE</th><th>QUEST STREAK</th></tr ></thead ><tbody>'
                   );
                   for (var i = 0; i < data1.data.length; i++) {
                     var datain = data1.data[i];
@@ -317,7 +317,7 @@ Highcharts.chart('container1', {
                   dataTab();
               
                   $("#next1").prepend(
-                    '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr> <th>USER NAME</th><th>EMAIL ID</th><th>SIGNUP DATE</th><th>SCHOOL NAME</th><th>STATE</th><th>PRACTICE COUNT</th><th>MINDFUL MINUTES</th><th>LAST PRACTICE DATE</th><th>LAST LOGIN DATE</th><th>RENEWABLE DATE</th><th>QUEST OBTAINED DATE</th><th>QUEST STREAK</th></tr ></thead ><tbody>'
+                    '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr> <th>USER NAME</th><th>EMAIL ID</th><th>SIGNUP DATE</th><th>SCHOOL NAME</th><th>STATE</th><th>PLAYBACK COUNT</th><th>MINDFUL MINUTES</th><th>LAST PLAYBACK DATE</th><th>LAST LOGIN DATE</th><th>RENEWABLE DATE</th><th>QUEST OBTAINED DATE</th><th>QUEST STREAK</th></tr ></thead ><tbody>'
                   );
                   for (var i = 0; i < data1.data.length; i++) {
                     var datain = data1.data[i];

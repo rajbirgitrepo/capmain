@@ -1,7 +1,7 @@
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/submonth",
+  url: "/submonth",
   method: "GET",
   success: function() {
     var gif = document.getElementById("gif");
@@ -82,7 +82,7 @@ $.ajax(settings).done(function (response) {
               click: function () {
                 var string = this.category;
                 text = string[0].toUpperCase() + string.slice(1).toLowerCase();
-                URL = "http://127.0.0.1:5000/submonth/" + text;
+                URL = "/submonth/" + text;
                 $("#next").empty();
                 $("#btnExport").show();
                 console.log(URL);

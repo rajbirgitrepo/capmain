@@ -1,9 +1,9 @@
-UK = "http://127.0.0.1:5000/parentsmapukraine";
+UK = "/parentsmapukraine";
 $(function () {
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/parentsmap",
+    url: "/parentsmap",
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -44,7 +44,7 @@ $(function () {
                 $("#btnExport").show();
 
                 URL =
-                  "http://127.0.0.1:5000/parentsstateinfo/" +
+                  "/parentsstateinfo/" +
                   e.point.name;
 
                 console.log(URL);
@@ -78,7 +78,7 @@ function createDynamic(url) {
     var data1 = JSON.parse(response);
 
     $("#next").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th> <th>SCHOOL PRACTICE COUNT</th> <th>LAST PRACTICE DATE</th> <th>USER COUNT</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th> <th>SCHOOL PLAYBACK COUNT</th> <th>LAST PLAYBACK DATE</th> <th>USER COUNT</th></tr ></thead ><tbody>'
     );
 
     for (var i = 0; i < data1.data.length; i++) {
@@ -92,7 +92,7 @@ function createDynamic(url) {
     dataTab();
 
     $("#next1").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th> <th>SCHOOL PRACTICE COUNT</th> <th>LAST PRACTICE DATE</th> <th>USER COUNT</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th> <th>SCHOOL PLAYBACK COUNT</th> <th>LAST PLAYBACK DATE</th> <th>USER COUNT</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];

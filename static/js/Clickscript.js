@@ -6,7 +6,7 @@
 var data = [
   'VISTA DEL MONTE ELEMENTARY'
 ]
-let URL = 'http://127.0.0.1:5000/schoolsearch/'
+let URL = '/schoolsearch/'
 class Autocomplete {
   constructor({
     rootNode,
@@ -245,7 +245,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
   const result = document.querySelector('.search-result')
   // const input = document.querySelector('.autocomplete-input')
   // result.innerHTML = 'Searched for: ' + input.value
-  URL = 'http://127.0.0.1:5000/schoolsearch/VISTA DEL MONTE ELEMENTARY';
+  URL = '/schoolsearch/VISTA DEL MONTE ELEMENTARY';
                          
   Table()
 });

@@ -332,7 +332,7 @@ series.text =dataa.word_cloud;
     var data1 = JSON.parse(response);
 
     $("#next").prepend(
-      '<p>Positive</p><table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th></tr ></thead ><tbody>'
+      '<p>Positive</p><table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.positivetable.length; i++) {
       var datain = data1.positivetable[i];
@@ -345,11 +345,11 @@ series.text =dataa.word_cloud;
     dataTab();
 
     $("#next1").prepend(
-      '<p>Negetive</p><table class="table table-striped custab table-fixed" id = "dataTable1"  ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable1"  ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
     );
 	
 	$("#next2").prepend(
-      '<p>Overall</p><table class="table table-striped custab table-fixed" id = "dataTable2"  ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable2"  ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.negtable.length; i++) {
       var datain1 = data1.negtable[i];
@@ -397,13 +397,13 @@ function createDynamicDiv(userList) {
     "<td>" +
     userList[3] +
     "</td>" +
-    "<td>" +
+    "<td style='padding: 1px !important;'>" +
     userList[4] +
     "</td>" +
     "<td>" +
     userList[5] +
     "</td>" +
-    "<td>" +
+    "<td style='padding: 5px !important;'>" +
     userList[6] +
     "</td>" +
     "<td>" +

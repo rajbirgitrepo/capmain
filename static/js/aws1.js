@@ -1,7 +1,7 @@
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/awschart",
+  "url":             "/awschart",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -49,7 +49,7 @@ plotOptions: {
                    $('#next').empty();
                    $('#btnExport').show();
                     
-                   URL = 'http://127.0.0.1:5000/AWSTABLE/'+new Date(this.x ).toLocaleString('sv-SE', { day:'numeric',month:'numeric', year:'numeric', hour12:false } );
+                   URL = '/AWSTABLE/'+new Date(this.x ).toLocaleString('sv-SE', { day:'numeric',month:'numeric', year:'numeric', hour12:false } );
         
                    
        
@@ -151,7 +151,7 @@ series: [{
         var settings = {
           "async": true,
           "crossDomain": true,
-          "url":             "http://127.0.0.1:5000/awschart",
+          "url":             "/awschart",
           "method": "GET"
          }
           $.ajax(settings).done(function (response) {
@@ -280,7 +280,7 @@ series: [{
         var settings = {
           "async": true,
           "crossDomain": true,
-          "url":             "http://127.0.0.1:5000/awschart",
+          "url":             "/awschart",
           "method": "GET"
          }
           $.ajax(settings).done(function (response) {
@@ -412,7 +412,7 @@ series: [{
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/awscostoptimisation",
+  "url":             "/awscostoptimisation",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -471,7 +471,7 @@ series: {point: {
                 
                    alert(this.x);
                 
-               URL = 'http://127.0.0.1:5000/donationhistorytable/'+this.x ;
+               URL = '/donationhistorytable/'+this.x ;
     console.log(URL);               
 Table()
               }
@@ -479,11 +479,11 @@ Table()
       }}
 },
 series: [{
-name: 'PRACTICE SESSION',
+name: 'PLAYBACK SESSION',
 color: '#005E86',
 type: 'column',
 yAxis: 1,
-data: dataa.data.Practice_Sessions,
+data: dataa.data.PLAYBACK_Sessions,
 tooltip: {
  
 }
@@ -521,7 +521,7 @@ tooltip: {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/enduser",
+  "url":             "/enduser",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -580,7 +580,7 @@ series: {point: {
                 
                    alert(this.x);
                 
-               URL = 'http://127.0.0.1:5000/donationhistorytable/'+this.x ;
+               URL = '/donationhistorytable/'+this.x ;
     console.log(URL);               
 Table()
               }
@@ -618,7 +618,7 @@ series: [
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/enduser",
+  "url":             "/enduser",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -682,7 +682,7 @@ series: {point: {
                 
                    alert(this.x);
                 
-               URL = 'http://127.0.0.1:5000/donationhistorytable/'+this.x ;
+               URL = '/donationhistorytable/'+this.x ;
     console.log(URL);               
 Table()
               }
@@ -731,7 +731,7 @@ tooltip: {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/appserverslareport",
+  "url":             "/appserverslareport",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -792,7 +792,7 @@ series: {point: {
                 
                    alert(this.x);
                 
-               URL = 'http://127.0.0.1:5000/donationhistorytable/'+this.x ;
+               URL = '/donationhistorytable/'+this.x ;
     console.log(URL);               
 Table()
               }
@@ -826,7 +826,7 @@ tooltip: {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/appserverslareport",
+  "url":             "/appserverslareport",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -892,7 +892,7 @@ series: {point: {
                 
                    alert(this.x);
                 
-               URL = 'http://127.0.0.1:5000/donationhistorytable/'+this.x ;
+               URL = '/donationhistorytable/'+this.x ;
     console.log(URL);               
 Table()
               }
@@ -941,7 +941,7 @@ tooltip: {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/mongomosttimeconquery",
+  "url":             "/mongomosttimeconquery",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -1000,7 +1000,7 @@ series: {point: {
                 
                    alert(this.x);
                 
-               URL = 'http://127.0.0.1:5000/donationhistorytable/'+this.x ;
+               URL = '/donationhistorytable/'+this.x ;
     console.log(URL);               
 Table()
               }
@@ -1035,7 +1035,7 @@ tooltip: {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/mysqlmosttimeconquery",
+  "url":             "/mysqlmosttimeconquery",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -1094,7 +1094,7 @@ series: {point: {
                 
                    alert(this.x);
                 
-               URL = 'http://127.0.0.1:5000/donationhistorytable/'+this.x ;
+               URL = '/donationhistorytable/'+this.x ;
     console.log(URL);               
 Table()
               }
@@ -1130,7 +1130,7 @@ tooltip: {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/relicweeklyresponse",
+  "url":             "/relicweeklyresponse",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -1189,7 +1189,7 @@ series: {point: {
                 
                    alert(this.x);
                 
-               URL = 'http://127.0.0.1:5000/donationhistorytable/'+this.x ;
+               URL = '/donationhistorytable/'+this.x ;
     console.log(URL);               
 Table()
               }
@@ -1197,7 +1197,7 @@ Table()
       }}
 },
 series: [{
-name: 'Practice Sessions',
+name: 'Playback Sessions',
 color: '#01a451',
 type: 'column',
 yAxis: 1,
@@ -1226,7 +1226,7 @@ tooltip: {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/mongovssqlquery",
+  "url":             "/mongovssqlquery",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -1285,7 +1285,7 @@ series: {point: {
                 
                    alert(this.x);
                 
-               URL = 'http://127.0.0.1:5000/donationhistorytable/'+this.x ;
+               URL = '/donationhistorytable/'+this.x ;
     console.log(URL);               
 Table()
               }

@@ -11,7 +11,7 @@ Highcharts.setOptions({
   var settings = {
       "async": true,
       "crossDomain": true,
-      "url":             "http://127.0.0.1:5000/planschoolcount",
+      "url":             "/planschoolcount",
       "method": "GET"
      }
       $.ajax(settings).done(function (response) {
@@ -71,7 +71,7 @@ $('#container2').highcharts({
                       $('#btnExport').show();
                       
                     
-                   URL = 'http://127.0.0.1:5000/userparents/'+this.category ;
+                   URL = '/userparents/'+this.category ;
         console.log(URL);               
         createDynamic(URL)
                   }

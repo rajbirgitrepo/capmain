@@ -42,6 +42,7 @@ import dateutil.parser
 from datetime import date
 import calendar
 import re
+import math
 import json
 import urllib.request
 from sort_dataframeby_monthorweek import *
@@ -51,7 +52,8 @@ from numpyencoder import NumpyEncoder
 from flask import Response
 from flask import Flask, make_response
 
-
+from flask import Flask,json, request, jsonify
+from dateutil.relativedelta import relativedelta
 
 app = Flask(__name__)
 CORS(app)
@@ -131,9 +133,90 @@ def homepage():
     return render_template('homepage.html')
 
 
+practice_cond_dictonary_list=[{'$project':{
+            '_id':0,
+            'USER_ID':'$USER_ID._id',
+            'CREATED_DATE' :'$CREATED_DATE',
+            'USER_EMAIL':'$USER_ID.EMAIL_ID',
+            'SCHOOL_ID':'$USER_ID.schoolId._id',
+            'SCHOOL_NAME':'$USER_ID.schoolId.NAME',
+            'MODIFIED_DATE':'$MODIFIED_DATE',
+            'AUDIO_LENGTH':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH',
+            "DISTRICT_NAME":'$USER_ID.DISTRICT_ID.DISTRICT_NAME',
+            'cursorStart':'$cursorStart',
+            'CURSOR_END':'$CURSOR_END',
+            'IS_DONE':'$IS_DONE',
+            'LAST_EVENT':'$LAST_EVENT',
+            'AUDIO_ID':'$PROGRAM_AUDIO_ID._id',
+            'AUDIO_NAME':'$PROGRAM_AUDIO_ID.AUDIO_NAME',
+            'PROGRAM_ID':'$PROGRAM_AUDIO_ID.PROGRAM_ID._id',
+            'PROGRAM_NAME':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}},
+
+
+           {'$project': { '_id':0,
+            'USER_ID':'$USER_ID',
+            'CREATED_DATE' :'$CREATED_DATE',
+            'USER_EMAIL':'$USER_EMAIL',
+            'SCHOOL_ID':'$SCHOOL_ID',
+            'SCHOOL_NAME':'$SCHOOL_NAME',
+            'MODIFIED_DATE':'$MODIFIED_DATE',
+            'AUDIO_LENGTH':'$AUDIO_LENGTH',
+            "DISTRICT_NAME":"$DISTRICT_NAME",
+            'cursorStart':'$cursorStart',
+            'CURSOR_END':'$CURSOR_END',
+            'IS_DONE':'$IS_DONE',
+            'LAST_EVENT':'$LAST_EVENT',
+            'AUDIO_ID':'$AUDIO_ID',
+            'AUDIO_NAME':'$AUDIO_NAME',
+            'PROGRAM_ID':'$PROGRAM_ID',
+            'PROGRAM_NAME':'$PROGRAM_NAME',
+            'Completion_Percentage':{'$round':
+                [{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']},
+                '$AUDIO_LENGTH']},0]}
+                }}
+           ]
+
+
+
+def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+        
+
+        return csy_date
+    
+    
+def LSY_Date():
+
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    return LSY_Date
+
+
 @app.route('/questtimeseries')
 def questtimeseries():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_master.aggregate([
@@ -167,7 +250,9 @@ def questtimeseries():
 
 @app.route("/practice_duration_monthly")
 def practice_duration_monthly():
-    client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     
     collection_practice=db.audio_track_master
@@ -249,7 +334,9 @@ def practice_duration_monthly():
 
 @app.route("/practice_duration_hourly")
 def practice_duration_hourly():
-    client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     
     collection_practice=db.audio_track_master
@@ -332,8 +419,8 @@ def practice_duration_hourly():
 @app.route('/d1_chart')
 def d1_chart_data():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1 = db.school_master.aggregate([
     {"$match":
@@ -468,8 +555,8 @@ def d1_chart_data():
 @app.route('/d1_admin/<district>')
 def d1_admin_table(district):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.subscription_master
     qr1=[{'$match':{"USER_ID.schoolId":{'$exists':True}}},
@@ -665,7 +752,9 @@ def d1_admin_table(district):
 
 @app.route("/spanish_narrator_usage")
 def spanish_narrator_usage_detail():
-    client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     
     collection_home=db.user_master
@@ -792,7 +881,7 @@ def spanish_narrator_usage_detail():
 
 @app.route('/queststreak')
 def queststreak():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_master.aggregate([
@@ -854,7 +943,7 @@ def queststreak():
     return json.dumps(temp)
 @app.route('/questactivestreak')
 def questactivestreak():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_master.aggregate([
@@ -929,7 +1018,7 @@ def questactivestreak():
 
 @app.route('/questusercounts')
 def questusercounts():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_quest_history.aggregate([{"$match":
@@ -982,8 +1071,8 @@ def questusercounts():
 @app.route('/executive_count_productwise_lelo')
 def executive_count_productwise_d3():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     df33=pd.read_csv("d325feb.csv")
@@ -1022,8 +1111,8 @@ def executive_count_productwise_d3():
     ################################sub_master################################
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
@@ -1106,8 +1195,8 @@ def communityexectable_D3():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{'$match':{'$and':[{
@@ -1150,8 +1239,8 @@ def communityexectable_D3():
     ################################sub_master################################
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
@@ -1210,8 +1299,8 @@ def explorerexectable_D3():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{'$match':{'$and':[{
@@ -1254,8 +1343,8 @@ def explorerexectable_D3():
     ################################sub_master################################
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
@@ -1315,8 +1404,8 @@ def cloud_table_d3():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{'$match':{'$and':[{
@@ -1361,8 +1450,8 @@ def cloud_table_d3():
     ################################sub_master################################
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
@@ -1553,8 +1642,8 @@ def portal_testing_new_api(smcategory):
 def cloud_new_chart():
     #school summary df
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     d3schoollist=[]
@@ -1856,8 +1945,8 @@ def cloud_new_chart():
 def d3_new_chart():
     #school summary df
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     d3schoollist=[]
@@ -2158,10 +2247,10 @@ def d3_new_chart():
 @app.route('/new_dash_count')
 def new_dash_count():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
-    url = "http://127.0.0.1:5000/executivecount_productwise"
+    url = "https://testcapxp.innerexplorer.org/executivecount_productwise"
     response = urllib.request.urlopen(url)
     data1 = json.loads(response.read())
 #     print (data1)
@@ -2204,8 +2293,8 @@ def partner_count_cards():
     from datetime import timedelta
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection1 = db.user_master
     collection2=db.audio_track_master
@@ -2428,8 +2517,8 @@ def partner_count_cards():
 def PARTNER_schppcfamily():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass  
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -2501,7 +2590,7 @@ def PARTNER_schppcfamily():
 # ================Quarter
 @app.route('/monthwisepc/quarter1/<districtid>/<startdate>/<enddate>')
 def monthwisepc_quater1(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -2522,7 +2611,7 @@ def monthwisepc_quater1(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -2551,7 +2640,7 @@ def monthwisepc_quater1(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -2570,12 +2659,13 @@ def monthwisepc_quater1(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -2799,7 +2889,7 @@ def monthwisepc_quater1(districtid,startdate,enddate):
 
 @app.route('/monthwisepc/quarter2/<districtid>/<startdate>/<enddate>')
 def monthwisepc_quater2(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -2820,7 +2910,7 @@ def monthwisepc_quater2(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -2849,7 +2939,7 @@ def monthwisepc_quater2(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -2868,12 +2958,13 @@ def monthwisepc_quater2(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -3097,7 +3188,7 @@ def monthwisepc_quater2(districtid,startdate,enddate):
 
 @app.route('/monthwisepc/quarter3/<districtid>/<startdate>/<enddate>')
 def monthwisepc_quater3(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -3118,7 +3209,7 @@ def monthwisepc_quater3(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -3147,7 +3238,7 @@ def monthwisepc_quater3(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -3166,12 +3257,13 @@ def monthwisepc_quater3(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -3395,7 +3487,7 @@ def monthwisepc_quater3(districtid,startdate,enddate):
 
 @app.route('/monthwisepc/quarter4/<districtid>/<startdate>/<enddate>')
 def monthwisepc_quater4(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -3416,7 +3508,7 @@ def monthwisepc_quater4(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -3445,7 +3537,7 @@ def monthwisepc_quater4(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -3464,12 +3556,13 @@ def monthwisepc_quater4(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -3688,7 +3781,7 @@ def monthwisepc_quater4(districtid,startdate,enddate):
 
 @app.route('/schoolwisepracticecounttop20/quarter1/<districtid>/<startdate>/<enddate>')
 def schwisepc_quater1(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -3709,7 +3802,7 @@ def schwisepc_quater1(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -3738,7 +3831,7 @@ def schwisepc_quater1(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -3757,12 +3850,13 @@ def schwisepc_quater1(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -3953,7 +4047,7 @@ def schwisepc_quater1(districtid,startdate,enddate):
 
 @app.route('/schoolwisepracticecounttop20/quarter2/<districtid>/<startdate>/<enddate>')
 def schwisepc_quater2(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -3974,7 +4068,7 @@ def schwisepc_quater2(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -4003,7 +4097,7 @@ def schwisepc_quater2(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -4022,12 +4116,13 @@ def schwisepc_quater2(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -4219,7 +4314,7 @@ def schwisepc_quater2(districtid,startdate,enddate):
 
 @app.route('/schoolwisepracticecounttop20/quarter3/<districtid>/<startdate>/<enddate>')
 def schwisepc_quater3(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -4240,7 +4335,7 @@ def schwisepc_quater3(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -4269,7 +4364,7 @@ def schwisepc_quater3(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -4288,12 +4383,13 @@ def schwisepc_quater3(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -4485,7 +4581,7 @@ def schwisepc_quater3(districtid,startdate,enddate):
 
 @app.route('/schoolwisepracticecounttop20/quarter4/<districtid>/<startdate>/<enddate>')
 def schwisepc_quater4(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -4506,7 +4602,7 @@ def schwisepc_quater4(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -4535,7 +4631,7 @@ def schwisepc_quater4(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -4554,12 +4650,13 @@ def schwisepc_quater4(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -4746,7 +4843,7 @@ def schwisepc_quater4(districtid,startdate,enddate):
 
 @app.route('/userpracticehistory/quarter1/<districtid>/<startdate>/<enddate>')
 def user_practice_quater1(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -4767,7 +4864,7 @@ def user_practice_quater1(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -4796,7 +4893,7 @@ def user_practice_quater1(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -4815,6 +4912,7 @@ def user_practice_quater1(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
@@ -4827,7 +4925,7 @@ def user_practice_quater1(districtid,startdate,enddate):
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -5051,7 +5149,7 @@ def user_practice_quater1(districtid,startdate,enddate):
 
 @app.route('/userpracticehistory/quarter2/<districtid>/<startdate>/<enddate>')
 def user_practice_quater2(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -5072,7 +5170,7 @@ def user_practice_quater2(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -5101,7 +5199,7 @@ def user_practice_quater2(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -5120,6 +5218,7 @@ def user_practice_quater2(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
@@ -5132,7 +5231,7 @@ def user_practice_quater2(districtid,startdate,enddate):
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -5356,7 +5455,7 @@ def user_practice_quater2(districtid,startdate,enddate):
 
 @app.route('/userpracticehistory/quarter3/<districtid>/<startdate>/<enddate>')
 def user_practice_quater3(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -5377,7 +5476,7 @@ def user_practice_quater3(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -5406,7 +5505,7 @@ def user_practice_quater3(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -5425,6 +5524,7 @@ def user_practice_quater3(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
@@ -5437,7 +5537,7 @@ def user_practice_quater3(districtid,startdate,enddate):
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -5661,7 +5761,7 @@ def user_practice_quater3(districtid,startdate,enddate):
 
 @app.route('/userpracticehistory/quarter4/<districtid>/<startdate>/<enddate>')
 def user_practice_quater4(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -5682,7 +5782,7 @@ def user_practice_quater4(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -5711,7 +5811,7 @@ def user_practice_quater4(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -5730,6 +5830,7 @@ def user_practice_quater4(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
@@ -5742,7 +5843,7 @@ def user_practice_quater4(districtid,startdate,enddate):
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -5965,7 +6066,7 @@ def user_practice_quater4(districtid,startdate,enddate):
 
 @app.route('/top20userspractisinginfo/quarter1/<districtid>/<startdate>/<enddate>')
 def topusers_practice_quater1(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -5986,7 +6087,7 @@ def topusers_practice_quater1(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -6015,7 +6116,7 @@ def topusers_practice_quater1(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -6034,12 +6135,13 @@ def topusers_practice_quater1(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -6134,7 +6236,7 @@ def topusers_practice_quater1(districtid,startdate,enddate):
 
 @app.route('/top20userspractisinginfo/quarter2/<districtid>/<startdate>/<enddate>')
 def topusers_practice_quater2(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -6155,7 +6257,7 @@ def topusers_practice_quater2(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -6184,7 +6286,7 @@ def topusers_practice_quater2(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -6203,12 +6305,13 @@ def topusers_practice_quater2(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -6304,7 +6407,7 @@ def topusers_practice_quater2(districtid,startdate,enddate):
 
 @app.route('/top20userspractisinginfo/quarter3/<districtid>/<startdate>/<enddate>')
 def topusers_practice_quater3(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -6325,7 +6428,7 @@ def topusers_practice_quater3(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -6354,7 +6457,7 @@ def topusers_practice_quater3(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -6373,12 +6476,13 @@ def topusers_practice_quater3(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -6473,7 +6577,7 @@ def topusers_practice_quater3(districtid,startdate,enddate):
 
 @app.route('/top20userspractisinginfo/quarter4/<districtid>/<startdate>/<enddate>')
 def topusers_practice_quater4(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -6494,7 +6598,7 @@ def topusers_practice_quater4(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -6523,7 +6627,7 @@ def topusers_practice_quater4(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -6542,12 +6646,13 @@ def topusers_practice_quater4(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -6646,8 +6751,8 @@ def topusers_practice_quater4(districtid,startdate,enddate):
 def partner__schpuc():
    
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection=db.user_master
 #     district=disdic[districtid]
@@ -6706,8 +6811,8 @@ def partner__schpuc():
 def partnerschwisepc():
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -6780,8 +6885,8 @@ def partnerschwisepc():
 def partner_topusers_practice():
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
 #     district=disdic[districtid]
@@ -6871,8 +6976,8 @@ def partner_topusers_practice():
 def partner__schwiseuc():
    
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass  
     collection = db.user_master
 #     district=disdic[districtid]
@@ -6928,8 +7033,8 @@ def heatmap_prac_partner():
 
     import collections
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -7059,8 +7164,8 @@ def heatmap_prac_partner():
 def portal_new_api(smcategory):
     if not g.user:    
         username = urllib.parse.quote_plus('admin')
-        password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-        client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+        password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+        client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
         db=client.compass
         collection = db.school_master
         from bson.objectid import ObjectId
@@ -7452,7 +7557,7 @@ def Schoolsearch_Email():
 #         # print(district)
 #         # print(partner)
 #         db = mysql.connector.connect(
-#         host="34.214.24.229",
+#         host="54.184.165.106",
 #         user="IE-tech",
 #         passwd="IE-tech@2O2O",
 #         database="compassJul")
@@ -7544,7 +7649,7 @@ def Schoolsearch_Email():
 
 @app.route('/pml')
 def PAY_ME_LATER():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dfdb = DataFrame(list(db.subscription_master.aggregate([
@@ -7601,7 +7706,7 @@ def Scoology():
     return render_template('Scoology.html')
 @app.route('/journeyprachis/<email>')
 def journeyprachischart(email):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.audio_track_master
@@ -7653,7 +7758,7 @@ def journeyprachischart(email):
 @app.route('/family_table')
 def famtablenew():
     reader = geolite2.reader()
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_master
@@ -7831,8 +7936,8 @@ def famtablenew():
 @app.route('/bubble_dataframe.csv')
 def buble_district12():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -7914,8 +8019,8 @@ def buble_district12():
     buubleusercount = pd.concat(result)
     ######family ########
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -8005,8 +8110,8 @@ def buble_district12():
     finmerge=mergeucfc12[["NAME_DISTRICT_x","MONTH_x","idu","totaluser","famcount"]]
     ###ACTIVE USER
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -8063,8 +8168,8 @@ def buble_district12():
     finmergeu=pd.merge(finmerge, buubleactuser, how='left', left_on='idu', right_on='acuid')
     ###ACTIVE FAMILY
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -8123,8 +8228,8 @@ def buble_district12():
     finmergeufo=finmergeufo.fillna(0)
     finmergeufo=finmergeufo.loc[:,~finmergeufo.columns.duplicated()]
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -8153,8 +8258,8 @@ def buble_district12():
     df1111=df1111.sort_values(by=['NAME_DISTRICT'], ascending=True)
     DISPRACTO=df1111[["NAME_DISTRICT","PRACTICE"]]
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -8208,8 +8313,8 @@ def buble_district12():
 @app.route('/rtusercount')
 def realtimeusercount():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     query4=[{"$match":{
@@ -8261,8 +8366,8 @@ def realtimeusercount():
 @app.route('/rtmapcount')
 def realtimemaprcount():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     query4=[{"$match":{
@@ -8361,8 +8466,8 @@ def realtimemaprcount():
 @app.route('/audiowisetrend')
 def audiowise_trend():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     query=[{"$match":{
@@ -8505,8 +8610,8 @@ def Race_BAR():
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     df=pd.read_csv(URL).fillna("NO INFO.")
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     dateStr = "2019-08-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -8667,8 +8772,8 @@ def Race_BAR():
 @app.route('/audcompdistribution')
 def averagecompletion():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     query4=[{"$match":{
@@ -8789,8 +8894,8 @@ def schdistrictghgh(disid):
     '6023a7949e8e623753fc3061':'Wasatch County School District',}
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -8876,8 +8981,8 @@ def schdistrictghgh(disid):
     # buubleusercount
     ######family ########
     # username = urllib.parse.quote_plus('admin')
-    # password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    # client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    # password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    # client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -8970,8 +9075,8 @@ def schdistrictghgh(disid):
     # finmerge
     ###ACTIVE USER
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -9026,8 +9131,8 @@ def schdistrictghgh(disid):
     finmergeu=pd.merge(finmerge, buubleactuser, how='left', left_on='idu', right_on='acuid')
     ###ACTIVE FAMILY
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -9087,8 +9192,8 @@ def schdistrictghgh(disid):
     finmergeufo=finmergeufo.fillna(0)
     finmergeufo=finmergeufo.loc[:,~finmergeufo.columns.duplicated()]
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -9118,8 +9223,8 @@ def schdistrictghgh(disid):
     df1111=df1111.sort_values(by=['NAME_DISTRICT'], ascending=True)
     DISPRACTO=df1111[["NAME_DISTRICT","PRACTICE"]]
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -9166,8 +9271,8 @@ def schdistrictghgh(disid):
 @app.route('/executivecount_productwise')
 def executive_count_productwise():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db["school_master"]
     query = {}
@@ -9210,8 +9315,8 @@ def executive_count_productwise():
     ################################sub_master################################
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
@@ -9295,8 +9400,8 @@ def lifetimeexectable():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{'$match':{'$and':[{
@@ -9341,8 +9446,8 @@ def lifetimeexectable():
     ################################sub_master################################
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
@@ -9410,8 +9515,8 @@ def communityexectable():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{'$match':{'$and':[{
@@ -9454,8 +9559,8 @@ def communityexectable():
     ################################sub_master################################
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
@@ -9524,8 +9629,8 @@ def explorerexectable():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{'$match':{'$and':[{
@@ -9568,8 +9673,8 @@ def explorerexectable():
     ################################sub_master################################
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
@@ -9639,8 +9744,8 @@ def cloudexectable():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{'$match':{'$and':[{
@@ -9683,8 +9788,8 @@ def cloudexectable():
     ################################sub_master################################
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
@@ -9753,8 +9858,8 @@ def homeexectable():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{'$match':{'$and':[{
@@ -9797,8 +9902,8 @@ def homeexectable():
     ################################sub_master################################
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
@@ -9866,8 +9971,8 @@ def schoolexectable():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{'$match':{'$and':[{
@@ -9910,8 +10015,8 @@ def schoolexectable():
     ################################sub_master################################
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
@@ -9967,8 +10072,8 @@ def schoolexectable():
 def _excecutivecount_():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
 
     database = client["compass"]
 
@@ -10062,7 +10167,7 @@ def _excecutivecount_():
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    {"_id":{"$nin":database.audio_track_master.distinct("USER_ID._id")}}                       
+    {"_id":{"$nin":database.login_logs.distinct("USER_ID._id")}}                       
                                  ]}},
     {"$group":{'_id':{},'distincts': {'$addToSet': "$_id"}}},
     {"$project":{'_id':0,'never_loggedin':{'$size':'$distincts'}}}])))
@@ -10108,7 +10213,7 @@ def _excecutivecount_():
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+             {'MODIFIED_DATE':{'$gte':csy_first_date()}},
             
              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -10199,8 +10304,8 @@ def _excecutivecount_():
 @app.route('/progschoolexclusivelylgpartner')
 def programe_exclusively_LG():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection2=db.school_master
     df=DataFrame(list(collection2.aggregate([{'$match':{'$and':[{'CAP_PROGRAM':{'$exists':True}},
@@ -10249,8 +10354,8 @@ def programe_exclusively_LG():
 @app.route('/progschoolexclusivelystate/<state>')
 def programe_exclusively_state(state):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection2=db.school_master
     collection=db.user_master
@@ -10307,13 +10412,47 @@ def programe_exclusively_state(state):
 
 @app.route('/progschoolexclusivelybeforeafter')
 def school_type_before_after():
-    from datetime import datetime
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+
+#     from datetime import datetime
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection2=db.school_master
     collection=db.user_master
+    
     df=DataFrame(list(collection2.aggregate([{'$match':{'$and':[{'CAP_PROGRAM':{'$exists':True}},
                                                                  {'BLOCKED_BY_CAP':{'$exists':False}},
                                                                  {'NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -10360,9 +10499,9 @@ def school_type_before_after():
     # agg = df.groupby([group])
     # for type, group in agg:
     #     print(group)
-    split_date ='2020-07-31'
-    BEFORE = DF.loc[DF['created_date'] <= split_date]
-    AFTER = DF.loc[DF['created_date'] > split_date]
+    split_date =str(csy_first_date().date())
+    BEFORE = DF.loc[DF['created_date'] < split_date]
+    AFTER = DF.loc[DF['created_date'] >= split_date]
 
 
     DF_BEFORE=BEFORE.groupby(by=["type"]).count()
@@ -10389,7 +10528,7 @@ def school_type_before_after():
 
 
 
-    data={'after_csy':count_A,'before_csy':count_B,'type_A':type_A,'type_B':type_B}
+    data={'after_csy':count_A,'before_csy':count_B,'type_A':type_B}
     return json.dumps(data)
 
 
@@ -10400,8 +10539,8 @@ def school_type_before_after():
 
 def programe_unitedstates_exclusively():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
 
     collection2=db.school_master
@@ -10442,8 +10581,8 @@ def programe_unitedstates_exclusively():
 @app.route('/progschooltable/<prog>')
 def progtable(prog):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
 
     collection2=db.school_master
@@ -10560,8 +10699,8 @@ def progtable(prog):
 @app.route('/progschooltableusa/<prog>')
 def progtable_usa(prog):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
 
     collection2=db.school_master
@@ -10696,10 +10835,10 @@ def newexecutive_count():
     from bson.regex import Regex
     from pymongo import MongoClient
     import urllib 
-    #  34.214.24.229:27017 [direct]
+    #  54.184.165.106:27017 [direct]
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     database = client["compass"]
     collection = database["subscription_master"]
 
@@ -12052,7 +12191,7 @@ def newexecutive_count():
 def planid_schoolcount():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.subscription_master
     df = DataFrame(list(collection.aggregate([
@@ -12087,8 +12226,8 @@ def planid_schoolcount():
 @app.route('/progschoolcount')
 def program_schoolcount():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -12172,8 +12311,8 @@ def program_schoolcount():
 @app.route('/progschoolcountexclusively')
 def programe_schcount_exclusively():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
 
     collection2=db.school_master
@@ -12208,8 +12347,8 @@ def schsummaryprogram_table(pg):
     
     reader = geolite2.reader()
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     
     collection2= db.audio_track_master
@@ -12573,7 +12712,7 @@ def schsummaryprogram_table(pg):
 def pracprogcount():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     df = DataFrame(list(collection.aggregate([
@@ -12616,8 +12755,8 @@ def pracprogcount():
 def heat_calender_pc():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -12657,7 +12796,7 @@ def heat_calender_pc():
     {'USER_ID.schoolId._id':{'$in':ids}},
 #      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
     {'USER_ID.schoolId._id':{'$in':ids}},
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,1,1)}},]}},
+     {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,1,1)}},]}},
 
 
 
@@ -12764,8 +12903,8 @@ def heat_calender_pc():
 def family_heat_calender_pc():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -12805,7 +12944,7 @@ def family_heat_calender_pc():
     {'USER_ID.schoolId._id':{'$in':ids}},
      {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
     {'USER_ID.schoolId._id':{'$in':ids}},
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,3,17)}},]}},
+     {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,1,1)}},]}},
 
 
 
@@ -12923,8 +13062,8 @@ def family_heat_calender_pc():
 def teachers_heat_calender_pc():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -12964,7 +13103,7 @@ def teachers_heat_calender_pc():
     {'USER_ID.schoolId._id':{'$in':ids}},
      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
     {'USER_ID.schoolId._id':{'$in':ids}},
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,1,1)}},]}},
+     {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,1,1)}},]}},
 
 
 
@@ -13081,8 +13220,8 @@ def teachers_heat_calender_pc():
 @app.route('/heatmapweeklycsy')
 def heat_csy_pc():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -13122,7 +13261,7 @@ def heat_csy_pc():
     {'USER_ID.schoolId._id':{'$in':ids}},
 #      {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
     {'USER_ID.schoolId._id':{'$in':ids}},
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,1,1)}},]}},
+     {'MODIFIED_DATE':{'$gte':csy_first_date()}},]}},
 
 
 
@@ -13227,8 +13366,8 @@ def heat_csy_pc():
 def heat_csy_pc_family():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -13268,7 +13407,7 @@ def heat_csy_pc_family():
     {'USER_ID.schoolId._id':{'$in':ids}},
      {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
     {'USER_ID.schoolId._id':{'$in':ids}},
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},]}},
+     {'MODIFIED_DATE':{'$gte':csy_first_date()}},]}},
 
 
 
@@ -13372,8 +13511,8 @@ def heat_csy_pc_family():
 def heat_csy_pc_teacher():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -13413,7 +13552,7 @@ def heat_csy_pc_teacher():
     {'USER_ID.schoolId._id':{'$in':ids}},
      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
     {'USER_ID.schoolId._id':{'$in':ids}},
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},]}},
+     {'MODIFIED_DATE':{'$gte':csy_first_date()}},]}},
 
 
 
@@ -13518,7 +13657,7 @@ def heat_csy_pc_teacher():
 
 @app.route('/districtheatmap/<districtid>/<startdate>/<enddate>')
 def heat_district(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -13539,7 +13678,7 @@ def heat_district(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -13568,7 +13707,7 @@ def heat_district(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -13587,13 +13726,14 @@ def heat_district(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     import collections
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -13644,7 +13784,7 @@ def heat_district(districtid,startdate,enddate):
 {'USER_ID.schoolId._id':{'$in':ids}},
 
 
- {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+ {'MODIFIED_DATE':{'$gte':csy_first_date()}},
     {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -13665,7 +13805,7 @@ def heat_district(districtid,startdate,enddate):
     {'USER_ID.schoolId._id':{'$in':top}},
     # {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
   
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+     {'MODIFIED_DATE':{'$gte':csy_first_date()}},
         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -13732,7 +13872,7 @@ def heat_district(districtid,startdate,enddate):
 # --------
 @app.route('/familydistrictheatmap/<districtid>/<startdate>/<enddate>')
 def heat_district_family_active(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -13753,7 +13893,7 @@ def heat_district_family_active(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -13782,7 +13922,7 @@ def heat_district_family_active(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -13801,13 +13941,14 @@ def heat_district_family_active(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     import collections
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -13858,7 +13999,7 @@ def heat_district_family_active(districtid,startdate,enddate):
 {'USER_ID.schoolId._id':{'$in':ids}},
 
 
- {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+ {'MODIFIED_DATE':{'$gte':csy_first_date()}},
     {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -13879,7 +14020,7 @@ def heat_district_family_active(districtid,startdate,enddate):
     {'USER_ID.schoolId._id':{'$in':top}},
     # {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
   
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+     {'MODIFIED_DATE':{'$gte':csy_first_date()}},
         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -13946,7 +14087,7 @@ def heat_district_family_active(districtid,startdate,enddate):
 #---
 @app.route('/teachersdistrictheatmap/<districtid>/<startdate>/<enddate>')
 def heat_district_teachers_active(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -13967,7 +14108,7 @@ def heat_district_teachers_active(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -13996,7 +14137,7 @@ def heat_district_teachers_active(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -14015,13 +14156,14 @@ def heat_district_teachers_active(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     import collections
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -14072,7 +14214,7 @@ def heat_district_teachers_active(districtid,startdate,enddate):
 {'USER_ID.schoolId._id':{'$in':ids}},
 
 
- {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+ {'MODIFIED_DATE':{'$gte':csy_first_date()}},
     {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -14093,7 +14235,7 @@ def heat_district_teachers_active(districtid,startdate,enddate):
     {'USER_ID.schoolId._id':{'$in':top}},
     # {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
   
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+     {'MODIFIED_DATE':{'$gte':csy_first_date()}},
         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -14161,7 +14303,7 @@ def heat_district_teachers_active(districtid,startdate,enddate):
 
 @app.route('/districtheatmappracteacher/<districtid>/<startdate>/<enddate>')
 def heat_district_teachers_prac(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -14182,7 +14324,7 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -14211,7 +14353,7 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -14230,13 +14372,14 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     import collections
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -14287,7 +14430,7 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
 {'USER_ID.schoolId._id':{'$in':ids}},
 
 
- {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+ {'MODIFIED_DATE':{'$gte':csy_first_date()}},
     {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -14308,7 +14451,7 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
     {'USER_ID.schoolId._id':{'$in':top}},
     # {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
   
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+     {'MODIFIED_DATE':{'$gte':csy_first_date()}},
         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -14375,7 +14518,7 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
 
 @app.route('/districtheatmappracfamily/<districtid>/<startdate>/<enddate>')
 def heat_district_family_prac(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -14396,7 +14539,7 @@ def heat_district_family_prac(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -14425,7 +14568,7 @@ def heat_district_family_prac(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -14444,13 +14587,14 @@ def heat_district_family_prac(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     import collections
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -14501,7 +14645,7 @@ def heat_district_family_prac(districtid,startdate,enddate):
 {'USER_ID.schoolId._id':{'$in':ids}},
 
 
- {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+ {'MODIFIED_DATE':{'$gte':csy_first_date()}},
     {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -14522,7 +14666,7 @@ def heat_district_family_prac(districtid,startdate,enddate):
     {'USER_ID.schoolId._id':{'$in':top}},
     # {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
   
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+     {'MODIFIED_DATE':{'$gte':csy_first_date()}},
         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -14589,7 +14733,7 @@ def heat_district_family_prac(districtid,startdate,enddate):
 
 @app.route('/districtheatmappractice/<districtid>/<startdate>/<enddate>')
 def heatmap_prac_district(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -14610,7 +14754,7 @@ def heatmap_prac_district(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -14639,7 +14783,7 @@ def heatmap_prac_district(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -14658,13 +14802,14 @@ def heatmap_prac_district(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     import collections
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -14715,7 +14860,7 @@ def heatmap_prac_district(districtid,startdate,enddate):
 {'USER_ID.schoolId._id':{'$in':ids}},
 
 
- {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+ {'MODIFIED_DATE':{'$gte':csy_first_date()}},
     {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -14736,7 +14881,7 @@ def heatmap_prac_district(districtid,startdate,enddate):
     {'USER_ID.schoolId._id':{'$in':top}},
     # {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
   
-     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+     {'MODIFIED_DATE':{'$gte':csy_first_date()}},
         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}]}},
 
@@ -14807,8 +14952,8 @@ def heatmap_prac_district(districtid,startdate,enddate):
 def weekprogpracsummary():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
@@ -14905,7 +15050,7 @@ def weekprogpracsummary():
 
 @app.route('/schoolwisefamilycount/<districtid>')
 def schpuc(districtid):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -14926,7 +15071,7 @@ def schpuc(districtid):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -14955,7 +15100,7 @@ def schpuc(districtid):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -14974,12 +15119,13 @@ def schpuc(districtid):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.user_master
     district=disdic[districtid]
@@ -15034,7 +15180,7 @@ def schpuc(districtid):
 
 @app.route('/schoolwisefamilypracticecount/<districtid>')
 def schppcfamily(districtid):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -15055,7 +15201,7 @@ def schppcfamily(districtid):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -15084,7 +15230,7 @@ def schppcfamily(districtid):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -15103,12 +15249,13 @@ def schppcfamily(districtid):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -15180,7 +15327,7 @@ def schppcfamily(districtid):
 
 @app.route('/schoolwisepracticecounttop20/<districtid>/<startdate>/<enddate>')
 def schwisepc(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -15201,7 +15348,7 @@ def schwisepc(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -15230,7 +15377,7 @@ def schwisepc(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -15249,12 +15396,13 @@ def schwisepc(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -15436,7 +15584,7 @@ def schwisepc(districtid,startdate,enddate):
 
 @app.route('/schoolwiseusercounttop20/<districtid>/<startdate>/<enddate>')
 def schwiseuc(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -15457,7 +15605,7 @@ def schwiseuc(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -15486,7 +15634,7 @@ def schwiseuc(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -15505,12 +15653,13 @@ def schwiseuc(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.user_master
     district=disdic[districtid]
@@ -15706,8 +15855,8 @@ def schwiseuc(districtid,startdate,enddate):
 def partner__monthwisepc():
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
 #     district=disdic[districtid]
@@ -15777,8 +15926,8 @@ def Attendance_heatmap_prac():
 
     import collections
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -15899,8 +16048,8 @@ def Attendance_heatmap_prac():
 def attendance_schppcfamily():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass  
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -15973,8 +16122,8 @@ def attendance_schppcfamily():
 def attendance__schpuc():
    
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection= db.user_master
 #     district=disdic[districtid]
@@ -16031,8 +16180,8 @@ def attendance__schpuc():
 def Attendancechwisepc():
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -16105,8 +16254,8 @@ def Attendancechwisepc():
 def attendance__topusers_practice():
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
 #     district=disdic[districtid]
@@ -16194,8 +16343,8 @@ def attendance__topusers_practice():
 def attendance__schwiseuc():
    
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass  
     collection = db.user_master
 #     district=disdic[districtid]
@@ -16248,8 +16397,8 @@ def attendance__schwiseuc():
 def attendance__monthwisepc():
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
 #     district=disdic[districtid]
@@ -16320,8 +16469,8 @@ def attend_count_cards():
     from datetime import timedelta
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection1 = db.user_master
     collection2=db.audio_track_master
@@ -16548,7 +16697,7 @@ def attend_count_cards():
 
 @app.route('/monthwisepracticedistrict/<districtid>/<startdate>/<enddate>')
 def monthwisepc(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -16569,7 +16718,7 @@ def monthwisepc(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -16598,7 +16747,7 @@ def monthwisepc(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -16617,12 +16766,13 @@ def monthwisepc(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -16647,7 +16797,7 @@ def monthwisepc(districtid,startdate,enddate):
                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
 #                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
 #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+         {'MODIFIED_DATE':{'$gte':csy_first_date()}},
         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
     # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
@@ -16681,7 +16831,7 @@ def monthwisepc(districtid,startdate,enddate):
                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
 #                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
 #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+         {'MODIFIED_DATE':{'$gte':csy_first_date()}},
         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
     # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
@@ -16715,7 +16865,7 @@ def monthwisepc(districtid,startdate,enddate):
                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
 #                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
 #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+         {'MODIFIED_DATE':{'$gte':csy_first_date()}},
         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
     # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
@@ -16748,7 +16898,7 @@ def monthwisepc(districtid,startdate,enddate):
                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
 #                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
 #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+         {'MODIFIED_DATE':{'$gte':csy_first_date()}},
         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
     # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
@@ -16781,7 +16931,7 @@ def monthwisepc(districtid,startdate,enddate):
                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
 #                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
 #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}},
+         {'MODIFIED_DATE':{'$gte':csy_first_date()}},
         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
     # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
@@ -16844,7 +16994,7 @@ def monthwisepc(districtid,startdate,enddate):
 
 @app.route('/90daysuserpractising/<districtid>/<startdate>/<enddate>')
 def user_practice_90days(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -16865,7 +17015,7 @@ def user_practice_90days(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -16894,7 +17044,7 @@ def user_practice_90days(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -16913,6 +17063,7 @@ def user_practice_90days(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
@@ -16924,8 +17075,8 @@ def user_practice_90days(districtid,startdate,enddate):
     start1= tod1-timedelta(days=90)
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -17156,8 +17307,8 @@ def user__logins_90days__skillman():
     start1= tod1-timedelta(days=90)
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.login_logs
 #     district=disdic[districtid]
@@ -17231,8 +17382,8 @@ def user__logins_90days__Attendance():
     start1= tod1-timedelta(days=90)
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.login_logs
 #     district=disdic[districtid]
@@ -17308,8 +17459,8 @@ def Skillman_user_practice_90days():
     start1= tod1-timedelta(days=90)
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     df = DataFrame(list(collection.aggregate([
@@ -17379,8 +17530,8 @@ def Attendance_user_practice_90days():
     start1= tod1-timedelta(days=90)
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     df = DataFrame(list(collection.aggregate([
@@ -17453,7 +17604,7 @@ def Attendance_user_practice_90days():
 
 @app.route('/90daysuserloggedindetail/<districtid>')
 def user_logins_90days(districtid):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -17474,7 +17625,7 @@ def user_logins_90days(districtid):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -17503,7 +17654,7 @@ def user_logins_90days(districtid):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -17522,6 +17673,7 @@ def user_logins_90days(districtid):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
@@ -17533,7 +17685,7 @@ def user_logins_90days(districtid):
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.login_logs
     district=disdic[districtid]
@@ -17599,7 +17751,7 @@ def user_logins_90days(districtid):
 
 @app.route('/top20userspractisinginfo/<districtid>/<startdate>/<enddate>')
 def topusers_practice(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -17620,7 +17772,7 @@ def topusers_practice(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -17649,7 +17801,7 @@ def topusers_practice(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -17668,12 +17820,13 @@ def topusers_practice(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     district=disdic[districtid]
@@ -17764,7 +17917,7 @@ def topusers_practice(districtid,startdate,enddate):
 
 @app.route('/districtcardsinfo/<districtid>/<startdate>/<enddate>')
 def district_count_cards(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -17785,7 +17938,7 @@ def district_count_cards(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -17814,7 +17967,7 @@ def district_count_cards(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -17825,7 +17978,7 @@ def district_count_cards(districtid,startdate,enddate):
     '5fe318b14d0ca68d7baf889e':'BLUE',
     '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
     '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
+    '60239a84e57dc27613699d57':b'Austin Independent School District',
     '6023a6d79e8e623753fc305c':'Boulder Valley School District',
     '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
     '6023a7269e8e623753fc305e':'Fulton County School System',
@@ -17833,6 +17986,8 @@ def district_count_cards(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
@@ -17840,8 +17995,8 @@ def district_count_cards(districtid,startdate,enddate):
     from datetime import timedelta
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection1 = db.user_master
     collection2=db.audio_track_master
@@ -17940,7 +18095,7 @@ def district_count_cards(districtid,startdate,enddate):
 #                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
                                {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
     #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
-                 {'MODIFIED_DATE':{'$gte':datetime(2020,8,1)}},
+                 {'MODIFIED_DATE':{'$gte':csy_first_date()}},
              {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
     # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
@@ -17992,7 +18147,7 @@ def district_count_cards(districtid,startdate,enddate):
 #                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
                                {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
     #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
-                 {'MODIFIED_DATE':{'$gte':datetime(2020,8,1)}},
+                 {'MODIFIED_DATE':{'$gte':csy_first_date()}},
              {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
     # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
@@ -18017,7 +18172,7 @@ def district_count_cards(districtid,startdate,enddate):
 #                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
                                {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
     #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
-                 {'MODIFIED_DATE':{'$gte':datetime(2020,8,1)}},
+                 {'MODIFIED_DATE':{'$gte':csy_first_date()}},
              {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
     # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
@@ -18100,7 +18255,7 @@ def district_count_cards(districtid,startdate,enddate):
 
 @app.route('/districtusertableteacher/<districtid>/<startdate>/<enddate>')
 def district_user_table_teacher(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -18121,7 +18276,7 @@ def district_user_table_teacher(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -18150,7 +18305,7 @@ def district_user_table_teacher(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -18169,13 +18324,14 @@ def district_user_table_teacher(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
 
     
@@ -18309,7 +18465,7 @@ def district_user_table_teacher(districtid,startdate,enddate):
 
 @app.route('/districtusertableparent/<districtid>/<startdate>/<enddate>')
 def district_user_table_parents(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -18330,7 +18486,7 @@ def district_user_table_parents(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -18359,7 +18515,7 @@ def district_user_table_parents(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -18378,13 +18534,14 @@ def district_user_table_parents(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
 
     
@@ -18520,7 +18677,7 @@ district_user_table_teacher('5f2609807a1c0000950bb477','2015-04-01','2021-04-13'
     
 @app.route('/districtschooltable/<districtid>/<startdate>/<enddate>')
 def district_school_table(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -18541,7 +18698,7 @@ def district_school_table(districtid,startdate,enddate):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -18570,7 +18727,7 @@ def district_school_table(districtid,startdate,enddate):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -18589,13 +18746,14 @@ def district_school_table(districtid,startdate,enddate):
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
     '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
     '123':'Skillman',
     '456':'UWBA',
     '789':'Attendance works'}
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
 
     
@@ -18735,7 +18893,7 @@ def schsummaryplan_table(pn):
     reader = geolite2.reader()
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection1= db.user_master
     query1=[
@@ -18932,8 +19090,8 @@ def schsummaryplan_table(pn):
 @app.route('/last_day_pr')
 def pract_cards_24hr():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -19105,8 +19263,8 @@ def pract_cards_24hr():
 @app.route('/comentperfeedbacktabledaily')
 def highstarfeedbacktabledaily():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1 = db.audio_track_master
     collection2=db.audio_feedback
@@ -19214,8 +19372,8 @@ def highstarfeedbacktabledaily():
 @app.route('/lowstartabledaily')
 def lowstarfeed():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1 = db.audio_track_master
     collection2=db.audio_feedback
@@ -19318,8 +19476,8 @@ def lowstarfeed():
 @app.route('/programPRACTICE_dailycomparsion')
 def progpracticedaily():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1 = db.audio_track_master
     tz = timezone('UTC')
@@ -19472,8 +19630,8 @@ def progpracticedaily():
 @app.route('/SIGNUPS_dailycomparsion') #test3
 def SIGNUP_24hr():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.user_master
 
@@ -19633,8 +19791,8 @@ def SIGNUP_24hr():
 @app.route('/Business_days_streaks_classroom')
 def practice_streak_business_days_school():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     from datetime import datetime
     now= datetime.now()- timedelta(hours=5.5)
@@ -19829,8 +19987,8 @@ def practice_streak_business_days_school():
 @app.route('/Business_days_streaks_Family')
 def practice_streak_business_days_parents():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     from datetime import datetime
     now= datetime.now()- timedelta(hours=5.5)
@@ -20018,6 +20176,393 @@ def practice_streak_business_days_parents():
 
     return json.dumps(temp)
 
+#>>>>>>>>>>>>>>>------------------ PRACTICE BIFURCATION API------------------------
+@app.route('/Business_days_streaks_Family/<charttype>')
+def practicestreak___businessdays___parents(charttype):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    from datetime import datetime
+    now= datetime.now()- timedelta(hours=5.5)
+
+    collection= db.audio_track_master
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+
+        qratm=[{"$match":
+                 {'$and': [
+                     {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                     {'USER_ID.CREATED_DATE':{'$gte':datetime(2020,3,17)}},
+                          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{'$ne':''}},
+                         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+               practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+        {'$group':{'_id':{'USER_ID':'$USER_ID',
+                          'EMAIL_ID':'$USER_EMAIL',
+            'PRACTICE_DATE':'$MODIFIED_DATE'},
+            }},
+            ]
+
+        bifur= list(collection.aggregate(qratm))
+        blah=DataFrame(bifur)
+        df_1 = pd.json_normalize(blah['_id'])
+        df_final = pd.concat([blah,df_1], axis =  1)
+        # df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+        df_final['date_now']= now.strftime("%Y-%m-%d")
+        df_final['PRACTICE_DATE'] = pd.to_datetime(df_final['PRACTICE_DATE'])
+        df_final['day_of_practice']= df_final['PRACTICE_DATE'].dt.strftime('%A')
+
+        df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+
+#         print(df_final)
+        if 'USER_ID' not in df_final.columns:
+            df_final['USER_ID'] = 0
+
+        df_final_sort=df_final.sort_values(['USER_ID','PRACTICE_DATE'],ascending=True)
+
+        group1=df_final_sort[['USER_ID','PRACTICE_DATE', 'day_of_practice']]
+
+        df2=group1.drop_duplicates()
+        df4=df2.reset_index(drop=True)
+        df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].astype('datetime64[ns]')
+
+
+        df5=df4.groupby(['USER_ID'])['PRACTICE_DATE'].agg(['max', 'min']).reset_index()
+
+        df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+
+
+        df6=df4.groupby('USER_ID')['PRACTICE_DATE'].apply(list).reset_index(name='list_of_day_of_practice')
+
+        list_of_list2=df6.list_of_day_of_practice.tolist()
+
+
+        df77= pd.merge(df5,df6 ,on ='USER_ID', how='left')
+
+        daterange=[]
+        for i in range(len(df77)):
+            z=pd.date_range(df77['min'][i].strftime("%Y-%m-%d"),df77['max'][i].strftime("%Y-%m-%d"),freq='d')
+            daterange.append(z)
+
+
+
+        datetime_range=[]
+        for j in range(len(daterange)):
+            yyy=[]
+            for i in range(len(daterange[j])):
+                xx=daterange[j][i].strftime("%Y-%m-%d")
+                yyy.append(xx) 
+
+            datetime_range.append(yyy)
+
+        df77['list_of_date_range']=datetime_range  
+
+        day_of_daterange=[]
+        for m in range(len(daterange)):
+            yyy=[]
+            for i in range(len(daterange[m])):
+                xx=daterange[m][i].strftime("%A")
+                yyy.append(xx) 
+
+            day_of_daterange.append(yyy)
+
+
+
+        df77['day_of_daterange']=day_of_daterange   
+
+        zz=[]
+        for i in range(len(df77['list_of_date_range'])):
+            xxxx=[]
+            for j in range(len(df77['list_of_date_range'][i])):
+
+                if df77['list_of_date_range'][i][j] in df77['list_of_day_of_practice'][i]:
+                    xxxx.append(1)
+                else:
+                    xxxx.append(0)
+
+            zz.append(xxxx)
+
+        df77['xxx']=zz
+
+
+        list_without_satsun=[]
+        for x in range(len(df77['day_of_daterange'])):
+
+            listtt=[i for i,d in enumerate(df77['day_of_daterange'][x]) if d=='Saturday' or d=='Sunday']
+
+            somelist = [i for j, i in enumerate(df77['xxx'][x]) if j not in listtt]                   
+
+            list_without_satsun.append(somelist)    
+
+        df77['list_without_satsun']=list_without_satsun
+
+
+        from itertools import groupby
+        from collections import defaultdict
+
+
+        liststst=[]
+
+        for w in range(len(df77['list_without_satsun'])):
+
+            out = [len([*group]) for i, group in groupby(list_without_satsun[w])]
+
+
+            ccc=[v for i, v in enumerate(list_without_satsun[w]) if i == 0 or v != list_without_satsun[w][i-1]]
+            end=[]
+            for l,m in zip(ccc,out):
+                end.append([l,m])
+
+            tup=[tuple(i) for i in end ]
+
+            d= defaultdict( list )
+            for v, k in tup:
+                d[v].append(k)
+
+            final_list=[ {v:d[v]} for v in sorted(d) ]
+
+
+            liststst.append(final_list)
+
+
+
+        maximum=[]
+        for i in liststst:
+            ccc=[]
+            for j in i:
+                try:
+                    xx=max(j[1])
+                    ccc.append(xx)
+                except:
+                    pass
+            maximum.append(ccc)     
+
+
+
+        df77['maximum']=maximum   
+
+        df77['maximum'] = df77['maximum'].str.get(0)
+        df77[['USER_ID','list_without_satsun','maximum']]
+
+        df88=df77.groupby(['maximum'], as_index=False)['USER_ID'].count()
+
+        df88=df88.reset_index(drop=True)
+
+        df99=pd.DataFrame(df88)
+
+        df99.rename(columns={'USER_ID':'Number_of_users_having_streak','maximum':'STREAK'},inplace=True)
+
+        df_final=df99.sort_values('STREAK', ascending=False)
+
+        df_final['cumulativesum']= df_final['Number_of_users_having_streak'].cumsum()
+
+
+        df_final_streak=df_final.sort_values('STREAK')
+
+
+        df_final_streak[['STREAK','cumulativesum']]
+
+        temp={'Number_of_streaks':df_final_streak['STREAK'].values.tolist(),'Practices':df_final_streak['cumulativesum'].values.tolist()}
+
+        return json.dumps(temp)
+    
+    else:
+        qratm=[{"$match":
+                 {'$and': [
+                     {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                     {'USER_ID.CREATED_DATE':{'$gte':datetime(2020,3,17)}},
+                          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{'$ne':''}},
+                         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        {'$group':{'_id':{'USER_ID':'$USER_ID._id',
+                          'EMAIL_ID':'$USER_ID.EMAIL_ID',
+            'PRACTICE_DATE':'$MODIFIED_DATE'},
+            }},
+            ]
+
+        bifur= list(collection.aggregate(qratm))
+        blah=DataFrame(bifur)
+        df_1 = pd.json_normalize(blah['_id'])
+        df_final = pd.concat([blah,df_1], axis =  1)
+        # df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+        df_final['date_now']= now.strftime("%Y-%m-%d")
+        df_final['PRACTICE_DATE'] = pd.to_datetime(df_final['PRACTICE_DATE'])
+        df_final['day_of_practice']= df_final['PRACTICE_DATE'].dt.strftime('%A')
+
+        df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+
+
+
+        df_final_sort=df_final.sort_values(['USER_ID','PRACTICE_DATE'],ascending=True)
+
+        group1=df_final_sort[['USER_ID','PRACTICE_DATE', 'day_of_practice']]
+
+        df2=group1.drop_duplicates()
+        df4=df2.reset_index(drop=True)
+        df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].astype('datetime64[ns]')
+
+
+        df5=df4.groupby(['USER_ID'])['PRACTICE_DATE'].agg(['max', 'min']).reset_index()
+
+        df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+
+
+        df6=df4.groupby('USER_ID')['PRACTICE_DATE'].apply(list).reset_index(name='list_of_day_of_practice')
+
+        list_of_list2=df6.list_of_day_of_practice.tolist()
+
+
+        df77= pd.merge(df5,df6 ,on ='USER_ID', how='left')
+
+        daterange=[]
+        for i in range(len(df77)):
+            z=pd.date_range(df77['min'][i].strftime("%Y-%m-%d"),df77['max'][i].strftime("%Y-%m-%d"),freq='d')
+            daterange.append(z)
+
+
+
+        datetime_range=[]
+        for j in range(len(daterange)):
+            yyy=[]
+            for i in range(len(daterange[j])):
+                xx=daterange[j][i].strftime("%Y-%m-%d")
+                yyy.append(xx) 
+
+            datetime_range.append(yyy)
+
+        df77['list_of_date_range']=datetime_range  
+
+        day_of_daterange=[]
+        for m in range(len(daterange)):
+            yyy=[]
+            for i in range(len(daterange[m])):
+                xx=daterange[m][i].strftime("%A")
+                yyy.append(xx) 
+
+            day_of_daterange.append(yyy)
+
+
+
+        df77['day_of_daterange']=day_of_daterange   
+
+        zz=[]
+        for i in range(len(df77['list_of_date_range'])):
+            xxxx=[]
+            for j in range(len(df77['list_of_date_range'][i])):
+
+                if df77['list_of_date_range'][i][j] in df77['list_of_day_of_practice'][i]:
+                    xxxx.append(1)
+                else:
+                    xxxx.append(0)
+
+            zz.append(xxxx)
+
+        df77['xxx']=zz
+
+
+        list_without_satsun=[]
+        for x in range(len(df77['day_of_daterange'])):
+
+            listtt=[i for i,d in enumerate(df77['day_of_daterange'][x]) if d=='Saturday' or d=='Sunday']
+
+            somelist = [i for j, i in enumerate(df77['xxx'][x]) if j not in listtt]                   
+
+            list_without_satsun.append(somelist)    
+
+        df77['list_without_satsun']=list_without_satsun
+
+
+        from itertools import groupby
+        from collections import defaultdict
+
+
+        liststst=[]
+
+        for w in range(len(df77['list_without_satsun'])):
+
+            out = [len([*group]) for i, group in groupby(list_without_satsun[w])]
+
+
+            ccc=[v for i, v in enumerate(list_without_satsun[w]) if i == 0 or v != list_without_satsun[w][i-1]]
+            end=[]
+            for l,m in zip(ccc,out):
+                end.append([l,m])
+
+            tup=[tuple(i) for i in end ]
+
+            d= defaultdict( list )
+            for v, k in tup:
+                d[v].append(k)
+
+            final_list=[ {v:d[v]} for v in sorted(d) ]
+
+
+            liststst.append(final_list)
+
+
+
+        maximum=[]
+        for i in liststst:
+            ccc=[]
+            for j in i:
+                try:
+                    xx=max(j[1])
+                    ccc.append(xx)
+                except:
+                    pass
+            maximum.append(ccc)     
+
+
+
+        df77['maximum']=maximum   
+
+        df77['maximum'] = df77['maximum'].str.get(0)
+        df77[['USER_ID','list_without_satsun','maximum']]
+
+        df88=df77.groupby(['maximum'], as_index=False)['USER_ID'].count()
+
+        df88=df88.reset_index(drop=True)
+
+        df99=pd.DataFrame(df88)
+
+        df99.rename(columns={'USER_ID':'Number_of_users_having_streak','maximum':'STREAK'},inplace=True)
+
+        df_final=df99.sort_values('STREAK', ascending=False)
+
+        df_final['cumulativesum']= df_final['Number_of_users_having_streak'].cumsum()
+
+
+        df_final_streak=df_final.sort_values('STREAK')
+
+
+        df_final_streak[['STREAK','cumulativesum']]
+
+        temp={'Number_of_streaks':df_final_streak['STREAK'].values.tolist(),'Practices':df_final_streak['cumulativesum'].values.tolist()}
+
+        return json.dumps(temp)
+
+
 
 
 
@@ -20027,8 +20572,8 @@ def practice_streak_business_days_parents():
 @app.route('/power_users_having_streaks')
 def power_users():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     from datetime import datetime
     now= datetime.now()- timedelta(hours=5.5)
@@ -20203,8 +20748,8 @@ def power_users():
 @app.route('/STREAKS')
 def present_streaks():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     from datetime import datetime
     now= datetime.now()- timedelta(hours=5.5)
@@ -20291,8 +20836,8 @@ def present_streaks():
 @app.route('/teachers_STREAKS')
 def classroom_streaks():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     from datetime import datetime
     now= datetime.now()- timedelta(hours=5.5)
@@ -20381,8 +20926,8 @@ def classroom_streaks():
 @app.route('/daywisefeedcardss')
 def feeddailycardsdayofweek():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     collection2=db.audio_feedback
@@ -20608,8 +21153,8 @@ def feeddailycardsdayofweek():
 @app.route('/ratedaily')
 def RATINGssy():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection=db.audio_feedback
     tz = timezone('UTC')
@@ -20627,6 +21172,7 @@ def RATINGssy():
 #     +timedelta(hours=4)
     start_15day=tod-timedelta(days=8)
     startend= start_15day+timedelta(days=1)
+    index=[0]
 
     df1 = DataFrame(list(collection.aggregate([
     {"$match":{'$and':[
@@ -20652,6 +21198,11 @@ def RATINGssy():
     {'$sort':{'_id':1}}
     ])))
     df1.rename(columns = { '_id': 'week'}, inplace = True)
+    
+    if df1.empty:
+        df1 = pd.DataFrame(index=index, columns=['week','rating_5','rating_4','rating_3','rating_2','rating_1'])
+        df1 = df1.fillna(0)
+    
     df1[['week','rating_5','rating_4','rating_3','rating_2','rating_1']]
     print(df1,"teachers_yes")
     df2 = DataFrame(list(collection.aggregate([
@@ -20678,6 +21229,11 @@ def RATINGssy():
     {'$sort':{'_id':1}}
     ])))
     df2.rename(columns = {'_id': 'week'}, inplace = True)
+    
+    if df2.empty:
+        df2 = pd.DataFrame(index=index, columns=['week','rating_5','rating_4','rating_3','rating_2','rating_1'])
+        df2 = df2.fillna(0) 
+    
     df2[['week','rating_5','rating_4','rating_3','rating_2','rating_1']]
     print(df2,"par_yes")
     df10 = DataFrame(list(collection.aggregate([
@@ -20704,6 +21260,10 @@ def RATINGssy():
     {'$sort':{'_id':1}}
     ])))
     df10.rename(columns = { '_id': 'week'}, inplace = True)
+    if df10.empty:
+        df10 = pd.DataFrame(index=index, columns=['week','rating_5','rating_4','rating_3','rating_2','rating_1'])
+        df10 = df10.fillna(0)
+    
     df10[['week','rating_5','rating_4','rating_3','rating_2','rating_1']]
     print(df10,"teach_lastweek")
     df20 = DataFrame(list(collection.aggregate([
@@ -20730,6 +21290,10 @@ def RATINGssy():
     {'$sort':{'_id':1}}
         ])))
     df20.rename(columns = { '_id': 'week'}, inplace = True)
+    if df20.empty:
+        df20 = pd.DataFrame(index=index, columns=['week','rating_5','rating_4','rating_3','rating_2','rating_1'])
+        df20 = df20.fillna(0)
+    
     df20[['week','rating_5','rating_4','rating_3','rating_2','rating_1']]
     print(df20,"par_lastweek")
     teachers_yes=df1.values.tolist()
@@ -20741,14 +21305,16 @@ def RATINGssy():
     temp={'weekdata':weekdata}
     return json.dumps(temp)
 
+# RATINGssy()
+
 
 #testttttt
 
 @app.route('/ratedailylowstar')
 def RATINGslowstar():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection=db.audio_feedback
     tz = timezone('UTC')
@@ -20872,8 +21438,8 @@ def RATINGslowstar():
 @app.route('/teacher_signup_table_daily')
 def teacher_signup_table():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
@@ -20969,8 +21535,8 @@ def teacher_signup_table():
 @app.route('/parents_signup_table_daily')
 def signupdataparent():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
@@ -21071,8 +21637,8 @@ def UWBA_heatmap_prac():
 
     import collections
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
@@ -21193,8 +21759,8 @@ def UWBA_heatmap_prac():
 def UWBA_schppcfamily():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass  
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -21267,8 +21833,8 @@ def UWBA_schppcfamily():
 def uwba__schpuc():
    
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection= db.user_master
 #     district=disdic[districtid]
@@ -21325,8 +21891,8 @@ def uwba__schpuc():
 def uwbachwisepc():
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
@@ -21399,8 +21965,8 @@ def uwbachwisepc():
 def uwba__topusers_practice():
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
 #     district=disdic[districtid]
@@ -21488,8 +22054,8 @@ def uwba__topusers_practice():
 def uwba__schwiseuc():
    
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass  
     collection = db.user_master
 #     district=disdic[districtid]
@@ -21542,8 +22108,8 @@ def uwba__schwiseuc():
 def uwba__monthwisepc():
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
 #     district=disdic[districtid]
@@ -21614,8 +22180,8 @@ def uwba_count_cards():
     from datetime import timedelta
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection1 = db.user_master
     collection2=db.audio_track_master
@@ -21849,8 +22415,8 @@ def uwba_count_cards():
 @app.route('/dayofweekpractparandteach')
 def practice_PARandTeacherchart():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     
@@ -21990,8 +22556,8 @@ def practice_PARandTeacherchart():
 @app.route('/playback_cards_week')
 def practice_cards_weeklyPandT():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     tz = timezone('UTC')
@@ -22148,8 +22714,8 @@ def practice_cards_weeklyPandT():
 @app.route('/newsignupsss') #test4
 def newweekcomparison():
     username= urllib.parse.quote_plus('admin')
-    password= urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password= urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.user_master
     # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
@@ -22262,8 +22828,8 @@ def newweekcomparison():
 @app.route('/SIGNUPS_WEEK') #test3
 def SIGNUP_cards_WEEK():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.user_master
     yesterday= datetime.datetime.now(tz=datetime.timezone.utc)- timedelta(days=1)
@@ -22406,8 +22972,8 @@ def SIGNUP_cards_WEEK():
 @app.route('/Weekly_power_users_having_streaks')
 def power_users_weekly__():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     yesterday= datetime.datetime.combine(datetime.datetime.utcnow() -timedelta(days=1),datetime.time.min)
     today= datetime.datetime.combine(datetime.datetime.utcnow(),datetime.time.min)
@@ -22578,8 +23144,8 @@ def power_users_weekly__():
 # def avg_audio_completed_less_():
 
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
 #     db=client.compass
 #     collection1= db.audio_track_master
 #     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -22658,8 +23224,8 @@ def power_users_weekly__():
 # def avg_audio_completed_more_():
 
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
 #     db=client.compass
 #     collection1= db.audio_track_master
 #     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -22742,8 +23308,8 @@ def power_users_weekly__():
 @app.route('/comparison1') #test2
 def weekly_compare_chart():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
@@ -22867,7 +23433,7 @@ def school_FAMsearch_mongo1(name):
 
     import urllib 
     import pandas as pd
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = MongoClient(mongo_uri)
     # client = MongoClient("mongodb://host:port/")
     database = client["compass"]
@@ -23047,7 +23613,7 @@ def school_FAMsearch_mongo1(name):
 def schooluserrdata(school,daate):  
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection3= db.audio_track_master
     query3=[
@@ -23103,8 +23669,8 @@ def schooluserrdata(school,daate):
 @app.route('/schoology_cards')
 def schoology_cardd():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.audio_track_master
@@ -23184,7 +23750,7 @@ def schoology_cardd():
 
 @app.route('/practicehistorychart')
 def practice_historynew():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.audio_track_master_all
@@ -23308,8 +23874,8 @@ def practice_historynew():
 # def avg_audio_completed_():
 
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
 #     db=client.compass
 #     collection1= db.audio_track_master
 #     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -23396,8 +23962,8 @@ def practice_historynew():
 # def avg_audio_completed_less_than__50():
 
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
 #     db=client.compass
 #     collection1= db.audio_track_master
 #     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -23488,27 +24054,25 @@ def practice_historynew():
 
 
 @app.route('/FAMILY_practice_table_DAILY')
-def PARENTS_practice_table_DAILY():
+def PARENTS_practice_table_DAY__(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
     # datetime.datetime.now() - datetime.timedelta(days=7)
     # ar d = new Date();
-    tz = timezone('UTC')
-    date=datetime.datetime.now(tz) 
-    # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
-    yesterday = pd.to_datetime(date) - timedelta(days=1)
-    yesterday= datetime.datetime.combine(datetime.datetime.utcnow() -timedelta(days=1),datetime.time.min)
-    print(yesterday,"yessss")
-    today= datetime.datetime.combine(datetime.datetime.utcnow(),datetime.time.min)
-    print(today,"today")
-    tod= today+ timedelta(hours=4)
-    start= tod-timedelta(days=1)
-    yester= yesterday+timedelta(hours=4)
-    start_15day=tod-timedelta(days=8)
-    startend= start_15day+timedelta(days=1)
+  
+    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+    yester= datetime.datetime.combine(mydatetime,datetime.time.min)
+    #     - timedelta(days=1)
+    tod= datetime.datetime.combine(mydatetime,datetime.time.max)
+    start_15day=yester- timedelta(days=7)
+    startend= tod- timedelta(days=7)
+#     print(start_15day)
+#     print(startend)
+
+
 
     qr1=[{"$match":{
     '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -23549,41 +24113,56 @@ def PARENTS_practice_table_DAILY():
 
     list1= list(collection1.aggregate(qr1))
     df_atm1= DataFrame(list1)
-    # df_atm1[['parents_playback_24hr', 'teachers_playback_24hr','total_playback_24hr']]
+    if df_atm1.empty:
+        return json.dumps({'data':'NO DATA AVAILABLE'})
+    else:
+        
+        if 'CURSOR_START' not in list(df_atm1.columns):
+            df_atm1['CURSOR_START']=0
+        else:
+            df_atm1=df_atm1
+
+        df_atm1['CURSOR_START'].fillna(0, inplace=True)
+        df_atm1['USER_NAME'].fillna('NO INFO FOUND', inplace=True)
+        df_atm1['EMAIL_ID'].fillna('NO INFO FOUND', inplace=True)
+        df_atm1['CITY'].fillna('NO INFO FOUND', inplace=True)
+        df_atm1['STATE'].fillna('NO INFO FOUND', inplace=True)
+        df_atm1['COUNTRY'].fillna('NO INFO FOUND', inplace=True)
+        df_atm1['PHONE'].fillna('NO INFO FOUND', inplace=True)
+
+        df_atm1['subtract']=df_atm1['CURSOR_END']-df_atm1['CURSOR_START']
+        df_atm1['divide']=df_atm1['subtract']/60
+
+        decimals = 2    
+
+        df_atm1['Mindful_minutess']=df_atm1['divide'].round(decimals)
 
 
-    df_atm1['CURSOR_START'].fillna(0, inplace=True)
-    df_atm1['CITY'].fillna('NO INFO FOUND', inplace=True)
-    df_atm1['STATE'].fillna('NO INFO FOUND', inplace=True)
-    df_atm1['COUNTRY'].fillna('NO INFO FOUND', inplace=True)
-    df_atm1['PHONE'].fillna('NO INFO FOUND', inplace=True)
-
-    df_atm1['subtract']=df_atm1['CURSOR_END']-df_atm1['CURSOR_START']
-    df_atm1['divide']=df_atm1['subtract']/60
-
-    decimals = 2    
-
-    df_atm1['Mindful_minutess']=df_atm1['divide'].round(decimals)
+        df_atm1['playback']= df_atm1['subtract']/df_atm1['AUDIO_LENGTH']
+        df_atm1['playback_time_percent']= df_atm1['playback'].round(0)
+    #     df_atm1['playback_time_PERCENTAGE']=df_atm1['playback_time_round']*100
 
 
-    df_atm1['playback']= df_atm1['subtract']/df_atm1['AUDIO_LENGTH']
-    df_atm1['playback_time_percent']= df_atm1['playback'].round(0)
-#     df_atm1['playback_time_PERCENTAGE']=df_atm1['playback_time_round']*100
+        df_atm1['LAST_PRACTICE_DATE']=df_atm1['LAST_PRACTICE_DATE'].dt.strftime("%m/%d/%Y")
+        df_atm1=df_atm1.fillna('')
+        
 
+        table=df_atm1[['SCHOOL_NAME','USER_NAME','EMAIL_ID','LAST_PRACTICE_DATE','PROGRAM_NAME','AUDIO_DAY',
+#                        'PHONE',
+#                        'AUDIO_LENGTH',
+                       'Mindful_minutess',
+                       'playback_time_percent',
+#                        'CITY','STATE','COUNTRY'
+                      ]]
 
-    df_atm1['LAST_PRACTICE_DATE']=df_atm1['LAST_PRACTICE_DATE'].dt.strftime("%m/%d/%Y, %H:%M:%S")
-
-    table=df_atm1[['USER_NAME','EMAIL_ID','LAST_PRACTICE_DATE','PROGRAM_NAME','AUDIO_DAY','PHONE','AUDIO_LENGTH','Mindful_minutess','playback_time_percent','CITY','STATE','COUNTRY']]
-
-    temp={'data':table.values.tolist()}
-    return json.dumps(temp)
-# practice_table()
+        temp={'data':table.values.tolist()}
+        return json.dumps(temp)
 
 @app.route('/classroom_practice_table_DAILY')
 def school_practice_table_DAILY():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -23675,8 +24254,8 @@ def school_practice_table_DAILY():
 @app.route('/classroom_practice_WEEKLY')
 def School_practice_table_weekly():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -23773,8 +24352,8 @@ def School_practice_table_weekly():
 @app.route('/PARENTS_practice_WEEKLY')
 def family_practice_table_weekly():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -23877,8 +24456,8 @@ def family_practice_table_weekly():
 
 def feeddailycardssss():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     collection2=db.audio_feedback
@@ -24124,8 +24703,8 @@ def feeddailycardssss():
 # def avg_audio_completed_weekly():
 
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
 #     db=client.compass
 #     collection1= db.audio_track_master
 #     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -24204,8 +24783,8 @@ def feeddailycardssss():
 @app.route('/highhratingweeklyP&T')
 def highRATING_weekSSS():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection= db.audio_feedback
     # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
@@ -24378,8 +24957,8 @@ def highRATING_weekSSS():
 @app.route('/lowwwratingweeklyP&T')
 def lowRATING_weekSSS():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection= db.audio_feedback
     # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
@@ -24549,25 +25128,58 @@ def lowRATING_weekSSS():
 
 @app.route('/practicehistorychartlatest')
 def practice_historynewlatest():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@34.214.24.229:27017/"
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+            # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+        #     print("LSY", LSY_Date)
+        #     print("CSY",csy_first_date())
+
+
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote('F5tMazRj47cYqm33e') + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.audio_track_master_all
     collection2 = db.audio_track_master
     ########## FOR DF ###########################
-    dateStr = "2019-08-01T00:00:00.000Z"
+    dateStr = str(LSY_Date.date())
     myDatetime = dateutil.parser.parse(dateStr)
-    datestr1 = "2020-07-31T23:59:59.000Z"
+    datestr1 = str(csy_first_date())
     myDatetime1 = dateutil.parser.parse(datestr1)
     ########### FOR DF1 ############################
-    dateStr2 = "2020-08-01T00:00:00.000Z"
+    dateStr2 = str(csy_first_date().date())
     myDatetime2 = dateutil.parser.parse(dateStr2)
     ########################## FOR DF2 ###############
     dateStr3 = "2020-03-17T00:00:00.000Z"
     myDatetime3 = dateutil.parser.parse(dateStr3)
     ##################################
     ##################################
-    dateStr4 = "2021-07-31T23:59:59.000Z"
+    dateStr4 = str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1))
     myDatetime4 = dateutil.parser.parse(dateStr4)
     ######################  USER PRACTICE 2019-2020(LSY) ############################################
     df1 = DataFrame(list(collection2.aggregate([{
@@ -24577,7 +25189,9 @@ def practice_historynewlatest():
                     "USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                     "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}},
                     'USER_ID.EMAIL_ID':{'$ne':""},
-                    "MODIFIED_DATE":{"$gte": myDatetime2,"$lte" : myDatetime4},
+                    "MODIFIED_DATE":{"$gte": myDatetime2
+    #                                      ,"$lte" : myDatetime4
+                                    },
                     'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}},
             {"$match":
             {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
@@ -24598,7 +25212,9 @@ def practice_historynewlatest():
                     'USER_ID.EMAIL_ID':{'$ne':""},
                       "USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                        "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                    "MODIFIED_DATE":{"$gte": myDatetime2,"$lte" : myDatetime4},
+                    "MODIFIED_DATE":{"$gte": myDatetime2
+    #                                      ,"$lte" : myDatetime4
+                                    },
                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}},
             {"$match":
             {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
@@ -24612,17 +25228,22 @@ def practice_historynewlatest():
             {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
                         'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
             {"$sort":{'Practice_date':1}}])))
-    
-    
+
+
+
+
     ########schoology################################
+
     schoology = DataFrame(list(collection2.aggregate([{
             '$match':{'USER_ID.IS_DISABLED':{'$ne':'Y'},
                     'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}, 
                     'USER_ID.EMAIL_ID':{'$ne':""},
                       "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}},
                    "USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")},
-                    "MODIFIED_DATE":{"$gte": myDatetime2,"$lte" : myDatetime4},
-#                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
+                    "MODIFIED_DATE":{"$gte": myDatetime2
+    #                                      ,"$lte" : myDatetime4
+                                    },
+    #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
                      }},
             {"$match":
             {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
@@ -24636,7 +25257,7 @@ def practice_historynewlatest():
             {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
                         'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
             {"$sort":{'Practice_date':1}}])))
-#     print(schoology,"schoology")
+    #     print(schoology,"schoology")
     ########clever################################
     clever = DataFrame(list(collection2.aggregate([{
             '$match':{'USER_ID.IS_DISABLED':{'$ne':'Y'},
@@ -24644,8 +25265,10 @@ def practice_historynewlatest():
                     'USER_ID.EMAIL_ID':{'$ne':""},
                       "USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                    "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")},
-                    "MODIFIED_DATE":{"$gte": myDatetime2,"$lte" : myDatetime4},
-#                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
+                    "MODIFIED_DATE":{"$gte": myDatetime2
+    #                                      ,"$lte" : myDatetime4
+                                    },
+    #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
                      }},
             {"$match":
             {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
@@ -24659,12 +25282,14 @@ def practice_historynewlatest():
             {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
                         'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
             {"$sort":{'Practice_date':1}}])))
+
+
     ###################### TOTAL LSY ##############################
-    df3 = DataFrame(list(collection.aggregate([{"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
+    df3 = DataFrame(list(collection2.aggregate([{"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
                     {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
-                    {'MODIFIED_DATE':{"$gte":myDatetime,"$lte": myDatetime1}}]}},
+                    {'MODIFIED_DATE':{"$gte":myDatetime,"$lt": myDatetime1}}]}},
             {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
                             'month':{'$month':'$MODIFIED_DATE'}},
                         'date':{'$first':'$MODIFIED_DATE'}, 
@@ -24672,36 +25297,73 @@ def practice_historynewlatest():
             {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
                         'Total_Practice_LSY':'$Total_Practice_CSY'}}, 
             {"$sort":{'Practice_date':1}}])))
+
+
+
+
     #user_CSY
     df1['Practice_date'] = pd.to_datetime(df1['Practice_date'])
+
+
     df5=df1.sort_values(by='Practice_date')
     #df5['Practice_date']=df5['Practice_date'].astype(np.int64)/int(1e6)
     #uscy=df5.values.tolist()
-    df7=pd.date_range(start='2020-08-01', end='2021-07-31')
+    df7=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
     df9 = pd.DataFrame(df7,columns = ["Practice_date"])
     df9['value'] = 0
+
     uscy1= df5.merge(df9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
     uscy1['Practice_date']=uscy1['Practice_date'].astype(np.int64)/int(1e6)
     uscy=uscy1[["Practice_date","Users_Practice_CSY"]].values.tolist()
+
     #clever csy
-    clever['Practice_date'] = pd.to_datetime(clever['Practice_date'])
-    df6c=clever.sort_values(by='Practice_date')
+    if 'Practice_date' in list(clever.columns):
+        clever['Practice_date'] = pd.to_datetime(clever['Practice_date'])
+        df6c=clever.sort_values(by='Practice_date')
+    else:
+        dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+        clever=pd.DataFrame(dates,columns = ["Practice_date"])
+        clever['Parents_Practice_CSY'] = 0
+        df6c=clever.sort_values(by='Practice_date')
+
+
+
     #schoology csy
-    schoology['Practice_date'] = pd.to_datetime(schoology['Practice_date'])
-    df6s=schoology.sort_values(by='Practice_date')
+
+    if 'Practice_date' in list(schoology.columns):
+        schoology['Practice_date'] = pd.to_datetime(schoology['Practice_date'])
+        df6s=schoology.sort_values(by='Practice_date')
+    else:
+        dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+        schoology=pd.DataFrame(dates,columns = ["Practice_date"])
+        schoology['Parents_Practice_CSY'] = 0
+        df6s=schoology.sort_values(by='Practice_date')
+
+
+
+
     #Parent_CSY
     df2['Practice_date'] = pd.to_datetime(df2['Practice_date'])
     df6=df2.sort_values(by='Practice_date')
-    dfp=pd.date_range(start='2020-08-01', end='2021-07-31')
+    dfp=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
     dfp9 = pd.DataFrame(dfp,columns = ["Practice_date"])
     dfp9['value'] = 0
+
     pscy1= df6.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
     pscy1['Practice_date']=pscy1['Practice_date'].astype(np.int64)/int(1e6)
     pscy=pscy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+
+
     ####clever
     ccsy1= df6c.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+
+
     ccsy1['Practice_date']=ccsy1['Practice_date'].astype(np.int64)/int(1e6)
     ccsy=ccsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+
+
+
+
     ####schoology
     scsy1= df6c.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
     scsy1['Practice_date']=scsy1['Practice_date'].astype(np.int64)/int(1e6)
@@ -24709,22 +25371,513 @@ def practice_historynewlatest():
     #practice_Lsy
     df3['Practice_date'] = pd.to_datetime(df3['Practice_date'])
     df4=df3.sort_values(by='Practice_date')
-    dfl=pd.date_range(start='2019-08-01', end='2020-07-31')
+    dfl=pd.date_range(start=str(csy_first_date().date()-relativedelta(years=1)), end=str(csy_first_date().date()-relativedelta(days=1)))
     dfl9 = pd.DataFrame(dfl,columns = ["Practice_date"])
     dfl9['value'] = 0
     plcy1= df4.merge(dfl9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
     plcy1['Practice_date']=plcy1['Practice_date'].astype(np.int64)/int(1e6)
     plcy=plcy1[["Practice_date","Total_Practice_LSY"]].values.tolist()
     temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'clever':ccsy,'schoology':scsy}}
+
     return json.dumps(temp)
+    
+#>>>>>>>>>>>>>>>>>>>>>...........PRACTICE BIFURCATION................>>>>>>>>>
+@app.route('/practicehistorychartlatest/<charttype>')
+def practice___history___new___latest(charttype):
+    import datetime
+    from datetime import timedelta
+    from dateutil.relativedelta import relativedelta
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+            # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+        #     print("LSY", LSY_Date)
+        #     print("CSY",csy_first_date())
+
+
+
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote('F5tMazRj47cYqm33e') + "@52.41.36.115:27017/"
+    client = pymongo.MongoClient(mongo_uri)
+    db = client.compass
+    collection = db.audio_track_master_all
+    collection2 = db.audio_track_master
+    ########## FOR DF ###########################
+    dateStr = str(LSY_Date.date())
+    myDatetime = dateutil.parser.parse(dateStr)
+    datestr1 = str(csy_first_date())
+    myDatetime1 = dateutil.parser.parse(datestr1)
+    ########### FOR DF1 ############################
+    dateStr2 = str(csy_first_date().date())
+    myDatetime2 = dateutil.parser.parse(dateStr2)
+    ########################## FOR DF2 ###############
+    dateStr3 = "2020-03-17T00:00:00.000Z"
+    myDatetime3 = dateutil.parser.parse(dateStr3)
+    ##################################
+    ##################################
+    dateStr4 = str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1))
+    myDatetime4 = dateutil.parser.parse(dateStr4)
+    
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        ######################  USER PRACTICE 2019-2020(LSY) ############################################
+        df1 = DataFrame(list(collection2.aggregate([{
+                '$match':{'USER_ID.IS_DISABLED':{'$ne':'Y'},
+                        'USER_ID.IS_BLOCKED':{"$ne":'Y'},
+                        'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}, 
+                        "USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                        "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                        'USER_ID.EMAIL_ID':{'$ne':""},
+                        "MODIFIED_DATE":{"$gte": myDatetime2
+        #                                      ,"$lte" : myDatetime4
+                                        },
+                        'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+                    practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'}, 
+                        'Users_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                            'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+        ##################### PARENTS ##########################################
+        df2 = DataFrame(list(collection2.aggregate([{
+                '$match':{'USER_ID.IS_DISABLED':{'$ne':'Y'},
+                        'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}, 
+                        'USER_ID.EMAIL_ID':{'$ne':""},
+                          "USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                           "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                        "MODIFIED_DATE":{"$gte": myDatetime2
+        #                                      ,"$lte" : myDatetime4
+                                        },
+                        'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+                practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'}, 
+                        'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+
+
+
+        ########schoology################################
+
+        schoology = DataFrame(list(collection2.aggregate([{
+                '$match':{'USER_ID.IS_DISABLED':{'$ne':'Y'},
+                        'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}, 
+                        'USER_ID.EMAIL_ID':{'$ne':""},
+                          "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                       "USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")},
+                        "MODIFIED_DATE":{"$gte": myDatetime2
+        #                                      ,"$lte" : myDatetime4
+                                        },
+        #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
+                         }},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'}, 
+                        'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+        #     print(schoology,"schoology")
+        ########clever################################
+        clever = DataFrame(list(collection2.aggregate([{
+                '$match':{'USER_ID.IS_DISABLED':{'$ne':'Y'},
+                        'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}, 
+                        'USER_ID.EMAIL_ID':{'$ne':""},
+                          "USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                       "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")},
+                        "MODIFIED_DATE":{"$gte": myDatetime2
+        #                                      ,"$lte" : myDatetime4
+                                        },
+        #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
+                         }},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'}, 
+                        'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+
+        ###################### TOTAL LSY ##############################
+        df3 = DataFrame(list(collection2.aggregate([{"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'MODIFIED_DATE':{"$gte":myDatetime,"$lt": myDatetime1}}]}},
+                    practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                'month':{'$month':'$MODIFIED_DATE'}},
+                            'date':{'$first':'$MODIFIED_DATE'}, 
+                            'Total_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                            'Total_Practice_LSY':'$Total_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+
+
+
+        #user_CSY
+        df1['Practice_date'] = pd.to_datetime(df1['Practice_date'])
+
+
+        df5=df1.sort_values(by='Practice_date')
+        #df5['Practice_date']=df5['Practice_date'].astype(np.int64)/int(1e6)
+        #uscy=df5.values.tolist()
+        df7=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
+        df9 = pd.DataFrame(df7,columns = ["Practice_date"])
+        df9['value'] = 0
+
+        uscy1= df5.merge(df9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+        uscy1['Practice_date']=uscy1['Practice_date'].astype(np.int64)/int(1e6)
+        uscy=uscy1[["Practice_date","Users_Practice_CSY"]].values.tolist()
+
+        #clever csy
+        if 'Practice_date' in list(clever.columns):
+            clever['Practice_date'] = pd.to_datetime(clever['Practice_date'])
+            df6c=clever.sort_values(by='Practice_date')
+        else:
+            dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+            clever=pd.DataFrame(dates,columns = ["Practice_date"])
+            clever['Parents_Practice_CSY'] = 0
+            df6c=clever.sort_values(by='Practice_date')
+
+
+
+        #schoology csy
+
+        if 'Practice_date' in list(schoology.columns):
+            schoology['Practice_date'] = pd.to_datetime(schoology['Practice_date'])
+            df6s=schoology.sort_values(by='Practice_date')
+        else:
+            dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+            schoology=pd.DataFrame(dates,columns = ["Practice_date"])
+            schoology['Parents_Practice_CSY'] = 0
+            df6s=schoology.sort_values(by='Practice_date')
+
+
+
+
+        #Parent_CSY
+        df2['Practice_date'] = pd.to_datetime(df2['Practice_date'])
+        df6=df2.sort_values(by='Practice_date')
+        dfp=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
+        dfp9 = pd.DataFrame(dfp,columns = ["Practice_date"])
+        dfp9['value'] = 0
+
+        pscy1= df6.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+        pscy1['Practice_date']=pscy1['Practice_date'].astype(np.int64)/int(1e6)
+        pscy=pscy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+
+
+        ####clever
+        ccsy1= df6c.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        ccsy1['Practice_date']=ccsy1['Practice_date'].astype(np.int64)/int(1e6)
+        ccsy=ccsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+
+
+
+
+        ####schoology
+        scsy1= df6c.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+        scsy1['Practice_date']=scsy1['Practice_date'].astype(np.int64)/int(1e6)
+        scsy=scsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+        #practice_Lsy
+        df3['Practice_date'] = pd.to_datetime(df3['Practice_date'])
+        df4=df3.sort_values(by='Practice_date')
+        dfl=pd.date_range(start=str(csy_first_date().date()-relativedelta(years=1)), end=str(csy_first_date().date()-relativedelta(days=1)))
+        dfl9 = pd.DataFrame(dfl,columns = ["Practice_date"])
+        dfl9['value'] = 0
+        plcy1= df4.merge(dfl9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+        plcy1['Practice_date']=plcy1['Practice_date'].astype(np.int64)/int(1e6)
+        plcy=plcy1[["Practice_date","Total_Practice_LSY"]].values.tolist()
+        temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'clever':ccsy,'schoology':scsy}}
+
+        return json.dumps(temp)
+    else:
+            ######################  USER PRACTICE 2019-2020(LSY) ############################################
+        df1 = DataFrame(list(collection2.aggregate([{
+                '$match':{'USER_ID.IS_DISABLED':{'$ne':'Y'},
+                        'USER_ID.IS_BLOCKED':{"$ne":'Y'},
+                        'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}, 
+                        "USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                        "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                        'USER_ID.EMAIL_ID':{'$ne':""},
+                        "MODIFIED_DATE":{"$gte": myDatetime2
+        #                                      ,"$lte" : myDatetime4
+                                        },
+                        'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'}, 
+                        'Users_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                            'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+        ##################### PARENTS ##########################################
+        df2 = DataFrame(list(collection2.aggregate([{
+                '$match':{'USER_ID.IS_DISABLED':{'$ne':'Y'},
+                        'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}, 
+                        'USER_ID.EMAIL_ID':{'$ne':""},
+                          "USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                           "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                        "MODIFIED_DATE":{"$gte": myDatetime2
+        #                                      ,"$lte" : myDatetime4
+                                        },
+                        'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'}, 
+                        'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+
+
+
+        ########schoology################################
+
+        schoology = DataFrame(list(collection2.aggregate([{
+                '$match':{'USER_ID.IS_DISABLED':{'$ne':'Y'},
+                        'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}, 
+                        'USER_ID.EMAIL_ID':{'$ne':""},
+                          "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                       "USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")},
+                        "MODIFIED_DATE":{"$gte": myDatetime2
+        #                                      ,"$lte" : myDatetime4
+                                        },
+        #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
+                         }},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'}, 
+                        'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+        #     print(schoology,"schoology")
+        ########clever################################
+        clever = DataFrame(list(collection2.aggregate([{
+                '$match':{'USER_ID.IS_DISABLED':{'$ne':'Y'},
+                        'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}, 
+                        'USER_ID.EMAIL_ID':{'$ne':""},
+                          "USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                       "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")},
+                        "MODIFIED_DATE":{"$gte": myDatetime2
+        #                                      ,"$lte" : myDatetime4
+                                        },
+        #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
+                         }},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'}, 
+                        'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+
+        ###################### TOTAL LSY ##############################
+        df3 = DataFrame(list(collection2.aggregate([{"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'MODIFIED_DATE':{"$gte":myDatetime,"$lt": myDatetime1}}]}},
+                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                'month':{'$month':'$MODIFIED_DATE'}},
+                            'date':{'$first':'$MODIFIED_DATE'}, 
+                            'Total_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                            'Total_Practice_LSY':'$Total_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+
+
+
+        #user_CSY
+        df1['Practice_date'] = pd.to_datetime(df1['Practice_date'])
+
+
+        df5=df1.sort_values(by='Practice_date')
+        #df5['Practice_date']=df5['Practice_date'].astype(np.int64)/int(1e6)
+        #uscy=df5.values.tolist()
+        df7=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
+        df9 = pd.DataFrame(df7,columns = ["Practice_date"])
+        df9['value'] = 0
+
+        uscy1= df5.merge(df9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+        uscy1['Practice_date']=uscy1['Practice_date'].astype(np.int64)/int(1e6)
+        uscy=uscy1[["Practice_date","Users_Practice_CSY"]].values.tolist()
+
+        #clever csy
+        if 'Practice_date' in list(clever.columns):
+            clever['Practice_date'] = pd.to_datetime(clever['Practice_date'])
+            df6c=clever.sort_values(by='Practice_date')
+        else:
+            dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+            clever=pd.DataFrame(dates,columns = ["Practice_date"])
+            clever['Parents_Practice_CSY'] = 0
+            df6c=clever.sort_values(by='Practice_date')
+
+
+
+        #schoology csy
+
+        if 'Practice_date' in list(schoology.columns):
+            schoology['Practice_date'] = pd.to_datetime(schoology['Practice_date'])
+            df6s=schoology.sort_values(by='Practice_date')
+        else:
+            dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+            schoology=pd.DataFrame(dates,columns = ["Practice_date"])
+            schoology['Parents_Practice_CSY'] = 0
+            df6s=schoology.sort_values(by='Practice_date')
+
+
+
+
+        #Parent_CSY
+        df2['Practice_date'] = pd.to_datetime(df2['Practice_date'])
+        df6=df2.sort_values(by='Practice_date')
+        dfp=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
+        dfp9 = pd.DataFrame(dfp,columns = ["Practice_date"])
+        dfp9['value'] = 0
+
+        pscy1= df6.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+        pscy1['Practice_date']=pscy1['Practice_date'].astype(np.int64)/int(1e6)
+        pscy=pscy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+
+
+        ####clever
+        ccsy1= df6c.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        ccsy1['Practice_date']=ccsy1['Practice_date'].astype(np.int64)/int(1e6)
+        ccsy=ccsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+
+
+
+
+        ####schoology
+        scsy1= df6c.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+        scsy1['Practice_date']=scsy1['Practice_date'].astype(np.int64)/int(1e6)
+        scsy=scsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+        #practice_Lsy
+        df3['Practice_date'] = pd.to_datetime(df3['Practice_date'])
+        df4=df3.sort_values(by='Practice_date')
+        dfl=pd.date_range(start=str(csy_first_date().date()-relativedelta(years=1)), end=str(csy_first_date().date()-relativedelta(days=1)))
+        dfl9 = pd.DataFrame(dfl,columns = ["Practice_date"])
+        dfl9['value'] = 0
+        plcy1= df4.merge(dfl9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+        plcy1['Practice_date']=plcy1['Practice_date'].astype(np.int64)/int(1e6)
+        plcy=plcy1[["Practice_date","Total_Practice_LSY"]].values.tolist()
+        temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'clever':ccsy,'schoology':scsy}}
+
+        return json.dumps(temp)
+
+
+
+
+
+
+
 
 
 @app.route('/signuptableschoology/<date>')
 def signup_user_detail(date):
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.subscription_master
     query1= [
@@ -24823,7 +25976,7 @@ def signup_user_detail(date):
 def practice_User_info(date):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection1= db.subscription_master
     query1= [
@@ -24921,8 +26074,8 @@ def practice_User_info(date):
 @app.route('/signuphistortyschoology')
 def signup_histx():    
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -24973,8 +26126,8 @@ def signup_histx():
 @app.route('/practicehistoryschoology')
 def practice_histx():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
 
@@ -25019,11 +26172,113 @@ def practice_histx():
     temp={'data':{'pracdata':pracdata,'pracdatacum':pracdatacum}}
     return(json.dumps(temp))
 
+#>>>>>>>>>>>------------PRACTICE BIFURCATION API------------------->>>>>>>>>
+@app.route('/practicehistoryschoology/<charttype>')
+def practice__histx__(charttype):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+
+
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        df = DataFrame(list(collection.aggregate([
+            {'$match':{'USER_ID.schoolId._id':{'$exists':1}}},
+        {"$match":
+                 {"$and":[{'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}}, 
+                          {'USER_ID.EMAIL_ID':{"$ne":""}}, 
+        {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}, {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.IS_BLOCKED':{"$ne":'Y'}},  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+         {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+     {'USER_ID._id':{'$in':db.schoology_master.distinct('USER_ID._id')}},
+    #  {'DISTRICT_ID.DISTRICT_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+         {'USER_ID.ROLE_TYPE':{"$regex":'schoology', '$options':'i'}}
+     ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'},
+                              'month':{'$month':'$MODIFIED_DATE'}, 
+                              'year':{'$year':'$MODIFIED_DATE'}},
+                       'date':{'$first':'$MODIFIED_DATE'},
+                      'pract_count':{'$sum':1} 
+                      }},
+            {'$project':{'_id':0, 'Practice_date':{'$dateToString':{'format':"%Y-%m-%d","date":'$date'}}, 
+                         'practice_count':'$pract_count'}},
+            {'$sort':{'Practice_date':-1}}])))
+
+        df1= df.dropna(subset=['Practice_date'])
+        df1['Practice_date']=pd.to_datetime(df1['Practice_date'])
+        df1['Practice_date']=df1['Practice_date'].astype(np.int64)/int(1e6)
+        df2=df1.sort_values(by=['Practice_date'], ascending=True)
+
+
+        df2['Total'] = df2['practice_count'].cumsum()
+        pracdata=[]
+        for i,j in zip(df2['Practice_date'].tolist(),df2['practice_count'].tolist()):
+            pracdata.append([i,j])
+        pracdatacum=[]
+        for i,j in zip(df2['Practice_date'].tolist(),df2['Total'].tolist()):
+            pracdatacum.append([i,j])
+
+        temp={'data':{'pracdata':pracdata,'pracdatacum':pracdatacum}}
+        return(json.dumps(temp))
+    
+    else:
+        df = DataFrame(list(collection.aggregate([
+            {'$match':{'USER_ID.schoolId._id':{'$exists':1}}},
+        {"$match":
+                 {"$and":[{'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}}, 
+                          {'USER_ID.EMAIL_ID':{"$ne":""}}, 
+        {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}, {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.IS_BLOCKED':{"$ne":'Y'}},  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+         {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+     {'USER_ID._id':{'$in':db.schoology_master.distinct('USER_ID._id')}},
+    #  {'DISTRICT_ID.DISTRICT_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+         {'USER_ID.ROLE_TYPE':{"$regex":'schoology', '$options':'i'}}
+     ]}},
+
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'},
+                              'month':{'$month':'$MODIFIED_DATE'}, 
+                              'year':{'$year':'$MODIFIED_DATE'}},
+                       'date':{'$first':'$MODIFIED_DATE'},
+                      'pract_count':{'$sum':1} 
+                      }},
+            {'$project':{'_id':0, 'Practice_date':{'$dateToString':{'format':"%Y-%m-%d","date":'$date'}}, 
+                         'practice_count':'$pract_count'}},
+            {'$sort':{'Practice_date':-1}}])))
+
+        df1= df.dropna(subset=['Practice_date'])
+        df1['Practice_date']=pd.to_datetime(df1['Practice_date'])
+        df1['Practice_date']=df1['Practice_date'].astype(np.int64)/int(1e6)
+        df2=df1.sort_values(by=['Practice_date'], ascending=True)
+
+
+        df2['Total'] = df2['practice_count'].cumsum()
+        pracdata=[]
+        for i,j in zip(df2['Practice_date'].tolist(),df2['practice_count'].tolist()):
+            pracdata.append([i,j])
+        pracdatacum=[]
+        for i,j in zip(df2['Practice_date'].tolist(),df2['Total'].tolist()):
+            pracdatacum.append([i,j])
+
+        temp={'data':{'pracdata':pracdata,'pracdatacum':pracdatacum}}
+        return(json.dumps(temp))
+
+
+
+
 
 
 @app.route('/pmlu')
 def PAY_ME_LATER_USER():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dfdb = DataFrame(list(db.subscription_master.aggregate([
@@ -25069,7 +26324,7 @@ def PAY_ME_LATER_USER():
 
 @app.route('/pmltable/<date>')
 def PAY_ME_LATER_TABLE(date):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dfdb = DataFrame(list(db.subscription_master.aggregate([
@@ -25107,7 +26362,7 @@ def PAY_ME_LATER_TABLE(date):
 
 @app.route('/pmlcsy')
 def PAY_ME_LATERCSY():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dfdb = DataFrame(list(db.subscription_master.aggregate([
@@ -25152,7 +26407,7 @@ def PAY_ME_LATERCSY():
 
 @app.route('/pmlcard/')
 def PAY_ME_LATER_card():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dfdb = DataFrame(list(db.subscription_master.aggregate([
@@ -25267,7 +26522,7 @@ def renewal_cardnew():
 
 # @app.route('/renewal20/<month>/But')
 # def subscription_Graphnewtabletwenty(month):
-#     db = mysql.connector.connect(host="34.214.24.229",    # your host, usually localhost
+#     db = mysql.connector.connect(host="54.184.165.106",    # your host, usually localhost
 #                      user="IE-tech",         # your username
 #                      passwd="IE-tech@2O2O",  # your password
 #                      db="compassJul")
@@ -25318,7 +26573,7 @@ def renewal_cardnew():
 
 # @app.route('/renewal19/<month>/But')
 # def subscription_Graphnewtable(month):
-#     db = mysql.connector.connect(host="34.214.24.229",    # your host, usually localhost
+#     db = mysql.connector.connect(host="54.184.165.106",    # your host, usually localhost
 #                      user="IE-tech",         # your username
 #                      passwd="IE-tech@2O2O",  # your password
 #                      db="compassJul")
@@ -25375,7 +26630,7 @@ def subscription_Graphnew():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.subscription_master
     df = DataFrame(list(collection.aggregate([
@@ -25414,8 +26669,8 @@ def subscription_Graphnew():
 def upcomingnewwwwww():
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     # query=[
@@ -26057,7 +27312,7 @@ def cloudonboard():
 
 @app.route('/familyjourney/<emailid>')
 def family_journey(emailid):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = MongoClient(mongo_uri)
 
     database = client["compass"]
@@ -26128,7 +27383,7 @@ def family_journey(emailid):
     try:
         username = urllib.parse.quote_plus('admin')
         password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-        client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+        client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
         db=client.compass
         db=client.compass
         collection = db.audio_track_master.aggregate(
@@ -26214,7 +27469,7 @@ def family_journey(emailid):
 def sms_table():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username,       password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username,       password))
     db=client.compass
     collection1= db.user_master
     query1=[
@@ -26315,8 +27570,8 @@ def sms_table():
 @app.route('/ratingcardsdaily_card')
 def dailyratings():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection2=db.audio_feedback
     tz = timezone('UTC')
@@ -26584,8 +27839,8 @@ def dailyratings():
 # def avg_audio_completed_greater_than_50():
 
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
 #     db=client.compass
 #     collection1= db.audio_track_master
 #     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -26672,8 +27927,8 @@ def dailyratings():
 @app.route('/parents_playback_table_daily/<program>')
 def playbackdailyforPARENTS(program):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
@@ -26776,8 +28031,8 @@ def playbackdailyforPARENTS(program):
 @app.route('/teachers_playback_table_daily/<program>')
 def playbackdailyforTEACHERS(program):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
@@ -26882,8 +28137,8 @@ def playbackdailyforTEACHERS(program):
 @app.route('/feedback_table_weekly_PARENTS')
 def weekly_feedback_table():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1 =db.audio_track_master
     collection2 = db.audio_feedback
@@ -26999,8 +28254,8 @@ def weekly_feedback_table():
 @app.route('/parents_signup_table_weekly')
 def signupparentweek():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
@@ -27095,8 +28350,8 @@ def signupparentweek():
 @app.route('/teacher_signup_table_weekly')
 def signupteacherweek():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
@@ -27196,8 +28451,8 @@ def signupteacherweek():
 @app.route('/dailyfeedratingtable_TEACHERS')
 def dailyyy_feedback_table_TEACHERS():
     username=urllib.parse.quote_plus('admin')
-    password=urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1 =db.audio_track_master
     collection2 = db.audio_feedback
@@ -27315,8 +28570,8 @@ def dailyyy_feedback_table_TEACHERS():
 @app.route('/dailyfeedratingtable_PARENTS')
 def dailyyy_feedback_table_PARENTS():
     username=urllib.parse.quote_plus('admin')
-    password=urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1 =db.audio_track_master
     collection2 = db.audio_feedback
@@ -27428,53 +28683,96 @@ def dailyyy_feedback_table_PARENTS():
 
 @app.route('/practicetrendnew')
 def practice_trendnew():
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username,       password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     df1 = DataFrame(list(collection.aggregate([
         {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-#      {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
-     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2019,8,1),
-                                        "$lt":datetime.datetime(2020,8,1)}}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
-       {'$project':{'_id':1,'Practice_count in 2019-2020':'$pc'}}])))
-    df1.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    df1['Month'] = df1['Month'].map(d)
-#     print(df1)
-#     print(df1)
-    df2 = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+     '$and':[
 
      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+      {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},    
      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                      {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1),
-                                        "$lt":datetime.datetime(2021,8,1)}}]}},
+        {"MODIFIED_DATE":{"$gte": LSY_Date,
+                                        "$lt":csy_first_date()}}]}},
        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
-       {'$project':{'_id':1,'Practice_count in 2020-2021':'$pc'}}])))
+       {'$project':{'_id':1,'TOTAL_LSY':'$pc'}}])))
+    df1.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    df1['Month'] = df1['Month'].map(d)
+   
+    df2 = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+      {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+       {'$project':{'_id':1,'teacher_CSY':'$pc'}}])))
+    if df2.empty == True:
+        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        df2
     df2.rename(columns = { '_id': 'Month'}, inplace = True)
     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
     df2['Month'] = df2['Month'].map(d)
-#     print(df2)
+
     practice_left= pd.merge(df1, df2,on='Month', how='outer')
-    practice_left=practice_left.fillna(0)
-    #print(practice_left)
+    practice_left=practice_left.fillna(0)    
     
     dfschoology = DataFrame(list(collection.aggregate([
         {"$match":{
@@ -27483,19 +28781,27 @@ def practice_trendnew():
             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+      {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                      {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1),
-                                        "$lt":datetime.datetime(2021,8,1)}}]}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
-       {'$project':{'_id':1,'Practice_count in 2020-2021':'$pc'}}])))
+       {'$project':{'_id':1,'schoology_CSY':'$pc'}}])))
+    
+    if dfschoology.empty == True:
+        dfschoology=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'schoology_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        dfschoology
     dfschoology.rename(columns = { '_id': 'Month'}, inplace = True)
     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
     dfschoology['Month'] = dfschoology['Month'].map(d)
-#     print(dfschoology,"dfschoology")
-#     practice_left= pd.merge(df1, df2,on='Month', how='outer')
     dfschoology=dfschoology.fillna(0)
     
     
@@ -27506,245 +28812,26 @@ def practice_trendnew():
             {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+       {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                      {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1),
-                                        "$lt":datetime.datetime(2021,8,1)}}]}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
-       {'$project':{'_id':1,'Practice_count in 2020-2021':'$pc'}}])))
+       {'$project':{'_id':1,'clever_CSY':'$pc'}}])))
+    if dfclever.empty == True:
+        dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        dfclever
     dfclever.rename(columns = { '_id': 'Month'}, inplace = True)
     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
     dfclever['Month'] = dfclever['Month'].map(d)
-#     print(dfclever,"dfclever")
-#     practice_left= pd.merge(df1, df2,on='Month', how='outer')
-    dfclever=dfclever.fillna(0)
-    
-    
-    
-    df3 = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-             { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-              {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2019,8,1),
-                                        "$lt":datetime.datetime(2020,8,1)}}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
-       {'$project':{'_id':1,'Practice_count in 2019-2020':'$pc'}}])))
-    df3.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    df3['Month'] = df3['Month'].map(d)
-#     print(df3)
-    df4 = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-{"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-             { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-              {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1),
-                                        "$lt":datetime.datetime(2021,8,1)}}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
-       {'$project':{'_id':1,'Practice_count in 2020-2021':'$pc'}}])))
-    df4.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    df4['Month'] = df4['Month'].map(d)
-#     print(df4,"df4")
-    practice_left2= pd.merge(df3, df4,on='Month', how='outer')
-#     print(practice_left2,"practice_left2")
-    practice_left2=practice_left2.fillna(0)
-    #print(practice_left2)
-    # ['Practice_count in 2020-2021'][6]
-    clever=[
-          dfclever[dfclever['Month']=='Aug']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Sep']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Oct']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Nov']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Dec']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Jan']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Feb']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Mar']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Apr']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='May']['Practice_count in 2020-2021'].item()]
-    schoolo1={'barc':clever}
-    schoology=[
-          dfschoology[dfschoology['Month']=='Aug']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Sep']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Oct']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Nov']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Dec']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Jan']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Feb']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Mar']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Apr']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='May']['Practice_count in 2020-2021'].item()]
-    schoolo={'bars':schoology}
-    bar2=[
-          practice_left2[practice_left2['Month']=='Aug']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Sep']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Oct']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Nov']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Dec']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Jan']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Feb']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Mar']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Apr']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='May']['Practice_count in 2020-2021'].item()]
-    ACTIVETREND1={'bar2':bar2}
-    month=["Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul"]
-    curve=[practice_left[practice_left['Month']=='Aug']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Sep']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Oct']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Nov']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Dec']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Jan']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Feb']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Mar']['Practice_count in 2019-2020'].item()+
-           practice_left2[practice_left2['Month']=='Mar']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Apr']['Practice_count in 2019-2020'].item()+ 
-           practice_left2[practice_left2['Month']=='Apr']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='May']['Practice_count in 2019-2020'].item()+ 
-           practice_left2[practice_left2['Month']=='May']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Jun']['Practice_count in 2019-2020'].item()+
-           practice_left2[practice_left2['Month']=='Jun']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Jul']['Practice_count in 2019-2020'].item()+
-           practice_left2[practice_left2['Month']=='Jul']['Practice_count in 2019-2020'].item()]
-    bar=[practice_left[practice_left['Month']=='Aug']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Sep']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Oct']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Nov']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Dec']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Jan']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Feb']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Mar']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Apr']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='May']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Jun']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Jul']['Practice_count in 2020-2021'].item()]
-    ACTIVETREND={'month':month,'curve':curve,'bar':bar}
-    ACTIVETREND=[ACTIVETREND,ACTIVETREND1,schoolo,schoolo1]
-    return json.dumps(ACTIVETREND)
-
-@app.route('/activetrendnew')
-def active_trendnew():
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username,       password))
-    db=client.compass
-    collection = db.audio_track_master
-    df1 = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
-     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2019,8,1),
-                                        "$lt":datetime.datetime(2020,8,1)}}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
-       {'$project':{'_id':1,'Practice_count in 2019-2020':{'$size':'$auc'}}}])))
-    df1.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    df1['Month'] = df1['Month'].map(d)
-    # print(df1)
-    df2 = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
-     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1),
-                                        "$lt":datetime.datetime(2021,8,1)}}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
-       {'$project':{'_id':1,'Practice_count in 2020-2021':{'$size':'$auc'}}}])))
-    df2.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    df2['Month'] = df2['Month'].map(d)
-    # df2
-    practice_left= pd.merge(df1, df2,on='Month', how='outer')
-    practice_left=practice_left.fillna(0)
-    #print(practice_left)
-    df3 = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-             { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-              {"USER_ID.CREATED_DATE":{"$gt": datetime.datetime(2020,3,17)}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2019,8,1),
-                                        "$lt":datetime.datetime(2020,8,1)}}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
-       {'$project':{'_id':1,'Practice_count in 2019-2020':{'$size':'$auc'}}}])))
-    df3.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    df3['Month'] = df3['Month'].map(d)
-    # print(df1)
-    
-    dfschoology = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
-     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1),
-                                        "$lt":datetime.datetime(2021,8,1)}}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
-       {'$project':{'_id':1,'Practice_count in 2020-2021':{'$size':'$auc'}}}])))
-    dfschoology.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    dfschoology['Month'] = dfschoology['Month'].map(d)
-#     print(dfschoology,"dfschoology")
-#     practice_left= pd.merge(df1, df2,on='Month', how='outer')
-    dfschoology=dfschoology.fillna(0)
-    
-    
-    dfclever = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
-     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
-     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1),
-                                        "$lt":datetime.datetime(2021,8,1)}}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
-       {'$project':{'_id':1,'Practice_count in 2020-2021':{'$size':'$auc'}}}])))
-    dfclever.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    dfclever['Month'] = dfclever['Month'].map(d)
-#     print(dfclever,"dfclever")
-#     practice_left= pd.merge(df1, df2,on='Month', how='outer')
     dfclever=dfclever.fillna(0)
     
     df4 = DataFrame(list(collection.aggregate([
@@ -27757,95 +28844,972 @@ def active_trendnew():
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
               {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
               {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+             {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+             
+             
               {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
-        {"MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1),
-                                        "$lt":datetime.datetime(2021,8,1)}}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
-       {'$project':{'_id':1,'Practice_count in 2020-2021':{'$size':'$auc'}}}])))
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+       {'$project':{'_id':1,'parents_CSY':'$pc'}}])))
+    if df4.empty == True:
+        df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        df4
     df4.rename(columns = { '_id': 'Month'}, inplace = True)
     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
     df4['Month'] = df4['Month'].map(d)
     # df2
-    practice_left2= pd.merge(df3, df4,on='Month', how='outer')
-    practice_left2=practice_left2.fillna(0)
-    #print(practice_left2)
-    # ['Practice_count in 2020-2021'][6]
-    clever=[dfclever[dfclever['Month']=='Aug']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Sep']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Oct']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Nov']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Dec']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Jan']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Feb']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Mar']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='Apr']['Practice_count in 2020-2021'].item(),
-    dfclever[dfclever['Month']=='May']['Practice_count in 2020-2021'].item()]
-    schoolo1={'barc':clever}
-    schoology=[
-          dfschoology[dfschoology['Month']=='Aug']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Sep']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Oct']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Nov']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Dec']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Jan']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Feb']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Mar']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='Apr']['Practice_count in 2020-2021'].item(),
-    dfschoology[dfschoology['Month']=='May']['Practice_count in 2020-2021'].item()]
-    schoolo={'bars':schoology}
-    bar2=[
-          practice_left2[practice_left2['Month']=='Aug']['Practice_count in 2020-2021'].item(),
-     practice_left2[practice_left2['Month']=='Sep']['Practice_count in 2020-2021'].item(),
-     practice_left2[practice_left2['Month']=='Oct']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Nov']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Dec']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Jan']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Feb']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Mar']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='Apr']['Practice_count in 2020-2021'].item(),
-    practice_left2[practice_left2['Month']=='May']['Practice_count in 2020-2021'].item()]
-    ACTIVETREND1={'bar2':bar2}
-    month=["Aug","Sep","Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul"]
-    curve=[practice_left[practice_left['Month']=='Aug']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Sep']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Oct']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Nov']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Dec']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Jan']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Feb']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Mar']['Practice_count in 2019-2020'].item()+
-           practice_left2[practice_left2['Month']=='Mar']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Apr']['Practice_count in 2019-2020'].item()+ 
-           practice_left2[practice_left2['Month']=='Apr']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='May']['Practice_count in 2019-2020'].item()+ 
-           practice_left2[practice_left2['Month']=='May']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Jun']['Practice_count in 2019-2020'].item()+
-           practice_left2[practice_left2['Month']=='Jun']['Practice_count in 2019-2020'].item(),
-           practice_left[practice_left['Month']=='Jul']['Practice_count in 2019-2020'].item()+
-           practice_left2[practice_left2['Month']=='Jul']['Practice_count in 2019-2020'].item()]
-    bar=[practice_left[practice_left['Month']=='Aug']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Sep']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Oct']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Nov']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Dec']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Jan']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Feb']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Mar']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Apr']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='May']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Jun']['Practice_count in 2020-2021'].item(),
-         practice_left[practice_left['Month']=='Jul']['Practice_count in 2020-2021'].item()]
-    ACTIVETREND={'month':month,'curve':curve,'bar':bar}
-    ACTIVETREND=[ACTIVETREND,ACTIVETREND1,schoolo,schoolo1]
-    return json.dumps(ACTIVETREND)
-    #print(ACTIVETREND)
+    practice_LSY= pd.merge(df1, df2,on='Month', how='left')
+    practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
+    
+    mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
+    d = dict(enumerate(calendar.month_abbr))
+    mon['Month'] = mon['Month'].map(d)
+    
+    data=pd.merge(mon,practice_CSY,on='Month',how='left')
+    Month=data['Month'].tolist()
+    TOTAL_LSY=data['TOTAL_LSY'].tolist()
+    teacher_CSY=data['teacher_CSY'].tolist()
+    parents_CSY=data['parents_CSY'].tolist()
+    schoology_CSY=data['schoology_CSY'].tolist()
+    clever_CSY=data['clever_CSY'].tolist()
+    temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+    
+    return json.dumps(temp)
+
+
+#<<<<<----------------PRACTICE AND PLAYBACK BIFURCATION API------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+@app.route('/practicetrendnew/<charttype>')
+# def practice_percentage_trend(threshold):
+def practice_trendnew_(charttype):
+    def csy_first_date():
+        date_today =datetime.date.today()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        
+        
+        
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+
+
+        df1 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[
+
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": LSY_Date,
+                                            "$lt":csy_first_date()}}]}},
+            practice_cond_dictonary_list[0],
+            practice_cond_dictonary_list[1],
+             threshcond[0],      
+
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'TOTAL_LSY':'$pc'}}])))
+        df1.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df1['Month'] = df1['Month'].map(d)
+
+        df2 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+            practice_cond_dictonary_list[0],
+            practice_cond_dictonary_list[1],
+             threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'teacher_CSY':'$pc'}}])))
+        if df2.empty == True:
+            df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            df2
+        df2.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df2['Month'] = df2['Month'].map(d)
+
+        practice_left= pd.merge(df1, df2,on='Month', how='outer')
+        practice_left=practice_left.fillna(0)    
+
+        dfschoology = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+            practice_cond_dictonary_list[0],
+            practice_cond_dictonary_list[1],
+             threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'schoology_CSY':'$pc'}}])))
+
+        if dfschoology.empty == True:
+            dfschoology=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'schoology_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfschoology
+        dfschoology.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfschoology['Month'] = dfschoology['Month'].map(d)
+        dfschoology=dfschoology.fillna(0)
+
+
+        dfclever = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+            practice_cond_dictonary_list[0],
+            practice_cond_dictonary_list[1],
+             threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'clever_CSY':'$pc'}}])))
+        if dfclever.empty == True:
+            dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfclever
+        dfclever.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfclever['Month'] = dfclever['Month'].map(d)
+        dfclever=dfclever.fillna(0)
+
+        df4 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+               {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+            practice_cond_dictonary_list[0],
+            practice_cond_dictonary_list[1],
+             threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'parents_CSY':'$pc'}}])))
+        if df4.empty == True:
+            df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            df4
+        df4.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df4['Month'] = df4['Month'].map(d)
+        # df2
+        practice_LSY= pd.merge(df1, df2,on='Month', how='left')
+        practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
+
+        mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
+        d = dict(enumerate(calendar.month_abbr))
+        mon['Month'] = mon['Month'].map(d)
+
+        data=pd.merge(mon,practice_CSY,on='Month',how='left')
+        Month=data['Month'].tolist()
+        TOTAL_LSY=data['TOTAL_LSY'].tolist()
+        teacher_CSY=data['teacher_CSY'].tolist()
+        parents_CSY=data['parents_CSY'].tolist()
+        schoology_CSY=data['schoology_CSY'].tolist()
+        clever_CSY=data['clever_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+
+        return json.dumps(temp)
+    
+    else:
+        df1 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[
+
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": LSY_Date,
+                                            "$lt":csy_first_date()}}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'TOTAL_LSY':'$pc'}}])))
+        df1.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df1['Month'] = df1['Month'].map(d)
+
+        df2 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'teacher_CSY':'$pc'}}])))
+        if df2.empty == True:
+            df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            df2
+        df2.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df2['Month'] = df2['Month'].map(d)
+
+        practice_left= pd.merge(df1, df2,on='Month', how='outer')
+        practice_left=practice_left.fillna(0)    
+
+        dfschoology = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'schoology_CSY':'$pc'}}])))
+
+        if dfschoology.empty == True:
+            dfschoology=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'schoology_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfschoology
+        dfschoology.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfschoology['Month'] = dfschoology['Month'].map(d)
+        dfschoology=dfschoology.fillna(0)
+
+
+        dfclever = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'clever_CSY':'$pc'}}])))
+        if dfclever.empty == True:
+            dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfclever
+        dfclever.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfclever['Month'] = dfclever['Month'].map(d)
+        dfclever=dfclever.fillna(0)
+
+        df4 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+               {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'parents_CSY':'$pc'}}])))
+        if df4.empty == True:
+            df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            df4
+        df4.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df4['Month'] = df4['Month'].map(d)
+        # df2
+        practice_LSY= pd.merge(df1, df2,on='Month', how='left')
+        practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
+
+        mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
+        d = dict(enumerate(calendar.month_abbr))
+        mon['Month'] = mon['Month'].map(d)
+
+        data=pd.merge(mon,practice_CSY,on='Month',how='left')
+        Month=data['Month'].tolist()
+        TOTAL_LSY=data['TOTAL_LSY'].tolist()
+        teacher_CSY=data['teacher_CSY'].tolist()
+        parents_CSY=data['parents_CSY'].tolist()
+        schoology_CSY=data['schoology_CSY'].tolist()
+        clever_CSY=data['clever_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+
+        return json.dumps(temp)
+
+#<<<<<<<<<<<<<<<<--------------API Ending here--------------------------->>>>>>>>>>>>>>>>>>
+
+
+
+
+
+
+@app.route('/activetrendnew')
+def active_trendnew():
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    df1 = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[
+
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+      {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+      
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": LSY_Date,
+                                        "$lt":csy_first_date()}}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+       {'$project':{'_id':1,'TOTAL_LSY':{'$size':'$auc'}}}])))
+    df1.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    df1['Month'] = df1['Month'].map(d)
+    print('LSY:', LSY_Date)
+    print('CSY',csy_first_date())
+    # print(df1)
+    df2 = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+       {'$project':{'_id':1,'teacher_CSY':{'$size':'$auc'}}}])))
+    if df2.empty == True:
+        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        df2
+    df2.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    df2['Month'] = df2['Month'].map(d)
+    # df2
+    practice_left= pd.merge(df1, df2,on='Month', how='outer')
+    practice_left=practice_left.fillna(0)
+    #print(practice_left)
+    
+    
+    dfschoology = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+            {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+       {'$project':{'_id':1,'schoology_CSY':{'$size':'$auc'}}}])))
+    
+    if dfschoology.empty == True:
+        dfschoology=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'schoology_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        dfschoology
+    dfschoology.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    dfschoology['Month'] = dfschoology['Month'].map(d)
+    dfschoology=dfschoology.fillna(0)
+    
+    
+    dfclever = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+            {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+            {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+       {'$project':{'_id':1,'clever_CSY':{'$size':'$auc'}}}])))
+    if dfclever.empty == True:
+        dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        dfclever
+    dfclever.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    dfclever['Month'] = dfclever['Month'].map(d)
+    dfclever=dfclever.fillna(0)
+    
+    df4 = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+           {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+             {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+              {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+       {'$project':{'_id':1,'parents_CSY':{'$size':'$auc'}}}])))
+    if df4.empty == True:
+        df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        df4
+    df4.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    df4['Month'] = df4['Month'].map(d)
+    # df2
+    practice_LSY= pd.merge(df1, df2,on='Month', how='left')
+    practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
+    
+    mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
+    d = dict(enumerate(calendar.month_abbr))
+    mon['Month'] = mon['Month'].map(d)
+    
+    data=pd.merge(mon,practice_CSY,on='Month',how='left')
+    Month=data['Month'].tolist()
+    TOTAL_LSY=data['TOTAL_LSY'].tolist()
+    teacher_CSY=data['teacher_CSY'].tolist()
+    parents_CSY=data['parents_CSY'].tolist()
+    schoology_CSY=data['schoology_CSY'].tolist()
+    clever_CSY=data['clever_CSY'].tolist()
+    temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+    
+    return json.dumps(temp)
+    
+
+#>>>>>>>>>>>>>>>>--------- PRACTICE BIFURCATION API-------------->>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route('/activetrendnew/<charttype>')
+def active_trend_new_(charttype):
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold= 0.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        df1 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[
+
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": LSY_Date,
+                                            "$lt":csy_first_date()}}]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$project':{'_id':1,'TOTAL_LSY':{'$size':'$auc'}}}])))
+        df1.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df1['Month'] = df1['Month'].map(d)
+        print('LSY:', LSY_Date)
+        print('CSY',csy_first_date())
+        # print(df1)
+        df2 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$project':{'_id':1,'teacher_CSY':{'$size':'$auc'}}}])))
+        if df2.empty == True:
+            df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            df2
+        df2.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df2['Month'] = df2['Month'].map(d)
+        # df2
+        practice_left= pd.merge(df1, df2,on='Month', how='outer')
+        practice_left=practice_left.fillna(0)
+        #print(practice_left)
+
+
+        dfschoology = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$project':{'_id':1,'schoology_CSY':{'$size':'$auc'}}}])))
+
+        if dfschoology.empty == True:
+            dfschoology=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'schoology_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfschoology
+        dfschoology.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfschoology['Month'] = dfschoology['Month'].map(d)
+        dfschoology=dfschoology.fillna(0)
+
+
+        dfclever = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$project':{'_id':1,'clever_CSY':{'$size':'$auc'}}}])))
+        if dfclever.empty == True:
+            dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfclever
+        dfclever.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfclever['Month'] = dfclever['Month'].map(d)
+        dfclever=dfclever.fillna(0)
+
+        df4 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+               {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$project':{'_id':1,'parents_CSY':{'$size':'$auc'}}}])))
+        if df4.empty == True:
+            df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            df4
+        df4.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df4['Month'] = df4['Month'].map(d)
+        # df2
+        practice_LSY= pd.merge(df1, df2,on='Month', how='left')
+        practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
+
+        mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
+        d = dict(enumerate(calendar.month_abbr))
+        mon['Month'] = mon['Month'].map(d)
+
+        data=pd.merge(mon,practice_CSY,on='Month',how='left')
+        Month=data['Month'].tolist()
+        TOTAL_LSY=data['TOTAL_LSY'].tolist()
+        teacher_CSY=data['teacher_CSY'].tolist()
+        parents_CSY=data['parents_CSY'].tolist()
+        schoology_CSY=data['schoology_CSY'].tolist()
+        clever_CSY=data['clever_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+
+        return json.dumps(temp)
+    
+    else:
+        df1 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[
+
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": LSY_Date,
+                                            "$lt":csy_first_date()}}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$project':{'_id':1,'TOTAL_LSY':{'$size':'$auc'}}}])))
+        df1.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df1['Month'] = df1['Month'].map(d)
+        print('LSY:', LSY_Date)
+        print('CSY',csy_first_date())
+        # print(df1)
+        df2 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$project':{'_id':1,'teacher_CSY':{'$size':'$auc'}}}])))
+        if df2.empty == True:
+            df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            df2
+        df2.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df2['Month'] = df2['Month'].map(d)
+        # df2
+        practice_left= pd.merge(df1, df2,on='Month', how='outer')
+        practice_left=practice_left.fillna(0)
+        #print(practice_left)
+
+
+        dfschoology = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$project':{'_id':1,'schoology_CSY':{'$size':'$auc'}}}])))
+
+        if dfschoology.empty == True:
+            dfschoology=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'schoology_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfschoology
+        dfschoology.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfschoology['Month'] = dfschoology['Month'].map(d)
+        dfschoology=dfschoology.fillna(0)
+
+
+        dfclever = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$project':{'_id':1,'clever_CSY':{'$size':'$auc'}}}])))
+        if dfclever.empty == True:
+            dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfclever
+        dfclever.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfclever['Month'] = dfclever['Month'].map(d)
+        dfclever=dfclever.fillna(0)
+
+        df4 = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+               {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$project':{'_id':1,'parents_CSY':{'$size':'$auc'}}}])))
+        if df4.empty == True:
+            df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            df4
+        df4.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        df4['Month'] = df4['Month'].map(d)
+        # df2
+        practice_LSY= pd.merge(df1, df2,on='Month', how='left')
+        practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
+
+        mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
+        d = dict(enumerate(calendar.month_abbr))
+        mon['Month'] = mon['Month'].map(d)
+
+        data=pd.merge(mon,practice_CSY,on='Month',how='left')
+        Month=data['Month'].tolist()
+        TOTAL_LSY=data['TOTAL_LSY'].tolist()
+        teacher_CSY=data['teacher_CSY'].tolist()
+        parents_CSY=data['parents_CSY'].tolist()
+        schoology_CSY=data['schoology_CSY'].tolist()
+        clever_CSY=data['clever_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+
+        return json.dumps(temp)
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>END
+    
+
+
+
 
 
 @app.route('/week_feed_rating_chart')
 def weekly_chart__():
     username=urllib.parse.quote_plus('admin')
-    password=urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client=MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client=MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     collection2=db.audio_feedback
@@ -27926,8 +29890,8 @@ def weekly_chart__():
 @app.route('/top_20_district_daily/<datestr>')
 def district_daily_(datestr):  
     username=urllib.parse.quote_plus('admin')
-    password=urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client=MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client=MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
 
 
 
@@ -27976,13 +29940,112 @@ def district_daily_(datestr):
     return json.dumps(temp)
 
 
+#>>>>>>>>>>>>>>>>>----------- PRACTICE BIFURCATION API------------------->>>>>>>>
+@app.route('/top_20_district_daily/<datestr>/<charttype>')
+def district___daily___(datestr,charttype):  
+    username=urllib.parse.quote_plus('admin')
+    password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client=MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+
+
+
+    db=client.compass
+    collection = db.audio_track_master
+    collection2=db.audio_feedback
+    mydatetime= dateutil.parser.parse(datestr)
+    yester= datetime.datetime.combine(mydatetime,datetime.time.min)
+#     - timedelta(days=1)
+    tod= datetime.datetime.combine(mydatetime,datetime.time.max)
+    start_15day=yester- timedelta(days=7)
+    startend= tod- timedelta(days=7)
+    print(start_15day)
+    print(startend)
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+
+        qr1=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+                    {'USER_ID._id':{'$in':db.user_master.distinct('_id', {'DISTRICT_ID._id':{'$exists':1}})}},
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": yester, '$lt': tod}}
+            ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+
+            {'$group':{'_id':'$DISTRICT_NAME', 'practice':{'$sum':1}
+            }}, 
+        #     {'$count':'count'}
+            ]
+
+        dis= list(collection.aggregate(qr1))
+        df= DataFrame(dis)
+
+        df0=df.nlargest(20,['practice'])
+
+        df1= df0.reset_index(drop=True)
+        df1[['_id','practice']]
+        distid=df1['_id'].values.tolist()
+        distpract=df1['practice'].values.tolist()
+
+        temp={'district':distid, 'practice':distpract}
+
+
+        return json.dumps(temp)
+    else:
+        qr1=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+                    {'USER_ID._id':{'$in':db.user_master.distinct('_id', {'DISTRICT_ID._id':{'$exists':1}})}},
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": yester, '$lt': tod}}
+            ]}},
+
+            {'$group':{'_id':'$USER_ID.DISTRICT_ID.DISTRICT_NAME', 'practice':{'$sum':1}
+            }}, 
+        #     {'$count':'count'}
+            ]
+
+        dis= list(collection.aggregate(qr1))
+        df= DataFrame(dis)
+
+        df0=df.nlargest(20,['practice'])
+
+        df1= df0.reset_index(drop=True)
+        df1[['_id','practice']]
+        distid=df1['_id'].values.tolist()
+        distpract=df1['practice'].values.tolist()
+
+        temp={'district':distid, 'practice':distpract}
+
+
+        return json.dumps(temp)
+
+
+
+
+
+
 
 
 @app.route('/top_20_district_weekly/<datestr>')
 def district_weeklyyy_(datestr):  
     username=urllib.parse.quote_plus('admin')
-    password=urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client=MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client=MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
 
 
 
@@ -28032,6 +30095,105 @@ def district_weeklyyy_(datestr):
 
     return json.dumps(temp)
 
+#>>>>>>>>>>>>>>>>>>-------------------PRACTICE BIFURCATION API--------------->
+@app.route('/top_20_district_weekly/<datestr>/<charttype>')
+def district___weeklyyy___(datestr,charttype):  
+    username=urllib.parse.quote_plus('admin')
+    password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client=MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+
+
+
+    db=client.compass
+    collection = db.audio_track_master
+    collection2=db.audio_feedback
+    mydatetime= dateutil.parser.parse(datestr)
+    yester= pd.to_datetime(mydatetime) +timedelta(hours=4)
+    print(yester)
+    tod=mydatetime+ timedelta(hours=4)
+
+    start= tod- timedelta(days=8)+timedelta(days=1)
+    print(start)
+    start_15day= start-timedelta(days=8)+timedelta(days=1)
+    print(start_15day)
+    # district=disdic[districtid]
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+
+        qr1=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+                    {'USER_ID._id':{'$in':db.user_master.distinct('_id', {'DISTRICT_ID._id':{'$exists':1}})}},
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": start, '$lt': yester}}
+            ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+
+            {'$group':{'_id':'$DISTRICT_NAME', 'practice':{'$sum':1}
+            }}, 
+        #     {'$count':'count'}
+            ]
+
+        dis= list(collection.aggregate(qr1))
+        df= DataFrame(dis)
+
+        df0=df.nlargest(20,['practice'])
+
+        df1= df0.reset_index(drop=True)
+        df1[['_id','practice']]
+        distid=df1['_id'].values.tolist()
+        distpract=df1['practice'].values.tolist()
+
+        temp={'district':distid, 'practice':distpract}
+
+
+        return json.dumps(temp)
+    else:
+        qr1=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+                    {'USER_ID._id':{'$in':db.user_master.distinct('_id', {'DISTRICT_ID._id':{'$exists':1}})}},
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": start, '$lt': yester}}
+            ]}},
+
+            {'$group':{'_id':'$USER_ID.DISTRICT_ID.DISTRICT_NAME', 'practice':{'$sum':1}
+            }}, 
+        #     {'$count':'count'}
+            ]
+
+        dis= list(collection.aggregate(qr1))
+        df= DataFrame(dis)
+
+        df0=df.nlargest(20,['practice'])
+
+        df1= df0.reset_index(drop=True)
+        df1[['_id','practice']]
+        distid=df1['_id'].values.tolist()
+        distpract=df1['practice'].values.tolist()
+
+        temp={'district':distid, 'practice':distpract}
+
+
+        return json.dumps(temp)
+
+
+
+
 @app.route('/word_cloud_feedback_daily/<datestr>/')
 def word_freq_daily_(datestr):
     import nltk
@@ -28046,7 +30208,9 @@ def word_freq_daily_(datestr):
     nenews_headlines = 0
 
     
-    client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     ollection = db.audio_track_master
     collection2=db.audio_feedback
@@ -28336,7 +30500,9 @@ def word_freq__(datestr):
     nnews_headlines=0
     nenews_headlines = 0
 
-    client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     ollection = db.audio_track_master
     collection2=db.audio_feedback
@@ -28544,8 +30710,8 @@ def word_freq__(datestr):
 @app.route('/week_feed_rating_chart/<datestr>')
 def weekly_chart___(datestr):
     username=urllib.parse.quote_plus('admin')
-    password=urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client=MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client=MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     collection2=db.audio_feedback
@@ -28628,21 +30794,43 @@ def weekly_chart___(datestr):
 
 @app.route('/weekprac')
 def week_prac():
-    import calendar
-    import pymongo
-    from pymongo import MongoClient
-    from pprint import pprint 
-    import urllib.parse
-    import pandas as pd
-    import numpy as np
-    from pandas import DataFrame
-    from bson.objectid import ObjectId
-    import datetime
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username,       password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username,       password))
     today= datetime.datetime.combine(datetime.datetime.utcnow(),datetime.time.min)
-    from dateutil.relativedelta import relativedelta
 
     new_date = today - relativedelta(years=1)
     print(new_date,"check1")
@@ -28657,7 +30845,9 @@ def week_prac():
        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
-       "MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1)}
+#        "MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1)}
+                   'MODIFIED_DATE':{'$gte': csy_first_date()}
+                   
     }},
     {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'},'pc':{'$sum':1},'auc':{'$addToSet':'$USER_ID._id'}}},
     {'$project':{'_id':1,'prac1':'$pc','user1':{'$size':'$auc'}}},
@@ -28677,8 +30867,8 @@ def week_prac():
       '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
-       "MODIFIED_DATE":{"$gt": datetime.datetime(2019,8,1),
-                                        "$lt":new_date}
+#        "MODIFIED_DATE":{"$gt": datetime.datetime(2019,8,1),"$lt":new_date}
+         'MODIFIED_DATE':{'$gt':LSY_Date,'$lt':new_date}
     }},
     {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'},'pc':{'$sum':1},'auc':{'$addToSet':'$USER_ID._id'}}},
     {'$project':{'_id':1,'prac2':'$pc','user2':{'$size':'$auc'}}},
@@ -28699,11 +30889,184 @@ def week_prac():
     data={'week':week,'user1920':user2021,'prac1920':prac2021,'user1819':user1920,'prac1819':prac1920}
     temp={"data":data}
     return json.dumps(temp)
-    #print(temp)
+
+
+#>>>>>>>>>>>>>>>>>>>>>--------------PRACTICE BIFURCATION API--------------------->>>>>>>>
+@app.route('/weekprac/<charttype>')
+# @app.route('/weekprac/<charttype>')
+def week___prac___(charttype):
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username,       password))
+    today= datetime.datetime.combine(datetime.datetime.utcnow(),datetime.time.min)
+
+    new_date = today - relativedelta(years=1)
+    print(new_date,"check1")
+    
+    db=client.compass
+    collection = db.audio_track_master
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        df1 = DataFrame(list(collection.aggregate([
+            {"$match":{'$and':[{'USER_id.ROLE_ID.ROLE_ID' :{'$ne':3}},
+            { "USER_id.IS_DISABLED":{"$ne":"Y"}},
+             { "USER_id.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_id.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+           { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
+    #        "MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1)}
+                       'MODIFIED_DATE':{'$gte': csy_first_date()}
+
+        }},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'},'pc':{'$sum':1},'auc':{'$addToSet':'$USER_ID'}}},
+        {'$project':{'_id':1,'prac1':'$pc','user1':{'$size':'$auc'}}},
+             { "$sort":{'_id' : 1 }}
+        ])))
+        df1.rename(columns = { '_id': 'DAY1'}, inplace = True)  
+        df1.insert(1, "DAY_name", ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], True)
+        # d = dict(enumerate(calendar.day_name))    # to convert monthnumber of dataframe into monthname
+        # df1['DAY_name'] = df1['DAY_name'].map(d)
+        #print(df1)
+        df2 = DataFrame(list(collection.aggregate([                   
+        {"$match":{
+            'USER_id.ROLE_ID.ROLE_ID' :{'$ne':3},
+             "USER_id.IS_DISABLED":{"$ne":"Y"},
+              "USER_id.IS_BLOCKED":{"$ne":"Y"},
+             "USER_id.INCOMPLETE_SIGNUP":{"$ne":"Y"},    
+          '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
+    #        "MODIFIED_DATE":{"$gt": datetime.datetime(2019,8,1),"$lt":new_date}
+             'MODIFIED_DATE':{'$gt':LSY_Date,'$lt':new_date}
+        }},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'},'pc':{'$sum':1},'auc':{'$addToSet':'$USER_ID'}}},
+        {'$project':{'_id':1,'prac2':'$pc','user2':{'$size':'$auc'}}},
+             { "$sort":{'_id' : 1 }}
+        ])))
+        df2.rename(columns = { '_id': 'DAY2'}, inplace = True)
+        df2.insert(1, "DAY_name", ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], True)
+        # d = dict(enumerate(calendar.day_abbr))    # to convert monthnumber of dataframe into monthname
+        # df2['DAY_name'] = df2['DAY_name'].map(d)
+        #print(df2)
+        df= pd.merge(df1, df2,on='DAY_name', how='outer')
+        #print(df)
+        week=df['DAY_name'].tolist()
+        user2021=df['user1'].tolist()
+        prac2021=df['prac1'].tolist()
+        user1920=df['user2'].tolist()
+        prac1920=df['prac2'].tolist()
+        data={'week':week,'user1920':user2021,'prac1920':prac2021,'user1819':user1920,'prac1819':prac1920}
+        temp={"data":data}
+        return json.dumps(temp)
+    
+    else:
+        df1 = DataFrame(list(collection.aggregate([
+            {"$match":{'$and':[{'USER_id.ROLE_ID.ROLE_ID' :{'$ne':3}},
+            { "USER_id.IS_DISABLED":{"$ne":"Y"}},
+             { "USER_id.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_id.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+           { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
+    #        "MODIFIED_DATE":{"$gte": datetime.datetime(2020,8,1)}
+                       'MODIFIED_DATE':{'$gte': csy_first_date()}
+
+        }},
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'},'pc':{'$sum':1},'auc':{'$addToSet':'$USER_ID._id'}}},
+        {'$project':{'_id':1,'prac1':'$pc','user1':{'$size':'$auc'}}},
+             { "$sort":{'_id' : 1 }}
+        ])))
+        df1.rename(columns = { '_id': 'DAY1'}, inplace = True)  
+        df1.insert(1, "DAY_name", ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], True)
+        # d = dict(enumerate(calendar.day_name))    # to convert monthnumber of dataframe into monthname
+        # df1['DAY_name'] = df1['DAY_name'].map(d)
+        #print(df1)
+        df2 = DataFrame(list(collection.aggregate([                   
+        {"$match":{
+            'USER_id.ROLE_ID.ROLE_ID' :{'$ne':3},
+             "USER_id.IS_DISABLED":{"$ne":"Y"},
+              "USER_id.IS_BLOCKED":{"$ne":"Y"},
+             "USER_id.INCOMPLETE_SIGNUP":{"$ne":"Y"},    
+          '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
+    #        "MODIFIED_DATE":{"$gt": datetime.datetime(2019,8,1),"$lt":new_date}
+             'MODIFIED_DATE':{'$gt':LSY_Date,'$lt':new_date}
+        }},
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'},'pc':{'$sum':1},'auc':{'$addToSet':'$USER_ID._id'}}},
+        {'$project':{'_id':1,'prac2':'$pc','user2':{'$size':'$auc'}}},
+             { "$sort":{'_id' : 1 }}
+        ])))
+        df2.rename(columns = { '_id': 'DAY2'}, inplace = True)
+        df2.insert(1, "DAY_name", ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], True)
+        # d = dict(enumerate(calendar.day_abbr))    # to convert monthnumber of dataframe into monthname
+        # df2['DAY_name'] = df2['DAY_name'].map(d)
+        #print(df2)
+        df= pd.merge(df1, df2,on='DAY_name', how='outer')
+        #print(df)
+        week=df['DAY_name'].tolist()
+        user2021=df['user1'].tolist()
+        prac2021=df['prac1'].tolist()
+        user1920=df['user2'].tolist()
+        prac1920=df['prac2'].tolist()
+        data={'week':week,'user1920':user2021,'prac1920':prac2021,'user1819':user1920,'prac1819':prac1920}
+        temp={"data":data}
+        return json.dumps(temp)
+
+
+
+
+
+
+# week_prac()
 
 # @app.route('/renewal19/<month>/Active20')
 # def renewalact2019(month):
-#     db = mysql.connector.connect(host="34.214.24.229",    # your host, usually localhost
+#     db = mysql.connector.connect(host="54.184.165.106",    # your host, usually localhost
 #                      user="IE-tech",         # your username
 #                      passwd="IE-tech@2O2O",  # your password
 #                      db="compassJul")  
@@ -28771,23 +31134,58 @@ def week_prac():
 
 @app.route('/proguser')
 def prog_user():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db=client.compass
     collection = db.audio_track_master
     prog_prac_table1 = DataFrame(list(collection.aggregate([
      {"$match":{
          '$and':[
-    {'USER_ID.ROLE_ID.ROLE_ID' :{'$ne':3}},
+    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+                
     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                      {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
                    'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None},
-    "MODIFIED_DATE":{"$gt": datetime.datetime(2020,8,1),
-                                    "$lt":datetime.datetime(2021,8,1)}}},
+    "MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                 "$lt":datetime.datetime(2021,8,1)
+                    }}},
     {'$group':{'_id':{'pn':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME','Month':{'$month':'$MODIFIED_DATE'}}, 'auc': {'$addToSet':'$USER_ID._id'},
                'pg':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID'}}},
     {'$project':{'pg':'$pg','_id':1, 'Active_usercount in 2020-2021':{'$size':'$auc'}}},
@@ -28803,12 +31201,8 @@ def prog_user():
     pre=[]
     high=[]
     alls=[]
-    
-    
     for i in set(prog_prac_table.pg.tolist()):
-        
         for j in month:
-            
             if i==2:
                 df=prog_prac_table[prog_prac_table['pg']==i]
                 try:
@@ -28847,13 +31241,12 @@ def prog_user():
             else:
                 break
     data=[{'elem':elem,'prek':pre,'mid':mid,'high':high,'all':alls}]
-    
     return json.dumps(data)
 #     print(data)
 
 @app.route('/progprac')
 def prog_prac():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db=client.compass
     collection = db.audio_track_master
@@ -28864,6 +31257,10 @@ def prog_prac():
     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
     {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
    { "USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},                      
     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                 {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
@@ -28937,8 +31334,8 @@ def prog_prac():
 @app.route('/canada')
 def canada():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,       password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,       password))
     db=client.compass
     collection1= db.subscription_master
     qr1=[{'$match':{'USER_ID.schoolId':{'$exists':True}}},
@@ -29084,8 +31481,8 @@ def canada():
 @app.route('/mexico')
 def mexico():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,       password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,       password))
     db=client.compass
     collection1= db.subscription_master
     qr1=[{'$match':{'USER_ID.schoolId':{'$exists':True}}},
@@ -29230,8 +31627,8 @@ def mexico():
 @app.route('/india')
 def india():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,       password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,       password))
     db=client.compass
     collection1= db.subscription_master
     qr1=[{'$match':{'USER_ID.schoolId':{'$exists':True}}},
@@ -29376,8 +31773,8 @@ def india():
 @app.route('/other')
 def other():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,       password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,       password))
     db=client.compass
     collection1= db.subscription_master
     qr1=[{'$match':{'USER_ID.schoolId':{'$exists':True}}},
@@ -29544,7 +31941,7 @@ def other():
 
 def school_journey(emailid):
     graph={}
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = MongoClient(mongo_uri)
 
     database = client["compass"]
@@ -29621,7 +32018,7 @@ def school_journey(emailid):
     try:
         username = urllib.parse.quote_plus('admin')
         password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-        client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+        client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
         
         db=client.compass
         collection = db.audio_track_master.aggregate(
@@ -29716,8 +32113,8 @@ def school_journey(emailid):
 @app.route('/mapinfo')
 def state_Info():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collectionMap=db.user_master
     querymap=[{'$match':{"schoolId":{'$exists':True}}},       
@@ -29760,8 +32157,8 @@ def state_Info():
 @app.route('/map/<states>')
 def shool_dash_map_table(states):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.subscription_master
     qr1=[{'$match':{"USER_ID.schoolId":{'$exists':True}}},
@@ -29959,7 +32356,7 @@ def shool_dash_map_table(states):
 def billme_table(daate):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username,       password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username,       password))
     db=client.compass
 
     collection1= db.subscription_master
@@ -30167,8 +32564,8 @@ def billme_table(daate):
 @app.route('/renewal20/<month>/')
 def renewal20(month):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     # query=[
@@ -30280,7 +32677,7 @@ def renewal20(month):
 
 # @app.route('/renewal20/<month>/Active20')
 # def renewalact2020(month):
-#     db = mysql.connector.connect(host="34.214.24.229",    # your host, usually localhost
+#     db = mysql.connector.connect(host="54.184.165.106",    # your host, usually localhost
 #                      user="IE-tech",         # your username
 #                      passwd="IE-tech@2O2O",  # your password
 #                      db="compassJul")  
@@ -30341,8 +32738,8 @@ def renewal20(month):
 @app.route('/renewal20/<month>/Active')
 def renewalact20(month):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     # query=[
@@ -30456,7 +32853,7 @@ def renewalact20(month):
 
 # @app.route('/renewal19/<month>/')
 # def renewal19(month):
-#     db = mysql.connector.connect(host="34.214.24.229",    # your host, usually localhost
+#     db = mysql.connector.connect(host="54.184.165.106",    # your host, usually localhost
 #                      user="IE-tech",         # your username
 #                      passwd="IE-tech@2O2O",  # your password
 #                      db="compassJul") 
@@ -30517,7 +32914,7 @@ def renewalact20(month):
 
 # @app.route('/renewal19/<month>/Active')
 # def renewalact19(month):
-#     db = mysql.connector.connect(host="34.214.24.229",    # your host, usually localhost
+#     db = mysql.connector.connect(host="54.184.165.106",    # your host, usually localhost
 #                      user="IE-tech",         # your username
 #                      passwd="IE-tech@2O2O",  # your password
 #                      db="compassJul")  
@@ -30578,8 +32975,8 @@ def renewalact20(month):
 @app.route('/school_search_name/')
 def school_search():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[
@@ -30628,7 +33025,7 @@ def school_search_mongo1(name):
 
     import urllib 
     import pandas as pd
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = MongoClient(mongo_uri)
     # client = MongoClient("mongodb://host:port/")
     database = client["compass"]
@@ -30833,8 +33230,8 @@ def school_search_mongo1(name):
 def feedbackssss(date):
     date_object = datetime.datetime.strptime(date, '%Y-%m-%d')
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1 =db.audio_track_master
     collection2 = db.audio_feedback
@@ -30923,8 +33320,8 @@ def feedbackssss(date):
 @app.route('/lowstarweekly')
 def lowstartable():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1 =db.audio_track_master
     collection2 = db.audio_feedback
@@ -31025,8 +33422,8 @@ def lowstartable():
 @app.route('/teach_practice_tablee_weekly/<week>')
 def playbackdatateachers(week):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
@@ -31118,8 +33515,8 @@ def playbackdatateachers(week):
 @app.route('/parents_practice_tablee_weekly/<week>')
 def playbackdataparents(week):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
@@ -31213,8 +33610,8 @@ def playbackdataparents(week):
 # @app.route('/coomentperfeedbacktable/<ratinggg>')
 # def weekly_feedback_table(ratinggg):
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
 #     db=client.compass
 #     collection1 =db.audio_track_master
 #     collection2 = db.audio_feedback
@@ -31345,8 +33742,8 @@ def playbackdataparents(week):
 # @app.route('/teachers_practice_tablee_weekly/<week>')
 # def playbackdatateachers(week):
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
 #     db=client.compass
 #     collection1= db.audio_track_master
 #     collection2= db.user_master
@@ -31449,8 +33846,8 @@ def playbackdataparents(week):
 # @app.route('/parents_practice_tablee_weekly/<week>')
 # def playbackdata(week):
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
 #     db=client.compass
 #     collection1= db.audio_track_master
 #     collection2= db.user_master
@@ -31554,8 +33951,8 @@ def playbackdataparents(week):
 # def feedback_of_7days_teach(date):
 #     date_object = datetime.datetime.strptime(date, '%Y-%m-%d')
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
 #     db=client.compass
 #     collection1 =db.audio_track_master
 #     collection2 = db.audio_feedback
@@ -31642,8 +34039,8 @@ def playbackdataparents(week):
 @app.route('/parents_practice_tablee_last_week/<week>')
 def playbackdataparents_last_week(week):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
@@ -31734,8 +34131,8 @@ def playbackdataparents_last_week(week):
 @app.route('/teach_practice_tablee_last_week/<week>')
 def playbackdatateachers_last_week(week):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
@@ -31827,8 +34224,8 @@ def playbackdatateachers_last_week(week):
 @app.route('/weeklyfeedcard')
 def feedweekcardssss():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     collection2=db.audio_feedback
@@ -32110,8 +34507,8 @@ def schoolengtabletop20():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{'$match':{'$and':[{
@@ -32205,7 +34602,7 @@ def schoolengtabletop20():
 def school_engagement12():    
     
     
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
 
@@ -32354,7 +34751,7 @@ def schoolsearch_em_id(name):
 
         import urllib 
         import pandas as pd
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
         client = pymongo.MongoClient(mongo_uri)
         # db = client.compass
         # client = MongoClient("mongodb://host:port/")
@@ -32362,19 +34759,38 @@ def schoolsearch_em_id(name):
         collection = database["user_master"]
         query = {}
         query["EMAIL_ID"] = Regex(name, "i")
+        query["ROLE_ID.ROLE_NAME"] = {
+                    u"$not": Regex(u".*PRESENT.*", "i")
+                }
+
         projection = {}
         projection["schoolId._id"] = 1.0
-
+    
         cursor1 = collection.find(query, projection = projection)
         dfum1=(list(cursor1))
+#         print(dfum1)
         dfm2=pd.json_normalize(dfum1, max_level=1)
         xvbnm=dfm2["schoolId._id"][0]
-        print(xvbnm)
+#         print(xvbnm)
+        name1=name.replace("%20"," ")
+#         print(name1,"hola")
+        from bson.regex import Regex
+        from pymongo import MongoClient
+        from flask import Flask,json
+
+        import urllib 
+        import pandas as pd
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
+        client = pymongo.MongoClient(mongo_uri)
+        # client = MongoClient("mongodb://host:port/")
+        database = client["compass"]
+        collection = database["user_master"]
+        name=xvbnm
         # Created with Studio 3T, the IDE for MongoDB - https://studio3t.com
         query = {}
     #     query["schoolId.NAME"] = name1
-        query["schoolId._id"] = ObjectId(xvbnm)
-    #     query["EMAIL_ID"] = Regex(u".*"""+emaail+""".*", "i")
+        query["schoolId._id"] = ObjectId(name)
+        #     query["EMAIL_ID"] = Regex(u".*amorgan@methacton\\.org.*", "i")
         query["USER_NAME"] = {
             u"$not": Regex(u".*TEST.*", "i")
         }
@@ -32383,6 +34799,9 @@ def schoolsearch_em_id(name):
             u"$ne": u"Y"
         }
 
+        query["ROLE_ID.ROLE_NAME"] = {
+            u"$not": Regex(u".*PRESENT.*", "i")
+        }
 
         query["IS_DISABLED"] = {
             u"$ne": u"Y"
@@ -32509,9 +34928,8 @@ def schoolsearch_em_id(name):
         )
         dfsbm=list(cursor)
         dfsbm=pd.json_normalize(dfsbm, max_level=1)
-        
     #     print(dfatd,"atd")
-    ############################################################
+        ############################################################
         collection = database["audio_track_master"]
 
     #     Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
@@ -32524,9 +34942,9 @@ def schoolsearch_em_id(name):
                     },
                      
              u"MODIFIED_DATE" : { 
-                u"$gte" : datetime.datetime(2020,8,1)
+                 u"$gte" :  datetime.datetime(2020,8,1)
             
-            }
+        }
                 }
 
             }, 
@@ -32545,20 +34963,19 @@ def schoolsearch_em_id(name):
             }, 
             {
                 u"$project": {
-                    u"USER_ID._id": u"$_id.USER_ID\u1390_id",
-                    u"MAX(MODIFIED_DATE)": u"$MAX(MODIFIED_DATE)",
-                    u"COUNT(USER_ID\u1390_id)": u"$COUNT(USER_ID\u1390_id)",
+                    u"CSYUSER_ID._id": u"$_id.USER_ID\u1390_id",
+                    u"CSYCOUNT(USER_ID\u1390_id)": u"$COUNT(USER_ID\u1390_id)",
                     u"_id": 0
                 }
             }
         ]
 
-        cursor = collection.aggregate(
+        cursor1 = collection.aggregate(
             pipeline, 
             allowDiskUse = True
         )
-        dfatdcsy=list(cursor)
-        dfatdcsy=pd.json_normalize(dfatdcsy, max_level=1)
+        dfatdcsy=list(cursor1)
+        dfatdcsy1=pd.json_normalize(dfatdcsy, max_level=1)
         ####################################################################
 
         try:
@@ -32566,10 +34983,6 @@ def schoolsearch_em_id(name):
             dffinal1=pd.merge(dffinal,dfatdcsy1,left_on='_id',right_on='CSYUSER_ID._id',how='left',suffixes=('_',''))
             dffinalnew=pd.merge(dffinal1,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
         except:
-            # dfum['MAX(MODIFIED_DATE)']='NO PRACTICE'
-            # dfum['COUNT(USER_ID᎐_id)']=0
-            # dffinal=dfum
-            # dffinalnew=pd.merge(dffinal,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
             dfum['MAX(MODIFIED_DATE)']='NO PRACTICE'
             dfum['COUNT(USER_ID᎐_id)']=0
             dffinal=dfum
@@ -32596,6 +35009,7 @@ def schoolsearch_em_id(name):
         dffinalnew['CSYCOUNT(USER_ID᎐_id)'].fillna(0, inplace=True)
         pracsum=sum(list(dffinalnew['COUNT(USER_ID᎐_id)']))
         dffinalnew.fillna(value=pd.np.nan, inplace=True)
+        
 
         MAX=[]
         for i in dffinalnew['MAX(MODIFIED_DATE)']:
@@ -32634,7 +35048,7 @@ def schoolsearch_em_id(name):
         plandf=list(cursor)
         plandf=pd.json_normalize(plandf, max_level=1)
         plannameadmin=plandf["PLAN_ID.PLAN_NAME"][0]
-        temp={"data":data,"school_practice_count":str(pracsum),"school_name":schoolname,"country":country,"state":state,"city":city,"address":address,"admin_name":admin,"admin_email":adminemail,"plan_name":plannameadmin,"user_count":totaluser}
+        temp={"data":data,"school_practice_count":str(pracsum),"school_name":schoolname,"country":country,"state":state,"city":city,"address":address,"admin_name":admin,"admin_email":adminemail,"plan":plannameadmin,"user_count":totaluser}
     #     ,"school_practice_count":str(card_detail['school_practice_count1'][0])
     #     temp={"data":data}
         return json.dumps(temp)
@@ -32649,7 +35063,7 @@ def schoolsearch_em_id(name):
 
         import urllib 
         import pandas as pd
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
         client = pymongo.MongoClient(mongo_uri)
         # client = MongoClient("mongodb://host:port/")
         database = client["compass"]
@@ -32934,7 +35348,7 @@ def user_search_mongo(name):
 
     import urllib 
     import pandas as pd
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = MongoClient(mongo_uri)
     database = client["compass"]
     collection = database["user_master"]
@@ -33110,7 +35524,7 @@ def user_search_mongo(name):
 def rating_month_info(month,n):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection1 = db.audio_feedback
     collection2 = db.audio_track_master
@@ -33226,7 +35640,7 @@ def rating_month_info(month,n):
 def parpracticeprogramactive():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     query=[
@@ -33291,6 +35705,168 @@ def parpracticeprogramactive():
        'transition':Bonuscompdf.Count.tolist(),'trant':Bonuscompdf.Count.sum()}
     return json.dumps(temp)
 
+
+#>>>>>>>>>>>>--------------- PRACTICE BIFURCATION API--------------------
+@app.route('/parpracticeprograme/<charttype>')
+def parpractice__program__active(charttype):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=0.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+    
+        query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                             {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,18)}},                
+                            ]}},
+           
+
+        {"$project":{'USER_ID':'$USER_ID.USER_ID','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+            'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,
+            'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+            'AUDIO_NAME':1,'AUDIO_LENGTH':1,
+            'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+
+            'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+                ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+            {"$match":{'Completion_Percentage':{"$gte":.5}}},
+            
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+                         threshcond[0],
+
+
+        { "$project": { 'USER_ID':1,'AGE_GROUP':1,
+
+            "status": {
+              "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": 'bonus','options': "i"  }}
+
+
+                  , 
+              "then": 'Bonus', "else": {
+                 "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": "sound",'options': "i" }}, 
+                 "then": 'Sound', "else": 'daily'
+                 }}}}}}   
+        ]
+
+
+        x=list(collection.aggregate(query))
+        df=pd.DataFrame(x)
+#         print(df)
+        if 'AGE_GROUP' not in df.columns:
+            df['AGE_GROUP'] = 0
+        if 'USER_ID' not in df.columns:
+            df['USER_ID'] = 0
+        if 'status' not in df.columns:
+            df['status'] = 0
+#         if 'USER_ID' not in df.columns:
+#             df['USER_ID'] = 0
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+
+        practice_count_overall=pd.DataFrame(df.groupby(['AGE_GROUP','status'])['USER_ID'].count()).reset_index().rename(columns={'USER_ID':'Count'})
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+        dailydf=practice_count_overall[practice_count_overall.status=='daily']
+        dailycompdf=pd.merge(age_group_df,dailydf,on='AGE_GROUP',how='left')
+        dailycompdf['status'].fillna('daily',inplace=True)
+        dailycompdf['Count'].fillna(0,inplace=True)
+        Sounddf=practice_count_overall[practice_count_overall.status=='Sound']
+        Soundcompdf=pd.merge(age_group_df,Sounddf,on='AGE_GROUP',how='left')
+        Soundcompdf['status'].fillna('Sound',inplace=True)
+        Soundcompdf['Count'].fillna(0,inplace=True)
+        Bonusdf=practice_count_overall[practice_count_overall.status=='Bonus']
+        Bonuscompdf=pd.merge(age_group_df,Bonusdf,on='AGE_GROUP',how='left')
+        Bonuscompdf['status'].fillna('Bonus',inplace=True)
+        Bonuscompdf['Count'].fillna(0,inplace=True)
+
+        
+        temp={'daily':dailycompdf.Count.tolist(),'dtotal':dailycompdf.Count.sum(),'prog':age_group_df.AGE_GROUP.tolist(),
+          'sound':Soundcompdf.Count.tolist(),'soundt':Soundcompdf.Count.sum(),
+           'transition':Bonuscompdf.Count.tolist(),'trant':Bonuscompdf.Count.sum()}
+        return json.dumps(temp, default=str)
+    
+    else:
+        query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                             {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,18)}},                
+                            ]}},
+
+        {"$project":{'USER_ID':'$USER_ID.USER_ID','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+            'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,
+            'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+            'AUDIO_NAME':1,'AUDIO_LENGTH':1,
+            'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+
+            'PlayBack_Time_Percent':{"$round":[{"$divide":[{"$subtract":
+                ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+#             {"$match":{'PlayBack_Time_Percent':{"$gte":.5}}},
+
+
+        { "$project": { 'USER_ID':1,'AGE_GROUP':1,
+
+            "status": {
+              "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": 'bonus','options': "i"  }}
+
+
+                  , 
+              "then": 'Bonus', "else": {
+                 "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": "sound",'options': "i" }}, 
+                 "then": 'Sound', "else": 'daily'
+                 }}}}}}   
+        ]
+
+
+        x=list(collection.aggregate(query))
+        df=pd.DataFrame(x)
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+
+        practice_count_overall=pd.DataFrame(df.groupby(['AGE_GROUP','status'])['USER_ID'].count()).reset_index().rename(columns={'USER_ID':'Count'})
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+        dailydf=practice_count_overall[practice_count_overall.status=='daily']
+        dailycompdf=pd.merge(age_group_df,dailydf,on='AGE_GROUP',how='left')
+        dailycompdf['status'].fillna('daily',inplace=True)
+        dailycompdf['Count'].fillna(0,inplace=True)
+        Sounddf=practice_count_overall[practice_count_overall.status=='Sound']
+        Soundcompdf=pd.merge(age_group_df,Sounddf,on='AGE_GROUP',how='left')
+        Soundcompdf['status'].fillna('Sound',inplace=True)
+        Soundcompdf['Count'].fillna(0,inplace=True)
+        Bonusdf=practice_count_overall[practice_count_overall.status=='Bonus']
+        Bonuscompdf=pd.merge(age_group_df,Bonusdf,on='AGE_GROUP',how='left')
+        Bonuscompdf['status'].fillna('Bonus',inplace=True)
+        Bonuscompdf['Count'].fillna(0,inplace=True)
+     
+        temp={'daily':dailycompdf.Count.tolist(),'dtotal':dailycompdf.Count.sum(),'prog':age_group_df.AGE_GROUP.tolist(),
+          'sound':Soundcompdf.Count.tolist(),'soundt':Soundcompdf.Count.sum(),
+           'transition':Bonuscompdf.Count.tolist(),'trant':Bonuscompdf.Count.sum()}
+        return json.dumps(temp)
+
+
+
+
+
 #Changes by Anil Mehra
 
 @app.route('/parpracticeprogg/<d>')
@@ -33303,7 +35879,7 @@ def parents_tableprogram(d):
         reader = geolite2.reader()
         username = urllib.parse.quote_plus('admin')
         password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-        client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+        client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
         db=client.compass
         collection = db.audio_track_master
         query=[
@@ -33362,7 +35938,7 @@ def parents_tableprogram(d):
         reader = geolite2.reader()
         username = urllib.parse.quote_plus('admin')
         password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-        client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+        client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
         db=client.compass
         collection = db.audio_track_master
         query=[
@@ -33422,7 +35998,7 @@ def parents_tableprogram(d):
         reader = geolite2.reader()
         username = urllib.parse.quote_plus('admin')
         password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-        client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+        client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
         db=client.compass
         collection = db.audio_track_master
         query=[
@@ -33573,6 +36149,595 @@ def parents_tableprogram(d):
     print(dftry.shape)
 
     return json.dumps({"data":dftry.values.tolist()})
+
+#>>>>>>>>>>>---------- PRACTICE BIFURCATION API----------------
+@app.route('/parpracticeprogg/<d>/<charttype>')
+def parents__table__program(d,charttype):
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+    
+        # def parents_tableprogram(d):    
+        x=''
+        query=''
+        if d=='D':        
+            reader = geolite2.reader()
+            username = urllib.parse.quote_plus('admin')
+            password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+            client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+            db=client.compass
+            collection = db.audio_track_master
+            query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                          {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,17)}},                
+                            {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$not':{'$regex':'bonus','$options':'i'}}},
+                            {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$not':{'$regex':'sound','$options':'i'}}}             
+                            ]}},
+             
+
+                {"$project":{'_id':0,'User_ObjectId':'$USER_ID._id',      
+                    'USER_ID':'$USER_ID.USER_ID','USER_NAME':'$USER_ID.USER_NAME','USER_EMAIL':'$USER_ID.EMAIL_ID',
+                    'PHONE':'$USER_ID.CONTACT_NUMBER','IP':'$USER_ID.IP_ADDRESS',
+                    'SCHOOL_NAME':'$USER_ID.schoolId.NAME','CITY':'$USER_ID.schoolId.CITY',
+                    'STATE':'$USER_ID.schoolId.STATE','CREATED_DATE':'$USER_ID.CREATED_DATE',
+                    'PRACTICE_DATE':'$MODIFIED_DATE','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+                    'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+                    'AUDIO_NAME':1,'AUDIO_LENGTH':1,'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+                    'Mindful_Minutes':{"$round":[{"$divide":
+                        [{"$subtract":['$CURSOR_END','$cursorStart']},60]},2]},
+                    'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+                        ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+                
+#                    practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+                         threshcond[0],
+
+                { "$project": { 'USER_ID':1,'User_ObjectId':1,'USER_NAME':1,'USER_EMAIL':1,
+                    'PHONE':1,'SCHOOL_NAME':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'AGE_GROUP':1     
+                    }},
+                
+                
+            {'$group':
+                        {'_id':{'user':'$User_ObjectId','agegp':'$AGE_GROUP'},
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'EMAIL_ID':{'$first':'$USER_EMAIL'},
+                            'SCHOOL':{'$first':'$SCHOOL_NAME'},
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'CITY':{'$first':'$CITY'},
+                            'STATE':{'$first':'$STATE'},
+                            'IP':{'$first':'$IP'},
+                            'CREATED_DATE':{'$first':'$CREATED_DATE'},
+                            'MODIFIED_DATE':{'$max':'$PRACTICE_DATE'},
+                            'Mindful_minutes':{'$sum':'$Mindful_Minutes'},
+                            'PHONE':{'$first':'$PHONE'},
+                            }},
+            { "$project": { '_id':0,
+
+                'USER_ID':'$_id.user','USER_NAME':1,'EMAIL_ID':1,
+                    'PHONE':1,'SCHOOL':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'CREATED_DATE':1,'MODIFIED_DATE':1,'Mindful_minutes':1   
+                    }}]
+
+        elif d=='T':
+            reader = geolite2.reader()
+            username = urllib.parse.quote_plus('admin')
+            password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+            client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+            db=client.compass
+            collection = db.audio_track_master
+            query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                            {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,17)}},                 
+                            {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$regex':'bonus','$options':'i'}},
+    #                         {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$not':{'$regex':'sound','$options':'i'}}}             
+                            ]}},
+              
+                {"$project":{'_id':0,'User_ObjectId':'$USER_ID._id',      
+                    'USER_ID':'$USER_ID.USER_ID','USER_NAME':'$USER_ID.USER_NAME','USER_EMAIL':'$USER_ID.EMAIL_ID',
+                    'PHONE':'$USER_ID.CONTACT_NUMBER','IP':'$USER_ID.IP_ADDRESS',
+                    'SCHOOL_NAME':'$USER_ID.schoolId.NAME','CITY':'$USER_ID.schoolId.CITY',
+                    'STATE':'$USER_ID.schoolId.STATE','CREATED_DATE':'$USER_ID.CREATED_DATE',
+                    'PRACTICE_DATE':'$MODIFIED_DATE','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+                    'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+                    'AUDIO_NAME':1,'AUDIO_LENGTH':1,'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+                    'Mindful_Minutes':{"$round":[{"$divide":
+                        [{"$subtract":['$CURSOR_END','$cursorStart']},60]},2]},
+                    'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+                        ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+#                   practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+                         threshcond[0],
+
+
+                { "$project": { 'USER_ID':1,'User_ObjectId':1,'USER_NAME':1,'USER_EMAIL':1,
+                    'PHONE':1,'SCHOOL_NAME':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'AGE_GROUP':1     
+                    }},
+                
+            {'$group':
+                        {'_id':{'user':'$User_ObjectId','agegp':'$AGE_GROUP'},
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'EMAIL_ID':{'$first':'$USER_EMAIL'},
+                            'SCHOOL':{'$first':'$SCHOOL_NAME'},
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'CITY':{'$first':'$CITY'},
+                            'STATE':{'$first':'$STATE'},
+                            'IP':{'$first':'$IP'},
+                            'CREATED_DATE':{'$first':'$CREATED_DATE'},
+                            'MODIFIED_DATE':{'$max':'$PRACTICE_DATE'},
+                            'Mindful_minutes':{'$sum':'$Mindful_Minutes'},
+                            'PHONE':{'$first':'$PHONE'},
+                            }},
+            { "$project": { '_id':0,
+
+                'USER_ID':'$_id.user','USER_NAME':1,'EMAIL_ID':1,
+                    'PHONE':1,'SCHOOL':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'CREATED_DATE':1,'MODIFIED_DATE':1,'Mindful_minutes':1   
+                    }}]
+        elif d=='S':
+
+
+            reader = geolite2.reader()
+            username = urllib.parse.quote_plus('admin')
+            password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+            client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+            db=client.compass
+            collection = db.audio_track_master
+            query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                             {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,17)}},                
+                            {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$regex':'sound','$options':'i'}},
+    #                         {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$not':{'$regex':'sound','$options':'i'}}}             
+                            ]}},
+              
+
+                {"$project":{'_id':0,'User_ObjectId':'$USER_ID._id',      
+                    'USER_ID':'$USER_ID.USER_ID','USER_NAME':'$USER_ID.USER_NAME','USER_EMAIL':'$USER_ID.EMAIL_ID',
+                    'PHONE':'$USER_ID.CONTACT_NUMBER','IP':'$USER_ID.IP_ADDRESS',
+                    'SCHOOL_NAME':'$USER_ID.schoolId.NAME','CITY':'$USER_ID.schoolId.CITY',
+                    'STATE':'$USER_ID.schoolId.STATE','CREATED_DATE':'$USER_ID.CREATED_DATE',
+                    'PRACTICE_DATE':'$MODIFIED_DATE','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+                    'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+                    'AUDIO_NAME':1,'AUDIO_LENGTH':1,'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+                    'Mindful_Minutes':{"$round":[{"$divide":
+                        [{"$subtract":['$CURSOR_END','$cursorStart']},60]},2]},
+                    'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+                        ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+#                   practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+                         threshcond[0],
+
+                { "$project": { 'USER_ID':1,'User_ObjectId':1,'USER_NAME':1,'USER_EMAIL':1,
+                    'PHONE':1,'SCHOOL_NAME':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'AGE_GROUP':1     
+                    }},
+            {'$group':
+                        {'_id':'$User_ObjectId',
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'EMAIL_ID':{'$first':'$USER_EMAIL'},
+                            'SCHOOL':{'$first':'$SCHOOL_NAME'},
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'CITY':{'$first':'$CITY'},
+                            'STATE':{'$first':'$STATE'},
+                            'IP':{'$first':'$IP'},
+                            'CREATED_DATE':{'$first':'$CREATED_DATE'},
+                            'MODIFIED_DATE':{'$max':'$PRACTICE_DATE'},
+                            'Mindful_minutes':{'$sum':'$Mindful_Minutes'},
+                            'PHONE':{'$first':'$PHONE'},
+                            }},
+            { "$project": { '_id':0,
+
+                'USER_ID':'$_id','USER_NAME':1,'EMAIL_ID':1,
+                    'PHONE':1,'SCHOOL':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'CREATED_DATE':1,'MODIFIED_DATE':1,'Mindful_minutes':1   
+                    }}]
+        else:
+            pass  
+        daily=list(collection.aggregate(query))
+        daily_df=pd.DataFrame(daily)
+        daily_df.Mindful_minutes=daily_df.Mindful_minutes.astype('int64')
+        daily_df['MODIFIED_DATE']=pd.to_datetime(daily_df['MODIFIED_DATE'])
+        daily_df['CREATED_DATE']=pd.to_datetime(daily_df['CREATED_DATE'])
+        daily_df['SCHOOL'].fillna("NO SCHOOL INFO", inplace=True)
+        daily_df['EMAIL_ID'].fillna("EMAIL_ID NOT AVAILABLE", inplace=True)
+        daily_df['EMAIL_ID'].replace("",'EMAIL_ID NOT AVAILABLE', inplace=True)
+        daily_df['USER_NAME'].replace("",'USER NAME NOT AVAILABLE', inplace=True)
+        daily_df['CITY'].fillna("NO CITY INFO AVAILABLE", inplace=True)
+        daily_df['STATE'].fillna("NO STATE INFO AVAILABLE", inplace=True)
+        daily_df = daily_df.replace(np.nan, 0)
+        daily_df['CREATED_DATE'].replace("NaT", "")
+
+
+        def country1(i):
+
+            location = reader.get(i)
+            c=(location['country']['names']['en'])
+            return c
+        def state1(i):
+            location = reader.get(i)
+            s=(location['subdivisions'][0]['names']['en'])
+            return s
+        def city1(i):
+            location = reader.get(i)
+            city=location['city']['names']['en']
+            return city
+        def pn_country(i):
+            import phonenumbers
+            import pycountry
+            from phonenumbers.phonenumberutil import (
+            region_code_for_country_code,
+            region_code_for_number,)
+            pn = phonenumbers.parse('+'+i)   
+            country = pycountry.countries.get(alpha_2=region_code_for_number(pn))
+            con=country.name
+            return con
+        ip=daily_df['IP'].tolist()
+        phone_number=daily_df['PHONE'].tolist()
+        Parents_Name=daily_df['USER_NAME'].tolist()
+        Parents_Email=daily_df.EMAIL_ID.tolist()
+        School_Name=daily_df['SCHOOL'].tolist()
+        state=daily_df['STATE'].tolist()
+        city=daily_df['CITY'].tolist()
+        sign_up_date=daily_df['CREATED_DATE'].tolist()
+        last_prac_date=daily_df['MODIFIED_DATE'].tolist()
+        #     practice_count=df['Practice_Count'].tolist()
+        mindful_minutes=daily_df['Mindful_minutes'].tolist()
+        
+        
+        for i in range(len(ip)):            
+            if city[i] is None:
+                try:
+                    city[i]=city1(ip[i])
+                except:
+                    pass
+            elif city[i]=='NO CITY INFO AVAILABLE':
+                try:
+                    city[i]=city1(ip[i])
+                except:
+                    pass                        
+
+            if state[i] is None:
+                try:
+                    state[i]=state1(ip[i])
+                except:
+                    pass
+            elif state[i] =='NO STATE INFO AVAILABLE':
+                try:
+                    state[i]=state1(ip[i])
+                except:
+                    pass    
+            if state[i] is None:
+                state[i]=''
+            if  last_prac_date[i] != 'NO PRACTICE' :
+                last_prac_date[i]=last_prac_date[i].strftime('%d %b %Y')
+            else:
+                last_prac_date[i]="NO PRACTICE"
+
+            if sign_up_date[i] is not None and sign_up_date[i] != 0 :        
+                sign_up_date[i]=sign_up_date[i].strftime('%d %b %Y')
+
+
+        state12 =  [each_string.upper() for each_string in state]
+        city12= [each_string.upper() for each_string in city]
+        school= [each_string.upper() for each_string in School_Name]
+
+
+
+        cv={'pnn':Parents_Name,'pe':Parents_Email,'pn':phone_number,'sn':school,'ct':city12,
+           'st':state12,'sp':sign_up_date,
+           'lp':last_prac_date,'mm':mindful_minutes}
+        dftry = pd.DataFrame.from_dict(cv)
+
+        return json.dumps({"data":dftry.values.tolist()})
+    
+    else:
+        
+        # def parents_tableprogram(d):    
+        x=''
+        query=''
+        if d=='D':        
+            reader = geolite2.reader()
+            username = urllib.parse.quote_plus('admin')
+            password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+            client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+            db=client.compass
+            collection = db.audio_track_master
+            query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                          {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,17)}},                
+                            {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$not':{'$regex':'bonus','$options':'i'}}},
+                            {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$not':{'$regex':'sound','$options':'i'}}}             
+                            ]}},
+
+                {"$project":{'_id':0,'User_ObjectId':'$USER_ID._id',      
+                    'USER_ID':'$USER_ID.USER_ID','USER_NAME':'$USER_ID.USER_NAME','USER_EMAIL':'$USER_ID.EMAIL_ID',
+                    'PHONE':'$USER_ID.CONTACT_NUMBER','IP':'$USER_ID.IP_ADDRESS',
+                    'SCHOOL_NAME':'$USER_ID.schoolId.NAME','CITY':'$USER_ID.schoolId.CITY',
+                    'STATE':'$USER_ID.schoolId.STATE','CREATED_DATE':'$USER_ID.CREATED_DATE',
+                    'PRACTICE_DATE':'$MODIFIED_DATE','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+                    'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+                    'AUDIO_NAME':1,'AUDIO_LENGTH':1,'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+                    'Mindful_Minutes':{"$round":[{"$divide":
+                        [{"$subtract":['$CURSOR_END','$cursorStart']},60]},2]},
+                    'PlayBack_Time_Percent':{"$round":[{"$divide":[{"$subtract":
+                        ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+
+                { "$project": { 'USER_ID':1,'User_ObjectId':1,'USER_NAME':1,'USER_EMAIL':1,
+                    'PHONE':1,'SCHOOL_NAME':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'AGE_GROUP':1     
+                    }},
+            {'$group':
+                        {'_id':{'user':'$User_ObjectId','agegp':'$AGE_GROUP'},
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'EMAIL_ID':{'$first':'$USER_EMAIL'},
+                            'SCHOOL':{'$first':'$SCHOOL_NAME'},
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'CITY':{'$first':'$CITY'},
+                            'STATE':{'$first':'$STATE'},
+                            'IP':{'$first':'$IP'},
+                            'CREATED_DATE':{'$first':'$CREATED_DATE'},
+                            'MODIFIED_DATE':{'$max':'$PRACTICE_DATE'},
+                            'Mindful_minutes':{'$sum':'$Mindful_Minutes'},
+                            'PHONE':{'$first':'$PHONE'},
+                            }},
+            { "$project": { '_id':0,
+
+                'USER_ID':'$_id.user','USER_NAME':1,'EMAIL_ID':1,
+                    'PHONE':1,'SCHOOL':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'CREATED_DATE':1,'MODIFIED_DATE':1,'Mindful_minutes':1   
+                    }}]
+
+        elif d=='T':
+            reader = geolite2.reader()
+            username = urllib.parse.quote_plus('admin')
+            password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+            client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+            db=client.compass
+            collection = db.audio_track_master
+            query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                            {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,17)}},                 
+                            {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$regex':'bonus','$options':'i'}},
+    #                         {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$not':{'$regex':'sound','$options':'i'}}}             
+                            ]}},
+
+                {"$project":{'_id':0,'User_ObjectId':'$USER_ID._id',      
+                    'USER_ID':'$USER_ID.USER_ID','USER_NAME':'$USER_ID.USER_NAME','USER_EMAIL':'$USER_ID.EMAIL_ID',
+                    'PHONE':'$USER_ID.CONTACT_NUMBER','IP':'$USER_ID.IP_ADDRESS',
+                    'SCHOOL_NAME':'$USER_ID.schoolId.NAME','CITY':'$USER_ID.schoolId.CITY',
+                    'STATE':'$USER_ID.schoolId.STATE','CREATED_DATE':'$USER_ID.CREATED_DATE',
+                    'PRACTICE_DATE':'$MODIFIED_DATE','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+                    'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+                    'AUDIO_NAME':1,'AUDIO_LENGTH':1,'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+                    'Mindful_Minutes':{"$round":[{"$divide":
+                        [{"$subtract":['$CURSOR_END','$cursorStart']},60]},2]},
+                    'PlayBack_Time_Percent':{"$round":[{"$divide":[{"$subtract":
+                        ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+
+                { "$project": { 'USER_ID':1,'User_ObjectId':1,'USER_NAME':1,'USER_EMAIL':1,
+                    'PHONE':1,'SCHOOL_NAME':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'AGE_GROUP':1     
+                    }},
+            {'$group':
+                        {'_id':{'user':'$User_ObjectId','agegp':'$AGE_GROUP'},
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'EMAIL_ID':{'$first':'$USER_EMAIL'},
+                            'SCHOOL':{'$first':'$SCHOOL_NAME'},
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'CITY':{'$first':'$CITY'},
+                            'STATE':{'$first':'$STATE'},
+                            'IP':{'$first':'$IP'},
+                            'CREATED_DATE':{'$first':'$CREATED_DATE'},
+                            'MODIFIED_DATE':{'$max':'$PRACTICE_DATE'},
+                            'Mindful_minutes':{'$sum':'$Mindful_Minutes'},
+                            'PHONE':{'$first':'$PHONE'},
+                            }},
+            { "$project": { '_id':0,
+
+                'USER_ID':'$_id.user','USER_NAME':1,'EMAIL_ID':1,
+                    'PHONE':1,'SCHOOL':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'CREATED_DATE':1,'MODIFIED_DATE':1,'Mindful_minutes':1   
+                    }}]
+        elif d=='S':
+
+
+            reader = geolite2.reader()
+            username = urllib.parse.quote_plus('admin')
+            password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+            client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+            db=client.compass
+            collection = db.audio_track_master
+            query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                             {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,17)}},                
+                            {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$regex':'sound','$options':'i'}},
+    #                         {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$not':{'$regex':'sound','$options':'i'}}}             
+                            ]}},
+
+                {"$project":{'_id':0,'User_ObjectId':'$USER_ID._id',      
+                    'USER_ID':'$USER_ID.USER_ID','USER_NAME':'$USER_ID.USER_NAME','USER_EMAIL':'$USER_ID.EMAIL_ID',
+                    'PHONE':'$USER_ID.CONTACT_NUMBER','IP':'$USER_ID.IP_ADDRESS',
+                    'SCHOOL_NAME':'$USER_ID.schoolId.NAME','CITY':'$USER_ID.schoolId.CITY',
+                    'STATE':'$USER_ID.schoolId.STATE','CREATED_DATE':'$USER_ID.CREATED_DATE',
+                    'PRACTICE_DATE':'$MODIFIED_DATE','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+                    'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+                    'AUDIO_NAME':1,'AUDIO_LENGTH':1,'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+                    'Mindful_Minutes':{"$round":[{"$divide":
+                        [{"$subtract":['$CURSOR_END','$cursorStart']},60]},2]},
+                    'PlayBack_Time_Percent':{"$round":[{"$divide":[{"$subtract":
+                        ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+
+                { "$project": { 'USER_ID':1,'User_ObjectId':1,'USER_NAME':1,'USER_EMAIL':1,
+                    'PHONE':1,'SCHOOL_NAME':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'AGE_GROUP':1     
+                    }},
+            {'$group':
+                        {'_id':'$User_ObjectId',
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'EMAIL_ID':{'$first':'$USER_EMAIL'},
+                            'SCHOOL':{'$first':'$SCHOOL_NAME'},
+                            'USER_NAME':{'$first':'$USER_NAME'},
+                            'CITY':{'$first':'$CITY'},
+                            'STATE':{'$first':'$STATE'},
+                            'IP':{'$first':'$IP'},
+                            'CREATED_DATE':{'$first':'$CREATED_DATE'},
+                            'MODIFIED_DATE':{'$max':'$PRACTICE_DATE'},
+                            'Mindful_minutes':{'$sum':'$Mindful_Minutes'},
+                            'PHONE':{'$first':'$PHONE'},
+                            }},
+            { "$project": { '_id':0,
+
+                'USER_ID':'$_id','USER_NAME':1,'EMAIL_ID':1,
+                    'PHONE':1,'SCHOOL':1,'CITY':1,'STATE':1,
+                               'CREATED_DATE':1,'PRACTICE_DATE':1,'IS_DONE':1,'Mindful_Minutes':1,
+                               'IP':1,'CREATED_DATE':1,'MODIFIED_DATE':1,'Mindful_minutes':1   
+                    }}]
+        else:
+            pass  
+        daily=list(collection.aggregate(query))
+        daily_df=pd.DataFrame(daily)
+        daily_df.Mindful_minutes=daily_df.Mindful_minutes.astype('int64')
+        daily_df['MODIFIED_DATE']=pd.to_datetime(daily_df['MODIFIED_DATE'])
+        daily_df['CREATED_DATE']=pd.to_datetime(daily_df['CREATED_DATE'])
+        daily_df['SCHOOL'].fillna("NO SCHOOL INFO", inplace=True)
+        daily_df['EMAIL_ID'].fillna("EMAIL_ID NOT AVAILABLE", inplace=True)
+        daily_df['EMAIL_ID'].replace("",'EMAIL_ID NOT AVAILABLE', inplace=True)
+        daily_df['USER_NAME'].replace("",'USER NAME NOT AVAILABLE', inplace=True)
+        daily_df['CITY'].fillna("NO CITY INFO AVAILABLE", inplace=True)
+        daily_df['STATE'].fillna("NO STATE INFO AVAILABLE", inplace=True)
+
+
+
+        def country1(i):
+
+            location = reader.get(i)
+            c=(location['country']['names']['en'])
+            return c
+        def state1(i):
+            location = reader.get(i)
+            s=(location['subdivisions'][0]['names']['en'])
+            return s
+        def city1(i):
+            location = reader.get(i)
+            city=location['city']['names']['en']
+            return city
+        def pn_country(i):
+            import phonenumbers
+            import pycountry
+            from phonenumbers.phonenumberutil import (
+            region_code_for_country_code,
+            region_code_for_number,)
+            pn = phonenumbers.parse('+'+i)   
+            country = pycountry.countries.get(alpha_2=region_code_for_number(pn))
+            con=country.name
+            return con
+        ip=daily_df['IP'].tolist()
+        phone_number=daily_df['PHONE'].tolist()
+        Parents_Name=daily_df['USER_NAME'].tolist()
+        Parents_Email=daily_df.EMAIL_ID.tolist()
+        School_Name=daily_df['SCHOOL'].tolist()
+        state=daily_df['STATE'].tolist()
+        city=daily_df['CITY'].tolist()
+        sign_up_date=daily_df['CREATED_DATE'].tolist()
+        last_prac_date=daily_df['MODIFIED_DATE'].tolist()
+        #     practice_count=df['Practice_Count'].tolist()
+        mindful_minutes=daily_df['Mindful_minutes'].tolist()
+        
+        for i in range(len(ip)):            
+            if city[i] is None:
+                try:
+                    city[i]=city1(ip[i])
+                except:
+                    pass
+            elif city[i]=='NO CITY INFO AVAILABLE':
+                try:
+                    city[i]=city1(ip[i])
+                except:
+                    pass                        
+
+            if state[i] is None:
+                try:
+                    state[i]=state1(ip[i])
+                except:
+                    pass
+            elif state[i] =='NO STATE INFO AVAILABLE':
+                try:
+                    state[i]=state1(ip[i])
+                except:
+                    pass    
+            if state[i] is None:
+                state[i]=''
+            if  last_prac_date[i] != 'NO PRACTICE' :
+                last_prac_date[i]=last_prac_date[i].strftime('%d %b %Y')
+            else:
+                last_prac_date[i]="NO PRACTICE"
+
+            if sign_up_date[i] is not None:        
+                sign_up_date[i]=sign_up_date[i].strftime('%d %b %Y')
+
+
+        state12 =  [each_string.upper() for each_string in state]
+        city12= [each_string.upper() for each_string in city]
+        school= [each_string.upper() for each_string in School_Name]
+
+
+
+        cv={'pnn':Parents_Name,'pe':Parents_Email,'pn':phone_number,'sn':school,'ct':city12,
+           'st':state12,'sp':sign_up_date,
+           'lp':last_prac_date,'mm':mindful_minutes}
+        dftry = pd.DataFrame.from_dict(cv)
+
+        return json.dumps({"data":dftry.values.tolist()})
+
+
+
+
+
 
 # @app.route('/mitpracticeprogg/<d>')
 # def mit_tableprogram(d):
@@ -33758,7 +36923,7 @@ def parents_tableprogram(d):
 def programwise_card():   
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     query=[
@@ -33839,7 +37004,7 @@ def paractweek12():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.audio_track_master
@@ -33925,6 +37090,207 @@ def paractweek12():
     return json.dumps(temp)
 # paractweek12()
 
+#>>>>>>>>>>>>>..-------------------PRACTICE BIFURCATION API------->>>>>>>>>>
+@app.route('/paractweek/<charttype>')
+def paract__week__12(charttype):
+
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+    db=client.compass
+    collection = db.user_master
+    collection2 = db.audio_track_master
+    dateStr = "2020-03-17T00:00:00.000Z"
+    myDatetime = dateutil.parser.parse(dateStr)
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        ############# DAY WISE #####################
+        df_prac = DataFrame(list(collection2.aggregate([
+                {"$match":{'$and':[{'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}, 
+                           {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                           {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                           {"USER_ID.EMAIL_ID":{"$not":{"$regex" : 'test','$options':'i'}}},
+                           {"USER_ID.EMAIL_ID":{"$nin": ["",None]}},
+                           {"USER_ID.EMAIL_ID":{"$not":{"$regex" : '1gen','$options':'i'}}},
+                           {"USER_ID.USER_NAME":{"$not":{"$regex" : 'test','$options':'i'}}},
+                           {'USER_ID.USER_NAME':{'$ne':{'$regex':'1gen','$options':'i'}}},
+                           {"USER_ID.CREATED_DATE":{"$gt": myDatetime}}]}},
+                        practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+                {'$group':{'_id':'$USER_ID',
+                           'date':{'$first':'$MODIFIED_DATE'} }},
+    #             {"$project":{"_id":0, 'sign_up':{'$dateToString':{'format':"%Y-%m-%d","date":'$date'}},'practice_count':{'$size':'$distinct'}}},
+    #             { '$sort': { '_id': 1 }}
+        ])))
+        df_prac1 = df_prac.rename(columns={"date": "sign_up"})
+    #     df_prac1 = df_prac.sort_values(by = ['sign_up']).reset_index(drop = True)
+
+
+    #     final['practice_count'] = final['practice_count'].fillna(0)
+        # print(df1)
+        df_prac1['sign_up'] = pd.to_datetime(df_prac1['sign_up'], errors = 'coerce')
+
+        df_prac1['sign_upn'] = pd.to_datetime(df_prac1['sign_up']) - timedelta(hours=4)
+
+
+
+        from datetime import datetime
+        from pytz import timezone
+        tz = timezone('UTC')
+        date=datetime.now(tz) 
+        today = pd.to_datetime(date) - timedelta(hours=4)
+        todaydate=today.strftime("%Y-%m-%d")
+        # print(todaydate)
+
+
+        df2 = df_prac1.groupby([df_prac1['sign_upn'].dt.date]).count()
+
+        # print(df1)
+
+
+        cdate=[]
+        for i in df2.index:
+            x=i.strftime('%S')
+            cdate.append(float(x)*1000)
+        count=[]
+        for i in df2['sign_up'] :
+            count.append(i)
+        count1=np.cumsum(count)
+
+
+        df3 = pd.DataFrame(list(zip(cdate,count)), 
+                           columns =['date', 'count']) 
+        df4 = pd.DataFrame(list(zip(cdate,count1)), 
+                           columns =['date', 'count'])
+        data = df3.values.tolist()
+        data1 = df4.values.tolist()
+
+
+        ##### hourly graph
+
+
+        times = pd.to_datetime(df_prac1.sign_upn)
+        times['hour'] = times.map( lambda x: pd.to_datetime(x).hour )
+        timedf=times.groupby(['hour']).size().to_frame('count').reset_index()
+
+        timedata={"hour":timedf['hour'].tolist(),"count":timedf['count'].tolist()}
+        ###### week data
+        df_data = pd.to_datetime(df_prac1['sign_upn'], format='%Y%m%d')
+        week_df = df_data.groupby(df_prac1['sign_upn'].dt.strftime("%A")).count()
+        if len(week_df) < 7:
+            dd = pd.DataFrame(week_df).transpose()
+            if "Monday" not in dd.columns:
+                dd["Monday"] = 0
+            if "Tuesday" not in dd.columns:
+                dd["Tuesday"] = 0
+            if "Wednesday" not in dd.columns:
+                dd["Wednesday"] = 0
+            if "Thursday" not in dd.columns:
+                dd["Thursday"] = 0
+            if "Friday" not in dd.columns:
+                dd["Friday"] = 0
+            if "Saturday" not in dd.columns:
+                dd["Saturday"] = 0
+            if "Sunday" not in dd.columns:
+                dd["Sunday"] = 0
+
+            dd = dd.T
+            week_df = pd.Series(dd.sign_upn)
+
+    
+        weekdata={"day":['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday', 'Sunday'],
+                  "count":[str(week_df['Monday']),str(week_df['Tuesday']),str(week_df['Wednesday']),
+                           str(week_df['Thursday']),str(week_df['Friday']),str(week_df['Saturday']),str(week_df['Sunday'])]}
+        temp={"weekdata":weekdata,"timedata":timedata}
+        return json.dumps(temp)
+
+    
+    else:
+        ############# DAY WISE #####################
+        df_prac = DataFrame(list(collection2.aggregate([
+                {"$match":{'$and':[{'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}, 
+                           {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                           {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                           {"USER_ID.EMAIL_ID":{"$not":{"$regex" : 'test','$options':'i'}}},
+                           {"USER_ID.EMAIL_ID":{"$nin": ["",None]}},
+                           {"USER_ID.EMAIL_ID":{"$not":{"$regex" : '1gen','$options':'i'}}},
+                           {"USER_ID.USER_NAME":{"$not":{"$regex" : 'test','$options':'i'}}},
+                           {'USER_ID.USER_NAME':{'$ne':{'$regex':'1gen','$options':'i'}}},
+                           {"USER_ID.CREATED_DATE":{"$gt": myDatetime}}]}},
+                {'$group':{'_id':'$USER_ID._id',
+                           'date':{'$first':'$MODIFIED_DATE'} }},
+    #             {"$project":{"_id":0, 'sign_up':{'$dateToString':{'format':"%Y-%m-%d","date":'$date'}},'practice_count':{'$size':'$distinct'}}},
+    #             { '$sort': { '_id': 1 }}
+        ])))
+        df_prac1 = df_prac.rename(columns={"date": "sign_up"})
+    #     df_prac1 = df_prac.sort_values(by = ['sign_up']).reset_index(drop = True)
+
+
+    #     final['practice_count'] = final['practice_count'].fillna(0)
+        # print(df1)
+        df_prac1['sign_up'] = pd.to_datetime(df_prac1['sign_up'], errors = 'coerce')
+
+        df_prac1['sign_upn'] = pd.to_datetime(df_prac1['sign_up']) - timedelta(hours=4)
+
+
+
+        from datetime import datetime
+        from pytz import timezone
+        tz = timezone('UTC')
+        date=datetime.now(tz) 
+        today = pd.to_datetime(date) - timedelta(hours=4)
+        todaydate=today.strftime("%Y-%m-%d")
+        # print(todaydate)
+
+
+        df2 = df_prac1.groupby([df_prac1['sign_upn'].dt.date]).count()
+
+        # print(df1)
+
+
+        cdate=[]
+        for i in df2.index:
+            x=i.strftime('%S')
+            cdate.append(float(x)*1000)
+        count=[]
+        for i in df2['sign_up'] :
+            count.append(i)
+        count1=np.cumsum(count)
+
+
+        df3 = pd.DataFrame(list(zip(cdate,count)), 
+                           columns =['date', 'count']) 
+        df4 = pd.DataFrame(list(zip(cdate,count1)), 
+                           columns =['date', 'count'])
+        data = df3.values.tolist()
+        data1 = df4.values.tolist()
+
+
+        ##### hourly graph
+
+
+        times = pd.to_datetime(df_prac1.sign_upn)
+        times['hour'] = times.map( lambda x: pd.to_datetime(x).hour )
+        timedf=times.groupby(['hour']).size().to_frame('count').reset_index()
+
+        timedata={"hour":timedf['hour'].tolist(),"count":timedf['count'].tolist()}
+
+        ###### week data
+        df_data = pd.to_datetime(df_prac1['sign_upn'], format='%Y%m%d')
+        week_df = df_data.groupby(df_prac1['sign_upn'].dt.strftime("%A")).count()
+
+        weekdata={"day":['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday', 'Sunday'],"count":[str(week_df['Monday']),str(week_df['Tuesday']),str(week_df['Wednesday']),str(week_df['Thursday']),str(week_df['Friday']),str(week_df['Saturday']),str(week_df['Sunday'])]}
+        temp={"weekdata":weekdata,"timedata":timedata}
+        return json.dumps(temp)
+
+
+
+
 
 
 
@@ -33933,7 +37299,7 @@ def mitpracticeprog2():
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     query=[
@@ -34003,7 +37369,7 @@ def mitpracticeprog2():
 def parpracticeprogram():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     query=[
@@ -34066,12 +37432,159 @@ def parpracticeprogram():
 
     return json.dumps(temp)
 
+#>>>>>>>>>>>>------------ PRACTICE BIFURCATION API-------------------
+@app.route('/parpracticeprogg_new/<charttype>')
+def parpractice__program___(charttype):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                            {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,17)}},                
+                            ]}},
+           
+
+        {"$project":{'USER_ID':'$USER_ID._id','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+            'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,
+            'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+            'AUDIO_NAME':1,'AUDIO_LENGTH':1,
+            'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+
+            'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+                ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+#               practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+                         threshcond[0],
+
+
+        { "$project": { 'USER_ID':1,'AGE_GROUP':1,
+
+            "status": {
+              "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": 'bonus','options': "i"  }}
+                  , 
+              "then": 'Bonus', "else": {
+                 "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": "sound",'options': "i" }}, 
+                 "then": 'Sound', "else": 'daily'
+                 }}}}}}         
+
+                 ]
+
+        x=list(collection.aggregate(query))
+        df=pd.DataFrame(x)
+        
+        if 'AGE_GROUP' not in df.columns:
+            df['AGE_GROUP'] = 0
+        if 'USER_ID' not in df.columns:
+            df['USER_ID'] = 0
+            
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+
+        practice_count_overall=pd.DataFrame(df.groupby(['AGE_GROUP','status'])['USER_ID'].count()).reset_index().rename(columns={'USER_ID':'Count'})
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+        dailydf=practice_count_overall[practice_count_overall.status=='daily']
+        dailycompdf=pd.merge(age_group_df,dailydf,on='AGE_GROUP',how='left')
+        dailycompdf['status'].fillna('daily',inplace=True)
+        dailycompdf['Count'].fillna(0,inplace=True)
+        Sounddf=practice_count_overall[practice_count_overall.status=='Sound']
+        Soundcompdf=pd.merge(age_group_df,Sounddf,on='AGE_GROUP',how='left')
+        Soundcompdf['status'].fillna('Sound',inplace=True)
+        Soundcompdf['Count'].fillna(0,inplace=True)
+        Bonusdf=practice_count_overall[practice_count_overall.status=='Bonus']
+        Bonuscompdf=pd.merge(age_group_df,Bonusdf,on='AGE_GROUP',how='left')
+        Bonuscompdf['status'].fillna('Bonus',inplace=True)
+        Bonuscompdf['Count'].fillna(0,inplace=True)
+        temp={'daily':dailycompdf.Count.tolist(),'dtotal':dailycompdf.Count.sum(),'prog':age_group_df.AGE_GROUP.tolist(),
+          'sound':Soundcompdf.Count.tolist(),'soundt':Soundcompdf.Count.sum(),
+           'transition':Bonuscompdf.Count.tolist(),'trant':Bonuscompdf.Count.sum()}
+
+        return json.dumps(temp, default=str)
+    
+    else:
+        query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                            {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,17)}},                
+                            ]}},
+
+        {"$project":{'USER_ID':'$USER_ID._id','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+            'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,
+            'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+            'AUDIO_NAME':1,'AUDIO_LENGTH':1,
+            'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+
+            'PlayBack_Time_Percent':{"$round":[{"$divide":[{"$subtract":
+                ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+
+
+        { "$project": { 'USER_ID':1,'AGE_GROUP':1,
+
+            "status": {
+              "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": 'bonus','options': "i"  }}
+                  , 
+              "then": 'Bonus', "else": {
+                 "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": "sound",'options': "i" }}, 
+                 "then": 'Sound', "else": 'daily'
+                 }}}}}}         
+
+                 ]
+
+        x=list(collection.aggregate(query))
+        df=pd.DataFrame(x)
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+
+        practice_count_overall=pd.DataFrame(df.groupby(['AGE_GROUP','status'])['USER_ID'].count()).reset_index().rename(columns={'USER_ID':'Count'})
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+        dailydf=practice_count_overall[practice_count_overall.status=='daily']
+        dailycompdf=pd.merge(age_group_df,dailydf,on='AGE_GROUP',how='left')
+        dailycompdf['status'].fillna('daily',inplace=True)
+        dailycompdf['Count'].fillna(0,inplace=True)
+        Sounddf=practice_count_overall[practice_count_overall.status=='Sound']
+        Soundcompdf=pd.merge(age_group_df,Sounddf,on='AGE_GROUP',how='left')
+        Soundcompdf['status'].fillna('Sound',inplace=True)
+        Soundcompdf['Count'].fillna(0,inplace=True)
+        Bonusdf=practice_count_overall[practice_count_overall.status=='Bonus']
+        Bonuscompdf=pd.merge(age_group_df,Bonusdf,on='AGE_GROUP',how='left')
+        Bonuscompdf['status'].fillna('Bonus',inplace=True)
+        Bonuscompdf['Count'].fillna(0,inplace=True)
+        temp={'daily':dailycompdf.Count.tolist(),'dtotal':dailycompdf.Count.sum(),'prog':age_group_df.AGE_GROUP.tolist(),
+          'sound':Soundcompdf.Count.tolist(),'soundt':Soundcompdf.Count.sum(),
+           'transition':Bonuscompdf.Count.tolist(),'trant':Bonuscompdf.Count.sum()}
+
+        return json.dumps(temp)
+
+
+
 
 @app.route('/parpracprog')
 def parpracticeprogram_unique():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     query=[
@@ -34133,12 +37646,162 @@ def parpracticeprogram_unique():
        'transition':Bonuscompdf.Count.tolist(),'trant':Bonuscompdf.Count.sum()}
     return json.dumps(temp)
 
+#>>>>>>>>>>>>>>----------- PRACTICE BIFURCATION API--------------->>>>>>>>>>>>
+@app.route('/parpracprog/<charttype>')
+def par__practice__program__unique(charttype):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                            {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,17)}},                
+                            ]}},
+         
+
+        {"$project":{'USER_ID':'$USER_ID._id','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+            'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,
+            'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+            'AUDIO_NAME':1,'AUDIO_LENGTH':1,
+            'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+
+            'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+                ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+#                practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+                         threshcond[0],
+
+
+        { "$project": { 'USER_ID':1,'AGE_GROUP':1,
+
+            "status": {
+              "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": 'bonus','options': "i"  }}
+                  , 
+              "then": 'Bonus', "else": {
+                 "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": "sound",'options': "i" }}, 
+                 "then": 'Sound', "else": 'daily'
+                 }}}}}}         
+
+                 ]
+
+        x=list(collection.aggregate(query))
+        df=pd.DataFrame(x)
+        
+        if 'AGE_GROUP' not in df.columns:
+            df['AGE_GROUP'] = 0
+        if 'USER_ID' not in df.columns:
+            df['USER_ID'] = 0
+            
+            
+            
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+
+        practice_count_overall=pd.DataFrame(df.groupby(['AGE_GROUP','status'])['USER_ID'].nunique()).reset_index().rename(columns={'USER_ID':'Count'})
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+        dailydf=practice_count_overall[practice_count_overall.status=='daily']
+        dailycompdf=pd.merge(age_group_df,dailydf,on='AGE_GROUP',how='left')
+        dailycompdf['status'].fillna('daily',inplace=True)
+        dailycompdf['Count'].fillna(0,inplace=True)
+        Sounddf=practice_count_overall[practice_count_overall.status=='Sound']
+        Soundcompdf=pd.merge(age_group_df,Sounddf,on='AGE_GROUP',how='left')
+        Soundcompdf['status'].fillna('Sound',inplace=True)
+        Soundcompdf['Count'].fillna(0,inplace=True)
+        Bonusdf=practice_count_overall[practice_count_overall.status=='Bonus']
+        Bonuscompdf=pd.merge(age_group_df,Bonusdf,on='AGE_GROUP',how='left')
+        Bonuscompdf['status'].fillna('Bonus',inplace=True)
+        Bonuscompdf['Count'].fillna(0,inplace=True)
+        temp={'daily':dailycompdf.Count.tolist(),'dtotal':dailycompdf.Count.sum(),'prog':age_group_df.AGE_GROUP.tolist(),
+          'sound':Soundcompdf.Count.tolist(),'soundt':Soundcompdf.Count.sum(),
+           'transition':Bonuscompdf.Count.tolist(),'trant':Bonuscompdf.Count.sum()}
+        return json.dumps(temp, default=str)
+    
+    else:
+        query=[
+            {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                            {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                            {'USER_ID.CREATED_DATE':{'$gte':datetime.datetime(2020,3,17)}},                
+                            ]}},
+
+        {"$project":{'USER_ID':'$USER_ID._id','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+            'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,
+            'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+            'AUDIO_NAME':1,'AUDIO_LENGTH':1,
+            'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+
+            'PlayBack_Time_Percent':{"$round":[{"$divide":[{"$subtract":
+                ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+
+
+        { "$project": { 'USER_ID':1,'AGE_GROUP':1,
+
+            "status": {
+              "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": 'bonus','options': "i"  }}
+                  , 
+              "then": 'Bonus', "else": {
+                 "$cond": { "if": { "$regexMatch": { 
+                                        "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                        "regex": "sound",'options': "i" }}, 
+                 "then": 'Sound', "else": 'daily'
+                 }}}}}}         
+
+                 ]
+
+        x=list(collection.aggregate(query))
+        df=pd.DataFrame(x)
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+
+        practice_count_overall=pd.DataFrame(df.groupby(['AGE_GROUP','status'])['USER_ID'].nunique()).reset_index().rename(columns={'USER_ID':'Count'})
+        age_group_df=pd.DataFrame({'AGE_GROUP':list(set(df.AGE_GROUP.tolist()))}).dropna().sort_values(by=['AGE_GROUP'])
+        dailydf=practice_count_overall[practice_count_overall.status=='daily']
+        dailycompdf=pd.merge(age_group_df,dailydf,on='AGE_GROUP',how='left')
+        dailycompdf['status'].fillna('daily',inplace=True)
+        dailycompdf['Count'].fillna(0,inplace=True)
+        Sounddf=practice_count_overall[practice_count_overall.status=='Sound']
+        Soundcompdf=pd.merge(age_group_df,Sounddf,on='AGE_GROUP',how='left')
+        Soundcompdf['status'].fillna('Sound',inplace=True)
+        Soundcompdf['Count'].fillna(0,inplace=True)
+        Bonusdf=practice_count_overall[practice_count_overall.status=='Bonus']
+        Bonuscompdf=pd.merge(age_group_df,Bonusdf,on='AGE_GROUP',how='left')
+        Bonuscompdf['status'].fillna('Bonus',inplace=True)
+        Bonuscompdf['Count'].fillna(0,inplace=True)
+        temp={'daily':dailycompdf.Count.tolist(),'dtotal':dailycompdf.Count.sum(),'prog':age_group_df.AGE_GROUP.tolist(),
+          'sound':Soundcompdf.Count.tolist(),'soundt':Soundcompdf.Count.sum(),
+           'transition':Bonuscompdf.Count.tolist(),'trant':Bonuscompdf.Count.sum()}
+        return json.dumps(temp)
+
+
+
+
+
+
 @app.route('/mitpracprog')
 def mitpracprog():
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     query=[
@@ -34207,8 +37870,8 @@ def mitpracprog():
 @app.route('/parsignupdaycompp')
 def parents_anal_hourly_comparison():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     dateStr = "2020-03-17T00:00:00.000Z"
@@ -34216,7 +37879,7 @@ def parents_anal_hourly_comparison():
     ##################### TODAY ###########################
     df = df = DataFrame(list(collection.aggregate([
             {"$match":{'$and':[{'ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-                                                                 
+
                   {"IS_DISABLED":{"$ne":"Y"}},
                   {"IS_BLOCKED":{"$ne":"Y"}},
                  {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -34229,16 +37892,18 @@ def parents_anal_hourly_comparison():
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                  
+
             {"CREATED_DATE":{"$gt":myDatetime}}]}},
         {"$group":{"_id":{"$dateToString": {"date":'$CREATED_DATE'}}, 'distinct':{"$addToSet":'$_id'}}},
         {"$project":{"_id":1, 'Total_parents':{'$size':'$distinct'}}},
         { '$sort': { '_id': 1 }}])))
     df = df.rename(columns={"_id": "sign_up"})
     df=df.dropna()
+
     df['sign_up'] = pd.to_datetime(df['sign_up'], errors = 'coerce')
     df['sign_upn'] = pd.to_datetime(df['sign_up']) - timedelta(hours=4)
     df['date']=df['sign_upn'].apply(lambda x: x.strftime("%Y-%m-%d"))
+
     tz = timezone('US/Eastern')
     date=datetime.datetime.now(tz)
     yesterday=pd.to_datetime(date)-timedelta(days=1)
@@ -34246,33 +37911,45 @@ def parents_anal_hourly_comparison():
     yesterdaydate=yesterday.strftime("%Y-%m-%d")
     dfyes=df[df['date']==yesterdaydate]
     dftod=df[df['date']==todaydate]
-    times = pd.to_datetime(dfyes.sign_upn)
-    times['hour'] = times.map( lambda x: pd.to_datetime(x).hour )
-    timedfyes=times.groupby(['hour']).size().to_frame('count').reset_index()
-    times2 = pd.to_datetime(dftod.sign_upn)
-    times2['hour'] = times2.map( lambda x: pd.to_datetime(x).hour )
-    timedftod=times2.groupby(['hour']).size().to_frame('count').reset_index()
-    timedfyes = timedfyes.astype(int)
-    hour=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
-    count=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    dftest = pd.DataFrame({'hour':hour,'count':count})
-    result = pd.merge(timedfyes , dftest,how='right', on='hour')
-    result=result.fillna(0)
-    result= result.astype(int)
-    result = result.sort_values(["hour", "count_x"], ascending = (True,False))
-    #yesterday count
-    yescount=list(result['count_x'])
-    timedftod = timedftod.astype(int)
-    result12 = pd.merge(timedftod, dftest,how='right', on='hour')
-    result12=result12.fillna(0)
-    result12= result12.astype(int)
-    result12 = result12.sort_values(["hour", "count_x"], ascending = (True,False))
-    #todays count
-    todcount=list(result12['count_x'])
-    totaly=sum(yescount)
-    totalt=sum(todcount)
-    temp={"tod":todcount,"yes":yescount,"totaly":[str(totaly)],"totalt":[str(totalt)]}
-    return json.dumps(temp)
+
+    if len(dftod) != 0:   
+        times = pd.to_datetime(dfyes.sign_upn)
+        times['hour'] = times.map( lambda x: pd.to_datetime(x).hour )
+        timedfyes=times.groupby(['hour']).size().to_frame('count').reset_index()
+        times2 = pd.to_datetime(dftod.sign_upn)
+        times2['hour'] = times2.map( lambda x: pd.to_datetime(x).hour )
+        timedftod=times2.groupby(['hour']).size().to_frame('count').reset_index()
+        timedfyes = timedfyes.astype(int)
+        hour=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+        count=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        dftest = pd.DataFrame({'hour':hour,'count':count})
+
+        result = pd.merge(timedfyes , dftest,how='right', on='hour')
+        result=result.fillna(0)
+        result= result.astype(int)
+
+        result = result.sort_values(["hour", "count_x"], ascending = (True,False))
+        #yesterday count
+        yescount=list(result['count_x'])
+        timedftod = timedftod.astype(int)
+        result12 = pd.merge(timedftod, dftest,how='right', on='hour')
+
+        result12=result12.fillna(0)
+        result12= result12.astype(int)
+        result12 = result12.sort_values(["hour", "count_x"], ascending = (True,False))
+        #todays count
+        todcount=list(result12['count_x'])
+        totaly=sum(yescount)
+        totalt=sum(todcount)
+
+        temp={"tod":todcount,"yes":yescount,"totaly":[str(totaly)],"totalt":[str(totalt)]}
+        return json.dumps(temp)
+    #     temp
+    else:
+        temp = {"tod":[],"totalt":[],"totaly":[],"yes":[]}
+        return json.dumps(temp)
+        
+# parents_anal_hourly_comparison()
 
 
 @app.route('/mitsignupdaycompp')
@@ -34280,7 +37957,7 @@ def parents_anal_hourly_comparison():
 def mitsignupdaycomp211():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     dateStr = "2020-03-17T00:00:00.000Z"
@@ -34347,8 +38024,8 @@ def mitsignupdaycomp211():
 @app.route('/parpracdaycompp')
 def parsignupdaycomp12():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     dateStr = "2020-03-17T00:00:00.000Z"
@@ -34404,13 +38081,142 @@ def parsignupdaycomp12():
     temp={"tod":todcount,"yes":yescount,"totaly":[str(totaly)],"totalt":[str(totalt)]}
     return json.dumps(temp)
 
+#>>>>>>>>>>>>------------------- PRACTICE BIFURCATION API------------------>>>>>>>>>
+@app.route('/parpracdaycompp/<charttype>')
+def par_signup_day_comp_12_(charttype):
+    from datetime import timedelta as tdelta
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    dateStr = "2020-03-17T00:00:00.000Z"
+    myDatetime = dateutil.parser.parse(dateStr)
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        df = DataFrame(list(collection.aggregate([
+                    {"$match":{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}},
+                             'USER_ID.IS_DISABLED':{"$ne":'Y'},'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'},
+                             'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}},
+                             'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}},
+                             'USER_ID.EMAIL_ID':{"$ne":""},
+                             'USER_ID.CREATED_DATE':{"$gt":myDatetime},
+                             'USER_ID.ROLE_ID.ROLE_ID':{"$eq":3}}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+                    {"$group":{"_id":{"$dateToString": {"date":'$MODIFIED_DATE'}},'Count':{"$sum":1}}},
+                    {"$project":{"_id":1, 'Parents_Practice':'$Count'}},
+                    { '$sort': { '_id': 1 }}])))
+        df = df.rename(columns={"_id": "sign_up"})
+        df=df.dropna()
+        df['sign_up'] = pd.to_datetime(df['sign_up'], errors = 'coerce')
+        df['sign_upn'] = pd.to_datetime(df['sign_up']) - timedelta(hours=4)
+        df['date']=df['sign_upn'].apply(lambda x: x.strftime("%Y-%m-%d"))
+        tz = timezone('US/Eastern')
+        date=datetime.datetime.now(tz)
+        yesterday=pd.to_datetime(date)-timedelta(days=1)
+        todaydate=date.strftime("%Y-%m-%d")
+        yesterdaydate=yesterday.strftime("%Y-%m-%d")
+        dfyes=df[df['date']==yesterdaydate]
+        dftod=df[df['date']==todaydate]
+        times = pd.to_datetime(dfyes.sign_upn)
+        times['hour'] = times.map( lambda x: pd.to_datetime(x).hour )
+        timedfyes=times.groupby(['hour']).size().to_frame('count').reset_index()
+        times2 = pd.to_datetime(dftod.sign_upn)
+        times2['hour'] = times2.map( lambda x: pd.to_datetime(x).hour )
+        timedftod=times2.groupby(['hour']).size().to_frame('count').reset_index()
+        timedfyes = timedfyes.astype(int)
+        hour=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+        count=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        dftest = pd.DataFrame({'hour':hour,'count':count})
+        result = pd.merge(timedfyes , dftest,how='right', on='hour')
+        result=result.fillna(0)
+        result= result.astype(int)
+        result = result.sort_values(["hour", "count_x"], ascending = (True,False))
+        #yesterday count
+        yescount=list(result['count_x'])
+        # timedftod = timedftod.astype(int)
+        # result12 = pd.merge(timedftod, dftest,how='right', on='hour')
+        # result12=result12.fillna(0)
+        # result12= result12.astype(int)
+        # result12 = result12.sort_values(["hour", "count_x"], ascending = (True,False))
+        # #todays count
+        todcount=list(result['count_y'])
+        totaly=sum(yescount)
+        totalt=sum(todcount)
+        temp={"tod":todcount,"yes":yescount,"totaly":[str(totaly)],"totalt":[str(totalt)]}
+        return json.dumps(temp)
+    
+    else:
+        df = DataFrame(list(collection.aggregate([
+                    {"$match":{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}},
+                             'USER_ID.IS_DISABLED':{"$ne":'Y'},'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'},
+                             'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}},
+                             'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}},
+                             'USER_ID.EMAIL_ID':{"$ne":""},
+                             'USER_ID.CREATED_DATE':{"$gt":myDatetime},
+                             'USER_ID.ROLE_ID.ROLE_ID':{"$eq":3}}},
+                    {"$group":{"_id":{"$dateToString": {"date":'$MODIFIED_DATE'}},'Count':{"$sum":1}}},
+                    {"$project":{"_id":1, 'Parents_Practice':'$Count'}},
+                    { '$sort': { '_id': 1 }}])))
+        df = df.rename(columns={"_id": "sign_up"})
+        df=df.dropna()
+        df['sign_up'] = pd.to_datetime(df['sign_up'], errors = 'coerce')
+        df['sign_upn'] = pd.to_datetime(df['sign_up']) - timedelta(hours=4)
+        df['date']=df['sign_upn'].apply(lambda x: x.strftime("%Y-%m-%d"))
+        tz = timezone('US/Eastern')
+        date=datetime.datetime.now(tz)
+        yesterday=pd.to_datetime(date)-timedelta(days=1)
+        todaydate=date.strftime("%Y-%m-%d")
+        yesterdaydate=yesterday.strftime("%Y-%m-%d")
+        dfyes=df[df['date']==yesterdaydate]
+        dftod=df[df['date']==todaydate]
+        times = pd.to_datetime(dfyes.sign_upn)
+        times['hour'] = times.map( lambda x: pd.to_datetime(x).hour )
+        timedfyes=times.groupby(['hour']).size().to_frame('count').reset_index()
+        times2 = pd.to_datetime(dftod.sign_upn)
+        times2['hour'] = times2.map( lambda x: pd.to_datetime(x).hour )
+        timedftod=times2.groupby(['hour']).size().to_frame('count').reset_index()
+        timedfyes = timedfyes.astype(int)
+        hour=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+        count=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        dftest = pd.DataFrame({'hour':hour,'count':count})
+        result = pd.merge(timedfyes , dftest,how='right', on='hour')
+        result=result.fillna(0)
+        result= result.astype(int)
+        result = result.sort_values(["hour", "count_x"], ascending = (True,False))
+        #yesterday count
+        yescount=list(result['count_x'])
+        # timedftod = timedftod.astype(int)
+        # result12 = pd.merge(timedftod, dftest,how='right', on='hour')
+        # result12=result12.fillna(0)
+        # result12= result12.astype(int)
+        # result12 = result12.sort_values(["hour", "count_x"], ascending = (True,False))
+        # #todays count
+        todcount=list(result['count_y'])
+        totaly=sum(yescount)
+        totalt=sum(todcount)
+        temp={"tod":todcount,"yes":yescount,"totaly":[str(totaly)],"totalt":[str(totalt)]}
+        return json.dumps(temp)
+
+
+
+
+
+
+
 # code  by ishwinder 
 
 @app.route('/schoolname/<n>')
 def school_name(n):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     df = DataFrame(list(db.user_master.aggregate([
      {"$match":
@@ -34439,7 +38245,7 @@ def mitsignupdaycomp12():
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     dateStr = "2020-03-17T00:00:00.000Z"
@@ -34547,7 +38353,7 @@ def parpracnew():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
 
     db=client.compass
     collection = db.audio_track_master
@@ -34593,12 +38399,121 @@ def parpracnew():
     data = df3.values.tolist()
     data1 = df4.values.tolist()
     return json.dumps({"bar":data,"line":data1})
+
+#>>>>>>>>>>>-------------------PRACTICE BIFURCATION API----------------------
+@app.route('/parpracnew/<charttype>')
+def par__pracnew__(charttype):
+
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+
+    db=client.compass
+    collection = db.audio_track_master
+
+    dateStr = "2020-03-17T00:00:00.000Z"
+    myDatetime = dateutil.parser.parse(dateStr)
+
+
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        x =list(collection.aggregate([
+            {"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
+                       {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                       {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$ne":[" ",'',None]}},
+                       {'USER_ID.CREATED_DATE':{"$gt":myDatetime}},
+                       {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+              practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+
+            {"$group":{"_id":{"$dateToString": {"format": "%Y-%m-%d","date":'$CREATED_DATE'}},
+                       'Count':{"$sum":1}}},
+                              
+            {"$project":{"_id":1, 'Parents_Practice':'$Count'}}]))
+        res = [] 
+        for idx, sub in enumerate(x, start = 0): 
+            if idx == 0: 
+        #         res.append(list(sub.keys())) 
+                res.append(list(sub.values())) 
+            else: 
+                res.append(list(sub.values())) 
+        df = pd.DataFrame(res, columns = ['date', 'count'])
+        df['date'] = pd.to_datetime(df['date'], errors = 'coerce')
+        df['date'] = pd.to_datetime(df['date']) - timedelta(hours=4)
+        df2 = df.groupby([df['date'].dt.date]).sum()
+        cdate=[]
+        for i in df2.index:
+            x=i.strftime('%S')
+            cdate.append(float(x)*1000)
+        count=[]
+        for i in df2['count'] :
+            count.append(i)
+        count1=np.cumsum(count)
+        df3 = pd.DataFrame(list(zip(cdate,count)), 
+                           columns =['date', 'count']) 
+        df4 = pd.DataFrame(list(zip(cdate,count1)), 
+                           columns =['date', 'count'])
+        data = df3.values.tolist()
+        data1 = df4.values.tolist()
+        return json.dumps({"bar":data,"line":data1})
+    
+    else:
+        x =list(collection.aggregate([
+            {"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
+                       {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                       {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$ne":[" ",'',None]}},
+                       {'USER_ID.CREATED_DATE':{"$gt":myDatetime}},
+                       {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+            {"$group":{"_id":{"$dateToString": {"format": "%Y-%m-%d","date":'$CREATED_DATE'}},
+                       'Count':{"$sum":1}}},
+            {"$project":{"_id":1, 'Parents_Practice':'$Count'}}]))
+        res = [] 
+        for idx, sub in enumerate(x, start = 0): 
+            if idx == 0: 
+        #         res.append(list(sub.keys())) 
+                res.append(list(sub.values())) 
+            else: 
+                res.append(list(sub.values())) 
+        df = pd.DataFrame(res, columns = ['date', 'count'])
+        df['date'] = pd.to_datetime(df['date'], errors = 'coerce')
+        df['date'] = pd.to_datetime(df['date']) - timedelta(hours=4)
+        df2 = df.groupby([df['date'].dt.date]).sum()
+        cdate=[]
+        for i in df2.index:
+            x=i.strftime('%S')
+            cdate.append(float(x)*1000)
+        count=[]
+        for i in df2['count'] :
+            count.append(i)
+        count1=np.cumsum(count)
+        df3 = pd.DataFrame(list(zip(cdate,count)), 
+                           columns =['date', 'count']) 
+        df4 = pd.DataFrame(list(zip(cdate,count1)), 
+                           columns =['date', 'count'])
+        data = df3.values.tolist()
+        data1 = df4.values.tolist()
+        return json.dumps({"bar":data,"line":data1})
+
+
+
+
+
+
+
 @app.route('/mitpracnew')
 def mitpracnew():
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
 
     db=client.compass
     collection = db.audio_track_master
@@ -34726,7 +38641,7 @@ def mitpracnew():
 def par_analytics_hourly_and_weekly_prac():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
 
     db=client.compass
     collection = db.audio_track_master
@@ -34781,12 +38696,134 @@ def par_analytics_hourly_and_weekly_prac():
     temp={"weekdata":weekdata,"timedata":timedata}
     return json.dumps(temp)
 
+
+#>>>>>>>>>>>>--------------PRACTICE BIFURCATION API---------------------
+@app.route('/parpracweek/<charttype>')
+def paranalytics__hourly__and__weeklyprac(charttype):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+
+    db=client.compass
+    collection = db.audio_track_master
+
+    dateStr = "2020-03-17T00:00:00.000Z"
+    myDatetime = dateutil.parser.parse(dateStr)
+
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+    ############# DAY WISE #####################
+
+        df = DataFrame(list(collection.aggregate([
+            {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                     {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$nin":["",' ',None]}},
+                     {'USER_ID.CREATED_DATE':{"$gt":myDatetime}},
+                     {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {"$group":{"_id":{'DayOfWeek':{'$dayOfWeek':'$MODIFIED_DATE'}},
+                     'Count':{"$sum":1}}},
+            {"$project":{"_id":1, 'Parents_Practice':'$Count'}}])))
+
+        df['DayOfWeek'] = pd.json_normalize(df['_id'])
+        del df["_id"]
+        weekdata={"day":['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday', 'Sunday'],"count":[str(df['Parents_Practice'][0]),str(df['Parents_Practice'][2]),
+                                                                                                                str(df['Parents_Practice'][4]),str(df['Parents_Practice'][1]),
+                                                                                                                str(df['Parents_Practice'][5]),str(df['Parents_Practice'][6]),str(df['Parents_Practice'][3])]}
+
+
+        ############### HOURLY ########################################
+
+
+
+        df_hour = DataFrame(list(collection.aggregate([
+            {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                     {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$nin":["",' ',None]}},
+                     {'USER_ID.CREATED_DATE':{"$gt":myDatetime}},
+                     {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {"$group":{"_id":{"hour": {"$hour": "$MODIFIED_DATE"}},'Count':{"$sum":1}}},
+            {"$project":{"_id":1, 'Parents_Practice':'$Count'}}])))
+
+        df_hour['hour'] = pd.json_normalize(df_hour['_id'])
+        del df_hour["_id"]
+        df1_hour=df_hour.sort_values(by = ["hour"])
+        timedata={"hour":df1_hour['hour'].tolist(),"count":df1_hour['Parents_Practice'].tolist()}
+
+
+
+        temp={"weekdata":weekdata,"timedata":timedata}
+        return json.dumps(temp)
+    
+    else:
+        
+        df = DataFrame(list(collection.aggregate([
+            {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                     {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$nin":["",' ',None]}},
+                     {'USER_ID.CREATED_DATE':{"$gt":myDatetime}},
+                     {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+            {"$group":{"_id":{'DayOfWeek':{'$dayOfWeek':'$MODIFIED_DATE'}},
+                     'Count':{"$sum":1}}},
+            {"$project":{"_id":1, 'Parents_Practice':'$Count'}}])))
+
+        df['DayOfWeek'] = pd.json_normalize(df['_id'])
+        del df["_id"]
+        weekdata={"day":['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday', 'Sunday'],"count":[str(df['Parents_Practice'][0]),str(df['Parents_Practice'][2]),
+                                                                                                                str(df['Parents_Practice'][4]),str(df['Parents_Practice'][1]),
+                                                                                                                str(df['Parents_Practice'][5]),str(df['Parents_Practice'][6]),str(df['Parents_Practice'][3])]}
+
+
+        ############### HOURLY ########################################
+
+
+
+        df_hour = DataFrame(list(collection.aggregate([
+            {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                     {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$nin":["",' ',None]}},
+                     {'USER_ID.CREATED_DATE':{"$gt":myDatetime}},
+                     {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+            {"$group":{"_id":{"hour": {"$hour": "$MODIFIED_DATE"}},'Count':{"$sum":1}}},
+            {"$project":{"_id":1, 'Parents_Practice':'$Count'}}])))
+
+        df_hour['hour'] = pd.json_normalize(df_hour['_id'])
+        del df_hour["_id"]
+        df1_hour=df_hour.sort_values(by = ["hour"])
+        timedata={"hour":df1_hour['hour'].tolist(),"count":df1_hour['Parents_Practice'].tolist()}
+
+
+
+        temp={"weekdata":weekdata,"timedata":timedata}
+        return json.dumps(temp)
+
+
+
+
+
+
 @app.route('/mitpracweek')
 def mitpracweek():
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
 
     db=client.compass
     collection = db.audio_track_master
@@ -34989,7 +39026,7 @@ def Par_analytics_signup_daywise_and_hourly_():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
 
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -35060,7 +39097,7 @@ def mitsignupweek():
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -35188,8 +39225,8 @@ def parentsmapmexico():
     reader = geolite2.reader()
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
 
 
@@ -35429,8 +39466,8 @@ def parentsmapcanada():
     reader = geolite2.reader()
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
 
 
@@ -35612,8 +39649,8 @@ def parentsmapcanada():
 def fast_cards():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection2 = db.FAST_APP_CLICKS
 
@@ -35647,8 +39684,8 @@ def fast_cards():
 @app.route('/fastaskedquestion')
 def asked_question():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
     collection2 = db.asked_question
 
@@ -35689,7 +39726,7 @@ def asked_question():
 def schgraph_table(sch):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection1= db.user_master
     query1=[
@@ -35859,7 +39896,7 @@ def schgraph_table(sch):
 def schgraph():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     df = DataFrame(list(collection.aggregate([
@@ -35897,7 +39934,7 @@ def parents_tabletest():
     reader = geolite2.reader()
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.audio_track_master
@@ -36052,8 +40089,8 @@ def schoolanalyticscards():
     reader = geolite2.reader()
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
 
 
@@ -36288,8 +40325,8 @@ def parentsmapother():
     reader = geolite2.reader()
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
 
 
@@ -36470,7 +40507,7 @@ def parentsmapukraine():
     reader = geolite2.reader()
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username,password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username,password))
     db=client.compass
 
 
@@ -36705,8 +40742,8 @@ def parentsmapindia():
     reader = geolite2.reader()
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
 
 
@@ -36947,8 +40984,8 @@ def parentsmapusa():
     reader = geolite2.reader()
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
 
 
@@ -37191,8 +41228,8 @@ def parentsmaps():
     reader = geolite2.reader()
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
 
 
@@ -37381,7 +41418,7 @@ def userparents_table(usertype):
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
 
 
@@ -37580,7 +41617,7 @@ def graph1_table(daate):
     datetime_object = datetime.datetime.strptime(DATE1, '%y/%m/%d %H:%M:%S')
     minus=datetime_object
     minus1 = minus.strftime("%d-%b-%Y").replace('-', ' ')
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_master
@@ -37761,7 +41798,7 @@ def logparents_table():
     reader = geolite2.reader()
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.audio_track_master
@@ -37925,7 +41962,7 @@ def pracparents_table():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.audio_track_master
@@ -38038,7 +42075,7 @@ def parents_table():
     reader = geolite2.reader()
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.audio_track_master
@@ -38224,7 +42261,7 @@ def parcount():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
 
     db=client.compass
     collection = db.user_master
@@ -38274,7 +42311,7 @@ def parcount():
 def mitcount():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
 
     db=client.compass
     collection = db.user_master
@@ -38321,7 +42358,7 @@ def parsignup():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     dateStr = "2020-03-17T00:00:00.000Z"
@@ -38381,7 +42418,7 @@ def parsignup():
 @app.route('/mitsignupsnew')
 def miitsignupnew():
     
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_master
@@ -38438,7 +42475,7 @@ def miitsignupnew():
 
 @app.route('/parsignupsnew')
 def parentsanalytics_chart1():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_master
@@ -38499,7 +42536,7 @@ def parentsanalytics_chart1():
 def psignu():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username,       password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username,       password))
     db=client.compass
     collection = db.user_master
     df = DataFrame(list(collection.aggregate([{"$match":
@@ -38537,7 +42574,7 @@ def psignu():
 def psignw():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.audio_track_master
@@ -38601,7 +42638,7 @@ def psignw():
 def psigns():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.audio_track_master
@@ -38675,7 +42712,7 @@ def psigns():
 def psign():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.audio_track_master
@@ -38747,23 +42784,63 @@ def psign():
 
 @app.route('/averagetrend/')
 def average_trend():
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username,       password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username,       password))
     db=client.compass
     collection = db.audio_track_master
     df1 = DataFrame(list(collection.aggregate([
         {'$match':{
-    'USER_ID.IS_DISABLED':{'$ne':'Y'},
-     'USER_ID.IS_BLOCKED':{"$ne":'Y'},
-     'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'},
-         '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
 
-     "MODIFIED_DATE":{"$gt": datetime.datetime(2019,8,1),
-     "$lt":datetime.datetime(2020,8,1)}
-    }},
+         '$and':[  {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                 {'MODIFIED_DATE':{'$gt':LSY_Date,'$lt': csy_first_date()}}]}},
+
+#      "MODIFIED_DATE":{"$gt": datetime.datetime(2019,8,1),"$lt":datetime.datetime(2020,8,1)}
+
+        
+
     {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
     'TOTAL_USERS_PRACTICING':{'$sum':1},
     'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID.USER_ID'}
@@ -38779,13 +42856,20 @@ def average_trend():
 
     df2 = DataFrame(list(collection.aggregate([
     {'$match':{
-    'USER_ID.IS_DISABLED':{'$ne':'Y'},
-     'USER_ID.IS_BLOCKED':{"$ne":'Y'},
-     'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'},
-         '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
-     "MODIFIED_DATE":{"$gt": datetime.datetime(2020,8,1),"$lt":datetime.datetime(2021,8,1)}
+
+         '$and':[  {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                {'MODIFIED_DATE':{'$gt':csy_first_date()}}],
+#      "MODIFIED_DATE":{"$gt": datetime.datetime(2020,8,1),"$lt":datetime.datetime(2021,8,1)}
+        'MODIFIED_DATE':{'$gt':csy_first_date()}
     }},
     {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
     'TOTAL_USERS_PRACTICING':{'$sum':1},
@@ -38834,13 +42918,289 @@ def average_trend():
     averageTREND=[averageTREND]
     return json.dumps(averageTREND)
 
+# <<<<<<<<<<<<<<<<<<<<<<<< Practice Bifurcation API >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+@app.route('/averagetrendnew/<charttype>')
+def average___trend_____(charttype):
+   
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+   
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username,       password))
+    db=client.compass
+    collection = db.audio_track_master
+   
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        df1 = DataFrame(list(collection.aggregate([
+            {'$match':{
+        'USER_ID.IS_DISABLED':{'$ne':'Y'},
+         'USER_ID.IS_BLOCKED':{"$ne":'Y'},
+         'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'},
+             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
+
+    #      "MODIFIED_DATE":{"$gt": datetime.datetime(2019,8,1),"$lt":datetime.datetime(2020,8,1)}
+        'MODIFIED_DATE':{'$gt':LSY_Date,'$lt': csy_first_date()}
+            }},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+        {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
+        'TOTAL_USERS_PRACTICING':{'$sum':1},
+        'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID'}
+         }},
+         {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}},
+        
+        {"$match":
+            {
+                'UNIQUE_USERS_PRACTICING':{'$gt':0}
+            }
+        },
+        {'$sort':{'_id':1}},
+        { "$project": { "Practice_count in 2019-2020": {"$round":[{ "$divide": ["$TOTAL_USERS_PRACTICING", "$UNIQUE_USERS_PRACTICING"] },2 ]} } }
+        ])))
+        df1.rename(columns = { '_id': 'Month'}, inplace = True)  
+        d = dict(enumerate(calendar.month_name))    # to convert monthnumber of dataframe into monthname
+        Month=[8,9,10,11,12,1,2,3,4,5,6,7]
+        if df1.empty:
+            df1=pd.DataFrame(index=[0,1,2,3,4,5,6,7,8,9,10,11], columns=['Month','Practice_count in 2019-2020'])
+            df1["Month"] = Month
+            df1.fillna(0,inplace=True)        
+        df1['Month'] = df1['Month'].map(d)
+        # print(df1)
+
+        df2 = DataFrame(list(collection.aggregate([
+        {'$match':{
+        'USER_ID.IS_DISABLED':{'$ne':'Y'},
+         'USER_ID.IS_BLOCKED':{"$ne":'Y'},
+         'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'},
+             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
+    #      "MODIFIED_DATE":{"$gt": datetime.datetime(2020,8,1),"$lt":datetime.datetime(2021,8,1)}
+            'MODIFIED_DATE':{'$gt':csy_first_date()}
+        }},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+        {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
+        'TOTAL_USERS_PRACTICING':{'$sum':1},
+        'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID'}
+         }},
+         {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}},
+         {"$match":
+            {
+                'UNIQUE_USERS_PRACTICING':{'$gt':0}
+            }
+        },
+        {'$sort':{'_id':1}},
+        { "$project": { "Practice_count in 2020-2021": {"$round":[{ "$divide": ["$TOTAL_USERS_PRACTICING", "$UNIQUE_USERS_PRACTICING"] },2 ]} } }
+        ])))
+        df2.rename(columns = { '_id': 'Month'}, inplace = True)  
+        d = dict(enumerate(calendar.month_name))    # to convert monthnumber of dataframe into monthname
+        Month=[8,9,10,11,12,1,2,3,4,5,6,7]
+        if df2.empty:
+            df2=pd.DataFrame(index=[0,1,2,3,4,5,6,7,8,9,10,11], columns=['Month','Practice_count in 2020-2021'])
+            df2["Month"] = Month
+            df2.fillna(0,inplace=True)        
+        df2['Month'] = df2['Month'].map(d)
+        # print(df2)
+
+        practice_left= pd.merge(df1, df2,on='Month', how='outer')
+
+        practice_left=practice_left.fillna(0)
+        practice_left
+
+        month=["AUG","SEP","OCT","NOV","DEC","JAN","FEB","MAR","APR","MAY","JUN","JUL"]
+        curve=[practice_left[practice_left['Month']=='August']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='September']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='October']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='November']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='December']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='January']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='February']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='March']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='April']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='May']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='June']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='July']['Practice_count in 2019-2020'].item()]
+        bar=[practice_left[practice_left['Month']=='August']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='September']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='October']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='November']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='December']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='January']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='February']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='March']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='April']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='May']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='June']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='July']['Practice_count in 2020-2021'].item()]
+        averageTREND={'month':month,'curve':curve,'bar':bar}
+        averageTREND=[averageTREND]
+        return json.dumps(averageTREND)
+   
+    else:
+        df1 = DataFrame(list(collection.aggregate([
+            {'$match':{
+        'USER_ID.IS_DISABLED':{'$ne':'Y'},
+         'USER_ID.IS_BLOCKED':{"$ne":'Y'},
+         'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'},
+             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
+
+    #      "MODIFIED_DATE":{"$gt": datetime.datetime(2019,8,1),"$lt":datetime.datetime(2020,8,1)}
+        'MODIFIED_DATE':{'$gt':LSY_Date,'$lt': csy_first_date()}
+
+
+        }},
+        {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
+        'TOTAL_USERS_PRACTICING':{'$sum':1},
+        'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID.USER_ID'}
+         }},
+         {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}},
+         {'$sort':{'_id':1}},
+        { "$project": { "Practice_count in 2019-2020": {"$round":[{ "$divide": ["$TOTAL_USERS_PRACTICING", "$UNIQUE_USERS_PRACTICING"] },2 ]} } }
+        ])))
+        df1.rename(columns = { '_id': 'Month'}, inplace = True)  
+        d = dict(enumerate(calendar.month_name))    # to convert monthnumber of dataframe into monthname
+        df1['Month'] = df1['Month'].map(d)
+        # print(df1)
+
+        df2 = DataFrame(list(collection.aggregate([
+        {'$match':{
+        'USER_ID.IS_DISABLED':{'$ne':'Y'},
+         'USER_ID.IS_BLOCKED':{"$ne":'Y'},
+         'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'},
+             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}],
+    #      "MODIFIED_DATE":{"$gt": datetime.datetime(2020,8,1),"$lt":datetime.datetime(2021,8,1)}
+            'MODIFIED_DATE':{'$gt':csy_first_date()}
+        }},
+        {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
+        'TOTAL_USERS_PRACTICING':{'$sum':1},
+        'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID.USER_ID'}
+         }},
+         {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}},
+         {'$sort':{'_id':1}},
+        { "$project": { "Practice_count in 2020-2021": {"$round":[{ "$divide": ["$TOTAL_USERS_PRACTICING", "$UNIQUE_USERS_PRACTICING"] },2 ]} } }
+        ])))
+        df2.rename(columns = { '_id': 'Month'}, inplace = True)  
+        d = dict(enumerate(calendar.month_name))    # to convert monthnumber of dataframe into monthname
+        df2['Month'] = df2['Month'].map(d)
+        # print(df2)
+
+        practice_left= pd.merge(df1, df2,on='Month', how='outer')
+
+        practice_left=practice_left.fillna(0)
+        practice_left
+
+        month=["AUG","SEP","OCT","NOV","DEC","JAN","FEB","MAR","APR","MAY","JUN","JUL"]
+        curve=[practice_left[practice_left['Month']=='August']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='September']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='October']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='November']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='December']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='January']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='February']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='March']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='April']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='May']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='June']['Practice_count in 2019-2020'].item(),
+               practice_left[practice_left['Month']=='July']['Practice_count in 2019-2020'].item()]
+        bar=[practice_left[practice_left['Month']=='August']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='September']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='October']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='November']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='December']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='January']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='February']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='March']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='April']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='May']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='June']['Practice_count in 2020-2021'].item(),
+             practice_left[practice_left['Month']=='July']['Practice_count in 2020-2021'].item()]
+        averageTREND={'month':month,'curve':curve,'bar':bar}
+        averageTREND=[averageTREND]
+        return json.dumps(averageTREND)
+
 
 @app.route('/feedbacktrend/')
 def feedback_trend():
 
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_feedback
     df = DataFrame(list(collection.aggregate([
@@ -38855,8 +43215,8 @@ def feedback_trend():
 
               {"USER.USER_NAME":{"$not":{"$regex" : 'test'}}},
     #            {'RATING':{'$ne':0}},
-              {'MODIFIED_DATE':{"$gte": datetime.datetime(2019,8,1),
-                                         "$lte":datetime.datetime(2020,7,31)}}]
+              {'MODIFIED_DATE':{"$gte": LSY_Date,
+                                         "$lte": csy_first_date()}}]
          }},
         {'$group':{'_id':{'$month':'$MODIFIED_DATE'}, 'count':{'$sum':1}}},
     {'$project':{'_id':1, '2019-2020':'$count'}}
@@ -38878,8 +43238,9 @@ def feedback_trend():
 
               {"USER.USER_NAME":{"$not":{"$regex" : 'test'}}},
     #            {'RATING':{'$ne':0}},
-              {'MODIFIED_DATE':{"$gte": datetime.datetime(2020,8,1),
-                                         "$lte":datetime.datetime(2021,7,31)}}]
+              {'MODIFIED_DATE':{"$gte": csy_first_date(),
+#                                          "$lte":datetime.datetime(2021,7,31)
+                               }}]
          }},
         {'$group':{'_id':{'$month':'$MODIFIED_DATE'}, 'count':{'$sum':1}}},
     {'$project':{'_id':1, '2020-2021':'$count'}}
@@ -38931,7 +43292,7 @@ def parents_tableprogramnew(d):
         reader = geolite2.reader()
         username = urllib.parse.quote_plus('admin')
         password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-        client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+        client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
         db=client.compass
         collection = db.audio_track_master
         query=[
@@ -38991,7 +43352,7 @@ def parents_tableprogramnew(d):
         reader = geolite2.reader()
         username = urllib.parse.quote_plus('admin')
         password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-        client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+        client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
         db=client.compass
         collection = db.audio_track_master
         query=[
@@ -39052,7 +43413,7 @@ def parents_tableprogramnew(d):
         reader = geolite2.reader()
         username = urllib.parse.quote_plus('admin')
         password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-        client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+        client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
         db=client.compass
         collection = db.audio_track_master
         query=[
@@ -39209,7 +43570,7 @@ def parents_tableprogramnew(d):
 def parpracticeprogram_unique_active():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     query=[
@@ -39539,7 +43900,7 @@ def indexdcsdcds():
 def familyfeedbackcards():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     collection2=db.audio_feedback
@@ -39593,7 +43954,7 @@ def feedback():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_feedback
     df = DataFrame(list(collection.aggregate([
@@ -39663,7 +44024,7 @@ def feedback():
 def parents_rating_month_info(month,n):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection1 = db.audio_feedback
     collection2 = db.audio_track_master
@@ -39780,7 +44141,7 @@ def parents_rating_month_info(month,n):
 def card(district):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master.aggregate([
     {"$match":{"schoolId":{"$exists":1}}},
@@ -40056,8 +44417,8 @@ def state_Infop():
         'west virginia': 'wv',
         'wyoming': 'wy'}
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collectionMap=db.user_master
     querymap=[{"$match":
@@ -40174,7 +44535,7 @@ def dashcount():
 def mongo_spider(district):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.user_master.aggregate([
     {"$match":{"schoolId":{"$exists":1}}},
@@ -40422,8 +44783,8 @@ def mongo_spider(district):
 @app.route('/sfeedbackcards')
 def schoolfeedbackcards():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     collection2=db.audio_feedback
@@ -40471,7 +44832,7 @@ def schoolfeedbackcards():
 def schoolrating():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.audio_feedback
     df = DataFrame(list(collection.aggregate([
@@ -40525,7 +44886,7 @@ def schoolrating():
 def daily_survey():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.survey_questions
 
@@ -40569,7 +44930,7 @@ def hourly_survey():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.survey_questions
 
@@ -40606,7 +44967,7 @@ def question_analysis():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.survey_questions
 
@@ -40677,7 +45038,7 @@ def ques_count():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.survey_questions
 
@@ -40722,7 +45083,7 @@ def ques_count():
 def response_analysis():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.survey_questions
 
@@ -40771,7 +45132,7 @@ def cards_data():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     collection = db.survey_questions
 
@@ -40816,6 +45177,7 @@ def cards_data():
     return json.dumps(temp)
 
 @app.route('/modetype/<startdate>/<enddate>')
+# @app.route('/modetype/<startdate>/<enddate>')
 def Payment_Mode(startdate,enddate):
     date1=startdate
     date2=enddate
@@ -40833,7 +45195,7 @@ def Payment_Mode(startdate,enddate):
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
@@ -41019,22 +45381,28 @@ def Payment_Mode(startdate,enddate):
     payment_df['MODE_OF_PAYMENT'] = payment_df['MODE_OF_PAYMENT'].str.replace("INVITEDUSER", "INVITED USER")
     payment_df['Last_Payment_Date'] =  pd.to_datetime(payment_df['Last_Payment_Date'])
     newdf1=payment_df[(payment_df.Last_Payment_Date >= startdate1) & (payment_df.Last_Payment_Date <= enddate1)]
+    dm=pd.DataFrame({"TYPE_OF_PAYMENT": ["FOUNDATION", "DISTRICT", "SCHOOL", "DONATION", "MOBILE"]})
     df1web=newdf1[['USER_NAME',"EMAIL_ID",'DEVICE_USED','MODE_OF_PAYMENT','TYPE_OF_PAYMENT','Last_Payment_Date','Payment_Amount']]
     df1web['Last_Payment_Date'] = pd.to_datetime(df1web['Last_Payment_Date'])
+    df1web=pd.merge(dm,df1web, on='TYPE_OF_PAYMENT',how='left').fillna(0)
+    df1web=df1web.fillna(0)
+    dm=pd.DataFrame({"TYPE_OF_PAYMENT": ["FOUNDATION", "DISTRICT", "SCHOOL", "DONATION", "MOBILE"]})
     df2web= df1web.groupby(['TYPE_OF_PAYMENT'])['Payment_Amount'].sum().reset_index()
+    df2web=pd.merge(dm,df2web, on='TYPE_OF_PAYMENT',how='left').fillna(0)
     df3web= df1web.groupby(['TYPE_OF_PAYMENT'])['Payment_Amount'].count().reset_index()
+    df3web=pd.merge(dm,df3web, on='TYPE_OF_PAYMENT',how='left').fillna(0)
     df4web= df1web.groupby(['TYPE_OF_PAYMENT'])
-    df1web.to_csv("revenaue.csv")
+    df1web.to_csv("revenaue.csv",index=False)
     donation=df4web.get_group('DONATION')
-    donation.to_csv("donation.csv")
+    donation.to_csv("donation.csv",index=False)
     school=df4web.get_group('SCHOOL')
-    school.to_csv("school.csv")
+    school.to_csv("school.csv",index=False)
     foundation=df4web.get_group('FOUNDATION')
-    foundation.to_csv("foundation.csv")
+    foundation.to_csv("foundation.csv",index=False)
     district=df4web.get_group('DISTRICT')
-    district.to_csv("district.csv")
+    district.to_csv("district.csv",index=False)
     mobile=df4web.get_group('MOBILE')
-    mobile.to_csv("mobile.csv")
+    mobile.to_csv("mobile.csv",index=False)
     df3web.sort_values(by=['Payment_Amount'], inplace=True, ascending=False)
     df2web.sort_values(by=['Payment_Amount'], inplace=True, ascending=False)
     df2web.Payment_Amount = df2web.Payment_Amount.round()
@@ -41043,7 +45411,14 @@ def Payment_Mode(startdate,enddate):
     Payment_Mode_Amount=df2web['Payment_Amount'].values.tolist()
     Payment_Mode_User=df3web['Payment_Amount'].values.tolist()
     temp={"amount":{"Payment_Mode":Payment_Mode_amount,"Payment_Mode_Amount":Payment_Mode_Amount},"user": {"Payment_Mode":Payment_Mode_user,"Payment_Mode_User":Payment_Mode_User}}
-    return(json.dumps(temp))
+    return (json.dumps(temp))
+
+
+
+
+
+
+
 
 @app.route('/revenauetable/<type>')
 def revenue_table(type):
@@ -41069,7 +45444,7 @@ def Payment_History(startdate,enddate):
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
@@ -41291,7 +45666,7 @@ def subtable(month):
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
@@ -41484,7 +45859,7 @@ def submonth():
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
@@ -41659,7 +46034,7 @@ def submonth():
     payment_df1=payment_df3.append(dfd1)
     payment_df=payment_df2.append(payment_df1)
     #########################2020#########################
-    newdf=payment_df[(payment_df.Last_Payment_Date>= '2020-07-01')]
+    newdf=payment_df[(payment_df.Last_Payment_Date>= '2021-07-01')]
     df1web=newdf[['MODE_OF_PAYMENT','Last_Payment_Date','Payment_Amount']]
     df1web['Last_Payment_Date'] = pd.to_datetime(df1web['Last_Payment_Date'])
     df1=df1web.groupby(df1web['Last_Payment_Date'].dt.strftime('%b'))['Payment_Amount'].sum().reset_index()
@@ -41670,7 +46045,7 @@ def submonth():
     df10 = pd.DataFrame(Last_Payment_Date,columns =['Last_Payment_Date'])
     final = pd.merge(df10, df2, on="Last_Payment_Date", how='left').fillna(0)
     #########################2019##############################
-    newdf2019=payment_df[(payment_df.Last_Payment_Date>= '2019-07-01') &(payment_df.Last_Payment_Date< '2020-07-01')]
+    newdf2019=payment_df[(payment_df.Last_Payment_Date>= '2020-07-01') &(payment_df.Last_Payment_Date< '2021-07-01')]
     df1web2019=newdf2019[['MODE_OF_PAYMENT','Last_Payment_Date','Payment_Amount']]
     df1web2019['Last_Payment_Date'] = pd.to_datetime(df1web2019['Last_Payment_Date'])
     df12019=df1web2019.groupby(df1web2019['Last_Payment_Date'].dt.strftime('%b'))['Payment_Amount'].sum().reset_index()
@@ -41693,7 +46068,7 @@ def submonth():
     temp={"month":final['Last_Payment_Date'].tolist(),"amount":final['Payment_Amount'].tolist(),"amount2020":final2019['Payment_Amount'].tolist()}
     new = pd.DataFrame.from_dict(temp)
     new["amountlsy"]=new["amount2020"]
-    new["amount2020"].iloc[0:11]=0
+    new["amount2020"].iloc[0:2]=0
     new["projection"]=new["amount"]+new["amount2020"]
     projection2021=new["projection"].cumsum().tolist()
     cumlsy=new["amountlsy"].cumsum().tolist()
@@ -41702,13 +46077,18 @@ def submonth():
     return(json.dumps(temp))
 
 
+
+
+
+
+
 @app.route('/web/history/<date>')
 def web_history_table(date):
     googleSheetId = '1ydZC5Q5cNBlPb2rI_lzcdL0lh7r7rvuSzDYxCDNseyw'
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
@@ -41897,7 +46277,7 @@ def mobile_history_table(date):
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
@@ -42087,7 +46467,7 @@ def mobile_history_table(date):
 #     worksheetName = 'Payment'
 #     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
 #     payment_df2=pd.read_csv(URL)
-#     mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+#     mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
 #     client = pymongo.MongoClient(mongo_uri)
 #     db = client.compass
 #     collection1 = db.campaign_data.aggregate([ {"$match":{"$and":[{"EMAIL":{"$not":{ "$regex":"1gen",'$options':'i'}}},
@@ -42234,7 +46614,7 @@ def mobile_history_table(date):
 #     worksheetName = 'Payment'
 #     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
 #     payment_df2=pd.read_csv(URL)
-#     mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+#     mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
 #     client = pymongo.MongoClient(mongo_uri)
 #     db = client.compass
 #     dateStr = "2020-07-01T00:00:00.000Z"
@@ -42283,8 +46663,8 @@ def chartdexc():
 # @app.route('/donationmap')
 # def Donation_map():
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
 #     db=client.compass
 #     datestr7 = "2021-01-31T20:12:46.000Z"
 #     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -42407,8 +46787,8 @@ def chartdexc():
 @app.route('/donationmaptable/<name>')
 def Donation_table_map(name):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -42529,8 +46909,8 @@ def Donation_table_map(name):
 @app.route('/donationcsy')
 def Donation_csy():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     today = date.today()
     d1 = today.strftime("%Y-%m-%d")
@@ -42646,10 +47026,10 @@ def Donation_csy():
     df=dff.append(dfd1)
     df1=df[["Last_Payment_Date","Payment_Amount"]]
     df1['Last_Payment_Date'] = pd.to_datetime(df1['Last_Payment_Date'])
-    df1=df1[(df1.Last_Payment_Date>= '2020-07-01')]
+    df1=df1[(df1.Last_Payment_Date>= '2021-07-01')]
     df2= df1.groupby(df1['Last_Payment_Date'].dt.date)['Payment_Amount'].sum().reset_index()
     df2['Last_Payment_Date'] = pd.to_datetime(df2['Last_Payment_Date'])
-    dfrange1=pd.date_range(start='2020-07-01', end=d1)
+    dfrange1=pd.date_range(start='2021-07-01', end=d1)
     dfrange2 = pd.DataFrame(dfrange1,columns = ["Last_Payment_Date"])
     dfrange2['Payment_Amount'] = 0
     dff2= df2.merge(dfrange2, on="Last_Payment_Date", how='right').fillna(0).sort_values(by='Last_Payment_Date')
@@ -42666,8 +47046,8 @@ def Donation_csy():
 @app.route('/donationcsytable/<date>')
 def Donation_table_csy(date):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -42781,7 +47161,7 @@ def Donation_table_csy(date):
     dff=pd.read_csv(URL).fillna("NO INFO.")
     df=dff.append(dfd1)
     df['Last_Payment_Date'] = pd.to_datetime(df['Last_Payment_Date'])
-    df1=df[(df.Last_Payment_Date>= '2020-07-01')]
+    df1=df[(df.Last_Payment_Date>= '2021-07-01')]
     df2=df1[["USER_NAME","EMAIL_ID","STATE","MODE_OF_PAYMENT","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","Total_Amount"]].astype(str)
     df3= df2[df2.Last_Payment_Date.str.contains("" + date + "",case=False)] 
     df3['Last_Payment_Date'] = df3['Last_Payment_Date'].astype('str')
@@ -42791,8 +47171,8 @@ def Donation_table_csy(date):
 @app.route('/donationCrowdfundingcsy')
 def Donation_Crowdfunding_csy():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.campaign_data.aggregate([ {"$match":{"$and":[{"EMAIL":{"$not":{ "$regex":"1gen",'$options':'i'}}},
             {"EMAIL":{"$not":{ "$regex":"TEST",'$options':'i'}}},
@@ -42815,7 +47195,7 @@ def Donation_Crowdfunding_csy():
     df=dfd1
     df1=df[["Last_Payment_Date","Payment_Amount"]]
     df1['Last_Payment_Date'] = pd.to_datetime(df1['Last_Payment_Date'])
-    df1=df1[(df1.Last_Payment_Date>= '2020-07-01')]
+    df1=df1[(df1.Last_Payment_Date>= '2021-07-01')]
     df2= df1.groupby(df1['Last_Payment_Date'].dt.date)['Payment_Amount'].sum().reset_index()
     df2['Last_Payment_Date'] = pd.to_datetime(df2['Last_Payment_Date'])
     df2['Last_Payment_Date'] = df2['Last_Payment_Date'].astype(np.int64) / int(1e6)
@@ -42830,8 +47210,8 @@ def Donation_Crowdfunding_csy():
 @app.route('/donationCrowdfundingcsytable/<date>')
 def Donation_table_Crowdfunding_csy(date):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.campaign_data.aggregate([ {"$match":{"$and":[{"EMAIL":{"$not":{ "$regex":"1gen",'$options':'i'}}},
             {"EMAIL":{"$not":{ "$regex":"TEST",'$options':'i'}}},
@@ -42871,8 +47251,8 @@ def Donation_history(startdate,enddate):
     else : 
         enddate1=date2
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -43001,8 +47381,8 @@ def Donation_history(startdate,enddate):
 @app.route('/donationhistorytable/<date>')
 def Donation_table_history(date):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -43136,8 +47516,8 @@ def Weekly_donation(startdate,enddate):
     else : 
         enddate1=date2
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -43186,8 +47566,8 @@ def Weekly_donation(startdate,enddate):
 @app.route('/donationcards')
 def Donation_cards():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -43302,14 +47682,158 @@ def Donation_cards():
     df1=df[["Last_Payment_Date","Payment_Amount","Total_Amount"]]
     liftimedonation=df1["Total_Amount"].sum().tolist()
     df1['Last_Payment_Date'] = pd.to_datetime(df1['Last_Payment_Date'])
-    df2=df1[(df1.Last_Payment_Date>= '2020-07-01')]
+    df2=df1[(df1.Last_Payment_Date>= '2021-07-01')]
     csydonation=df2["Payment_Amount"].sum().tolist()
     csydonor=df2["Payment_Amount"].count().tolist()
-    df3=df1[(df1.Last_Payment_Date>= '2019-07-01') &(df1.Last_Payment_Date< '2020-07-01')]
+    df3=df1[(df1.Last_Payment_Date>= '2020-07-01') &(df1.Last_Payment_Date< '2021-07-01')]
     lsydonation=df3["Payment_Amount"].sum().tolist()
     lsydonor=df3["Payment_Amount"].count().tolist()
     temp={"liftimedonation":liftimedonation,"csydonation":csydonation,"lsydonation":lsydonation,"totaldonor":csydonor,"lsydonor":lsydonor}
     return json.dumps(temp)
+
+
+@app.route('/donationcalandercardtable/<startdate>/<enddate>')
+
+def calander_Donation_table(startdate,enddate):
+    date1=startdate
+    date2=enddate
+    today = date.today()
+    d1 = today.strftime("%Y-%m-%d")
+    if(len(date1) == 0): 
+        startdate1='2020-07-01'
+    else : 
+        startdate1=date1
+    if(len(date2) == 0):
+        enddate1=d1
+    else : 
+        enddate1=date2
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    datestr7 = "2021-04-19T20:12:46.000Z"
+    myDatetim0 = dateutil.parser.parse(datestr7)
+    collection = db.campaign_data.aggregate([ {"$match":{"$and":[{"EMAIL":{"$not":{ "$regex":"1gen",'$options':'i'}}},
+            {"EMAIL":{"$not":{ "$regex":"TEST",'$options':'i'}}},
+            {"FIRST_NAME":{"$not":{ "$regex":"Rajbir Kaur",'$options':'i'}}},
+                {"FIRST_NAME":{"$not":{ "$regex":"1gen",'$options':'i'}}},
+                {"FIRST_NAME":{"$not":{ "$regex":"test",'$options':'i'}}},
+                {"IS_PAYMENT_SUCCESS" :{"$eq":"Y"}},
+                {"CREATED_DATE":{"$gt":myDatetim0}},
+                { "CAMPAIGN_ID._id":{"$ne":ObjectId("5f5933f122a9de32555fceb4")}}
+            
+            ]
+        }}
+    ,{"$project":{"_id":1,"FIRST_NAME":1,"LAST_NAME":1,"EMAIL_ID":"$EMAIL","PHONE_NO":1,"IP_ADDRESS":1,
+        "Payment_Amount":"$AMOUNT","Last_Payment_Date": { "$dateToString": { "format": "%Y-%m-%d", "date": "$CREATED_DATE" } },"Total_Amount":"$AMOUNT"}}
+    ] )
+    dfd= DataFrame(list(collection))
+    dfd["TYPE_OF_PAYMENT"]="DONATION"
+    dfd["DEVICE_USED"]="COMPASS"
+    dfd["MODE_OF_PAYMENT"]="ONLINE"
+    # dfd["IP_ADDRESS"]=dfd["IP_ADDRESS"].fillna("NO INFO.")
+    dfd.Payment_Amount = dfd.Payment_Amount.round()
+    dfd.Total_Amount = dfd.Total_Amount.round()
+    # IP_ADDRESS=dfd["IP_ADDRESS"].tolist()
+    # IP_ADDRESS="100.15.128.147"
+    # STATE1=[]
+
+    # for i in IP_ADDRESS:
+    #     url = 'http://ipinfo.io/'+i+'/json'
+    #     response = urlopen(url)
+    #     data = json.load(response)
+
+    #     IP=data['ip']
+    #     org=data['org']
+    #     city = data['city']
+    #     country=data['country']
+    #     region=data['region']
+    #     # print ('IP : {4} \nState : {1} \nCountry : {2} \nCity : {3} \nOrg : {0}'.format(org,region,country,city,IP))
+    #     STATE1.append(region)
+
+    # dfd["STATE"]=STATE1
+    # us_state_shot = {
+    #     'Alabama': 'AL',
+    #     'Alaska': 'AK',
+    #     'American Samoa': 'AS',
+    #     'Arizona': 'AZ',
+    #     'Arkansas': 'AR',
+    #     'California': 'CA',
+    #     'Colorado': 'CO',
+    #     'Connecticut': 'CT',
+    #     'Delaware': 'DE',
+    #     'District of Columbia': 'DC',
+    #     'Florida': 'FL',
+    #     'Georgia': 'GA',
+    #     'Guam': 'GU',
+    #     'Hawaii': 'HI',
+    #     'Idaho': 'ID',
+    #     'Illinois': 'IL',
+    #     'Indiana': 'IN',
+    #     'Iowa': 'IA',
+    #     'Kansas': 'KS',
+    #     'Kentucky': 'KY',
+    #     'Louisiana': 'LA',
+    #     'Maine': 'ME',
+    #     'Maryland': 'MD',
+    #     'Massachusetts': 'MA',
+    #     'Michigan': 'MI',
+    #     'Minnesota': 'MN',
+    #     'Mississippi': 'MS',
+    #     'Missouri': 'MO',
+    #     'Montana': 'MT',
+    #     'Nebraska': 'NE',
+    #     'Nevada': 'NV',
+    #     'New Hampshire': 'NH',
+    #     'New Jersey': 'NJ',
+    #     'New Mexico': 'NM',
+    #     'New York': 'NY',
+    #     'North Carolina': 'NC',
+    #     'North Dakota': 'ND',
+    #     'Northern Mariana Islands':'MP',
+    #     'Ohio': 'OH',
+    #     'Oklahoma': 'OK',
+    #     'Oregon': 'OR',
+    #     'Pennsylvania': 'PA',
+    #     'Puerto Rico': 'PR',
+    #     'Rhode Island': 'RI',
+    #     'South Carolina': 'SC',
+    #     'South Dakota': 'SD',
+    #     'Tennessee': 'TN',
+    #     'Texas': 'TX',
+    #     'Utah': 'UT',
+    #     'Vermont': 'VT',
+    #     'Virgin Islands': 'VI',
+    #     'Virginia': 'VA',
+    #     'Washington': 'WA',
+    #     'West Virginia': 'WV',
+    #     'Wisconsin': 'WI',
+    #     'Wyoming': 'WY'
+    # }
+    # dfd["STATE_SHOT"] = dfd["STATE"].map(us_state_shot) 
+    dfd['USER_NAME'] = dfd['FIRST_NAME'].str.cat(dfd['LAST_NAME'], sep =" ") 
+    dfd['USER_NAME'] = dfd['USER_NAME'].str.upper()
+    dfd1=dfd[["USER_NAME","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","EMAIL_ID","MODE_OF_PAYMENT","Total_Amount"]]
+    
+    # dfd1=dfd[["USER_NAME","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","EMAIL_ID","MODE_OF_PAYMENT","STATE","STATE_SHOT","Total_Amount"]]
+    googleSheetId = '1OnsKEyX4guTg--LWsfFM2neF1L6auLH3DWGrgEt8wXk'
+    worksheetName = 'Payment'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    dff=pd.read_csv(URL).fillna("NO INFO.")
+    df=dff.append(dfd1).fillna('NO INFO')
+    df1=df[["USER_NAME","EMAIL_ID","STATE","MODE_OF_PAYMENT","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","Total_Amount"]]
+    df1['Last_Payment_Date'] = pd.to_datetime(df1['Last_Payment_Date'])
+    df2=df1[(df1.Last_Payment_Date >= startdate1) & (df1.Last_Payment_Date <= enddate1)]
+    data=df2[["USER_NAME","EMAIL_ID","STATE","MODE_OF_PAYMENT","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","Total_Amount"]].astype(str)
+    print(len(data))
+#     csydonation=df2["Payment_Amount"].sum().tolist()
+#     csydonor=df2["Payment_Amount"].count().tolist()
+#     temp={"csydonation":csydonation,"totaldonor":csydonor}
+    temp={"data":data.values.tolist()}
+    return json.dumps(temp)
+
+
+
 
 
 @app.route('/donationcalandercard/<startdate>/<enddate>')
@@ -43327,8 +47851,8 @@ def calander_Donation_cards(startdate,enddate):
     else : 
         enddate1=date2
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -43451,8 +47975,8 @@ def calander_Donation_cards(startdate,enddate):
 @app.route('/donationjourney/<email>')
 def donation_journey(email):   
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -43511,8 +48035,8 @@ def donation_journey(email):
 @app.route('/donationcardstablecsy')
 def Donation_cards_Table():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -43627,9 +48151,9 @@ def Donation_cards_Table():
     df1=df[["USER_NAME","EMAIL_ID","STATE","MODE_OF_PAYMENT","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","Total_Amount"]]
     liftimedonation=df1["Total_Amount"].sum().tolist()
     df1['Last_Payment_Date'] = pd.to_datetime(df1['Last_Payment_Date'])
-    df2=df1[(df1.Last_Payment_Date>= '2020-07-01')]
+    df2=df1[(df1.Last_Payment_Date>= '2021-07-01')].fillna("NO INFO.")
     csy=df2[["USER_NAME","EMAIL_ID","STATE","MODE_OF_PAYMENT","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","Total_Amount"]].astype(str)
-    df3=df1[(df1.Last_Payment_Date> '2019-07-01') &(df1.Last_Payment_Date< '2020-07-01')]
+    df3=df1[(df1.Last_Payment_Date>= '2020-07-01') &(df1.Last_Payment_Date< '2021-07-01')]
     lsy=df3[["USER_NAME","EMAIL_ID","STATE","MODE_OF_PAYMENT","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","Total_Amount"]].astype(str)
     temp={"data":csy.values.tolist()}
     return json.dumps(temp)
@@ -43637,8 +48161,8 @@ def Donation_cards_Table():
 @app.route('/donationcardstablelsy')
 def Donation_cards_Table2():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -43753,9 +48277,9 @@ def Donation_cards_Table2():
     df1=df[["USER_NAME","EMAIL_ID","STATE","MODE_OF_PAYMENT","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","Total_Amount"]]
     liftimedonation=df1["Total_Amount"].sum().tolist()
     df1['Last_Payment_Date'] = pd.to_datetime(df1['Last_Payment_Date'])
-    df2=df1[(df1.Last_Payment_Date>= '2020-07-01')]
+    df2=df1[(df1.Last_Payment_Date>= '2021-07-01')]
     csy=df2[["USER_NAME","EMAIL_ID","STATE","MODE_OF_PAYMENT","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","Total_Amount"]].astype(str)
-    df3=df1[(df1.Last_Payment_Date> '2019-07-01') &(df1.Last_Payment_Date< '2020-07-01')]
+    df3=df1[(df1.Last_Payment_Date>= '2020-07-01') &(df1.Last_Payment_Date< '2021-07-01')]
     lsy=df3[["USER_NAME","EMAIL_ID","STATE","MODE_OF_PAYMENT","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","Total_Amount"]].astype(str)
     temp={"data":lsy.values.tolist()}
     return json.dumps(temp)
@@ -43763,8 +48287,8 @@ def Donation_cards_Table2():
 @app.route('/donationmapcard')
 def Donation_map_card():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -43874,7 +48398,7 @@ def Donation_map_card():
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     dff=pd.read_csv(URL).fillna("NO INFO.")
     df=dff #.append(dfd1)
-    df1=df[(df.Last_Payment_Date>= '2020-07-01')]
+    df1=df[(df.Last_Payment_Date>= '2021-07-01')]
     df2=df1[["STATE_SHOT","STATE","Payment_Amount","Total_Amount"]]
     df2['Payment_Amount'] = pd.to_numeric(df2['Payment_Amount'],errors='coerce')
     df3= df2.groupby(['STATE_SHOT',"STATE"])['Payment_Amount','Total_Amount'].sum().reset_index()
@@ -43890,7 +48414,7 @@ def school_payment_csy():
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dateStr = "2020-07-01T00:00:00.000Z"
@@ -43966,7 +48490,7 @@ def school_payment_csy():
     dfweb = payment_df[payment_df.TYPE_OF_PAYMENT.str.contains("SCHOOL",case=False)]
     df1web=dfweb[['Last_Payment_Date','Payment_Amount']]
     df1web['Last_Payment_Date'] = pd.to_datetime(df1web['Last_Payment_Date'])
-    df1web=df1web[(df1web.Last_Payment_Date>= '2020-07-01')]
+    df1web=df1web[(df1web.Last_Payment_Date>= '2021-07-01')]
     df2web= df1web.groupby(df1web['Last_Payment_Date'].dt.date)['Payment_Amount'].sum().reset_index()
     df2web.Payment_Amount = df2web.Payment_Amount.round()
     df2web['Last_Payment_Date'] = pd.to_datetime(df2web['Last_Payment_Date'])
@@ -43980,13 +48504,14 @@ def school_payment_csy():
     temp={"WebHistory":WebHistory,"CumWebHistory":CumWebHistory}
     return json.dumps(temp)
 
+
 @app.route('/schoolpaymentcsytable/<date>')
 def school_payment_csy_table(date):
     googleSheetId = '1X8nlhWRKFE6jO221SP1hrpBi9RSHZJ8_Q7oij1IU14Q'
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dateStr = "2020-07-01T00:00:00.000Z"
@@ -44075,7 +48600,7 @@ def school_payment_map():
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dateStr = "2020-07-01T00:00:00.000Z"
@@ -44151,7 +48676,7 @@ def school_payment_map():
     
     df = payment_df[payment_df.TYPE_OF_PAYMENT.str.contains("SCHOOL",case=False)]
     df['Last_Payment_Date'] = pd.to_datetime(df['Last_Payment_Date'])
-    df1=df[(df.Last_Payment_Date>= '2020-07-01')]
+    df1=df[(df.Last_Payment_Date>= '2021-07-01')]
     df2=df1[["STATE_SHOT","STATE","Payment_Amount"]]
     df2['Payment_Amount'] = pd.to_numeric(df2['Payment_Amount'],errors='coerce')
     df3= df2.groupby(['STATE_SHOT',"STATE"])['Payment_Amount'].sum().reset_index()
@@ -44166,7 +48691,7 @@ def school_payment_map_table(name):
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dateStr = "2020-07-01T00:00:00.000Z"
@@ -44242,7 +48767,7 @@ def school_payment_map_table(name):
     payment_df.Payment_Amount = payment_df.Payment_Amount.round()
     df = payment_df[payment_df.TYPE_OF_PAYMENT.str.contains("SCHOOL",case=False)]
     df['Last_Payment_Date'] = pd.to_datetime(df['Last_Payment_Date'])
-    df1=df[(df.Last_Payment_Date>= '2020-07-01')]
+    df1=df[(df.Last_Payment_Date>= '2021-07-01')]
     df2=df1[["USER_NAME","EMAIL_ID","SCHOOL_NAME","STATE","MODE_OF_PAYMENT","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount"]]
     df3= df2[df2.STATE.str.contains("" + name + "",case=False)] 
     df3['Last_Payment_Date'] = df3['Last_Payment_Date'].astype('str')
@@ -44255,7 +48780,7 @@ def school_payment_weekly():
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dateStr = "2020-07-01T00:00:00.000Z"
@@ -44331,7 +48856,7 @@ def school_payment_weekly():
     
     df = payment_df[payment_df.TYPE_OF_PAYMENT.str.contains("SCHOOL",case=False)]
     df['Last_Payment_Date'] = pd.to_datetime(df['Last_Payment_Date'])
-    df1=df[(df.Last_Payment_Date>= '2020-07-01')]
+    df1=df[(df.Last_Payment_Date>= '2021-07-01')]
     df1['Last_Payment_Date'] = pd.to_datetime(df1['Last_Payment_Date'])
     df1=df1.groupby(df1['Last_Payment_Date'].dt.day_name())['Payment_Amount'].sum().reset_index()
     df1.Payment_Amount = df1.Payment_Amount.round()
@@ -44340,6 +48865,14 @@ def school_payment_weekly():
     final = pd.merge(df2, df1, on="Last_Payment_Date", how='left').fillna(0)
     temp={"month":final['Last_Payment_Date'].tolist(),"amount":final['Payment_Amount'].tolist()}
     return json.dumps(temp)
+
+
+
+
+
+
+
+
 import plotly.express as px
 @app.route('/bubble')
 def bubblee():
@@ -44356,7 +48889,7 @@ def school_payment_card():
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dateStr = "2020-07-01T00:00:00.000Z"
@@ -44432,7 +48965,7 @@ def school_payment_card():
     
     df = payment_df[payment_df.TYPE_OF_PAYMENT.str.contains("SCHOOL",case=False)]
     df['Last_Payment_Date'] = pd.to_datetime(df['Last_Payment_Date'])
-    df1=df[(df.Last_Payment_Date>= '2020-07-01')]
+    df1=df[(df.Last_Payment_Date>= '2021-07-01')]
     df1['Last_Payment_Date'] = pd.to_datetime(df1['Last_Payment_Date'])
     amount=df1['Payment_Amount'].sum()
     amount = amount.round()
@@ -44446,7 +48979,7 @@ def school_map_card():
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dateStr = "2020-07-01T00:00:00.000Z"
@@ -44522,7 +49055,7 @@ def school_map_card():
     
     df = payment_df[payment_df.TYPE_OF_PAYMENT.str.contains("SCHOOL",case=False)]
     df['Last_Payment_Date'] = pd.to_datetime(df['Last_Payment_Date'])
-    df1=df[(df.Last_Payment_Date>= '2020-07-01')]
+    df1=df[(df.Last_Payment_Date>= '2021-07-01')]
     df2=df1[["STATE_SHOT","STATE","Payment_Amount"]]
     df2['Payment_Amount'] = pd.to_numeric(df2['Payment_Amount'],errors='coerce')
     df3= df2.groupby(['STATE_SHOT',"STATE"])['Payment_Amount'].sum().reset_index()
@@ -44538,8 +49071,8 @@ def school_map_card():
 def d3_chart():
     #school summary df
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{"$match":{
@@ -44829,8 +49362,8 @@ def d3_chart():
 
 def d3_renewal_table(year,month):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{"$match":{
@@ -45157,8 +49690,8 @@ def d3_renewal_table(year,month):
 
 def d3_renewal_active_csy_table(year,month):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{"$match":{
@@ -45497,8 +50030,8 @@ def Paid_mobile_subscription_table():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -45549,8 +50082,8 @@ def Paid_mobile_subscription_table():
         lifetimelist1.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -45769,8 +50302,8 @@ def mobile_subscription_card():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -45821,8 +50354,8 @@ def mobile_subscription_card():
         lifetimelist1.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -46012,8 +50545,8 @@ def mobile_app_schoooool():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -46066,8 +50599,8 @@ def mobile_app_schoooool():
         lifetimelist1.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -46261,8 +50794,8 @@ def mobile_app_user():
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -46314,8 +50847,8 @@ def mobile_app_user():
         lifetimelist1.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -46509,8 +51042,8 @@ def mobile_app_USERS(year,month):
         
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -46567,8 +51100,8 @@ def mobile_app_USERS(year,month):
         lifetimelist1.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -46882,8 +51415,8 @@ def mobile_app_activeusersss(year,month):
         
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -46940,8 +51473,8 @@ def mobile_app_activeusersss(year,month):
         lifetimelist1.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -47258,8 +51791,8 @@ def mobile_app_actice_schools(year,month):
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -47314,8 +51847,8 @@ def mobile_app_actice_schools(year,month):
         lifetimelist1.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -47592,8 +52125,8 @@ def mobile_app_schl(year,month):
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -47648,8 +52181,8 @@ def mobile_app_schl(year,month):
         lifetimelist1.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -47924,8 +52457,8 @@ def mobile_app_ACTIVE_schools(year,month):
         lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -47980,8 +52513,8 @@ def mobile_app_ACTIVE_schools(year,month):
         lifetimelist1.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
 
@@ -48249,12 +52782,45 @@ def mobile_app_ACTIVE_schools(year,month):
 
 @app.route('/districtupcuser/<district>/<type>')
 def Practice_districtupcuser_Bifurcation(type,district):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     Type=""+type+""
     if Type =="csy":
-        dateStr = "2020-08-01T00:00:00.000Z"
+        dateStr = str(csy_first_date())
         myDatetime = dateutil.parser.parse(dateStr)
         mydoc = db.audio_track_master.aggregate(
         [{"$match":{
@@ -48346,9 +52912,9 @@ def Practice_districtupcuser_Bifurcation(type,district):
         temp={"playback":df6,"percentage":df5,"count":int(df4["USER_ID"].count())}
         return json.dumps(temp)
     elif Type=="lsy":
-        dateStr = "2019-08-01T00:00:00.000Z"
+        dateStr = str(LSY_Date)
         myDatetime = dateutil.parser.parse(dateStr)
-        dateStr1 = "2020-07-31T00:00:00.000Z"
+        dateStr1 = str(csy_first_date())
         myDatetime1 = dateutil.parser.parse(dateStr1)
         mydoc = db.audio_track_master.aggregate(
         [{"$match":{
@@ -48361,7 +52927,7 @@ def Practice_districtupcuser_Bifurcation(type,district):
                   {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                   {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
                   {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-                  {'MODIFIED_DATE':{'$gte':myDatetime,'$lte':myDatetime1}},
+                  {'MODIFIED_DATE':{'$gte':myDatetime,'$lt':myDatetime1}},
                   {'USER_ID.schoolId._id':{'$in':
                       db.school_master.distinct('_id',{'CATEGORY':    
             {'$regex':''+district+'','$options':'i'},
@@ -48404,7 +52970,7 @@ def Practice_districtupcuser_Bifurcation(type,district):
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
          {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-        {'MODIFIED_DATE':{'$gte':myDatetime,'$lte':myDatetime1}},
+        {'MODIFIED_DATE':{'$gte':myDatetime,'$lt':myDatetime1}},
         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
         {'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
         {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
@@ -48532,7 +53098,40 @@ def Practice_districtupcuser_Bifurcation(type,district):
 
 @app.route('/districtupcfamily/<district>/<type>')
 def Practice_districtupcfamily_Bifurcation(type,district):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     Type=""+type+""
@@ -48550,7 +53149,9 @@ def Practice_districtupcfamily_Bifurcation(type,district):
                   {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
                   {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
                   {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-                  {'MODIFIED_DATE':{'$gte':myDatetime}},
+#                   {'MODIFIED_DATE':{'$gte':myDatetime}},
+                  {'MODIFIED_DATE':{'$gte':csy_first_date()}},
+                         
                   {'USER_ID.schoolId._id':{'$in':
                       db.school_master.distinct('_id',{'CATEGORY':    
             {'$regex':''+district+'','$options':'i'},
@@ -48593,7 +53194,8 @@ def Practice_districtupcfamily_Bifurcation(type,district):
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
         
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-        {'MODIFIED_DATE':{"$gt":myDatetime}},
+#         {'MODIFIED_DATE':{"$gt":myDatetime}},
+        {'MODIFIED_DATE':{'$gt':csy_first_date()}},
         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
         {'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
         {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
@@ -48644,7 +53246,8 @@ def Practice_districtupcfamily_Bifurcation(type,district):
                   {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
                   {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
                   {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-                  {'MODIFIED_DATE':{'$gte':myDatetime,'$lte':myDatetime1}},
+#                   {'MODIFIED_DATE':{'$gte':myDatetime,'$lte':myDatetime1}},
+                    {'MODIFIED_DATE':{'$gte':LSY_Date,'$lt':csy_first_date()}},
                   {'USER_ID.schoolId._id':{'$in':
                       db.school_master.distinct('_id',{'CATEGORY':    
             {'$regex':''+district+'','$options':'i'},
@@ -48687,7 +53290,9 @@ def Practice_districtupcfamily_Bifurcation(type,district):
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
          
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-        {'MODIFIED_DATE':{'$gte':myDatetime,'$lte':myDatetime1}},
+#         {'MODIFIED_DATE':{'$gte':myDatetime,'$lte':myDatetime1}},
+        {'MODIFIED_DATE':{'$gte':LSY_Date,'$lt':csy_first_date()}},
+                
         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
         {'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
         {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
@@ -48811,16 +53416,49 @@ def Practice_districtupcfamily_Bifurcation(type,district):
         temp={"playback":df6,"percentage":df5,"count":int(df4["USER_ID"].count())}
         return json.dumps(temp)
     else:
-        print("NO DATA")        
+        print("NO DATA")                
 
 @app.route('/programupcuser/<program>/<type>')
 def programupcuser_Practice_Bifurcation(type,program):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     Type=""+type+""
     if Type =="csy":
-        dateStr = "2020-08-01T00:00:00.000Z"
+        dateStr = str(csy_first_date())
         myDatetime = dateutil.parser.parse(dateStr)
         mydoc = db.audio_track_master.aggregate(
         [{"$match":{
@@ -48912,9 +53550,9 @@ def programupcuser_Practice_Bifurcation(type,program):
         temp={"playback":df6,"percentage":df5,"count":int(df4["USER_ID"].count())}
         return json.dumps(temp)
     elif Type=="lsy":
-        dateStr = "2019-08-01T00:00:00.000Z"
+        dateStr = str(LSY_Date)
         myDatetime = dateutil.parser.parse(dateStr)
-        dateStr1 = "2020-07-31T00:00:00.000Z"
+        dateStr1 = str(csy_first_date())
         myDatetime1 = dateutil.parser.parse(dateStr1)
         mydoc = db.audio_track_master.aggregate(
         [{"$match":{
@@ -48927,7 +53565,7 @@ def programupcuser_Practice_Bifurcation(type,program):
                   {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                   {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
                   {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-                  {'MODIFIED_DATE':{'$gte':myDatetime,'$lte':myDatetime1}},
+                  {'MODIFIED_DATE':{'$gte':myDatetime,'$lt':myDatetime1}},
                   {'USER_ID.schoolId._id':{'$in':
                       db.school_master.distinct('_id',{'CAP_PROGRAM':    
             {'$regex':''+program+'','$options':'i'},
@@ -48970,7 +53608,7 @@ def programupcuser_Practice_Bifurcation(type,program):
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
          {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-        {'MODIFIED_DATE':{'$gte':myDatetime,'$lte':myDatetime1}},
+        {'MODIFIED_DATE':{'$gte':myDatetime,'$lt':myDatetime1}},
         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
         {'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
         {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
@@ -49098,12 +53736,45 @@ def programupcuser_Practice_Bifurcation(type,program):
 
 @app.route('/programupcfamily/<program>/<type>')
 def programupcfamily_Practice_Bifurcation(type,program):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     Type=""+type+""
     if Type =="csy":
-        dateStr = "2020-08-01T00:00:00.000Z"
+        dateStr = str(csy_first_date())
         myDatetime = dateutil.parser.parse(dateStr)
         mydoc = db.audio_track_master.aggregate(
         [{"$match":{
@@ -49195,9 +53866,9 @@ def programupcfamily_Practice_Bifurcation(type,program):
         temp={"playback":df6,"percentage":df5,"count":int(df4["USER_ID"].count())}
         return json.dumps(temp)
     elif Type=="lsy":
-        dateStr = "2019-08-01T00:00:00.000Z"
+        dateStr = str(LSY_Date)
         myDatetime = dateutil.parser.parse(dateStr)
-        dateStr1 = "2020-07-31T00:00:00.000Z"
+        dateStr1 = str(csy_first_date())
         myDatetime1 = dateutil.parser.parse(dateStr1)
         mydoc = db.audio_track_master.aggregate(
         [{"$match":{
@@ -49210,7 +53881,7 @@ def programupcfamily_Practice_Bifurcation(type,program):
                   {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
                   {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
                   {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-                  {'MODIFIED_DATE':{'$gte':myDatetime,'$lte':myDatetime1}},
+                  {'MODIFIED_DATE':{'$gte':myDatetime,'$lt':myDatetime1}},
                   {'USER_ID.schoolId._id':{'$in':
                       db.school_master.distinct('_id',{'CAP_PROGRAM':    
             {'$regex':''+program+'','$options':'i'},
@@ -49253,7 +53924,7 @@ def programupcfamily_Practice_Bifurcation(type,program):
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
           
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-        {'MODIFIED_DATE':{'$gte':myDatetime,'$lte':myDatetime1}},
+        {'MODIFIED_DATE':{'$gte':myDatetime,'$lt':myDatetime1}},
         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
         {'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
         {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
@@ -49382,7 +54053,7 @@ def programupcfamily_Practice_Bifurcation(type,program):
 
 @app.route('/schoolupcuser/<name>/')
 def schoolupcuser_Practice_Bifurcation(name):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dateStr = "2020-08-01T00:00:00.000Z"
@@ -49479,7 +54150,7 @@ def schoolupcuser_Practice_Bifurcation(name):
 
 @app.route('/schoolupcfamily/<name>/')
 def schoolupcfamily_Practice_Bifurcation(name):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     dateStr = "2020-08-01T00:00:00.000Z"
@@ -49578,8 +54249,8 @@ def schoolupcfamily_Practice_Bifurcation(name):
 @app.route('/newdonor/')
 def NEW_DONOR():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-01-25T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -49686,11 +54357,11 @@ def NEW_DONOR():
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     dff=pd.read_csv(URL).fillna("NO INFO.")
-    df=dff #.append(dfd1) 
+    df=dff#.append(dfd1) 
     df['Last_Payment_Date'] = pd.to_datetime(df['Last_Payment_Date'])
 
-    df1=df[(df.Last_Payment_Date> '2020-11-30')]
-    df2=df[(df.Last_Payment_Date< '2020-12-01')]
+    df1=df[(df.Last_Payment_Date> '2021-06-30')]
+    df2=df[(df.Last_Payment_Date< '2021-07-01')]
     new=df1[~df1['EMAIL_ID'].isin(df2['EMAIL_ID'])]
     df3=new
     newdonor=df3[["USER_NAME","EMAIL_ID","STATE","MODE_OF_PAYMENT","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","Total_Amount"]].fillna("no info")
@@ -49701,11 +54372,12 @@ def NEW_DONOR():
     temp={"count":int(count),"amount":int(amount),"data":table}
     return json.dumps(temp)
 
+
 @app.route('/boardmemberdonation/')
 def BOARD_MEMBER_DONOR():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     datestr7 = "2021-01-25T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
@@ -49814,7 +54486,7 @@ def BOARD_MEMBER_DONOR():
     dff=pd.read_csv(URL).fillna("NO INFO.")
     df=dff #.append(dfd1).reset_index() 
     df['Last_Payment_Date'] = pd.to_datetime(df['Last_Payment_Date'])
-    df=df[(df.Last_Payment_Date>= '2020-07-01')]
+    df=df[(df.Last_Payment_Date>= '2021-07-01')]
     name=["LAURA","JANICE","SAMANTHA","MICHAEL","KRISTIE","TODD","SHERITA"
         ,"PAUL SUGAR","SAIDEEP RAJ","KATHI","JANETTE"]
     pat = '|'.join(map(re.escape, name))
@@ -49835,11 +54507,45 @@ def BOARD_MEMBER_DONOR():
 #  <<<<<<<<<<<<<<<<<<<-----------------Tune_In_Graph--------------------------------------->>>>>>>>>>>>>>>>>>>>>
 
 @app.route('/tuneingraph')
-
 def tune_in_csy_lsy():
+    import datetime
+    from datetime import timedelta
+    from dateutil.relativedelta import relativedelta
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.tune_in_audio_track_detail
     query=[{"$match":{
@@ -49853,9 +54559,9 @@ def tune_in_csy_lsy():
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
               {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
               {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                  '$lte':datetime.datetime(2021,7,31)
-                  }},
+    #               {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),'$lte':datetime.datetime(2021,7,31)}},
+            {'MODIFIED_DATE':{'$gte': csy_first_date()}},
+
                   {'INVITEE_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
                    {'INVITEE_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
                  {'INVITEE_EMAIL':{"$not":{"$regex":"manoj.rayat5575@gmail.com",'$options':'i'}}},
@@ -49879,6 +54585,16 @@ def tune_in_csy_lsy():
     tune_in_practice_CSY=list(collection.aggregate(query))
     tune_in_practice_CSY_df=pd.DataFrame(tune_in_practice_CSY)
 
+    if "month" not in tune_in_practice_CSY_df.columns:
+        tune_in_practice_CSY_df["month"] = "NO INFO"
+    if "year" not in tune_in_practice_CSY_df.columns:
+        tune_in_practice_CSY_df["year"] = "NO INFO"
+    if "practicing_parent" not in tune_in_practice_CSY_df.columns:
+        tune_in_practice_CSY_df["practicing_parent"] = "NO INFO"
+
+    if tune_in_practice_CSY_df.empty:
+        tune_in_practice_CSY_df.loc[len(tune_in_practice_CSY_df)] = 0
+
     collection1 = db.tune_in_master
     query1=[{"$match":{
              '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -49893,9 +54609,10 @@ def tune_in_csy_lsy():
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
               {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
               {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                  '$lte':datetime.datetime(2021,7,31)
-                  }}
+    #               {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),'$lte':datetime.datetime(2021,7,31)}}
+            {'MODIFIED_DATE':{'$gte': csy_first_date()}},
+
+
               ]}},
 
               {'$group':{
@@ -49919,7 +54636,26 @@ def tune_in_csy_lsy():
                       }
                       }]
     tune_in_CSY=list(collection1.aggregate(query1))
+    print(tune_in_CSY)
     tune_in_CSY_df=pd.DataFrame(tune_in_CSY)
+    print(tune_in_CSY_df)
+
+    if "month" not in tune_in_CSY_df.columns:
+        tune_in_CSY_df["month"] = "NO INFO"
+    if "year" not in tune_in_CSY_df.columns:
+        tune_in_CSY_df["year"] = "NO INFO"
+    if "TuneIn_Send" not in tune_in_CSY_df.columns:
+        tune_in_CSY_df["TuneIn_Send"] = "NO INFO"
+    if "Opt_Out" not in tune_in_CSY_df.columns:
+        tune_in_CSY_df["Opt_Out"] = "NO INFO"
+    if "Opt_In" not in tune_in_CSY_df.columns:
+        tune_in_CSY_df["Opt_In"] = "NO INFO"
+
+
+    if tune_in_CSY_df.empty:
+        tune_in_CSY_df.loc[len(tune_in_CSY_df)] = 0
+
+
     month_df=pd.DataFrame({'month':list(range(1,13))})
     monthname=[]
     months=month_df.month.tolist()
@@ -49942,9 +54678,10 @@ def tune_in_csy_lsy():
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
               {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
               {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'MODIFIED_DATE':{'$gte':datetime.datetime(2019,8,1),
-                  '$lte':datetime.datetime(2020,7,31)
-                  }},
+    #               {'MODIFIED_DATE':{'$gte':datetime.datetime(2019,8,1),'$lte':datetime.datetime(2020,7,31)}},
+              {'MODIFIED_DATE':{'$gte':LSY_Date,'$lt': csy_first_date()}},
+
+
                   {'INVITEE_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
                    {'INVITEE_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
                  {'INVITEE_EMAIL':{"$not":{"$regex":"manoj.rayat5575@gmail.com",'$options':'i'}}},
@@ -49986,9 +54723,9 @@ def tune_in_csy_lsy():
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
               {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
               {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'MODIFIED_DATE':{'$gte':datetime.datetime(2019,8,1),
-                  '$lte':datetime.datetime(2020,7,31)
-                  }}
+    #               {'MODIFIED_DATE':{'$gte':datetime.datetime(2019,8,1),'$lte':datetime.datetime(2020,7,31)}}
+            {'MODIFIED_DATE':{'$gte':LSY_Date,'$lt': csy_first_date()}},
+
               ]}},
 
               {'$group':{
@@ -50013,6 +54750,7 @@ def tune_in_csy_lsy():
                       }]
     tune_in_LSY=list(collection1.aggregate(query1_LSY))
     tune_in_LSY_df=pd.DataFrame(tune_in_LSY)
+
 
     tune_in_data_LSY=tune_in_LSY_df.merge(tune_in_practice_LSY_df,on=['month'],how='left').fillna(0)
     tune_in_Final_LSY=month_df.merge(tune_in_data_LSY[['month','TuneIn_Send', 'Opt_Out', 'Opt_In', 'practicing_parent']],
@@ -50046,8 +54784,8 @@ def tune_in_LSY_table(month,opt):
     else:
         opt='Y'        
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.tune_in_master
     query=[{"$match":{
@@ -50106,8 +54844,8 @@ def tune_in_CSY_table(month,opt):
     else:
         opt='Y'        
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.tune_in_master
     query=[{"$match":{
@@ -50163,8 +54901,8 @@ def tune_in_CSY_table(month,opt):
 def tune_in_prac_table(month):
     month=month.title()
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.tune_in_audio_track_detail
     query=[{"$match":{
@@ -50245,8 +54983,8 @@ def tune_in_prac_table(month):
 @app.route('/tuneincsycard')
 def tunein_cards_csy():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.tune_in_audio_track_detail
     query=[{"$match":{
@@ -50348,7 +55086,7 @@ def tunein_cards_csy():
 def tunein_spider(district):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     dfti = DataFrame(list(db.tune_in_master.aggregate([
        {"$match":{
@@ -50513,7 +55251,9 @@ def tunein_spider(district):
 ####################################### Bill Me Later Analysis###########################################
 @app.route("/BillMeLaterAnalysis")
 def billmelateranalysis():
-    client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1 = db.subscription_master
     collection2 = db.audio_track_master
@@ -50742,8 +55482,8 @@ def ddt_card(districtid):
 
     #school summary df
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.subscription_master
@@ -51085,8 +55825,8 @@ def ddt_chart(districtid):
 
     #school summary df
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.subscription_master
@@ -51450,8 +56190,8 @@ def ddt_overall_table(districtid,practype):
     '6023a7949e8e623753fc3061':'Wasatch County School District',}
     district=disdic[districtid]
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.subscription_master
@@ -51773,7 +56513,7 @@ def ddt_overall_table(districtid,practype):
 def MONGO_CLE_SCH_CARD():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@34.214.24.229:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass
     #####################CLEVER#######################
     collection3 = db.user_master.aggregate([
@@ -51996,8 +56736,8 @@ def ddt_CSY_table(districtid,practype):
     '6023a7949e8e623753fc3061':'Wasatch County School District',}
     district=disdic[districtid]
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     collection2 = db.subscription_master
@@ -52317,7 +57057,7 @@ def ddt_CSY_table(districtid,practype):
 
 @app.route('/questtimeseriestable')
 def questtimeseriestable():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_master.aggregate([
@@ -52507,7 +57247,7 @@ def questtimeseriestable():
 
 @app.route('/queststreaktable/<num>')
 def queststreaktable(num):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_master.aggregate([
@@ -52735,7 +57475,7 @@ def queststreaktable(num):
 
 @app.route('/questactivestreaktable/<num>')
 def questactivestreaktable(num):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_master.aggregate([
@@ -52979,8 +57719,8 @@ def questactivestreaktable(num):
 @app.route('/campaignstatapi')
 def campaignapi():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.campaign_data
     query=[{'$match':{'$and':[
@@ -53071,7 +57811,9 @@ def campaignapi():
 @app.route("/user_journey_score/<name>")
 def new0(name):
     def userjourneyinfo(name):
-        client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+        username = urllib.parse.quote_plus('admin')
+        password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+        client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
         db=client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
@@ -53288,7 +58030,7 @@ def new0(name):
         return (dict)
 
     def userjourneychart(name):
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
         client = pymongo.MongoClient(mongo_uri)
         db = client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
@@ -53363,7 +58105,9 @@ def new0(name):
 @app.route("/usercomparison/<name>/<name1>")
 def new(name,name1):
     def usercomparisoninfo(name):
-        client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+        username = urllib.parse.quote_plus('admin')
+        password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+        client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
         db=client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
@@ -53616,7 +58360,7 @@ def new(name,name1):
         return (dict)
 
     def usercomparisonchart(name):
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
         client = pymongo.MongoClient(mongo_uri)
         db = client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
@@ -53697,7 +58441,9 @@ def new(name,name1):
             return (temp)  
 
     def usercomparisoninfo1(name1):
-        client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+        username = urllib.parse.quote_plus('admin')
+        password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+        client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
         db=client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
@@ -53950,7 +58696,7 @@ def new(name,name1):
         return (dict)
 
     def usercomparisonchart1(name1):
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
         client = pymongo.MongoClient(mongo_uri)
         db = client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
@@ -54037,7 +58783,9 @@ def new(name,name1):
 @app.route("/schoolcomparison/<name>/<name1>")
 def new1(name,name1):
     def schoolcomparisoninfo(name):
-        client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+        username = urllib.parse.quote_plus('admin')
+        password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+        client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
         db=client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
@@ -54212,7 +58960,7 @@ def new1(name,name1):
         return (dict)
 
     def schoolcomparisonchart(name):
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
         client = pymongo.MongoClient(mongo_uri)
         db = client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
@@ -54313,7 +59061,9 @@ def new1(name,name1):
             return (temp)  
 
     def schoolcomparisoninfo1(name1):
-        client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+        username = urllib.parse.quote_plus('admin')
+        password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+        client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
         db=client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
@@ -54488,7 +59238,7 @@ def new1(name,name1):
         return (dict)
 
     def schoolcomparisonchart1(name1):
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
         client = pymongo.MongoClient(mongo_uri)
         db = client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
@@ -54595,7 +59345,9 @@ def new1(name,name1):
 @app.route("/districtcomparison/<name>/<name1>")
 def new2(name,name1):
     def districtcomparisoninfo(name):
-        client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+        username = urllib.parse.quote_plus('admin')
+        password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+        client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
         db=client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
@@ -54836,7 +59588,7 @@ def new2(name,name1):
         return (dict)
 
     def districtcomparisonchart(name):
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
         client = pymongo.MongoClient(mongo_uri)
         db = client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
@@ -55007,7 +59759,9 @@ def new2(name,name1):
     
 
     def districtcomparisoninfo1(name1):
-        client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+        username = urllib.parse.quote_plus('admin')
+        password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+        client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
         db=client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
@@ -55244,7 +59998,7 @@ def new2(name,name1):
         return (dict)
 
     def districtcomparisonchart1(name1):
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@34.214.24.229:27017/"
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
         client = pymongo.MongoClient(mongo_uri)
         db = client.compass
         dateStr = "2020-08-01T00:00:00.000Z"
@@ -55420,8 +60174,8 @@ def new2(name,name1):
 
 # def avg_audio_completed_greater_than_50___(datestr):
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
 #     db=client.compass
 #     collection1= db.audio_track_master
     
@@ -55497,8 +60251,8 @@ def new2(name,name1):
 def avg_audio_completed_____(datestr):
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -55575,22 +60329,30 @@ def avg_audio_completed_____(datestr):
     #     temp={'data':data}
     return json.dumps(data)
 
+# blaaaa
+    # client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@52.41.36.115:27017/')
 
 
 @app.route('/ratingcardsdaily_card/<datestr>')
 def dailyratings___(datestr):
+    import datetime
+    import math
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection2=db.audio_feedback
-    mydatetime= dateutil.parser.parse(datestr)
-    yester= pd.to_datetime(mydatetime) - timedelta(days=1)
-    tod= mydatetime
+    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+#     yester= pd.to_datetime(mydatetime) - timedelta(days=1)
+#     tod= mydatetime
+    yester= datetime.datetime.combine(mydatetime,datetime.time.min)
+    tod= datetime.datetime.combine(mydatetime,datetime.time.max)
+
+    
     start_15day=tod- timedelta(days=8)
     startend= start_15day+timedelta(days=1)
-    print(start_15day)
-    print(startend)
+#     print(start_15day)
+#     print(startend)
 
 
 #TEACHERS COMMENT PER FEEDBACK LAST WEEK
@@ -55604,7 +60366,7 @@ def dailyratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':yester, '$lt':tod}}    ,    
-        {'COMMENT':{'$nin':['',' ',None]}},
+#         {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
 
     {'$group':{'_id':'null', 'rating':{'$sum':1}
@@ -55612,8 +60374,11 @@ def dailyratings___(datestr):
     ]
 
     commentsonfeed=list(collection2.aggregate(query1))
-    commentsonfeedback=pd.DataFrame(commentsonfeed)
-    comments_per_feedback_teacher=commentsonfeedback[['rating']]
+    if len(commentsonfeed)>0:
+        commentsonfeedback=pd.DataFrame(commentsonfeed)
+        comments_per_feedback_teacher=commentsonfeedback[['rating']]
+    else:
+        comments_per_feedback_teacher=pd.DataFrame({'rating':[0]})
     
     
 #PARENTS COMMENT PER FEEDBACK LAST WEEK
@@ -55627,7 +60392,7 @@ def dailyratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':yester, '$lt':tod}}    ,    
-       {'COMMENT':{'$nin':['',' ',None]}},
+#        {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
         
 
@@ -55636,8 +60401,11 @@ def dailyratings___(datestr):
     ]
 
     commentsonfeed2=list(collection2.aggregate(querya))
-    commentsonfeedback2=pd.DataFrame(commentsonfeed2)
-    comments_per_feedback_parents=commentsonfeedback2[['rating']]
+    if len(commentsonfeed2)>0:
+        commentsonfeedback2=pd.DataFrame(commentsonfeed2)
+        comments_per_feedback_parents=commentsonfeedback2[['rating']]
+    else:
+        comments_per_feedback_parents=pd.DataFrame({'rating':[0]})
     
 
     
@@ -55652,7 +60420,7 @@ def dailyratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':start_15day, '$lt':startend}}    ,   
-       {'COMMENT':{'$nin':['',' ',None]}},
+#        {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
    
     {'$group':{'_id':'null', 'rating':{'$sum':1}
@@ -55660,8 +60428,11 @@ def dailyratings___(datestr):
     ]
 
     commentsonfeed11=list(collection2.aggregate(query4))
-    commentsonfeedback11=pd.DataFrame(commentsonfeed11)
-    comments_per_feedback_before_last_week_teachers=commentsonfeedback11[['rating']]
+    if len(commentsonfeed11)>0:
+        commentsonfeedback11=pd.DataFrame(commentsonfeed11)
+        comments_per_feedback_before_last_week_teachers=commentsonfeedback11[['rating']]
+    else:
+        comments_per_feedback_before_last_week_teachers=pd.DataFrame({'rating':[0]})
     
 
     
@@ -55676,7 +60447,7 @@ def dailyratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':start_15day, '$lt':startend}},    
-        {'COMMENT':{'$nin':['',' ',None]}},
+#         {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
 
 
@@ -55685,8 +60456,11 @@ def dailyratings___(datestr):
     ]
 
     commentsonfeed200=list(collection2.aggregate(queryB))
-    commentsonfeedback20=pd.DataFrame(commentsonfeed200)
-    comments_per_feedback_before_last_week_parents=commentsonfeedback20[['rating']]
+    if len(commentsonfeed200)>0:
+        commentsonfeedback20=pd.DataFrame(commentsonfeed200)
+        comments_per_feedback_before_last_week_parents=commentsonfeedback20[['rating']]
+    else:
+        comments_per_feedback_before_last_week_parents=pd.DataFrame({'rating':[0]})
     
 
     
@@ -55700,17 +60474,22 @@ def dailyratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':yester, '$lt':tod}}    ,    
-        {'COMMENT':{'$nin':['',' ',None]}},
+#         {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
     {'$project':{'_id':0, 'RATING':'$RATING'
     }}
     ]
 
     avg_rating=list(collection2.aggregate(query6))
-    avg_ratings=pd.DataFrame(avg_rating)
-    avg_ratings_lastweek=avg_ratings[['RATING']]
+    if len(avg_rating)>0:
+        avg_ratings=pd.DataFrame(avg_rating)
+        avg_ratings_lastweek=avg_ratings[['RATING']]
+        avg_ratings_last_week=pd.DataFrame({'avg_ratings_lastweek':round(avg_ratings_lastweek[avg_ratings_lastweek['RATING']!=0]['RATING'].mean(),1)}, index=[0])
+    else:
+        avg_ratings_lastweek=pd.DataFrame({'RATING':[0]})
+        avg_ratings_last_week=pd.DataFrame({'avg_ratings_lastweek':[0]})
 
-    avg_ratings_last_week=pd.DataFrame({'avg_ratings_lastweek':round(avg_ratings_lastweek[avg_ratings_lastweek['RATING']!=0]['RATING'].mean(),1)}, index=[0])
+    
 
     
    
@@ -55723,7 +60502,7 @@ def dailyratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':start_15day, '$lt':startend}}    ,   
-        {'COMMENT':{'$nin':['',' ',None]}},
+#         {'COMMENT':{'$nin':['',' ',None]}},
         
     {'RATING':{'$ne':0}}]}},
    
@@ -55732,88 +60511,123 @@ def dailyratings___(datestr):
     ]
 
     avg_rate=list(collection2.aggregate(query60))
-    avg_ratin=pd.DataFrame(avg_rate)
-    avg_ratings_before_lastweek=avg_ratin[['RATING']]
-
-    avg_ratings_beforee_last_week=pd.DataFrame({'avg_ratings_before_lastweek':round(avg_ratings_before_lastweek[avg_ratings_before_lastweek['RATING']!=0]['RATING'].mean(),1)}, index=[0])
-
-
-
+    if len(avg_rate)>0:
+        avg_ratin=pd.DataFrame(avg_rate)
+        avg_ratings_before_lastweek=avg_ratin[['RATING']]
+        avg_ratings_beforee_last_week=pd.DataFrame({'avg_ratings_before_lastweek':round(avg_ratings_before_lastweek[avg_ratings_before_lastweek['RATING']!=0]['RATING'].mean(),1)}, index=[0])
+    else:
+        avg_ratings_before_lastweek=pd.DataFrame({'RATING':[0]})
+        avg_ratings_beforee_last_week=pd.DataFrame({'avg_ratings_before_lastweek':[0]})
     
+
     
     TEACHER_Comment_per_feedbackchange=[]
     teacher_PERCENTAGE_change=[]
     if comments_per_feedback_teacher['rating'].iloc[0] > comments_per_feedback_before_last_week_teachers['rating'].iloc[0]:
         xx=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
         yy= xx/comments_per_feedback_teacher['rating'].iloc[0]
+        if math.isnan(yy):
+            yy=0
+        else:
+            yy=yy
         zz= round(yy*100,2)
         TEACHER_Comment_per_feedbackchange.append('-1')
         teacher_PERCENTAGE_change.append(zz)
-        
+
     elif comments_per_feedback_teacher['rating'].iloc[0] == comments_per_feedback_before_last_week_teachers['rating'].iloc[0]:
         xx=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
         yy= xx/comments_per_feedback_teacher['rating'].iloc[0]
+        if math.isnan(yy):
+            yy=0
+        else:
+            yy=yy
         zz= round(yy*100,2)
         TEACHER_Comment_per_feedbackchange.append('0')
         teacher_PERCENTAGE_change.append(zz)
-        
+
     else:
         xx=comments_per_feedback_before_last_week_teachers['rating'].iloc[0]-comments_per_feedback_teacher['rating'].iloc[0]
         yy= xx/comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
+        if math.isnan(yy):
+            yy=0
+        else:
+            yy=yy
         zz= round(yy*100,2)
         TEACHER_Comment_per_feedbackchange.append('1')
         teacher_PERCENTAGE_change.append(zz)
-        
 
 
     PARENT_Comment_per_feedbackchange=[]
     parent_PERCENTAGE_change=[]
     if comments_per_feedback_parents['rating'].iloc[0] > comments_per_feedback_before_last_week_parents['rating'].iloc[0]:
-        xx=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
-        yy= xx/comments_per_feedback_parents['rating'].iloc[0]
-        zz= round(yy*100,2)
+        pp=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
+        qq= pp/comments_per_feedback_parents['rating'].iloc[0]
+        if math.isnan(qq):
+            qq=0
+        else:
+            qq=qq 
+        rr=round(qq*100,2)
         PARENT_Comment_per_feedbackchange.append('-1')
-        parent_PERCENTAGE_change.append(zz)
-        
+        parent_PERCENTAGE_change.append(rr)
+
     elif comments_per_feedback_parents['rating'].iloc[0] == comments_per_feedback_before_last_week_parents['rating'].iloc[0]:
-        xx=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
-        yy= xx/comments_per_feedback_parents['rating'].iloc[0]
-        zz= round(yy*100,2)
+        pp=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
+        qq= pp/comments_per_feedback_parents['rating'].iloc[0]
+        if math.isnan(qq):
+            qq=0
+        else:
+            qq=qq 
+        rr=round(qq*100,2)
         PARENT_Comment_per_feedbackchange.append('0')
-        parent_PERCENTAGE_change.append(zz)
-        
+        parent_PERCENTAGE_change.append(rr)
+
     else:
-        xx=comments_per_feedback_before_last_week_parents['rating'].iloc[0]-comments_per_feedback_parents['rating'].iloc[0]
-        yy= xx/comments_per_feedback_before_last_week_parents['rating'].iloc[0]
-        zz= round(yy*100,2)
+        pp=comments_per_feedback_before_last_week_parents['rating'].iloc[0]-comments_per_feedback_parents['rating'].iloc[0]
+        qq= pp/comments_per_feedback_before_last_week_parents['rating'].iloc[0]
+        if math.isnan(qq):
+            qq=0
+        else:
+            qq=qq 
+        rr=round(qq*100,2)
         PARENT_Comment_per_feedbackchange.append('1')
-        parent_PERCENTAGE_change.append(zz)
-        
+        parent_PERCENTAGE_change.append(rr)
 
 
     Average_FEEDBACK_Rating_change=[]
     Average_feedback_PERCENTAGE=[]
     if avg_ratings_last_week['avg_ratings_lastweek'].iloc[0] > avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]:
-        xx=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
-        yy= xx/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
-        zz= round(yy*100,2)
+        aa=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
+        bb= aa/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
+        if math.isnan(bb):
+            bb=0
+        else:
+            bb=bb            
+        cc= round(bb*100,2)
         Average_FEEDBACK_Rating_change.append('-1')
-        Average_feedback_PERCENTAGE.append(zz)
-        
-        
+        Average_feedback_PERCENTAGE.append(cc)
+
+
     elif avg_ratings_last_week['avg_ratings_lastweek'].iloc[0] == avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]:
-        xx=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
-        yy= xx/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
-        zz= round(yy*100,2)
+        aa=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
+        bb= aa/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
+        if math.isnan(bb):
+            bb=0
+        else:
+            bb=bb            
+        cc= round(bb*100,2)
         Average_FEEDBACK_Rating_change.append('0')
-        Average_feedback_PERCENTAGE.append(zz)
-        
+        Average_feedback_PERCENTAGE.append(cc)
+
     else:
-        xx=avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]-avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
-        yy= xx/avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
-        zz= round(yy*100,2)
+        aa=avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]-avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
+        bb= aa/avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
+        if math.isnan(bb):
+            bb=0
+        else:
+            bb=bb            
+        cc= round(bb*100,2)
         Average_FEEDBACK_Rating_change.append('1')
-        Average_feedback_PERCENTAGE.append(zz)
+        Average_feedback_PERCENTAGE.append(cc)
 
 
 
@@ -55844,18 +60658,17 @@ def dailyratings___(datestr):
 
 
 
-
 # dailyratings('2020-03-20')
 
 
 @app.route('/last_day_pr/<datestr>')
 def pract_cards_24hr____(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
-    mydatetime= dateutil.parser.parse(datestr)
+    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
 #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
@@ -55922,6 +60735,10 @@ def pract_cards_24hr____(datestr):
     if df_atm2['parents_playback_48hrs'].iloc[0] > df_atm1['parents_playback_24hr'].iloc[0]:
         xx=df_atm2['parents_playback_48hrs'].iloc[0]-df_atm1['parents_playback_24hr'].iloc[0]
         yy= xx/df_atm2['parents_playback_48hrs'].iloc[0]
+        if math.isnan(yy):
+            yy=0
+        else:
+            yy=yy
         zz= round(yy*100,2)
         PARENTSCHANGE.append('-1')
         PARENT_percentagechange.append(zz)
@@ -55929,6 +60746,10 @@ def pract_cards_24hr____(datestr):
     elif df_atm2['parents_playback_48hrs'].iloc[0] == df_atm1['parents_playback_24hr'].iloc[0]:
         xx=df_atm2['parents_playback_48hrs'].iloc[0]-df_atm1['parents_playback_24hr'].iloc[0]
         yy= xx/df_atm2['parents_playback_48hrs'].iloc[0]
+        if math.isnan(yy):
+            yy=0
+        else:
+            yy=yy
         zz= round(yy*100,2)
         PARENTSCHANGE.append('0')
         PARENT_percentagechange.append(zz)
@@ -55936,6 +60757,10 @@ def pract_cards_24hr____(datestr):
     else:
         xx=df_atm1['parents_playback_24hr'].iloc[0]-df_atm2['parents_playback_48hrs'].iloc[0]
         yy= xx/df_atm1['parents_playback_24hr'].iloc[0]
+        if math.isnan(yy):
+            yy=0
+        else:
+            yy=yy
         zz= round(yy*100,2)
         PARENTSCHANGE.append('1')
         PARENT_percentagechange.append(zz)
@@ -55945,52 +60770,76 @@ def pract_cards_24hr____(datestr):
     TEACHERSCHANGE=[]
     TEACHER_percentagechange=[]
     if df_atm2['teachers_playback_48hrs'].iloc[0] > df_atm1['teachers_playback_24hr'].iloc[0]:
-        xx=df_atm2['teachers_playback_48hrs'].iloc[0]-df_atm1['teachers_playback_24hr'].iloc[0]
-        yy= xx/df_atm2['teachers_playback_48hrs'].iloc[0]
-        zz= round(yy*100,2)
+        aa=df_atm2['teachers_playback_48hrs'].iloc[0]-df_atm1['teachers_playback_24hr'].iloc[0]
+        bb= aa/df_atm2['teachers_playback_48hrs'].iloc[0]   
+        if math.isnan(bb):
+            bb=0
+        else:
+            bb=bb
+        cc= round(bb*100,2)
         TEACHERSCHANGE.append('-1')
-        TEACHER_percentagechange.append(zz)
+        TEACHER_percentagechange.append(cc)
 
     elif df_atm2['teachers_playback_48hrs'].iloc[0] == df_atm1['teachers_playback_24hr'].iloc[0]:
-        xx=df_atm2['teachers_playback_48hrs'].iloc[0]-df_atm1['teachers_playback_24hr'].iloc[0]
-        yy= xx/df_atm2['teachers_playback_48hrs'].iloc[0]
-        zz= round(yy*100,2)
+        aa=df_atm2['teachers_playback_48hrs'].iloc[0]-df_atm1['teachers_playback_24hr'].iloc[0]
+        bb= aa/df_atm2['teachers_playback_48hrs'].iloc[0]
+        if math.isnan(bb):
+            bb=0
+        else:
+            bb=bb
+        cc= round(bb*100,2)
         TEACHERSCHANGE.append('0')
-        TEACHER_percentagechange.append(zz)
+        TEACHER_percentagechange.append(cc)
 
 
     else:
-        xx=df_atm1['teachers_playback_24hr'].iloc[0]-df_atm2['teachers_playback_48hrs'].iloc[0]
-        yy= xx/df_atm1['teachers_playback_24hr'].iloc[0]
-        zz= round(yy*100,2)
+        aa=df_atm1['teachers_playback_24hr'].iloc[0]-df_atm2['teachers_playback_48hrs'].iloc[0]
+        bb= aa/df_atm1['teachers_playback_24hr'].iloc[0]
+        if math.isnan(bb):
+            bb=0
+        else:
+            bb=bb
+        cc= round(bb*100,2)
         TEACHERSCHANGE.append('1')
-        TEACHER_percentagechange.append(zz)
+        TEACHER_percentagechange.append(cc)
 
 
     TOTALCHANGE=[]
     TOTAL_percentagechange=[]
     if df_atm2['total_playback_48hrs'].iloc[0] > df_atm1['total_playback_24hr'].iloc[0]:
-        xx=df_atm2['total_playback_48hrs'].iloc[0]-df_atm1['total_playback_24hr'].iloc[0]
-        yy= xx/df_atm2['total_playback_48hrs'].iloc[0]
-        zz= round(yy*100,2)
+        pp=df_atm2['total_playback_48hrs'].iloc[0]-df_atm1['total_playback_24hr'].iloc[0]
+        qq= pp/df_atm2['total_playback_48hrs'].iloc[0]
+        if math.isnan(qq):
+            qq=0
+        else:
+            qq=qq
+        rr= round(qq*100,2)
         TOTALCHANGE.append('-1')
-        TOTAL_percentagechange.append(zz)
+        TOTAL_percentagechange.append(rr)
 
 
     elif df_atm2['total_playback_48hrs'].iloc[0] == df_atm1['total_playback_24hr'].iloc[0]:
-        xx=df_atm2['total_playback_48hrs'].iloc[0]-df_atm1['total_playback_24hr'].iloc[0]
-        yy= xx/df_atm2['total_playback_48hrs'].iloc[0]
-        zz= round(yy*100,2)
+        pp=df_atm2['total_playback_48hrs'].iloc[0]-df_atm1['total_playback_24hr'].iloc[0]
+        qq= pp/df_atm2['total_playback_48hrs'].iloc[0]
+        if math.isnan(qq):
+            qq=0
+        else:
+            qq=qq
+        rr= round(qq*100,2)
         TOTALCHANGE.append('0')
-        TOTAL_percentagechange.append(zz)
+        TOTAL_percentagechange.append(rr)
 
 
     else: 
-        xx=df_atm1['total_playback_24hr'].iloc[0]-df_atm2['total_playback_48hrs'].iloc[0]
-        yy= xx/df_atm1['total_playback_24hr'].iloc[0]
-        zz= round(yy*100,2)
+        pp=df_atm1['total_playback_24hr'].iloc[0]-df_atm2['total_playback_48hrs'].iloc[0]
+        qq= pp/df_atm1['total_playback_24hr'].iloc[0]
+        if math.isnan(qq):
+            qq=0
+        else:
+            qq=qq
+        rr= round(qq*100,2)
         TOTALCHANGE.append('1')
-        TOTAL_percentagechange.append(zz)
+        TOTAL_percentagechange.append(rr)
 
 
     parents_playback_24hr=df_atm1['parents_playback_24hr'].tolist()
@@ -56015,12 +60864,12 @@ def pract_cards_24hr____(datestr):
 def SIGNUP_24hr___(datestr):
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.user_master
 
-    mydatetime= dateutil.parser.parse(datestr)
+    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
@@ -56176,8 +61025,8 @@ def SIGNUP_24hr___(datestr):
 def avg_audio_completed_less___(datestr):
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
     
@@ -56256,8 +61105,8 @@ def avg_audio_completed_less___(datestr):
 # def avg_audio_completed_more__(datestr):
 
 #     username = urllib.parse.quote_plus('admin')
-#     password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-#     client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
 #     db=client.compass
 #     collection1= db.audio_track_master
 #     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -56338,8 +61187,8 @@ def avg_audio_completed_less___(datestr):
 @app.route('/Weekly_power_users_having_streaks/<datestr>')
 def power_users_weekly___(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     mydatetime= dateutil.parser.parse(datestr)
     
@@ -56516,8 +61365,8 @@ def power_users_weekly___(datestr):
 @app.route('/playback_cards_week/<datestr>')
 def practice_cards_weeklyPandT__(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     
@@ -56556,7 +61405,9 @@ def practice_cards_weeklyPandT__(datestr):
     {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
-    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+            {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{'$nin':['',' ',None]}},
     {'MODIFIED_DATE':{'$gt':start , '$lte':yester}}
     ]}},
     {'$group':{'_id':'null', 
@@ -56683,8 +61534,8 @@ def practice_cards_weeklyPandT__(datestr):
 @app.route('/SIGNUPS_WEEK/<datestr>') #test3
 def SIGNUP_cards_WEEK__(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.user_master
     
@@ -56826,8 +61677,8 @@ def SIGNUP_cards_WEEK__(datestr):
 @app.route('/comparison1/<datestr>') #test2
 def weekly_compare_chart___(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     
@@ -56853,11 +61704,16 @@ def weekly_compare_chart___(datestr):
     
     qr1=[{"$match":{
     '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            
+            {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+            
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
     {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-    {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},        
+      
 #     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
     {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -56878,7 +61734,9 @@ def weekly_compare_chart___(datestr):
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
 #         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
-                {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},        
+               {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},        
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start_15day
                     , '$lt': start}}
@@ -56890,7 +61748,7 @@ def weekly_compare_chart___(datestr):
     list2= list(collection1.aggregate(qr2))
     df_at2m= DataFrame(list2)
     LAST_TO_LAST_WEEK_PRACTICE_parents=df_at2m[['_id','LAST_TO_LAST_WEEK_PRACTICE_parents']]
-    join_final= pd.merge(LAST_WEEK_PRACTICE_parents, LAST_TO_LAST_WEEK_PRACTICE_parents, on='_id', how='left')    
+    join_final1= pd.merge(LAST_WEEK_PRACTICE_parents, LAST_TO_LAST_WEEK_PRACTICE_parents, on='_id', how='left')    
 # =========================================
     qr3=[{"$match":{
     '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -56898,7 +61756,9 @@ def weekly_compare_chart___(datestr):
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
     {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-    {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},        
+    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
     {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -56919,7 +61779,9 @@ def weekly_compare_chart___(datestr):
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
-                {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},        
+        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+         {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},       
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start_15day
                     , '$lt': start}}
@@ -56931,32 +61793,623 @@ def weekly_compare_chart___(datestr):
     list4= list(collection1.aggregate(qr4))
     df_atm4= DataFrame(list4)
     LAST_TO_LAST_WEEK_PRACTICE_teachers=df_atm4[['_id','LAST_TO_LAST_WEEK_PRACTICE_teachers']]
-    join_final= pd.merge(LAST_WEEK_PRACTICE_TEACHERS, LAST_TO_LAST_WEEK_PRACTICE_teachers, on='_id', how='left')    
-    weekdata={"day":['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-     "count_last_week_parents":[int(str(LAST_WEEK_PRACTICE_parents['LAST_WEEK_PRACTICE_parents'][0])),int(str(LAST_WEEK_PRACTICE_parents['LAST_WEEK_PRACTICE_parents'][1])),
-       int(str(LAST_WEEK_PRACTICE_parents['LAST_WEEK_PRACTICE_parents'][2])),int(str(LAST_WEEK_PRACTICE_parents['LAST_WEEK_PRACTICE_parents'][3])),
-    int(str(LAST_WEEK_PRACTICE_parents['LAST_WEEK_PRACTICE_parents'][4])),int(str(LAST_WEEK_PRACTICE_parents['LAST_WEEK_PRACTICE_parents'][5])),int(str(LAST_WEEK_PRACTICE_parents['LAST_WEEK_PRACTICE_parents'][6]))],
-    'count_last_to_lastweek_parents':[int(str(LAST_TO_LAST_WEEK_PRACTICE_parents['LAST_TO_LAST_WEEK_PRACTICE_parents'][0])),int(str(LAST_TO_LAST_WEEK_PRACTICE_parents['LAST_TO_LAST_WEEK_PRACTICE_parents'][1])),
-    int(str(LAST_TO_LAST_WEEK_PRACTICE_parents['LAST_TO_LAST_WEEK_PRACTICE_parents'][2])),int(str(LAST_TO_LAST_WEEK_PRACTICE_parents['LAST_TO_LAST_WEEK_PRACTICE_parents'][3])),
-    int(str(LAST_TO_LAST_WEEK_PRACTICE_parents['LAST_TO_LAST_WEEK_PRACTICE_parents'][4])),int(str(LAST_TO_LAST_WEEK_PRACTICE_parents['LAST_TO_LAST_WEEK_PRACTICE_parents'][5])),int(str(LAST_TO_LAST_WEEK_PRACTICE_parents['LAST_TO_LAST_WEEK_PRACTICE_parents'][6]))],
-    'count_last_week_teachers': [int(str(LAST_WEEK_PRACTICE_TEACHERS['LAST_WEEK_PRACTICE_TEACHERS'][0])),int(str(LAST_WEEK_PRACTICE_TEACHERS['LAST_WEEK_PRACTICE_TEACHERS'][1])),
-    int(str(LAST_WEEK_PRACTICE_TEACHERS['LAST_WEEK_PRACTICE_TEACHERS'][2])),int(str(LAST_WEEK_PRACTICE_TEACHERS['LAST_WEEK_PRACTICE_TEACHERS'][3])),
-    int(str(LAST_WEEK_PRACTICE_TEACHERS['LAST_WEEK_PRACTICE_TEACHERS'][4])),int(str(LAST_WEEK_PRACTICE_TEACHERS['LAST_WEEK_PRACTICE_TEACHERS'][5])),int(str(LAST_WEEK_PRACTICE_TEACHERS['LAST_WEEK_PRACTICE_TEACHERS'][6]))],
-    'count_last_to_last_week_teachers':[int(str(LAST_TO_LAST_WEEK_PRACTICE_teachers['LAST_TO_LAST_WEEK_PRACTICE_teachers'][0])),int(str(LAST_TO_LAST_WEEK_PRACTICE_teachers['LAST_TO_LAST_WEEK_PRACTICE_teachers'][1])),
-    int(str(LAST_TO_LAST_WEEK_PRACTICE_teachers['LAST_TO_LAST_WEEK_PRACTICE_teachers'][2])),int(str(LAST_TO_LAST_WEEK_PRACTICE_teachers['LAST_TO_LAST_WEEK_PRACTICE_teachers'][3])),
-    int(str(LAST_TO_LAST_WEEK_PRACTICE_teachers['LAST_TO_LAST_WEEK_PRACTICE_teachers'][4])),int(str(LAST_TO_LAST_WEEK_PRACTICE_teachers['LAST_TO_LAST_WEEK_PRACTICE_teachers'][5])),int(str(LAST_TO_LAST_WEEK_PRACTICE_teachers['LAST_TO_LAST_WEEK_PRACTICE_teachers'][6]))],
-    }
-    weekdata
+    join_final2= pd.merge(LAST_WEEK_PRACTICE_TEACHERS, LAST_TO_LAST_WEEK_PRACTICE_teachers, on='_id', how='left') 
+    
+        
+        
+# =========================================
+    qr5=[{"$match":{
+    '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+     {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+     {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+    }},
+    ]}},
+    {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+    'LAST_WEEK_PRACTICE_schoology':{'$sum':1}
+    }}, {'$sort':{'_id':1}}
+     ]
+    list5= list(collection1.aggregate(qr5))
+    df_atm5= DataFrame(list5)
+    df_atm5
+    LAST_WEEK_PRACTICE_schoology=df_atm5[['_id','LAST_WEEK_PRACTICE_schoology']]
+    qr6=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+         {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start_15day
+                    , '$lt': start}}
+        ]}},
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+    'LAST_TO_LAST_WEEK_PRACTICE_schoology':{'$sum':1}
+    }}, {'$sort':{'_id':1}}
+     ]
+    list6= list(collection1.aggregate(qr6))
+    df_atm6= DataFrame(list6)
+    LAST_TO_LAST_WEEK_PRACTICE_schoology=df_atm6[['_id','LAST_TO_LAST_WEEK_PRACTICE_schoology']]
+    join_final3= pd.merge(LAST_WEEK_PRACTICE_schoology, LAST_TO_LAST_WEEK_PRACTICE_schoology, on='_id', how='left') 
+       
+# =========================================
+    qr7=[{"$match":{
+    '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+     {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+     {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},      
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+    }},
+    ]}},
+    {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+    'LAST_WEEK_PRACTICE_clever':{'$sum':1}
+    }}, {'$sort':{'_id':1}}
+     ]
+    list7= list(collection1.aggregate(qr7))
+    df_atm7= DataFrame(list7)
+    df_atm7
+    LAST_WEEK_PRACTICE_clever=df_atm7[['_id','LAST_WEEK_PRACTICE_clever']]
+    qr8=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+         {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},         
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start_15day
+                    , '$lt': start}}
+        ]}},
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+    'LAST_TO_LAST_WEEK_PRACTICE_clever':{'$sum':1}
+    }}, {'$sort':{'_id':1}}
+     ]
+    list8= list(collection1.aggregate(qr8))
+    df_atm8= DataFrame(list8)
+    LAST_TO_LAST_WEEK_PRACTICE_clever=df_atm8[['_id','LAST_TO_LAST_WEEK_PRACTICE_clever']]
+    join_final4= pd.merge(LAST_WEEK_PRACTICE_clever, LAST_TO_LAST_WEEK_PRACTICE_clever, on='_id', how='left') 
+    
+    days=pd.DataFrame({'_id':[1,2,3,4,5,6,7],'day':['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']})
+    
+    df1=pd.merge(days,join_final1, on='_id',how='left')
+    df2=pd.merge(df1,join_final2, on='_id',how='left')
+    df3=pd.merge(df2,join_final3, on='_id',how='left')
+    df4=pd.merge(df3,join_final4, on='_id',how='left').fillna(0)
+    df4=df4.astype(int, errors='ignore')
+    df4.columns
+    lists=[]
+    
+    for i in df4.columns:
+        
+        i=df4[i].tolist()
+        lists.append(i)  
+    weekdata={"day":lists[1],
+     "count_last_week_parents":lists[2],
+    'count_last_to_lastweek_parents':lists[3],
+    'count_last_week_teachers':lists[4],
+    'count_last_to_last_week_teachers':lists[5],
+    'count_last_week_schoology':lists[6],
+    'count_last_to_last_week_schoology':lists[7],
+    'count_last_week_clever':lists[8],
+    'count_last_to_last_week_clever':lists[9]}
     temp={'weekdata':weekdata}
     return json.dumps(temp)
+    
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>------- PRACTICE BIFURCATION API------------------>>>>>>>>>
+@app.route('/comparison1/<datestr>/<charttype>') #test2
+def weekly__compare__chart__(datestr,charttype):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection1= db.audio_track_master
+    
+    
+    mydatetime= dateutil.parser.parse(datestr)
+    yester= pd.to_datetime(mydatetime) +timedelta(hours=4)
+    print(yester)
+    tod=mydatetime+ timedelta(hours=4)
+
+    start= tod- timedelta(days=8)+timedelta(days=1)
+    print(start)
+    start_15day= start-timedelta(days=8)+timedelta(days=1)
+    print(start_15day)
+    
+#     # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
+#     yesterday= datetime.datetime.combine(datetime.datetime.utcnow() -timedelta(days=1),datetime.time.min)
+#     today= datetime.datetime.combine(datetime.datetime.utcnow(),datetime.time.min)
+#     tod= today+ timedelta(hours=4)
+#     # yester-timedelta(days=8)
+#     start= tod-timedelta(days=8)+timedelta(days=1)
+#     yester= yesterday+timedelta(hours=4)+timedelta(days=1)
+#     start_15day=tod-timedelta(days=15)+timedelta(days=1)
+
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+    
+        qr1=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+
+                {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+
+    #     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_parents':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list1= list(collection1.aggregate(qr1))
+        df_atm= DataFrame(list1)
+        df_atm
+        LAST_WEEK_PRACTICE_parents=df_atm[['_id','LAST_WEEK_PRACTICE_parents']]
+        qr2=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    #         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+                   {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},        
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_parents':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list2= list(collection1.aggregate(qr2))
+        df_at2m= DataFrame(list2)
+        LAST_TO_LAST_WEEK_PRACTICE_parents=df_at2m[['_id','LAST_TO_LAST_WEEK_PRACTICE_parents']]
+        join_final1= pd.merge(LAST_WEEK_PRACTICE_parents, LAST_TO_LAST_WEEK_PRACTICE_parents, on='_id', how='left')    
+    # =========================================
+        qr3=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_TEACHERS':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list3= list(collection1.aggregate(qr3))
+        df_atm3= DataFrame(list3)
+        df_atm3
+        LAST_WEEK_PRACTICE_TEACHERS=df_atm3[['_id','LAST_WEEK_PRACTICE_TEACHERS']]
+        qr4=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},       
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_teachers':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list4= list(collection1.aggregate(qr4))
+        df_atm4= DataFrame(list4)
+        LAST_TO_LAST_WEEK_PRACTICE_teachers=df_atm4[['_id','LAST_TO_LAST_WEEK_PRACTICE_teachers']]
+        join_final2= pd.merge(LAST_WEEK_PRACTICE_TEACHERS, LAST_TO_LAST_WEEK_PRACTICE_teachers, on='_id', how='left') 
+
+
+
+    # =========================================
+        qr5=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+         {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_schoology':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list5= list(collection1.aggregate(qr5))
+        df_atm5= DataFrame(list5)
+        df_atm5
+        LAST_WEEK_PRACTICE_schoology=df_atm5[['_id','LAST_WEEK_PRACTICE_schoology']]
+        qr6=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_schoology':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list6= list(collection1.aggregate(qr6))
+        df_atm6= DataFrame(list6)
+        LAST_TO_LAST_WEEK_PRACTICE_schoology=df_atm6[['_id','LAST_TO_LAST_WEEK_PRACTICE_schoology']]
+        join_final3= pd.merge(LAST_WEEK_PRACTICE_schoology, LAST_TO_LAST_WEEK_PRACTICE_schoology, on='_id', how='left') 
+
+    # =========================================
+        qr7=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+         {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},      
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_clever':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list7= list(collection1.aggregate(qr7))
+        df_atm7= DataFrame(list7)
+        df_atm7
+        LAST_WEEK_PRACTICE_clever=df_atm7[['_id','LAST_WEEK_PRACTICE_clever']]
+        qr8=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},         
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_clever':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list8= list(collection1.aggregate(qr8))
+        df_atm8= DataFrame(list8)
+        LAST_TO_LAST_WEEK_PRACTICE_clever=df_atm8[['_id','LAST_TO_LAST_WEEK_PRACTICE_clever']]
+        join_final4= pd.merge(LAST_WEEK_PRACTICE_clever, LAST_TO_LAST_WEEK_PRACTICE_clever, on='_id', how='left') 
+
+        days=pd.DataFrame({'_id':[1,2,3,4,5,6,7],'day':['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']})
+
+        df1=pd.merge(days,join_final1, on='_id',how='left')
+        df2=pd.merge(df1,join_final2, on='_id',how='left')
+        df3=pd.merge(df2,join_final3, on='_id',how='left')
+        df4=pd.merge(df3,join_final4, on='_id',how='left').fillna(0)
+        df4=df4.astype(int, errors='ignore')
+        df4.columns
+        lists=[]
+
+        for i in df4.columns:
+
+            i=df4[i].tolist()
+            lists.append(i)  
+        weekdata={"day":lists[1],
+         "count_last_week_parents":lists[2],
+        'count_last_to_lastweek_parents':lists[3],
+        'count_last_week_teachers':lists[4],
+        'count_last_to_last_week_teachers':lists[5],
+        'count_last_week_schoology':lists[6],
+        'count_last_to_last_week_schoology':lists[7],
+        'count_last_week_clever':lists[8],
+        'count_last_to_last_week_clever':lists[9]}
+        temp={'weekdata':weekdata}
+        return json.dumps(temp)
+    else:
+        qr1=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+
+                {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+
+    #     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_parents':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list1= list(collection1.aggregate(qr1))
+        df_atm= DataFrame(list1)
+        df_atm
+        LAST_WEEK_PRACTICE_parents=df_atm[['_id','LAST_WEEK_PRACTICE_parents']]
+        qr2=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    #         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+                   {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},        
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_parents':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list2= list(collection1.aggregate(qr2))
+        df_at2m= DataFrame(list2)
+        LAST_TO_LAST_WEEK_PRACTICE_parents=df_at2m[['_id','LAST_TO_LAST_WEEK_PRACTICE_parents']]
+        join_final1= pd.merge(LAST_WEEK_PRACTICE_parents, LAST_TO_LAST_WEEK_PRACTICE_parents, on='_id', how='left')    
+    # =========================================
+        qr3=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_TEACHERS':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list3= list(collection1.aggregate(qr3))
+        df_atm3= DataFrame(list3)
+        df_atm3
+        LAST_WEEK_PRACTICE_TEACHERS=df_atm3[['_id','LAST_WEEK_PRACTICE_TEACHERS']]
+        qr4=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},       
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_teachers':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list4= list(collection1.aggregate(qr4))
+        df_atm4= DataFrame(list4)
+        LAST_TO_LAST_WEEK_PRACTICE_teachers=df_atm4[['_id','LAST_TO_LAST_WEEK_PRACTICE_teachers']]
+        join_final2= pd.merge(LAST_WEEK_PRACTICE_TEACHERS, LAST_TO_LAST_WEEK_PRACTICE_teachers, on='_id', how='left') 
+
+
+
+    # =========================================
+        qr5=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+         {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_schoology':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list5= list(collection1.aggregate(qr5))
+        df_atm5= DataFrame(list5)
+        df_atm5
+        LAST_WEEK_PRACTICE_schoology=df_atm5[['_id','LAST_WEEK_PRACTICE_schoology']]
+        qr6=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_schoology':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list6= list(collection1.aggregate(qr6))
+        df_atm6= DataFrame(list6)
+        LAST_TO_LAST_WEEK_PRACTICE_schoology=df_atm6[['_id','LAST_TO_LAST_WEEK_PRACTICE_schoology']]
+        join_final3= pd.merge(LAST_WEEK_PRACTICE_schoology, LAST_TO_LAST_WEEK_PRACTICE_schoology, on='_id', how='left') 
+
+    # =========================================
+        qr7=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+         {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},      
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_clever':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list7= list(collection1.aggregate(qr7))
+        df_atm7= DataFrame(list7)
+        df_atm7
+        LAST_WEEK_PRACTICE_clever=df_atm7[['_id','LAST_WEEK_PRACTICE_clever']]
+        qr8=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},         
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_clever':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list8= list(collection1.aggregate(qr8))
+        df_atm8= DataFrame(list8)
+        LAST_TO_LAST_WEEK_PRACTICE_clever=df_atm8[['_id','LAST_TO_LAST_WEEK_PRACTICE_clever']]
+        join_final4= pd.merge(LAST_WEEK_PRACTICE_clever, LAST_TO_LAST_WEEK_PRACTICE_clever, on='_id', how='left') 
+
+        days=pd.DataFrame({'_id':[1,2,3,4,5,6,7],'day':['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']})
+
+        df1=pd.merge(days,join_final1, on='_id',how='left')
+        df2=pd.merge(df1,join_final2, on='_id',how='left')
+        df3=pd.merge(df2,join_final3, on='_id',how='left')
+        df4=pd.merge(df3,join_final4, on='_id',how='left').fillna(0)
+        df4=df4.astype(int, errors='ignore')
+        df4.columns
+        lists=[]
+
+        for i in df4.columns:
+
+            i=df4[i].tolist()
+            lists.append(i)  
+        weekdata={"day":lists[1],
+         "count_last_week_parents":lists[2],
+        'count_last_to_lastweek_parents':lists[3],
+        'count_last_week_teachers':lists[4],
+        'count_last_to_last_week_teachers':lists[5],
+        'count_last_week_schoology':lists[6],
+        'count_last_to_last_week_schoology':lists[7],
+        'count_last_week_clever':lists[8],
+        'count_last_to_last_week_clever':lists[9]}
+        temp={'weekdata':weekdata}
+        return json.dumps(temp)
+
+
+
 
 
 
 @app.route('/weeklyfeedcard/<datestr>')
 def feedweekcardssss___(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
     collection2=db.audio_feedback
@@ -57246,20 +62699,20 @@ def feedweekcardssss___(datestr):
 @app.route('/dailyfeedratingtable_TEACHERS/<datestr>')
 def dailyyy_feedback_table_TEACHERS__(datestr):
     username=urllib.parse.quote_plus('admin')
-    password=urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1 =db.audio_track_master
     collection2 = db.audio_feedback
 
-    mydatetime= dateutil.parser.parse(datestr)
-    yester= pd.to_datetime(mydatetime) - timedelta(days=1)
-    tod= mydatetime
+    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+#     yester= pd.to_datetime(mydatetime) - timedelta(days=1)
+#     tod= mydatetime
+    yester= datetime.datetime.combine(mydatetime,datetime.time.min)
+    tod= datetime.datetime.combine(mydatetime,datetime.time.max)
+    
     start_15day=tod- timedelta(days=8)
     startend= start_15day+timedelta(days=1)
-    print(start_15day)
-    print(startend)
-
 
     qr1= [{"$match":{
     '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -57306,7 +62759,7 @@ def dailyyy_feedback_table_TEACHERS__(datestr):
             {'MODIFIED_DATE':{'$gte':yester,
                              '$lt':tod
                              }},
-            {'COMMENT':{'$nin':['',' ',None]}},
+#             {'COMMENT':{'$nin':['',' ',None]}},
                {'RATING':{'$ne':0}}]}},
 
 
@@ -57315,7 +62768,9 @@ def dailyyy_feedback_table_TEACHERS__(datestr):
                  'DEVICE_USED':'$DEVICE_USED',
                'SCHOOL':'$USER.schoolId.NAME',
     #            'CREATED_DATE':'$CREATED_DATE',
-               'COMMENT':'$COMMENT', 'ACTION_DATE':'$MODIFIED_DATE',
+                    'CREATED_DATE':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},
+               'COMMENT':'$COMMENT',
+#                  'ACTION_DATE':'$MODIFIED_DATE',
          'RATING':'$RATING',
          'COMMENT':'$COMMENT'
         }} ,
@@ -57324,51 +62779,48 @@ def dailyyy_feedback_table_TEACHERS__(datestr):
 
     list2= list(collection2.aggregate(qr2))
     audio1= DataFrame(list2)
-    audio=pd.merge(audio1,df_atm1, on='_id', how='left')
-
-
-    audio2=audio[['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'PROGRAM_NAME','RATING','COMMENT','AUDIO_DAY','PRACTICE_COUNT',
-    'Language',  'Audio_name', 'mindful_minutes', 'PlayBack_Time_Percent' ,'STATE','CITY']]       
-    #               'LAST_PRACTICE_DATE'
-    audio2['SCHOOL_NAME'].fillna('NO SCHOOL', inplace=True)
-    audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
-    audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
-    audio2['RATING'].fillna('NO RATING GIVEN', inplace=True)
-    audio2['COMMENT'].fillna('NO COMMENT', inplace=True)
-    audio2['AUDIO_DAY'].fillna('NO AUDIO DAY', inplace=True)
-    audio2['PROGRAM_NAME'].fillna('NO PROGRAM NAME FOUND', inplace=True)
-    audio2['Audio_name'].fillna('NO AUDIO FOUND', inplace=True)
-    audio2['STATE'].fillna('NO STATE FOUND', inplace=True)
-    audio2['CITY'].fillna('NO CITY FOUND', inplace=True)
-    audio2['Language'].fillna('NO LANGUAGE FOUND', inplace=True)
-    audio2['RATING']=str(audio2['RATING'].iloc[0])
-    audio2['RATING']=audio2['RATING'].replace(0, 'No Rating')
-    # audio2['LAST_PRACTICE_DATE']=audio2['LAST_PRACTICE_DATE'].dt.strftime('%d %b %Y')
-    # audio2['CREATED_DATE']=audio2['CREATED_DATE'].dt.strftime('%d %b %Y')
-
-    # #     audio20= audio2.groupby(audio2['RATING'])
-    # #     audio3= audio20.get_group(''+ratinggg+'')
-    # #     audio30= pd.DataFrame(audio3)
-    # #     audio4=audio30.values.tolist()
-
-    temp={'data':audio2.values.tolist()}
-
-
-    return json.dumps(temp)
+    
+    if audio1.empty:
+        return json.dumps({'data':"NO DATA AVAILABLE"})
+    else:
+        audio=pd.merge(audio1,df_atm1, on='_id', how='left')
+        audio=audio.sort_values(by='COMMENT',ascending=False).reset_index(drop=True)
+        audio['AUDIO_DAY']=audio['AUDIO_DAY'].fillna('')
+        audio['PROGRAM_NAME']=audio['PROGRAM_NAME'].fillna('')
+        audio['Program']=audio[['PROGRAM_NAME', 'AUDIO_DAY']].agg(' '.join, axis=1)
+        audio2=audio[['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'Program','COMMENT','CREATED_DATE','RATING','Language']]
+        audio2['SCHOOL_NAME'].fillna('NO SCHOOL', inplace=True)
+        audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
+        audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
+        audio2['RATING'].fillna('', inplace=True)
+        audio2['COMMENT'].fillna('NO COMMENT', inplace=True)
+        audio2['Program'].fillna('NO PROGRAM NAME FOUND', inplace=True)
+        # audio2['RATING']=str(audio2['RATING'].iloc[0])
+        audio2['RATING']=audio2['RATING'].replace(0, '')
+        audio2['Language'].fillna('NO LANGUAGE FOUND', inplace=True)
+        audio2['CREATED_DATE']=audio2['CREATED_DATE'].fillna('')
+#         audio2=audio2.drop(['STATE', 'CITY'], axis=1)
+        temp={'data':audio2.values.tolist()}
+        temp={'data':audio2.values.tolist()}
+        
+        return json.dumps(temp)
 
 
 @app.route('/dailyfeedratingtable_PARENTS/<datestr>')
 def dailyyy_feedback_table_PARENTS__(datestr):
     username=urllib.parse.quote_plus('admin')
-    password=urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1 =db.audio_track_master
     collection2 = db.audio_feedback
 
-    mydatetime= dateutil.parser.parse(datestr)
-    yester= pd.to_datetime(mydatetime) - timedelta(days=1)
-    tod= mydatetime
+    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+#     yester= pd.to_datetime(mydatetime) - timedelta(days=1)
+#     tod= mydatetime
+    yester= datetime.datetime.combine(mydatetime,datetime.time.min)
+    tod= datetime.datetime.combine(mydatetime,datetime.time.max)
+    
     start_15day=tod- timedelta(days=8)
     startend= start_15day+timedelta(days=1)
     print(start_15day)
@@ -57420,7 +62872,7 @@ def dailyyy_feedback_table_PARENTS__(datestr):
             {'MODIFIED_DATE':{'$gte':yester,
                              '$lt':tod
                              }},
-            {'COMMENT':{'$nin':['',' ',None]}},
+#             {'COMMENT':{'$nin':['',' ',None]}},
                {'RATING':{'$ne':0}}]}},
 
 
@@ -57428,7 +62880,7 @@ def dailyyy_feedback_table_PARENTS__(datestr):
                'EMAIL':'$USER.EMAIL_ID',
                  'DEVICE_USED':'$DEVICE_USED',
                'SCHOOL':'$USER.schoolId.NAME',
-    #            'CREATED_DATE':'$CREATED_DATE',
+               'CREATED_DATE':'$CREATED_DATE',
                'COMMENT':'$COMMENT', 'ACTION_DATE':'$MODIFIED_DATE',
          'RATING':'$RATING',
          'COMMENT':'$COMMENT'
@@ -57438,38 +62890,30 @@ def dailyyy_feedback_table_PARENTS__(datestr):
 
     list2= list(collection2.aggregate(qr2))
     audio1= DataFrame(list2)
-    audio=pd.merge(audio1,df_atm1, on='_id', how='left')
+    if audio1.empty:
+        return json.dumps({'data':"NO DATA AVAILABLE"})
+    else:
+        audio=pd.merge(audio1,df_atm1, on='_id', how='left')
+        audio=audio.sort_values(by='COMMENT',ascending=False).reset_index(drop=True)
+        audio['AUDIO_DAY']=audio['AUDIO_DAY'].fillna('')
+        audio['PROGRAM_NAME']=audio['PROGRAM_NAME'].fillna('')
+        audio['Program']=audio[['PROGRAM_NAME', 'AUDIO_DAY']].agg(' '.join, axis=1)
+        audio2=audio[['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'Program','COMMENT','CREATED_DATE','RATING','Language']]
+        audio2['SCHOOL_NAME'].fillna('NO SCHOOL', inplace=True)
+        audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
+        audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
+        audio2['RATING'].fillna('', inplace=True)
+        audio2['COMMENT'].fillna('NO COMMENT', inplace=True)
+        audio2['Program'].fillna('NO PROGRAM NAME FOUND', inplace=True)
+        # audio2['RATING']=str(audio2['RATING'].iloc[0])
+        audio2['RATING']=audio2['RATING'].replace(0, '')
+        audio2['Language'].fillna('NO LANGUAGE FOUND', inplace=True)
+        audio2['CREATED_DATE']=audio2['CREATED_DATE'].fillna('')
+        temp={'data':audio2.values.tolist()}
+        return json.dumps(temp)
 
 
-    audio2=audio[['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'PROGRAM_NAME','RATING','COMMENT','AUDIO_DAY','PRACTICE_COUNT',
-    'Language',  'Audio_name', 'mindful_minutes', 'PlayBack_Time_Percent' ,'STATE','CITY']]       
-    #               'LAST_PRACTICE_DATE'
-    audio2['SCHOOL_NAME'].fillna('NO SCHOOL', inplace=True)
-    audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
-    audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
-    audio2['RATING'].fillna('NO RATING GIVEN', inplace=True)
-    audio2['COMMENT'].fillna('NO COMMENT', inplace=True)
-    audio2['AUDIO_DAY'].fillna('NO AUDIO DAY', inplace=True)
-    audio2['PROGRAM_NAME'].fillna('NO PROGRAM NAME FOUND', inplace=True)
-    audio2['Audio_name'].fillna('NO AUDIO FOUND', inplace=True)
-    audio2['STATE'].fillna('NO STATE FOUND', inplace=True)
-    audio2['CITY'].fillna('NO CITY FOUND', inplace=True)
-    audio2['Language'].fillna('NO LANGUAGE FOUND', inplace=True)
-    audio2['RATING']=str(audio2['RATING'].iloc[0])
-    audio2['RATING']=audio2['RATING'].replace(0, 'No Rating')
-    # audio2['LAST_PRACTICE_DATE']=audio2['LAST_PRACTICE_DATE'].dt.strftime('%d %b %Y')
-    # audio2['CREATED_DATE']=audio2['CREATED_DATE'].dt.strftime('%d %b %Y')
-
-    # #     audio20= audio2.groupby(audio2['RATING'])
-    # #     audio3= audio20.get_group(''+ratinggg+'')
-    # #     audio30= pd.DataFrame(audio3)
-    # #     audio4=audio30.values.tolist()
-
-    temp={'data':audio2.values.tolist()}
-
-
-    return json.dumps(temp)
-
+        
 
 @app.route('/districtddtcard/<datestr>/<districtid>')
 def feedback_district_chart__(datestr,districtid):
@@ -57546,8 +62990,8 @@ def feedback_district_chart__(datestr,districtid):
     district=disdic[districtid]
     
     username=urllib.parse.quote_plus('admin')
-    password=urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client=MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client=MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
 
     db=client.compass
     collection = db.audio_track_master
@@ -57634,24 +63078,23 @@ def feedback_district_chart__(datestr,districtid):
 
 
 
-
 @app.route('/feedback_table_weekly_PARENTS/<datestr>')
-def weekly_feedback_table__(datestr):
+def weekly_feedback_table__(datestr):    
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@54.202.61.130:27017/" % (username,password))
     db=client.compass
     collection1 =db.audio_track_master
     collection2 = db.audio_feedback
     mydatetime= dateutil.parser.parse(datestr)
     yester= pd.to_datetime(mydatetime) +timedelta(hours=4)
-    print(yester)
+    # print(yester)
     tod=mydatetime+ timedelta(hours=4)
 
     start= tod- timedelta(days=8)+timedelta(days=1)
-    print(start)
+    #     print(start)
     start_15day= start-timedelta(days=8)+timedelta(days=1)
-    print(start_15day)
+    #     print(start_15day)
 
 
     qr1= [{"$match":{
@@ -57699,15 +63142,16 @@ def weekly_feedback_table__(datestr):
             {'MODIFIED_DATE':{'$gte':start,
                              '$lt':yester
                              }},
-            {'COMMENT':{'$nin':['',' ',None]}},
-               {'RATING':{'$ne':0}}]}},
+    #             {'COMMENT':{'$nin':['',' ',None]}},
+               {'RATING':{'$ne':0}}
+           ]}},
 
 
     {'$project':{'_id':'$USER._id', 'USER_NAME':'$USER.USER_NAME',
                'EMAIL':'$USER.EMAIL_ID',
                  'DEVICE_USED':'$DEVICE_USED',
                'SCHOOL':'$USER.schoolId.NAME',
-    #            'CREATED_DATE':'$CREATED_DATE',
+               'CREATED_DATE':'$CREATED_DATE',
                'COMMENT':'$COMMENT', 'ACTION_DATE':'$MODIFIED_DATE',
          'RATING':'$RATING',
          'COMMENT':'$COMMENT'
@@ -57719,31 +63163,32 @@ def weekly_feedback_table__(datestr):
     audio1= DataFrame(list2)
     audio=pd.merge(audio1,df_atm1, on='_id', how='left')
 
-
-    audio2=audio[['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'PROGRAM_NAME','RATING','COMMENT','AUDIO_DAY','PRACTICE_COUNT',
-    'Language',  'Audio_name', 'mindful_minutes', 'PlayBack_Time_Percent' ,'STATE','CITY']]       
-    #               'LAST_PRACTICE_DATE'
+    audio=audio.sort_values(by='COMMENT',ascending=False).reset_index(drop=True)
+    audio['AUDIO_DAY']=audio['AUDIO_DAY'].fillna('')
+    audio['PROGRAM_NAME']=audio['PROGRAM_NAME'].fillna('')
+    audio['Program']=audio[['PROGRAM_NAME', 'AUDIO_DAY']].agg(' '.join, axis=1)
+    audio2=audio[['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'Program','COMMENT','CREATED_DATE','RATING','Language']]
     audio2['SCHOOL_NAME'].fillna('NO SCHOOL', inplace=True)
     audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
     audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
-    audio2['RATING'].fillna('NO RATING GIVEN', inplace=True)
+    audio2['RATING'].fillna('', inplace=True)
     audio2['COMMENT'].fillna('NO COMMENT', inplace=True)
-    audio2['AUDIO_DAY'].fillna('NO AUDIO DAY', inplace=True)
-    audio2['PROGRAM_NAME'].fillna('NO PROGRAM NAME FOUND', inplace=True)
-    audio2['Audio_name'].fillna('NO AUDIO FOUND', inplace=True)
-    audio2['STATE'].fillna('NO STATE FOUND', inplace=True)
-    audio2['CITY'].fillna('NO CITY FOUND', inplace=True)
+    audio2['Program'].fillna('NO PROGRAM NAME FOUND', inplace=True)
+    # audio2['RATING']=str(audio2['RATING'].iloc[0])
+    audio2['RATING']=audio2['RATING'].replace(0, '')
     audio2['Language'].fillna('NO LANGUAGE FOUND', inplace=True)
-    audio2['RATING']=str(audio2['RATING'].iloc[0])
-    audio2['RATING']=audio2['RATING'].replace(0, 'No Rating')
-    # audio2['LAST_PRACTICE_DATE']=audio2['LAST_PRACTICE_DATE'].dt.strftime('%d %b %Y')
-    # audio2['CREATED_DATE']=audio2['CREATED_DATE'].dt.strftime('%d %b %Y')
+    audio2['CREATED_DATE']=audio2['CREATED_DATE'].fillna('')
 
-    # #     audio20= audio2.groupby(audio2['RATING'])
-    # #     audio3= audio20.get_group(''+ratinggg+'')
-    # #     audio30= pd.DataFrame(audio3)
-    # #     audio4=audio30.values.tolist()
 
+    dates=[]
+    for i in range(len(list(audio2['CREATED_DATE']))):
+        if list(audio2['CREATED_DATE'])[i]=='':
+            dates.append('')
+        else:
+            d=list(audio2['CREATED_DATE'])[i].strftime('%d %b %Y %H:%M:%S')
+            dates.append(d)
+
+    audio2['CREATED_DATE']=dates
     temp={'data':audio2.values.tolist()}
 
 
@@ -57754,27 +63199,20 @@ def weekly_feedback_table__(datestr):
 @app.route('/feedback_table_weekly_TEACHERS/<datestr>')
 def weekly_feedback_tableTEACHERS___(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1 =db.audio_track_master
     collection2 = db.audio_feedback
-    
-#     # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
-#     yesterday= datetime.datetime.combine(datetime.datetime.utcnow() -timedelta(days=1),datetime.time.min)
-#     today= datetime.datetime.combine(datetime.datetime.utcnow(),datetime.time.min)
-#     tod= today+ timedelta(hours=4)
-#     # yester-timedelta(days=8)
-#     start= tod-timedelta(days=8)
-#     yester= yesterday+timedelta(hours=4)
-#     start_15day=tod-timedelta(days=15)
-    
+
+
     mydatetime= dateutil.parser.parse(datestr)
     yester= pd.to_datetime(mydatetime)+timedelta(hours=4)
     tod=mydatetime+ timedelta(hours=4)
     start= tod- timedelta(days=7)
     start_15day= start-timedelta(days=7)
-    
+
 
 
     qr1= [{"$match":{
@@ -57822,7 +63260,7 @@ def weekly_feedback_tableTEACHERS___(datestr):
             {'MODIFIED_DATE':{'$gte':start,
                              '$lt':yester
                              }},
-#             {'COMMENT':{'$nin':['',' ',None]}},
+    #             {'COMMENT':{'$nin':['',' ',None]}},
                {'RATING':{'$ne':0}}]}},
 
 
@@ -57830,7 +63268,7 @@ def weekly_feedback_tableTEACHERS___(datestr):
                'EMAIL':'$USER.EMAIL_ID',
                  'DEVICE_USED':'$DEVICE_USED',
                'SCHOOL':'$USER.schoolId.NAME',
-    #            'CREATED_DATE':'$CREATED_DATE',
+               'CREATED_DATE':'$CREATED_DATE',
                'COMMENT':'$COMMENT', 'ACTION_DATE':'$MODIFIED_DATE',
          'RATING':'$RATING',
          'COMMENT':'$COMMENT'
@@ -57842,40 +63280,29 @@ def weekly_feedback_tableTEACHERS___(datestr):
     audio1= DataFrame(list2)
     audio=pd.merge(audio1,df_atm1, on='_id', how='left')
     audio=audio.sort_values(by='COMMENT',ascending=False).reset_index(drop=True)
+    audio['AUDIO_DAY']=audio['AUDIO_DAY'].fillna('')
+    audio['PROGRAM_NAME']=audio['PROGRAM_NAME'].fillna('')
 
-
-    audio2=audio[['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'PROGRAM_NAME','RATING','COMMENT','AUDIO_DAY','PRACTICE_COUNT',
-    'Language',  'Audio_name', 'mindful_minutes', 'PlayBack_Time_Percent' ,'STATE','CITY']]       
-    #               'LAST_PRACTICE_DATE'
+    audio['Program']=audio[['PROGRAM_NAME', 'AUDIO_DAY']].agg(' '.join, axis=1)
+    audio2=audio[['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'Program','COMMENT','CREATED_DATE','RATING','Language']]
     audio2['SCHOOL_NAME'].fillna('NO SCHOOL', inplace=True)
     audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
     audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
-    audio2['RATING'].fillna('NO RATING GIVEN', inplace=True)
+    audio2['RATING'].fillna('', inplace=True)
     audio2['COMMENT'].fillna('NO COMMENT', inplace=True)
-    audio2['AUDIO_DAY'].fillna('NO AUDIO DAY', inplace=True)
-    audio2['PROGRAM_NAME'].fillna('NO PROGRAM NAME FOUND', inplace=True)
-    audio2['Audio_name'].fillna('NO AUDIO FOUND', inplace=True)
-    audio2['STATE'].fillna('NO STATE FOUND', inplace=True)
-    audio2['CITY'].fillna('NO CITY FOUND', inplace=True)
+    audio2['Program'].fillna('NO PROGRAM NAME FOUND', inplace=True)
+    # audio2['RATING']=str(audio2['RATING'].iloc[0])
+    audio2['RATING']=audio2['RATING'].replace(0, '')
     audio2['Language'].fillna('NO LANGUAGE FOUND', inplace=True)
-    audio2['RATING']=str(audio2['RATING'].iloc[0])
-    audio2['RATING']=audio2['RATING'].replace(0, 'No Rating')
-    # audio2['LAST_PRACTICE_DATE']=audio2['LAST_PRACTICE_DATE'].dt.strftime('%d %b %Y')
-    # audio2['CREATED_DATE']=audio2['CREATED_DATE'].dt.strftime('%d %b %Y')
-
-    # #     audio20= audio2.groupby(audio2['RATING'])
-    # #     audio3= audio20.get_group(''+ratinggg+'')
-    # #     audio30= pd.DataFrame(audio3)
-    # #     audio4=audio30.values.tolist()
-
+    audio2['CREATED_DATE']=audio2['CREATED_DATE'].fillna('')
     temp={'data':audio2.values.tolist()}
     return json.dumps(temp)
 
 @app.route('/programPRACTICE_dailycomparsion/<datestr>')
 def progpracticeDAY____(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1 = db.audio_track_master
 
@@ -58018,11 +63445,312 @@ def progpracticeDAY____(datestr):
     return json.dumps(data)
 
 
+#>>>>>>>>>>>>>>>>>>>----------PRACTICE BIFURCATION API----------------------
+
+@app.route('/programPRACTICE_dailycomparsion/<datestr>/<charttype>')
+def progpractice____DAY____(datestr,charttype):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection1 = db.audio_track_master
+
+    mydatetime= dateutil.parser.parse(datestr)
+    yester= datetime.datetime.combine(mydatetime,datetime.time.min)
+    #     - timedelta(days=1)
+    tod= datetime.datetime.combine(mydatetime,datetime.time.max)
+    start_15day=yester- timedelta(days=7)
+    startend= tod- timedelta(days=7)
+    print(start_15day)
+    print(startend)
+    
+    charttype=str(charttype).title()
+    if charttype=='Practice':
+    #     threshold=int(threshold)/100
+        threshold=.5
+        
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+    
+
+        qr111=[
+        {'$match':{'USER_ID.schoolId':{'$exists':1}}},
+        {"$match":
+             {'$and': [
+                     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                    {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                 {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
+                     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                    { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                               {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                                 {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
+                 {'MODIFIED_DATE':{'$gte':yester,
+                                     '$lt':tod
+                                     }},
+                    ]}},
+                        practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {"$group":{'_id':'$PROGRAM_NAME', 'practicecount':{'$sum':1}}},
+             {"$project":{'_id':1, 'teacherspracticecount':'$practicecount'}},
+            ]    
+
+
+        qr222=   [
+
+        {"$match":
+             {'$and': [
+                     {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                    {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                 {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
+                     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                    { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                               {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                                 {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
+                 {'MODIFIED_DATE':{'$gte':yester,
+                                     '$lt':tod
+                                     }},
+
+                    ]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {"$group":{'_id':'$PROGRAM_NAME', 'practicecount':{'$sum':1}}},
+             {"$project":{'_id':1, 'parentspracticecount':'$practicecount'}},
+            ]   
+
+
+        qr44=[
+        {'$match':{'USER_ID.schoolId':{'$exists':1}}},
+        {"$match":
+             {'$and': [
+                     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                    {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                 {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
+                     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                    { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                               {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                                 {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
+                 {'MODIFIED_DATE':{'$gte':start_15day,
+                                     '$lt':startend
+                                     }},
+                    ]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {"$group":{'_id':'$PROGRAM_NAME', 'practicecount':{'$sum':1}}},
+             {"$project":{'_id':1, 'teacherspracticecount':'$practicecount'}},
+            ]    
+
+
+        qr33=   [
+
+        {"$match":
+             {'$and': [
+                     {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                    {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                 {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
+                     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                    { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                               {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                                 {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
+                 {'MODIFIED_DATE':{'$gte':start_15day,
+                                     '$lt':startend
+                                     }},
+
+                    ]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {"$group":{'_id':'$PROGRAM_NAME', 'practicecount':{'$sum':1}}},
+             {"$project":{'_id':1, 'parentspracticecount':'$practicecount'}},
+            ]     
+
+
+        list1= list(collection1.aggregate(qr111))
+        df_atm1= DataFrame(list1)
+        list2= list(collection1.aggregate(qr222))
+        df_atm2= DataFrame(list2)
+        join= pd.merge(df_atm1,df_atm2, how='left', on='_id')
+
+        list3= list(collection1.aggregate(qr33))
+        df_atm3= DataFrame(list3)
+        list4= list(collection1.aggregate(qr44))
+        df_atm4= DataFrame(list4)
+        join_lastweek24hrs= pd.merge(df_atm3,df_atm4, how='left', on='_id')
+
+        join.rename(columns = { '_id': 'progname'}, inplace = True)
+        join['parentspracticecount'].fillna(0, inplace=True)
+        join['teacherspracticecount'].fillna(0, inplace=True)
+
+        parentspractice=join['parentspracticecount'].tolist()
+        teacherspractice=join['teacherspracticecount'].tolist()
+        progname=join['progname'].tolist()
+#         print(progname)
+
+        join_lastweek24hrs.rename(columns = { '_id': 'progname'}, inplace = True)
+        join_lastweek24hrs['parentspracticecount'].fillna(0, inplace=True)
+        join_lastweek24hrs['teacherspracticecount'].fillna(0, inplace=True)
+        
+        join_lastweek24hrs['progname'].fillna("NO INFO",inplace=True)
+#         print(join_lastweek24hrs)
+
+        parentspractice_lastweek24hrs=join_lastweek24hrs['parentspracticecount'].tolist()
+        teacherspractice_lastweek24hrs=join_lastweek24hrs['teacherspracticecount'].tolist()
+        progname_lastweek24hrs=join_lastweek24hrs['progname'].tolist()
+
+#         print(progname)
+        for i in range(len(progname)):
+                progname[i] = progname[i]
+        data={'parentspractice':parentspractice,'teacherspractice':teacherspractice,
+              'parentspractice_lastweek24hrs':parentspractice_lastweek24hrs,
+              'teacherspractice_lastweek24hrs':teacherspractice_lastweek24hrs,
+              'progname':progname}
+        return json.dumps(data)
+    else:
+        qr111=[
+    {'$match':{'USER_ID.schoolId':{'$exists':1}}},
+    {"$match":
+         {'$and': [
+                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
+                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
+             {'MODIFIED_DATE':{'$gte':yester,
+                                 '$lt':tod
+                                 }},
+                ]}},
+        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME', 'practicecount':{'$sum':1}}},
+         {"$project":{'_id':1, 'teacherspracticecount':'$practicecount'}},
+        ]    
+
+
+    qr222=   [
+
+    {"$match":
+         {'$and': [
+                 {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
+                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
+             {'MODIFIED_DATE':{'$gte':yester,
+                                 '$lt':tod
+                                 }},
+
+                ]}},
+        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME', 'practicecount':{'$sum':1}}},
+         {"$project":{'_id':1, 'parentspracticecount':'$practicecount'}},
+        ]   
+    
+    
+    qr44=[
+    {'$match':{'USER_ID.schoolId':{'$exists':1}}},
+    {"$match":
+         {'$and': [
+                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
+                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
+             {'MODIFIED_DATE':{'$gte':start_15day,
+                                 '$lt':startend
+                                 }},
+                ]}},
+        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME', 'practicecount':{'$sum':1}}},
+         {"$project":{'_id':1, 'teacherspracticecount':'$practicecount'}},
+        ]    
+
+
+    qr33=   [
+
+    {"$match":
+         {'$and': [
+                 {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
+                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
+             {'MODIFIED_DATE':{'$gte':start_15day,
+                                 '$lt':startend
+                                 }},
+
+                ]}},
+        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME', 'practicecount':{'$sum':1}}},
+         {"$project":{'_id':1, 'parentspracticecount':'$practicecount'}},
+        ]     
+    
+
+    list1= list(collection1.aggregate(qr111))
+    df_atm1= DataFrame(list1)
+    list2= list(collection1.aggregate(qr222))
+    df_atm2= DataFrame(list2)
+    join= pd.merge(df_atm1,df_atm2, how='left', on='_id')
+    
+    list3= list(collection1.aggregate(qr33))
+    df_atm3= DataFrame(list3)
+    list4= list(collection1.aggregate(qr44))
+    df_atm4= DataFrame(list4)
+    join_lastweek24hrs= pd.merge(df_atm3,df_atm4, how='left', on='_id')
+    
+    join.rename(columns = { '_id': 'progname'}, inplace = True)
+    join['parentspracticecount'].fillna(0, inplace=True)
+    join['teacherspracticecount'].fillna(0, inplace=True)
+    
+    parentspractice=join['parentspracticecount'].tolist()
+    teacherspractice=join['teacherspracticecount'].tolist()
+    progname=join['progname'].tolist()
+        
+    join_lastweek24hrs.rename(columns = { '_id': 'progname'}, inplace = True)
+    join_lastweek24hrs['parentspracticecount'].fillna(0, inplace=True)
+    join_lastweek24hrs['teacherspracticecount'].fillna(0, inplace=True)
+    
+    join_lastweek24hrs['progname'].fillna("NO INFO",inplace=True)
+    parentspractice_lastweek24hrs=join_lastweek24hrs['parentspracticecount'].tolist()
+    teacherspractice_lastweek24hrs=join_lastweek24hrs['teacherspracticecount'].tolist()
+    progname_lastweek24hrs=join_lastweek24hrs['progname'].tolist()
+    
+#     print(df)
+    for i in range(len(progname)):
+            progname[i] = progname[i]
+    data={'parentspractice':parentspractice,'teacherspractice':teacherspractice,
+          'parentspractice_lastweek24hrs':parentspractice_lastweek24hrs,
+          'teacherspractice_lastweek24hrs':teacherspractice_lastweek24hrs,
+          'progname':progname}
+    
+    return json.dumps(data)
+
+
+
 @app.route('/ratedaily/<datestr>')
 def RATssy(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection=db.audio_feedback
     mydatetime= dateutil.parser.parse(datestr)
@@ -58032,7 +63760,7 @@ def RATssy(datestr):
     startend= start_15day+timedelta(days=1)
     print(start_15day)
     print(startend)
-    
+    index=[0]
 
     df1 = DataFrame(list(collection.aggregate([
     {"$match":{'$and':[
@@ -58058,6 +63786,9 @@ def RATssy(datestr):
     {'$sort':{'_id':1}}
     ])))
     df1.rename(columns = { '_id': 'week'}, inplace = True)
+    if df1.empty:
+        df1 = pd.DataFrame(index=index, columns=['week','rating_5','rating_4','rating_3','rating_2','rating_1'])
+        df1 = df1.fillna(0)
     df1[['week','rating_5','rating_4','rating_3','rating_2','rating_1']]
     print(df1,"teachers_yes")
     df2 = DataFrame(list(collection.aggregate([
@@ -58084,6 +63815,9 @@ def RATssy(datestr):
     {'$sort':{'_id':1}}
     ])))
     df2.rename(columns = {'_id': 'week'}, inplace = True)
+    if df2.empty:
+        df2 = pd.DataFrame(index=index, columns=['week','rating_5','rating_4','rating_3','rating_2','rating_1'])
+        df2 = df2.fillna(0)
     df2[['week','rating_5','rating_4','rating_3','rating_2','rating_1']]
     print(df2,"par_yes")
     df10 = DataFrame(list(collection.aggregate([
@@ -58110,6 +63844,9 @@ def RATssy(datestr):
     {'$sort':{'_id':1}}
     ])))
     df10.rename(columns = { '_id': 'week'}, inplace = True)
+    if df10.empty:
+        df10 = pd.DataFrame(index=index, columns=['week','rating_5','rating_4','rating_3','rating_2','rating_1'])
+        df10 = df10.fillna(0)
     df10[['week','rating_5','rating_4','rating_3','rating_2','rating_1']]
     print(df10,"teach_lastweek")
     df20 = DataFrame(list(collection.aggregate([
@@ -58136,6 +63873,9 @@ def RATssy(datestr):
     {'$sort':{'_id':1}}
         ])))
     df20.rename(columns = { '_id': 'week'}, inplace = True)
+    if df20.empty:
+        df20 = pd.DataFrame(index=index, columns=['week','rating_5','rating_4','rating_3','rating_2','rating_1'])
+        df20 = df20.fillna(0)
     df20[['week','rating_5','rating_4','rating_3','rating_2','rating_1']]
     print(df20,"par_lastweek")
     teachers_yes=df1.values.tolist()
@@ -58151,13 +63891,13 @@ def RATssy(datestr):
 @app.route('/parents_signup_table_daily/<datestr>')
 def signupdataparentDay______(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
     
-    mydatetime= dateutil.parser.parse(datestr)
+    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
@@ -58214,42 +63954,50 @@ def signupdataparentDay______(datestr):
     list2= list(collection2.aggregate(qr2))
     df_um= DataFrame(list2)
     
-    df_final= pd.merge(df_um,df_atm,how='left', on='_id')
-   
-    audio2=df_final[['schoolNAME', 'USER_NAME', 'EMAIL','PRACTICE_COUNT','CREATED_DATE','PRACTICE_DATE','COUNTRY', 'STATE', 'CITY', 'PROGRAM_NAME']]
-    audio2['schoolNAME'].fillna('NO SCHOOL', inplace=True)
-    audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
-    audio2['PRACTICE_COUNT'].fillna(0, inplace=True)
-    audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
-    audio2['PROGRAM_NAME'].fillna('NO PROGRAM NAME FOUND', inplace=True)
-    audio2['COUNTRY'].fillna('NO COUNTRY FOUND', inplace=True)
-    audio2['STATE'].fillna('NO STATE FOUND', inplace=True)
-    audio2['CITY'].fillna('NO CITY FOUND', inplace=True)
-    audio2['PRACTICE_DATE']=audio2['PRACTICE_DATE'].dt.strftime('%d %b %Y')
-#     audio2['PRACTICE_DATE']=pd.to_datetime(audio2['PRACTICE_DATE'], errors='coerce').dt.time
-#     audio2['PRACTICE_DATE']=pd.to_datetime(audio2['PRACTICE_DATE'], format = '%d%b%Y')
-    audio2['PRACTICE_DATE'].fillna('NO PRACTICE', inplace=True)
+    if df_um.empty:
+        return json.dumps({'data':"NO DATA AVAILABLE"})
+    else:
+        df_final= pd.merge(df_um,df_atm,how='left', on='_id')
+
+        audio2=df_final[['schoolNAME', 'USER_NAME', 'EMAIL','PRACTICE_COUNT','CREATED_DATE','PRACTICE_DATE','COUNTRY', 'STATE', 'CITY', 'PROGRAM_NAME']]
+        audio2['schoolNAME'].fillna('NO SCHOOL', inplace=True)
+        audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
+        audio2['PRACTICE_COUNT'].fillna(0, inplace=True)
+        audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
+        audio2['PROGRAM_NAME'].fillna('NO PROGRAM NAME FOUND', inplace=True)
+        audio2['COUNTRY'].fillna('NO COUNTRY FOUND', inplace=True)
+        audio2['STATE'].fillna('NO STATE FOUND', inplace=True)
+        audio2['CITY'].fillna('NO CITY FOUND', inplace=True)
+        audio2['PRACTICE_DATE']=audio2['PRACTICE_DATE'].dt.strftime('%d %b %Y')
+    #     audio2['PRACTICE_DATE']=pd.to_datetime(audio2['PRACTICE_DATE'], errors='coerce').dt.time
+    #     audio2['PRACTICE_DATE']=pd.to_datetime(audio2['PRACTICE_DATE'], format = '%d%b%Y')
+        audio2['PRACTICE_DATE'].fillna('NO PRACTICE', inplace=True)
 
 
-    audio2['CREATED_DATE']=audio2['CREATED_DATE'].dt.strftime('%d %b %Y')
+        audio2['CREATED_DATE']=audio2['CREATED_DATE'].dt.strftime('%d %b %Y')
 
-   
-    temp={'data':audio2.values.tolist()}
-    return json.dumps(temp)
+
+        temp={'data':audio2.values.tolist()}
+        return json.dumps(temp)
 
 
 @app.route('/teacher_signup_table_daily/<datestr>')
 def teacher_signup_table_day__(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
 
-    mydatetime= dateutil.parser.parse(datestr)
-    yester= pd.to_datetime(mydatetime) - timedelta(days=1)
-    tod= mydatetime
+    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+    yester= datetime.datetime.combine(mydatetime,datetime.time.min)
+    #     - timedelta(days=1)
+    tod= datetime.datetime.combine(mydatetime,datetime.time.max)
+    
+    
+#     yester= pd.to_datetime(mydatetime) - timedelta(days=1)
+#     tod= mydatetime
     start_15day=tod- timedelta(days=8)
     startend= start_15day+timedelta(days=1)
     print(start_15day)
@@ -58299,49 +64047,52 @@ def teacher_signup_table_day__(datestr):
     list2= list(collection2.aggregate(qr2))
     df_um= DataFrame(list2)
     
-    df_final= pd.merge(df_um,df_atm,how='left', on='_id')
-   
-    audio2=df_final[['schoolNAME', 'USER_NAME', 'EMAIL','PRACTICE_COUNT','CREATED_DATE','PRACTICE_DATE','COUNTRY', 'STATE', 'CITY', 'PROGRAM_NAME']]
-    audio2['schoolNAME'].fillna('NO SCHOOL', inplace=True)
-    audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
-    audio2['PRACTICE_COUNT'].fillna(0, inplace=True)
-    audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
-    audio2['PROGRAM_NAME'].fillna('NO PROGRAM NAME FOUND', inplace=True)
-    audio2['COUNTRY'].fillna('NO COUNTRY FOUND', inplace=True)
-    audio2['STATE'].fillna('NO STATE FOUND', inplace=True)
-    audio2['CITY'].fillna('NO CITY FOUND', inplace=True)
-    audio2['PRACTICE_DATE']=audio2['PRACTICE_DATE'].dt.strftime('%d %b %Y')
-#     audio2['PRACTICE_DATE']=pd.to_datetime(audio2['PRACTICE_DATE'], errors='coerce').dt.time
-#     audio2['PRACTICE_DATE']=pd.to_datetime(audio2['PRACTICE_DATE'], format = '%d%b%Y')
-    audio2['PRACTICE_DATE'].fillna('NO PRACTICE', inplace=True)
-
-
-    audio2['CREATED_DATE']=audio2['CREATED_DATE'].dt.strftime('%d %b %Y')
-
     
-    temp={'data':audio2.values.tolist()}
-    return json.dumps(temp)
+    if df_um.empty:
+        
+        return json.dumps({'data':"NO DATA AVAILABLE"})
+    else:
+        df_final= pd.merge(df_um,df_atm,how='left', on='_id')
+
+        audio2=df_final[['schoolNAME', 'USER_NAME', 'EMAIL','PRACTICE_COUNT','CREATED_DATE','PRACTICE_DATE','COUNTRY', 'STATE', 'CITY', 'PROGRAM_NAME']]
+        audio2['schoolNAME'].fillna('NO SCHOOL', inplace=True)
+        audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
+        audio2['PRACTICE_COUNT'].fillna(0, inplace=True)
+        audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
+        audio2['PROGRAM_NAME'].fillna('NO PROGRAM NAME FOUND', inplace=True)
+        audio2['COUNTRY'].fillna('NO COUNTRY FOUND', inplace=True)
+        audio2['STATE'].fillna('NO STATE FOUND', inplace=True)
+        audio2['CITY'].fillna('NO CITY FOUND', inplace=True)
+        audio2['PRACTICE_DATE']=audio2['PRACTICE_DATE'].dt.strftime('%d %b %Y')
+    #     audio2['PRACTICE_DATE']=pd.to_datetime(audio2['PRACTICE_DATE'], errors='coerce').dt.time
+    #     audio2['PRACTICE_DATE']=pd.to_datetime(audio2['PRACTICE_DATE'], format = '%d%b%Y')
+        audio2['PRACTICE_DATE'].fillna('NO PRACTICE', inplace=True)
+
+
+        audio2['CREATED_DATE']=audio2['CREATED_DATE'].dt.strftime('%d %b %Y')
+
+
+        temp={'data':audio2.values.tolist()}
+        return json.dumps(temp)
 
 
 @app.route('/classroom_practice_table_DAILY/<datestr>')
 def school_practice_table_DAILYY____(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
     # datetime.datetime.now() - datetime.timedelta(days=7)
     # ar d = new Date();
       
-    mydatetime= dateutil.parser.parse(datestr)
+    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
     start_15day=yester- timedelta(days=7)
     startend= tod- timedelta(days=7)
-    print(start_15day)
-    print(startend)
-
+    
 
     qr1=[{"$match":{
     '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -58382,54 +64133,69 @@ def school_practice_table_DAILYY____(datestr):
 
     list1= list(collection1.aggregate(qr1))
     df_atm1= DataFrame(list1)
-    # df_atm1[['parents_playback_24hr', 'teachers_playback_24hr','total_playback_24hr']]
+    if df_atm1.empty:
+        return json.dumps({'data':'NO DATA AVAILABLE'})
+    else:
+        
+        if 'CURSOR_START' not in list(df_atm1.columns):
+            df_atm1['CURSOR_START']=0
+        else:
+            df_atm1=df_atm1
+
+            # df_atm1[['parents_playback_24hr', 'teachers_playback_24hr','total_playback_24hr']]
 
 
-    df_atm1['CURSOR_START'].fillna(0, inplace=True)
-    df_atm1['CITY'].fillna('NO INFO FOUND', inplace=True)
-    df_atm1['STATE'].fillna('NO INFO FOUND', inplace=True)
-    df_atm1['COUNTRY'].fillna('NO INFO FOUND', inplace=True)
-    df_atm1['PHONE'].fillna('NO INFO FOUND', inplace=True)
+            df_atm1['CURSOR_START'].fillna(0, inplace=True)
+            df_atm1['CITY'].fillna('NO INFO FOUND', inplace=True)
+            df_atm1['STATE'].fillna('NO INFO FOUND', inplace=True)
+            df_atm1['COUNTRY'].fillna('NO INFO FOUND', inplace=True)
+            df_atm1['PHONE'].fillna('NO INFO FOUND', inplace=True)
 
-    df_atm1['subtract']=df_atm1['CURSOR_END']-df_atm1['CURSOR_START']
-    df_atm1['divide']=df_atm1['subtract']/60
+            df_atm1['subtract']=df_atm1['CURSOR_END']-df_atm1['CURSOR_START']
+            df_atm1['divide']=df_atm1['subtract']/60
 
-    decimals = 2    
+            decimals = 2    
 
-    df_atm1['Mindful_minutess']=df_atm1['divide'].round(decimals)
-
-
-    df_atm1['playback']= df_atm1['subtract']/df_atm1['AUDIO_LENGTH']
-    df_atm1['playback_time_percent']= df_atm1['playback'].round(0)
-#     df_atm1['playback_time_PERCENTAGE']=df_atm1['playback_time_round']*100
+            df_atm1['Mindful_minutess']=df_atm1['divide'].round(decimals)
 
 
-    df_atm1['LAST_PRACTICE_DATE']=df_atm1['LAST_PRACTICE_DATE'].dt.strftime("%m/%d/%Y, %H:%M:%S")
+            df_atm1['playback']= df_atm1['subtract']/df_atm1['AUDIO_LENGTH']
+            df_atm1['playback_time_percent']= df_atm1['playback'].round(0)
+        #     df_atm1['playback_time_PERCENTAGE']=df_atm1['playback_time_round']*100
 
-    table=df_atm1[['USER_NAME','EMAIL_ID','LAST_PRACTICE_DATE','PROGRAM_NAME','AUDIO_DAY','PHONE','AUDIO_LENGTH','Mindful_minutess','playback_time_percent','CITY','STATE','COUNTRY']]
+            df_atm1['LAST_PRACTICE_DATE']=df_atm1['LAST_PRACTICE_DATE'].dt.strftime("%m/%d/%Y")
+            df_atm1=df_atm1.fillna('')
 
-    temp={'data':table.values.tolist()}
-    return json.dumps(temp)
+
+            table=df_atm1[['SCHOOL_NAME','USER_NAME','EMAIL_ID','LAST_PRACTICE_DATE','PROGRAM_NAME','AUDIO_DAY',
+    #                        'PHONE',
+#                        'AUDIO_LENGTH',
+                       'Mindful_minutess',
+                       'playback_time_percent',
+#                        'CITY','STATE','COUNTRY'
+                      ]]
+            temp={'data':table.values.tolist()}
+            return json.dumps(temp)
 
 
 @app.route('/FAMILY_practice_table_DAILY/<datestr>')
 def PARENTS_practice_table_DAY___(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
     # datetime.datetime.now() - datetime.timedelta(days=7)
     # ar d = new Date();
   
-    mydatetime= dateutil.parser.parse(datestr)
+    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
     start_15day=yester- timedelta(days=7)
     startend= tod- timedelta(days=7)
-    print(start_15day)
-    print(startend)
+#     print(start_15day)
+#     print(startend)
 
 
 
@@ -58472,46 +64238,62 @@ def PARENTS_practice_table_DAY___(datestr):
 
     list1= list(collection1.aggregate(qr1))
     df_atm1= DataFrame(list1)
-    # df_atm1[['parents_playback_24hr', 'teachers_playback_24hr','total_playback_24hr']]
+    if df_atm1.empty:
+        return json.dumps({'data':'NO DATA AVAILABLE'})
+    else:
+        
+        if 'CURSOR_START' not in list(df_atm1.columns):
+            df_atm1['CURSOR_START']=0
+        else:
+            df_atm1=df_atm1
+
+        df_atm1['CURSOR_START'].fillna(0, inplace=True)
+        df_atm1['USER_NAME'].fillna('NO INFO FOUND', inplace=True)
+        df_atm1['EMAIL_ID'].fillna('NO INFO FOUND', inplace=True)
+        df_atm1['CITY'].fillna('NO INFO FOUND', inplace=True)
+        df_atm1['STATE'].fillna('NO INFO FOUND', inplace=True)
+        df_atm1['COUNTRY'].fillna('NO INFO FOUND', inplace=True)
+        df_atm1['PHONE'].fillna('NO INFO FOUND', inplace=True)
+
+        df_atm1['subtract']=df_atm1['CURSOR_END']-df_atm1['CURSOR_START']
+        df_atm1['divide']=df_atm1['subtract']/60
+
+        decimals = 2    
+
+        df_atm1['Mindful_minutess']=df_atm1['divide'].round(decimals)
 
 
-    df_atm1['CURSOR_START'].fillna(0, inplace=True)
-    df_atm1['CITY'].fillna('NO INFO FOUND', inplace=True)
-    df_atm1['STATE'].fillna('NO INFO FOUND', inplace=True)
-    df_atm1['COUNTRY'].fillna('NO INFO FOUND', inplace=True)
-    df_atm1['PHONE'].fillna('NO INFO FOUND', inplace=True)
-
-    df_atm1['subtract']=df_atm1['CURSOR_END']-df_atm1['CURSOR_START']
-    df_atm1['divide']=df_atm1['subtract']/60
-
-    decimals = 2    
-
-    df_atm1['Mindful_minutess']=df_atm1['divide'].round(decimals)
+        df_atm1['playback']= df_atm1['subtract']/df_atm1['AUDIO_LENGTH']
+        df_atm1['playback_time_percent']= df_atm1['playback'].round(0)
+    #     df_atm1['playback_time_PERCENTAGE']=df_atm1['playback_time_round']*100
 
 
-    df_atm1['playback']= df_atm1['subtract']/df_atm1['AUDIO_LENGTH']
-    df_atm1['playback_time_percent']= df_atm1['playback'].round(0)
-#     df_atm1['playback_time_PERCENTAGE']=df_atm1['playback_time_round']*100
+        df_atm1['LAST_PRACTICE_DATE']=df_atm1['LAST_PRACTICE_DATE'].dt.strftime("%m/%d/%Y")
+        df_atm1=df_atm1.fillna('')
+        
 
+        table=df_atm1[['SCHOOL_NAME','USER_NAME','EMAIL_ID','LAST_PRACTICE_DATE','PROGRAM_NAME','AUDIO_DAY',
+#                        'PHONE',
+#                        'AUDIO_LENGTH',
+                       'Mindful_minutess',
+                       'playback_time_percent',
+#                        'CITY','STATE','COUNTRY'
+                      ]]
 
-    df_atm1['LAST_PRACTICE_DATE']=df_atm1['LAST_PRACTICE_DATE'].dt.strftime("%m/%d/%Y, %H:%M:%S")
-
-    table=df_atm1[['USER_NAME','EMAIL_ID','LAST_PRACTICE_DATE','PROGRAM_NAME','AUDIO_DAY','PHONE','AUDIO_LENGTH','Mindful_minutess','playback_time_percent','CITY','STATE','COUNTRY']]
-
-    temp={'data':table.values.tolist()}
-    return json.dumps(temp)
+        temp={'data':table.values.tolist()}
+        return json.dumps(temp)
 
 # Below api has been updated on 27 may 2021 by Anil 
 @app.route('/parents_signup_table_weekly/<datestr>')
 def signupparentweekLY__(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
 
-    mydatetime= dateutil.parser.parse('2021-5-26')
+    mydatetime= dateutil.parser.parse(datestr)
     yester= pd.to_datetime(mydatetime) +timedelta(hours=4)
     #     print(yester)
     tod=mydatetime+ timedelta(hours=4)
@@ -58593,8 +64375,8 @@ def signupparentweekLY__(datestr):
 @app.route('/teacher_signup_table_weekly/<datestr>')
 def signupteacherweeklyyy____(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1= db.audio_track_master
     collection2= db.user_master
@@ -58679,8 +64461,8 @@ def signupteacherweeklyyy____(datestr):
 def family_practice_table_weekly____(datestr):
     username = urllib.parse.quote_plus('admin')
 
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -58706,7 +64488,8 @@ def family_practice_table_weekly____(datestr):
     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
             {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+            {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'USER_ID.EMAIL_ID':{'$nin':['',' ',None]}},
     {'MODIFIED_DATE':{'$gte': start, '$lt':yester
     }},
@@ -58769,8 +64552,22 @@ def family_practice_table_weekly____(datestr):
     df_atm1['LAST_PRACTICE_DATE']=df_atm1['LAST_PRACTICE_DATE'].dt.strftime('%d %b %Y')
     df_atm1['LAST_PRACTICE_DATE']=df_atm1['LAST_PRACTICE_DATE'].fillna('NO PRACTICE')
 
+    df_atm1['SCHOOL_NAME'].fillna('', inplace=True)
+    df_atm1['USER_NAME'].fillna('', inplace=True)
+    df_atm1['EMAIL_ID'].fillna('', inplace=True)
+    df_atm1['LAST_PRACTICE_DATE'].fillna('', inplace=True)
+    df_atm1['PROGRAM_NAME'].fillna('', inplace=True)
+    df_atm1['AUDIO_DAY'].fillna('', inplace=True)
+    df_atm1['Mindful_minutess'].fillna('', inplace=True)
+    df_atm1['playback_time_percent'].fillna('', inplace=True)
 
-    table=df_atm1[['USER_NAME','EMAIL_ID','LAST_PRACTICE_DATE','PROGRAM_NAME','AUDIO_DAY','AUDIO_LENGTH','Mindful_minutess','playback_time_percent','CITY','STATE','COUNTRY']]
+    table=df_atm1[['SCHOOL_NAME','USER_NAME','EMAIL_ID','LAST_PRACTICE_DATE','PROGRAM_NAME','AUDIO_DAY',
+#                        'PHONE',
+#                        'AUDIO_LENGTH',
+                       'Mindful_minutess',
+                       'playback_time_percent',
+#                        'CITY','STATE','COUNTRY'
+                      ]]
     temp={'data':table.values.tolist()}
     return json.dumps(temp)
 
@@ -58778,8 +64575,8 @@ def family_practice_table_weekly____(datestr):
 @app.route('/classroom_practice_WEEKLY/<datestr>')
 def School_practice_table_WEEK___(datestr):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username,password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
     # datetime.datetime.now() - datetime.timedelta(days=7)
@@ -58866,15 +64663,32 @@ def School_practice_table_WEEK___(datestr):
     df_atm1['LAST_PRACTICE_DATE']=df_atm1['LAST_PRACTICE_DATE'].dt.strftime('%d %b %Y')
     df_atm1['LAST_PRACTICE_DATE']=df_atm1['LAST_PRACTICE_DATE'].fillna('NO PRACTICE')
 
+    df_atm1['SCHOOL_NAME'].fillna('', inplace=True)
+    df_atm1['USER_NAME'].fillna('', inplace=True)
+    df_atm1['EMAIL_ID'].fillna('', inplace=True)
+    df_atm1['LAST_PRACTICE_DATE'].fillna('', inplace=True)
+    df_atm1['PROGRAM_NAME'].fillna('', inplace=True)
+    df_atm1['AUDIO_DAY'].fillna('', inplace=True)
+    df_atm1['Mindful_minutess'].fillna('', inplace=True)
+    df_atm1['playback_time_percent'].fillna('', inplace=True)
 
-    table=df_atm1[['USER_NAME','EMAIL_ID','LAST_PRACTICE_DATE','PROGRAM_NAME','AUDIO_DAY','AUDIO_LENGTH','Mindful_minutess','playback_time_percent','CITY','STATE','COUNTRY']]
+
+    table=df_atm1[['SCHOOL_NAME','USER_NAME','EMAIL_ID','LAST_PRACTICE_DATE','PROGRAM_NAME','AUDIO_DAY',
+#                        'PHONE',
+#                        'AUDIO_LENGTH',
+                       'Mindful_minutess',
+                       'playback_time_percent',
+#                        'CITY','STATE','COUNTRY'
+                      ]]
     temp={'data':table.values.tolist()}
     return json.dumps(temp)
 
 
 @app.route("/spanish_narrator_usage_new")
 def spanish_narrator_usage_new_detail():
-    client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@44.234.88.150:27017/')
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     
     collection_home=db.user_master
@@ -59075,8 +64889,8 @@ def app_server_slareport():
 @app.route('/awscostoptimisation')
 def db_performance():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
     query=[{"$match":{
@@ -59357,9 +65171,42 @@ def districtescore(disid):
         '6023a7949e8e623753fc3061':'Wasatch County School District'}
     district=disdic[disid]
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
+    
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
     collection = db.user_master.aggregate([
     {"$match":{"schoolId":{"$exists":1}}},
     {"$match":
@@ -59723,7 +65570,7 @@ def districtescore(disid):
     ###################################
 
     ################ THIS_SCHOOL_YEAR ##########
-    this_school_year=engagment[(engagment["CREATED_DATE"]>="2020-08-01")|(engagment["LAST_PRACTICE_DATE"]<="2020-08-01")]
+    this_school_year=engagment[(engagment["CREATED_DATE"]>=str(csy_first_date()))|(engagment["LAST_PRACTICE_DATE"]<=str(csy_first_date()))]
     if this_school_year.empty == True:
     #     this_school_year_score=0
         this_school_year["ID"]=0
@@ -59732,7 +65579,7 @@ def districtescore(disid):
         this_school_year["POSSIBLE_SCORE"]=0  
 
     else:
-        a_date = "2020-08-01"
+        a_date = str(csy_first_date())
         this_school_days = round((( pd.to_datetime(d1) -  pd.to_datetime(a_date)).days)/6)
         this_school_year.loc[(this_school_year['PRACTICE_COUNT'] >= this_school_days), 'SCORE'] = 2
         this_school_year.loc[(this_school_year['PRACTICE_COUNT'] < this_school_days), 'SCORE'] = 1
@@ -59867,14 +65714,15 @@ def districtescore(disid):
         "Consistent_Weekly_Practice":round(District_Averages.CWP_Score),"District_Engagement_Score":round(District_Averages.mean())}}
     return json.dumps(temp)
 
+
 @app.route('/dis_streak_report/<districtid>')
 def dis_streak_report(districtid):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
 
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -59895,7 +65743,7 @@ def dis_streak_report(districtid):
     '5f2609807a1c0000950bb47d':'Flint Public Schools',
     '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
     '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
     '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '5f2609807a1c0000950bb455':'Krum Independent School District',
@@ -59924,7 +65772,7 @@ def dis_streak_report(districtid):
     '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
     '5f2609807a1c0000950bb45d':'Youngstown',
     '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
+    '5f2609807a1c0000950bb469':'LSF-Head Start',
     '5f2609807a1c0000950bb46e':'District 25 New York Schools',
     '5f2609807a1c0000950bb46f':'Paradise Schools',
     '5f2609807a1c0000950bb479':'Panorama Education',
@@ -59942,24 +65790,30 @@ def dis_streak_report(districtid):
     '6023a7499e8e623753fc305f':'Manatee County School District',
     '6023a76f9e8e623753fc3060':'San Jose Unified School District',
     '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District'}
+    '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
+    '123':'Skillman',
+    '456':'UWBA',
+    '789':'Attendance works'}
     district=disdic[districtid]
-    collection = db.school_master.aggregate([
-    {"$match":
-        {"$and":[
-    {'IS_PORTAL':'Y'},
-    {'CATEGORY':{"$in":[""+district+""
-    ]}}]}},
-    {"$project":{"ID":"$_id","school_name":"$NAME","district_name":"$CATEGORY"}}
+#     collection = db.school_master.aggregate([
+#     {"$match":
+#         {"$and":[
+#     {'IS_PORTAL':'Y'},
+#     {'CATEGORY':{'$regex':district,'$options':'i'}}
+#     ]}},
+#     {"$project":{"ID":"$_id","school_name":"$NAME","district_name":"$CATEGORY"}}
 
-    ])
-    df67= DataFrame(list(collection)).fillna(0)
-    school_list=df67["ID"].tolist()
+#     ])
+#     df67= DataFrame(list(collection)).fillna(0)
+#     school_list=df67["ID"].tolist()
     collection1 = db.user_master.aggregate([
     {"$match":
         {"$and":[
-        {"schoolId._id":{"$in":school_list}},
+#         {"schoolId._id":{"$in":school_list}},
             {"IS_QUEST_OBTAINED":"Y"},
+       {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+
              {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
@@ -59974,7 +65828,10 @@ def dis_streak_report(districtid):
     ])
     df1= DataFrame(list(collection1)).fillna(0)
     if df1.empty == True:
-        temp="NO USER"
+        dataa=pd.DataFrame([{"USER_NAME":'NO USER',"USER_EMAIL":0,"USER_CREATED_DATE":0,
+                     "school_name":0,"STATE":0,"PRACTICE_SESSIONS":0,"MINDFUL_MINUTES":0,"LAST_PRACTICE_DATE":0,
+                  "LAST_LOGIN":0,"renewable_date":0,"QUEST_OBTAINED_DATE":0,"STREAK":0}])
+        temp={"data":dataa.values.tolist()}
     else:
         user_list=df1["USER_ID"].tolist()
 
@@ -60111,7 +65968,13 @@ def dis_streak_report(districtid):
         df15=df14[["USER_NAME","USER_EMAIL","USER_CREATED_DATE","school_name","STATE","PRACTICE_SESSIONS","MINDFUL_MINUTES","LAST_PRACTICE_DATE",
                   "LAST_LOGIN","renewable_date","QUEST_OBTAINED_DATE","STREAK"]]
         temp={"data":df15.values.tolist()}
+#         print(temp)
     return json.dumps(temp)
+
+
+
+
+
 
 @app.route('/familysearchid/<name>')
 def familysearch_em_id(name):
@@ -60124,7 +65987,7 @@ def familysearch_em_id(name):
 
         import urllib 
         import pandas as pd
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
         client = pymongo.MongoClient(mongo_uri)
         # db = client.compass
         # client = MongoClient("mongodb://host:port/")
@@ -60418,7 +66281,7 @@ def familysearch_em_id(name):
 
         import urllib 
         import pandas as pd
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("A_dM!n|#!_2o20") + "@44.234.88.150:27017/"
+        mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
         client = pymongo.MongoClient(mongo_uri)
         # client = MongoClient("mongodb://host:port/")
         database = client["compass"]
@@ -60689,8 +66552,8 @@ def familysearch_em_id(name):
 @app.route('/microdisrenewable/')
 def micro_dis_renewable():
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('A_dM!n|#!_2o20')
-    client = MongoClient("mongodb://%s:%s@44.234.88.150:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     portal=['Adams 12 Five Star Schools',
     'Adams County School District 14',
@@ -60939,7 +66802,1066 @@ def micro_dis_renewable():
             'Active_Schools_csy':y2022.Active_User.to_list()   
             }}
     return json.dumps(temp)
+
+@app.route('/weeklyrevanue/<enddate>')
+def weekly_revanue(enddate):
+    from datetime import datetime, timedelta,date
+    date2=datetime.strptime(enddate, "%Y-%m-%d")
+    date1=date2 - timedelta(days=7)
+    date1=date1.strftime("%Y-%m-%d")
+    today = date.today()
+    startdate1=date1
+    enddate1=date2
+    googleSheetId = '1ydZC5Q5cNBlPb2rI_lzcdL0lh7r7rvuSzDYxCDNseyw'
+    worksheetName = 'Payment'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment_df2=pd.read_csv(URL)
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
+    client = pymongo.MongoClient(mongo_uri)
+    db = client.compass
+    datestr7 = "2021-04-19T20:12:46.000Z"
+    myDatetim0 = dateutil.parser.parse(datestr7)
+    collection1 = db.campaign_data.aggregate([ {"$match":{"$and":[{"EMAIL":{"$not":{ "$regex":"1gen",'$options':'i'}}},
+            {"EMAIL":{"$not":{ "$regex":"TEST",'$options':'i'}}},
+            {"FIRST_NAME":{"$not":{ "$regex":"Rajbir Kaur",'$options':'i'}}},
+                {"FIRST_NAME":{"$not":{ "$regex":"1gen",'$options':'i'}}},
+                {"FIRST_NAME":{"$not":{ "$regex":"test",'$options':'i'}}},
+                {"IS_PAYMENT_SUCCESS" :{"$eq":"Y"}},
+                {"CREATED_DATE":{"$gt":myDatetim0}},
+                { "CAMPAIGN_ID._id":{"$ne":ObjectId("5f5933f122a9de32555fceb4")}}
+            
+            ]
+        }}
+    ,{"$project":{"_id":1,"FIRST_NAME":1,"LAST_NAME":1,"EMAIL_ID":"$EMAIL","PHONE_NO":1,"IP_ADDRESS":1,
+        "Payment_Amount":"$AMOUNT","Last_Payment_Date": { "$dateToString": { "format": "%Y-%m-%d", "date": "$CREATED_DATE" } },"Total_Amount":"$AMOUNT"}}
+    ] )
+    dfd= DataFrame(list(collection1))
+    dfd["TYPE_OF_PAYMENT"]="DONATION"
+    dfd["DEVICE_USED"]="COMPASS"
+    dfd["MODE_OF_PAYMENT"]="ONLINE"
+    # dfd["IP_ADDRESS"]=dfd["IP_ADDRESS"].fillna("NO INFO.")
+    # IP_ADDRESS=dfd["IP_ADDRESS"].tolist()
+    # IP_ADDRESS="100.15.128.147"
+    # STATE1=[]
+
+    # for i in IP_ADDRESS:
+    #     url = 'http://ipinfo.io/'+i+'/json'
+    #     response = urlopen(url)
+    #     data = json.load(response)
+
+    #     IP=data['ip']
+    #     org=data['org']
+    #     city = data['city']
+    #     country=data['country']
+    #     region=data['region']
+    #     # print ('IP : {4} \nState : {1} \nCountry : {2} \nCity : {3} \nOrg : {0}'.format(org,region,country,city,IP))
+    #     STATE1.append(region)
+
+    # dfd["STATE"]=STATE1
+    # us_state_shot = {
+    #     'Alabama': 'AL',
+    #     'Alaska': 'AK',
+    #     'American Samoa': 'AS',
+    #     'Arizona': 'AZ',
+    #     'Arkansas': 'AR',
+    #     'California': 'CA',
+    #     'Colorado': 'CO',
+    #     'Connecticut': 'CT',
+    #     'Delaware': 'DE',
+    #     'District of Columbia': 'DC',
+    #     'Florida': 'FL',
+    #     'Georgia': 'GA',
+    #     'Guam': 'GU',
+    #     'Hawaii': 'HI',
+    #     'Idaho': 'ID',
+    #     'Illinois': 'IL',
+    #     'Indiana': 'IN',
+    #     'Iowa': 'IA',
+    #     'Kansas': 'KS',
+    #     'Kentucky': 'KY',
+    #     'Louisiana': 'LA',
+    #     'Maine': 'ME',
+    #     'Maryland': 'MD',
+    #     'Massachusetts': 'MA',
+    #     'Michigan': 'MI',
+    #     'Minnesota': 'MN',
+    #     'Mississippi': 'MS',
+    #     'Missouri': 'MO',
+    #     'Montana': 'MT',
+    #     'Nebraska': 'NE',
+    #     'Nevada': 'NV',
+    #     'New Hampshire': 'NH',
+    #     'New Jersey': 'NJ',
+    #     'New Mexico': 'NM',
+    #     'New York': 'NY',
+    #     'North Carolina': 'NC',
+    #     'North Dakota': 'ND',
+    #     'Northern Mariana Islands':'MP',
+    #     'Ohio': 'OH',
+    #     'Oklahoma': 'OK',
+    #     'Oregon': 'OR',
+    #     'Pennsylvania': 'PA',
+    #     'Puerto Rico': 'PR',
+    #     'Rhode Island': 'RI',
+    #     'South Carolina': 'SC',
+    #     'South Dakota': 'SD',
+    #     'Tennessee': 'TN',
+    #     'Texas': 'TX',
+    #     'Utah': 'UT',
+    #     'Vermont': 'VT',
+    #     'Virgin Islands': 'VI',
+    #     'Virginia': 'VA',
+    #     'Washington': 'WA',
+    #     'West Virginia': 'WV',
+    #     'Wisconsin': 'WI',
+    #     'Wyoming': 'WY'
+    # }
+    # dfd["STATE_SHOT"] = dfd["STATE"].map(us_state_shot) 
+    dfd['USER_NAME'] = dfd['FIRST_NAME'].str.cat(dfd['LAST_NAME'], sep =" ") 
+    dfd['USER_NAME'] = dfd['USER_NAME'].str.upper()
+    dfd1=dfd[["USER_NAME","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","EMAIL_ID","MODE_OF_PAYMENT","Total_Amount"]]
     
+    # dfd1=dfd[["USER_NAME","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","EMAIL_ID","MODE_OF_PAYMENT","STATE","STATE_SHOT","Total_Amount"]]
+    dateStr = "2020-07-01T00:00:00.000Z"
+    myDatetime = dateutil.parser.parse(dateStr)
+    mydoc = db.subscription_master.aggregate([
+    {"$match":{"$and":[{"USER_ID.USER_NAME":{"$not":{ "$regex":"Test",'$options':'i'}}},
+        {"USER_ID.USER_NAME":{"$not":{ "$regex":"test",'$options':'i'}}},
+            {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"1gen",'$options':'i'}}},
+            {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
+                    
+            {"LAST_PAYMENT_DATE":{"$gte":myDatetime}},
+            {"IS_PAYMENT_SUCCESS" : "Y"},
+            {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
+    }},
+    {"$project":{"_id":0,"USER_NAME":"$USER_ID.USER_NAME","DEVICE_USED":"$USER_ID.DEVICE_USED","SCHOOL":"$USER_ID.schoolId.NAME",
+    "MODE_OF_PAYMENT":"$MODE_OF_PAYMENT","Last_Payment_Date": { "$dateToString": { "format": "%Y-%m-%d", "date": "$LAST_PAYMENT_DATE"}},"Payment_Amount":"$LAST_PAYMENT_AMOUNT",
+    "EMAIL_ID":"$USER_ID.EMAIL_ID"}}
+    ,{"$unwind":"$Last_Payment_Date"}
+    ])
+    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1.replace(to_replace="NULL",value="NO INFO",inplace=True)
+    SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
+        'MONTGOMERY UPPER MIDDLE SCHOOL',
+        'RIVER VALLEY ELEMENTARY',
+        'ALTURA PREPARATORY SCHOOL',
+        'TWO BUNCH PALMS ELEMENTARY',
+        'MELISSA MIDDLE SCHOOL',
+        'MONTGOMERY LOWER MID SCH',
+        'HATTIE DYER ELEMENTARY SCHOOL',
+        'STOCKDALE JUNIOR HIGH',
+        'INYO COUNTY COMMUNITY SCHOOL',
+        'DESERT HOT SPRINGS HIGH',
+        'SEMINOLE HIGH SCHOOL',
+        'FRANKLIN WOODS INTERMEDIATE SCHOOL',
+        'MARY B. LEWIS ELEMENTARY',
+        'MCMILLIN (CORKY) ELEMENTARY',
+        'ELGIN MIDDLE',
+        'MACFARLANE PARK ELEMENTARY MAGNET SCHOOL',
+        'ODYSSEY ELEMENTARY',
+        'FORT MEADOW ECC',
+        'NO INFO',
+        'BRAWLEY ELEMENTARY SCHOOL DISTRICVT',
+        'BRIGHTON HIGH',
+        'MARY M WALSH',
+        'THE CAPITOL SCHOOL',
+        'DR. DANIEL BRIGHT SCHOOL',
+        'ROCK POINT COMMUNITY SCHOOL',
+        'MURNIN ES',
+        'SUNNY SANDS ELEMENTARY',
+        'THOMAS JEFFERSON MIDDLE SCHOOL',
+        'BENJAMIN FRANKLIN MIDDLE SCHOOL',
+        'FAIRMONT CHARTER ELEMENTARY',
+        'BLAIR ELEMENTARY SCHOOL',
+        'L.A. MORGAN ELEMENTARY',
+        'KRUM EARLY EDUCATION CENTER',
+        'AMANDA HOPE RAINBOW ANGLES(NPO)',
+        'STONY BROOK ELEMENTARY',
+        'ROSE SPRINGS ELEMENTARY',
+        'MT. BALDY JOINT ELEMENTARY',
+        'LIBERTY HILLS ELEMENTARY',
+        'WEST ZONE ELC']
+    payment_df1 = payment_df1[~payment_df1['SCHOOL'].isin(SCHOOL_LIST)]
+    payment_df1['TYPE_OF_PAYMENT'] = 'SCHOOL'
+    payment_df1= payment_df1[payment_df1['MODE_OF_PAYMENT']!='payLater']
+    payment_df1= payment_df1[payment_df1['DEVICE_USED']!='OTHERS']
+    payment_df1.loc[(payment_df1['DEVICE_USED'] == "ios"), 'TYPE_OF_PAYMENT'] = 'MOBILE'
+    payment_df1.loc[(payment_df1['DEVICE_USED'] == "android"), 'TYPE_OF_PAYMENT'] = 'MOBILE'
+    payment_df1['DEVICE_USED'] = payment_df1['DEVICE_USED'].str.upper()
+    payment_df3=payment_df1.drop(payment_df1[(payment_df1['Payment_Amount'] < 100) & (payment_df1['DEVICE_USED'] == "WEBAPP")].index)
+    payment_df1=payment_df3.append(dfd1)
+    payment_df=payment_df1.append(payment_df2)
+
+    # payment_df.Payment_Amount = payment_df.Payment_Amount.round()
+    payment_df['DEVICE_USED'] = payment_df['DEVICE_USED'].str.upper() 
+    payment_df['MODE_OF_PAYMENT'] = payment_df['MODE_OF_PAYMENT'].str.upper()
+    payment_df['DEVICE_USED'] = payment_df['DEVICE_USED'].str.upper()
+    payment_df['MODE_OF_PAYMENT'] = payment_df['MODE_OF_PAYMENT'].str.replace("POMOCODE", "PROMOCODE")
+    payment_df['MODE_OF_PAYMENT'] = payment_df['MODE_OF_PAYMENT'].str.replace("SQUAREPAYMENT", "SQUARE PAYMENT")
+    payment_df['MODE_OF_PAYMENT'] = payment_df['MODE_OF_PAYMENT'].str.replace("INVITED_USER", "INVITED USER")
+    payment_df['MODE_OF_PAYMENT'] = payment_df['MODE_OF_PAYMENT'].str.replace("INVITEDUSER", "INVITED USER")
+    payment_df['Last_Payment_Date'] =  pd.to_datetime(payment_df['Last_Payment_Date'])
+    newdf1=payment_df[(payment_df.Last_Payment_Date >= startdate1) & (payment_df.Last_Payment_Date <= enddate1)]
+    df1web=newdf1[['USER_NAME',"EMAIL_ID",'DEVICE_USED','MODE_OF_PAYMENT','TYPE_OF_PAYMENT','Last_Payment_Date','Payment_Amount']]
+    df1web['Last_Payment_Date'] = pd.to_datetime(df1web['Last_Payment_Date'])
+    df2web= df1web.groupby(['TYPE_OF_PAYMENT'])['Payment_Amount'].sum().reset_index()
+    df3web= df1web.groupby(['TYPE_OF_PAYMENT'])['Payment_Amount'].count().reset_index()
+    df3web.sort_values(by=['Payment_Amount'], inplace=True, ascending=False)
+    df2web.sort_values(by=['Payment_Amount'], inplace=True, ascending=False)
+    df2web.Payment_Amount = df2web.Payment_Amount.round()
+    if df2web['TYPE_OF_PAYMENT'].all() != "SCHOOL":
+        df2web.loc[len(df2web.index)] = ['SCHOOL', 0]
+    elif df2web['TYPE_OF_PAYMENT'].all() != "DONATION":
+        df2web.loc[len(df2web.index)] = ["DONATION", 0] 
+    else:
+        pass
+    Payment_Mode_amount=df2web['TYPE_OF_PAYMENT'].values.tolist()
+    Payment_Mode_user=df3web['TYPE_OF_PAYMENT'].values.tolist()
+    Payment_Mode_Amount=df2web['Payment_Amount'].values.tolist()
+    Payment_Mode_User=df3web['Payment_Amount'].values.tolist()
+    temp={"amount":{"Payment_Mode":Payment_Mode_amount,"Payment_Mode_Amount":Payment_Mode_Amount},"user": {"Payment_Mode":Payment_Mode_user,"Payment_Mode_User":Payment_Mode_User}}
+    return(json.dumps(temp))
+
+@app.route("/insights")
+def insights():     
+    googleSheetId = '1HIm2Z9t6IDckB8WCrAv1NPVNiZK_zIUGpl8_G2JjGAk'
+    worksheetName = 'INSIGHTS'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment_df2=pd.read_csv(URL)
+
+    insight = payment_df2.INSIGHTS.to_list()
+#     l1 = insight[0].split(',')
+#     l2 = insight[1].split(',')
+#     l3 = insight[2].split(',')
+#     l4 = insight[3].split(',')
+#     l5 = insight[4].split(',')
+
+    temp = {"INSIGHTS" : insight}
+    return json.dumps(temp)
+
+@app.route('/districtlogoupdates')
+def district_logo_updates():
+    
+    googleSheetId = '1RJFZvxFm4Ig5XtQKtqPFy5uYzVafzNU4-NcnOyUI96A'
+    # googleSheetId = '1y0nF64mOFuIJ7WUotPVt4IBM7GySaSoXr3UlkuSgQNo'
+    worksheetName = 'District_logo_sheet'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment_df2=pd.read_csv(URL)
+    # print(payment_df2)
+    payment_df2
+
+    data1 = payment_df2.to_numpy().tolist()
+    data2={"data":data1}
+    data2
+    return json.dumps(data2)
+
+# district_logo_updates()
+    
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> DASHBOARD LINKS API'S >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@app.route("/cap_apis")
+def capapis():     
+    googleSheetId = '1UmU9f3wRnF-BLmq_-NsSQsgku3J7PtNOR9BaeKnmBsg'
+    worksheetName = "API'S"
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment_df2=pd.read_csv(URL)
+    dff = payment_df2[["Dashboard Name","Dashboard Description","Dashboard Link"]].to_dict('records')
+    #     print(payment_df2)
+#     df1 = payment_df2[payment_df2["Main Dashboard"] == "EXECUTIVE SUMMARY"][["Dashboard Name","Dashboard Description", "Dashboard Link"]].to_dict('records')
+#     df2 = payment_df2[payment_df2["Main Dashboard"] == "ENGAGEMENT DASHBOARDS"][["Dashboard Name","Dashboard Description", "Dashboard Link"]].to_dict('records')
+#     df3 = payment_df2[payment_df2["Main Dashboard"] == "PLAYBACK ANALYTICS"][["Dashboard Name","Dashboard Description", "Dashboard Link"]].to_dict('records')
+#     df4 = payment_df2[payment_df2["Main Dashboard"] == "REVENUE DASHBOARDS"][["Dashboard Name","Dashboard Description", "Dashboard Link"]].to_dict('records')
+#     df5 = payment_df2[payment_df2["Main Dashboard"] == "FEEDBACK AND SURVEY"][["Dashboard Name","Dashboard Description", "Dashboard Link"]].to_dict('records')
+#     df6 = payment_df2[payment_df2["Main Dashboard"] == "SUBSCRIPTION DASHBOARDS"][["Dashboard Name","Dashboard Description", "Dashboard Link"]].to_dict('records')
+#     df7 = payment_df2[payment_df2["Main Dashboard"] == "APP ANALYTICS"][["Dashboard Name","Dashboard Description", "Dashboard Link"]].to_dict('records')
+
+#     temp = {"EXECUTIVE SUMMARY" : df1, "ENGAGEMENT DASHBOARDS" : df2, "PLAYBACK ANALYTICS" : df3, "REVENUE DASHBOARDS" : df4, "FEEDBACK AND SURVEY" : df5, "SUBSCRIPTION DASHBOARDS" : df6, "APP ANALYTICS" :df7}
+    temp1 = {"DATA" : dff}
+    return json.dumps(temp1)
+
+######################################################
+@app.route("/oldescores")
+def old_escores():
+    dict2=[]
+    dict1=[]
+    datelist=["2021-01-30","2021-02-28","2021-03-31","2021-04-30","2021-05-31","2021-06-30","2021-07-31"]
+    disdic=["Agawam School district","Belleville School District","Broward County Public Schools","Champlain Valley School District","Chico Unified School District","Chula Vista Elementary School District","Clarksville-Montgomery County School System","Community Consolidated School District 89","Comox Valley School District","Douglas County School District","Early learning Sarasota","Englewood Public School District","Fairfield-Suisun Unified School District","Flint Public Schools","Goleta District","Hillsborough County","Krum Independent School District","LAUSD","LSF-Head Start","La Joya School District","Mt. Lebanon School District","NYC - Queens South","Needham School District","Oakland Unified School District","Ogden school district","Oroville City Elementary School District","Oswego School District","Paradise Unified School District","Pinellas County Schools","Racine Unified Schools","Salt Lake City School District","San Diego Unified School District","San Leandro Unified School District","Sarasota County","Springfield Public School","Wayne Metro","Westfield Public School District","Wichita Falls Independent School District","Youngstown","Adams 12 Five Star Schools","Adams County School District 14","Ann Arbor Public Schools","Apple Valley Unified School District","Aurora Public Schools","Austin Independent School District","Berkeley Public Schools","Bishop Unified School District","Bismarck Public Schools","Boston Public Schools","Boulder Valley School District","Canyons School District","Chicago Public Schools","Colton Joint Unified School District","Dennis-Yarmouth Regional School District","Denver Public Schools","Durham Public Schools","FITCHBURG PUBLIC SCHOOLS","Fairfax County Public Schools","Falmouth Public Schools","Fulton County School System","Glenbard District 87","Granite School District","Greenburgh North Castle Union Free School District","Griffin-Spalding County School System","Hartford Public Schools","Helena Public Schools","HidalgoIndependent School district","Hopedale Public Schools","Houston Independent School District","KIPP Public Schools","Kearsarge Regional School District","Lamar Consolidated Independent School District","Lincolnshire Schools","Littleton Public Schools","Manatee County School District","Miami-Dade County Public Schools","Middleton-Cross Plains Area School District","Mill Valley School District","Millard School District","Muscatine Community School District","Northside Independent School District","Paterson School District","Rich School District","San Francisco Unified School District","San Jose Unified School District","San Marcos Unified School District","San Marino Unified School District","School District of Palm Beach County","School District of the Chathams","Sevier School District","South Summit School District","Sudbury Public Schools","Tooele County School District","Upland Unified School District","Wasatch County School District","Washoe County School District","West Contra Costa Unified School District","Westford Public Schools","White River School District"]
+    for j in disdic: 
+        print(j)
+        for i in datelist:
+            print(i)
+            try:   
+                username = urllib.parse.quote_plus('admin')
+                password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+                client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+                db=client.compass
+                today = date.today()
+                d1 = str(i)
+                d2=pd.to_datetime(d1)
+                datestr7 = d1+"T00:00:00.000Z"
+                myDatetime = dateutil.parser.parse(datestr7)
+                print(d1,d2)
+                collection = db.user_master.aggregate([
+                {"$match":{"schoolId":{"$exists":1}}},
+                {"$match":
+                    {"$and":[
+                {"schoolId._id":{"$in":db.school_master.distinct( "_id", {"CATEGORY":{'$regex':j, '$options':'i'} } )}},
+                        {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                    {'IS_DISABLED':{"$ne":'Y'}},
+                {'IS_BLOCKED':{"$ne":'Y'}},
+                {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+                {"$match":
+                {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+                {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+                ,
+                {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME","USER_NAME":"$USER_NAME",
+                            "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME","CREATED_DATE":{ "$dateToString": { "format": "%Y-%m-%d", "date":"$CREATED_DATE"}}}}
+
+                ])
+                df1= DataFrame(list(collection)).fillna(0)
+                user_list=df1["USER_ID"].tolist()
+                total_school=df1.groupby(["ID","school_name"])["USER_ID"].count().reset_index()
+                total_users=len(user_list)
+                collection2 = db.audio_track_master.aggregate([
+                    {"$match":{"USER_ID._id":{
+                                    "$in":user_list
+
+                                }    ,"USER_ID.schoolId":{"$exists":1}}},
+                    {"$match":{
+                        '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                        {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                        {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                        {'USER_ID.schoolId.NAME':{'$not':{"$regex":'test','$options':'i'}}},
+                        {'MODIFIED_DATE':{'$lte':myDatetime}}        
+                        ]}},
+                        {'$group':{
+
+                            '_id':{"USER_ID":"$USER_ID._id","SCHOOLiD":'$USER_ID.schoolId._id'},
+                            'Last_Prac_Date':{'$max':'$MODIFIED_DATE'},
+                            'Active_User':{'$addToSet':'$USER_ID._id'},
+                            'Practice_Sessions':{'$sum':1},
+                            'Mindful_Minutes':{'$sum':{'$round':
+                                [{'$divide':[{'$subtract':
+                                    ['$CURSOR_END','$cursorStart']},60]},0]}}  
+                            }},
+                        {'$project':{'_id':0,
+                                    "USER_ID":"$_id.USER_ID",
+                                    "USER_ID":"$_id.USER_ID",
+                            'SCHOOL_ID':'$_id.SCHOOLiD',
+                            'LAST_PRACTICE_DATE':{ "$dateToString": { "format": "%Y-%m-%d", "date":'$Last_Prac_Date'}},
+                            'PRACTICE_COUNT':'$Practice_Sessions',
+                            'MINDFUL_MINUTES':'$Mindful_Minutes'
+                            }
+                            }])
+                df3= DataFrame(list(collection2)).fillna(0)
+                final=pd.merge(df1, df3, on='USER_ID',how='left').fillna(0)
+                total_users_school=final.groupby(["ID","school_name"])["USER_ID"].count().reset_index()
+                ######################### percentage_of_active_users ############################
+                final1 = final[final.PRACTICE_COUNT != 0]
+
+                final1["TODAY_DATE"]=d1
+                final1['LAST_PRACTICE_DATE'] = pd.to_datetime(final1['LAST_PRACTICE_DATE'])
+                final1['CREATED_DATE'] = pd.to_datetime(final1['CREATED_DATE'])
+                final1["TODAY_DATE"] = pd.to_datetime(final1["TODAY_DATE"])
+                final1['DAYS'] = (final1["TODAY_DATE"] - final1['CREATED_DATE']).dt.days
+                final1['DAYS'] = pd.to_numeric(final1['DAYS'])
+                final1["PRACTICE_COUNT"] = pd.to_numeric(final1["PRACTICE_COUNT"])
+                final1.loc[(final1['DAYS'] > 60) & (final1["PRACTICE_COUNT"] >= 20), 'STATUS'] = 'ACTIVE'  #ACTIVE
+                final1.loc[(final1['DAYS'] <= 60), 'THRESHOLD'] = (final1['DAYS']/60)*20
+                final1.loc[((final1["THRESHOLD"]!=0) & (final1["PRACTICE_COUNT"]>final1["THRESHOLD"])), 'STATUS'] = 'ACTIVE'  #ACTIVE
+                final1=final1.fillna(0)    
+                active_users=final1[final1["STATUS"]=="ACTIVE"]
+                active_users_school=active_users.groupby(["ID","school_name"])["_id"].count().reset_index()
+                active_users_final=pd.merge(active_users_school, total_users_school, on='ID',how='left').fillna(0)
+                active_users_final["p_of_active_users"]=round((active_users_final["_id"]/active_users_final["USER_ID"])*100)
+                p_of_active_users=round(active_users_final["p_of_active_users"].mean())
+                AUSW=active_users_final[["ID","school_name_x","p_of_active_users"]]
+                AUSW0=pd.merge(AUSW, total_school, on='ID',how='right').fillna(0)
+                AUSW1=AUSW0[["school_name","p_of_active_users"]]
+                AUSW1.loc[(AUSW1["p_of_active_users"] > 100), 'p_of_active_users'] = 100  
+                AUSW1["NAME"]="ACTIVE USER"
+                AUSW1=AUSW1.round()
+                links0 = AUSW1.rename(columns={'school_name' : 'x', 'NAME' : 'y','p_of_active_users':'heat'}).to_dict('r')
+                ###################################################################################
+                ##################### PERCENTAGE_ACTIVE_USAGE ################################
+                collection3 = db.audio_track_master.aggregate([
+                    {"$match":{"USER_ID._id":{
+                                    "$in":user_list
+                                }    ,"USER_ID.schoolId":{"$exists":1}}},
+                    {"$match":{
+                        '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                        {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                        {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                        {'USER_ID.schoolId.NAME':{'$not':{"$regex":'test','$options':'i'}}},
+                            {'MODIFIED_DATE':{'$lte':myDatetime}}       
+                        ]}},
+                #            {'$project':{
+                #                     "USER_ID":"$USER_ID._id",
+                #              'MODIFIED_DATE':{ "$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}},
+                #              'CURSOR_END':'$CURSOR_END',
+                #              'cursorStart':'$cursorStart'
+                #              }
+                #              },
+                        {'$group':{
+
+                            '_id':{"USER_ID":"$USER_ID._id",'MODIFIED_DATE':'$MODIFIED_DATE'},
+                            'First_Prac_Date':{'$min':'$MODIFIED_DATE'},
+                            'Last_Prac_Date':{'$max':'$MODIFIED_DATE'},
+                            'Practice_Sessions':{'$sum':1}
+                            }},
+                        {'$project':{'_id':0,
+                                    "USER_ID":"$_id.USER_ID",
+                            'LAST_PRACTICE_DATE':'$Last_Prac_Date',
+                            'FIRST_PRACTICE_DATE':'$First_Prac_Date',
+                            'PRACTICE_DAYS':'$Practice_Sessions'
+                            }
+                        }
+                            ,
+                            {'$group':{
+
+                            '_id':{"USER_ID":"$USER_ID"},
+                            'First_Prac_Date':{'$min':'$FIRST_PRACTICE_DATE'},
+                            'Last_Prac_Date':{'$max':'$LAST_PRACTICE_DATE'},
+                            'Practice_Sessions':{'$sum':'$PRACTICE_DAYS'}
+                            }},
+                            {'$project':{'_id':0,
+                                    "USER_ID":"$_id.USER_ID",
+                            'LAST_PRACTICE_DATE':{ "$dateToString": { "format": "%Y-%m-%d", "date":'$Last_Prac_Date'}},
+                            'FIRST_PRACTICE_DATE':{ "$dateToString": { "format": "%Y-%m-%d", "date":'$First_Prac_Date'}},
+                            'PRACTICE_DAYS':'$Practice_Sessions'
+                            }
+                            }
+                            ])
+                df4= DataFrame(list(collection3)).fillna(0)
+                usage=pd.merge(df1, df4, on='USER_ID',how='left').fillna(0)
+                usage1 = usage[usage.PRACTICE_DAYS != 0].reset_index()
+                usage1["TODAY_DATE"]=d1
+                usage1['FIRST_PRACTICE_DATE'] = pd.to_datetime(usage1['FIRST_PRACTICE_DATE'])
+                usage1["LAST_PRACTICE_DATE"] = pd.to_datetime(usage1["LAST_PRACTICE_DATE"])
+                usage1["TODAY_DATE"] = pd.to_datetime(usage1["TODAY_DATE"])
+                dfhello=pd.read_csv("Holiday_List.csv")
+                dfhello["date"]= pd.to_datetime(dfhello["date"])
+                list1=dfhello["date"].tolist()
+                usage1["DAYSKIP"]=0
+                from datetime import timedelta
+                from datetime import date
+                from pandas import Timestamp
+                for i in range(len(usage1.index)):
+                    skip_count = 0
+                    start = usage1['FIRST_PRACTICE_DATE'][i]
+                    end = today
+                    dates_to_skip = [Timestamp('2018-01-01 00:00:00'), Timestamp('2018-01-30 00:00:00'), Timestamp('2018-01-31 00:00:00'), Timestamp('2018-04-05 00:00:00'), Timestamp('2018-04-06 00:00:00'),
+                Timestamp('2018-04-07 00:00:00'), Timestamp('2018-04-08 00:00:00'), Timestamp('2018-04-09 00:00:00'), Timestamp('2018-06-16 00:00:00'), Timestamp('2018-06-17 00:00:00'), Timestamp('2018-06-18 00:00:00'),
+                Timestamp('2018-06-19 00:00:00'), Timestamp('2018-06-20 00:00:00'), Timestamp('2018-06-21 00:00:00'), Timestamp('2018-06-22 00:00:00'), Timestamp('2018-06-23 00:00:00'), Timestamp('2018-06-24 00:00:00'),
+                Timestamp('2018-06-25 00:00:00'), Timestamp('2018-06-26 00:00:00'), Timestamp('2018-06-27 00:00:00'), Timestamp('2018-06-28 00:00:00'), Timestamp('2018-06-29 00:00:00'), Timestamp('2018-06-30 00:00:00'),
+                Timestamp('2018-07-01 00:00:00'), Timestamp('2018-07-02 00:00:00'), Timestamp('2018-07-03 00:00:00'), Timestamp('2018-07-04 00:00:00'), Timestamp('2018-07-05 00:00:00'), Timestamp('2018-07-06 00:00:00'),
+                Timestamp('2018-07-07 00:00:00'), Timestamp('2018-07-08 00:00:00'), Timestamp('2018-07-09 00:00:00'), Timestamp('2018-07-10 00:00:00'), Timestamp('2018-07-11 00:00:00'), Timestamp('2018-07-12 00:00:00'),
+                Timestamp('2018-07-13 00:00:00'), Timestamp('2018-07-14 00:00:00'), Timestamp('2018-07-15 00:00:00'), Timestamp('2018-07-16 00:00:00'), Timestamp('2018-07-17 00:00:00'), Timestamp('2018-07-18 00:00:00'),
+                Timestamp('2018-07-19 00:00:00'), Timestamp('2018-07-20 00:00:00'), Timestamp('2018-07-21 00:00:00'), Timestamp('2018-07-22 00:00:00'), Timestamp('2018-07-23 00:00:00'), Timestamp('2018-07-24 00:00:00'),
+                Timestamp('2018-07-25 00:00:00'), Timestamp('2018-07-26 00:00:00'), Timestamp('2018-07-27 00:00:00'), Timestamp('2018-07-28 00:00:00'), Timestamp('2018-07-29 00:00:00'), Timestamp('2018-07-30 00:00:00'),
+                Timestamp('2018-07-31 00:00:00'), Timestamp('2018-08-01 00:00:00'), Timestamp('2018-08-02 00:00:00'), Timestamp('2018-08-03 00:00:00'), Timestamp('2018-08-04 00:00:00'), Timestamp('2018-08-05 00:00:00'),
+                Timestamp('2018-08-06 00:00:00'), Timestamp('2018-08-07 00:00:00'), Timestamp('2018-08-08 00:00:00'), Timestamp('2018-08-09 00:00:00'), Timestamp('2018-08-10 00:00:00'), Timestamp('2018-08-11 00:00:00'),
+                Timestamp('2018-08-12 00:00:00'), Timestamp('2018-08-13 00:00:00'), Timestamp('2018-08-14 00:00:00'), Timestamp('2018-09-18 00:00:00'), Timestamp('2018-11-26 00:00:00'), Timestamp('2018-11-27 00:00:00'),
+                Timestamp('2018-11-28 00:00:00'), Timestamp('2018-12-21 00:00:00'), Timestamp('2018-12-22 00:00:00'), Timestamp('2018-12-23 00:00:00'), Timestamp('2018-12-24 00:00:00'), Timestamp('2018-12-25 00:00:00'),
+                Timestamp('2018-12-26 00:00:00'), Timestamp('2018-12-27 00:00:00'), Timestamp('2018-12-28 00:00:00'), Timestamp('2018-12-29 00:00:00'), Timestamp('2018-12-30 00:00:00'), Timestamp('2018-12-31 00:00:00'),
+                Timestamp('2019-01-01 00:00:00'), Timestamp('2019-01-30 00:00:00'), Timestamp('2019-01-31 00:00:00'), Timestamp('2019-04-05 00:00:00'), Timestamp('2019-04-06 00:00:00'), Timestamp('2019-04-07 00:00:00'),
+                Timestamp('2019-04-08 00:00:00'), Timestamp('2019-04-09 00:00:00'), Timestamp('2019-06-16 00:00:00'), Timestamp('2019-06-17 00:00:00'), Timestamp('2019-06-18 00:00:00'), Timestamp('2019-06-19 00:00:00'),
+                Timestamp('2019-06-20 00:00:00'), Timestamp('2019-06-21 00:00:00'), Timestamp('2019-06-22 00:00:00'), Timestamp('2019-06-23 00:00:00'), Timestamp('2019-06-24 00:00:00'), Timestamp('2019-06-25 00:00:00'),
+                Timestamp('2019-06-26 00:00:00'), Timestamp('2019-06-27 00:00:00'), Timestamp('2019-06-28 00:00:00'), Timestamp('2019-06-29 00:00:00'), Timestamp('2019-06-30 00:00:00'), Timestamp('2019-07-01 00:00:00'),
+                Timestamp('2019-07-02 00:00:00'), Timestamp('2019-07-03 00:00:00'), Timestamp('2019-07-04 00:00:00'), Timestamp('2019-07-05 00:00:00'), Timestamp('2019-07-06 00:00:00'), Timestamp('2019-07-07 00:00:00'),
+                Timestamp('2019-07-08 00:00:00'), Timestamp('2019-07-09 00:00:00'), Timestamp('2019-07-10 00:00:00'), Timestamp('2019-07-11 00:00:00'), Timestamp('2019-07-12 00:00:00'), Timestamp('2019-07-13 00:00:00'),
+                Timestamp('2019-07-14 00:00:00'), Timestamp('2019-07-15 00:00:00'), Timestamp('2019-07-16 00:00:00'), Timestamp('2019-07-17 00:00:00'), Timestamp('2019-07-18 00:00:00'), Timestamp('2019-07-19 00:00:00'),
+                Timestamp('2019-07-20 00:00:00'), Timestamp('2019-07-21 00:00:00'), Timestamp('2019-07-22 00:00:00'), Timestamp('2019-07-23 00:00:00'), Timestamp('2019-07-24 00:00:00'), Timestamp('2019-07-25 00:00:00'),
+                Timestamp('2019-07-26 00:00:00'), Timestamp('2019-07-27 00:00:00'), Timestamp('2019-07-28 00:00:00'), Timestamp('2019-07-29 00:00:00'), Timestamp('2019-07-30 00:00:00'), Timestamp('2019-07-31 00:00:00'),
+                Timestamp('2019-08-01 00:00:00'), Timestamp('2019-08-02 00:00:00'), Timestamp('2019-08-03 00:00:00'), Timestamp('2019-08-04 00:00:00'), Timestamp('2019-08-05 00:00:00'), Timestamp('2019-08-06 00:00:00'),
+                Timestamp('2019-08-07 00:00:00'), Timestamp('2019-08-08 00:00:00'), Timestamp('2019-08-09 00:00:00'), Timestamp('2019-08-10 00:00:00'), Timestamp('2019-08-11 00:00:00'), Timestamp('2019-08-12 00:00:00'),
+                Timestamp('2019-08-13 00:00:00'), Timestamp('2019-08-14 00:00:00'), Timestamp('2019-09-18 00:00:00'), Timestamp('2019-11-26 00:00:00'), Timestamp('2019-11-27 00:00:00'), Timestamp('2019-11-28 00:00:00'),
+                Timestamp('2019-12-21 00:00:00'), Timestamp('2019-12-22 00:00:00'), Timestamp('2019-12-23 00:00:00'), Timestamp('2019-12-24 00:00:00'), Timestamp('2019-12-25 00:00:00'), Timestamp('2019-12-26 00:00:00'),
+                Timestamp('2019-12-27 00:00:00'), Timestamp('2019-12-28 00:00:00'), Timestamp('2019-12-29 00:00:00'), Timestamp('2019-12-30 00:00:00'), Timestamp('2019-12-31 00:00:00'), Timestamp('2020-01-01 00:00:00'),
+                Timestamp('2020-01-30 00:00:00'), Timestamp('2020-01-31 00:00:00'), Timestamp('2020-04-05 00:00:00'), Timestamp('2020-04-06 00:00:00'), Timestamp('2020-04-07 00:00:00'), Timestamp('2020-04-08 00:00:00'),
+                Timestamp('2020-04-09 00:00:00'), Timestamp('2020-06-16 00:00:00'), Timestamp('2020-06-17 00:00:00'), Timestamp('2020-06-18 00:00:00'), Timestamp('2020-06-19 00:00:00'), Timestamp('2020-06-20 00:00:00'),
+                Timestamp('2020-06-21 00:00:00'), Timestamp('2020-06-22 00:00:00'), Timestamp('2020-06-23 00:00:00'), Timestamp('2020-06-24 00:00:00'), Timestamp('2020-06-25 00:00:00'), Timestamp('2020-06-26 00:00:00'),
+                Timestamp('2020-06-27 00:00:00'), Timestamp('2020-06-28 00:00:00'), Timestamp('2020-06-29 00:00:00'), Timestamp('2020-06-30 00:00:00'), Timestamp('2020-07-01 00:00:00'), Timestamp('2020-07-02 00:00:00'),
+                Timestamp('2020-07-03 00:00:00'), Timestamp('2020-07-04 00:00:00'), Timestamp('2020-07-05 00:00:00'), Timestamp('2020-07-06 00:00:00'), Timestamp('2020-07-07 00:00:00'), Timestamp('2020-07-08 00:00:00'),
+                Timestamp('2020-07-09 00:00:00'), Timestamp('2020-07-10 00:00:00'), Timestamp('2020-07-11 00:00:00'), Timestamp('2020-07-12 00:00:00'), Timestamp('2020-07-13 00:00:00'), Timestamp('2020-07-14 00:00:00'),
+                Timestamp('2020-07-15 00:00:00'), Timestamp('2020-07-16 00:00:00'), Timestamp('2020-07-17 00:00:00'), Timestamp('2020-07-18 00:00:00'), Timestamp('2020-07-19 00:00:00'), Timestamp('2020-07-20 00:00:00'),
+                Timestamp('2020-07-21 00:00:00'), Timestamp('2020-07-22 00:00:00'), Timestamp('2020-07-23 00:00:00'), Timestamp('2020-07-24 00:00:00'), Timestamp('2020-07-25 00:00:00'), Timestamp('2020-07-26 00:00:00'),
+                Timestamp('2020-07-27 00:00:00'), Timestamp('2020-07-28 00:00:00'), Timestamp('2020-07-29 00:00:00'), Timestamp('2020-07-30 00:00:00'), Timestamp('2020-07-31 00:00:00'), Timestamp('2020-08-01 00:00:00'),
+                Timestamp('2020-08-02 00:00:00'), Timestamp('2020-08-03 00:00:00'), Timestamp('2020-08-04 00:00:00'), Timestamp('2020-08-05 00:00:00'), Timestamp('2020-08-06 00:00:00'), Timestamp('2020-08-07 00:00:00'),
+                Timestamp('2020-08-08 00:00:00'), Timestamp('2020-08-09 00:00:00'), Timestamp('2020-08-10 00:00:00'), Timestamp('2020-08-11 00:00:00'), Timestamp('2020-08-12 00:00:00'), Timestamp('2020-08-13 00:00:00'),
+                Timestamp('2020-08-14 00:00:00'), Timestamp('2020-09-18 00:00:00'), Timestamp('2020-11-26 00:00:00'), Timestamp('2020-11-27 00:00:00'), Timestamp('2020-11-28 00:00:00'), Timestamp('2020-12-21 00:00:00'),
+                Timestamp('2020-12-22 00:00:00'), Timestamp('2020-12-23 00:00:00'), Timestamp('2020-12-24 00:00:00'), Timestamp('2020-12-25 00:00:00'), Timestamp('2020-12-26 00:00:00'), Timestamp('2020-12-27 00:00:00'),
+                Timestamp('2020-12-28 00:00:00'), Timestamp('2020-12-29 00:00:00'), Timestamp('2020-12-30 00:00:00'), Timestamp('2020-12-31 00:00:00'), Timestamp('2021-01-01 00:00:00'), Timestamp('2021-01-30 00:00:00'),
+                Timestamp('2021-01-31 00:00:00'), Timestamp('2021-04-05 00:00:00'), Timestamp('2021-04-06 00:00:00'), Timestamp('2021-04-07 00:00:00'), Timestamp('2021-04-08 00:00:00'), Timestamp('2021-04-09 00:00:00'),
+                Timestamp('2021-06-16 00:00:00'), Timestamp('2021-06-17 00:00:00'), Timestamp('2021-06-18 00:00:00'), Timestamp('2021-06-19 00:00:00'), Timestamp('2021-06-20 00:00:00'), Timestamp('2021-06-21 00:00:00'),
+                Timestamp('2021-06-22 00:00:00'), Timestamp('2021-06-23 00:00:00'), Timestamp('2021-06-24 00:00:00'), Timestamp('2021-06-25 00:00:00'), Timestamp('2021-06-26 00:00:00'), Timestamp('2021-06-27 00:00:00'),
+                Timestamp('2021-06-28 00:00:00'), Timestamp('2021-06-29 00:00:00'), Timestamp('2021-06-30 00:00:00'), Timestamp('2021-07-01 00:00:00'), Timestamp('2021-07-02 00:00:00'), Timestamp('2021-07-03 00:00:00'),
+                Timestamp('2021-07-04 00:00:00'), Timestamp('2021-07-05 00:00:00'), Timestamp('2021-07-06 00:00:00'), Timestamp('2021-07-07 00:00:00'), Timestamp('2021-07-08 00:00:00'), Timestamp('2021-07-09 00:00:00'),
+                Timestamp('2021-07-10 00:00:00'), Timestamp('2021-07-11 00:00:00'), Timestamp('2021-07-12 00:00:00'), Timestamp('2021-07-13 00:00:00'), Timestamp('2021-07-14 00:00:00'), Timestamp('2021-07-15 00:00:00'),
+                Timestamp('2021-07-16 00:00:00'), Timestamp('2021-07-17 00:00:00'), Timestamp('2021-07-18 00:00:00'), Timestamp('2021-07-19 00:00:00'), Timestamp('2021-07-20 00:00:00'), Timestamp('2021-07-21 00:00:00'),
+                Timestamp('2021-07-22 00:00:00'), Timestamp('2021-07-23 00:00:00'), Timestamp('2021-07-24 00:00:00'), Timestamp('2021-07-25 00:00:00'), Timestamp('2021-07-26 00:00:00'), Timestamp('2021-07-27 00:00:00'),
+                Timestamp('2021-07-28 00:00:00'), Timestamp('2021-07-29 00:00:00'), Timestamp('2021-07-30 00:00:00'), Timestamp('2021-07-31 00:00:00'), Timestamp('2021-08-01 00:00:00'), Timestamp('2021-08-02 00:00:00'),
+                Timestamp('2021-08-03 00:00:00'), Timestamp('2021-08-04 00:00:00'), Timestamp('2021-08-05 00:00:00'), Timestamp('2021-08-06 00:00:00'), Timestamp('2021-08-07 00:00:00'), Timestamp('2021-08-08 00:00:00'),
+                Timestamp('2021-08-09 00:00:00'), Timestamp('2021-08-10 00:00:00'), Timestamp('2021-08-11 00:00:00'), Timestamp('2021-08-12 00:00:00'), Timestamp('2021-08-13 00:00:00'), Timestamp('2021-08-14 00:00:00'),
+                Timestamp('2021-09-18 00:00:00'), Timestamp('2021-11-26 00:00:00'), Timestamp('2021-11-27 00:00:00'), Timestamp('2021-11-28 00:00:00'), Timestamp('2021-12-21 00:00:00'), Timestamp('2021-12-22 00:00:00'),
+                Timestamp('2021-12-23 00:00:00'), Timestamp('2021-12-24 00:00:00'), Timestamp('2021-12-25 00:00:00'), Timestamp('2021-12-26 00:00:00'), Timestamp('2021-12-27 00:00:00'), Timestamp('2021-12-28 00:00:00'),
+                Timestamp('2021-12-29 00:00:00'), Timestamp('2021-12-30 00:00:00'), Timestamp('2021-12-31 00:00:00'),
+                ]
+                    for to_skip in dates_to_skip:
+                        if start <= to_skip < end:
+                            skip_count += 1
+                    datestoskip=[]
+
+
+
+                    for to_skip in dates_to_skip:
+                        if start <= to_skip < end:
+                                datestoskip.append(to_skip)
+                    usage1["DAYSKIP"][i]=len(datestoskip)
+                usage1['TOTAL_DAYS'] = (usage1["TODAY_DATE"]-usage1['FIRST_PRACTICE_DATE'] ).dt.days
+                usage1['TOTAL_DAYS'] = pd.to_numeric(usage1['TOTAL_DAYS'])
+                usage1["DAYS"]=usage1["TOTAL_DAYS"]-usage1['DAYSKIP']
+                usage1['PRACTICE_DAYS'] = pd.to_numeric(usage1['PRACTICE_DAYS'])
+                usage1.loc[(usage1['DAYS'] == 0), 'DAYS'] =1
+                usage1['THRESHOLD'] = usage1['PRACTICE_DAYS']/usage1['DAYS']
+                usage1['THRESHOLD'] = pd.to_numeric(usage1['THRESHOLD'])
+                mean=usage1['THRESHOLD'].mean()
+                std=usage1['THRESHOLD'].std()
+                usage1['NORMALIZED']=(usage1['THRESHOLD']-mean)/std
+                MAX_THRESHOLD=usage1['NORMALIZED'].max()
+                MIN_THRESHOLD=usage1['NORMALIZED'].min()
+                usage1.loc[(usage1['NORMALIZED'] >= 0), 'ACTIVE_USAGE'] = (0.5+((usage1['NORMALIZED']/MAX_THRESHOLD)/2))*100
+                usage1.loc[(usage1['NORMALIZED'] < 0), 'ACTIVE_USAGE'] = ((1-(usage1['NORMALIZED']/MIN_THRESHOLD))/2)*100
+                active_usage=round(usage1["ACTIVE_USAGE"].mean())
+                new= usage1.groupby(["ID","school_name"])['ACTIVE_USAGE'].mean().reset_index()
+                AUESW=new[["ID","school_name","ACTIVE_USAGE"]]
+                AUESW0=pd.merge(AUESW, total_school, on='ID',how='right').fillna(0)
+                AUESW1=AUESW0[["school_name_y","ACTIVE_USAGE"]]
+                AUESW1["NAME"]="ACTIVE USAGE"
+                AUESW1=AUESW1.round()
+                activepusage=usage1[["USER_ID","ACTIVE_USAGE"]]
+                activepusage.loc[(activepusage["ACTIVE_USAGE"] > 100), "ACTIVE_USAGE"] = 100  
+                links1 = AUESW1.rename(columns={'school_name_y' : 'x', 'NAME' : 'y','ACTIVE_USAGE':'heat'}).to_dict('r')
+                ##############################################################################################
+                #################################RECENT_ENGAGMENT############################################
+                collection4 = db.audio_track_master.aggregate([
+                    {"$match":{"USER_ID._id":{
+                                    "$in":user_list
+
+                                }    ,"USER_ID.schoolId":{"$exists":1}}},
+                    {"$match":{
+                        '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                #           {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                        {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                        {'USER_ID.schoolId.NAME':{'$not':{"$regex":'test','$options':'i'}}},  
+                            {'MODIFIED_DATE':{'$lte':myDatetime}}   
+                        ]}},
+                        {'$group':{
+
+                            '_id':{"USER_ID":"$USER_ID._id","SCHOOLiD":'$USER_ID.schoolId._id'},
+                            'Last_Prac_Date':{'$max':'$MODIFIED_DATE'},
+                            'Active_User':{'$addToSet':'$USER_ID._id'},
+                            'Practice_Sessions':{'$sum':1},
+                            'Mindful_Minutes':{'$sum':{'$round':
+                                [{'$divide':[{'$subtract':
+                                    ['$CURSOR_END','$cursorStart']},60]},0]}}  
+                            }},
+                        {'$project':{'_id':0,
+                                    "USER_ID":"$_id.USER_ID",
+                                    "USER_ID":"$_id.USER_ID",
+                            'SCHOOL_ID':'$_id.SCHOOLiD',
+                            'LAST_PRACTICE_DATE':{ "$dateToString": { "format": "%Y-%m-%d", "date":'$Last_Prac_Date'}},
+                            'PRACTICE_COUNT':'$Practice_Sessions',
+                            'MINDFUL_MINUTES':'$Mindful_Minutes'
+                            }
+                            }])
+                dfe= DataFrame(list(collection4)).fillna(0)
+                final1e=pd.merge(df1, dfe, on='USER_ID',how='left').fillna(0)
+                final1e = final1e[final1e.PRACTICE_COUNT != 0]
+                final1e["TODAY_DATE"]=d1
+                final1e['LAST_PRACTICE_DATE'] = pd.to_datetime(final1e['LAST_PRACTICE_DATE'])
+                final1e['CREATED_DATE'] = pd.to_datetime(final1e['CREATED_DATE'])
+                final1e["TODAY_DATE"] = pd.to_datetime(final1e["TODAY_DATE"])
+                final1e['DAYS'] = (final1e["TODAY_DATE"] - final1e['CREATED_DATE']).dt.days
+                final1e['PRACTICE_DAYS'] = (final1e["TODAY_DATE"] - final1e['LAST_PRACTICE_DATE']).dt.days
+                final1e['DAYS'] = pd.to_numeric(final1e['DAYS'])
+                final1e["PRACTICE_COUNT"] = pd.to_numeric(final1e["PRACTICE_COUNT"])
+                engagment=final1e[["_id","USER_ID","ID","school_name","USER_NAME","email_id","district_name","CREATED_DATE","SCHOOL_ID","LAST_PRACTICE_DATE","PRACTICE_COUNT","MINDFUL_MINUTES","TODAY_DATE","DAYS",'PRACTICE_DAYS']]
+                engagment=pd.merge(engagment, activepusage, on='USER_ID',how='left').fillna(0)
+                ################ 30_DAYS #########
+                days_30=engagment[(engagment["DAYS"]<=30)|(engagment["PRACTICE_DAYS"]<=30)]
+                if days_30.empty == True:
+                #     days_30_score=0
+                    days_30["ID"]=0
+                    days_30["school_name"]="NO SCHOOL"
+                    days_30["SCORE"]=0
+                    days_30["POSSIBLE_SCORE"]=0
+                else:
+                    days_30.loc[(days_30['PRACTICE_COUNT'] >=5), 'SCORE'] = 2
+                    days_30.loc[(days_30['PRACTICE_COUNT'] < 5), 'SCORE'] = 1
+                    days_30['POSSIBLE_SCORE']=2
+                #     days_30_score= (sum(days_30['SCORE'])/sum(days_30['POSSIBLE_SCORE']))*100
+                ###################################
+
+                ################ 60_DAYS ##########
+                days_60=engagment[(engagment["DAYS"]<=60) |(engagment["PRACTICE_DAYS"]<=60)]
+                if days_60.empty == True:
+                #     days_60_score=0
+                    days_60["ID"]=0
+                    days_60["school_name"]="NO SCHOOL"
+                    days_60["SCORE"]=0
+                    days_60["POSSIBLE_SCORE"]=0
+                else:
+                    days_60.loc[(days_60['PRACTICE_COUNT'] >=10), 'SCORE'] = 2
+                    days_60.loc[(days_60['PRACTICE_COUNT'] < 10), 'SCORE'] = 1
+                    days_60['POSSIBLE_SCORE']=2
+                #     days_60_score= (sum(days_60['SCORE'])/sum(days_60['POSSIBLE_SCORE']))*100
+                ###################################
+
+                ################ 180_DAYS ##########
+                days_180=engagment[(engagment["DAYS"]<=180)|(engagment["PRACTICE_DAYS"]<=180)]
+                if days_180.empty == True:
+                #     days_180_score=0
+                    days_180["ID"]=0
+                    days_180["school_name"]="NO SCHOOL"
+                    days_180["SCORE"]=0
+                    days_180["POSSIBLE_SCORE"]=0
+                else:
+                    days_180.loc[(days_180['PRACTICE_COUNT'] >=30), 'SCORE'] = 2
+                    days_180.loc[(days_180['PRACTICE_COUNT'] < 30), 'SCORE'] = 1
+                    days_180['POSSIBLE_SCORE']=2
+                #     days_180_score= (sum(days_180['SCORE'])/sum(days_180['POSSIBLE_SCORE']))*100
+                ###################################
+
+                ################ 365_DAYS ##########
+                days_365=engagment[(engagment["DAYS"]<=365)|(engagment["PRACTICE_DAYS"]<=365)]
+                if days_365.empty == True:
+                #     days_365_score=0
+                    days_365["ID"]=0
+                    days_365["school_name"]="NO SCHOOL"
+                    days_365["SCORE"]=0
+                    days_365["POSSIBLE_SCORE"]=0
+                else:
+                    days_365.loc[(days_365['PRACTICE_COUNT'] >= 60), 'SCORE'] = 2
+                    days_365.loc[(days_365['PRACTICE_COUNT'] < 60), 'SCORE'] = 1
+                    days_365['POSSIBLE_SCORE']=2
+                #     days_365_score= (sum(days_365['SCORE'])/sum(days_365['POSSIBLE_SCORE']))*100
+                ###################################
+
+                ################ THIS_SCHOOL_YEAR ##########
+                this_school_year=engagment[(engagment["CREATED_DATE"]>="2021-08-01")|(engagment["LAST_PRACTICE_DATE"]<="2021-08-01")]
+                if this_school_year.empty == True:
+                #     this_school_year_score=0
+                    this_school_year["ID"]=0
+                    this_school_year["school_name"]="NO SCHOOL"
+                    this_school_year["SCORE"]=0
+                    this_school_year["POSSIBLE_SCORE"]=0  
+
+                else:
+                    a_date = "2021-08-01"
+                    this_school_days = round((( pd.to_datetime(d1) -  pd.to_datetime(a_date)).days)/6)
+                    this_school_year.loc[(this_school_year['PRACTICE_COUNT'] >= this_school_days), 'SCORE'] = 2
+                    this_school_year.loc[(this_school_year['PRACTICE_COUNT'] < this_school_days), 'SCORE'] = 1
+                    this_school_year['POSSIBLE_SCORE']=2
+                #     this_school_year_score= (sum(this_school_year['SCORE'])/sum(this_school_year['POSSIBLE_SCORE']))*100
+                ###################################
+
+                ################ LIFETIME ##########
+                lifetime=engagment[engagment["PRACTICE_COUNT"]>0]
+                if lifetime.empty == True:
+                #     lifetime_score=0
+                    lifetime["ID"]=0
+                    lifetime["school_name"]="NO SCHOOL"
+                    lifetime["SCORE"]=0
+                    lifetime["POSSIBLE_SCORE"]=0  
+                else:
+                    this_school_days1 = 1/6
+                    lifetime.loc[(lifetime['ACTIVE_USAGE'] >= this_school_days1), 'SCORE'] = 2
+                    lifetime.loc[(lifetime['ACTIVE_USAGE'] < this_school_days1), 'SCORE'] = 1
+                    lifetime['POSSIBLE_SCORE']=2
+                #     lifetime_score= (sum(this_school_year['SCORE'])/sum(this_school_year['POSSIBLE_SCORE']))*100
+                ###################################
+                a=days_30[["ID","school_name","SCORE","POSSIBLE_SCORE"]]
+                b=days_60[["ID","school_name","SCORE","POSSIBLE_SCORE"]]
+                c=days_180[["ID","school_name","SCORE","POSSIBLE_SCORE"]]
+                d=days_365[["ID","school_name","SCORE","POSSIBLE_SCORE"]]
+                e=this_school_year[["ID","school_name","SCORE","POSSIBLE_SCORE"]]
+                f=lifetime[["ID","school_name","SCORE","POSSIBLE_SCORE"]]
+                engagmentfinaldf=pd.concat([a,b,c,d,e,f], axis=0)
+                engagment_school_final=engagmentfinaldf.groupby(["ID","school_name"]).sum().reset_index()
+                engagment_school_final["RECENT_ENGAGMENT"]= (engagment_school_final['SCORE']/engagment_school_final['POSSIBLE_SCORE'])*100
+                percentage_recent_engagment=round(engagment_school_final["RECENT_ENGAGMENT"]).mean()
+                RESW=engagment_school_final[["ID","school_name","RECENT_ENGAGMENT"]]
+                RESW0=pd.merge(RESW, total_school, on='ID',how='right').fillna(0)
+                RESW1=RESW0[["school_name_y","RECENT_ENGAGMENT"]]
+                RESW1.loc[(RESW1["RECENT_ENGAGMENT"] > 100), "RECENT_ENGAGMENT"] = 100  
+                RESW1["NAME"]="RECENT ENGAGMENT"
+                RESW1=RESW1.round()
+                links2 = RESW1.rename(columns={'school_name_y' : 'x', 'NAME' : 'y','RECENT_ENGAGMENT':'heat'}).to_dict('r')
+                ########################################################################################
+                ###############################Consistent Weekly Practice#######################
+                collection5 = db.audio_track_master
+                query5=[ {"$match":{"USER_ID._id":{
+                                    "$in":user_list
+
+                                }    ,"USER_ID.schoolId":{"$exists":1}}},
+                    {"$match":{
+                        '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                        {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                                    {'MODIFIED_DATE':{'$lte':myDatetime}} 
+                                ]}},
+                #           {'$project':{
+                #               '_id':0,
+                #               'USER_ID':'$USER_ID._id',
+                #               'PRACTICE_DATE':{'$dateToString':{'format':"%Y-%m-%d",'date': "$MODIFIED_DATE"}}
+
+                #               }},
+
+                        {'$group':{
+                            '_id':{
+                                'USER_ID':'$USER_ID._id',
+                                'PRACTICE_DATE':"$MODIFIED_DATE"
+                                }
+                            }},
+                            {'$project':{
+                                '_id':0,
+                                'USER_ID':'$_id.USER_ID',
+                                'PRACTICE_DATE':'$_id.PRACTICE_DATE'
+                                }}]
+                atmaster=list(collection5.aggregate(query5))
+                audio_track_master=pd.DataFrame(atmaster)
+                df1['CREATED_DATE']=pd.to_datetime(df1['CREATED_DATE'])
+                df1['week_since_signup']=np.ceil(round((d2-df1.CREATED_DATE)/np.timedelta64(1,'W'),3))
+                dfw1=audio_track_master.merge(df1,on='USER_ID',how='left')
+                dfw1['PRACTICE_DATE']=pd.to_datetime(dfw1['PRACTICE_DATE'])
+                dfw1['practicing_week']=np.ceil(round((dfw1.PRACTICE_DATE-dfw1.CREATED_DATE)/np.timedelta64(1,'W'),3))
+                dfw1.sort_values(['USER_ID', 'week_since_signup','practicing_week'], ascending=[True, True,True])
+                dfw2=dfw1.sort_values(['USER_ID', 'week_since_signup','practicing_week'], ascending=[True, True,True]).reset_index(drop=True)
+                dfw2.loc[dfw2['PRACTICE_DATE']<dfw2['CREATED_DATE'], 'PRACTICE_DATE'] = dfw2['CREATED_DATE']
+                dfw2.loc[dfw2['PRACTICE_DATE']==dfw2['CREATED_DATE'], 'practicing_week'] = 1
+                dfw3=dfw2.groupby(['USER_ID','practicing_week'])['practicing_week'].count().to_frame(name = 'practice_count').reset_index()
+                prac_count_of_week=dfw3.practice_count.tolist()
+                points=[]
+                for i in range(len(prac_count_of_week)):
+                    if prac_count_of_week[i]==1:
+                        points.append(1)
+                    elif prac_count_of_week[i]==2:
+                        points.append(3)
+                    elif prac_count_of_week[i]==3:
+                        points.append(10)
+                    elif prac_count_of_week[i]==4:        
+                        points.append(15)
+                    else:
+                        points.append(20)
+
+                dfw3['Earned_Points']=points
+                dfw4=dfw3.groupby('USER_ID')['Earned_Points'].sum().to_frame(name = 'Total_Points_Earned').reset_index()
+                dfw5=df1.merge(dfw4,how='left',on='USER_ID').fillna(0)
+                dfw5['CWP_Score']=round((dfw5['Total_Points_Earned']/(dfw5['week_since_signup']*10))*100,0)
+                dfw6=dfw5.groupby('ID')['CWP_Score'].mean().reset_index()
+
+                ##################################################################
+                FESCORE=pd.merge(AUSW, AUESW, on='ID',how='left').fillna(0)
+                FESCORE1=pd.merge(FESCORE, RESW, on='ID',how='left').fillna(0)
+                FESCORE2=pd.merge(FESCORE1, dfw6, on='ID',how='left').fillna(0)
+                FINAL_ESCORE=FESCORE2[["ID","school_name_y","p_of_active_users","ACTIVE_USAGE","RECENT_ENGAGMENT","CWP_Score"]]
+                FINAL_ESCORE0=pd.merge(FINAL_ESCORE, total_school, on='ID',how='right').fillna(0)
+                CWPSW=FINAL_ESCORE0[["school_name","CWP_Score"]]
+                CWPSW.loc[(CWPSW["CWP_Score"] > 100), "CWP_Score"] = 100 
+                CWPSW["NAME"]="CONSTENT WEEKLY PRAC"
+                CWPSW=CWPSW.round()
+                links3 = CWPSW.rename(columns={'school_name' : 'x', 'NAME' : 'y','CWP_Score':'heat'}).to_dict('r')
+                links0.extend(links1)
+                links0.extend(links2)
+                links0.extend(links3)
+                FINAL_ESCORE0['mean'] = FINAL_ESCORE0.mean(axis=1)
+                FINAL_ESCORE_SCHOOL=FINAL_ESCORE0[["school_name","mean"]]
+                FINAL_ESCORE_SCHOOL["NAME"]="SCHOOL ENGAGMENT SCORE"
+                FINAL_ESCORE_SCHOOL=FINAL_ESCORE_SCHOOL.round()
+                links_school = FINAL_ESCORE_SCHOOL.rename(columns={'school_name_y' : 'x', 'NAME' : 'y','mean':'heat'}).to_dict('r')
+                District_Averages= FINAL_ESCORE.mean(axis=0)
+                temp={"District":j,"p_of_Active_Users":round(District_Averages.p_of_active_users),
+                    "Active_Usage":round(District_Averages.ACTIVE_USAGE),"Recent_Engagement":round(District_Averages.RECENT_ENGAGMENT),
+                    "Consistent_Weekly_Practice":round(District_Averages.CWP_Score),"District_Engagement_Score":round(District_Averages.mean()),"Month":d2.strftime("%B")}
+                dict1.append(temp)
+            except:
+                dict2.append(j)
+            dfdd=pd.DataFrame(dict1)
+            dfdd.to_csv("templates/newescore.csv")
+            return jsonify("code run sucsessfully")  
+
+@app.route('/escoreinsites/<disid>')
+def escore_insites(disid):
+    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+        '5f2609807a1c0000950bb475':'Agawam School district',
+        '5f2609807a1c0000950bb481':'Alameda Unified School District',
+        '5f2609807a1c0000950bb47a':'Alpine School District',
+        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
+        '5f2609807a1c0000950bb463':'Austin Independent School District',
+        '5f59e4836451a9089d7d4007':'Belleville School District',
+        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
+        '5f2609807a1c0000950bb46c':'Chico Unified School District',
+        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
+        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
+        '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
+        '5f2609807a1c0000950bb480':'Dell Texas',
+        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
+        '5f895191609e08b76029f641':'Early learning Sarasota',
+        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
+        '5f2609807a1c0000950bb461':'Englewood Public School District',
+        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
+        '5f2609807a1c0000950bb47d':'Flint Public Schools',
+        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
+        '5f2609807a1c0000950bb450':'Goleta District',
+        '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
+        '5f2609807a1c0000950bb476':'Hillsborough County',
+        '5f2609807a1c0000950bb455':'Krum Independent School District',
+        '5f2609807a1c0000950bb47e':'La Joya School District',
+        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
+        '5f2609807a1c0000950bb45a':'LAUSD',
+        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
+        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
+        '5fbcdf0ba84e48a64412a798':'Needham School District',
+        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
+        '5f6994386451a9089d7d4009':'Ogden school district',
+        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
+        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
+        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
+        '5f2609807a1c0000950bb466':'Pinellas County Schools',
+        '5f2609807a1c0000950bb471':'Racine Unified Schools',
+        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
+        '5f2609807a1c0000950bb478':'San Diego Unified School District',
+        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
+        '5f2609807a1c0000950bb477':'Sarasota County',
+        '5f2609807a1c0000950bb473':'Skillman Foundation',
+        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
+        '5f2609807a1c0000950bb468':'Utah Board of Education',
+        '5f698b826451a9089d7d4008':'Wayne Metro',
+        '5f2609807a1c0000950bb45b':'Westfield Public School District',
+        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
+        '5f2609807a1c0000950bb45d':'Youngstown',
+        '5f2609807a1c0000950bb464':'Equity Education',
+        '5f2609807a1c0000950bb469':'LSF -  Head Start',
+        '5f2609807a1c0000950bb46e':'District 25 New York Schools',
+        '5f2609807a1c0000950bb46f':'Paradise Schools',
+        '5f2609807a1c0000950bb479':'Panorama Education',
+        '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
+        '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
+        '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
+        '5fe2e25d4d0ca68d7baf889d':'BGCA',
+        '5fe318b14d0ca68d7baf889e':'BLUE',
+        '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
+        '6017ab3043ca9c39151838d4':'Oswego School District',
+        '60239a84e57dc27613699d57':'Austin Independent School District',
+        '6023a6d79e8e623753fc305c':'Boulder Valley School District',
+        '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
+        '6023a7269e8e623753fc305e':'Fulton County School System',
+        '6023a7499e8e623753fc305f':'Manatee County School District',
+        '6023a76f9e8e623753fc3060':'San Jose Unified School District',
+        '6023a7949e8e623753fc3061':'Wasatch County School District'}
+    district=disdic[disid]
+    df=pd.read_csv("templates/newescore.csv")
+    dfdr=df[df["District"]==district]
+    link =dfdr[["Month","p_of_Active_Users"]].assign(x = 'Active Users').rename(columns={'Month' : 'y','p_of_Active_Users':'heat'}).to_dict('r')
+    link1 =dfdr[["Month","Active_Usage"]].assign(x = 'Active Usage').rename(columns={'Month' : 'y','Active_Usage':'heat'}).to_dict('r')
+    link2 =dfdr[["Month","Recent_Engagement"]].assign(x = 'Recent Engagement').rename(columns={'Month' : 'y','Recent_Engagement':'heat'}).to_dict('r')
+    link3 =dfdr[["Month","Consistent_Weekly_Practice"]].assign(x = 'Consistent Weekly Practice').rename(columns={'Month' : 'y','Consistent_Weekly_Practice':'heat'}).to_dict('r')
+    link4 =dfdr[["Month","District_Engagement_Score"]].assign(x = 'District Engagement Score').rename(columns={'Month' : 'y','District_Engagement_Score':'heat'}).to_dict('r')
+    link.extend(link1)
+    link.extend(link2)
+    link.extend(link3)
+    link.extend(link4)
+    return json.dumps(link)
+
+@app.route('/escorepolar/<disid>')
+def escore_polar(disid):
+    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+        '5f2609807a1c0000950bb475':'Agawam School district',
+        '5f2609807a1c0000950bb481':'Alameda Unified School District',
+        '5f2609807a1c0000950bb47a':'Alpine School District',
+        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
+        '5f2609807a1c0000950bb463':'Austin Independent School District',
+        '5f59e4836451a9089d7d4007':'Belleville School District',
+        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
+        '5f2609807a1c0000950bb46c':'Chico Unified School District',
+        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
+        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
+        '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
+        '5f2609807a1c0000950bb480':'Dell Texas',
+        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
+        '5f895191609e08b76029f641':'Early learning Sarasota',
+        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
+        '5f2609807a1c0000950bb461':'Englewood Public School District',
+        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
+        '5f2609807a1c0000950bb47d':'Flint Public Schools',
+        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
+        '5f2609807a1c0000950bb450':'Goleta District',
+        '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
+        '5f2609807a1c0000950bb476':'Hillsborough County',
+        '5f2609807a1c0000950bb455':'Krum Independent School District',
+        '5f2609807a1c0000950bb47e':'La Joya School District',
+        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
+        '5f2609807a1c0000950bb45a':'LAUSD',
+        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
+        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
+        '5fbcdf0ba84e48a64412a798':'Needham School District',
+        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
+        '5f6994386451a9089d7d4009':'Ogden school district',
+        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
+        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
+        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
+        '5f2609807a1c0000950bb466':'Pinellas County Schools',
+        '5f2609807a1c0000950bb471':'Racine Unified Schools',
+        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
+        '5f2609807a1c0000950bb478':'San Diego Unified School District',
+        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
+        '5f2609807a1c0000950bb477':'Sarasota County',
+        '5f2609807a1c0000950bb473':'Skillman Foundation',
+        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
+        '5f2609807a1c0000950bb468':'Utah Board of Education',
+        '5f698b826451a9089d7d4008':'Wayne Metro',
+        '5f2609807a1c0000950bb45b':'Westfield Public School District',
+        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
+        '5f2609807a1c0000950bb45d':'Youngstown',
+        '5f2609807a1c0000950bb464':'Equity Education',
+        '5f2609807a1c0000950bb469':'LSF -  Head Start',
+        '5f2609807a1c0000950bb46e':'District 25 New York Schools',
+        '5f2609807a1c0000950bb46f':'Paradise Schools',
+        '5f2609807a1c0000950bb479':'Panorama Education',
+        '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
+        '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
+        '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
+        '5fe2e25d4d0ca68d7baf889d':'BGCA',
+        '5fe318b14d0ca68d7baf889e':'BLUE',
+        '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
+        '6017ab3043ca9c39151838d4':'Oswego School District',
+        '60239a84e57dc27613699d57':'Austin Independent School District',
+        '6023a6d79e8e623753fc305c':'Boulder Valley School District',
+        '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
+        '6023a7269e8e623753fc305e':'Fulton County School System',
+        '6023a7499e8e623753fc305f':'Manatee County School District',
+        '6023a76f9e8e623753fc3060':'San Jose Unified School District',
+        '6023a7949e8e623753fc3061':'Wasatch County School District'}
+    district=disdic[disid]
+    df=pd.read_csv("templates/newescore.csv")
+    df1=df[df["District"]==district]
+    month=['January', 'February', 'March', 'April', 'May', 'June', 'July','August', 'September', 'October', 'November', 'December']
+    df2 = pd.DataFrame(month,columns =['Month'])
+    df3= pd.merge(df2, df1, on="Month", how='left').fillna(0)
+    df4=df3[["Month","p_of_Active_Users","Active_Usage","Recent_Engagement","Consistent_Weekly_Practice"]].values.tolist()
+    return json.dumps({"data":df4})
+
+@app.route('/escorestack/<disid>')
+def escore_stack(disid):
+    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+        '5f2609807a1c0000950bb475':'Agawam School district',
+        '5f2609807a1c0000950bb481':'Alameda Unified School District',
+        '5f2609807a1c0000950bb47a':'Alpine School District',
+        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
+        '5f2609807a1c0000950bb463':'Austin Independent School District',
+        '5f59e4836451a9089d7d4007':'Belleville School District',
+        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
+        '5f2609807a1c0000950bb46c':'Chico Unified School District',
+        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
+        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
+        '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
+        '5f2609807a1c0000950bb480':'Dell Texas',
+        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
+        '5f895191609e08b76029f641':'Early learning Sarasota',
+        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
+        '5f2609807a1c0000950bb461':'Englewood Public School District',
+        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
+        '5f2609807a1c0000950bb47d':'Flint Public Schools',
+        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
+        '5f2609807a1c0000950bb450':'Goleta District',
+        '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
+        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
+        '5f2609807a1c0000950bb476':'Hillsborough County',
+        '5f2609807a1c0000950bb455':'Krum Independent School District',
+        '5f2609807a1c0000950bb47e':'La Joya School District',
+        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
+        '5f2609807a1c0000950bb45a':'LAUSD',
+        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
+        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
+        '5fbcdf0ba84e48a64412a798':'Needham School District',
+        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
+        '5f6994386451a9089d7d4009':'Ogden school district',
+        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
+        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
+        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
+        '5f2609807a1c0000950bb466':'Pinellas County Schools',
+        '5f2609807a1c0000950bb471':'Racine Unified Schools',
+        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
+        '5f2609807a1c0000950bb478':'San Diego Unified School District',
+        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
+        '5f2609807a1c0000950bb477':'Sarasota County',
+        '5f2609807a1c0000950bb473':'Skillman Foundation',
+        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
+        '5f2609807a1c0000950bb468':'Utah Board of Education',
+        '5f698b826451a9089d7d4008':'Wayne Metro',
+        '5f2609807a1c0000950bb45b':'Westfield Public School District',
+        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
+        '5f2609807a1c0000950bb45d':'Youngstown',
+        '5f2609807a1c0000950bb464':'Equity Education',
+        '5f2609807a1c0000950bb469':'LSF -  Head Start',
+        '5f2609807a1c0000950bb46e':'District 25 New York Schools',
+        '5f2609807a1c0000950bb46f':'Paradise Schools',
+        '5f2609807a1c0000950bb479':'Panorama Education',
+        '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
+        '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
+        '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
+        '5fe2e25d4d0ca68d7baf889d':'BGCA',
+        '5fe318b14d0ca68d7baf889e':'BLUE',
+        '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
+        '6017ab3043ca9c39151838d4':'Oswego School District',
+        '60239a84e57dc27613699d57':'Austin Independent School District',
+        '6023a6d79e8e623753fc305c':'Boulder Valley School District',
+        '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
+        '6023a7269e8e623753fc305e':'Fulton County School System',
+        '6023a7499e8e623753fc305f':'Manatee County School District',
+        '6023a76f9e8e623753fc3060':'San Jose Unified School District',
+        '6023a7949e8e623753fc3061':'Wasatch County School District'}
+    district=disdic[disid]
+    df=pd.read_csv("templates/newescore.csv")
+    df1=df[df["District"]==district]
+    month=['January', 'February', 'March', 'April', 'May', 'June', 'July','August', 'September', 'October', 'November', 'December']
+    df2 = pd.DataFrame(month,columns =['Month'])
+    df3= pd.merge(df2, df1, on="Month", how='left').fillna(0)
+    active_user=df3["p_of_Active_Users"].tolist()
+    Active_Usage=df3["Active_Usage"].tolist()
+    Recent_Engagement=df3["Recent_Engagement"].tolist()
+    Consistent_Weekly_Practice=df3["Consistent_Weekly_Practice"].tolist()
+    District_Engagement_Score=df3["District_Engagement_Score"].tolist()
+    temp={"active_user":active_user,"Active_Usage":Active_Usage,"Recent_Engagement":Recent_Engagement,"Consistent_Weekly_Practice":Consistent_Weekly_Practice,
+        "District_Engagement_Score":District_Engagement_Score}
+    return json.dumps(temp)
+
 @app.route('/Family_SURVEY')
 def Family_SURVEY():
     if not g.user:

@@ -11,7 +11,7 @@ Highcharts.setOptions({
     var settings = {
         "async": true,
         "crossDomain": true,
-        "url":             "http://127.0.0.1:5000/psignupu",
+        "url":             "/psignupu",
         "method": "GET"
        }
         $.ajax(settings).done(function (response) {
@@ -34,7 +34,8 @@ Highcharts.setOptions({
       labels: {
        style: {
          color: '#000000',
-         }
+         },
+         rotation:270
        },
       categories: dataa.user_type
     },
@@ -76,7 +77,7 @@ Highcharts.setOptions({
                         $('#btnExport').show();
                         
                       
-                     URL = 'http://127.0.0.1:5000/userparents/'+this.category ;
+                     URL = '/userparents/'+this.category ;
           console.log(URL);               
           createDynamic(URL)
                     }

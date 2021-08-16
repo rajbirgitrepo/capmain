@@ -16,7 +16,7 @@ imgd('skillman');
 function imgd(a){
   console.log("iamge", a);
   $("#imgdis").empty();
-  $("#imgdis").append('<img src="http://127.0.0.1:5000/static/images/'+ a +'.png" class="img-responsive" alt="School" style="color: #797979; width: 100%;">');
+  $("#imgdis").append('<img src="/static/images/'+ a +'.png" class="img-responsive" alt="School" style="color: #797979; width: 100%;">');
 }
 function charts(a,b,c){
     $("#container").empty();
@@ -32,7 +32,7 @@ function charts(a,b,c){
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/90daysuserpractising"+"/"+a+"/"+b+"/"+c,
+    url: "/90daysuserpractising"+"/"+a+"/"+b+"/"+c,
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -45,7 +45,7 @@ function charts(a,b,c){
               type: "column"
         },
         title: {
-          text: "User Practice History",
+          text: "User Playback History",
         },
         colors: ['#4F1FAF','#462CEE','#8AE02B','#01A451'],
         xAxis: [
@@ -68,7 +68,7 @@ function charts(a,b,c){
               },
             },
             title: {
-              text: "PRACTICE COUNT",
+              text: "PLAYBACK COUNT",
               style: {
                 color: "#000",
               },
@@ -130,7 +130,7 @@ function charts(a,b,c){
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/monthwisepracticedistrict"+"/"+a+"/"+b+"/"+c,
+    url: "/monthwisepracticedistrict"+"/"+a+"/"+b+"/"+c,
     method: "GET",
     error: function(){
       zerochart();
@@ -147,7 +147,7 @@ function charts(a,b,c){
       
         },
         title: {
-          text: "Practice Trend By Month",
+          text: "Playback Trend By Month",
         },
         colors: ['#4F1FAF','#462CEE','#8AE02B','#01A451'],
         xAxis: [
@@ -166,7 +166,7 @@ function charts(a,b,c){
               },
             },
             title: {
-              text: "PRACTICE COUNT",
+              text: "PLAYBACK COUNT",
               style: {
                 color: "#000",
               },
@@ -234,7 +234,7 @@ function zerochart(){
 
       },
       title: {
-        text: "Practice Trend By Month",
+        text: "Playback Trend By Month",
       },
       xAxis: [
         {
@@ -252,7 +252,7 @@ function zerochart(){
             },
           },
           title: {
-            text: "PRACTICE COUNT",
+            text: "PLAYBACK COUNT",
             style: {
               color: "#000",
             },
@@ -281,7 +281,7 @@ function zerochart(){
       plotOptions: { borderWidth: 2, series: { point: {} } },
       series: [
         {
-          name: "Practice Count",
+          name: "Playback Count",
           showInLegend: false,
           color: "#01a451",
           type: "column",
@@ -297,7 +297,7 @@ function zerochart(){
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/schoolwiseusercounttop20"+"/"+a+"/"+b+"/"+c,
+    url: "/schoolwiseusercounttop20"+"/"+a+"/"+b+"/"+c,
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -397,7 +397,7 @@ function zerochart(){
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/top20userspractisinginfo"+"/"+a+"/"+b+"/"+c,
+    url: "/top20userspractisinginfo"+"/"+a+"/"+b+"/"+c,
     method: "GET",
     error: function(){
       zerochart2();
@@ -413,7 +413,7 @@ function zerochart(){
               type: "column"
         },
         title: {
-          text: "Top 20 User Practice Count",
+          text: "Top 20 User Playback Count",
         },
         colors: ['#4F1FAF','#462CEE','#8AE02B','#01A451'],
         xAxis: [
@@ -438,7 +438,7 @@ function zerochart(){
               },
             },
             title: {
-              text: "PRACTICE COUNT",
+              text: "PLAYBACK COUNT",
               style: {
                 color: "#000",
               },
@@ -467,7 +467,7 @@ function zerochart(){
         plotOptions: { borderWidth: 2, series: { point: {} } },
         series: [
           {
-            name: "Practice Count",
+            name: "Playback Count",
             showInLegend: false,
             color: "#01a451",
             type: "bar",
@@ -486,7 +486,7 @@ function zerochart(){
               type: "column"
         },
         title: {
-          text: "Top 20 User Practice Count",
+          text: "Top 20 User Playback Count",
         },
         xAxis: [
           {
@@ -510,7 +510,7 @@ function zerochart(){
               },
             },
             title: {
-              text: "PRACTICE COUNT",
+              text: "PLAYBACK COUNT",
               style: {
                 color: "#000",
               },
@@ -539,7 +539,7 @@ function zerochart(){
         plotOptions: { borderWidth: 2, series: { point: {} } },
         series: [
           {
-            name: "Practice Count",
+            name: "Playback Count",
             showInLegend: false,
             color: "#01a451",
             type: "bar",
@@ -553,7 +553,7 @@ function zerochart(){
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/schoolwisepracticecounttop20"+"/"+a+"/"+b+"/"+c,
+    url: "/schoolwisepracticecounttop20"+"/"+a+"/"+b+"/"+c,
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -566,7 +566,7 @@ function zerochart(){
               type: "column"
         },
         title: {
-          text: "Top 20 School Practice Count",
+          text: "Top 20 School Playback Count",
         },
         colors: ['#4F1FAF','#462CEE','#8AE02B','#01A451'],
         xAxis: [
@@ -591,7 +591,7 @@ function zerochart(){
               },
             },
             title: {
-              text: "PRACTICE COUNT",
+              text: "PLAYBACK COUNT",
               style: {
                 color: "#000",
               },
@@ -654,7 +654,7 @@ function zerochart(){
   // var settings = {
   //   async: true,
   //   crossDomain: true,
-  //   url: "http://127.0.0.1:5000/schoolwisefamilycount/5f2609807a1c0000950bb46d/2020-01-01/2021-02-17",
+  //   url: "/schoolwisefamilycount/5f2609807a1c0000950bb46d/2020-01-01/2021-02-17",
   //   method: "GET",
   // };
   // $.ajax(settings).done(function (response) {
@@ -752,7 +752,7 @@ function zerochart(){
 //   var settings = {
 //     async: true,
 //     crossDomain: true,
-//     url: "http://127.0.0.1:5000/schoolwisefamilypracticecount/5f2609807a1c0000950bb46d/2020-01-01/2021-02-17",
+//     url: "/schoolwisefamilypracticecount/5f2609807a1c0000950bb46d/2020-01-01/2021-02-17",
 //     method: "GET",
 //   };
 //   $.ajax(settings).done(function (response) {
@@ -765,7 +765,7 @@ function zerochart(){
     // type: "column"
 //         },
 //         title: {
-//           text: "Family Practice Count by School",
+//           text: "Family PLAYBACK COUNT by School",
 //         },
 //         xAxis: [
 //           {
@@ -783,7 +783,7 @@ function zerochart(){
 //               },
 //             },
 //             title: {
-//               text: "FAMILY PRACTICE COUNT",
+//               text: "FAMILY PLAYBACK COUNT",
 //               style: {
 //                 color: "#000",
 //               },
@@ -866,7 +866,7 @@ function createDynamic(url) {
     var data1 = JSON.parse(response);
 
     $("#next").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];
@@ -879,7 +879,7 @@ function createDynamic(url) {
     dataTab();
 
     $("#next1").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];
@@ -952,7 +952,7 @@ function createDynamic2(url) {
     var data1 = JSON.parse(response);
 
     $("#next").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PRACTICE COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>CATEGORY</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>CATEGORY</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];
@@ -965,7 +965,7 @@ function createDynamic2(url) {
     dataTab();
 
     $("#next1").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PRACTICE COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>CATEGORY</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>CATEGORY</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];
@@ -1041,7 +1041,7 @@ function hi(){
         console.log(a);
         var modal2 = document.getElementById("myModal2");
         modal2.style.display = "block";
-        $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+        $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
         var gif = document.getElementById("gif");
       gif.style.display = "block";
         $('#btnExport').show();
@@ -1057,7 +1057,7 @@ function hi(){
       console.log(a);
       var modal2 = document.getElementById("myModal2");
       modal2.style.display = "block";
-      $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='http://127.0.0.1:5000/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+      $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
       var gif = document.getElementById("gif");
     gif.style.display = "block";
       $('#btnExport').show();
@@ -1098,10 +1098,10 @@ function idtype(a){
 $('#heat-map').empty()
 var type = "districtheatmappractice/"+a+"/"+c+"/"+b;
 heatnew(type);
-$('#chartname').text("Overall District Practice Heat Map")
+$('#chartname').text("Overall District Playback Heat Map")
 }
 function cardcount(id,a,b){
-      URL = "http://127.0.0.1:5000/districtcardsinfo/"+id+"/"+a+"/"+b;
+      URL = "/districtcardsinfo/"+id+"/"+a+"/"+b;
       var settings = {
   async: true,
   crossDomain: true,
@@ -1139,7 +1139,7 @@ var min, max, colorScale, temps, tempsArr;
 var colors =  ["#EFF7F2","#DBEEE1","#B3DFC1","#8ECAA0","#76C28D","#65B87E","#52AB6D","#42A862","#329B52","#278845"]
 var months = ["", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
 var table, thead, tbody, rows, headCells, cells;
-var ur = "http://127.0.0.1:5000/"+b;
+var ur = "/"+b;
 console.log(ur);
 var data = d3.json(ur, function(error, data){
 
@@ -1275,21 +1275,21 @@ else if (this.value == '4') {
   let textContent = document.getElementById('disdetails').innerText; 
   var type = "districtheatmappractice/"+textContent+"/"+c+"/"+b;
   heatnew(type);
-  $('#chartname').text("Overall District Practice Heat Map")
+  $('#chartname').text("Overall District Playback Heat Map")
 }
 else if (this.value == '5') {
   $('#heat-map').empty()
   let textContent = document.getElementById('disdetails').innerText; 
   var type = "districtheatmappracteacher/"+textContent+"/"+c+"/"+b;
   heatnew(type);
-  $('#chartname').text("Teacher Wise Practice Heat Map")
+  $('#chartname').text("Teacher Wise Playback Heat Map")
 }
 else if (this.value == '6') {
   $('#heat-map').empty()
   let textContent = document.getElementById('disdetails').innerText; 
   var type = "districtheatmappracfamily/"+textContent+"/"+c+"/"+b;
   heatnew(type);
-  $('#chartname').text("Family Wise Practice Heat Map")
+  $('#chartname').text("Family Wise Playback Heat Map")
 }
 })
 function takeid(){

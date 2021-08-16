@@ -2,7 +2,7 @@ let str = window.location.href;
 console.log(str.substr(str.lastIndexOf("?")+1));
 var urlid = str.substr(str.lastIndexOf("?")+1);
 // if(urlid !== ''){
-//   URL = "http://127.0.0.1:5000/schoolsearchid/"+urlid
+//   URL = "/schoolsearchid/"+urlid
 //   $("#schoolname").empty();
 //   $("#practice").empty();
 //   $("#state").empty();
@@ -181,7 +181,7 @@ function schoolsearch(){
 var a = document.getElementById("searchinputdescription").innerText;
 console.log(a);
 if(a !== '' ){
-URL = "http://127.0.0.1:5000/schoolsearchid/"+a
+URL = "/schoolsearchid/"+a
 $("#schoolname").empty();
 $("#practice").empty();
 $("#state").empty();
@@ -212,7 +212,7 @@ $("#searchinputdescription").empty();
 }
 else{
   var a = document.getElementById("searchinput").value;
-  URL = "http://127.0.0.1:5000/schoolsearchid/"+a
+  URL = "/schoolsearchid/"+a
 $("#schoolname").empty();
 $("#practice").empty();
 $("#state").empty();
@@ -244,8 +244,8 @@ createDynamic(URL);
 
 function schoolsearch2(){
   var a = document.getElementById("searchinput").value;
-  URL = "http://127.0.0.1:5000/journey/"+a;
-  URL2 = "http://127.0.0.1:5000/usersearch/"+a;
+  URL = "/journey/"+a;
+  URL2 = "/usersearch/"+a;
   $("#schoolname").empty();
   $("#practice").empty();
   $("#state").empty();
@@ -322,7 +322,7 @@ $.ajax(settings).done(function (response) {
   $("#city").text("CITY: " + dataa.city);
   $("#admin").text("ADMIN NAME: " + dataa.admin_name);
   $("#plan").text(dataa.plan);
-  var url1 = "http://127.0.0.1:5000/journey/"+dataa.admin_email;
+  var url1 = "/journey/"+dataa.admin_email;
   jou(url1);
   historychart(dataa.admin_email)
 });
@@ -546,7 +546,7 @@ function jou2(url1){
     $("#practicecount").text(practice);
     $("#uniqueusercount").text(datain[0].unique_user);
     $("#months").text(datain[0].month);
-    var url2 = "http://127.0.0.1:5000/schoolsearchid/"+datain[0].schoolid;
+    var url2 = "/schoolsearchid/"+datain[0].schoolid;
     P2(url2);
     console.log(datain[0].city);
     console.log(datain[0].students_impacted);

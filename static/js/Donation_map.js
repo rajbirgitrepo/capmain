@@ -5,7 +5,7 @@ function cose(){
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/donationmap",
+  "url":             "/donationmap",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -47,7 +47,7 @@ var settings = {
                   click: function (e) {
                       {
 // alert(e.point.name); //changes here
-URL = 'http://127.0.0.1:5000/donationmaptable/'+e.point.name;
+URL = '/donationmaptable/'+e.point.name;
                         console.log(URL);
                        
                         $("#next").empty();

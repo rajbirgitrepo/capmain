@@ -1,7 +1,7 @@
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "http://127.0.0.1:5000/racebardis",
+    "url":             "/racebardis",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -39,7 +39,7 @@ $('#container').highcharts({
      
   },
     title: {
-        text: 'District Practice Race Chart'
+        text: 'District Playback Race Chart'
     },
     subtitle: {
         text: ''
@@ -77,7 +77,7 @@ $('#container').highcharts({
   }
 },
         title: {
-            text: 'Practice Count'
+            text: 'Playback Count'
         }
     },
     tooltip: {

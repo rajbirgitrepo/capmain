@@ -6,7 +6,7 @@ imgd('3');
 function imgd(a){
   console.log("iamge", a);
   $("#imgdis").empty();
-  $("#imgdis").append('<img src="http://127.0.0.1:5000/static/images/'+ a +'.png" class="img-responsive" alt="School" style="color: #797979; width: 100%;">');
+  $("#imgdis").append('<img src="/static/images/'+ a +'.png" class="img-responsive" alt="School" style="color: #797979; width: 100%;">');
 }
 
 function modal2(){
@@ -54,7 +54,7 @@ function spyder(a){
 var settings = {
   async: true,
   crossDomain: true,
-  url: 'http://127.0.0.1:5000/mongo/'+a,
+  url: '/mongo/'+a,
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -73,20 +73,20 @@ $.ajax(settings).done(function (response) {
     .id("name")
     .width(1100)
     .height(800)
-    .size("Practice Count")
+    .size("Playback Count")
     .legend(false)
     .edges(links)
     .edges({ arrows: true })
     .focus(dataa.nodes[0].name)
     .font({ family: "Helvetica" })
-    .tooltip(["names", "Practice Count"])
+    .tooltip(["names", "Playback Count"])
     .tooltip({ size: false })
     .attrs(attributes)
     .color("hex")
     .mouse({
       click: function (d, viz) {
         console.log(d.name);
-        URL = "http://127.0.0.1:5000/schoolsearch/" + d.name;
+        URL = "/schoolsearch/" + d.name;
         Table();
         P3();
       },
@@ -326,7 +326,7 @@ function count(a)
 {  var settings = {
     async: true,
     crossDomain: true,
-    url: 'http://127.0.0.1:5000/card/'+a,
+    url: '/card/'+a,
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -352,7 +352,7 @@ function count(a)
 
 
 function cardcount(id){
-  URL = "http://127.0.0.1:5000/districtcardsinfo/" + id;
+  URL = "/districtcardsinfo/" + id;
   var settings = {
 async: true,
 crossDomain: true,

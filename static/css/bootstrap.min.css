@@ -92,7 +92,7 @@ textarea {
 }
 
 html {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     line-height: 1.15;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%
@@ -425,7 +425,7 @@ html {
 
 body {
     margin: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-size: 1rem;
     line-height: 1.45;
     color: #404E67;
@@ -568,7 +568,7 @@ h4,
 h5,
 h6 {
     margin-bottom: .5rem;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-weight: 400;
     line-height: 1.2;
     color: inherit
@@ -751,7 +751,7 @@ code,
 kbd,
 pre,
 samp {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
 }
 
 code {
@@ -5621,7 +5621,7 @@ button.list-group-item-danger.active:hover {
 
 .popover,
 .tooltip {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     font-style: normal;
     letter-spacing: normal;
     line-break: auto;
@@ -6206,7 +6206,7 @@ button.close {
     width: 20px;
     height: 20px;
     margin-top: -10px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     line-height: 1
 }
 

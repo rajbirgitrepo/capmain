@@ -4,7 +4,7 @@ Highcharts.chart('container6', {
       height: '60%'
     },
     title: {
-      text: 'Top 10 Transactions 2020-2021'
+      text: 'Top 10 Transactions 2021-2022'
     },
     tooltip: {
       useHTML: true,
@@ -17,7 +17,7 @@ Highcharts.chart('container6', {
                         //console.log("hellooooo",this);
                           // alert(' value: ' + this.series.name[0]);
                         
-                        URL = 'http://127.0.0.1:5000/toptrans/'+this.name;
+                        URL = '/toptrans/'+this.name;
                         $("#next").empty();
                         $("#btnExport").show();
                         console.log(URL);

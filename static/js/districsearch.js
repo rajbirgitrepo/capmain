@@ -9,7 +9,7 @@ var data = [
   "YOUNGSTOWN IAMPRESENT",
   "FAIRFIELD IAMPRESENT",
 ];
-let URL = "http://127.0.0.1:5000/schoolsearch/";
+let URL = "/schoolsearch/";
 let TOTAL = "1";
 let SIGNUPS = "1";
 let ACTIVE = "1";
@@ -267,10 +267,10 @@ document.querySelector("form").addEventListener("submit", (event) => {
   // result.innerHTML = 'Searched for: ' + input.value
 
   $("#viz").empty();
-  URL = "http://127.0.0.1:5000/fair/" + input.value;
-  TOTAL = "http://127.0.0.1:5000/fair/total/" + input.value;
-  SIGNUPS = "http://127.0.0.1:5000/fair/sign/" + input.value;
-  ACTIVE = "http://127.0.0.1:5000/fair/active/" + input.value;
+  URL = "/fair/" + input.value;
+  TOTAL = "/fair/total/" + input.value;
+  SIGNUPS = "/fair/sign/" + input.value;
+  ACTIVE = "/fair/active/" + input.value;
   var settings = {
     async: true,
     crossDomain: true,
@@ -307,7 +307,7 @@ document.querySelector("form").addEventListener("submit", (event) => {
       .mouse({
         click: function (d, viz) {
           URL =
-            "http://127.0.0.1:5000/fair/" +
+            "/fair/" +
             input.value +
             "/" +
             d.name;
@@ -368,7 +368,7 @@ function createDynamic(url) {
     var data1 = JSON.parse(response);
 
     $("#next").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>PARENTS NAME</th><th>PARENTS EMAIL</th><th>USER TYPE</th><th>STATE</th> <th>COUNTRY</th> <th>SIGN UP DATE</th> <th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>PARENTS NAME</th><th>PARENTS EMAIL</th><th>USER TYPE</th><th>STATE</th> <th>COUNTRY</th> <th>SIGN UP DATE</th> <th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
     );
 
     for (var i = 0; i < data1.data.length; i++) {
@@ -382,7 +382,7 @@ function createDynamic(url) {
     dataTab();
 
     $("#next1").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>PARENTS NAME</th><th>PARENTS EMAIL</th><th>USER TYPE</th><th>STATE</th> <th>COUNTRY</th> <th>SIGN UP DATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>PARENTS NAME</th><th>PARENTS EMAIL</th><th>USER TYPE</th><th>STATE</th> <th>COUNTRY</th> <th>SIGN UP DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
     );
     for (var i = 0; i < data1.data.length; i++) {
       var datain = data1.data[i];

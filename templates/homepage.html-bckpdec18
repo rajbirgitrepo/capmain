@@ -6,7 +6,9 @@ of Simple CSS Waves-->
   <title>CAPXP 2020</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/bootstrap.min.css') }}">
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/journeystyle.css') }}">
@@ -287,7 +289,7 @@ text-align: center;
     <section class="sboxes">
         <div class="container"  >
             <div class="row">
-                <img src="http://127.0.0.1:5000/static/images/capwhite.png" class="logo">
+                <img src="/static/images/capwhite.png" class="logo">
                 <h1 style="margin-left: 350px;margin-top: 60px;">Welcome to CAPXP Analytics</h1>
                 <a href="#popup1">
                 <div class="whatnew">
@@ -305,7 +307,7 @@ text-align: center;
                              <a href="Executive_Dashboard" onclick="idbased()">
                                  <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()">
                                   
-                                     <img src="http://127.0.0.1:5000/static/images/badge.png" class="img-responsive" alt="School">
+                                     <img src="/static/images/badge.png" class="img-responsive" alt="School">
                                      <p class="text-s" style="border-radius: 20px;">
                                          EXECUTIVE SUMMARY
                                      </p>
@@ -317,7 +319,7 @@ text-align: center;
                           <div class="col-md-2 portalBox">
                               <a href="School_Analytics">
                                   <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="gettin()">
-                                      <img src="http://127.0.0.1:5000/static/images/badge.png" class="img-responsive" alt="School" style="color: #797979;">
+                                      <img src="/static/images/badge.png" class="img-responsive" alt="School" style="color: #797979;">
                                       <p class="text-s" style="border-radius: 20px;">
                                          ENGAGEMENT DASHBOARDS
                                       </p>
@@ -330,9 +332,9 @@ text-align: center;
                           <div class="col-md-2 portalBox">
                               <a href="Practice_Analytics">
                                   <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="best()">
-                                      <img src="http://127.0.0.1:5000/static/images/badge.png" style="padding: 26px;" class="img-responsive" alt="School">
+                                      <img src="/static/images/badge.png" style="padding: 26px;" class="img-responsive" alt="School">
                                       <p class="text-s" style="border-radius: 20px;">
-                                         PRACTICE ANALYTICS
+                                         PLAYBACK ANALYTICS
                                       </p>
                                   </div>
                               </a>
@@ -340,7 +342,7 @@ text-align: center;
                           <div class="col-md-2 portalBox">
                              <a href="feedback_Analyitcs">
                                  <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="technical()">
-                                     <img src="http://127.0.0.1:5000/static/images/badge.png" class="img-responsive" alt="School" style="color: #797979;">
+                                     <img src="/static/images/badge.png" class="img-responsive" alt="School" style="color: #797979;">
                                      <p class="text-s" style="border-radius: 20px;">
                                         FEEDBACK AND SURVEY
                                      </p>
@@ -350,7 +352,7 @@ text-align: center;
                           <div class="col-md-2 portalBox">
                              <a href="Upcoming_Renewals">
                                  <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="faq()">
-                                     <img src="http://127.0.0.1:5000/static/images/badge.png" class="img-responsive" alt="School">
+                                     <img src="/static/images/badge.png" class="img-responsive" alt="School">
                                      <p class="text-s" style="border-radius: 20px;"style="border-radius: 20px;">
                                         SUBSCRIPTION DASHBOARDS
                                      </p>
@@ -360,7 +362,7 @@ text-align: center;
                          <div class="col-md-2 portalBox">
                           <a href="Familyapp_school">
                               <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="resources()">
-                                  <img src="http://127.0.0.1:5000/static/images/badge.png" class="img-responsive" alt="School" style="color: #797979;">
+                                  <img src="/static/images/badge.png" class="img-responsive" alt="School" style="color: #797979;">
                                   <p class="text-s" style="border-radius: 20px;">
                                      APP ANALYTICS
                                   </p>

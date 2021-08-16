@@ -1,7 +1,7 @@
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/STREAKS",
+  url: "/STREAKS",
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -70,7 +70,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
   async: true,
   crossDomain: true,
-  url: "http://127.0.0.1:5000/teachers_STREAKS",
+  url: "/teachers_STREAKS",
   method: "GET",
 };
 $.ajax(settings).done(function (response) {
@@ -140,7 +140,7 @@ $.ajax(settings).done(function (response) {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "http://127.0.0.1:5000/power_users_having_streaks",
+  "url":             "/power_users_having_streaks",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
@@ -229,7 +229,7 @@ Highcharts.setOptions({
   var settings = {
       "async": true,
       "crossDomain": true,
-      "url":             "http://127.0.0.1:5000/Business_days_streaks_classroom",
+      "url":             "/Business_days_streaks_classroom",
       "method": "GET"
      }
       $.ajax(settings).done(function (response) {
@@ -263,7 +263,7 @@ $('#container4').highcharts({
   },
   yAxis: {
     title: {
-      text: 'Practices',
+      text: 'Playbacks',
       style: {
        color: '#000000'
        }
@@ -295,7 +295,7 @@ $('#container4').highcharts({
                       $('#btnExport').show();
                       
                     
-                   URL = 'http://127.0.0.1:5000/schoolsummaryprog/'+this.category ;
+                   URL = '/schoolsummaryprog/'+this.category ;
         console.log(URL);               
         createDynamic(URL)
         cardscroll();
@@ -305,7 +305,7 @@ $('#container4').highcharts({
   },
   series: [{
       color: '#01a451',
-    name: 'Practices',
+    name: 'Playbacks',
     data: dataa.Practices_y
   }]
 });
@@ -327,7 +327,7 @@ $('#container4').highcharts({
         var settings = {
             "async": true,
             "crossDomain": true,
-            "url":             "http://127.0.0.1:5000/Business_days_streaks_Family",
+            "url":             "/Business_days_streaks_Family",
             "method": "GET"
            }
             $.ajax(settings).done(function (response) {
@@ -361,7 +361,7 @@ $('#container4').highcharts({
         },
         yAxis: {
           title: {
-            text: 'Practices',
+            text: 'Playbacks',
             style: {
              color: '#000000'
              }
@@ -393,7 +393,7 @@ $('#container4').highcharts({
                             $('#btnExport').show();
                             
                           
-                         URL = 'http://127.0.0.1:5000/schoolsummaryprog/'+this.category ;
+                         URL = '/schoolsummaryprog/'+this.category ;
               console.log(URL);               
               createDynamic(URL)
               cardscroll();
@@ -403,7 +403,7 @@ $('#container4').highcharts({
         },
         series: [{
             color: '#01a451',
-          name: 'Practices',
+          name: 'Playbacks',
           data: dataa.Practices
         }]
       });

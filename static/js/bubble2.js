@@ -2,7 +2,7 @@ var plotly_data = {
   data: [
     {
       hovertemplate:
-        "<b>%{hovertext}</b><br><br>USER ENGAGEMENT=%{x}<br>FAMILY ENGAGEMENT=%{y}<br>OVERALL PRACTICE=%{marker.size}<br>SCHOOL COUNT=%{marker.color}<extra></extra>",
+        "<b>%{hovertext}</b><br><br>USER ENGAGEMENT=%{x}<br>FAMILY ENGAGEMENT=%{y}<br>OVERALL PLAYBACK=%{marker.size}<br>SCHOOL COUNT=%{marker.color}<extra></extra>",
       hovertext: [
         "WICHITA",
         "KRUM",

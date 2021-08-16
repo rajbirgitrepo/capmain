@@ -2,7 +2,7 @@ $(function () {
   var settings = {
     async: true,
     crossDomain: true,
-    url: "http://127.0.0.1:5000/mapinfo",
+    url: "/mapinfo",
     method: "GET",
   };
   $.ajax(settings).done(function (response) {
@@ -39,7 +39,7 @@ $(function () {
                 $("#next").empty();
                 $("#btnExport").show();
 
-                URL = "http://127.0.0.1:5000/map/" + e.point.name;
+                URL = "/map/" + e.point.name;
 
                 console.log(URL);
                 createDynamic(URL);
@@ -72,7 +72,7 @@ function createDynamic(url) {
     console.log(data1.data.length);
 
     $("#next").prepend(
-      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th> <th>SCHOOL PRACTICE COUNT</th> <th>LAST PRACTICE DATE</th> <th>USER COUNT</th></tr ></thead ><tbody>'
+      '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ADMIN NAME</th><th>ADMIN EMAIL</th><th>RENEWAL DATE</th> <th>SCHOOL PLAYBACK COUNT</th> <th>LAST PLAYBACK DATE</th> <th>USER COUNT</th></tr ></thead ><tbody>'
     );
 
     for (var i = 0; i < data1.data.length; i++) {
