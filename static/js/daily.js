@@ -72,7 +72,7 @@ var settings = {
 playbackTrendChart2('playback', 'Playback')
 $("#practice_topChart").val('playback');
 $(document).on('change', '#practice_topChart', function () {
-  $('#container10').empty();
+  // $('#container10').empty();
   console.log(this.value)
   if (this.value == 'practice') {
     document.getElementById('topdistrict').title = 'your new title';
@@ -98,7 +98,7 @@ var settings = {
   
   Highcharts.chart('container10', {
   chart: {
-  type: 'column'
+  type: 'bar'
   },
   colors: [
          
@@ -164,7 +164,7 @@ var settings = {
   playbackTrendChart('playback', 'Playback')
   $("#practice_comparisonChart").val('playback');
   $(document).on('change', '#practice_comparisonChart', function () {
-    $('#container2').empty();
+    // $('#container2').empty();
     console.log(this.value)
     if (this.value == 'practice') {
       document.getElementById('dailyInsight').title = 'your new title';
@@ -475,7 +475,7 @@ Highcharts.chart('container5', {
 
 
             }
-            function createDynamic(url){
+            function createDynamic3(url){
 
               var settings = {
               "async": true,
@@ -490,7 +490,7 @@ Highcharts.chart('container5', {
               $.ajax(settings).done(function (response) {
               var data1=JSON.parse(response);
               
-              $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>RATING</th><th>COMMENT</th><th>AUDIO DAY</th></thead ><tbody>');
+              $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
               for(var i=0;i<data1.data.length;i++){
               
               
@@ -509,7 +509,7 @@ Highcharts.chart('container5', {
               
               
               
-              $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>RATING</th><th>COMMENT</th><th>AUDIO DAY</th></thead ><tbody>');
+              $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
               for(var i=0;i<data1.data.length;i++){
               
               
@@ -546,9 +546,91 @@ Highcharts.chart('container5', {
                       '<td>'+userList[1]+'</td>'+
                       '<td>'+userList[2]+'</td>'+
                       '<td>'+userList[3]+'</td>'+
-                        '<td>'+userList[4]+'</td>'+
-                      '<td style="font-size: 12px;font-weight: 900;">'+userList[5]+'</td>'+
+                        '<td style="font-size: 12px;font-weight: 900;">'+userList[4]+'</td>'+
+                      '<td >'+userList[5]+'</td>'+
                       '<td>'+userList[6]+'</td>'+
+                      '<td>'+userList[7]+'</td>'+
+
+                      '</tr>'
+              
+                    
+              return dynamicDiv;
+              }
+            function createDynamic(url){
+
+              var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": url,
+              "method": "GET",
+              success: function() {
+                var gif = document.getElementById("gif");
+                gif.style.display = "none";
+                },
+              }
+              $.ajax(settings).done(function (response) {
+              var data1=JSON.parse(response);
+              
+              $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
+              for(var i=0;i<data1.data.length;i++){
+              
+              
+              var datain = data1.data[i];
+              var resultDiv = createDynamicDiv(datain);
+              
+              $("#dataTable").append(resultDiv);
+              
+              
+              
+              
+              }
+              //$('#dataTable1').append('</tbody></table>');
+              $('#dataTable').append('</tbody></table>');
+              dataTab();
+              
+              
+              
+              $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
+              for(var i=0;i<data1.data.length;i++){
+              
+              
+              var datain = data1.data[i];
+              
+              var resultDiv = createDynamicDiv(datain);
+              $("#dataTable1").append(resultDiv);
+              }
+              
+              
+              $('#dataTable1').append('</tbody></table>');
+              })
+              }
+              
+              function dataTab()
+              {
+              
+              $("#dataTable").DataTable( {
+                "pageLength": 50
+              } );
+              
+              }
+              
+              
+              function createDynamicDiv(userList){
+              var dynamicDiv = '';
+              console.log(userList)
+              
+              
+              
+              
+              dynamicDiv +=   '<tr >'+
+                        '<td>'+userList[0]+'</td>'+
+                      '<td>'+userList[1]+'</td>'+
+                      '<td>'+userList[2]+'</td>'+
+                      '<td>'+userList[3]+'</td>'+
+                        '<td style="font-size: 12px;font-weight: 900;">'+userList[4]+'</td>'+
+                      '<td >'+userList[5]+'</td>'+
+                      '<td>'+userList[6]+'</td>'+
+                      '<td>'+userList[7]+'</td>'+
 
                       '</tr>'
               
@@ -827,4 +909,17 @@ function cards(URL) {
     $('#btnExport').show();
     var d =  document.getElementById("stardate").innerText;
     createDynamic(URL + '/' + d)
+  }
+
+  function cards3(URL) {
+    $('#next').empty();
+    console.log(URL);
+    var modal2 = document.getElementById("myModal2");
+    modal2.style.display = "block";
+    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    var gif = document.getElementById("gif");
+    gif.style.display = "block";
+    $('#btnExport').show();
+    var d =  document.getElementById("stardate").innerText;
+    createDynamic3(URL + '/' + d)
   }

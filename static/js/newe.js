@@ -196,6 +196,221 @@ function charts(a) {
     );
   });
 
+
+
+
+  var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url":             "/escoreinsites/" + a,
+    "method": "GET"
+   }
+    $.ajax(settings).done(function (response) {
+    var data=JSON.parse(response);
+      var chart = anychart.heatMap(data);
+  // var labels = chart.xAxis().labels();
+  // labels.enabled(false);
+  chart.xAxis().labels().width(80); 
+  chart.xAxis().labels().height(90);
+  chart.tooltip().format("{%y}: {%heat}");    
+      var colorScale = anychart.scales.ordinalColor();
+  colorScale.colors(['#FF8C00','#d6ff6e','#8ae02b', '#00a651']);
+  colorScale.ranges([
+    {from: 0, to: 25},
+    {from: 25, to: 50},
+   {from: 50, to: 75},
+    {from: 75, to: 100}
+  ]);
+                
+  chart.colorScale(colorScale);
+      // Sets colorScale
+  
+  
+      // Sets chart title
+      chart
+        .title()
+        .enabled(true)
+        .text('E-SCORE LAUSD')
+        .padding([0, 0, 20, 0]);
+  
+      // Sets chart labels
+      chart.labels().enabled(true).format('{%Heat}');
+  
+      // Sets Scrolls for Axes
+      chart.xScroller(true);
+      chart.yScroller(true);
+      
+  
+      // Sets starting zoom for Axes
+      chart.xZoom().setToPointsCount(8);
+      chart.yZoom().setToPointsCount(6);
+  
+      // Sets chart and hover chart settings
+      chart.stroke('#fff');
+      chart
+        .hovered()
+        .stroke('2 #fff')
+        .fill('#545f69')
+        .labels({ fontColor: '#fff' });
+  
+      // Sets legend
+      chart
+        .legend()
+        .enabled(true)
+        .align('center')
+        .position('center-bottom')
+        .itemsLayout('horizontal')
+        .padding([20, 0, 0, 0]);
+  
+      // set container id for the chart
+      chart.container('container2');
+      // initiate chart drawing
+      chart.draw();
+  
+  }); 
+  
+  
+  
+  var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url":             "/escorepolar/" + a,
+    "method": "GET"
+   }
+    $.ajax(settings).done(function (response) {
+    var data=JSON.parse(response);
+  anychart.onDocumentReady(function () {
+  palette=['#FF8C00','#d6ff6e','#8ae02b', '#00a651']
+  // create polar chart
+  var chart = anychart.polar();
+  
+  // create data set on our data
+  var chartData = {
+  title: '',
+  header: ['#','Active Users', 'Active Usage', 'Recent Engagement','Consistent Weekly Practice'],
+  rows: data.data
+  };
+  chart.palette(palette);
+  // sort data by X
+  chart
+  .sortPointsByX(true)
+  // set series type
+  .defaultSeriesType('column')
+  // disable y-axis
+  .yAxis(false)
+  // set x-scale
+  .xScale('ordinal');
+  
+  // set chart data
+  chart.data(chartData);
+  
+  // set legend settings
+  chart.legend().enabled(true).position('center-bottom');
+  // set title margin
+  chart.title().margin().bottom(20);
+  
+  // set stack mod
+  chart.yScale().stackMode('value');
+  
+  // set tooltip settings
+  chart.tooltip().valuePostfix('%');
+  
+  // set chart container id
+  chart.container('container3');
+  // initiate chart drawing
+  chart.draw();
+  });
+  });
+  
+  
+  
+  
+  var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url":             "/escorestack/" + a,
+    "method": "GET"
+   }
+    $.ajax(settings).done(function (response) {
+    var data=JSON.parse(response);
+  
+  Highcharts.chart('container4', {
+  chart: {
+  type: 'column'
+  },title:{text:"Escore Monthly"},
+  colors: ['#FF8C00','#d6ff6e','#8ae02b', '#00a651','#006400'],
+  credits:{enabled:false}
+  ,
+  xAxis: {
+  categories: [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+  ],
+  crosshair: true
+  },yAxis: [{
+    lineWidth: 1,
+    title: {
+        text: 'Count'
+    }
+  }, {
+    lineWidth: 1,
+    opposite: true,
+    title: {
+        text: 'District Engagement Score'
+    }
+  }],
+  tooltip: {
+  headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+  pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+  '<td style="padding:0"><b>{point.y}</b></td></tr>',
+  footerFormat: '</table>',
+  shared: true,
+  useHTML: true
+  },
+  plotOptions: {
+  column: {
+  stacking: 'normal',
+  }
+  },
+  series: [{
+  name: 'Active Users',
+  data:  data.active_user,
+  stack: 0
+  }, {
+  name: 'Active Usages',
+  data: data.Active_Usage,
+  stack: 0
+  },{
+  name: 'Recent Engagement',
+  data: data.Recent_Engagement,
+  stack: 0
+  }, {
+  name: 'Consistent Weekly Practice',
+  data: data.Consistent_Weekly_Practice,
+  stack: 0
+  },{
+  type:"line",
+  name: 'District Engagement Score',
+  data: data.District_Engagement_Score,
+  stack: 0,
+  yAxis:1
+  }]
+  });
+  });
+
+
+
+
 }
 
 var modal = document.getElementById("myModal");
@@ -465,214 +680,7 @@ function cardcount(id, a, b) {
 }
 
 
-var settings = {
-  "async": true,
-  "crossDomain": true,
-  "url":             "/escoreinsites/5f59e4836451a9089d7d4007",
-  "method": "GET"
- }
-  $.ajax(settings).done(function (response) {
-  var data=JSON.parse(response);
-    var chart = anychart.heatMap(data);
-// var labels = chart.xAxis().labels();
-// labels.enabled(false);
-chart.xAxis().labels().width(80); 
-chart.xAxis().labels().height(90);
-chart.tooltip().format("{%y}: {%heat}");    
-    var colorScale = anychart.scales.ordinalColor();
-colorScale.colors(['#FF8C00','#d6ff6e','#8ae02b', '#00a651']);
-colorScale.ranges([
-  {from: 0, to: 25},
-  {from: 25, to: 50},
- {from: 50, to: 75},
-  {from: 75, to: 100}
-]);
-              
-chart.colorScale(colorScale);
-    // Sets colorScale
 
-
-    // Sets chart title
-    chart
-      .title()
-      .enabled(true)
-      .text('E-SCORE LAUSD')
-      .padding([0, 0, 20, 0]);
-
-    // Sets chart labels
-    chart.labels().enabled(true).format('{%Heat}');
-
-    // Sets Scrolls for Axes
-    chart.xScroller(true);
-    chart.yScroller(true);
-    
-
-    // Sets starting zoom for Axes
-    chart.xZoom().setToPointsCount(8);
-    chart.yZoom().setToPointsCount(6);
-
-    // Sets chart and hover chart settings
-    chart.stroke('#fff');
-    chart
-      .hovered()
-      .stroke('2 #fff')
-      .fill('#545f69')
-      .labels({ fontColor: '#fff' });
-
-    // Sets legend
-    chart
-      .legend()
-      .enabled(true)
-      .align('center')
-      .position('center-bottom')
-      .itemsLayout('horizontal')
-      .padding([20, 0, 0, 0]);
-
-    // set container id for the chart
-    chart.container('container2');
-    // initiate chart drawing
-    chart.draw();
-
-}); 
-
-
-
-var settings = {
-  "async": true,
-  "crossDomain": true,
-  "url":             "/escorepolar/5f59e4836451a9089d7d4007",
-  "method": "GET"
- }
-  $.ajax(settings).done(function (response) {
-  var data=JSON.parse(response);
-anychart.onDocumentReady(function () {
-palette=['#FF8C00','#d6ff6e','#8ae02b', '#00a651']
-// create polar chart
-var chart = anychart.polar();
-
-// create data set on our data
-var chartData = {
-title: '',
-header: ['#','Active Users', 'Active Usage', 'Recent Engagement','Consistent Weekly Practice'],
-rows: data.data
-};
-chart.palette(palette);
-// sort data by X
-chart
-.sortPointsByX(true)
-// set series type
-.defaultSeriesType('column')
-// disable y-axis
-.yAxis(false)
-// set x-scale
-.xScale('ordinal');
-
-// set chart data
-chart.data(chartData);
-
-// set legend settings
-chart.legend().enabled(true).position('center-bottom');
-// set title margin
-chart.title().margin().bottom(20);
-
-// set stack mod
-chart.yScale().stackMode('value');
-
-// set tooltip settings
-chart.tooltip().valuePostfix('%');
-
-// set chart container id
-chart.container('container3');
-// initiate chart drawing
-chart.draw();
-});
-});
-
-
-
-
-var settings = {
-  "async": true,
-  "crossDomain": true,
-  "url":             "/escorestack/5f59e4836451a9089d7d4007",
-  "method": "GET"
- }
-  $.ajax(settings).done(function (response) {
-  var data=JSON.parse(response);
-
-Highcharts.chart('container4', {
-chart: {
-type: 'column'
-},title:{text:"Escore Monthly"},
-colors: ['#FF8C00','#d6ff6e','#8ae02b', '#00a651','#006400'],
-credits:{enabled:false}
-,
-xAxis: {
-categories: [
-'Jan',
-'Feb',
-'Mar',
-'Apr',
-'May',
-'Jun',
-'Jul',
-'Aug',
-'Sep',
-'Oct',
-'Nov',
-'Dec'
-],
-crosshair: true
-},yAxis: [{
-  lineWidth: 1,
-  title: {
-      text: 'Count'
-  }
-}, {
-  lineWidth: 1,
-  opposite: true,
-  title: {
-      text: 'District Engagement Score'
-  }
-}],
-tooltip: {
-headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-'<td style="padding:0"><b>{point.y}</b></td></tr>',
-footerFormat: '</table>',
-shared: true,
-useHTML: true
-},
-plotOptions: {
-column: {
-stacking: 'normal',
-}
-},
-series: [{
-name: 'Active Users',
-data:  data.active_user,
-stack: 0
-}, {
-name: 'Active Usages',
-data: data.Active_Usage,
-stack: 0
-},{
-name: 'Recent Engagement',
-data: data.Recent_Engagement,
-stack: 0
-}, {
-name: 'Consistent Weekly Practice',
-data: data.Consistent_Weekly_Practice,
-stack: 0
-},{
-type:"line",
-name: 'District Engagement Score',
-data: data.District_Engagement_Score,
-stack: 0,
-yAxis:1
-}]
-});
-});
 
 
 
