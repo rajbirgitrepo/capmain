@@ -26376,7 +26376,9 @@ def PAY_ME_LATERCSY():
             {"USER_ID.EMAIL_ID" :{"$not": {'$regex' : 'test', '$options' : 'i'}}},
             {"USER_ID.EMAIL_ID" :{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
             {"USER_ID.USER_NAME" :{"$not": {'$regex' : 'test', '$options' : 'i'}}},
-                {"USER_ID.USER_NAME" :{"$not": {'$regex' : '1gen', '$options' : 'i'}}}
+                {"USER_ID.USER_NAME" :{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                {'SUBSCRIPTION_DATE':{'$gte':LSY_Date(),'$lt':csy_first_date()}},
+
             ]}},
         {"$project":{"_id":0,"EMAIL_ID":"$USER_ID.EMAIL_ID","NAME":"$USER_ID.USER_NAME",
             "SUBSCRIPTION_DATE": { "$dateToString": { "format": "%Y-%m-%d", "date": "$SUBSCRIPTION_DATE" } },
@@ -60333,7 +60335,8 @@ def avg_audio_completed_____(datestr):
     # client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@52.41.36.115:27017/')
 
 @app.route('/ratingcardsdaily_card/<datestr>')
-def dailyfeedback_ratings___(datestr):
+def dailyfeedback_ratingssss___(datestr):
+    datestr='2021-08-16'
     import datetime
     import math
     username = urllib.parse.quote_plus('admin')
@@ -60342,19 +60345,19 @@ def dailyfeedback_ratings___(datestr):
     db=client.compass
     collection2=db.audio_feedback
     mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
-#     yester= pd.to_datetime(mydatetime) - timedelta(days=1)
-#     tod= mydatetime
+    #     yester= pd.to_datetime(mydatetime) - timedelta(days=1)
+    #     tod= mydatetime
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
 
-    
+
     start_15day=tod- timedelta(days=8)
     startend= start_15day+timedelta(days=1)
-#     print(start_15day)
-#     print(startend)
+    #     print(start_15day)
+    #     print(startend)
 
 
-#TEACHERS COMMENT PER FEEDBACK LAST WEEK
+    #TEACHERS COMMENT PER FEEDBACK LAST WEEK
     query1=[
     {"$match":{'$and':[
      {'USER.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
@@ -60365,7 +60368,7 @@ def dailyfeedback_ratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':yester, '$lt':tod}}    ,    
-#         {'COMMENT':{'$nin':['',' ',None]}},
+    #         {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
 
     {'$group':{'_id':'null', 'rating':{'$sum':1}
@@ -60378,11 +60381,11 @@ def dailyfeedback_ratings___(datestr):
         comments_per_feedback_teacher=commentsonfeedback[['rating']]
     else:
         comments_per_feedback_teacher=pd.DataFrame({'rating':[0]})
-    
-    
-#PARENTS COMMENT PER FEEDBACK LAST WEEK
+
+
+    #PARENTS COMMENT PER FEEDBACK LAST WEEK
     querya=[
-   {"$match":{'$and':[
+    {"$match":{'$and':[
      {'USER.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
     {"USER.IS_DISABLED":{"$ne":"Y"}},
      { "USER.IS_BLOCKED":{"$ne":"Y"}},
@@ -60391,9 +60394,9 @@ def dailyfeedback_ratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':yester, '$lt':tod}}    ,    
-#        {'COMMENT':{'$nin':['',' ',None]}},
+    #        {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
-        
+
 
     {'$group':{'_id':'null', 'rating':{'$sum':1}
     }}
@@ -60405,12 +60408,12 @@ def dailyfeedback_ratings___(datestr):
         comments_per_feedback_parents=commentsonfeedback2[['rating']]
     else:
         comments_per_feedback_parents=pd.DataFrame({'rating':[0]})
-    
 
-    
-#TEACHERS COMMENT PER FEEDBACK before LAST WEEK
+
+
+    #TEACHERS COMMENT PER FEEDBACK before LAST WEEK
     query4=[
-   {"$match":{'$and':[
+    {"$match":{'$and':[
      {'USER.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
     {"USER.IS_DISABLED":{"$ne":"Y"}},
      { "USER.IS_BLOCKED":{"$ne":"Y"}},
@@ -60419,9 +60422,9 @@ def dailyfeedback_ratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':start_15day, '$lt':startend}}    ,   
-#        {'COMMENT':{'$nin':['',' ',None]}},
+    #        {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
-   
+
     {'$group':{'_id':'null', 'rating':{'$sum':1}
     }}
     ]
@@ -60432,10 +60435,10 @@ def dailyfeedback_ratings___(datestr):
         comments_per_feedback_before_last_week_teachers=commentsonfeedback11[['rating']]
     else:
         comments_per_feedback_before_last_week_teachers=pd.DataFrame({'rating':[0]})
-    
 
-    
-#  PARENTS COMMENT PER FEEDBACK before LAST WEEK
+
+
+    #  PARENTS COMMENT PER FEEDBACK before LAST WEEK
     queryB=[
     {"$match":{'$and':[
      {'USER.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
@@ -60446,7 +60449,7 @@ def dailyfeedback_ratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':start_15day, '$lt':startend}},    
-#         {'COMMENT':{'$nin':['',' ',None]}},
+    #         {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
 
 
@@ -60460,10 +60463,10 @@ def dailyfeedback_ratings___(datestr):
         comments_per_feedback_before_last_week_parents=commentsonfeedback20[['rating']]
     else:
         comments_per_feedback_before_last_week_parents=pd.DataFrame({'rating':[0]})
-    
 
-    
-# AVERAGE FEEDBACK RATING LAST WEEK
+
+
+    # AVERAGE FEEDBACK RATING LAST WEEK
     query6=[
     {"$match":{'$and':[
     {"USER.IS_DISABLED":{"$ne":"Y"}},
@@ -60473,7 +60476,7 @@ def dailyfeedback_ratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':yester, '$lt':tod}}    ,    
-#         {'COMMENT':{'$nin':['',' ',None]}},
+    #         {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
     {'$project':{'_id':0, 'RATING':'$RATING'
     }}
@@ -60488,10 +60491,10 @@ def dailyfeedback_ratings___(datestr):
         avg_ratings_lastweek=pd.DataFrame({'RATING':[0]})
         avg_ratings_last_week=pd.DataFrame({'avg_ratings_lastweek':[0]})
 
-    
 
-    
-   
+
+
+
     query60=[
     {"$match":{'$and':[
     {"USER.IS_DISABLED":{"$ne":"Y"}},
@@ -60501,10 +60504,10 @@ def dailyfeedback_ratings___(datestr):
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
        {'MODIFIED_DATE':{'$gte':start_15day, '$lt':startend}}    ,   
-#         {'COMMENT':{'$nin':['',' ',None]}},
-        
+    #         {'COMMENT':{'$nin':['',' ',None]}},
+
     {'RATING':{'$ne':0}}]}},
-   
+
     {'$project':{'_id':0, 'RATING':'$RATING'
     }}
     ]
@@ -60517,136 +60520,166 @@ def dailyfeedback_ratings___(datestr):
     else:
         avg_ratings_before_lastweek=pd.DataFrame({'RATING':[0]})
         avg_ratings_beforee_last_week=pd.DataFrame({'avg_ratings_before_lastweek':[0]})
-    
 
-    
+
+
     TEACHER_Comment_per_feedbackchange=[]
     teacher_PERCENTAGE_change=[]
     if comments_per_feedback_before_last_week_teachers['rating'].iloc[0]> comments_per_feedback_teacher['rating'].iloc[0]:
         xx=comments_per_feedback_before_last_week_teachers['rating'].iloc[0]-comments_per_feedback_teacher['rating'].iloc[0]
-        yy= xx/comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
-        if math.isnan(yy):
-            yy=0
+        if comments_per_feedback_before_last_week_teachers['rating'].iloc[0]==0:
+            yy= round(xx/1*100,2)
         else:
-            yy=yy
-        zz= round(yy*100,2)
+            yy=xx/comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
+
+
+    #     if math.isnan(yy):
+    #         yy=0
+    #     else:
+    #         yy=yy
+    #     zz= round(yy*100,2)
         TEACHER_Comment_per_feedbackchange.append('-1')
-        teacher_PERCENTAGE_change.append(zz)
+        teacher_PERCENTAGE_change.append(yy)
 
     elif comments_per_feedback_teacher['rating'].iloc[0] == comments_per_feedback_before_last_week_teachers['rating'].iloc[0]:
         xx=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
         yy= xx/comments_per_feedback_teacher['rating'].iloc[0]
-        if math.isnan(yy):
-            yy=0
-        else:
-            yy=yy
-        zz= round(yy*100,2)
+    #     if math.isnan(yy):
+    #         yy=0
+    #     else:
+    #         yy=yy
+    #     zz= round(yy*100,2)
         TEACHER_Comment_per_feedbackchange.append('0')
-        teacher_PERCENTAGE_change.append(zz)
+        teacher_PERCENTAGE_change.append(yy)
 
     else:
-        xx=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
-        yy= xx/comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
-        if math.isnan(yy):
-            yy=0
+        pp=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
+        if comments_per_feedback_before_last_week_teachers['rating'].iloc[0]==0:
+            qq= round(pp/1*100,2)
         else:
-            yy=yy
-        zz= round(yy*100,2)
+            qq= pp/comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
+
+
+    #     if math.isnan(qq):
+    #         qq=0
+    #     else:
+    #         qq=qq 
+    #     rr=round(qq*100,2)
         TEACHER_Comment_per_feedbackchange.append('1')
-        teacher_PERCENTAGE_change.append(zz)
+        teacher_PERCENTAGE_change.append(qq)
 
 
     PARENT_Comment_per_feedbackchange=[]
     parent_PERCENTAGE_change=[]
     if comments_per_feedback_before_last_week_parents['rating'].iloc[0]> comments_per_feedback_parents['rating'].iloc[0]:
         pp=comments_per_feedback_before_last_week_parents['rating'].iloc[0]- comments_per_feedback_parents['rating'].iloc[0]
-        qq= pp/comments_per_feedback_before_last_week_parents['rating'].iloc[0]
-        if math.isnan(qq):
-            qq=0
+        if comments_per_feedback_before_last_week_parents['rating'].iloc[0]==0:
+            qq=round(pp/1*100,2)
         else:
-            qq=qq 
-        rr=round(qq*100,2)
+            qq= pp/comments_per_feedback_before_last_week_parents['rating'].iloc[0]
+    #     if math.isnan(qq):
+    #         qq=0
+    #     else:
+    #         qq=qq 
+    #     rr=round(qq*100,2)
         PARENT_Comment_per_feedbackchange.append('-1')
-        parent_PERCENTAGE_change.append(rr)
+        parent_PERCENTAGE_change.append(qq)
 
     elif comments_per_feedback_parents['rating'].iloc[0] == comments_per_feedback_before_last_week_parents['rating'].iloc[0]:
         pp=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
         qq= pp/comments_per_feedback_parents['rating'].iloc[0]
-        if math.isnan(qq):
-            qq=0
-        else:
-            qq=qq 
-        rr=round(qq*100,2)
+    #     if math.isnan(qq):
+    #         qq=0
+    #     else:
+    #         qq=qq 
+    #     rr=round(qq*100,2)
         PARENT_Comment_per_feedbackchange.append('0')
-        parent_PERCENTAGE_change.append(rr)
+        parent_PERCENTAGE_change.append(qq)
 
     else:
         pp=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
-        qq= pp/comments_per_feedback_before_last_week_parents['rating'].iloc[0]
-        if math.isnan(qq):
-            qq=0
+        if comments_per_feedback_before_last_week_parents['rating'].iloc[0]==0:
+            qq= round(pp/1*100,2)
         else:
-            qq=qq 
-        rr=round(qq*100,2)
+            qq= pp/comments_per_feedback_before_last_week_parents['rating'].iloc[0]
+
+
+    #     if math.isnan(qq):
+    #         qq=0
+    #     else:
+    #         qq=qq 
+    #     rr=round(qq*100,2)
         PARENT_Comment_per_feedbackchange.append('1')
-        parent_PERCENTAGE_change.append(rr)
+        parent_PERCENTAGE_change.append(qq)
 
 
     Average_FEEDBACK_Rating_change=[]
     Average_feedback_PERCENTAGE=[]
     if avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]> avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]:
         aa=avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]- avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
-        bb= aa/avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
-        if math.isnan(bb):
-            bb=0
+        if avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]==0:
+            bb= round(aa/1*100,2)
         else:
-            bb=bb            
-        cc= round(bb*100,2)
+            bb= aa/avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
+
+
+    #     if math.isnan(bb):
+    #         bb=0
+    #     else:
+    #         bb=bb            
+    #     cc= round(bb*100,2)
         Average_FEEDBACK_Rating_change.append('-1')
-        Average_feedback_PERCENTAGE.append(cc)
+        Average_feedback_PERCENTAGE.append(bb)
 
 
     elif avg_ratings_last_week['avg_ratings_lastweek'].iloc[0] == avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]:
         aa=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
         bb= aa/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
-        if math.isnan(bb):
-            bb=0
-        else:
-            bb=bb            
-        cc= round(bb*100,2)
+    #     if math.isnan(bb):
+    #         bb=0
+    #     else:
+    #         bb=bb            
+    #     cc= round(bb*100,2)
         Average_FEEDBACK_Rating_change.append('0')
-        Average_feedback_PERCENTAGE.append(cc)
+        Average_feedback_PERCENTAGE.append(bb)
 
     else:
         aa=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
-        bb= aa/avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
-        if math.isnan(bb):
-            bb=0
+        if avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]==0:
+            bb= round(aa/1*100,2)
         else:
-            bb=bb            
-        cc= round(bb*100,2)
+            bb= aa/avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
+
+
+    #     if math.isnan(bb):
+    #         bb=0
+    #     else:
+    #         bb=bb            
+    #     cc= round(bb*100,2)
+
         Average_FEEDBACK_Rating_change.append('1')
-        Average_feedback_PERCENTAGE.append(cc)
+        Average_feedback_PERCENTAGE.append(bb)
 
 
 
     data_final=pd.DataFrame({'TEACHER_FEEDBACK_RATING_LAST_WEEK':comments_per_feedback_teacher['rating'].tolist(),
                              'TEACHER_FEEDBACK_RATING_BEFORE_LAST_WEEK':comments_per_feedback_before_last_week_teachers['rating'].tolist(),
-                             
+
     'PARENT_FEEDBACK_RATING_LAST_WEEK':comments_per_feedback_parents['rating'].tolist(),
     'PARENT_FEEDBACK_RATING_BEFORE_LAST_WEEK':comments_per_feedback_before_last_week_parents['rating'].tolist(),
-                                 
-     'Average_Rating_lastweek':avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].tolist(),
+
+     'avg_ratings_before_lastweek':avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].tolist(),
      'Average_Rating_lastweek':avg_ratings_last_week['avg_ratings_lastweek'].tolist(),
-                             
+
       'TEACHER_Comment_per_feedbackchange':TEACHER_Comment_per_feedbackchange,
        'teacher_PERCENTAGE_change':teacher_PERCENTAGE_change,                      
       'PARENT_Comment_per_feedbackchange':PARENT_Comment_per_feedbackchange,
        'parent_PERCENTAGE_change':parent_PERCENTAGE_change,                      
       'Average_FEEDBACK_Rating_change':Average_FEEDBACK_Rating_change,
-       'Average_feedback_PERCENTAGE':Average_feedback_PERCENTAGE                      
+       'Average_feedback_PERCENTAGE':Average_feedback_PERCENTAGE                   
                                 })   
-    
+
+
     temp={}
     for j in range(len(data_final.columns)):
         key = data_final.columns[j]
@@ -63481,10 +63514,8 @@ def progpractice____DAY____(datestr,charttype):
     if charttype=='Practice':
     #     threshold=int(threshold)/100
         threshold=.5
-        
         threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
-    
-
+        
         qr111=[
         {'$match':{'USER_ID.schoolId':{'$exists':1}}},
         {"$match":
@@ -63508,8 +63539,7 @@ def progpractice____DAY____(datestr,charttype):
             {"$group":{'_id':'$PROGRAM_NAME', 'practicecount':{'$sum':1}}},
              {"$project":{'_id':1, 'teacherspracticecount':'$practicecount'}},
             ]    
-
-
+        
         qr222=   [
 
         {"$match":
@@ -63586,17 +63616,42 @@ def progpractice____DAY____(datestr,charttype):
              {"$project":{'_id':1, 'parentspracticecount':'$practicecount'}},
             ]     
 
-
         list1= list(collection1.aggregate(qr111))
         df_atm1= DataFrame(list1)
+        
+        _id=['Exploring Me Pre-k-Kindergarten', 'Sound Practices', 'Exploring Potential Middle', 
+             'Exploring Originality Elementary', 'Exploring Relevance High', 'Wellness Series']
+        if df_atm1.empty:
+            df_atm1 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','teacherspracticecount'])
+            df_atm1['_id']=_id
+            df_atm1 = df_atm1.fillna(0)
+
         list2= list(collection1.aggregate(qr222))
         df_atm2= DataFrame(list2)
+
+        if df_atm2.empty:
+            df_atm2 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','parentspracticecount'])
+            df_atm2['_id']=_id
+            df_atm2 = df_atm2.fillna(0)
+
         join= pd.merge(df_atm1,df_atm2, how='left', on='_id')
 
         list3= list(collection1.aggregate(qr33))
         df_atm3= DataFrame(list3)
+
+        if df_atm3.empty:
+            df_atm3 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','parentspracticecount'])
+            df_atm3['_id']=_id
+            df_atm3 = df_atm3.fillna(0)
+
         list4= list(collection1.aggregate(qr44))
         df_atm4= DataFrame(list4)
+
+        if df_atm4.empty:
+            df_atm4 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','teacherspracticecount'])
+            df_atm4['_id']=_id
+            df_atm4 = df_atm4.fillna(0)
+        
         join_lastweek24hrs= pd.merge(df_atm3,df_atm4, how='left', on='_id')
 
         join.rename(columns = { '_id': 'progname'}, inplace = True)
@@ -63720,14 +63775,40 @@ def progpractice____DAY____(datestr,charttype):
 
     list1= list(collection1.aggregate(qr111))
     df_atm1= DataFrame(list1)
+    
+    _id=['Exploring Me Pre-k-Kindergarten', 'Sound Practices', 'Exploring Potential Middle', 
+         'Exploring Originality Elementary', 'Exploring Relevance High', 'Wellness Series']
+    if df_atm1.empty:
+        df_atm1 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','teacherspracticecount'])
+        df_atm1['_id']=_id
+        df_atm1 = df_atm1.fillna(0)
+
     list2= list(collection1.aggregate(qr222))
     df_atm2= DataFrame(list2)
-    join= pd.merge(df_atm1,df_atm2, how='left', on='_id')
     
+    if df_atm2.empty:
+        df_atm2 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','parentspracticecount'])
+        df_atm2['_id']=_id
+        df_atm2 = df_atm2.fillna(0)
+
+    join= pd.merge(df_atm1,df_atm2, how='left', on='_id')
+
     list3= list(collection1.aggregate(qr33))
     df_atm3= DataFrame(list3)
+    
+    if df_atm3.empty:
+        df_atm3 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','parentspracticecount'])
+        df_atm3['_id']=_id
+        df_atm3 = df_atm3.fillna(0)
+
     list4= list(collection1.aggregate(qr44))
     df_atm4= DataFrame(list4)
+    
+    if df_atm4.empty:
+        df_atm4 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','teacherspracticecount'])
+        df_atm4['_id']=_id
+        df_atm4 = df_atm4.fillna(0)
+
     join_lastweek24hrs= pd.merge(df_atm3,df_atm4, how='left', on='_id')
     
     join.rename(columns = { '_id': 'progname'}, inplace = True)
@@ -64296,9 +64377,8 @@ def PARENTS_practice_table_DAY___(datestr):
         temp={'data':table.values.tolist()}
         return json.dumps(temp)
 
-# Below api has been updated on 27 may 2021 by Anil 
 @app.route('/parents_signup_table_weekly/<datestr>')
-def signupparentweekLY__(datestr):
+def signupparentweekLY_____(datestr):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -64316,18 +64396,20 @@ def signupparentweekLY__(datestr):
     start_15day= start-timedelta(days=8)+timedelta(days=1)
     #     print(start_15day)
 
+    
 
     qr1=[{"$match":{
-    '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    '$and':[
+        {'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
     {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
     {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},        
     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-    #     {'MODIFIED_DATE':{'$gte':yester , '$lt':tod
-    #     }},
     ]}},
+         
+         
     {'$group':{'_id':'$USER_ID._id', 'PRACTICE_COUNT':{'$sum':1},
      'LAST_PRACTICE_DATE':{'$max':'$MODIFIED_DATE'}, 
      'PROGRAM_NAME':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'},
@@ -64338,8 +64420,8 @@ def signupparentweekLY__(datestr):
 
     list1= list(collection1.aggregate(qr1))
     df_atm= DataFrame(list1)
-
-
+      
+               
     qr2=[{"$match":{
     '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
     {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -64378,7 +64460,7 @@ def signupparentweekLY__(datestr):
     audio2['CREATED_DATE']=audio2['CREATED_DATE'].dt.strftime('%d %b %Y')
     audio2['LAST_PRACTICE_DATE']= audio2['LAST_PRACTICE_DATE'].dt.strftime('%d %b %Y')
     audio2['LAST_PRACTICE_DATE'].fillna('NO PRACTICE', inplace=True)
-    audio2=audio2[audio2['EMAIL']!='']
+#     audio2=audio2[audio2['EMAIL']]
     
     temp={'data':audio2.values.tolist()}
     return json.dumps(temp)
@@ -67624,7 +67706,7 @@ def old_escores():
             except:
                 dict2.append(j)
             dfdd=pd.DataFrame(dict1)
-            dfdd.to_csv("templates/newescore.csv")
+            # dfdd.to_csv("templates/newescore.csv")
             return jsonify("code run sucsessfully")  
 
 @app.route('/escoreinsites/<disid>')
@@ -67698,7 +67780,10 @@ def escore_insites(disid):
         '6023a76f9e8e623753fc3060':'San Jose Unified School District',
         '6023a7949e8e623753fc3061':'Wasatch County School District'}
     district=disdic[disid]
-    df=pd.read_csv("templates/newescore.csv")
+    googleSheetId = '1gs1CqiYPAMhHWbelBU7o3GRAk7o3QeqYY-OJz_MUYZw'
+    worksheetName = 'newescore'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    df=pd.read_csv(URL)
     dfdr=df[df["District"]==district]
     link =dfdr[["Month","p_of_Active_Users"]].assign(x = 'Active Users').rename(columns={'Month' : 'y','p_of_Active_Users':'heat'}).to_dict('r')
     link1 =dfdr[["Month","Active_Usage"]].assign(x = 'Active Usage').rename(columns={'Month' : 'y','Active_Usage':'heat'}).to_dict('r')
@@ -67782,7 +67867,10 @@ def escore_polar(disid):
         '6023a76f9e8e623753fc3060':'San Jose Unified School District',
         '6023a7949e8e623753fc3061':'Wasatch County School District'}
     district=disdic[disid]
-    df=pd.read_csv("templates/newescore.csv")
+    googleSheetId = '1gs1CqiYPAMhHWbelBU7o3GRAk7o3QeqYY-OJz_MUYZw'
+    worksheetName = 'newescore'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    df=pd.read_csv(URL)
     df1=df[df["District"]==district]
     month=['January', 'February', 'March', 'April', 'May', 'June', 'July','August', 'September', 'October', 'November', 'December']
     df2 = pd.DataFrame(month,columns =['Month'])
@@ -67861,7 +67949,10 @@ def escore_stack(disid):
         '6023a76f9e8e623753fc3060':'San Jose Unified School District',
         '6023a7949e8e623753fc3061':'Wasatch County School District'}
     district=disdic[disid]
-    df=pd.read_csv("templates/newescore.csv")
+    googleSheetId = '1gs1CqiYPAMhHWbelBU7o3GRAk7o3QeqYY-OJz_MUYZw'
+    worksheetName = 'newescore'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    df=pd.read_csv(URL)
     df1=df[df["District"]==district]
     month=['January', 'February', 'March', 'April', 'May', 'June', 'July','August', 'September', 'October', 'November', 'December']
     df2 = pd.DataFrame(month,columns =['Month'])
