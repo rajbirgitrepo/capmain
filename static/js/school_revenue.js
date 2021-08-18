@@ -31,8 +31,14 @@ $.ajax(settings).done(function (response) {
   console.log(dataa.other);
   $("#0c").text("$" + dataa.data[0][1]);
   $("#1c").text("$" +dataa.data[1][1]);
+  $("#2c").text("$" +dataa.data[2][1]);
+  $("#3c").text("$" +dataa.data[3][1]);
+  $("#4c").text("$" +dataa.data[4][1]);
   $("#0h").text(dataa.data[0][0]);
   $("#1h").text(dataa.data[1][0]);
+  $("#2h").text(dataa.data[2][0]);
+  $("#3h").text(dataa.data[3][0]);
+  $("#4h").text(dataa.data[4][0]);
 });
 var settings = {
   "async": true,
@@ -222,7 +228,7 @@ function createDynamic(url) {
       var data1 = JSON.parse(response);
   
       $("#next").prepend(
-        '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL ID</th><th>DEVICE USED</th><th>MODE OF PAYMENT</th><th>TYPE OF PAYMENT</th><th>PAYMENT DATE</th><th>PAYMENT AMOUNT</th></tr ></thead ><tbody>'
+        '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>TYPE OF PAYMENT</th><th>USER NAME</th><th>EMAIL ID</th><th>DEVICE USED</th><th>MODE OF PAYMENT</th><th>PAYMENT DATE</th><th>PAYMENT AMOUNT</th></tr ></thead ><tbody>'
       );
       for (var i = 0; i < data1.data.length; i++) {
         var datain = data1.data[i];
@@ -257,7 +263,9 @@ function createDynamic(url) {
   
     dynamicDiv +=
       "<tr >" +
-  
+      "<td>" +
+      userList[0] +
+      "</td>" +
       "<td>" +
       userList[1] +
       "</td>" +
@@ -275,9 +283,6 @@ function createDynamic(url) {
       "</td>" +
       "<td>" +
       userList[6] +
-      "</td>" +
-      "<td>" +
-      userList[7] +
       "</td>" +
       "</tr>";
   

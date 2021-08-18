@@ -1,5 +1,5 @@
-playbackTrendChart('playback', 'Playback')
-$("#practice_activeChart").val('playback');
+playbackTrendChart('Playback', 'Playback')
+$("#practice_activeChart").val('Playback');
 $(document).on('change', '#practice_activeChart', function () {
   $('#container33').empty();
   console.log(this.value)

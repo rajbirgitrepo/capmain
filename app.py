@@ -10212,12 +10212,11 @@ def _excecutivecount_():
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-            {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'MODIFIED_DATE':{'$gte':csy_first_date()}},
-            
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':csy_first_date()}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
 
@@ -19813,45 +19812,63 @@ def practice_streak_business_days_school():
                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'USER_ID':'$USER_ID._id',
-                      'EMAIL_ID':'$USER_ID.EMAIL_ID',
-        'PRACTICE_DATE':'$MODIFIED_DATE'},
+    {'$group':{'_id':'$USER_ID._id',
+                'EMAIL_ID':{"$first":'$USER_ID.EMAIL_ID'},
+                'PRACTICE_DATE_max':{"$max":'$MODIFIED_DATE'},
+                'PRACTICE_DATE_min':{"$min":'$MODIFIED_DATE'},
+    #             'PRACTICE_DATE':{'$addToSet':'$MODIFIED_DATE'} 
+    #           'PRACTICE_DATE_max':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},
+    #           'PRACTICE_DATE_min':{'$min':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},
+               'PRACTICE_DATE':{'$addToSet':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}}
+
         }},
-        ]
+    {"$project":{
+            "_id":0,
+            "USER_ID":"$_id",
+            "EMAIL_ID":"$EMAIL_ID",
+            "max":"$PRACTICE_DATE_max",
+            "min":"$PRACTICE_DATE_min",
+            "list_of_day_of_practice":"$PRACTICE_DATE"
+    }}
+      ]
 
     bifur= list(collection.aggregate(qratm))
     blah=DataFrame(bifur)
-    df_1 = pd.json_normalize(blah['_id'])
-    df_final = pd.concat([blah,df_1], axis =  1)
+
+    df77=blah
+    df77=df77.sort_values(['USER_ID'],ascending=True).reset_index()
+    
+    # df_1 = pd.json_normalize(blah['_id'])
+    # df_final = pd.concat([blah,df_1], axis =  1)
+    # # df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+    # df_final['date_now']= now.strftime("%Y-%m-%d")
+    # df_final['PRACTICE_DATE'] = pd.to_datetime(df_final['PRACTICE_DATE'])
+    # df_final['day_of_practice']= df_final['PRACTICE_DATE'].dt.strftime('%A')
+
     # df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
-    df_final['date_now']= now.strftime("%Y-%m-%d")
-    df_final['PRACTICE_DATE'] = pd.to_datetime(df_final['PRACTICE_DATE'])
-    df_final['day_of_practice']= df_final['PRACTICE_DATE'].dt.strftime('%A')
-
-    df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
 
 
 
-    df_final_sort=df_final.sort_values(['USER_ID','PRACTICE_DATE'],ascending=True)
+    # df_final_sort=df_final.sort_values(['USER_ID','PRACTICE_DATE'],ascending=True)
 
-    group1=df_final_sort[['USER_ID','PRACTICE_DATE', 'day_of_practice']]
+    # group1=df_final_sort[['USER_ID','PRACTICE_DATE', 'day_of_practice']]
 
-    df2=group1.drop_duplicates()
-    df4=df2.reset_index(drop=True)
-    df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].astype('datetime64[ns]')
-
-
-    df5=df4.groupby(['USER_ID'])['PRACTICE_DATE'].agg(['max', 'min']).reset_index()
-
-    df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+    # df2=group1.drop_duplicates()
+    # df4=df2.reset_index(drop=True)
+    # df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].astype('datetime64[ns]')
 
 
-    df6=df4.groupby('USER_ID')['PRACTICE_DATE'].apply(list).reset_index(name='list_of_day_of_practice')
+    # df5=df4.groupby(['USER_ID'])['PRACTICE_DATE'].agg(['max', 'min']).reset_index()
 
-    list_of_list2=df6.list_of_day_of_practice.tolist()
+    # df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
 
 
-    df77= pd.merge(df5,df6 ,on ='USER_ID', how='left')
+    # df6=df4.groupby('USER_ID')['PRACTICE_DATE'].apply(list).reset_index(name='list_of_day_of_practice')
+
+    # list_of_list2=df6.list_of_day_of_practice.tolist()
+
+
+    # df77= pd.merge(df5,df6 ,on ='USER_ID', how='left')
 
     daterange=[]
     for i in range(len(df77)):
@@ -20009,45 +20026,63 @@ def practice_streak_business_days_parents():
                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'USER_ID':'$USER_ID._id',
-                      'EMAIL_ID':'$USER_ID.EMAIL_ID',
-        'PRACTICE_DATE':'$MODIFIED_DATE'},
+    {'$group':{'_id':'$USER_ID._id',
+                'EMAIL_ID':{"$first":'$USER_ID.EMAIL_ID'},
+                'PRACTICE_DATE_max':{"$max":'$MODIFIED_DATE'},
+                'PRACTICE_DATE_min':{"$min":'$MODIFIED_DATE'},
+    #             'PRACTICE_DATE':{'$addToSet':'$MODIFIED_DATE'} 
+    #           'PRACTICE_DATE_max':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},
+    #           'PRACTICE_DATE_min':{'$min':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},
+               'PRACTICE_DATE':{'$addToSet':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}}
+
         }},
-        ]
+    {"$project":{
+            "_id":0,
+            "USER_ID":"$_id",
+            "EMAIL_ID":"$EMAIL_ID",
+            "max":"$PRACTICE_DATE_max",
+            "min":"$PRACTICE_DATE_min",
+            "list_of_day_of_practice":"$PRACTICE_DATE"
+    }}
+      ]
 
     bifur= list(collection.aggregate(qratm))
     blah=DataFrame(bifur)
-    df_1 = pd.json_normalize(blah['_id'])
-    df_final = pd.concat([blah,df_1], axis =  1)
+
+    df77=blah
+    df77=df77.sort_values(['USER_ID'],ascending=True).reset_index()
+
+    # df_1 = pd.json_normalize(blah['_id'])
+    # df_final = pd.concat([blah,df_1], axis =  1)
+    # # df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+    # df_final['date_now']= now.strftime("%Y-%m-%d")
+    # df_final['PRACTICE_DATE'] = pd.to_datetime(df_final['PRACTICE_DATE'])
+    # df_final['day_of_practice']= df_final['PRACTICE_DATE'].dt.strftime('%A')
+
     # df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
-    df_final['date_now']= now.strftime("%Y-%m-%d")
-    df_final['PRACTICE_DATE'] = pd.to_datetime(df_final['PRACTICE_DATE'])
-    df_final['day_of_practice']= df_final['PRACTICE_DATE'].dt.strftime('%A')
-
-    df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
 
 
 
-    df_final_sort=df_final.sort_values(['USER_ID','PRACTICE_DATE'],ascending=True)
+    # df_final_sort=df_final.sort_values(['USER_ID','PRACTICE_DATE'],ascending=True)
 
-    group1=df_final_sort[['USER_ID','PRACTICE_DATE', 'day_of_practice']]
+    # group1=df_final_sort[['USER_ID','PRACTICE_DATE', 'day_of_practice']]
 
-    df2=group1.drop_duplicates()
-    df4=df2.reset_index(drop=True)
-    df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].astype('datetime64[ns]')
-
-
-    df5=df4.groupby(['USER_ID'])['PRACTICE_DATE'].agg(['max', 'min']).reset_index()
-
-    df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+    # df2=group1.drop_duplicates()
+    # df4=df2.reset_index(drop=True)
+    # df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].astype('datetime64[ns]')
 
 
-    df6=df4.groupby('USER_ID')['PRACTICE_DATE'].apply(list).reset_index(name='list_of_day_of_practice')
+    # df5=df4.groupby(['USER_ID'])['PRACTICE_DATE'].agg(['max', 'min']).reset_index()
 
-    list_of_list2=df6.list_of_day_of_practice.tolist()
+    # df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
 
 
-    df77= pd.merge(df5,df6 ,on ='USER_ID', how='left')
+    # df6=df4.groupby('USER_ID')['PRACTICE_DATE'].apply(list).reset_index(name='list_of_day_of_practice')
+
+    # list_of_list2=df6.list_of_day_of_practice.tolist()
+
+
+    # df77= pd.merge(df5,df6 ,on ='USER_ID', how='left')
 
     daterange=[]
     for i in range(len(df77)):
@@ -20211,47 +20246,69 @@ def practicestreak___businessdays___parents(charttype):
                practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-        {'$group':{'_id':{'USER_ID':'$USER_ID',
-                          'EMAIL_ID':'$USER_EMAIL',
-            'PRACTICE_DATE':'$MODIFIED_DATE'},
-            }},
-            ]
+#         {'$group':{'_id':{'USER_ID':'$USER_ID',
+#                           'EMAIL_ID':'$USER_EMAIL',
+#             'PRACTICE_DATE':'$MODIFIED_DATE'},
+#             }},
+            {'$group':{'_id':'$USER_ID',
+                'EMAIL_ID':{"$first":'$USER_EMAIL'},
+                'PRACTICE_DATE_max':{"$max":'$MODIFIED_DATE'},
+                'PRACTICE_DATE_min':{"$min":'$MODIFIED_DATE'},
+    #             'PRACTICE_DATE':{'$addToSet':'$MODIFIED_DATE'} 
+    #           'PRACTICE_DATE_max':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},
+    #           'PRACTICE_DATE_min':{'$min':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},
+               'PRACTICE_DATE':{'$addToSet':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}}
+
+        }},
+        {"$project":{
+                "_id":0,
+                "USER_ID":"$_id",
+                "EMAIL_ID":"$EMAIL_ID",
+                "max":"$PRACTICE_DATE_max",
+                "min":"$PRACTICE_DATE_min",
+                "list_of_day_of_practice":"$PRACTICE_DATE"
+        }}
+          ]
 
         bifur= list(collection.aggregate(qratm))
         blah=DataFrame(bifur)
-        df_1 = pd.json_normalize(blah['_id'])
-        df_final = pd.concat([blah,df_1], axis =  1)
-        # df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
-        df_final['date_now']= now.strftime("%Y-%m-%d")
-        df_final['PRACTICE_DATE'] = pd.to_datetime(df_final['PRACTICE_DATE'])
-        df_final['day_of_practice']= df_final['PRACTICE_DATE'].dt.strftime('%A')
 
-        df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+        df77=blah
+        df77=df77.sort_values(['USER_ID'],ascending=True).reset_index()
+    
+#         df_1 = pd.json_normalize(blah['_id'])
+#         df_final = pd.concat([blah,df_1], axis =  1)
+#         # df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+#         df_final['date_now']= now.strftime("%Y-%m-%d")
+#         df_final['PRACTICE_DATE'] = pd.to_datetime(df_final['PRACTICE_DATE'])
+#         df_final['day_of_practice']= df_final['PRACTICE_DATE'].dt.strftime('%A')
 
-#         print(df_final)
-        if 'USER_ID' not in df_final.columns:
-            df_final['USER_ID'] = 0
+#         df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
 
-        df_final_sort=df_final.sort_values(['USER_ID','PRACTICE_DATE'],ascending=True)
+# #         print(df_final)
+#         if 'USER_ID' not in df_final.columns:
+#             df_final['USER_ID'] = 0
 
-        group1=df_final_sort[['USER_ID','PRACTICE_DATE', 'day_of_practice']]
+#         df_final_sort=df_final.sort_values(['USER_ID','PRACTICE_DATE'],ascending=True)
 
-        df2=group1.drop_duplicates()
-        df4=df2.reset_index(drop=True)
-        df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].astype('datetime64[ns]')
+#         group1=df_final_sort[['USER_ID','PRACTICE_DATE', 'day_of_practice']]
 
-
-        df5=df4.groupby(['USER_ID'])['PRACTICE_DATE'].agg(['max', 'min']).reset_index()
-
-        df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
-
-
-        df6=df4.groupby('USER_ID')['PRACTICE_DATE'].apply(list).reset_index(name='list_of_day_of_practice')
-
-        list_of_list2=df6.list_of_day_of_practice.tolist()
+#         df2=group1.drop_duplicates()
+#         df4=df2.reset_index(drop=True)
+#         df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].astype('datetime64[ns]')
 
 
-        df77= pd.merge(df5,df6 ,on ='USER_ID', how='left')
+#         df5=df4.groupby(['USER_ID'])['PRACTICE_DATE'].agg(['max', 'min']).reset_index()
+
+#         df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+
+
+#         df6=df4.groupby('USER_ID')['PRACTICE_DATE'].apply(list).reset_index(name='list_of_day_of_practice')
+
+#         list_of_list2=df6.list_of_day_of_practice.tolist()
+
+
+#         df77= pd.merge(df5,df6 ,on ='USER_ID', how='left')
 
         daterange=[]
         for i in range(len(df77)):
@@ -20393,47 +20450,65 @@ def practicestreak___businessdays___parents(charttype):
                          {'USER_ID.EMAIL_ID':{'$ne':''}},
                          {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                      {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{'USER_ID':'$USER_ID._id',
-                          'EMAIL_ID':'$USER_ID.EMAIL_ID',
-            'PRACTICE_DATE':'$MODIFIED_DATE'},
-            }},
-            ]
+                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        {'$group':{'_id':'$USER_ID._id',
+                'EMAIL_ID':{"$first":'$USER_ID.EMAIL_ID'},
+                'PRACTICE_DATE_max':{"$max":'$MODIFIED_DATE'},
+                'PRACTICE_DATE_min':{"$min":'$MODIFIED_DATE'},
+    #             'PRACTICE_DATE':{'$addToSet':'$MODIFIED_DATE'} 
+    #           'PRACTICE_DATE_max':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},
+    #           'PRACTICE_DATE_min':{'$min':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},
+               'PRACTICE_DATE':{'$addToSet':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}}
+
+        }},
+        {"$project":{
+                "_id":0,
+                "USER_ID":"$_id",
+                "EMAIL_ID":"$EMAIL_ID",
+                "max":"$PRACTICE_DATE_max",
+                "min":"$PRACTICE_DATE_min",
+                "list_of_day_of_practice":"$PRACTICE_DATE"
+        }}
+          ]
 
         bifur= list(collection.aggregate(qratm))
         blah=DataFrame(bifur)
-        df_1 = pd.json_normalize(blah['_id'])
-        df_final = pd.concat([blah,df_1], axis =  1)
-        # df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
-        df_final['date_now']= now.strftime("%Y-%m-%d")
-        df_final['PRACTICE_DATE'] = pd.to_datetime(df_final['PRACTICE_DATE'])
-        df_final['day_of_practice']= df_final['PRACTICE_DATE'].dt.strftime('%A')
 
-        df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+        df77=blah
+        df77=df77.sort_values(['USER_ID'],ascending=True).reset_index()
 
+#         df_1 = pd.json_normalize(blah['_id'])
+#         df_final = pd.concat([blah,df_1], axis =  1)
+#         # df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+#         df_final['date_now']= now.strftime("%Y-%m-%d")
+#         df_final['PRACTICE_DATE'] = pd.to_datetime(df_final['PRACTICE_DATE'])
+#         df_final['day_of_practice']= df_final['PRACTICE_DATE'].dt.strftime('%A')
 
-
-        df_final_sort=df_final.sort_values(['USER_ID','PRACTICE_DATE'],ascending=True)
-
-        group1=df_final_sort[['USER_ID','PRACTICE_DATE', 'day_of_practice']]
-
-        df2=group1.drop_duplicates()
-        df4=df2.reset_index(drop=True)
-        df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].astype('datetime64[ns]')
+#         df_final['PRACTICE_DATE'] =df_final['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
 
 
-        df5=df4.groupby(['USER_ID'])['PRACTICE_DATE'].agg(['max', 'min']).reset_index()
 
-        df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
+#         df_final_sort=df_final.sort_values(['USER_ID','PRACTICE_DATE'],ascending=True)
+
+#         group1=df_final_sort[['USER_ID','PRACTICE_DATE', 'day_of_practice']]
+
+#         df2=group1.drop_duplicates()
+#         df4=df2.reset_index(drop=True)
+#         df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].astype('datetime64[ns]')
 
 
-        df6=df4.groupby('USER_ID')['PRACTICE_DATE'].apply(list).reset_index(name='list_of_day_of_practice')
+#         df5=df4.groupby(['USER_ID'])['PRACTICE_DATE'].agg(['max', 'min']).reset_index()
 
-        list_of_list2=df6.list_of_day_of_practice.tolist()
+#         df4['PRACTICE_DATE']=df4['PRACTICE_DATE'].dt.strftime("%Y-%m-%d")
 
 
-        df77= pd.merge(df5,df6 ,on ='USER_ID', how='left')
+#         df6=df4.groupby('USER_ID')['PRACTICE_DATE'].apply(list).reset_index(name='list_of_day_of_practice')
+
+#         list_of_list2=df6.list_of_day_of_practice.tolist()
+
+
+#         df77= pd.merge(df5,df6 ,on ='USER_ID', how='left')
 
         daterange=[]
         for i in range(len(df77)):
@@ -20584,7 +20659,7 @@ def power_users():
              {'$and': [
                  {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                 {'MODIFIED_DATE':{'$gte':datetime(2020,8,1)}},
+                 {'MODIFIED_DATE':{'$gte':csy_first_date()}},
                       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -20848,7 +20923,7 @@ def classroom_streaks():
              {'$and': [
                  {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                 {'MODIFIED_DATE':{'$gte':datetime(2020,8,1)}},
+                 {'MODIFIED_DATE':{'$gte':csy_first_date()}},
                       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -25648,7 +25723,7 @@ def practice___history___new___latest(charttype):
 
 
         ####schoology
-        scsy1= df6c.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+        scsy1= df6s.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
         scsy1['Practice_date']=scsy1['Practice_date'].astype(np.int64)/int(1e6)
         scsy=scsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
         #practice_Lsy
@@ -25848,7 +25923,7 @@ def practice___history___new___latest(charttype):
 
 
         ####schoology
-        scsy1= df6c.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+        scsy1= df6s.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
         scsy1['Practice_date']=scsy1['Practice_date'].astype(np.int64)/int(1e6)
         scsy=scsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
         #practice_Lsy
@@ -28942,6 +29017,10 @@ def practice_trendnew_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": LSY_Date,
@@ -28965,6 +29044,10 @@ def practice_trendnew_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
@@ -28995,6 +29078,10 @@ def practice_trendnew_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                              { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
@@ -29025,6 +29112,10 @@ def practice_trendnew_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+               { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
@@ -29052,6 +29143,11 @@ def practice_trendnew_(charttype):
                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                              { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                   {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                   {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
                   {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
@@ -29100,6 +29196,11 @@ def practice_trendnew_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": LSY_Date,
@@ -29119,6 +29220,10 @@ def practice_trendnew_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
@@ -29146,6 +29251,10 @@ def practice_trendnew_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
@@ -29171,7 +29280,11 @@ def practice_trendnew_(charttype):
                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -29197,6 +29310,11 @@ def practice_trendnew_(charttype):
                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+                 {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                   {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                   {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
                   {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
@@ -29502,6 +29620,11 @@ def active_trend_new_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+              { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+#                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": LSY_Date,
@@ -29526,6 +29649,11 @@ def active_trend_new_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+#                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
@@ -29558,6 +29686,11 @@ def active_trend_new_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+#                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
@@ -29586,7 +29719,12 @@ def active_trend_new_(charttype):
                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+#                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -29615,6 +29753,11 @@ def active_trend_new_(charttype):
                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+                 {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                   {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                   {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
                   {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
@@ -29684,6 +29827,11 @@ def active_trend_new_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+#                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
@@ -29713,6 +29861,11 @@ def active_trend_new_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+#                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
@@ -29740,6 +29893,11 @@ def active_trend_new_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+#                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
@@ -29764,6 +29922,11 @@ def active_trend_new_(charttype):
                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+                 {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                   {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                   {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
                   {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
@@ -60336,7 +60499,6 @@ def avg_audio_completed_____(datestr):
 
 @app.route('/ratingcardsdaily_card/<datestr>')
 def dailyfeedback_ratingssss___(datestr):
-    datestr='2021-08-16'
     import datetime
     import math
     username = urllib.parse.quote_plus('admin')

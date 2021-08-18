@@ -670,7 +670,11 @@ categories: dataa.temp.percentage_of_audio_completed[0],
 tickmarkPlacement: 'on',
 title: {
 enabled: false
+}, 
+labels :{
+  rotation: 270
 }
+
 }
 ,yAxis: [ {
   lineWidth: 1,
