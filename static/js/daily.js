@@ -107,7 +107,7 @@ var settings = {
          
       ],
   title: {
-  text: 'Top 20 District ' + t
+  text: 'Top  Districts ' + t
   },
   xAxis: {
   categories: dataa.district,
