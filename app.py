@@ -10298,6 +10298,115 @@ def _excecutivecount_():
     return json.dumps(temp)
 
 
+@app.route('/proguserexclusively')
+def programe_users_exclusively():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass 
+
+    collection2=db.school_master
+    collection1=db.user_master
+    collection3=db.audio_track_master
+    df1=DataFrame(list(collection2.aggregate([{'$match':{'$and':[{'CAP_PROGRAM':{'$exists':True}},
+                                                                 {'BLOCKED_BY_CAP':{'$exists':False}},
+                                                                 {'NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                                                                 {'CAP_PROGRAM':{'$ne':'NULL'}},
+                                                                  {'CAP_PROGRAM':{'$ne':''}}
+
+
+    ]}},
+    #     {'$match':{'$or':[
+    #           {'COUNTRY':{"$regex":"UNITED STATES",'$options':'i'}},
+    #         {'COUNTRY':{"$regex":"USA",'$options':'i'}},
+    #         {'COUNTRY':{"$regex":"America",'$options':'i'}},
+
+    #        {'COUNTRY':{"$regex":"US",'$options':'i'}}]}},
+
+    # {'$group':{'_id':'$_id','school':{'$addToSet':'$_id'},'CAP_PROGRAM':{'$first':'$CAP_PROGRAM'}}},
+    {'$project':{'_id':0,'CAP_PROGRAM':'$CAP_PROGRAM','school':'$_id'}},
+    #       {'$sort':{'_id':1}}
+
+    ])))
+    school=df1['school'].tolist()
+
+    df = DataFrame(list(collection1.aggregate([{"$match":
+    {'$and':[
+    # {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+
+    {"IS_DISABLED":{"$ne":"Y"}},
+              {"IS_BLOCKED":{"$ne":"Y"}},
+             {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+            { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'schoolId._id':{'$in':school}},
+         {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "CAP_PROGRAM":{'$exists':True} } )}},
+
+
+    # //               {'IS_ADMIN':'Y'},
+             {'EMAIL_ID':{'$ne':''}},
+             {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                       {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+
+
+    # {"$group":{'_id':'$_id','user': {'$addToSet': "$_id"}}},
+    {"$project":{'_id':1,'school':'$schoolId._id'}}
+                                              ])))
+
+
+    collection3=db.audio_track_master
+    df4 = DataFrame(list(collection3.aggregate([
+        {"$match":
+         {
+            '$and':[
+    #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},  
+                 {'USER_ID.schoolId._id':{'$in':school}},
+             {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "CAP_PROGRAM":{'$exists':True} } )}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    #             {'MODIFIED_DATE':{'$gte':csy_first_date()}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+
+         }},
+        {'$group':{'_id':'$USER_ID._id','pc':{'$sum':1}}},
+        {'$project':{'_id':1, 'practice_count':'$pc'}}
+
+        ])))
+
+
+    df4=df4.loc[(df4['practice_count']>=5)] 
+
+
+
+
+    df2=pd.merge(df1,df,on='school',how='left')
+    df5=pd.merge(df2,df4,on='_id',how='left')
+
+
+    dff=df5.groupby(['CAP_PROGRAM']).agg({'_id': ['count'], 'practice_count': ['count']})
+    dff.reset_index(inplace=True)
+    dff.columns = dff.columns.get_level_values(0)
+
+
+    capprog=dff['CAP_PROGRAM'].tolist()
+    users=dff['_id'].tolist()
+    playbacks=dff['practice_count'].tolist()
+
+    data={'type':capprog,'total_users':users,'total_user_atleast_5_playbacks':playbacks}
+    return json.dumps(data)
+
+
 
 
 @app.route('/progschoolexclusivelylgpartner')
@@ -38074,47 +38183,50 @@ def parents_anal_hourly_comparison():
     yesterday=pd.to_datetime(date)-timedelta(days=1)
     todaydate=date.strftime("%Y-%m-%d")
     yesterdaydate=yesterday.strftime("%Y-%m-%d")
+    print(yesterdaydate)
+    print(todaydate)
+    
     dfyes=df[df['date']==yesterdaydate]
     dftod=df[df['date']==todaydate]
 
-    if len(dftod) != 0:   
-        times = pd.to_datetime(dfyes.sign_upn)
-        times['hour'] = times.map( lambda x: pd.to_datetime(x).hour )
-        timedfyes=times.groupby(['hour']).size().to_frame('count').reset_index()
+    times = pd.to_datetime(dfyes.sign_upn)
+    times['hour'] = times.map( lambda x: pd.to_datetime(x).hour )
+    timedfyes=times.groupby(['hour']).size().to_frame('count').reset_index()
+    
+    if len(dftod) != 0:
         times2 = pd.to_datetime(dftod.sign_upn)
         times2['hour'] = times2.map( lambda x: pd.to_datetime(x).hour )
         timedftod=times2.groupby(['hour']).size().to_frame('count').reset_index()
-        timedfyes = timedfyes.astype(int)
-        hour=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
-        count=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-        dftest = pd.DataFrame({'hour':hour,'count':count})
-
-        result = pd.merge(timedfyes , dftest,how='right', on='hour')
-        result=result.fillna(0)
-        result= result.astype(int)
-
-        result = result.sort_values(["hour", "count_x"], ascending = (True,False))
-        #yesterday count
-        yescount=list(result['count_x'])
-        timedftod = timedftod.astype(int)
-        result12 = pd.merge(timedftod, dftest,how='right', on='hour')
-
-        result12=result12.fillna(0)
-        result12= result12.astype(int)
-        result12 = result12.sort_values(["hour", "count_x"], ascending = (True,False))
-        #todays count
-        todcount=list(result12['count_x'])
-        totaly=sum(yescount)
-        totalt=sum(todcount)
-
-        temp={"tod":todcount,"yes":yescount,"totaly":[str(totaly)],"totalt":[str(totalt)]}
-        return json.dumps(temp)
-    #     temp
+    
     else:
-        temp = {"tod":[],"totalt":[],"totaly":[],"yes":[]}
-        return json.dumps(temp)
+        timedftod = pd.DataFrame(index=[0], columns=['hour','count'])
+        timedftod = timedftod.fillna(0)        
         
-# parents_anal_hourly_comparison()
+    timedfyes = timedfyes.astype(int)
+    hour=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+    count=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    dftest = pd.DataFrame({'hour':hour,'count':count})
+
+    result = pd.merge(timedfyes , dftest,how='right', on='hour')
+    result=result.fillna(0)
+    result= result.astype(int)
+
+    result = result.sort_values(["hour", "count_x"], ascending = (True,False))
+    #yesterday count
+    yescount=list(result['count_x'])
+    timedftod = timedftod.astype(int)
+    result12 = pd.merge(timedftod, dftest,how='right', on='hour')
+
+    result12=result12.fillna(0)
+    result12= result12.astype(int)
+    result12 = result12.sort_values(["hour", "count_x"], ascending = (True,False))
+    #todays count
+    todcount=list(result12['count_x'])
+    totaly=sum(yescount)
+    totalt=sum(todcount)
+
+    temp={"tod":todcount,"yes":yescount,"totaly":[str(totaly)],"totalt":[str(totalt)]}
+    return json.dumps(temp)
 
 
 @app.route('/mitsignupdaycompp')
@@ -42422,7 +42534,7 @@ def parents_table():
 
 
 @app.route('/parcount')
-def parcount():
+def parcount__():
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
@@ -42431,45 +42543,80 @@ def parcount():
     db=client.compass
     collection = db.user_master
     collection2 = db.audio_track_detail_backup
-
     dateStr = "2020-03-17T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
 
-
-    df = DataFrame(list(collection.aggregate([{"$match":{'$and':[{'ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-                                                                 
+    df = DataFrame(list(collection.aggregate([
+        {"$match":{'$and':[{'ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
                   {"IS_DISABLED":{"$ne":"Y"}},
                   {"IS_BLOCKED":{"$ne":"Y"}},
                  {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
     # //               {'IS_ADMIN':'Y'},
                  {'EMAIL_ID':{'$ne':''}},
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                  
             {"CREATED_DATE":{"$gte":myDatetime}}]}}, 
                                               
-        {'$group':{'_id':'$_id','Parents_Id':{'$first':'$_id'},'name':{'$first':'$schoolId.NAME'},'city':{'$first':'$schoolId.CITY'},'state':{'$first':'$schoolId.STATE'},
+        {'$group':{'_id':'$_id','Parents_Id':{'$first':'$_id'},'name':{'$first':'$schoolId.NAME'},
+                   'city':{'$first':'$schoolId.CITY'},'state':{'$first':'$schoolId.STATE'},
         'country':{'$first':'$schoolId.COUNTRY'},
-        'ip_address':{'$first':'$IP_ADDRESS'}, 'Parents_Name':{'$first':'$USER_NAME'}, 'Parents_Email':{'$first':'$EMAIL_ID'}, 
-        'contact_number':{'$first':'$CONTACT_NUMBER'}, 'user_type':{'$first':'$USER_TYPE'}, 'Sign_Up_Date':{'$first':'$CREATED_DATE'}
+        'ip_address':{'$first':'$IP_ADDRESS'}, 'Parents_Name':{'$first':'$USER_NAME'},
+                   'Parents_Email':{'$first':'$EMAIL_ID'}, 
+        'contact_number':{'$first':'$CONTACT_NUMBER'}, 'user_type':{'$first':'$USER_TYPE'}, 
+                   'Sign_Up_Date':{'$first':'$CREATED_DATE'}
         }}
         ])))
-
-
-
-
+# ========================================= FROM --/presentios for IOS downloads =======================================
+  
     total_parents = df.shape[0]
     total_downloads=round(total_parents*.95)
     downloadper=round((total_downloads/total_parents)*100)
-    ios=round(total_downloads*0.60)
+#     ios=round(total_downloads*0.60)
     android=round(total_downloads*0.40)
+    
+    googleSheetId = '1UrhNlOkyAhboHYQwNQJHpEiJ-NfeCDX5MS3DPh8Na50'
+    worksheetName = 'impressions'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(
+    googleSheetId,
+    worksheetName
+    )
+    df = pd.read_csv(URL)
+    #product page views
+    googleSheetId1 = '1UrhNlOkyAhboHYQwNQJHpEiJ-NfeCDX5MS3DPh8Na50'
+    worksheetName1 = 'product_page_views'
+    URL1 = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(
+    googleSheetId1,
+    worksheetName1
+    )
+    df1 = pd.read_csv(URL1)
+    #conversion_rate
+    googleSheetId2 = '1UrhNlOkyAhboHYQwNQJHpEiJ-NfeCDX5MS3DPh8Na50'
+    worksheetName2 = 'conversion_rate'
+    URL2 = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(
+    googleSheetId2,
+    worksheetName2
+    )
+    df2 = pd.read_csv(URL2)
+    dfs = [df, df1, df2]
+    df_final = reduce(lambda left,right: pd.merge(left,right,on='Date'), dfs)
+    df_final['Date'] = pd.to_datetime(df_final['Date'])
+    newdf=df_final[(df_final.Date> '2020-03-16')]
+    newdf['Date'] = newdf['Date'].astype(np.int64) / int(1e6)
+    df3=newdf[['Date','Impressions']]
 
-    temp={"download":[str(total_downloads)],"downloadper":[str(downloadper)],"android":[str(android)],"ios":[str(ios)],'totalparents':[str(total_parents)]}
+    df6=newdf[['Date','App Units']]
+    #APP UNIT ---- INSTALL
+    App_Units= df6.values.tolist()
+    appunit=list(df6['App Units'])
+
+    ios=str(sum(appunit))
+
+    temp={"download":[str(total_downloads)],"downloadper":[str(downloadper)],"android":[str(android)],
+          "ios":[str(ios)],'totalparents':[str(total_parents)]}
     return json.dumps(temp)
 
 @app.route('/mitcount')

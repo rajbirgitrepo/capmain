@@ -622,7 +622,7 @@ function zerochart(){
             categories: dataa.schname,
             labels: {
               style: {
-                fontSize: "10px",
+                fontSize: "8px",
                 rotation : 90,
               },
             }

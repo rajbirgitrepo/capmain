@@ -56,6 +56,9 @@ function imgd(a) {
 function charts(a) {
   $("#container").empty();
   $("#container1").empty();
+  $("#container2").empty();
+  $("#container3").empty();
+  $("#container4").empty();
   anychart.onDocumentReady(function () {
     // The data used in this sample can be obtained from the CDN
     // https://cdn.anychart.com/samples/heat-map-charts/heat-map-with-scroll/data.json

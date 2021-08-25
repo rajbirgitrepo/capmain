@@ -52,8 +52,14 @@ Highcharts.chart('container1', {
         series: {point: {
                 events: {
                     click: function () {
-                        $("#next").empty();
-                        $("#btnExport").show();
+                        $('#next').empty();
+            //   console.log(a);
+              var modal2 = document.getElementById("myModal2");
+              modal2.style.display = "block";
+              $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+              var gif = document.getElementById("gif");
+            gif.style.display = "block";
+              $('#btnExport').show();
           
                         URL =
                           "/familyschoolsearch/" +

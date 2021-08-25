@@ -942,7 +942,7 @@ var settings = {
           },
           yAxis: {
             title: {
-              text: 'SCHOOL COUNT',
+              text: 'School Count',
               style: {
                color: '#000000'
                }
@@ -1052,7 +1052,7 @@ var settings = {
             },
             series: [
               {
-                name: 'LG Count',
+                name: 'LG Sponsored',
                 data: dataa.Lg,
                 stack: 0
               },{
@@ -1065,6 +1065,79 @@ var settings = {
           });
           
               });
+
+
+
+
+              var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url":"/proguserexclusively",
+                "method": "GET"
+               }
+                $.ajax(settings).done(function (response) {
+                var dataa=JSON.parse(response); 
+                 console.log(dataa,"hello frnd")
+            
+            Highcharts.chart('containertotaluser', {
+              chart: {
+                type: 'column'
+              },
+              colors: [
+                '#01A451',
+                '#8AE02B',
+                '#a0afb0',
+                '#01A451',
+                         ],
+            
+                         title: {
+                text: 'User Count By School Type'
+                },
+                xAxis: {
+                categories:dataa.type,
+                crosshair: true
+              },
+              yAxis: {
+                min: 0,
+                title: {
+                  text: 'User Count'
+                }
+              },
+              tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                  '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+                footerFormat: '</table>',
+                shared: false,
+                useHTML: true
+              },
+              legend: {
+              enabled: true,
+              itemStyle: {
+                  fontSize: '10px',
+                  fontWeight: '200',
+              }
+            },
+              plotOptions: {
+                column: {
+                  stacking: 'normal',
+                }
+              },
+              series: [{
+                name: 'Total users with atleast 5 Playbacks',
+                data: dataa.total_user_atleast_5_playbacks,
+                stack: 0
+              },
+                      {
+                name: 'Total Useres',
+                data: dataa.total_users,
+                stack: 1
+              }]
+            });
+            
+                });
+
+
               var settings = {
                 "async": true,
                 "crossDomain": true,
@@ -1122,12 +1195,12 @@ var settings = {
               series: [{
                 name: 'Before CSY',
                 data: dataa.before_csy,
-                stack: 0
+                stack: 1
               }, 
               {
                 name: 'After CSY',
                 data: dataa.after_csy,
-                stack: 1
+                stack: 0
               }
                       ]
             });

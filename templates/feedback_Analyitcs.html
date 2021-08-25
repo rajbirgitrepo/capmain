@@ -391,26 +391,31 @@ gtag('config', 'UA-73908394-1'); </script>
           <p class='search-result'></p>
         </div>
 
-        <div class="welcome2" style="margin-top: 20px;" id="scroll">
-          <div class="container-fluid">
-            <div class="col-md-12"
-              style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
-              <div class="row">
-                <div id="admin" class="col-md-12">
-                  <div class="card material-table">
-                    <div class="table-header">
-                      <span class="table-title" id="tablename"></span>
-        
-                    </div>
-                    <a class="btn btn-success btn-logion" style="float:right;"  download="Capdatafeedbackanalytics.csv" id="btnExport" onclick="return ExcellentExport.csv(this,'dataTable1');" style=" float: right;margin: 5px 15px;" href="">Export</a>
-             <div class="custyle" id="next"></div>
-                    <div class="custyle" id="next1"></div>
+        <section>
+          <div id="myModal2" class="modal2">
+            <!-- Modal content -->
+            <div class="modal2-content">
+              <div id="admin" class="col-md-12">
+                <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
+                  <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()"
+                    style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o"
+                      aria-hidden="true"></i></a>
+                  <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"
+                    download="CapdataExecutivedashboard.csv" id="btnExport"
+                    onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;"
+                    href=""><i class="fa fa-download" aria-hidden="true"></i></a>
+    
+                  <div class="table-header">
+                    <span class="table-title" style="margin: 0 !important;"></span>
                   </div>
+                  <div id="gif"></div>
+                  <div class="custyle" id="next"></div>
+                  <div class="custyle" id="next1"></div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+       </section>
 
       
       </section>
