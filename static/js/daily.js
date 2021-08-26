@@ -721,6 +721,89 @@ Highcharts.chart('container5', {
                           
                   return dynamicDiv;
                   }
+                  function createDynamic4(url){
+
+                    var settings = {
+                    "async": true,
+                    "crossDomain": true,
+                    "url": url,
+                    "method": "GET",
+                    success: function() {
+                      var gif = document.getElementById("gif");
+                      gif.style.display = "none";
+                      },
+                    
+                    }
+                    $.ajax(settings).done(function (response) {
+                    var data1=JSON.parse(response);
+                    
+                    $('#next').prepend('<table class="display" id = "dataTable1"><thead ><tr><th>Date</th><th>Login</th><th>Subscription Extend</th><th>Align Admin/Teacher</th><th>Forget Email</th><th>Others/th><th>Waiting For Customer</th><th>IE Team Raised</th></tr ></thead ><tbody>');
+                    for(var i=0;i<data1.data.length;i++){
+                    
+                    
+                    var datain = data1.data[i];
+                    var resultDiv = createDynamicDiv4(datain);
+                    
+                    $("#dataTable").append(resultDiv);
+                    
+                    
+                    
+                    
+                    }
+                    //$('#dataTable1').append('</tbody></table>');
+                    $('#dataTable').append('</tbody></table>');
+                    dataTab();
+                    
+                    
+                    
+                    $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>Date</th><th>Login</th><th>Subscription Extend</th><th>Align Admin/Teacher</th><th>Forget Email</th><th>Others/th><th>Waiting For Customer</th><th>IE Team Raised</th></tr ></thead ><tbody>');
+                      for(var i=0;i<data1.data.length;i++){
+                    
+                    
+                    var datain = data1.data[i];
+                    
+                    var resultDiv = createDynamicDiv4(datain);
+                    $("#dataTable1").append(resultDiv);
+                    }
+                    
+                    
+                    $('#dataTable1').append('</tbody></table>');
+                    })
+                    }
+                    
+                    function dataTab()
+                    {
+                    
+                    $("#dataTable").DataTable( {
+                        "pageLength": 50
+                    } );
+                    
+                    }
+                    
+                    
+                    function createDynamicDiv4(userList){
+                    var dynamicDiv = '';
+                    console.log(userList)
+                    
+                    
+                      
+                      
+                      dynamicDiv +=   '<tr >'+
+                                '<td>'+userList[0]+'</td>'+
+                              '<td>'+userList[1]+'</td>'+
+                              '<td>'+userList[2]+'</td>'+
+                              '<td>'+userList[3]+'</td>'+
+                                '<td>'+userList[4]+'</td>'+
+                              '<td>'+userList[5]+'</td>'+
+                              '<td>'+userList[6]+'</td>'+
+                              '<td>'+userList[7]+'</td>'+
+                     
+                             
+                              '</tr>'
+                    
+                            
+                    return dynamicDiv;
+                    }
 
 function cardscount(a){
        
@@ -778,12 +861,14 @@ else {
   $("#neverlogged1").text(dataa.parents_signup_yesterday[0]);
   $("#totalstudent1").text(dataa.teachers_signup_yesterday[0]);
 });
+
 var settings = {
   async: true,
   crossDomain: true,
   url: "/last_day_pr/"+a,
   method: "GET",
 };
+console.log(a);
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
  
@@ -834,6 +919,23 @@ else {
   $("#usercount").text(dataa.total_playback_24hr[0]);
   $("#neverlogged").text(dataa.teachers_playback_24hr[0]);
   $("#totalstudent").text(dataa.parents_playback_24hr[0]);
+
+});
+var settings = {
+  async: true,
+  crossDomain: true,
+  url: "/jiratickets/"+a,
+  method: "GET",
+};
+$.ajax(settings).done(function (response) {
+  var dataa = JSON.parse(response);
+  console.log(dataa);
+  
+
+  
+  $("#jtickets").text(dataa.total_tickets);
+  $("#jresolved").text(dataa.done);
+  $("#jescalated").text(dataa.escalated);
 
 });
 
@@ -922,4 +1024,16 @@ function cards(URL) {
     $('#btnExport').show();
     var d =  document.getElementById("stardate").innerText;
     createDynamic3(URL + '/' + d)
+  }
+  function cards4(URL) {
+    $('#next').empty();
+    console.log(URL);
+    var modal2 = document.getElementById("myModal2");
+    modal2.style.display = "block";
+    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    var gif = document.getElementById("gif");
+    gif.style.display = "block";
+    $('#btnExport').show();
+    var d =  document.getElementById("stardate").innerText;
+    createDynamic4(URL + '/' + d)
   }

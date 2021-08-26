@@ -2244,6 +2244,513 @@ def d3_new_chart():
 
     return json.dumps(temp)
 
+
+
+# ============LOGIN DASHBOARD
+@app.route("/tempasscode_streak")
+def temp_streak():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.Temp_Access
+    from datetime import datetime
+
+    df=DataFrame(list(collection.aggregate([
+    {"$match":{"$and":[
+    # // #              {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+               {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},
+                 {'CREATED_DATE':{'$gte':datetime(2021,8,16,11,0,0,0)}},
+                 {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com',
+                     'north3elem@gmail.com']}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+         }},
+
+
+        {'$project':{'_id':1,'user_name':'$USER_ID.USER_NAME','userid':'$USER_ID._id','email':'$USER_ID.EMAIL_ID','CREATED_DATE':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},'TEMP_PASSWORD':'$TEMP_PASSWORD'}},
+
+        {'$group':{'_id':'$email','CREATED_DATE':{'$addToSet':'$CREATED_DATE'},'sum':{'$sum':1}}},
+        {'$project':{'_id':1,'CREATED_DATE':'$CREATED_DATE','No_of_days_of_temp_passcode':{'$size':'$CREATED_DATE'},'count':'$sum'}},
+        {'$group':{'_id':'$count','streak':{'$sum':1},'email':{'$addToSet':'$_id'}}},
+        {'$project':{'_id':1,'streak':'$streak','email':{'$size':'$email'}}}
+
+    ])))
+    df
+
+    streak=df['_id'].tolist()
+    streak_count=df['streak'].tolist()
+
+    data={'streak':streak,'streak_count':streak_count}
+    return json.dumps(data)
+
+@app.route("/tempasscode_table/<n>")
+def temp_table(n):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.Temp_Access
+    from datetime import datetime
+
+    df=DataFrame(list(collection.aggregate([
+    {"$match":{"$and":[
+    # // #              {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+               {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},
+                 {'CREATED_DATE':{'$gte':datetime(2021,8,16,11,0,0,0)}},
+                 {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com',
+                     'north3elem@gmail.com']}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+         }},
+
+
+        {'$project':{'_id':1,'user_name':'$USER_ID.USER_NAME','userid':'$USER_ID._id','email':'$USER_ID.EMAIL_ID','CREATED_DATE':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},'TEMP_PASSWORD':'$TEMP_PASSWORD'}},
+
+        {'$group':{'_id':'$userid','email':{'$first':'$email'},'CREATED_DATE':{'$addToSet':'$CREATED_DATE'},'sum':{'$sum':1}}},
+        {'$project':{'_id':1,'email':'$email','CREATED_DATE':'$CREATED_DATE','No_of_days_of_temp_passcode':{'$size':'$CREATED_DATE'},'count':'$sum'}},
+        {'$match':{'count':int(""+n+"")}},
+        {'$project':{'_id':1}}
+    ])))
+#     df.rename(columns = { '_id': 'EMAIL_ID'}, inplace = True)
+        
+    email=df['_id'].tolist()
+        
+        
+    df1=DataFrame(list(db.user_master.aggregate([
+    {"$match":{"$and":[
+         {'_id' :{'$in':email}},
+       
+    ]}},
+    {'$project':{'_id':1,'USER_NAME':'$USER_NAME','EMAIL_ID':'$EMAIL_ID','SCHOOL_NAME':'$schoolId.NAME','ROLE':'$ROLE_ID.ROLE_NAME'}}
+        
+        
+    ])))
+        
+    df2=DataFrame(list(db.audio_track_master.aggregate([
+    {"$match":{"$and":[
+         {'USER_ID._id' :{'$in':email}},
+         {'MODIFIED_DATE':{'$gte':datetime(2021,8,1)}},
+    ]}},
+    {'$group':{'_id':'$USER_ID._id','pc':{'$sum':1},'last_prac':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date": '$MODIFIED_DATE'}}}}},
+    {'$project':{'_id':1,'playbacks_csy':'$pc','last_practice_date':'$last_prac'}}    
+    ])))
+    df3=DataFrame(list(db.Temp_Access.aggregate([
+    {"$match":{"$and":[
+         {'USER_ID._id' :{'$in':email}},
+     
+    ]}},
+    {'$group':{'_id':'$USER_ID._id','last_TEMP':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date": '$CREATED_DATE'}}}}},
+    {'$project':{'_id':1,'LAST_TEMP_DATE':'$last_TEMP'}}    
+    ])))
+    
+    
+    
+    
+    
+    
+    dff=pd.merge(df,df1,on='_id',how='left').fillna('')
+    DF=pd.merge(dff,df2,on='_id',how='left').fillna('')
+    dfff=pd.merge(DF,df3,on='_id',how='left').fillna('')
+    dfff=dfff[['USER_NAME','EMAIL_ID','SCHOOL_NAME','playbacks_csy','last_practice_date','LAST_TEMP_DATE']]
+    data=dfff.values.tolist()
+    return json.dumps({'data':data})
+
+@app.route("/login_cards")
+def login_card():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.Temp_Access
+    from datetime import datetime
+
+
+    df=DataFrame(list(collection.aggregate([
+    {"$match":{"$and":[
+    # // #              {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+               {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},
+                 {'CREATED_DATE':{'$gte':datetime(2021,8,16,11,0,0,0)}},
+                 {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com',
+                     'north3elem@gmail.com']}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+         }},
+         {'$group':{
+             '_id':{},
+             'users':{'$addToSet':'$USER_ID._id'},'total':{'$sum':1},
+             'schools':{'$addToSet':'$USER_ID.schoolId._id'},
+
+             }},
+           {'$project':{
+               '_id':0,
+               'unique_user_temp':{'$size':'$users'},'total_user':'$total',
+               'school_login':{'$size':'$schools'}
+               }}      
+    ])))
+
+    unique_user_temp=df['unique_user_temp'][0]
+    total_temp_count=df['total_user'][0]
+
+
+
+    df1=DataFrame(list(db.login_logs.aggregate([
+        {"$match":
+         {
+            '$and':[
+    #      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+    #          {"USER_ID.DEVICE_USED" : "webApp"},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+    #             {"USER_ID._id":{"$in":db.login_tracking.distinct( "_id", {  "IS_SUCCESS" : "Y"})}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},
+
+                  {'LAST_LOGGED_IN':{'$gte':datetime(2021,8,16,11,0,0,0),
+
+
+
+                                    }},
+                 {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com']}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+
+         }},
+        {'$group':{'_id':'','pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'}}},
+
+        {'$project':{'_id':1, 'login_count':'$pc','login_user':{'$size':'$uc'}}}])))
+
+    logins=df1['login_user'][0]
+    df2=DataFrame(list(db.login_tracking.aggregate([
+        {"$match":
+         {
+            '$and':[
+    #      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+    #          {"USER_ID.DEVICE_USED" : "webApp"},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+    #             {"USER_ID._id":{"$in":db.login_tracking.distinct( "_id", {  "IS_SUCCESS" : "Y"})}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},
+                {  "IS_SUCCESS" : "Y"},
+                  {'CREATED_DATE':{'$gte':datetime(2021,8,16,11,0,0,0)}},
+                 {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com']}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}
+            ]
+
+         }},
+        {'$group':{'_id':'','pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'}}},
+
+        {'$project':{'_id':1, 'login_count':'$pc','login_user':{'$size':'$uc'}}}])))
+
+
+    unique_success_logins=df2['login_user'][0]
+
+
+    df3=DataFrame(list(db.email_logging.aggregate([
+        {"$match":
+         {
+            '$and':[
+              {'PURPOSE':{'$regex':'Inner Explorer Login Help','$options':'i'}},
+                  {'CREATED_DATE':{'$gte':datetime(2021,8,16,11,0,0,0)}},
+                 {'RECEIVER_EMAIL':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com']}},
+
+            ]
+
+         }},
+        {'$group':{'_id':'','pc':{'$sum':1},'uc':{'$addToSet':'$_id'}}},
+
+        {'$project':{'_id':1, 'login_count':'$pc','new_passcode_email_count':{'$size':'$uc'}}}]
+             )))
+
+    new_passcode_email_count=df3['new_passcode_email_count'][0]
+
+    data={'totalsuccesslogins':str(logins),'new_passcode_email_count':str(new_passcode_email_count),'unique_user_temp':str(unique_user_temp), 
+         'total_temp_count':str(total_temp_count)}
+    return json.dumps(data)
+
+
+@app.route("/daily_logins")
+def date_wise_login():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    from datetime import datetime
+    # collection = db.Temp_Access
+
+    d1=DataFrame(list(db.login_tracking.aggregate([
+        {"$match":
+         {
+            '$and':[
+                {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+           {"USER_ID._id":{"$nin":db.subscription_master.distinct( "USER_ID._id", { "PLAN_ID.PLAN_ID":{'$in':[16,17]}})}},   
+             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+             {"USER_ID.DEVICE_USED" : {'$regex':"webApp",'$options':'i'}},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},
+    #             {  "IS_SUCCESS" : "N"},
+                  {'CREATED_DATE':{'$gte':datetime(2021,8,16,11,0,0,0)}},
+                 {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com']}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},'pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'}}},
+        {'$project':{'_id':1, 'login_count':'$pc','login_user_webapp':{'$size':'$uc'}}},
+        {'$sort':{'_id':1}}])))
+    d1=d1.astype(str)
+
+
+    # if d1.empty is True:
+    #     login_user_webapp=0
+    # else:
+    #     login_user_webapp=d1['login_user_webapp'][0]
+
+    d2=DataFrame(list(db.login_tracking.aggregate([
+        {"$match":
+         {
+            '$and':[
+    #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+           {"USER_ID._id":{"$in":db.subscription_master.distinct( "USER_ID._id", { "PLAN_ID.PLAN_ID":16})}},   
+             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+    #          {"USER_ID.DEVICE_USED" : "webApp"},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},
+    #             {  "IS_SUCCESS" : "N"},
+                  {'CREATED_DATE':{'$gte':datetime(2021,8,16,11,0,0,0)}},
+                 {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com']}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},'pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'}}},
+        {'$project':{'_id':1, 'login_count':'$pc','login_user_classroom':{'$size':'$uc'}}}
+        ,{'$sort':{'_id':1}}])))
+    d2=d2.astype(str)
+    # login_user_classroom=d2['login_user_classroom'][0]
+    # if d2.empty is True:
+    #     login_user_classroom=0
+    # else:
+    #     login_user_classroom=d2['login_user_classroom'][0]
+
+    d3=DataFrame(list(db.login_tracking.aggregate([
+        {"$match":
+         {
+            '$and':[
+                {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+    #        {"USER_ID._id":{"$nin":db.subscription_master.distinct( "USER_ID._id", { "PLAN_ID.PLAN_ID":{'$in':[16,17]}})}},   
+             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+    #          {"USER_ID.DEVICE_USED" : "webApp"},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},
+    #             {  "IS_SUCCESS" : "N"},
+                  {'CREATED_DATE':{'$gte':datetime(2021,8,16,11,0,0,0)}},
+                 {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com']}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},'pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'}}},
+        {'$project':{'_id':1, 'login_count':'$pc','login_user_clever':{'$size':'$uc'}}},
+        {'$sort':{'_id':1}}])))
+    d3=d3.astype(str)
+    # if d3.empty is True:
+    #     login_user_clever=0
+    # else:
+    #     login_user_clever=d3['login_user_clever'][0]
+
+
+    d4=DataFrame(list(db.login_tracking.aggregate([
+        {"$match":
+         {
+            '$and':[
+                {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+    #        {"USER_ID._id":{"$nin":db.subscription_master.distinct( "USER_ID._id", { "PLAN_ID.PLAN_ID":{'$in':[16,17]}})}},   
+             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+    #          {"USER_ID.DEVICE_USED" : "webApp"},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},
+    #             {  "IS_SUCCESS" : "N"},
+                  {'CREATED_DATE':{'$gte':datetime(2021,8,16,11,0,0,0)}},
+                 {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com']}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},'pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'}}},
+        {'$project':{'_id':1, 'login_count':'$pc','login_user_schoology':{'$size':'$uc'}}},
+        {'$sort':{'_id':1}}])))
+    if d4.empty is True:
+        login_user_schoology=0
+        d4=pd.DataFrame({'_id':['2021-08-16','2021-08-17','2021-08-18','2021-08-19'],'login_count':[0,0,0,0],'login_user_schoology':[0,0,0,0]})
+        d4=d4.astype(str)
+    #     pd.to_dateime['_id']
+    else:
+        d4=d4.astype(str)
+    d5=DataFrame(list(db.login_tracking.aggregate([
+        {"$match":
+         {
+            '$and':[
+    #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+           {"USER_ID._id":{"$in":db.subscription_master.distinct( "USER_ID._id", { "PLAN_ID.PLAN_ID":17})}},   
+             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+    #          {"USER_ID.DEVICE_USED" : "webApp"},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},
+    #             {  "IS_SUCCESS" : "N"},
+                  {'CREATED_DATE':{'$gte':datetime(2021,8,16,11,0,0,0)}},
+                 {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com']}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},'pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'}}},
+        {'$project':{'_id':1, 'login_count':'$pc','login_user_homeapp':{'$size':'$uc'}}},
+        {'$sort':{'_id':1}}
+
+
+    ])))
+    d5=d5.astype(str)
+
+    a=pd.merge(d1,d2 , on='_id', how='outer')
+    b=pd.merge(a,d3 , on='_id', how='outer')
+    c=pd.merge(b,d4 , on='_id', how='outer')
+    d=pd.merge(c,d5 , on='_id', how='outer')
+
+
+    d1=d1.astype(str)
+
+    d=d.fillna(0)
+
+    d.sort_values(by="_id")
+    final_df=d[['_id','login_user_webapp','login_user_classroom','login_user_clever','login_user_schoology','login_user_homeapp']]
+    final_df
+
+
+    date=final_df['_id'].tolist()
+    webapp_success_login=final_df['login_user_webapp'].tolist()
+    classroom_success_login=final_df['login_user_classroom'].tolist()
+    homeapp_success_login=final_df['login_user_homeapp'].tolist()
+    clever_success_login=final_df['login_user_clever'].tolist()
+    schoology_success_login=final_df['login_user_schoology'].tolist()
+
+    data={'date':date,'webapp_success_login':webapp_success_login,'classroom_success_login':classroom_success_login,
+         'homeapp_success_login':homeapp_success_login,'clever_success_login':clever_success_login,'schoology_success_login':
+         schoology_success_login}
+    return json.dumps(data)
+
+
+
 @app.route('/new_dash_count')
 def new_dash_count():
     username = urllib.parse.quote_plus('admin')
@@ -60876,6 +61383,9 @@ def dailyfeedback_ratingssss___(datestr):
     #     rr=round(qq*100,2)
         TEACHER_Comment_per_feedbackchange.append('1')
         teacher_PERCENTAGE_change.append(qq)
+        
+    import math
+    teacher_PERCENTAGE_change=[0 if math.isnan(i) else i for i in teacher_PERCENTAGE_change] 
 
 
     PARENT_Comment_per_feedbackchange=[]
@@ -60920,6 +61430,10 @@ def dailyfeedback_ratingssss___(datestr):
     #     rr=round(qq*100,2)
         PARENT_Comment_per_feedbackchange.append('1')
         parent_PERCENTAGE_change.append(qq)
+    
+    import math
+    parent_PERCENTAGE_change=[0 if math.isnan(i) else i for i in parent_PERCENTAGE_change] 
+    
 
 
     Average_FEEDBACK_Rating_change=[]
@@ -61103,6 +61617,9 @@ def practice_cards_24hr____(datestr):
         zz= round(yy*100,2)
         PARENTSCHANGE.append('1')
         PARENT_percentagechange.append(zz)
+        
+    from numpy import inf
+    PARENT_percentagechange[PARENT_percentagechange == inf] = 0
 
 
 
@@ -61141,6 +61658,9 @@ def practice_cards_24hr____(datestr):
         cc= round(bb*100,2)
         TEACHERSCHANGE.append('1')
         TEACHER_percentagechange.append(cc)
+        
+    from numpy import inf
+    TEACHER_percentagechange[TEACHER_percentagechange == inf] = 0
 
 
     TOTALCHANGE=[]
@@ -61179,6 +61699,9 @@ def practice_cards_24hr____(datestr):
         rr= round(qq*100,2)
         TOTALCHANGE.append('1')
         TOTAL_percentagechange.append(rr)
+        
+    from numpy import inf
+    TOTAL_percentagechange[TOTAL_percentagechange == inf] = 0
 
 
     parents_playback_24hr=df_atm1['parents_playback_24hr'].tolist()
@@ -62801,6 +63324,10 @@ def feedbackweekcardssss___(datestr):
 
     commentsonfeed=list(collection2.aggregate(query1))
     commentsonfeedback=pd.DataFrame(commentsonfeed)
+    if commentsonfeedback.empty:
+        commentsonfeedback = pd.DataFrame(index=[0], columns=['_id','rating'])
+        commentsonfeedback = commentsonfeedback.fillna(0)
+    
     comments_per_feedback_teacher=commentsonfeedback[['rating']]
     comments_per_feedback_teacher['rating']=commentsonfeedback['rating'].astype(int)
     
@@ -62828,6 +63355,10 @@ def feedbackweekcardssss___(datestr):
 
     commentsonfeed2=list(collection2.aggregate(querya))
     commentsonfeedback2=pd.DataFrame(commentsonfeed2)
+    if commentsonfeedback2.empty:
+        commentsonfeedback2 = pd.DataFrame(index=[0], columns=['_id','rating'])
+        commentsonfeedback2 = commentsonfeedback2.fillna(0)
+    
     comments_per_feedback_parents=commentsonfeedback2[['rating']]
     comments_per_feedback_parents['rating']=comments_per_feedback_parents['rating'].astype(int)
     
@@ -62857,6 +63388,10 @@ def feedbackweekcardssss___(datestr):
 
     commentsonfeed11=list(collection2.aggregate(query4))
     commentsonfeedback11=pd.DataFrame(commentsonfeed11)
+    if commentsonfeedback11.empty:
+        commentsonfeedback11 = pd.DataFrame(index=[0], columns=['_id','rating'])
+        commentsonfeedback11 = commentsonfeedback11.fillna(0)
+    
     comments_per_feedback_before_last_week_teachers=commentsonfeedback11[['rating']]
     comments_per_feedback_before_last_week_teachers['rating']=comments_per_feedback_before_last_week_teachers['rating'].astype(int)
     
@@ -62885,6 +63420,10 @@ def feedbackweekcardssss___(datestr):
 
     commentsonfeed200=list(collection2.aggregate(queryB))
     commentsonfeedback20=pd.DataFrame(commentsonfeed200)
+    if commentsonfeedback20.empty:
+        commentsonfeedback20 = pd.DataFrame(index=[0], columns=['_id','rating'])
+        commentsonfeedback20 = commentsonfeedback20.fillna(0)
+    
     comments_per_feedback_before_last_week_parents=commentsonfeedback20[['rating']]
     comments_per_feedback_before_last_week_parents['rating']=comments_per_feedback_before_last_week_parents['rating'].astype(int)
 
@@ -62911,6 +63450,10 @@ def feedbackweekcardssss___(datestr):
 
     avg_rating=list(collection2.aggregate(query6))
     avg_ratings=pd.DataFrame(avg_rating)
+    if avg_ratings.empty:
+        avg_ratings = pd.DataFrame(index=[0], columns=['_id','rating'])
+        avg_ratings = avg_ratings.fillna(0)
+    
     avg_ratings_lastweek=avg_ratings[['RATING']]
     avg_ratings_lastweek['RATING']=avg_ratings_lastweek['RATING'].astype(int)
 
@@ -62941,6 +63484,10 @@ def feedbackweekcardssss___(datestr):
 
     avg_rate=list(collection2.aggregate(query60))
     avg_ratin=pd.DataFrame(avg_rate)
+    if avg_ratin.empty:
+        avg_ratin = pd.DataFrame(index=[0], columns=['_id','rating'])
+        avg_ratin = avg_ratin.fillna(0)
+    
     avg_ratings_before_lastweek=avg_ratin[['RATING']]
     avg_ratings_before_lastweek['RATING']=avg_ratings_before_lastweek['RATING'].astype(int)
     avg_ratings_beforee_last_week=pd.DataFrame({'avg_ratings_before_lastweek':round(avg_ratings_before_lastweek[avg_ratings_before_lastweek['RATING']!=0]['RATING'].mean(),1)}, index=[0])
@@ -63246,26 +63793,31 @@ def dailyyy_feedback_table_PARENTS__(datestr):
     list2= list(collection2.aggregate(qr2))
     audio1= DataFrame(list2)
     if audio1.empty:
-        return json.dumps({'data':"NO DATA AVAILABLE"})
-    else:
-        audio=pd.merge(audio1,df_atm1, on='_id', how='left')
-        audio=audio.sort_values(by='COMMENT',ascending=False).reset_index(drop=True)
-        audio['AUDIO_DAY']=audio['AUDIO_DAY'].fillna('')
-        audio['PROGRAM_NAME']=audio['PROGRAM_NAME'].fillna('')
-        audio['Program']=audio[['PROGRAM_NAME', 'AUDIO_DAY']].agg(' '.join, axis=1)
-        audio2=audio[['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'Program','COMMENT','CREATED_DATE','RATING','Language']]
-        audio2['SCHOOL_NAME'].fillna('NO SCHOOL', inplace=True)
-        audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
-        audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
-        audio2['RATING'].fillna('', inplace=True)
-        audio2['COMMENT'].fillna('NO COMMENT', inplace=True)
-        audio2['Program'].fillna('NO PROGRAM NAME FOUND', inplace=True)
-        # audio2['RATING']=str(audio2['RATING'].iloc[0])
-        audio2['RATING']=audio2['RATING'].replace(0, '')
-        audio2['Language'].fillna('NO LANGUAGE FOUND', inplace=True)
-        audio2['CREATED_DATE']=audio2['CREATED_DATE'].fillna('')
-        temp={'data':audio2.values.tolist()}
+        
+        temp = pd.DataFrame(index=[0], columns=['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'Program','COMMENT','CREATED_DATE','RATING','Language'])
+        temp = temp.fillna('')
+        temp={'data':temp.values.tolist()}        
         return json.dumps(temp)
+#         return json.dumps({'data':[]})
+    
+    audio=pd.merge(audio1,df_atm1, on='_id', how='left')
+    audio=audio.sort_values(by='COMMENT',ascending=False).reset_index(drop=True)
+    audio['AUDIO_DAY']=audio['AUDIO_DAY'].fillna('')
+    audio['PROGRAM_NAME']=audio['PROGRAM_NAME'].fillna('')
+    audio['Program']=audio[['PROGRAM_NAME', 'AUDIO_DAY']].agg(' '.join, axis=1)
+    audio2=audio[['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'Program','COMMENT','CREATED_DATE','RATING','Language']]
+    audio2['SCHOOL_NAME'].fillna('NO SCHOOL', inplace=True)
+    audio2['USER_NAME'].fillna('NO NAME FOUND', inplace=True)
+    audio2['EMAIL'].fillna('NO EMAIL FOUND', inplace=True)
+    audio2['RATING'].fillna('', inplace=True)
+    audio2['COMMENT'].fillna('NO COMMENT', inplace=True)
+    audio2['Program'].fillna('NO PROGRAM NAME FOUND', inplace=True)
+    # audio2['RATING']=str(audio2['RATING'].iloc[0])
+    audio2['RATING']=audio2['RATING'].replace(0, '')
+    audio2['Language'].fillna('NO LANGUAGE FOUND', inplace=True)
+    audio2['CREATED_DATE']=audio2['CREATED_DATE'].fillna('')
+    temp={'data':audio2.values.tolist()}
+    return json.dumps(temp)
 
 
         
@@ -63516,6 +64068,14 @@ def weekly_feedback_table__(datestr):
 
     list2= list(collection2.aggregate(qr2))
     audio1= DataFrame(list2)
+    if audio1.empty:
+        
+        temp = pd.DataFrame(index=[0], columns=['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'Program','COMMENT','CREATED_DATE','RATING','Language'])
+        temp = temp.fillna('')
+        temp={'data':temp.values.tolist()}        
+        return json.dumps(temp)
+#         return json.dumps({'data':[]})
+
     audio=pd.merge(audio1,df_atm1, on='_id', how='left')
 
     audio=audio.sort_values(by='COMMENT',ascending=False).reset_index(drop=True)
@@ -63633,6 +64193,14 @@ def weekly_feedback_tableTEACHERS___(datestr):
 
     list2= list(collection2.aggregate(qr2))
     audio1= DataFrame(list2)
+    if audio1.empty:
+        
+        temp = pd.DataFrame(index=[0], columns=['SCHOOL_NAME', 'USER_NAME', 'EMAIL', 'Program','COMMENT','CREATED_DATE','RATING','Language'])
+        temp = temp.fillna('')
+        temp={'data':temp.values.tolist()}        
+        return json.dumps(temp)
+#         return json.dumps({'data':[]})
+
     audio=pd.merge(audio1,df_atm1, on='_id', how='left')
     audio=audio.sort_values(by='COMMENT',ascending=False).reset_index(drop=True)
     audio['AUDIO_DAY']=audio['AUDIO_DAY'].fillna('')
@@ -63984,8 +64552,15 @@ def progpractice____DAY____(datestr,charttype):
         progname_lastweek24hrs=join_lastweek24hrs['progname'].tolist()
 
 #         print(progname)
-        for i in range(len(progname)):
-                progname[i] = progname[i]
+#         for i in range(len(progname)):
+#                 progname[i] = progname[i]
+
+        if len(progname) > len(progname_lastweek24hrs):
+            progname=progname
+
+        if len(progname_lastweek24hrs) > len(progname):
+            progname=progname_lastweek24hrs
+    
         data={'parentspractice':parentspractice,'teacherspractice':teacherspractice,
               'parentspractice_lastweek24hrs':parentspractice_lastweek24hrs,
               'teacherspractice_lastweek24hrs':teacherspractice_lastweek24hrs,
@@ -64138,8 +64713,15 @@ def progpractice____DAY____(datestr,charttype):
     progname_lastweek24hrs=join_lastweek24hrs['progname'].tolist()
     
 #     print(df)
-    for i in range(len(progname)):
-            progname[i] = progname[i]
+#     for i in range(len(progname)):
+#             progname[i] = progname[i]
+    
+    if len(progname) > len(progname_lastweek24hrs):
+        progname=progname
+        
+    if len(progname_lastweek24hrs) > len(progname):
+        progname=progname_lastweek24hrs
+    
     data={'parentspractice':parentspractice,'teacherspractice':teacherspractice,
           'parentspractice_lastweek24hrs':parentspractice_lastweek24hrs,
           'teacherspractice_lastweek24hrs':teacherspractice_lastweek24hrs,
@@ -68275,6 +68857,102 @@ def escore_stack(disid):
         "District_Engagement_Score":District_Engagement_Score}
     return json.dumps(temp)
 
+#>>>>>>>>>>-----------JIRA REQUEST API's--------------------->>>>>>>>>>>>>>>>>
+@app.route("/jiratickets/<datestr>")
+def jira_tickets(datestr):
+    googleSheetId = '1dMLQzJn-fMvWBz4ui1fY_xnouMI4lVH6Gl77CWiToSU'
+    worksheetName = 'CAP_JIRA'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    df=pd.read_csv(URL)
+
+    date= dateutil.parser.parse(datestr)
+
+    #     datestr = "2021-08-19"
+    df1 = df[['Date', 'Requests Received','Done','Escalted']].fillna(0)
+    df1 = df1.replace("-", 0)
+    df1['Date'] = pd.to_datetime(df1['Date'])
+
+    df1["Requests Received"] = df1["Requests Received"].astype(int)
+    df1["Done"] = df1["Done"].astype(int)
+    df1["Escalted"] = df1["Escalted"].astype(int)
+
+
+    dff = df1[(df1['Date'] == datestr)]
+
+    dff.astype(str)
+    d1 = dff.Date.iloc[0].strftime('%Y-%m-%d')
+    d2 = dff["Requests Received"].iloc[0].astype(str)
+    d3 = dff["Done"].iloc[0].astype(str)
+    d4 = dff["Escalted"].iloc[0].astype(str)
+    dict1 = dff.to_numpy().tolist()
+    temp = {"date" : d1,"total_tickets" : d2,"done" : d3,"escalated" : d4}
+
+    return json.dumps(temp,default=str)
+
+
+
+#>>>>>>>>>>-----------JIRA REQUEST API's 2--------------------->>>>>>>>>>>>>>>>>
+@app.route("/jiratype/<datestr>")
+def jira_type(datestr):
+    googleSheetId = '1dMLQzJn-fMvWBz4ui1fY_xnouMI4lVH6Gl77CWiToSU'
+    worksheetName = 'CAP_JIRA'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    df=pd.read_csv(URL)
+    date= dateutil.parser.parse(datestr)
+
+
+    df2 = df[['Lisa Cahill', 'Laurie','Lisa Grady', 'Laura', 'Tabitha','Paul', 'Harsh', 'Victoria', 'Iris','Joan', 
+              'Nina']].fillna(0)
+    df3 = df[['Date','Login', 'Subscription Extend','Align Admin/ Teacher','Forgot Email', 'Others','Waiting for Customer']].fillna(0)
+
+    df3['Date'] = pd.to_datetime(df3['Date'])
+    df2 = df2.replace("-", 0)
+    df3 = df3.replace("-", 0)
+
+    df2["Tabitha"]=df2["Tabitha"].astype(int)
+    df2["Harsh"]=df2["Harsh"].astype(int)
+    df2["Paul"]=df2["Paul"].astype(int)
+    df2["Joan"]=df2["Joan"].astype(int)
+    df2["Laurie"]=df2["Laurie"].astype(int)
+    df2["Lisa Grady"]=df2["Lisa Grady"].astype(int)
+    df2["Nina"]=df2["Nina"].astype(int)
+    df2["Lisa Cahill"]=df2["Lisa Cahill"].astype(int)
+    df2["Laura"]=df2["Laura"].astype(int)
+    df2["Victoria"]=df2["Victoria"].astype(int)
+
+
+    df3['Login']=df3["Login"].astype(int)
+    df3["Subscription Extend"]=df3["Subscription Extend"].astype(int)
+    df3["Align Admin/ Teacher"]=df3["Align Admin/ Teacher"].astype(int)
+    df3["Forgot Email"]=df3["Forgot Email"].astype(int)
+    df3["Others"]=df3["Others"].astype(int)
+    df3["Waiting for Customer"]=df3["Waiting for Customer"].astype(int)
+
+
+    df3["IE_Team_Raised"] =df2.sum(axis = 1)
+    dff = df3[(df3['Date'] == datestr)]
+    #     dff.T
+    d1 = dff.Date.iloc[0].strftime('%Y-%m-%d')
+    d2 = dff["Login"].to_list()
+    d3 = dff["Subscription Extend"].to_list()
+    d4 = dff["Align Admin/ Teacher"].to_list()
+    d5 = dff["Forgot Email"].to_list()
+    d6 = dff["Others"].to_list()
+    d7 = dff["Waiting for Customer"].to_list()
+    d8 = dff["IE_Team_Raised"].to_list()
+    temp = {"data" :dff}
+    temp = {"Date" : d1,"Login" : d2,"Subscription Extend" : d3,"Align Admin/Teacher" : d4,"Forgot Email" : d5, "Others" : d6, 
+            "Waiting For Customer" : d7, "IE Team Raised" : d8 }
+
+    dftry = pd.DataFrame.from_dict(temp).fillna(0)
+    temp = {"data":dftry.values.astype(str).tolist()}
+    return json.dumps(temp) 
+
+
+
+
+####################################################################################################################
+
 @app.route('/Family_SURVEY')
 def Family_SURVEY():
     if not g.user:
@@ -68453,6 +69131,14 @@ def callibration():
         return redirect(url_for('login'))
         
     return render_template('callibration.html')
+
+@app.route('/login_analytics')
+def loginAnalytics():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('login_analytics.html')
+
 @app.route('/Journey_score')
 def reportcard():
     if not g.user:

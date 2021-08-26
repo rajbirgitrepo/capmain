@@ -468,7 +468,31 @@
               </div>
             </div>
           </div>
-
+                 <div class="col-md-3">
+            <div class="boxExecutive">
+              <div>
+                <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
+                <p style="font-size: 11px;">Total JIRA Tickets<span style="margin-left: 5px !important;"
+                    id="updownjira"></span></p>
+                <p class="boxvalue2" id="jtickets"  onclick="cards4('/jiratype')"></p>
+                <hr />
+                <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
+                <p class="boxHeading2">Resolved JIRA Tickets<span style="margin-left: 5px !important;"
+                    id="updownjiraResolved"></span></p>
+                <p class="boxvalue" id="jresolved" 
+                  style="cursor:pointer;"></p>
+                <br />
+                <hr />
+                <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
+                <p class="boxHeading2">Escalated JIRA Tickets<span style="margin-left: 5px !important;"
+                    id="updownjeerae"></span></p>
+                <p class="boxvalue" id="jescalated" 
+                  style="cursor:pointer;"></p>
+                <br />
+                <hr />
+              </div>
+            </div>
+          </div>
           <!-- <div class="col-md-3">
                 <div class="boxExecutive">
                   <div >
