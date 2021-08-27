@@ -1084,8 +1084,8 @@ var settings = {
                 type: 'column'
               },
               colors: [
-                '#8AE02B',
                 '#01A451',
+                '#8AE02B',
                 '#a0afb0',
                 '#01A451',
                          ],
@@ -1126,12 +1126,12 @@ var settings = {
               series: [{
                 name: 'Total users with atleast 5 Playbacks',
                 data: dataa.total_user_atleast_5_playbacks,
-                stack: 1
+                stack: 0
               },
                       {
                 name: 'Total Useres',
                 data: dataa.total_users,
-                stack: 0
+                stack: 1
               }]
             });
             
