@@ -233,21 +233,21 @@ Highcharts.chart('container2', {
     }
   },
   series: [{
-    name: 'HOME ' + tx + ' LAST WEEK 24HRS',
+    name: 'PARENT ' + tx + ' LAST WEEK 24HRS',
     data: dataa.parentspractice_lastweek24hrs,
     stack: 0
   },
           {
-    name: 'HOME ' + tx,
+    name: 'PARENT ' + tx,
     data: dataa.parentspractice,
     stack: 1
   },
   {
-    name: 'CLASSROOM ' + tx + ' LAST WEEK 24HRS',
+    name: 'TEACHER ' + tx + ' LAST WEEK 24HRS',
     data: dataa.teacherspractice_lastweek24hrs,
     stack: 0
   }, {
-    name: 'CLASSROOM ' + tx,
+    name: 'TEACHER ' + tx,
     data: dataa.teacherspractice,
     stack: 1
   },]
@@ -320,11 +320,11 @@ Highcharts.chart('container', {
     data: dataa.weekdata.par_yes,
     stack: 1
   },{
-    name: 'CLASSROOM FEEDBACK LAST WEEK 24HRS',
+    name: 'TEACHER FEEDBACK LAST WEEK 24HRS',
     data: dataa.weekdata.teach_lastweek,
     stack: 0
   }, {
-    name: 'CLASSROOM FEEDBACK YESTERDAY',
+    name: 'TEACHER FEEDBACK YESTERDAY',
     data: dataa.weekdata.teachers_yes,
     stack: 1
   }]
@@ -737,7 +737,7 @@ Highcharts.chart('container5', {
                     $.ajax(settings).done(function (response) {
                     var data1=JSON.parse(response);
                     
-                    $('#next').prepend('<table class="display" id = "dataTable1"><thead ><tr><th>Date</th><th>Login</th><th>Subscription Extend</th><th>Align Admin/Teacher</th><th>Forget Email</th><th>Others/th><th>Waiting For Customer</th><th>IE Team Raised</th></tr ></thead ><tbody>');
+                    $('#next').prepend('<table class="display" id = "dataTable1"><thead ><tr><th>Date</th><th>Login</th><th>Subscription Extend</th><th>Align Admin/Teacher</th><th>Forget Email</th><th>Others</th><th>Waiting For Customer</th><th>IE Team Raised</th></tr ></thead ><tbody>');
                     for(var i=0;i<data1.data.length;i++){
                     
                     
@@ -756,7 +756,7 @@ Highcharts.chart('container5', {
                     
                     
                     
-                    $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>Date</th><th>Login</th><th>Subscription Extend</th><th>Align Admin/Teacher</th><th>Forget Email</th><th>Others/th><th>Waiting For Customer</th><th>IE Team Raised</th></tr ></thead ><tbody>');
+                    $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>Date</th><th>Login</th><th>Subscription Extend</th><th>Align Admin/Teacher</th><th>Forget Email</th><th>Others</th><th>Waiting For Customer</th><th>IE Team Raised</th></tr ></thead ><tbody>');
                       for(var i=0;i<data1.data.length;i++){
                     
                     
@@ -921,6 +921,7 @@ else {
   $("#totalstudent").text(dataa.parents_playback_24hr[0]);
 
 });
+
 var settings = {
   async: true,
   crossDomain: true,

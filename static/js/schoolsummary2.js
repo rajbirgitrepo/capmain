@@ -1123,16 +1123,17 @@ var settings = {
                   stacking: 'normal',
                 }
               },
-              series: [{
-                name: 'Total users with atleast 5 Playbacks',
-                data: dataa.total_user_atleast_5_playbacks,
-                stack: 0
-              },
-                      {
+              series: [  {
                 name: 'Total Useres',
                 data: dataa.total_users,
+                stack: 0
+              },{
+                name: 'Total users with atleast 5 Playbacks',
+                data: dataa.total_user_atleast_5_playbacks,
                 stack: 1
-              }]
+              },
+                      
+            ]
             });
             
                 });

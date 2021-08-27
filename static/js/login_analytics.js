@@ -50,7 +50,7 @@ var settings = {
     yAxis: {lineWidth:1,
         min: 0,
         title: {
-            text: 'streak_count'
+            text: 'Streak Count'
         },
         stackLabels: {
             enabled: false,

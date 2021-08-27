@@ -8,9 +8,9 @@
    $.ajax(settings).done(function (response) {
     var dataa=JSON.parse(response);
     console.log("this is jira");
-  $('#jira').text(dataa.Jirar);
-   $('#jirac').text(dataa.Jirac);
-  $('#jirae').text(dataa.jirae);
+  // $('#jira').text(dataa.Jirar);
+  //  $('#jirac').text(dataa.Jirac);
+  // $('#jirae').text(dataa.jirae);
   $('#App_Uninstall').text(dataa.App_Uninstall);
   $('#Crashes').text(dataa.Crashes);
   $('#App_exception').text(dataa.App_exception);
@@ -107,19 +107,19 @@
   
 
   console.log("this is jira");
-  var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url": '/chartdesc',
-      "method": "GET"
-     }
-     $.ajax(settings).done(function (response) {
-      var dataa=JSON.parse(response);
-      console.log("this is jira");
-    $('#jira').text(dataa.Jirar);
-     $('#jirar').text(dataa.Jirac);
-    $('#jirae').text(dataa.jirae);
-     });
+  // var settings = {
+  //     "async": true,
+  //     "crossDomain": true,
+  //     "url": '/chartdesc',
+  //     "method": "GET"
+  //    }
+  //    $.ajax(settings).done(function (response) {
+  //     var dataa=JSON.parse(response);
+  //     console.log("this is jira");
+  //   $('#jira').text(dataa.Jirar);
+  //    $('#jirar').text(dataa.Jirac);
+  //   $('#jirae').text(dataa.jirae);
+  //    });
    
   function cardscount(a){
          
@@ -148,6 +148,24 @@
     $("#d1").text(dataa.total_signup_yesterday[0]);
 
   });
+  var settings = {
+    async: true,
+    crossDomain: true,
+    url: "/jiratickets/"+a,
+    method: "GET",
+  };
+  $.ajax(settings).done(function (response) {
+    var dataa = JSON.parse(response);
+    console.log(dataa);
+    
+  
+    
+    $("#totaljira").text(dataa.total_tickets);
+    $("#jiraresolved").text(dataa.done);
+    $("#jiraescalated").text(dataa.escalated);
+  
+  });
+  
   var settings = {
     async: true,
     crossDomain: true,

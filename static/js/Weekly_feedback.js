@@ -656,71 +656,64 @@ var settings = {
   $.ajax(settings).done(function (response) {
   var dataa=JSON.parse(response);
 Highcharts.chart('container5', {
-chart: {
-type: 'column'
-},
-title: {
-text: 'Average Audio Completion Weekly'
-},
-subtitle: {
-text: ''
-},
-xAxis: {
-categories: dataa.temp.percentage_of_audio_completed[0],
-tickmarkPlacement: 'on',
-title: {
-enabled: false
-}, 
-labels :{
-  rotation: 270
-}
-
-}
-,yAxis: [ {
-  lineWidth: 1,
-  opposite: false,
+  chart: {
+    type: 'column'
+  },
   title: {
-      text: 'Count'
+    text: 'Average Audio Completion Weekly'
+  },
+  subtitle: {
+    text: ''
+  },
+  xAxis: {
+    categories: dataa.temp.percentage_of_audio_completed[0],
+    tickmarkPlacement: 'on',
+    title: {
+      enabled: false
+    }
   }
-},{
-  lineWidth: 1,
-  opposite: true,
-  title: {
-      text: 'Cumulative Count'
-  }
-}],
-tooltip: {
-split: true,
-valueSuffix: ''
-},
-plotOptions: {
-area: {
-stacking: 'normal',
-lineColor: '#666666',
-lineWidth: 1,
-marker: {
-  lineWidth: 1,
-  lineColor: '#666666',
-  enabled : false
-}
-}
-},
-series: [
-//   {
-// name: 'Cumulative Audio Completion',
-// color:'#DCDCDC',
-// type:"area",
-// data: dataa.temp.cumulative_audio_completion
-// }, 
-{
-name: 'Audio Completion',
-color:'#00a651',
-yAxis:0,
-
-data: dataa.temp.number_of_audios_compelted
-}]
-});
-    });
+ ,yAxis: [ {
+        lineWidth: 1,
+        opposite: false,
+        title: {
+            text: 'Count'
+        }
+    },{
+        lineWidth: 1,
+        opposite: true,
+        title: {
+            text: 'Cumulative Count'
+        }
+    }],
+  tooltip: {
+    split: true,
+    valueSuffix: ''
+  },
+  plotOptions: {
+    area: {
+      stacking: 'normal',
+      lineColor: '#666666',
+      lineWidth: 1,
+      marker: {
+        lineWidth: 1,
+        lineColor: '#666666',
+        enabled : false
+      }
+    }
+  },
+  series: [{
+    name: 'Cumulative Audio Completion',
+    color:'#DCDCDC',
+    type:"area",
+    data: dataa.temp.cumulative_audio_completion
+  }, {
+    name: 'Audio Completion',
+    color:'#00a651',
+    yAxis:0,
+   
+    data: dataa.temp.number_of_audios_compelted
+  }]
+});    });
 
 
     var settings = {

@@ -2285,7 +2285,8 @@ def temp_streak():
         {'$group':{'_id':'$email','CREATED_DATE':{'$addToSet':'$CREATED_DATE'},'sum':{'$sum':1}}},
         {'$project':{'_id':1,'CREATED_DATE':'$CREATED_DATE','No_of_days_of_temp_passcode':{'$size':'$CREATED_DATE'},'count':'$sum'}},
         {'$group':{'_id':'$count','streak':{'$sum':1},'email':{'$addToSet':'$_id'}}},
-        {'$project':{'_id':1,'streak':'$streak','email':{'$size':'$email'}}}
+        {'$project':{'_id':1,'streak':'$streak','email':{'$size':'$email'}}},
+        {'$sort':{'_id':1}},
 
     ])))
     df
@@ -20244,162 +20245,162 @@ def progpracticedaily():
 
 
 
-@app.route('/SIGNUPS_dailycomparsion') #test3
-def SIGNUP_24hr():
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
-    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
-    db=client.compass
-    collection1= db.user_master
+# @app.route('/SIGNUPS_dailycomparsion') #test3
+# def SIGNUP_24hr():
+#     username = urllib.parse.quote_plus('admin')
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+#     db=client.compass
+#     collection1= db.user_master
 
-    #     tz = timezone('UTC')
-    #     date=datetime.datetime.now(tz) 
-    # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
-    #     yesterday = pd.to_datetime(date) - timedelta(days=1)
-    tz = timezone('UTC')
-    date=datetime.datetime.now(tz) 
-    # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
-    yesterday = pd.to_datetime(date) - timedelta(days=1)
-    yesterday= datetime.datetime.combine(datetime.datetime.utcnow() -timedelta(days=1),datetime.time.min)
-    print(yesterday,"yessss")
-    today= datetime.datetime.combine(datetime.datetime.utcnow(),datetime.time.min)
-    print(today,"today")
-    tod= today
-    #     + timedelta(hours=4)
-    start= tod-timedelta(days=1)
-    yester= yesterday
-    #     +timedelta(hours=4)
-    start_15day=tod-timedelta(days=8)
-    startend= start_15day+timedelta(days=1)
+#     #     tz = timezone('UTC')
+#     #     date=datetime.datetime.now(tz) 
+#     # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
+#     #     yesterday = pd.to_datetime(date) - timedelta(days=1)
+#     tz = timezone('UTC')
+#     date=datetime.datetime.now(tz) 
+#     # yesterday= datetime.now(tz=timezone.utc)- timedelta(days=1)
+#     yesterday = pd.to_datetime(date) - timedelta(days=1)
+#     yesterday= datetime.datetime.combine(datetime.datetime.utcnow() -timedelta(days=1),datetime.time.min)
+#     print(yesterday,"yessss")
+#     today= datetime.datetime.combine(datetime.datetime.utcnow(),datetime.time.min)
+#     print(today,"today")
+#     tod= today
+#     #     + timedelta(hours=4)
+#     start= tod-timedelta(days=1)
+#     yester= yesterday
+#     #     +timedelta(hours=4)
+#     start_15day=tod-timedelta(days=8)
+#     startend= start_15day+timedelta(days=1)
 
-    qr1=[{"$match":{
-    '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
-    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-    {'IS_BLOCKED':{"$ne":'Y'}}, 
-    {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-    {'CREATED_DATE':{'$gt':yester , '$lte':tod}}
-    ]}},
-    {'$group':{'_id':'null', 
-    'parents_signup_last_week': {'$sum':{'$cond':[{'$eq':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
-    'teachers_signup_last_week': {'$sum':{'$cond':[{'$ne':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
-    'total_signup_last_week': {'$sum':1}            
-    }}]
-    list1= list(collection1.aggregate(qr1))
-    df_atm= DataFrame(list1)
-    df_atm1=df_atm[['parents_signup_last_week', 'teachers_signup_last_week','total_signup_last_week']]
-    qr2=[{"$match":{
-    '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
-    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-    {'IS_BLOCKED':{"$ne":'Y'}}, 
-    {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-    {'CREATED_DATE':{'$gte':start_15day
-                , '$lt': startend}}
-    ]}},
-    {'$group':{'_id':'null', 
-    'parents_signup_last_to_lastweek': {'$sum':{'$cond':[{'$eq':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
-    'teachers_signup_last_to_lastweek': {'$sum':{'$cond':[{'$ne':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
-    'total_signup_last_to_lastweek': {'$sum':1}            
-    }}]
-    list2= list(collection1.aggregate(qr2))
-    df_atm= DataFrame(list2)
+#     qr1=[{"$match":{
+#     '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#     {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#     {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#     {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+#     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+#     {'IS_BLOCKED':{"$ne":'Y'}}, 
+#     {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+#     {'CREATED_DATE':{'$gt':yester , '$lte':tod}}
+#     ]}},
+#     {'$group':{'_id':'null', 
+#     'parents_signup_last_week': {'$sum':{'$cond':[{'$eq':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+#     'teachers_signup_last_week': {'$sum':{'$cond':[{'$ne':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+#     'total_signup_last_week': {'$sum':1}            
+#     }}]
+#     list1= list(collection1.aggregate(qr1))
+#     df_atm= DataFrame(list1)
+#     df_atm1=df_atm[['parents_signup_last_week', 'teachers_signup_last_week','total_signup_last_week']]
+#     qr2=[{"$match":{
+#     '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#     {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#     {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#     {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+#     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+#     {'IS_BLOCKED':{"$ne":'Y'}}, 
+#     {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+#     {'CREATED_DATE':{'$gte':start_15day
+#                 , '$lt': startend}}
+#     ]}},
+#     {'$group':{'_id':'null', 
+#     'parents_signup_last_to_lastweek': {'$sum':{'$cond':[{'$eq':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+#     'teachers_signup_last_to_lastweek': {'$sum':{'$cond':[{'$ne':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+#     'total_signup_last_to_lastweek': {'$sum':1}            
+#     }}]
+#     list2= list(collection1.aggregate(qr2))
+#     df_atm= DataFrame(list2)
 
-    df_atm2=df_atm[['parents_signup_last_to_lastweek', 'teachers_signup_last_to_lastweek','total_signup_last_to_lastweek']]
-
-
-    parentschange=[]
-    parents_Percentage_Change=[]
-    if df_atm2['parents_signup_last_to_lastweek'].iloc[0] > df_atm1['parents_signup_last_week'].iloc[0]:
-        xx=df_atm2['parents_signup_last_to_lastweek'].iloc[0]-df_atm1['parents_signup_last_week'].iloc[0]
-        yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
-        parentschange.append('-1')
-        parents_Percentage_Change.append(zz)
-
-    elif df_atm2['parents_signup_last_to_lastweek'].iloc[0] == df_atm1['parents_signup_last_week'].iloc[0]:
-        xx=df_atm2['parents_signup_last_to_lastweek'].iloc[0]-df_atm1['parents_signup_last_week'].iloc[0]
-        yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
-        parentschange.append('0')
-        parents_Percentage_Change.append(zz)
-
-    else:
-        xx=df_atm1['parents_signup_last_week'].iloc[0]-df_atm2['parents_signup_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['parents_signup_last_week'].iloc[0]
-        zz= round(yy*100,2)
-        parentschange.append('1')
-        parents_Percentage_Change.append(zz)
+#     df_atm2=df_atm[['parents_signup_last_to_lastweek', 'teachers_signup_last_to_lastweek','total_signup_last_to_lastweek']]
 
 
-    teacherschange=[]
-    Teacher_percentage_change=[]
-    if df_atm2['teachers_signup_last_to_lastweek'].iloc[0] > df_atm1['teachers_signup_last_week'].iloc[0]:
-        xx=df_atm2['teachers_signup_last_to_lastweek'].iloc[0]-df_atm1['teachers_signup_last_week'].iloc[0]
-        yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
-        teacherschange.append('-1')
-        Teacher_percentage_change.append(zz)
+#     parentschange=[]
+#     parents_Percentage_Change=[]
+#     if df_atm2['parents_signup_last_to_lastweek'].iloc[0] > df_atm1['parents_signup_last_week'].iloc[0]:
+#         xx=df_atm2['parents_signup_last_to_lastweek'].iloc[0]-df_atm1['parents_signup_last_week'].iloc[0]
+#         yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
+#         parentschange.append('-1')
+#         parents_Percentage_Change.append(zz)
 
-    elif df_atm2['teachers_signup_last_to_lastweek'].iloc[0] == df_atm1['teachers_signup_last_week'].iloc[0]:
-        xx=df_atm2['teachers_signup_last_to_lastweek'].iloc[0]-df_atm1['teachers_signup_last_week'].iloc[0]
-        yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
-        teacherschange.append('0')
-        Teacher_percentage_change.append(zz)
+#     elif df_atm2['parents_signup_last_to_lastweek'].iloc[0] == df_atm1['parents_signup_last_week'].iloc[0]:
+#         xx=df_atm2['parents_signup_last_to_lastweek'].iloc[0]-df_atm1['parents_signup_last_week'].iloc[0]
+#         yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
+#         parentschange.append('0')
+#         parents_Percentage_Change.append(zz)
 
-    else:
-        xx=df_atm1['teachers_signup_last_week'].iloc[0]-df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['teachers_signup_last_week'].iloc[0]
-        zz= round(yy*100,2)
-        teacherschange.append('1')
-        Teacher_percentage_change.append(zz)
-
-
-    totalchange=[]
-    Total_percentage_change=[]
-    if df_atm2['total_signup_last_to_lastweek'].iloc[0] > df_atm1['total_signup_last_week'].iloc[0]:
-        xx=df_atm2['total_signup_last_to_lastweek'].iloc[0]-df_atm1['total_signup_last_week'].iloc[0]
-        yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
-        totalchange.append('-1')
-        Total_percentage_change.append(zz)
-    elif df_atm2['total_signup_last_to_lastweek'].iloc[0] == df_atm1['total_signup_last_week'].iloc[0]:
-        xx=df_atm2['total_signup_last_to_lastweek'].iloc[0]-df_atm1['total_signup_last_week'].iloc[0]
-        yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
-        totalchange.append('0')
-        Total_percentage_change.append(zz)
-    else:
-        xx=df_atm1['total_signup_last_week'].iloc[0]-df_atm2['total_signup_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm1['teachers_signup_last_week'].iloc[0]
-        zz= round(yy*100,2)
-        totalchange.append('1')
-        Total_percentage_change.append(zz)
+#     else:
+#         xx=df_atm1['parents_signup_last_week'].iloc[0]-df_atm2['parents_signup_last_to_lastweek'].iloc[0]
+#         yy= xx/df_atm1['parents_signup_last_week'].iloc[0]
+#         zz= round(yy*100,2)
+#         parentschange.append('1')
+#         parents_Percentage_Change.append(zz)
 
 
-    data=pd.DataFrame({'parents_signup_yesterday':df_atm1['parents_signup_last_week'].tolist(),
-                       'teachers_signup_yesterday':df_atm1['teachers_signup_last_week'].tolist(),
-    'total_signup_yesterday':df_atm1['total_signup_last_week'].tolist(),
-                       'parentschanged':parentschange, 'parents_Percentage_Change':parents_Percentage_Change,
-                       'teacherschanged':teacherschange, 'Teacher_percentage_change':Teacher_percentage_change,
-          'totalchanged':totalchange, 'Total_percentage_change':Total_percentage_change,
-               'parents_signup_lastweek':df_atm2['parents_signup_last_to_lastweek'].tolist(),
-                     'teachers_signup_lastweek':  df_atm2['teachers_signup_last_to_lastweek'].tolist(),
-                'total_signup_lastweek':       df_atm2['total_signup_last_to_lastweek'].tolist()
+#     teacherschange=[]
+#     Teacher_percentage_change=[]
+#     if df_atm2['teachers_signup_last_to_lastweek'].iloc[0] > df_atm1['teachers_signup_last_week'].iloc[0]:
+#         xx=df_atm2['teachers_signup_last_to_lastweek'].iloc[0]-df_atm1['teachers_signup_last_week'].iloc[0]
+#         yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
+#         teacherschange.append('-1')
+#         Teacher_percentage_change.append(zz)
 
-                      })  
-    temp2={}
+#     elif df_atm2['teachers_signup_last_to_lastweek'].iloc[0] == df_atm1['teachers_signup_last_week'].iloc[0]:
+#         xx=df_atm2['teachers_signup_last_to_lastweek'].iloc[0]-df_atm1['teachers_signup_last_week'].iloc[0]
+#         yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
+#         teacherschange.append('0')
+#         Teacher_percentage_change.append(zz)
 
-    for j in range(len(data.columns)):
-        key= data.columns[j]
-        value=[str(data[data.columns[j]].iloc[0])]
-        temp2.update({key:value})
-    return json.dumps(temp2)
+#     else:
+#         xx=df_atm1['teachers_signup_last_week'].iloc[0]-df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
+#         yy= xx/df_atm1['teachers_signup_last_week'].iloc[0]
+#         zz= round(yy*100,2)
+#         teacherschange.append('1')
+#         Teacher_percentage_change.append(zz)
+
+
+#     totalchange=[]
+#     Total_percentage_change=[]
+#     if df_atm2['total_signup_last_to_lastweek'].iloc[0] > df_atm1['total_signup_last_week'].iloc[0]:
+#         xx=df_atm2['total_signup_last_to_lastweek'].iloc[0]-df_atm1['total_signup_last_week'].iloc[0]
+#         yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
+#         totalchange.append('-1')
+#         Total_percentage_change.append(zz)
+#     elif df_atm2['total_signup_last_to_lastweek'].iloc[0] == df_atm1['total_signup_last_week'].iloc[0]:
+#         xx=df_atm2['total_signup_last_to_lastweek'].iloc[0]-df_atm1['total_signup_last_week'].iloc[0]
+#         yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
+#         totalchange.append('0')
+#         Total_percentage_change.append(zz)
+#     else:
+#         xx=df_atm1['total_signup_last_week'].iloc[0]-df_atm2['total_signup_last_to_lastweek'].iloc[0]
+#         yy= xx/df_atm1['teachers_signup_last_week'].iloc[0]
+#         zz= round(yy*100,2)
+#         totalchange.append('1')
+#         Total_percentage_change.append(zz)
+
+
+#     data=pd.DataFrame({'parents_signup_yesterday':df_atm1['parents_signup_last_week'].tolist(),
+#                        'teachers_signup_yesterday':df_atm1['teachers_signup_last_week'].tolist(),
+#     'total_signup_yesterday':df_atm1['total_signup_last_week'].tolist(),
+#                        'parentschanged':parentschange, 'parents_Percentage_Change':parents_Percentage_Change,
+#                        'teacherschanged':teacherschange, 'Teacher_percentage_change':Teacher_percentage_change,
+#           'totalchanged':totalchange, 'Total_percentage_change':Total_percentage_change,
+#                'parents_signup_lastweek':df_atm2['parents_signup_last_to_lastweek'].tolist(),
+#                      'teachers_signup_lastweek':  df_atm2['teachers_signup_last_to_lastweek'].tolist(),
+#                 'total_signup_lastweek':       df_atm2['total_signup_last_to_lastweek'].tolist()
+
+#                       })  
+#     temp2={}
+
+#     for j in range(len(data.columns)):
+#         key= data.columns[j]
+#         value=[str(data[data.columns[j]].iloc[0])]
+#         temp2.update({key:value})
+#     return json.dumps(temp2)
 
 
 
@@ -26147,6 +26148,7 @@ def practice___history___new___latest(charttype):
                 '$match':{'USER_ID.IS_DISABLED':{'$ne':'Y'},
                         'USER_ID.IS_BLOCKED':{"$ne":'Y'},
                         'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}, 
+                      
                         "USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                         "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}},
                         'USER_ID.EMAIL_ID':{'$ne':""},
@@ -26155,8 +26157,11 @@ def practice___history___new___latest(charttype):
                                         },
                         'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}},
                 {"$match":
-                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                {"$and" :[
+                   
+                    {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                    {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
                         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
                     practice_cond_dictonary_list[0],
@@ -26184,6 +26189,7 @@ def practice___history___new___latest(charttype):
                 {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                          {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
                 practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
@@ -26216,6 +26222,7 @@ def practice___history___new___latest(charttype):
                 {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                          {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
@@ -26244,6 +26251,7 @@ def practice___history___new___latest(charttype):
                 {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                          {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
@@ -26262,6 +26270,7 @@ def practice___history___new___latest(charttype):
                         {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                          {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'MODIFIED_DATE':{"$gte":myDatetime,"$lt": myDatetime1}}]}},
                     practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
@@ -26373,6 +26382,7 @@ def practice___history___new___latest(charttype):
                 {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                          {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
                 {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
                                 'month':{'$month':'$MODIFIED_DATE'}},
@@ -26396,6 +26406,7 @@ def practice___history___new___latest(charttype):
                 {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                          {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
                 {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
                                 'month':{'$month':'$MODIFIED_DATE'}},
@@ -26425,6 +26436,7 @@ def practice___history___new___latest(charttype):
                 {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                          {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
                 {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
                                 'month':{'$month':'$MODIFIED_DATE'}},
@@ -26450,6 +26462,7 @@ def practice___history___new___latest(charttype):
                 {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                          {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
                 {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
                                 'month':{'$month':'$MODIFIED_DATE'}},
@@ -26464,6 +26477,7 @@ def practice___history___new___latest(charttype):
         df3 = DataFrame(list(collection2.aggregate([{"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
                         {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                       {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
                         {'MODIFIED_DATE':{"$gte":myDatetime,"$lt": myDatetime1}}]}},
                 {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
@@ -29689,7 +29703,8 @@ def practice_trendnew_(charttype):
 
         dfschoology = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -29723,7 +29738,8 @@ def practice_trendnew_(charttype):
 
         dfclever = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -29862,7 +29878,8 @@ def practice_trendnew_(charttype):
 
         dfschoology = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -29893,7 +29910,8 @@ def practice_trendnew_(charttype):
 
         dfclever = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -29976,212 +29994,215 @@ def practice_trendnew_(charttype):
 
 
 
-@app.route('/activetrendnew')
-def active_trendnew():
+# @app.route('/activetrendnew')
+# def active_trendnew():
     
-    def csy_first_date():
-        date_today =datetime.date.today()
-    #     print(date_today)
-    #     date_today='2024-07-01'
-    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
-        initial_date='2020-08-01'
-        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
-        # Check if leap year in the calculation
-        if ((day1.year+1) % 4) == 0:
-            if ((day1.year+1) % 100) == 0:
-                if ((day1.year+1) % 400) == 0:
-                    days_diff=1
-                else:
-                    days_diff=1
-            else:
-                days_diff=1
-        else:
-            days_diff=0
-        if ((date_today-day1).days<(365+days_diff)):
-            day_1=day1
-        else:
-            day1=day1+timedelta(days=(365+days_diff))
-            day_1=day1
+#     def csy_first_date():
+#         date_today =datetime.date.today()
+#     #     print(date_today)
+#     #     date_today='2024-07-01'
+#     #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+#         initial_date='2020-08-01'
+#         day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+#         # Check if leap year in the calculation
+#         if ((day1.year+1) % 4) == 0:
+#             if ((day1.year+1) % 100) == 0:
+#                 if ((day1.year+1) % 400) == 0:
+#                     days_diff=1
+#                 else:
+#                     days_diff=1
+#             else:
+#                 days_diff=1
+#         else:
+#             days_diff=0
+#         if ((date_today-day1).days<(365+days_diff)):
+#             day_1=day1
+#         else:
+#             day1=day1+timedelta(days=(365+days_diff))
+#             day_1=day1
 
-        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+#         csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
 
-        return csy_date
-        # LSY logic:
-    LSY_Date=csy_first_date()-relativedelta(years=1)
-    #     print("LSY", LSY_Date)
-    #     print("CSY",csy_first_date())
+#         return csy_date
+#         # LSY logic:
+#     LSY_Date=csy_first_date()-relativedelta(years=1)
+#     #     print("LSY", LSY_Date)
+#     #     print("CSY",csy_first_date())
     
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
-    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
-    db=client.compass
-    collection = db.audio_track_master
-    df1 = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[
+#     username = urllib.parse.quote_plus('admin')
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+#     db=client.compass
+#     collection = db.audio_track_master
+#     df1 = DataFrame(list(collection.aggregate([
+#         {"$match":{
+#      '$and':[
 
-     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
-      {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-            {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+#      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+#       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+#      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+#       {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+#             {'USER_ID.EMAIL_ID':{'$ne':''}},
+#              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#          { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
       
-     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": LSY_Date,
-                                        "$lt":csy_first_date()}}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
-       {'$project':{'_id':1,'TOTAL_LSY':{'$size':'$auc'}}}])))
-    df1.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    df1['Month'] = df1['Month'].map(d)
-    print('LSY:', LSY_Date)
-    print('CSY',csy_first_date())
-    # print(df1)
-    df2 = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
-              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-            {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
-     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": csy_first_date(),
-#                                         "$lt":datetime.datetime(2021,8,1)
-                         }}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
-       {'$project':{'_id':1,'teacher_CSY':{'$size':'$auc'}}}])))
-    if df2.empty == True:
-        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    else:
-        df2
-    df2.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    df2['Month'] = df2['Month'].map(d)
-    # df2
-    practice_left= pd.merge(df1, df2,on='Month', how='outer')
-    practice_left=practice_left.fillna(0)
-    #print(practice_left)
+#      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                      {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#         {"MODIFIED_DATE":{"$gte": LSY_Date,
+#                                         "$lt":csy_first_date()}}]}},
+#        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+#        {'$project':{'_id':1,'TOTAL_LSY':{'$size':'$auc'}}}])))
+#     df1.rename(columns = { '_id': 'Month'}, inplace = True)
+#     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+#     df1['Month'] = df1['Month'].map(d)
+#     print('LSY:', LSY_Date)
+#     print('CSY',csy_first_date())
+#     # print(df1)
+#     df2 = DataFrame(list(collection.aggregate([
+#         {"$match":{
+#      '$and':[
+#          {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#              {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#              {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+#      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+#       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+#      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+#               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+#             {'USER_ID.EMAIL_ID':{'$ne':''}},
+#              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#          { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+#      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                      {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#         {"MODIFIED_DATE":{"$gte": csy_first_date(),
+# #                                         "$lt":datetime.datetime(2021,8,1)
+#                          }}]}},
+#        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+#        {'$project':{'_id':1,'teacher_CSY':{'$size':'$auc'}}}])))
+#     if df2.empty == True:
+#         df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+#     else:
+#         df2
+#     df2.rename(columns = { '_id': 'Month'}, inplace = True)
+#     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+#     df2['Month'] = df2['Month'].map(d)
+#     # df2
+#     practice_left= pd.merge(df1, df2,on='Month', how='outer')
+#     practice_left=practice_left.fillna(0)
+#     #print(practice_left)
     
     
-    dfschoology = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-            {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
-     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": csy_first_date(),
-#                                         "$lt":datetime.datetime(2021,8,1)
-                         }}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
-       {'$project':{'_id':1,'schoology_CSY':{'$size':'$auc'}}}])))
+#     dfschoology = DataFrame(list(collection.aggregate([
+#         {"$match":{
+#      '$and':[
+# #          {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+#             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+#      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+#       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+#      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+#               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+#             {'USER_ID.EMAIL_ID':{'$ne':''}},
+#              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#          { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+#      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                      {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#         {"MODIFIED_DATE":{"$gte": csy_first_date(),
+# #                                         "$lt":datetime.datetime(2021,8,1)
+#                          }}]}},
+#        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+#        {'$project':{'_id':1,'schoology_CSY':{'$size':'$auc'}}}])))
     
-    if dfschoology.empty == True:
-        dfschoology=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'schoology_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    else:
-        dfschoology
-    dfschoology.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    dfschoology['Month'] = dfschoology['Month'].map(d)
-    dfschoology=dfschoology.fillna(0)
+#     if dfschoology.empty == True:
+#         dfschoology=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'schoology_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+#     else:
+#         dfschoology
+#     dfschoology.rename(columns = { '_id': 'Month'}, inplace = True)
+#     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+#     dfschoology['Month'] = dfschoology['Month'].map(d)
+#     dfschoology=dfschoology.fillna(0)
     
     
-    dfclever = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
-     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-            {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
-     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {"MODIFIED_DATE":{"$gte": csy_first_date(),
-#                                         "$lt":datetime.datetime(2021,8,1)
-                         }}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
-       {'$project':{'_id':1,'clever_CSY':{'$size':'$auc'}}}])))
-    if dfclever.empty == True:
-        dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    else:
-        dfclever
-    dfclever.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    dfclever['Month'] = dfclever['Month'].map(d)
-    dfclever=dfclever.fillna(0)
+#     dfclever = DataFrame(list(collection.aggregate([
+#         {"$match":{
+#      '$and':[
+# #          {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#             {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+#      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+#       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+#      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+#               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+#             {'USER_ID.EMAIL_ID':{'$ne':''}},
+#              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#          { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+#      { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                      {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#         {"MODIFIED_DATE":{"$gte": csy_first_date(),
+# #                                         "$lt":datetime.datetime(2021,8,1)
+#                          }}]}},
+#        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+#        {'$project':{'_id':1,'clever_CSY':{'$size':'$auc'}}}])))
+#     if dfclever.empty == True:
+#         dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+#     else:
+#         dfclever
+#     dfclever.rename(columns = { '_id': 'Month'}, inplace = True)
+#     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+#     dfclever['Month'] = dfclever['Month'].map(d)
+#     dfclever=dfclever.fillna(0)
     
-    df4 = DataFrame(list(collection.aggregate([
-        {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-           {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-             { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-             {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-            {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
-              {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
-        {"MODIFIED_DATE":{"$gte": csy_first_date(),
-#                                         "$lt":datetime.datetime(2021,8,1)
-                         }}]}},
-       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
-       {'$project':{'_id':1,'parents_CSY':{'$size':'$auc'}}}])))
-    if df4.empty == True:
-        df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    else:
-        df4
-    df4.rename(columns = { '_id': 'Month'}, inplace = True)
-    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-    df4['Month'] = df4['Month'].map(d)
-    # df2
-    practice_LSY= pd.merge(df1, df2,on='Month', how='left')
-    practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
-    practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
-    practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
+#     df4 = DataFrame(list(collection.aggregate([
+#         {"$match":{
+#      '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+#              {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#            {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+#              { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#               {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+#               {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+#              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+#               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+#             {'USER_ID.EMAIL_ID':{'$ne':''}},
+#              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#          { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},   
+#               {"USER_ID.CREATED_DATE":{"$gte": datetime.datetime(2020,3,17)}},
+#         {"MODIFIED_DATE":{"$gte": csy_first_date(),
+# #                                         "$lt":datetime.datetime(2021,8,1)
+#                          }}]}},
+#        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+#        {'$project':{'_id':1,'parents_CSY':{'$size':'$auc'}}}])))
+#     if df4.empty == True:
+#         df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+#     else:
+#         df4
+#     df4.rename(columns = { '_id': 'Month'}, inplace = True)
+#     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+#     df4['Month'] = df4['Month'].map(d)
+#     # df2
+#     practice_LSY= pd.merge(df1, df2,on='Month', how='left')
+#     practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
+#     practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+#     practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
     
-    mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
-    d = dict(enumerate(calendar.month_abbr))
-    mon['Month'] = mon['Month'].map(d)
+#     mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
+#     d = dict(enumerate(calendar.month_abbr))
+#     mon['Month'] = mon['Month'].map(d)
     
-    data=pd.merge(mon,practice_CSY,on='Month',how='left')
-    Month=data['Month'].tolist()
-    TOTAL_LSY=data['TOTAL_LSY'].tolist()
-    teacher_CSY=data['teacher_CSY'].tolist()
-    parents_CSY=data['parents_CSY'].tolist()
-    schoology_CSY=data['schoology_CSY'].tolist()
-    clever_CSY=data['clever_CSY'].tolist()
-    temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+#     data=pd.merge(mon,practice_CSY,on='Month',how='left')
+#     Month=data['Month'].tolist()
+#     TOTAL_LSY=data['TOTAL_LSY'].tolist()
+#     teacher_CSY=data['teacher_CSY'].tolist()
+#     parents_CSY=data['parents_CSY'].tolist()
+#     schoology_CSY=data['schoology_CSY'].tolist()
+#     clever_CSY=data['clever_CSY'].tolist()
+#     temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
     
-    return json.dumps(temp)
+#     return json.dumps(temp)
     
 
 #>>>>>>>>>>>>>>>>--------- PRACTICE BIFURCATION API-------------->>>>>>>>>>>>>>>>>>>>>>>>>
@@ -30260,7 +30281,8 @@ def active_trend_new_(charttype):
         # print(df1)
         df2 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':[
+             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -30297,7 +30319,8 @@ def active_trend_new_(charttype):
 
         dfschoology = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -30332,7 +30355,8 @@ def active_trend_new_(charttype):
 
         dfclever = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -30472,7 +30496,8 @@ def active_trend_new_(charttype):
 
         dfschoology = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -30504,7 +30529,8 @@ def active_trend_new_(charttype):
 
         dfclever = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -30759,7 +30785,7 @@ def district___daily___(datestr,charttype):
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
                     {'USER_ID._id':{'$in':db.user_master.distinct('_id', {'DISTRICT_ID._id':{'$exists':1}})}},
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-            {"MODIFIED_DATE":{"$gte": yester, '$lt': tod}}
+            {"MODIFIED_DATE":{"$gte": yester, '$lte': tod}}
             ]}},
              practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
@@ -30794,7 +30820,7 @@ def district___daily___(datestr,charttype):
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
                     {'USER_ID._id':{'$in':db.user_master.distinct('_id', {'DISTRICT_ID._id':{'$exists':1}})}},
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-            {"MODIFIED_DATE":{"$gte": yester, '$lt': tod}}
+            {"MODIFIED_DATE":{"$gte": yester, '$lte': tod}}
             ]}},
 
             {'$group':{'_id':'$USER_ID.DISTRICT_ID.DISTRICT_NAME', 'practice':{'$sum':1}
@@ -61070,22 +61096,20 @@ def new2(name,name1):
 
 @app.route('/AVG_audio_completion_daily_less_than50/<datestr>')
 def avg_audio_completed_____(datestr):
-
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
+
     collection1= db.audio_track_master
-    # datetime.datetime.now() - datetime.timedelta(days=7)
-    # ar d = new Date();
     mydatetime= dateutil.parser.parse(datestr)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
-    #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
     start_15day=yester- timedelta(days=7)
     startend= tod- timedelta(days=7)
     print(start_15day)
     print(startend)
+
 
     qr1=[{"$match":{
     '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -61096,13 +61120,13 @@ def avg_audio_completed_____(datestr):
     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-    {'MODIFIED_DATE':{'$gte': yester, '$lt':tod
+    {'MODIFIED_DATE':{'$gte': yester, '$lte':tod
     }},
     ]}},
 
 
     {'$project':{'_id':'$USER_ID._id', 'modified_date':'$MODIFIED_DATE',
-                 'AUDIO_ID':'$PROGRAM_AUDIO_ID.AUDIO_ID', 'Program_Name':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME',
+                 'AUDIO_ID':'$PROGRAM_AUDIO_ID._id', 'Program_Name':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME',
               'Audio_Length':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH', 'start':'$cursorStart','end':'$CURSOR_END'             
 
     }}]
@@ -61116,24 +61140,22 @@ def avg_audio_completed_____(datestr):
 
     userprac_trend['completed_precentage']=round(((userprac_trend.end-userprac_trend.start)/userprac_trend.Audio_Length*100),0)
 
-    #     userprac_trend_1=userprac_trend[userprac_trend.completed_precentage>=75]
-    # d=userprac_trend.groupby('AUDIO_ID')['completed_precentage'].mean().reset_index()
-
     userprac_trend['completed_precentage']=round(userprac_trend['completed_precentage'],0)
 
-    # dd=userprac_trend.groupby('completed_precentage').count().reset_index().rename({'AUDIO_ID':'Audio_Count'},axis=1)
+    dd=userprac_trend.groupby('completed_precentage').count().reset_index().rename({'AUDIO_ID':'Audio_Count'},axis=1)
 
-
-
-    # userprac_trend=userprac_trend[userprac_trend.completed_precentage <=50]
     userprac_trend[userprac_trend.completed_precentage < 0]=0
-    # d['completed_precentage']=round(d['completed_precentage'],0)
 
+    
+    userprac_trend['start']=userprac_trend['start'].fillna(0)
+    userprac_trend['end']=userprac_trend['end'].fillna(0)
+    userprac_trend['completed_precentage']=userprac_trend['completed_precentage'].fillna(0)
+    userprac_trend['AUDIO_ID']=userprac_trend['AUDIO_ID'].fillna(0)
+
+    
     dd=userprac_trend.groupby('completed_precentage')['AUDIO_ID'].count().reset_index().rename({'AUDIO_ID':'Audio_Count'},axis=1)
 
     dd['cumulativesum_line']= dd['Audio_Count'].cumsum()
-
-    # dd[dd.completed_precentage< 0]=0
 
 
     percentage_of_audio_completed= dd.completed_precentage.tolist(),
@@ -61145,16 +61167,14 @@ def avg_audio_completed_____(datestr):
 
     data={'temp':temp}
 
-    #     for i,j,k in zip(dd.completed_precentage.tolist(),dd.Audio_Count.tolist(), dd.cumulativesum_line.tolist()):
-    #         data.append([i,j,k])
-    #     temp={'data':data}
+
     return json.dumps(data)
 
 # blaaaa
     # client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@52.41.36.115:27017/')
 
 @app.route('/ratingcardsdaily_card/<datestr>')
-def dailyfeedback_ratingssss___(datestr):
+def dailyfeedback_ratingsssss___(datestr):
     import datetime
     import math
     username = urllib.parse.quote_plus('admin')
@@ -61162,7 +61182,8 @@ def dailyfeedback_ratingssss___(datestr):
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection2=db.audio_feedback
-    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+    mydatetime= dateutil.parser.parse(datestr)
+#     -timedelta(hours=24)
     #     yester= pd.to_datetime(mydatetime) - timedelta(days=1)
     #     tod= mydatetime
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
@@ -61361,7 +61382,10 @@ def dailyfeedback_ratingssss___(datestr):
 
     elif comments_per_feedback_teacher['rating'].iloc[0] == comments_per_feedback_before_last_week_teachers['rating'].iloc[0]:
         xx=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
-        yy= xx/comments_per_feedback_teacher['rating'].iloc[0]
+        if comments_per_feedback_teacher['rating'].iloc[0] & comments_per_feedback_before_last_week_teachers['rating'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:            
+            yy= xx/comments_per_feedback_teacher['rating'].iloc[0]
     #     if math.isnan(yy):
     #         yy=0
     #     else:
@@ -61385,9 +61409,6 @@ def dailyfeedback_ratingssss___(datestr):
     #     rr=round(qq*100,2)
         TEACHER_Comment_per_feedbackchange.append('1')
         teacher_PERCENTAGE_change.append(qq)
-        
-    import math
-    teacher_PERCENTAGE_change=[0 if math.isnan(i) else i for i in teacher_PERCENTAGE_change] 
 
 
     PARENT_Comment_per_feedbackchange=[]
@@ -61408,7 +61429,10 @@ def dailyfeedback_ratingssss___(datestr):
 
     elif comments_per_feedback_parents['rating'].iloc[0] == comments_per_feedback_before_last_week_parents['rating'].iloc[0]:
         pp=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
-        qq= pp/comments_per_feedback_parents['rating'].iloc[0]
+        if comments_per_feedback_parents['rating'].iloc[0] & comments_per_feedback_before_last_week_parents['rating'].iloc[0]==0:
+            qq=round(pp/1*100,2)
+        else:
+            qq= pp/comments_per_feedback_parents['rating'].iloc[0]
     #     if math.isnan(qq):
     #         qq=0
     #     else:
@@ -61432,10 +61456,6 @@ def dailyfeedback_ratingssss___(datestr):
     #     rr=round(qq*100,2)
         PARENT_Comment_per_feedbackchange.append('1')
         parent_PERCENTAGE_change.append(qq)
-    
-    import math
-    parent_PERCENTAGE_change=[0 if math.isnan(i) else i for i in parent_PERCENTAGE_change] 
-    
 
 
     Average_FEEDBACK_Rating_change=[]
@@ -61459,7 +61479,10 @@ def dailyfeedback_ratingssss___(datestr):
 
     elif avg_ratings_last_week['avg_ratings_lastweek'].iloc[0] == avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]:
         aa=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
-        bb= aa/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
+        if avg_ratings_last_week['avg_ratings_lastweek'].iloc[0] & avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]==0:
+            bb=round(aa/1*100,2)
+        else:
+            bb= aa/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
     #     if math.isnan(bb):
     #         bb=0
     #     else:
@@ -61516,14 +61539,16 @@ def dailyfeedback_ratingssss___(datestr):
 
 
 
+
 @app.route('/last_day_pr/<datestr>')
-def practice_cards_24hr____(datestr):
+def practice_cards_24hrs____(datestr):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
-    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+    mydatetime= dateutil.parser.parse(datestr)
+#     -timedelta(hours=24)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
 #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
@@ -61589,14 +61614,18 @@ def practice_cards_24hr____(datestr):
     PARENT_percentagechange=[]
     if df_atm2['parents_playback_48hrs'].iloc[0] > df_atm1['parents_playback_24hr'].iloc[0]:
         xx=df_atm2['parents_playback_48hrs'].iloc[0]-df_atm1['parents_playback_24hr'].iloc[0]
-        yy= xx/df_atm2['parents_playback_48hrs'].iloc[0]
-        if math.isnan(yy):
-            yy=0
+        if df_atm2['parents_playback_48hrs'].iloc[0]==0:
+            yy=round(xx/1*100,2)
         else:
-            yy=yy
-        zz= round(yy*100,2)
+            yy=xx/df_atm2['parents_playback_48hrs'].iloc[0]
+            
+#         if math.isnan(yy):
+#             yy=0
+#         else:
+#             yy=yy
+#         zz= round(yy*100,2)
         PARENTSCHANGE.append('-1')
-        PARENT_percentagechange.append(zz)
+        PARENT_percentagechange.append(yy)
 
     elif df_atm2['parents_playback_48hrs'].iloc[0] == df_atm1['parents_playback_24hr'].iloc[0]:
         xx=df_atm2['parents_playback_48hrs'].iloc[0]-df_atm1['parents_playback_24hr'].iloc[0]
@@ -61611,17 +61640,18 @@ def practice_cards_24hr____(datestr):
 
     else:
         xx=df_atm1['parents_playback_24hr'].iloc[0]-df_atm2['parents_playback_48hrs'].iloc[0]
-        yy= xx/df_atm2['parents_playback_48hrs'].iloc[0]
-        if math.isnan(yy):
-            yy=0
+        if df_atm2['parents_playback_48hrs'].iloc[0]==0:
+            yy= round(xx/1*100,2)
         else:
-            yy=yy
-        zz= round(yy*100,2)
+            yy= xx/df_atm2['parents_playback_48hrs'].iloc[0]
+            
+#         if math.isnan(yy):
+#             yy=0
+#         else:
+#             yy=yy
+#         zz= round(yy*100,2)
         PARENTSCHANGE.append('1')
-        PARENT_percentagechange.append(zz)
-        
-    from numpy import inf
-    PARENT_percentagechange[PARENT_percentagechange == inf] = 0
+        PARENT_percentagechange.append(yy)
 
 
 
@@ -61629,14 +61659,17 @@ def practice_cards_24hr____(datestr):
     TEACHER_percentagechange=[]
     if df_atm2['teachers_playback_48hrs'].iloc[0] > df_atm1['teachers_playback_24hr'].iloc[0]:
         aa=df_atm2['teachers_playback_48hrs'].iloc[0]-df_atm1['teachers_playback_24hr'].iloc[0]
-        bb= aa/df_atm2['teachers_playback_48hrs'].iloc[0]   
-        if math.isnan(bb):
-            bb=0
-        else:
-            bb=bb
-        cc= round(bb*100,2)
+        if df_atm2['teachers_playback_48hrs'].iloc[0]==0:
+            bb=round(aa/1*100,2)
+        else:            
+            bb= aa/df_atm2['teachers_playback_48hrs'].iloc[0]   
+#         if math.isnan(bb):
+#             bb=0
+#         else:
+#             bb=bb
+#         cc= round(bb*100,2)
         TEACHERSCHANGE.append('-1')
-        TEACHER_percentagechange.append(cc)
+        TEACHER_percentagechange.append(bb)
 
     elif df_atm2['teachers_playback_48hrs'].iloc[0] == df_atm1['teachers_playback_24hr'].iloc[0]:
         aa=df_atm2['teachers_playback_48hrs'].iloc[0]-df_atm1['teachers_playback_24hr'].iloc[0]
@@ -61652,31 +61685,36 @@ def practice_cards_24hr____(datestr):
 
     else:
         aa=df_atm1['teachers_playback_24hr'].iloc[0]-df_atm2['teachers_playback_48hrs'].iloc[0]
-        bb= aa/df_atm2['teachers_playback_48hrs'].iloc[0]
-        if math.isnan(bb):
-            bb=0
+        if df_atm2['teachers_playback_48hrs'].iloc[0]==0:
+            bb= round(aa/1*100,2)
         else:
-            bb=bb
-        cc= round(bb*100,2)
+            
+            bb= aa/df_atm2['teachers_playback_48hrs'].iloc[0]
+#         if math.isnan(bb):
+#             bb=0
+#         else:
+#             bb=bb
+#         cc= round(bb*100,2)
         TEACHERSCHANGE.append('1')
-        TEACHER_percentagechange.append(cc)
-        
-    from numpy import inf
-    TEACHER_percentagechange[TEACHER_percentagechange == inf] = 0
+        TEACHER_percentagechange.append(bb)
 
 
     TOTALCHANGE=[]
     TOTAL_percentagechange=[]
     if df_atm2['total_playback_48hrs'].iloc[0] > df_atm1['total_playback_24hr'].iloc[0]:
         pp=df_atm2['total_playback_48hrs'].iloc[0]-df_atm1['total_playback_24hr'].iloc[0]
-        qq= pp/df_atm2['total_playback_48hrs'].iloc[0]
-        if math.isnan(qq):
-            qq=0
+        if df_atm2['total_playback_48hrs'].iloc[0]==0:
+            qq= round(pp/1*100,2)
         else:
-            qq=qq
-        rr= round(qq*100,2)
+            
+            qq= pp/df_atm2['total_playback_48hrs'].iloc[0]
+#         if math.isnan(qq):
+#             qq=0
+#         else:
+#             qq=qq
+#         rr= round(qq*100,2)
         TOTALCHANGE.append('-1')
-        TOTAL_percentagechange.append(rr)
+        TOTAL_percentagechange.append(qq)
 
 
     elif df_atm2['total_playback_48hrs'].iloc[0] == df_atm1['total_playback_24hr'].iloc[0]:
@@ -61693,17 +61731,18 @@ def practice_cards_24hr____(datestr):
 
     else: 
         pp=df_atm1['total_playback_24hr'].iloc[0]-df_atm2['total_playback_48hrs'].iloc[0]
-        qq= pp/df_atm2['total_playback_48hrs'].iloc[0]
-        if math.isnan(qq):
-            qq=0
+        if df_atm2['total_playback_48hrs'].iloc[0]==0:
+            qq= round(pp/1*100,2)
         else:
-            qq=qq
-        rr= round(qq*100,2)
+            
+            qq= pp/df_atm2['total_playback_48hrs'].iloc[0]
+#         if math.isnan(qq):
+#             qq=0
+#         else:
+#             qq=qq
+#         rr= round(qq*100,2)
         TOTALCHANGE.append('1')
-        TOTAL_percentagechange.append(rr)
-        
-    from numpy import inf
-    TOTAL_percentagechange[TOTAL_percentagechange == inf] = 0
+        TOTAL_percentagechange.append(qq)
 
 
     parents_playback_24hr=df_atm1['parents_playback_24hr'].tolist()
@@ -61726,7 +61765,7 @@ def practice_cards_24hr____(datestr):
 
 
 @app.route('/SIGNUPS_dailycomparsion/<datestr>') #test3
-def SIGNUP_cards_24hr___(datestr):
+def SIGNUP_cards_24hrs___(datestr):
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -61734,7 +61773,8 @@ def SIGNUP_cards_24hr___(datestr):
     db=client.compass
     collection1= db.user_master
 
-    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+    mydatetime= dateutil.parser.parse(datestr)
+#     -timedelta(hours=24)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
@@ -61800,24 +61840,36 @@ def SIGNUP_cards_24hr___(datestr):
     parents_Percentage_Change=[]
     if df_atm2['parents_signup_last_to_lastweek'].iloc[0] > df_atm1['parents_signup_last_week'].iloc[0]:
         xx=df_atm2['parents_signup_last_to_lastweek'].iloc[0]-df_atm1['parents_signup_last_week'].iloc[0]
-        yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
+        if df_atm2['parents_signup_last_to_lastweek'].iloc[0]==0:
+            yy= round(xx/1*100,2)
+        else:        
+            yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
         parentschange.append('-1')
-        parents_Percentage_Change.append(zz)
+        parents_Percentage_Change.append(yy)
 
     elif df_atm2['parents_signup_last_to_lastweek'].iloc[0] == df_atm1['parents_signup_last_week'].iloc[0]:
         xx=df_atm2['parents_signup_last_to_lastweek'].iloc[0]-df_atm1['parents_signup_last_week'].iloc[0]
-        yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
+        if df_atm2['parents_signup_last_to_lastweek'].iloc[0] & df_atm1['parents_signup_last_week'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:
+        
+            yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
+                
+#         zz= round(yy*100,2)
         parentschange.append('0')
-        parents_Percentage_Change.append(zz)
+        parents_Percentage_Change.append(yy)
 
     else:
         xx=df_atm1['parents_signup_last_week'].iloc[0]-df_atm2['parents_signup_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
+        if df_atm2['parents_signup_last_to_lastweek'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:
+            
+            yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
         parentschange.append('1')
-        parents_Percentage_Change.append(zz)
+        parents_Percentage_Change.append(yy)
 
 
     teacherschange=[]
@@ -61831,39 +61883,59 @@ def SIGNUP_cards_24hr___(datestr):
 
     elif df_atm2['teachers_signup_last_to_lastweek'].iloc[0] == df_atm1['teachers_signup_last_week'].iloc[0]:
         xx=df_atm2['teachers_signup_last_to_lastweek'].iloc[0]-df_atm1['teachers_signup_last_week'].iloc[0]
-        yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
+        if df_atm2['teachers_signup_last_to_lastweek'].iloc[0] &df_atm1['teachers_signup_last_week'].iloc[0]==0:
+            yy= round(xx/1*100,2)
+        else:
+            yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
+
         teacherschange.append('0')
-        Teacher_percentage_change.append(zz)
+        Teacher_percentage_change.append(yy)
 
     else:
         xx=df_atm1['teachers_signup_last_week'].iloc[0]-df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
+        if df_atm2['teachers_signup_last_to_lastweek'].iloc[0]==0:
+            yy= round(xx/1*100,2)
+        else:
+            yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
+        
+#         zz= round(yy*100,2)
         teacherschange.append('1')
-        Teacher_percentage_change.append(zz)
+        Teacher_percentage_change.append(yy)
 
 
     totalchange=[]
     Total_percentage_change=[]
     if df_atm2['total_signup_last_to_lastweek'].iloc[0] > df_atm1['total_signup_last_week'].iloc[0]:
         xx=df_atm2['total_signup_last_to_lastweek'].iloc[0]-df_atm1['total_signup_last_week'].iloc[0]
-        yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
+        
+        if df_atm2['total_signup_last_to_lastweek'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:
+            
+            yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
         totalchange.append('-1')
-        Total_percentage_change.append(zz)
-    elif df_atm2['total_signup_last_to_lastweek'].iloc[0] == df_atm1['total_signup_last_week'].iloc[0]:
+        Total_percentage_change.append(yy)
+        
+    elif df_atm2['total_signup_last_to_lastweek'].iloc[0] == df_atm1['total_signup_last_week'].iloc[0]:        
         xx=df_atm2['total_signup_last_to_lastweek'].iloc[0]-df_atm1['total_signup_last_week'].iloc[0]
-        yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
+        if df_atm2['total_signup_last_to_lastweek'].iloc[0] & df_atm1['total_signup_last_week'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:
+            yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
         totalchange.append('0')
-        Total_percentage_change.append(zz)
+        Total_percentage_change.append(yy)
     else:
         xx=df_atm1['total_signup_last_week'].iloc[0]-df_atm2['total_signup_last_to_lastweek'].iloc[0]
-        yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
-        zz= round(yy*100,2)
+        if df_atm2['total_signup_last_to_lastweek'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:
+            yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
+#         zz= round(yy*100,2)
         totalchange.append('1')
-        Total_percentage_change.append(zz)
+        Total_percentage_change.append(yy)
 
 
     data=pd.DataFrame({'parents_signup_yesterday':df_atm1['parents_signup_last_week'].tolist(),
@@ -61888,6 +61960,8 @@ def SIGNUP_cards_24hr___(datestr):
 
 
 
+
+
 @app.route('/AVG_audio_completion_weekly_less_50/<datestr>')
 def avg_audio_completed_less___(datestr):
 
@@ -61896,8 +61970,9 @@ def avg_audio_completed_less___(datestr):
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     collection1= db.audio_track_master
-    
+
     mydatetime= dateutil.parser.parse(datestr)
+    # mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
     yester= pd.to_datetime(mydatetime) +timedelta(hours=4)
     print(yester)
     tod=mydatetime+ timedelta(hours=4)
@@ -61922,7 +61997,7 @@ def avg_audio_completed_less___(datestr):
 
 
     {'$project':{'_id':'$USER_ID._id', 'modified_date':'$MODIFIED_DATE',
-                 'AUDIO_ID':'$PROGRAM_AUDIO_ID.AUDIO_ID', 'Program_Name':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME',
+                 'AUDIO_ID':'$PROGRAM_AUDIO_ID._id', 'Program_Name':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME',
               'Audio_Length':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH', 'start':'$cursorStart','end':'$CURSOR_END'             
 
     }}]
@@ -61948,6 +62023,12 @@ def avg_audio_completed_less___(datestr):
     # userprac_trend=userprac_trend[userprac_trend.completed_precentage <=50]
     userprac_trend[userprac_trend.completed_precentage < 0]=0
     # d['completed_precentage']=round(d['completed_precentage'],0)
+    userprac_trend
+
+    userprac_trend['start']=userprac_trend['start'].fillna(0)
+    userprac_trend['end']=userprac_trend['end'].fillna(0)
+    userprac_trend['completed_precentage']=userprac_trend['completed_precentage'].fillna(0)
+    userprac_trend['AUDIO_ID']=userprac_trend['AUDIO_ID'].fillna(0)
 
     dd=userprac_trend.groupby('completed_precentage')['AUDIO_ID'].count().reset_index().rename({'AUDIO_ID':'Audio_Count'},axis=1)
 
@@ -62858,7 +62939,8 @@ def weekly__compare__chart__(datestr,charttype):
         df_atm
         LAST_WEEK_PRACTICE_parents=df_atm[['_id','LAST_WEEK_PRACTICE_parents']]
         qr2=[{"$match":{
-            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            '$and':[
+                {'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
@@ -62943,7 +63025,7 @@ def weekly__compare__chart__(datestr,charttype):
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
          {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
          {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
@@ -62969,7 +63051,7 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
-            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
              {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
@@ -62995,7 +63077,7 @@ def weekly__compare__chart__(datestr,charttype):
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
          {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
          {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},      
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
@@ -63021,7 +63103,7 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
-            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
              {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},         
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
@@ -63168,7 +63250,7 @@ def weekly__compare__chart__(datestr,charttype):
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
          {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
          {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
@@ -63191,7 +63273,7 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
-            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
              {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
@@ -63214,7 +63296,7 @@ def weekly__compare__chart__(datestr,charttype):
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
          {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
          {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},      
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
@@ -63237,7 +63319,7 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
-            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
              {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},         
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
@@ -63609,14 +63691,14 @@ def dailyyy_feedback_table_TEACHERS__(datestr):
     collection1 =db.audio_track_master
     collection2 = db.audio_feedback
 
-    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+    mydatetime= dateutil.parser.parse(datestr)
 #     yester= pd.to_datetime(mydatetime) - timedelta(days=1)
 #     tod= mydatetime
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
     
-    start_15day=tod- timedelta(days=8)
-    startend= start_15day+timedelta(days=1)
+    start_15day=yester- timedelta(days=7)
+    startend= tod- timedelta(days=7)
 
     qr1= [{"$match":{
     '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -63628,7 +63710,7 @@ def dailyyy_feedback_table_TEACHERS__(datestr):
     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, 
             {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
     {'MODIFIED_DATE':{'$gte':yester,
-                             '$lt':tod
+                             '$lte':tod
                              }},
     ]}},
     {'$group':{'_id':'$USER_ID._id',
@@ -63661,7 +63743,7 @@ def dailyyy_feedback_table_TEACHERS__(datestr):
     {'USER.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
     {'USER.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
             {'MODIFIED_DATE':{'$gte':yester,
-                             '$lt':tod
+                             '$lte':tod
                              }},
 #             {'COMMENT':{'$nin':['',' ',None]}},
                {'RATING':{'$ne':0}}]}},
@@ -63719,14 +63801,14 @@ def dailyyy_feedback_table_PARENTS__(datestr):
     collection1 =db.audio_track_master
     collection2 = db.audio_feedback
 
-    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+    mydatetime= dateutil.parser.parse(datestr)
 #     yester= pd.to_datetime(mydatetime) - timedelta(days=1)
 #     tod= mydatetime
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
     
-    start_15day=tod- timedelta(days=8)
-    startend= start_15day+timedelta(days=1)
+    start_15day=yester- timedelta(days=7)
+    startend= tod- timedelta(days=7)
     print(start_15day)
     print(startend)
 
@@ -63741,7 +63823,7 @@ def dailyyy_feedback_table_PARENTS__(datestr):
     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, 
             {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
     {'MODIFIED_DATE':{'$gte':yester,
-                             '$lt':tod
+                             '$lte':tod
                              }},
     ]}},
     {'$group':{'_id':'$USER_ID._id',
@@ -63774,7 +63856,7 @@ def dailyyy_feedback_table_PARENTS__(datestr):
     {'USER.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
     {'USER.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
             {'MODIFIED_DATE':{'$gte':yester,
-                             '$lt':tod
+                             '$lte':tod
                              }},
 #             {'COMMENT':{'$nin':['',' ',None]}},
                {'RATING':{'$ne':0}}]}},
@@ -64419,7 +64501,7 @@ def progpractice____DAY____(datestr,charttype):
                                  {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
               {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
                  {'MODIFIED_DATE':{'$gte':yester,
-                                     '$lt':tod
+                                     '$lte':tod
                                      }},
                     ]}},
                         practice_cond_dictonary_list[0],
@@ -64444,7 +64526,7 @@ def progpractice____DAY____(datestr,charttype):
                                  {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
               {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
                  {'MODIFIED_DATE':{'$gte':yester,
-                                     '$lt':tod
+                                     '$lte':tod
                                      }},
 
                     ]}},
@@ -64471,7 +64553,7 @@ def progpractice____DAY____(datestr,charttype):
                                  {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
               {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
                  {'MODIFIED_DATE':{'$gte':start_15day,
-                                     '$lt':startend
+                                     '$lte':startend
                                      }},
                     ]}},
             practice_cond_dictonary_list[0],
@@ -64497,7 +64579,7 @@ def progpractice____DAY____(datestr,charttype):
                                  {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
               {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
                  {'MODIFIED_DATE':{'$gte':start_15day,
-                                     '$lt':startend
+                                     '$lte':startend
                                      }},
 
                     ]}},
@@ -64604,7 +64686,7 @@ def progpractice____DAY____(datestr,charttype):
           {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
             
              {'MODIFIED_DATE':{'$gte':yester,
-                                 '$lt':tod
+                                 '$lte':tod
                                  }},
                 ]}},
         {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID','PROGRAM_NAME':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}, 'practicecount':{'$sum':1}}},
@@ -64627,7 +64709,7 @@ def progpractice____DAY____(datestr,charttype):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
           {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
              {'MODIFIED_DATE':{'$gte':yester,
-                                 '$lt':tod
+                                 '$lte':tod
                                  }},
 
                 ]}},
@@ -64651,7 +64733,7 @@ def progpractice____DAY____(datestr,charttype):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
           {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
              {'MODIFIED_DATE':{'$gte':start_15day,
-                                 '$lt':startend
+                                 '$lte':startend
                                  }},
                 ]}},
         {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID','PROGRAM_NAME':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}, 'practicecount':{'$sum':1}}},
@@ -64674,7 +64756,7 @@ def progpractice____DAY____(datestr,charttype):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
           {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
              {'MODIFIED_DATE':{'$gte':start_15day,
-                                 '$lt':startend
+                                 '$lte':startend
                                  }},
 
                 ]}},
@@ -64768,10 +64850,11 @@ def RATssy(datestr):
     db=client.compass
     collection=db.audio_feedback
     mydatetime= dateutil.parser.parse(datestr)
-    yester= pd.to_datetime(mydatetime) - timedelta(days=1)
-    tod= mydatetime
-    start_15day=tod- timedelta(days=8)
-    startend= start_15day+timedelta(days=1)
+    yester= datetime.datetime.combine(mydatetime,datetime.time.min)
+    #     - timedelta(days=1)
+    tod= datetime.datetime.combine(mydatetime,datetime.time.max)
+    start_15day=yester- timedelta(days=7)
+    startend= tod- timedelta(days=7)
     print(start_15day)
     print(startend)
     index=[0]
@@ -64785,7 +64868,7 @@ def RATssy(datestr):
     { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-       {'MODIFIED_DATE':{'$gte':yester, '$lt':tod}}    ,         
+       {'MODIFIED_DATE':{'$gte':yester, '$lte':tod}}    ,         
     {'RATING':{'$ne':0}}]}},
     {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 'count':{'$sum':'$USER._id'},
     'rating_5':{'$sum':{'$cond':[{'$eq':['$RATING', 5]},1,0]}},
@@ -64814,7 +64897,7 @@ def RATssy(datestr):
     { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    {'MODIFIED_DATE':{'$gte':yester, '$lt':tod}}    ,         
+    {'MODIFIED_DATE':{'$gte':yester, '$lte':tod}}    ,         
     {'RATING':{'$ne':0}}]}},
     {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 'count':{'$sum':'$USER._id'},
     'rating_5':{'$sum':{'$cond':[{'$eq':['$RATING', 5]},1,0]}},
@@ -64843,7 +64926,7 @@ def RATssy(datestr):
     { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-       {'MODIFIED_DATE':{'$gte':start_15day, '$lt':startend}}    ,         
+       {'MODIFIED_DATE':{'$gte':start_15day, '$lte':startend}}    ,         
     {'RATING':{'$ne':0}}]}},
     {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 'count':{'$sum':'$USER._id'},
     'rating_5':{'$sum':{'$cond':[{'$eq':['$RATING', 5]},1,0]}},
@@ -64872,7 +64955,7 @@ def RATssy(datestr):
         { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
          {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
          {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-           {'MODIFIED_DATE':{'$gte':start_15day, '$lt':startend}}    ,         
+           {'MODIFIED_DATE':{'$gte':start_15day, '$lte':startend}}    ,         
         {'RATING':{'$ne':0}}]}},
     {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 'count':{'$sum':'$USER._id'},
     'rating_5':{'$sum':{'$cond':[{'$eq':['$RATING', 5]},1,0]}},
@@ -64911,7 +64994,7 @@ def signupdataparentDay______(datestr):
     collection1= db.audio_track_master
     collection2= db.user_master
     
-    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+    mydatetime= dateutil.parser.parse(datestr)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
@@ -64954,7 +65037,7 @@ def signupdataparentDay______(datestr):
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
     {'CREATED_DATE':{'$gte':yester
-                , '$lt': tod}}
+                , '$lte': tod}}
     ]}},
          {'$project':{'_id':'$_id','CREATED_DATE':'$CREATED_DATE', 'schoolNAME':'$schoolId.NAME',
                       'USER_NAME':'$USER_NAME','EMAIL':'$EMAIL_ID',
@@ -65004,7 +65087,7 @@ def teacher_signup_table_day__(datestr):
     collection1= db.audio_track_master
     collection2= db.user_master
 
-    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+    mydatetime= dateutil.parser.parse(datestr)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
@@ -65012,8 +65095,8 @@ def teacher_signup_table_day__(datestr):
     
 #     yester= pd.to_datetime(mydatetime) - timedelta(days=1)
 #     tod= mydatetime
-    start_15day=tod- timedelta(days=8)
-    startend= start_15day+timedelta(days=1)
+    start_15day=yester- timedelta(days=7)
+    startend= tod- timedelta(days=7)
     print(start_15day)
     print(startend)
 
@@ -65050,7 +65133,7 @@ def teacher_signup_table_day__(datestr):
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
     {'CREATED_DATE':{'$gte':yester
-                , '$lt': tod}}
+                , '$lte': tod}}
     ]}},
          {'$project':{'_id':'$_id','CREATED_DATE':'$CREATED_DATE', 'schoolNAME':'$schoolId.NAME',
                       'USER_NAME':'$USER_NAME','EMAIL':'$EMAIL_ID',
@@ -65100,7 +65183,7 @@ def school_practice_table_DAILYY____(datestr):
     # datetime.datetime.now() - datetime.timedelta(days=7)
     # ar d = new Date();
       
-    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+    mydatetime= dateutil.parser.parse(datestr)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
@@ -65117,7 +65200,7 @@ def school_practice_table_DAILYY____(datestr):
     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
             {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-    {'MODIFIED_DATE':{'$gte': yester, '$lt':tod
+    {'MODIFIED_DATE':{'$gte': yester, '$lte':tod
     }},
     ]}},
 
@@ -65202,7 +65285,7 @@ def PARENTS_practice_table_DAY___(datestr):
     # datetime.datetime.now() - datetime.timedelta(days=7)
     # ar d = new Date();
   
-    mydatetime= dateutil.parser.parse(datestr)-timedelta(hours=24)
+    mydatetime= dateutil.parser.parse(datestr)
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     #     - timedelta(days=1)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
@@ -65222,7 +65305,7 @@ def PARENTS_practice_table_DAY___(datestr):
     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
             {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-    {'MODIFIED_DATE':{'$gte': yester, '$lt':tod
+    {'MODIFIED_DATE':{'$gte': yester, '$lte':tod
     }},
     ]}},
 
