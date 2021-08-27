@@ -842,7 +842,7 @@ else {
     document.getElementById("updownsignp").style.color = "grey";
   }
 var v = parseInt(dataa.parentschanged[0]);
-
+//
 if(v===1){
   console.log("hello2")
   document.getElementById("updownsignt").style.color = "green";
