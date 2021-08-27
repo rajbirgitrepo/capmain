@@ -2568,7 +2568,7 @@ def date_wise_login():
         {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},'pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'}}},
         {'$project':{'_id':1, 'login_count':'$pc','login_user_webapp':{'$size':'$uc'}}},
         {'$sort':{'_id':1}}])))
-    d1=d1.astype(str)
+   
 
 
     # if d1.empty is True:
@@ -2606,7 +2606,7 @@ def date_wise_login():
         {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},'pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'}}},
         {'$project':{'_id':1, 'login_count':'$pc','login_user_classroom':{'$size':'$uc'}}}
         ,{'$sort':{'_id':1}}])))
-    d2=d2.astype(str)
+   
     # login_user_classroom=d2['login_user_classroom'][0]
     # if d2.empty is True:
     #     login_user_classroom=0
@@ -2643,7 +2643,7 @@ def date_wise_login():
         {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},'pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'}}},
         {'$project':{'_id':1, 'login_count':'$pc','login_user_clever':{'$size':'$uc'}}},
         {'$sort':{'_id':1}}])))
-    d3=d3.astype(str)
+  
     # if d3.empty is True:
     #     login_user_clever=0
     # else:
@@ -2686,7 +2686,7 @@ def date_wise_login():
         d4=d4.astype(str)
     #     pd.to_dateime['_id']
     else:
-        d4=d4.astype(str)
+        d4
     d5=DataFrame(list(db.login_tracking.aggregate([
         {"$match":
          {
@@ -2720,7 +2720,7 @@ def date_wise_login():
 
 
     ])))
-    d5=d5.astype(str)
+   
 
     a=pd.merge(d1,d2 , on='_id', how='outer')
     b=pd.merge(a,d3 , on='_id', how='outer')
@@ -2728,7 +2728,7 @@ def date_wise_login():
     d=pd.merge(c,d5 , on='_id', how='outer')
 
 
-    d1=d1.astype(str)
+  
 
     d=d.fillna(0)
 
@@ -13503,6 +13503,7 @@ def heat_calender_pc():
     DF = DF.drop(['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','TOTAL'], axis=1)
     DF=DF.T
     DF=DF.round()
+    DF=DF.fillna(0)
     
     
     day=DF.values.tolist()
@@ -13814,6 +13815,7 @@ def teachers_heat_calender_pc():
     DF = DF.drop(['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','TOTAL'], axis=1)
     DF=DF.T
     DF=DF.round()
+    DF=DF.fillna(0)
     
     
     day=DF.values.tolist()
@@ -64384,9 +64386,18 @@ def progpractice____DAY____(datestr,charttype):
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
     start_15day=yester- timedelta(days=7)
     startend= tod- timedelta(days=7)
+    print(tod)
+    print(yester)
     print(start_15day)
     print(startend)
-    
+    dtf=DataFrame(list(db.program_master.aggregate([
+        {"$match":{"$and":[
+        #              {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                        {"PROGRAM_ID":{"$nin":[5,6,7]}},]}},
+        {'$project':{'_id':'$PROGRAM_ID','PROGRAM_NAME':'$PROGRAM_NAME'}},
+    {'$sort':{'_id':1}}])))
+    progname_=dtf['PROGRAM_NAME'].tolist()
+                      
     charttype=str(charttype).title()
     if charttype=='Practice':
     #     threshold=int(threshold)/100
@@ -64402,6 +64413,7 @@ def progpractice____DAY____(datestr,charttype):
                       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                
                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -64413,8 +64425,8 @@ def progpractice____DAY____(datestr,charttype):
                         practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-            {"$group":{'_id':'$PROGRAM_NAME', 'practicecount':{'$sum':1}}},
-             {"$project":{'_id':1, 'teacherspracticecount':'$practicecount'}},
+            {"$group":{'_id':'$PROGRAM_ID','PROGRAM_NAME':{'$first':'$PROGRAM_NAME'},'practicecount':{'$sum':1}}},
+             {"$project":{'_id':1,'PROGRAM_NAME':'$PROGRAM_NAME', 'teacherspracticecount':'$practicecount'}},
             ]    
         
         qr222=   [
@@ -64426,6 +64438,7 @@ def progpractice____DAY____(datestr,charttype):
                       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                   
                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -64438,8 +64451,8 @@ def progpractice____DAY____(datestr,charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-            {"$group":{'_id':'$PROGRAM_NAME', 'practicecount':{'$sum':1}}},
-             {"$project":{'_id':1, 'parentspracticecount':'$practicecount'}},
+            {"$group":{'_id':'$PROGRAM_ID','PROGRAM_NAME':{'$first':'$PROGRAM_NAME'}, 'practicecount':{'$sum':1}}},
+             {"$project":{'_id':1,'PROGRAM_NAME':'$PROGRAM_NAME', 'parentspracticecount':'$practicecount'}},
             ]   
 
 
@@ -64452,6 +64465,7 @@ def progpractice____DAY____(datestr,charttype):
                       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                   
                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -64463,8 +64477,8 @@ def progpractice____DAY____(datestr,charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-            {"$group":{'_id':'$PROGRAM_NAME', 'practicecount':{'$sum':1}}},
-             {"$project":{'_id':1, 'teacherspracticecount':'$practicecount'}},
+            {"$group":{'_id':'$PROGRAM_ID','PROGRAM_NAME':{'$first':'$PROGRAM_NAME'},  'practicecount':{'$sum':1}}},
+             {"$project":{'_id':1,'PROGRAM_NAME':'$PROGRAM_NAME', 'teacherspracticecount':'$practicecount'}},
             ]    
 
 
@@ -64477,6 +64491,7 @@ def progpractice____DAY____(datestr,charttype):
                       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+              
                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -64489,17 +64504,16 @@ def progpractice____DAY____(datestr,charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-            {"$group":{'_id':'$PROGRAM_NAME', 'practicecount':{'$sum':1}}},
-             {"$project":{'_id':1, 'parentspracticecount':'$practicecount'}},
+            {"$group":{'_id':'$PROGRAM_ID', 'PROGRAM_NAME':{'$first':'$PROGRAM_NAME'}, 'practicecount':{'$sum':1}}},
+             {"$project":{'_id':1,'PROGRAM_NAME':'$PROGRAM_NAME',  'parentspracticecount':'$practicecount'}},
             ]     
 
         list1= list(collection1.aggregate(qr111))
         df_atm1= DataFrame(list1)
         
-        _id=['Exploring Me Pre-k-Kindergarten', 'Sound Practices', 'Exploring Potential Middle', 
-             'Exploring Originality Elementary', 'Exploring Relevance High', 'Wellness Series']
+        _id=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
         if df_atm1.empty:
-            df_atm1 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','teacherspracticecount'])
+            df_atm1 = pd.DataFrame(index=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], columns=['_id','teacherspracticecount'])
             df_atm1['_id']=_id
             df_atm1 = df_atm1.fillna(0)
 
@@ -64507,17 +64521,18 @@ def progpractice____DAY____(datestr,charttype):
         df_atm2= DataFrame(list2)
 
         if df_atm2.empty:
-            df_atm2 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','parentspracticecount'])
+            df_atm2 = pd.DataFrame(index=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], columns=['_id','parentspracticecount'])
             df_atm2['_id']=_id
             df_atm2 = df_atm2.fillna(0)
 
-        join= pd.merge(df_atm1,df_atm2, how='left', on='_id')
+        df1= pd.merge(dtf,df_atm1, how='left', on='_id')
+        join= pd.merge(df1,df_atm2, how='left', on='_id')
 
         list3= list(collection1.aggregate(qr33))
         df_atm3= DataFrame(list3)
 
         if df_atm3.empty:
-            df_atm3 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','parentspracticecount'])
+            df_atm3 = pd.DataFrame(index=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], columns=['_id','parentspracticecount'])
             df_atm3['_id']=_id
             df_atm3 = df_atm3.fillna(0)
 
@@ -64525,11 +64540,12 @@ def progpractice____DAY____(datestr,charttype):
         df_atm4= DataFrame(list4)
 
         if df_atm4.empty:
-            df_atm4 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','teacherspracticecount'])
+            df_atm4 = pd.DataFrame(index=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], columns=['_id','teacherspracticecount'])
             df_atm4['_id']=_id
             df_atm4 = df_atm4.fillna(0)
         
-        join_lastweek24hrs= pd.merge(df_atm3,df_atm4, how='left', on='_id')
+        df2= pd.merge(dtf,df_atm3, how='left', on='_id')
+        join_lastweek24hrs= pd.merge(df2,df_atm4, how='left', on='_id')
 
         join.rename(columns = { '_id': 'progname'}, inplace = True)
         join['parentspracticecount'].fillna(0, inplace=True)
@@ -64538,6 +64554,7 @@ def progpractice____DAY____(datestr,charttype):
         parentspractice=join['parentspracticecount'].tolist()
         teacherspractice=join['teacherspracticecount'].tolist()
         progname=join['progname'].tolist()
+        
 #         print(progname)
 
         join_lastweek24hrs.rename(columns = { '_id': 'progname'}, inplace = True)
@@ -64567,6 +64584,11 @@ def progpractice____DAY____(datestr,charttype):
               'progname':progname}
         return json.dumps(data)
     else:
+        
+        
+        
+        
+        
         qr111=[
     {'$match':{'USER_ID.schoolId':{'$exists':1}}},
     {"$match":
@@ -64580,12 +64602,13 @@ def progpractice____DAY____(datestr,charttype):
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
           {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
+            
              {'MODIFIED_DATE':{'$gte':yester,
                                  '$lt':tod
                                  }},
                 ]}},
-        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME', 'practicecount':{'$sum':1}}},
-         {"$project":{'_id':1, 'teacherspracticecount':'$practicecount'}},
+        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID','PROGRAM_NAME':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}, 'practicecount':{'$sum':1}}},
+         {"$project":{'_id':1, 'teacherspracticecount':'$practicecount','PROGRAM_NAME':'$PROGRAM_NAME'}},
         ]    
 
 
@@ -64598,6 +64621,7 @@ def progpractice____DAY____(datestr,charttype):
                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+            
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -64607,8 +64631,8 @@ def progpractice____DAY____(datestr,charttype):
                                  }},
 
                 ]}},
-        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME', 'practicecount':{'$sum':1}}},
-         {"$project":{'_id':1, 'parentspracticecount':'$practicecount'}},
+        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID','PROGRAM_NAME':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}, 'practicecount':{'$sum':1}}},
+         {"$project":{'_id':1, 'parentspracticecount':'$practicecount','PROGRAM_NAME':'$PROGRAM_NAME'}},
         ]   
     
     
@@ -64621,6 +64645,7 @@ def progpractice____DAY____(datestr,charttype):
                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+             {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':{'$in':[9, 11, 12, 13,10]}},
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -64629,8 +64654,8 @@ def progpractice____DAY____(datestr,charttype):
                                  '$lt':startend
                                  }},
                 ]}},
-        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME', 'practicecount':{'$sum':1}}},
-         {"$project":{'_id':1, 'teacherspracticecount':'$practicecount'}},
+        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID','PROGRAM_NAME':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}, 'practicecount':{'$sum':1}}},
+         {"$project":{'_id':1, 'teacherspracticecount':'$practicecount','PROGRAM_NAME':'$PROGRAM_NAME'}},
         ]    
 
 
@@ -64644,6 +64669,7 @@ def progpractice____DAY____(datestr,charttype):
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
           {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
@@ -64652,18 +64678,17 @@ def progpractice____DAY____(datestr,charttype):
                                  }},
 
                 ]}},
-        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME', 'practicecount':{'$sum':1}}},
-         {"$project":{'_id':1, 'parentspracticecount':'$practicecount'}},
+        {"$group":{'_id':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID','PROGRAM_NAME':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}, 'practicecount':{'$sum':1}}},
+         {"$project":{'_id':1, 'parentspracticecount':'$practicecount','PROGRAM_NAME':'$PROGRAM_NAME'}},
         ]     
     
 
     list1= list(collection1.aggregate(qr111))
     df_atm1= DataFrame(list1)
     
-    _id=['Exploring Me Pre-k-Kindergarten', 'Sound Practices', 'Exploring Potential Middle', 
-         'Exploring Originality Elementary', 'Exploring Relevance High', 'Wellness Series']
+    _id=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
     if df_atm1.empty:
-        df_atm1 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','teacherspracticecount'])
+        df_atm1 = pd.DataFrame(index=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], columns=['_id','teacherspracticecount'])
         df_atm1['_id']=_id
         df_atm1 = df_atm1.fillna(0)
 
@@ -64671,17 +64696,18 @@ def progpractice____DAY____(datestr,charttype):
     df_atm2= DataFrame(list2)
     
     if df_atm2.empty:
-        df_atm2 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','parentspracticecount'])
+        df_atm2 = pd.DataFrame(index=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], columns=['_id','parentspracticecount'])
         df_atm2['_id']=_id
         df_atm2 = df_atm2.fillna(0)
 
-    join= pd.merge(df_atm1,df_atm2, how='left', on='_id')
+    df1= pd.merge(dtf,df_atm1, how='left', on='_id')
+    join= pd.merge(df1,df_atm2, how='left', on='_id')
 
     list3= list(collection1.aggregate(qr33))
     df_atm3= DataFrame(list3)
     
     if df_atm3.empty:
-        df_atm3 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','parentspracticecount'])
+        df_atm3 = pd.DataFrame(index=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], columns=['_id','parentspracticecount'])
         df_atm3['_id']=_id
         df_atm3 = df_atm3.fillna(0)
 
@@ -64689,11 +64715,11 @@ def progpractice____DAY____(datestr,charttype):
     df_atm4= DataFrame(list4)
     
     if df_atm4.empty:
-        df_atm4 = pd.DataFrame(index=[0,1,2,3,4,5], columns=['_id','teacherspracticecount'])
+        df_atm4 = pd.DataFrame(index=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16], columns=['_id','teacherspracticecount'])
         df_atm4['_id']=_id
         df_atm4 = df_atm4.fillna(0)
-
-    join_lastweek24hrs= pd.merge(df_atm3,df_atm4, how='left', on='_id')
+    df2= pd.merge(dtf,df_atm3, how='left', on='_id')
+    join_lastweek24hrs= pd.merge(df2,df_atm4, how='left', on='_id')
     
     join.rename(columns = { '_id': 'progname'}, inplace = True)
     join['parentspracticecount'].fillna(0, inplace=True)
@@ -64702,6 +64728,7 @@ def progpractice____DAY____(datestr,charttype):
     parentspractice=join['parentspracticecount'].tolist()
     teacherspractice=join['teacherspracticecount'].tolist()
     progname=join['progname'].tolist()
+#     progname_=join['PROGRAM_NAME'].tolist()
         
     join_lastweek24hrs.rename(columns = { '_id': 'progname'}, inplace = True)
     join_lastweek24hrs['parentspracticecount'].fillna(0, inplace=True)
@@ -64711,6 +64738,7 @@ def progpractice____DAY____(datestr,charttype):
     parentspractice_lastweek24hrs=join_lastweek24hrs['parentspracticecount'].tolist()
     teacherspractice_lastweek24hrs=join_lastweek24hrs['teacherspracticecount'].tolist()
     progname_lastweek24hrs=join_lastweek24hrs['progname'].tolist()
+#     progname_lastweek24hrs=join_lastweek24hrs['PROGRAM_NAME'].tolist()
     
 #     print(df)
 #     for i in range(len(progname)):
@@ -64725,10 +64753,11 @@ def progpractice____DAY____(datestr,charttype):
     data={'parentspractice':parentspractice,'teacherspractice':teacherspractice,
           'parentspractice_lastweek24hrs':parentspractice_lastweek24hrs,
           'teacherspractice_lastweek24hrs':teacherspractice_lastweek24hrs,
-          'progname':progname}
+          'prognameid':progname,
+         'progname':progname_
+         }
     
     return json.dumps(data)
-
 
 
 @app.route('/ratedaily/<datestr>')
@@ -69132,7 +69161,7 @@ def callibration():
         
     return render_template('callibration.html')
 
-@app.route('/login_analytics')
+@app.route('/Login_analytics')
 def loginAnalytics():
     if not g.user:
         return redirect(url_for('login'))

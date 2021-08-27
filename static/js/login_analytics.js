@@ -70,7 +70,21 @@ var settings = {
     plotOptions: {series: {point: {
         events: {
             click: function () {
-              alert(this.x);
+              
+              $('#next').empty();
+              // console.log(a);
+              var modal2 = document.getElementById("myModal2");
+              modal2.style.display = "block";
+              $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+              var gif = document.getElementById("gif");
+            gif.style.display = "block";
+              $('#btnExport').show();
+
+              URL =
+                "tempasscode_table/"+this.category;
+
+              console.log(URL);
+              createDynamic(URL);
             },
           },
             }},
@@ -197,3 +211,82 @@ var settings = {
     });
   });
 
+  function createDynamic(url){
+
+    var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": url,
+    "method": "GET",
+    success: function() {
+      var gif = document.getElementById("gif");
+      gif.style.display = "none";
+      },
+    }
+    $.ajax(settings).done(function (response) {
+    var data1=JSON.parse(response);
+    
+    $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>USER_NAME</th><th>EMAIL_ID</th><th>SCHOOL_NAME</th><th>PLAYBACK IN CSY</th><th>LAST_PRACTICE_DATE</th><th>LAST_TEMP_DATE</th></thead ><tbody>');
+    for(var i=0;i<data1.data.length;i++){
+    
+    
+    var datain = data1.data[i];
+    var resultDiv = createDynamicDiv(datain);
+    
+    $("#dataTable").append(resultDiv);
+    
+    
+    
+    
+    }
+    //$('#dataTable1').append('</tbody></table>');
+    $('#dataTable').append('</tbody></table>');
+    dataTab();
+    
+    
+    
+    $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>USER_NAME</th><th>EMAIL_ID</th><th>SCHOOL_NAME</th><th>PLAYBACK IN CSY</th><th>LAST_PRACTICE_DATE</th><th>LAST_TEMP_DATE</th></thead ><tbody>');
+    for(var i=0;i<data1.data.length;i++){
+    
+    
+    var datain = data1.data[i];
+    
+    var resultDiv = createDynamicDiv(datain);
+    $("#dataTable1").append(resultDiv);
+    }
+    
+    
+    $('#dataTable1').append('</tbody></table>');
+    })
+    }
+    function dataTab()
+              {
+              
+              $("#dataTable").DataTable( {
+                "pageLength": 50
+              } );
+              
+              }
+              
+              
+              function createDynamicDiv(userList){
+              var dynamicDiv = '';
+              console.log(userList)
+              
+              
+              
+              
+              dynamicDiv +=   '<tr >'+
+                        '<td>'+userList[0]+'</td>'+
+                      '<td>'+userList[1]+'</td>'+
+                      '<td>'+userList[2]+'</td>'+
+                      '<td>'+userList[3]+'</td>'+
+                      '<td>'+userList[4]+'</td>'+
+                      '<td >'+userList[5]+'</td>'+
+                    
+
+                      '</tr>'
+              
+                    
+              return dynamicDiv;
+              }
