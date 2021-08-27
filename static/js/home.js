@@ -165,6 +165,65 @@
     $("#jiraescalated").text(dataa.escalated);
   
   });
+  var settings = {
+    async: true,
+    crossDomain: true,
+    url: "/ratingcardsdaily_card/"+a,
+    method: "GET",
+  };
+  $.ajax(settings).done(function (response) {
+    var dataa = JSON.parse(response);
+   
+  var v =parseInt(dataa.Average_FEEDBACK_Rating_change[0]);
+  
+  if(v===1){
+    console.log("hello2")
+    document.getElementById("updownfbtotalDaily").style.color = "green";
+  }
+  else if(v===-1) {
+    console.log("h2i")
+    document.getElementById("updownfbtotalDaily").style.color = "#ff0000";
+  }
+  else {
+      document.getElementById("updownfbtotalDaily").style.color = "grey";
+    }
+  
+  
+    
+    $("#avgfb").text(dataa.Average_Rating_lastweek[0]);
+  
+  });
+  var settings = {
+    async: true,
+    crossDomain: true,
+    url: "/weeklyfeedcard/"+a,
+    method: "GET",
+    };
+    $.ajax(settings).done(function (response) {
+    var dataa = JSON.parse(response);
+    
+     
+  var v =parseInt(dataa.Average_FEEDBACK_Rating_change[0]);
+  
+  if(v===1){
+    console.log("hello2")
+    document.getElementById("updownfbtotalWeekly").style.color = "green";
+  }
+  else if(v===-1) {
+    console.log("h2i")
+    document.getElementById("updownfbtotalWeekly").style.color = "#ff0000";
+  }
+  else {
+      document.getElementById("updownfbtotalWeekly").style.color = "grey";
+    }
+  
+    
+    $("#avgfb1").text(dataa.Average_Rating_lastweek[0]);
+   
+    // $("#fbp").text(parseFloat(dataa.Low_star_rating_lastweek[0]).toFixed(1));
+    // $("#fbp2").text(parseFloat(dataa.avg_ratings_week_befforelastweek[0]).toFixed(1));
+    });
+  
   
   var settings = {
     async: true,
