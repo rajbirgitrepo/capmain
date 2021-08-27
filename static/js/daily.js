@@ -828,7 +828,7 @@ else if(c===-1) {
 else {
   document.getElementById("updownsigntotal").style.color = "grey";
   }
- var t = parseInt(dataa.parentschanged[0]);
+ var t = parseInt(dataa.teacherschanged[0]);
 
   if(t===1){
     console.log("hello2")
@@ -841,7 +841,7 @@ else {
   else {
     document.getElementById("updownsignp").style.color = "grey";
   }
-var v = parseInt(dataa.teacherschanged[0]);
+var v = parseInt(dataa.parentschanged[0]);
 
 if(v===1){
   console.log("hello2")
@@ -855,8 +855,8 @@ else {
     document.getElementById("updownsignt").style.color = "grey";
   }
   $("#updownsigntotal").text(parseFloat(dataa.Total_percentage_change[0]).toFixed(0) + "%");
-  $("#updownsignp").text(parseFloat(dataa.parents_Percentage_Change[0]).toFixed(0) + "%");
-  $("#updownsignt").text(parseFloat(dataa.Teacher_percentage_change[0]).toFixed(0) + "%");
+  $("#updownsignp").text(parseFloat(dataa.Teacher_percentage_change[0]).toFixed(0) + "%");
+  $("#updownsignt").text(parseFloat(dataa.parents_Percentage_Change[0]).toFixed(0) + "%");
   $("#usercount1").text(dataa.total_signup_yesterday[0]);
   $("#neverlogged1").text(dataa.parents_signup_yesterday[0]);
   $("#totalstudent1").text(dataa.teachers_signup_yesterday[0]);
