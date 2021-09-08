@@ -19736,7 +19736,7 @@ def pract_cards_24hr():
     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-    {'MODIFIED_DATE':{'$gte': yester, '$lt':tod
+    {'MODIFIED_DATE':{'$gte': yester, '$lte':tod
     }},
     ]}},
 
@@ -61174,7 +61174,7 @@ def avg_audio_completed_____(datestr):
     # client = MongoClient('mongodb://IE-tech:I#^m0NgO_2o20!@52.41.36.115:27017/')
 
 @app.route('/ratingcardsdaily_card/<datestr>')
-def dailyfeedback_ratingsssss___(datestr):
+def dailyfeedback_ratingssss___(datestr):
     import datetime
     import math
     username = urllib.parse.quote_plus('admin')
@@ -61183,17 +61183,16 @@ def dailyfeedback_ratingsssss___(datestr):
     db=client.compass
     collection2=db.audio_feedback
     mydatetime= dateutil.parser.parse(datestr)
-#     -timedelta(hours=24)
     #     yester= pd.to_datetime(mydatetime) - timedelta(days=1)
     #     tod= mydatetime
     yester= datetime.datetime.combine(mydatetime,datetime.time.min)
     tod= datetime.datetime.combine(mydatetime,datetime.time.max)
 
 
-    start_15day=tod- timedelta(days=8)
-    startend= start_15day+timedelta(days=1)
-    #     print(start_15day)
-    #     print(startend)
+    start_15day=yester- timedelta(days=7)
+    startend= tod- timedelta(days=7)
+    print(start_15day)
+    print(startend)
 
 
     #TEACHERS COMMENT PER FEEDBACK LAST WEEK
@@ -61206,7 +61205,7 @@ def dailyfeedback_ratingsssss___(datestr):
     { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-       {'MODIFIED_DATE':{'$gte':yester, '$lt':tod}}    ,    
+       {'MODIFIED_DATE':{'$gte':yester, '$lte':tod}}    ,    
     #         {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
 
@@ -61232,7 +61231,7 @@ def dailyfeedback_ratingsssss___(datestr):
     { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-       {'MODIFIED_DATE':{'$gte':yester, '$lt':tod}}    ,    
+       {'MODIFIED_DATE':{'$gte':yester, '$lte':tod}}    ,    
     #        {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
 
@@ -61260,7 +61259,7 @@ def dailyfeedback_ratingsssss___(datestr):
     { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
      {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-       {'MODIFIED_DATE':{'$gte':start_15day, '$lt':startend}}    ,   
+       {'MODIFIED_DATE':{'$gte':start_15day, '$lte':startend}}    ,   
     #        {'COMMENT':{'$nin':['',' ',None]}},
     {'RATING':{'$ne':0}}]}},
 
@@ -61382,10 +61381,7 @@ def dailyfeedback_ratingsssss___(datestr):
 
     elif comments_per_feedback_teacher['rating'].iloc[0] == comments_per_feedback_before_last_week_teachers['rating'].iloc[0]:
         xx=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
-        if comments_per_feedback_teacher['rating'].iloc[0] & comments_per_feedback_before_last_week_teachers['rating'].iloc[0]==0:
-            yy=round(xx/1*100,2)
-        else:            
-            yy= xx/comments_per_feedback_teacher['rating'].iloc[0]
+        yy= xx/comments_per_feedback_teacher['rating'].iloc[0]
     #     if math.isnan(yy):
     #         yy=0
     #     else:
@@ -61409,6 +61405,9 @@ def dailyfeedback_ratingsssss___(datestr):
     #     rr=round(qq*100,2)
         TEACHER_Comment_per_feedbackchange.append('1')
         teacher_PERCENTAGE_change.append(qq)
+        
+    import math
+    teacher_PERCENTAGE_change=[0 if math.isnan(i) else i for i in teacher_PERCENTAGE_change] 
 
 
     PARENT_Comment_per_feedbackchange=[]
@@ -61429,10 +61428,7 @@ def dailyfeedback_ratingsssss___(datestr):
 
     elif comments_per_feedback_parents['rating'].iloc[0] == comments_per_feedback_before_last_week_parents['rating'].iloc[0]:
         pp=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
-        if comments_per_feedback_parents['rating'].iloc[0] & comments_per_feedback_before_last_week_parents['rating'].iloc[0]==0:
-            qq=round(pp/1*100,2)
-        else:
-            qq= pp/comments_per_feedback_parents['rating'].iloc[0]
+        qq= pp/comments_per_feedback_parents['rating'].iloc[0]
     #     if math.isnan(qq):
     #         qq=0
     #     else:
@@ -61456,6 +61452,10 @@ def dailyfeedback_ratingsssss___(datestr):
     #     rr=round(qq*100,2)
         PARENT_Comment_per_feedbackchange.append('1')
         parent_PERCENTAGE_change.append(qq)
+    
+    import math
+    parent_PERCENTAGE_change=[0 if math.isnan(i) else i for i in parent_PERCENTAGE_change] 
+    
 
 
     Average_FEEDBACK_Rating_change=[]
@@ -61479,10 +61479,7 @@ def dailyfeedback_ratingsssss___(datestr):
 
     elif avg_ratings_last_week['avg_ratings_lastweek'].iloc[0] == avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]:
         aa=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
-        if avg_ratings_last_week['avg_ratings_lastweek'].iloc[0] & avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]==0:
-            bb=round(aa/1*100,2)
-        else:
-            bb= aa/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
+        bb= aa/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
     #     if math.isnan(bb):
     #         bb=0
     #     else:
@@ -61535,9 +61532,6 @@ def dailyfeedback_ratingsssss___(datestr):
         temp.update({key:value})
         #     print(temp)
     return json.dumps(temp)
-
-
-
 
 
 @app.route('/last_day_pr/<datestr>')
@@ -64487,7 +64481,7 @@ def progpractice____DAY____(datestr,charttype):
         threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
         
         qr111=[
-        {'$match':{'USER_ID.schoolId':{'$exists':1}}},
+#         {'$match':{'USER_ID.schoolId':{'$exists':1}}},
         {"$match":
              {'$and': [
                      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
@@ -64495,6 +64489,7 @@ def progpractice____DAY____(datestr,charttype):
                       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 
                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -64520,6 +64515,7 @@ def progpractice____DAY____(datestr,charttype):
                       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                    
                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -64539,7 +64535,7 @@ def progpractice____DAY____(datestr,charttype):
 
 
         qr44=[
-        {'$match':{'USER_ID.schoolId':{'$exists':1}}},
+#         {'$match':{'USER_ID.schoolId':{'$exists':1}}},
         {"$match":
              {'$and': [
                      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
@@ -64547,6 +64543,7 @@ def progpractice____DAY____(datestr,charttype):
                       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                    
                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -64573,6 +64570,7 @@ def progpractice____DAY____(datestr,charttype):
                       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
               
                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                                {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -64672,7 +64670,7 @@ def progpractice____DAY____(datestr,charttype):
         
         
         qr111=[
-    {'$match':{'USER_ID.schoolId':{'$exists':1}}},
+#     {'$match':{'USER_ID.schoolId':{'$exists':1}}},
     {"$match":
          {'$and': [
                  {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
@@ -64680,6 +64678,7 @@ def progpractice____DAY____(datestr,charttype):
                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -64703,6 +64702,7 @@ def progpractice____DAY____(datestr,charttype):
                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -64719,7 +64719,7 @@ def progpractice____DAY____(datestr,charttype):
     
     
     qr44=[
-    {'$match':{'USER_ID.schoolId':{'$exists':1}}},
+#     {'$match':{'USER_ID.schoolId':{'$exists':1}}},
     {"$match":
          {'$and': [
                  {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
@@ -64727,7 +64727,8 @@ def progpractice____DAY____(datestr,charttype):
                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-             {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':{'$in':[9, 11, 12, 13,10]}},
+              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#            
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -64751,7 +64752,7 @@ def progpractice____DAY____(datestr,charttype):
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     
+                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
           {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{'$ne':None}},
@@ -69060,10 +69061,144 @@ def jira_type(datestr):
     temp = {"data":dftry.values.astype(str).tolist()}
     return json.dumps(temp) 
 
-
-
-
 ####################################################################################################################
+
+@app.route('/Dashboard_Insights/<dashtype>')
+def dashboard_insights(dashtype):
+
+    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    worksheetName = 'Executive_Summary'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment_df1=pd.read_csv(URL)
+
+    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    worksheetName = 'Engagement_Dashboard'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment_df2=pd.read_csv(URL)
+
+    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    worksheetName = 'Playback_Analytics'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment_df3=pd.read_csv(URL)
+
+    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    worksheetName = 'Revenue_Dashboards'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment_df4=pd.read_csv(URL)
+
+    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    worksheetName = 'Feedback_Survey'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment_df5=pd.read_csv(URL)
+
+    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    worksheetName = 'Subscription_Dashboard'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment_df6=pd.read_csv(URL)
+
+    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    worksheetName = 'App_Analytics'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment_df7=pd.read_csv(URL)
+
+    payment_df1=payment_df1[['Name_of_the_dashboard','Chart_Card_Name','Insights']]
+    dash_name1=payment_df1['Name_of_the_dashboard'].unique()
+    dash_desc1=[]
+    for i in np.arange(0,len(dash_name1)):
+        b1=[]    
+        data1 = payment_df1[payment_df1['Name_of_the_dashboard']==dash_name1[i]]
+#         b1.append(data1[['Chart/ Card Name','Insights']].to_numpy().tolist())
+        b1.append([dict(zip(data1.Chart_Card_Name, data1.Insights))]) 
+        dash_desc1.append(b1[0])
+    data1 = dict(zip(dash_name1, dash_desc1))
+
+    payment_df2=payment_df2[['Name_of_the_dashboard','Chart_Card_Name','Insights']]
+    dash_name2=payment_df2['Name_of_the_dashboard'].unique()
+    dash_desc2=[]
+    for i in np.arange(0,len(dash_name2)):
+        b2=[]    
+        data2 = payment_df2[payment_df2['Name_of_the_dashboard']==dash_name2[i]]
+#         b2.append(data2[['Chart/ Card Name','Insights']].to_numpy().tolist())
+        b2.append([dict(zip(data2.Chart_Card_Name, data2.Insights))])
+        dash_desc2.append(b2[0])
+    data2 = dict(zip(dash_name2, dash_desc2))
+
+    payment_df3=payment_df3[['Name_of_the_dashboard','Chart_Card_Name','Insights']]
+    dash_name3=payment_df3['Name_of_the_dashboard'].unique()
+    dash_desc3=[]
+    for i in np.arange(0,len(dash_name3)):
+        b3=[]    
+        data3 = payment_df3[payment_df3['Name_of_the_dashboard']==dash_name3[i]]
+#         b3.append(data3[['Chart/ Card Name','Insights']].to_numpy().tolist())
+        b3.append([dict(zip(data3.Chart_Card_Name, data3.Insights))])
+        dash_desc3.append(b3[0])
+    data3 = dict(zip(dash_name3, dash_desc3))
+
+    payment_df4=payment_df4[['Name_of_the_dashboard','Chart_Card_Name','Insights']]
+    dash_name4=payment_df4['Name_of_the_dashboard'].unique()
+    dash_desc4=[]
+    for i in np.arange(0,len(dash_name4)):
+        b4=[]    
+        data4 = payment_df4[payment_df4['Name_of_the_dashboard']==dash_name4[i]]
+#         b4.append(data4[['Chart/ Card Name','Insights']].to_numpy().tolist())
+        b4.append([dict(zip(data4.Chart_Card_Name, data4.Insights))])
+        dash_desc4.append(b4[0])
+    data4 = dict(zip(dash_name4, dash_desc4))
+
+    payment_df5=payment_df5[['Name_of_the_dashboard','Chart_Card_Name','Insights']]
+    dash_name5=payment_df5['Name_of_the_dashboard'].unique()
+    dash_desc5=[]
+    for i in np.arange(0,len(dash_name5)):
+        b5=[]    
+        data5 = payment_df5[payment_df5['Name_of_the_dashboard']==dash_name5[i]]
+#         b5.append(data5[['Chart/ Card Name','Insights']].to_numpy().tolist())
+        b5.append([dict(zip(data5.Chart_Card_Name, data5.Insights))])
+        dash_desc5.append(b5[0])
+    data5 = dict(zip(dash_name5, dash_desc5))
+
+    payment_df6=payment_df6[['Name_of_the_dashboard','Chart_Card_Name','Insights']]
+    dash_name6=payment_df6['Name_of_the_dashboard'].unique()
+    dash_desc6=[]
+    for i in np.arange(0,len(dash_name6)):
+        b6=[]    
+        data6 = payment_df6[payment_df6['Name_of_the_dashboard']==dash_name6[i]]
+#         b6.append(data6[['Chart/ Card Name','Insights']].to_numpy().tolist())
+        b6.append([dict(zip(data6.Chart_Card_Name, data6.Insights))])
+        dash_desc6.append(b6[0])
+    data6 = dict(zip(dash_name6, dash_desc6))
+
+    payment_df7=payment_df7[['Name_of_the_dashboard','Chart_Card_Name','Insights']]
+    dash_name7=payment_df7['Name_of_the_dashboard'].unique()
+    dash_desc7=[]
+    for i in np.arange(0,len(dash_name7)):
+        b7=[]    
+        data7 = payment_df7[payment_df7['Name_of_the_dashboard']==dash_name7[i]]
+#         b7.append(data7[['Chart/ Card Name','Insights']].to_numpy().tolist())
+        b7.append([dict(zip(data7.Chart_Card_Name, data7.Insights))])
+        dash_desc7.append(b7[0])
+    data7 = dict(zip(dash_name7, dash_desc7))
+
+    #     dataf={"Executive_Summary":data1,"Engagement_Dashboard":data2,"Practice_Analytics":data3,"Revenue_Dashboards":data4,
+    #           "Feedback_Survey":data5,"Subscription_Dashboard":data6,"App_Analytics":data7}
+    
+    if dashtype=='Executive_Summary':
+        dataf={"Executive_Summary":data1}
+    if dashtype=='Engagement_Dashboard':
+        dataf={"Engagement_Dashboard":data2}
+    if dashtype=='Practice_Analytics':
+        dataf={"Practice_Analytics":data3}
+    if dashtype=='Revenue_Dashboards':
+        dataf={"Revenue_Dashboards":data4}
+    if dashtype=='Feedback_Survey':
+        dataf={"Feedback_Survey":data5}
+    if dashtype=='Subscription_Dashboard':
+        dataf={"Subscription_Dashboard":data6}
+    if dashtype=='App_Analytics':
+        dataf={"App_Analytics":data7}
+
+    return json.dumps(dataf)
+
+# dashboard_insights('Executive_Summary')
 
 @app.route('/Family_SURVEY')
 def Family_SURVEY():

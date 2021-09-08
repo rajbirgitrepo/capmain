@@ -2,655 +2,647 @@
 <html lang="en">
 
 <head>
-  <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>CAPXP CAP SUMMARY </title>
+    <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>CAPXP CAP SUMMARY </title>
 
-  <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
-  <title>CAPXP FAMILY MAP VIEW</title>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/search2.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/map-table.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/modal-style.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/search2.css') }}">
-  <!--  -->
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/journeystyle.css') }}">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-  <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css'>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
-  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+    <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
+    <title>CAPXP FAMILY MAP VIEW</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/search2.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/map-table.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/modal-style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/search2.css') }}">
+    <!--  -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/journeystyle.css') }}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
 
-  <script src="https://code.highcharts.com/stock/highstock.js"></script>
-  <script src="https://code.highcharts.com/maps/modules/map.js"></script>
-  <script src="https://code.highcharts.com/maps/modules/data.js"></script>
-  <script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
-  <script src="https://code.highcharts.com/mapdata/countries/us/custom/us-all-territories.js"></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/map.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/data.js"></script>
+    <script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
+    <script src="https://code.highcharts.com/mapdata/countries/us/custom/us-all-territories.js"></script>
 
 
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"> 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-EWVQZSV89G');
-  </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-EWVQZSV89G');
+    </script>
 </head>
 
 <style>
-  .image {
-    float: right;
-    width: 107px;
-    height: 38px;
-    opacity: 100%;
-    margin-top: 15px;
-  }
-
-  .image2 {
-    float: left;
-    width: 1%;
-    opacity: 100%;
-    margin-top: 4px;
-    margin-right: 10px;
-
-  }
-
-  .highcharts-figure,
-  .highcharts-data-table table {
-    min-width: 310px;
-    max-width: 800px;
-    margin: 1em auto;
-  }
-
-  .tablelink {
-    color: #4da555;
-    cursor: pointer;
-  }
-
-  .tablelink2 {
-    color: #3253c0;
-    cursor: pointer;
-  }
-
-  .ui-tooltip,
-  .arrow:after {
-    background: #fafafa;
-    border: 2px solid white;
-  }
-
-  .ui-tooltip {
-    padding: 10px 20px;
-    color: #4da555;
-    border-radius: 10px;
-    font: bold 14px "Helvetica Neue", Sans-Serif;
-    text-transform: uppercase;
-    box-shadow: 0 0 7px #fafafa;
-  }
-
-  .arrow {
-    width: 70px;
-    height: 16px;
-    overflow: hidden;
-    position: absolute;
-    left: 50%;
-    margin-left: -35px;
-    bottom: -16px;
-  }
-
-  .arrow.top {
-    top: -16px;
-    bottom: auto;
-  }
-
-  .arrow.left {
-    left: 20%;
-  }
-
-  .arrow:after {
-    content: "";
-    position: absolute;
-    left: 20px;
-    top: -20px;
-    width: 25px;
-    height: 25px;
-    box-shadow: 6px 5px 9px -9px black;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
-
-  .arrow.top:after {
-    bottom: -20px;
-    top: auto;
-  }
+    .image {
+        float: right;
+        width: 107px;
+        height: 38px;
+        opacity: 100%;
+        margin-top: 15px;
+    }
+    
+    .image2 {
+        float: left;
+        width: 1%;
+        opacity: 100%;
+        margin-top: 4px;
+        margin-right: 10px;
+    }
+    
+    .highcharts-figure,
+    .highcharts-data-table table {
+        min-width: 310px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+    
+    .tablelink {
+        color: #4da555;
+        cursor: pointer;
+    }
+    
+    .tablelink2 {
+        color: #3253c0;
+        cursor: pointer;
+    }
+    
+    .ui-tooltip,
+    .arrow:after {
+        background: #fafafa;
+        border: 2px solid white;
+    }
+    
+    .ui-tooltip {
+        padding: 10px 20px;
+        color: #4da555;
+        border-radius: 10px;
+        font: bold 14px "Helvetica Neue", Sans-Serif;
+        text-transform: uppercase;
+        box-shadow: 0 0 7px #fafafa;
+    }
+    
+    .arrow {
+        width: 70px;
+        height: 16px;
+        overflow: hidden;
+        position: absolute;
+        left: 50%;
+        margin-left: -35px;
+        bottom: -16px;
+    }
+    
+    .arrow.top {
+        top: -16px;
+        bottom: auto;
+    }
+    
+    .arrow.left {
+        left: 20%;
+    }
+    
+    .arrow:after {
+        content: "";
+        position: absolute;
+        left: 20px;
+        top: -20px;
+        width: 25px;
+        height: 25px;
+        box-shadow: 6px 5px 9px -9px black;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+    
+    .arrow.top:after {
+        bottom: -20px;
+        top: auto;
+    }
 </style>
 
 <script>
-  $(function () {
-    $(document).tooltip({
-      position: {
-        my: "center bottom-20",
-        at: "center top",
-        using: function (position, feedback) {
-          $(this).css(position);
-          $("<div>")
-            .addClass("arrow")
-            .addClass(feedback.vertical)
-            .addClass(feedback.horizontal)
-            .appendTo(this);
-        }
-      }
+    $(function() {
+        $(document).tooltip({
+            position: {
+                my: "center bottom-20",
+                at: "center top",
+                using: function(position, feedback) {
+                    $(this).css(position);
+                    $("<div>")
+                        .addClass("arrow")
+                        .addClass(feedback.vertical)
+                        .addClass(feedback.horizontal)
+                        .appendTo(this);
+                }
+            }
+        });
     });
-  });
 </script>
 
 <body class="body">
-  <nav class="navbar navbar-default">
-    <div class="">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="page_Heading" href="#">CAP SUMMARY</a>
-          <a href="homepage">
-            <img src="/static/images/capwhite.png" alt="" class="logo">
-          </a>
-        </div>
-        <div class="navbar-right">
-          <ul class="nav navbar-nav">
-            <li style="left: 2px;
-          top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true"
-                style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i>
-              <p style="float: right;">Views</p>
-              <p id="count" style="float: right;margin-right: 3px;"></p>
-            </li>
-            <!-- <li style="left: 10px;
+    <nav class="navbar navbar-default">
+        <div class="">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="page_Heading" href="#">CAP SUMMARY</a>
+                    <a href="homepage">
+                        <img src="/static/images/capwhite.png" alt="" class="logo">
+                    </a>
+                </div>
+                <div class="navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li style="left: 2px;
+          top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true" style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i>
+                            <p style="float: right;">Views</p>
+                            <p id="count" style="float: right;margin-right: 3px;"></p>
+                        </li>
+                        <!-- <li style="left: 10px;
           top: 34px;
           color: #fff;
           cursor: pointer;" id="myBtn"><i class="fa fa-lightbulb-o" style="margin-top:2px;"></i><p style="float: right;">Insights</p><p style="float: right;margin-right: 3px; margin-left: 5px;">2</p></li> -->
-            <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true"
+                        <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true"
                   style="margin-top:2px;margin-right: 3px;"></i></a></li>
-            <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1"
+                        <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1"
                   class="fa fa-bars show-side-btn"></i></a></li>
-            <li style="margin-top: 27px;">
-              <div class="dropdown">
-                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown"
-                  style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid"
+                        <li style="margin-top: 27px;">
+                            <div class="dropdown">
+                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid"
                     style="display: none;">1</span></button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                  <li role="presentation" id="usname"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a>
-                  </li>
-                  <hr />
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                    <li role="presentation" id="usname"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a>
+                                    </li>
+                                    <hr />
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>
+                                </ul>
+                            </div>
+                    </ul>
+                </div>
+                <div class="input-Container ui-widget">
+                    <i class="fa fa-search Icon"></i>
+                    <div id="iid" class="input-Field">
+                    </div>
+                    <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
+                    <p style="display: none;" id="tagdescription"></p>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <aside class="side-nav" id="show-side-navigation1">
+        <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
+        <ul class="categories" style="margin-top:35px;">
+            <li class="active">
+                <i class="fa fa-home" aria-hidden="true"></i>
+                <a href="#">EXECUTIVE SUMMARY</a>
+                <ul class="side-nav-dropdown">
+                    <li class="active2">
+                        <a href="Executive_Dashboard">CAP SUMMARY</a>
+                    </li>
+                    <li class="active2"><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
+                    <li class="active2"><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
+                    <li class="active2"><a href="aws_releases">COMPASS RELEASES</a></li>
+                    <li class="active2"><a href="schoolsummary">SCHOOL SUMMARY</a></li>
+                    <li class="active2"><a href="awsmain">AWS ANALYTICS</a></li>
+                    <li class="active2"><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
+
                 </ul>
-              </div>
-          </ul>
-        </div>
-        <div class="input-Container ui-widget">
-          <i class="fa fa-search Icon"></i>
-          <div id="iid" class="input-Field">
-          </div>
-          <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
-          <p style="display: none;" id="tagdescription"></p>
-        </div>
-      </div>
-    </div>
-  </nav>
-  <aside class="side-nav" id="show-side-navigation1">
-    <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-    <ul class="categories" style="margin-top:35px;">
-      <li class="active">
-        <i class="fa fa-home" aria-hidden="true"></i>
-        <a href="#">EXECUTIVE SUMMARY</a>
-        <ul class="side-nav-dropdown">
-          <li class="active2">
-            <a href="Executive_Dashboard">CAP SUMMARY</a>
-          </li>
-          <li class="active2"><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
-          <li class="active2"><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
-          <li class="active2"><a href="aws_releases">COMPASS RELEASES</a></li>
-          <li class="active2"><a href="schoolsummary">SCHOOL SUMMARY</a></li>
-          <li class="active2"><a href="awsmain">AWS ANALYTICS</a></li>
-          <li class="active2"><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-          
-        </ul>
-      </li>
-      <li><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
-        <ul class="side-nav-dropdown">
-          <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
-          <li><a href="Disctrictfilter">DISTRICT 360</a></li>
-          <li><a href="partner">PARTNER PORTAL</a></li>
-          <li><a href="Login_analytics">LOGIN ANALYTICS</a></li>
-          <!-- <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
-          <!-- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->
-          <li><a href="School_Search">SCHOOL SEARCH</a></li>
-          <li><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
-<li><a href="21daystreak">21 Day Streak</a></li>
-        </ul>
-      </li>
-      <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
-        <ul class="side-nav-dropdown">
-          <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
-          <li><a href="Scoology">SCHOOLOGY</a></li>
-          <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
-          <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-          <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
-          <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
-          <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
-          <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
-        </ul>
-      </li>
-      <li>
-        <i class="fa fa-dollar"></i><a href="#">REVENUE DASHBOARDS</a>
-        <ul class="side-nav-dropdown">
-          <li><a href="Transaction_Reporting">REVENUE OVERVIEW</a></li>
-          <li><a href="Donation">DONATION DASHBOARD</a></li>
-          <li><a href="School_Revenue">SCHOOL REVENUE</a></li>
-          <li><a href="Bill_later">BILL ME LATER</a></li>
-        </ul>
-      </li>
-      <li><i class="fa fa-bolt"></i><a href="#">FEEDBACK AND SURVEY</a>
-        <ul class="side-nav-dropdown">
-          <li><a href="feedback_Analyitcs">FEEDBACK ANAYLTICS</a></li>
-          <li><a href="sentiment">SENTIMENT ANAYLTICS</a></li>
-          <li><a href="feedback_Trends">FEEDBACK TRENDS</a></li>
-          <li><a href="Family_SURVEY">HOME SURVEY ANALYTICS</a></li>
-          <li><a href="feedback_Analyitcs_family">HOME FEEDBACK ANALYTICS</a></li>
-        </ul>
-      </li>
-      <li>
-        <i class="fa fa-users "></i><a href="#">SUBSCRIPTION DASHBOARDS</a>
-        <ul class="side-nav-dropdown">
-          <li><a href="Upcoming_Renewals">UPCOMING RENEWAL</a></li>
-          <li><a href="d1districts">D1 Districts</a></li>
-          <li><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
-          <li><a href="Sms_analytics">SMS ANALYTICS</a></li>
+            </li>
+            <li><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
+                    <li><a href="Disctrictfilter">DISTRICT 360</a></li>
+                    <li><a href="partner">PARTNER PORTAL</a></li>
+                    <li><a href="Login_analytics">LOGIN ANALYTICS</a></li>
+                    <!-- <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
+                    <!-- <li><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->
+                    <li><a href="School_Search">SCHOOL SEARCH</a></li>
+                    <li><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
+                    <li><a href="21daystreak">21 Day Streak</a></li>
+                </ul>
+            </li>
+            <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
+                    <li><a href="Scoology">SCHOOLOGY</a></li>
+                    <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
+                    <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
+                    <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
+                    <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
+                    <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
+                    <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
+                </ul>
+            </li>
+            <li>
+                <i class="fa fa-dollar"></i><a href="#">REVENUE DASHBOARDS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Transaction_Reporting">REVENUE OVERVIEW</a></li>
+                    <li><a href="Donation">DONATION DASHBOARD</a></li>
+                    <li><a href="School_Revenue">SCHOOL REVENUE</a></li>
+                    <li><a href="Bill_later">BILL ME LATER</a></li>
+                </ul>
+            </li>
+            <li><i class="fa fa-bolt"></i><a href="#">FEEDBACK AND SURVEY</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="feedback_Analyitcs">FEEDBACK ANAYLTICS</a></li>
+                    <li><a href="sentiment">SENTIMENT ANAYLTICS</a></li>
+                    <li><a href="feedback_Trends">FEEDBACK TRENDS</a></li>
+                    <li><a href="Family_SURVEY">HOME SURVEY ANALYTICS</a></li>
+                    <li><a href="feedback_Analyitcs_family">HOME FEEDBACK ANALYTICS</a></li>
+                </ul>
+            </li>
+            <li>
+                <i class="fa fa-users "></i><a href="#">SUBSCRIPTION DASHBOARDS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Upcoming_Renewals">UPCOMING RENEWAL</a></li>
+                    <li><a href="d1districts">D1 DISTRICTS</a></li>
+                    <li><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
+                    <li><a href="Sms_analytics">SMS ANALYTICS</a></li>
 
-        </ul>
-      </li>
+                </ul>
+            </li>
 
-      <li><i class="fa fa-star"></i><a href="#">APP ANALYTICS</a>
-        <ul class="side-nav-dropdown">
-          <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
-          <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-          <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
-          <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
-          <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
-          <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
-        </ul>
-      </li>
-      <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
+            <li><i class="fa fa-star"></i><a href="#">APP ANALYTICS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
+                    <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
+                    <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
+                    <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
+                    <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
+                    <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
+                </ul>
+            </li>
+            <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
             style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
-      </li>
-      <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
-  </aside>
-  <section id="contents">
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
+            </li>
+            <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
+    </aside>
+    <section id="contents">
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
 
-      <!-- Modal content -->
-      <div class="modal-content">
-        <button onclick="cose()">Close X</button>
-        <section class="mtsection">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="card">
-                  <div class="card-header no-border">
-                    <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil" aria-hidden="true"
+            <!-- Modal content -->
+            <div class="modal-content">
+                <button onclick="cose()">Close X</button>
+                <section class="mtsection">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header no-border">
+                                        <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil" aria-hidden="true"
                           style="float: right;cursor: pointer;"></i></a></h4>
 
 
-                  </div>
-                  <div class="card-body card-contentt">
-                    <div class="card-block">
-                      <p id="schoolname"></p>
-                      <p id="admin"></p>
-                      <p id="email"></p>
-                      <p id="adress"></p>
-                      <p id="city"></p>
-                      <p id="state"></p>
-                      <p id="country"></p>
-                      <p style="float: left;margin-right: 9px;"><b>Renewal Date:</b>
-                      <p id="renewal"></p>
-                      </p>
-                      </a>
-                      </p>
+                                    </div>
+                                    <div class="card-body card-contentt">
+                                        <div class="card-block">
+                                            <p id="schoolname"></p>
+                                            <p id="admin"></p>
+                                            <p id="email"></p>
+                                            <p id="adress"></p>
+                                            <p id="city"></p>
+                                            <p id="state"></p>
+                                            <p id="country"></p>
+                                            <p style="float: left;margin-right: 9px;"><b>Renewal Date:</b>
+                                                <p id="renewal"></p>
+                                            </p>
+                                            </a>
+                                            </p>
 
 
 
 
-                    </div>
-                  </div>
-                </div>
-              </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-              <div class="col-md-6">
-
-
-
-                <section class="mtsection">
-                  <div class="">
-                    <div class="pcard">
-                      <div class="col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                          <div class="card-header" data-background-color="rose1">
-                            <img src="/static/images/capuser.png" style="width: 54px;" class="img-responsive">
-                          </div>
-                          <div class="card-content">
-                            <p class="category">Total Users</p>
-                            <h3 class="card-title" id="ucount"></h3>
+                            <div class="col-md-6">
 
 
-                          </div>
 
-                        </div>
-                      </div>
+                                <section class="mtsection">
+                                    <div class="">
+                                        <div class="pcard">
+                                            <div class="col-md-6 col-sm-6">
+                                                <div class="card card-stats">
+                                                    <div class="card-header" data-background-color="rose1">
+                                                        <img src="/static/images/capuser.png" style="width: 54px;" class="img-responsive">
+                                                    </div>
+                                                    <div class="card-content">
+                                                        <p class="category">Total Users</p>
+                                                        <h3 class="card-title" id="ucount"></h3>
 
-                      <div class="col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                          <div class="card-header" data-background-color="rose">
-                            <img src="/static/images/capminute.png" style="width: 54px;" class="img-responsive">
-                          </div>
-                          <div class="card-content">
-                            <p class="category">Playback Count</p>
-                            <h3 class="card-title" id="pcount"></h3>
-                          </div>
 
-                        </div>
-                      </div>
+                                                    </div>
 
-                      <div class="col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                          <div class="card-header" data-background-color="green">
-                            <img src="/static/images/capstudy.png" style="width: 54px;" class="img-responsive">
-                          </div>
-                          <div class="card-content">
-                            <p class="category"> Mindful Minutes</p>
-                            <h3 class="card-title" id="mindfulness_minutes"></h3>
-                          </div>
-                          <!-- <div class="card-footer">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6">
+                                                <div class="card card-stats">
+                                                    <div class="card-header" data-background-color="rose">
+                                                        <img src="/static/images/capminute.png" style="width: 54px;" class="img-responsive">
+                                                    </div>
+                                                    <div class="card-content">
+                                                        <p class="category">Playback Count</p>
+                                                        <h3 class="card-title" id="pcount"></h3>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-sm-6">
+                                                <div class="card card-stats">
+                                                    <div class="card-header" data-background-color="green">
+                                                        <img src="/static/images/capstudy.png" style="width: 54px;" class="img-responsive">
+                                                    </div>
+                                                    <div class="card-content">
+                                                        <p class="category"> Mindful Minutes</p>
+                                                        <h3 class="card-title" id="mindfulness_minutes"></h3>
+                                                    </div>
+                                                    <!-- <div class="card-footer">
                     <div class="stats">
                       <i class="material-icons text-danger">warning</i> <a href="#pablo">Get More Space...</a>
                     </div>
                   </div> -->
-                        </div>
-                      </div>
+                                                </div>
+                                            </div>
 
-                      <div class="col-md-6 col-sm-6">
-                        <div class="card card-stats">
-                          <div class="card-header" data-background-color="blue">
-                            <img src="/static/images/cappractice.png" style="width: 54px;" class="img-responsive">
-                          </div>
-                          <div class="card-content">
-                            <p class="category">5 Star Ratings</p>
-                            <h3 class="card-title" id="ratings"></h3>
-                          </div>
-                          <!-- 	<div class="card-footer">
+                                            <div class="col-md-6 col-sm-6">
+                                                <div class="card card-stats">
+                                                    <div class="card-header" data-background-color="blue">
+                                                        <img src="/static/images/cappractice.png" style="width: 54px;" class="img-responsive">
+                                                    </div>
+                                                    <div class="card-content">
+                                                        <p class="category">5 Star Ratings</p>
+                                                        <h3 class="card-title" id="ratings"></h3>
+                                                    </div>
+                                                    <!-- 	<div class="card-footer">
                     <div class="stats">
                       <i class="material-icons text-danger">warning</i> <a href="#pablo">Get More Space...</a>
                     </div>
                   </div> -->
+                                                </div>
+                                            </div>
+
+                                            <button class="ex_Button" onclick="explore()">Explore School</button>
+
+                                        </div>
+
+                                    </div>
+
+                                </section>
+
+
+
+                            </div>
                         </div>
-                      </div>
-
-                      <button class="ex_Button" onclick="explore()">Explore School</button>
-
                     </div>
-
-                  </div>
-
                 </section>
-
-
-
-              </div>
             </div>
-          </div>
-        </section>
-      </div>
 
-    </div>
+        </div>
 
 
-    <div id="myModal2" class="modal2">
-      <!-- Modal content -->
-      <div class="modal2-content">
-        <div id="admin" class="col-md-12">
-          <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
-            <button onclick="gif2()" style="float: right;background-color: white;"><i class="fa fa-times-circle-o"
+        <div id="myModal2" class="modal2">
+            <!-- Modal content -->
+            <div class="modal2-content">
+                <div id="admin" class="col-md-12">
+                    <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
+                        <button onclick="gif2()" style="float: right;background-color: white;"><i class="fa fa-times-circle-o"
                 aria-hidden="true"></i>
             </button>
-            <!-- <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"  download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a> -->
+                        <!-- <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"  download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a> -->
 
-            <div class="table-header">
-              <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
+                        <div class="table-header">
+                            <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
+                        </div>
+                        <div id="gif"></div>
+                        <div class="custyle" id="next"></div>
+                        <div class="custyle" id="next1"></div>
+                    </div>
+                </div>
             </div>
-            <div id="gif"></div>
-            <div class="custyle" id="next"></div>
-            <div class="custyle" id="next1"></div>
-          </div>
         </div>
-      </div>
-    </div>
-    <section class="statistics">
-      <div class="container-fluid">
-        <div class="col-md-3" title="" id="school_count">
-          <div class="boxExecutive" style="padding-bottom: 35px;">
-            <div>
-              <img src="/static/images/Bar_Chartnew.png" class="image">
-              <p style="font-size: 11px;">School Count</p>
-              <p class="boxvalue2" id="schoolcount"></p>
-              <hr />
-              <img src="/static/images/green.png" class="image2">
-              <p class="boxHeading2">Community</p>
-              <p class="boxvalue" id="trial" style="cursor: pointer;" onclick="cards('/executive_community')"></p>
-              <br />
-              <hr />
-              <img src="/static/images/green.png" class="image2">
-              <p class="boxHeading2">Cloud<br /></p>
-              <p class="boxvalue" id="lsy" style="cursor: pointer;" onclick="cards('/executive_cloud')"></p>
-              <br />
-              <hr />
-              <img src="/static/images/green.png" class="image2">
-              <p class="boxHeading2">Explorer<br /></p>
-              <p class="boxvalue" id="next6" style="cursor: pointer;" onclick="cards('/executive_explorer')"></p>
-              <br />
-              <hr />
-              <a href="Transaction_Reporting">
-                <p class="boxvalue" style="color: green;font-size: 11px !important;">View Upcoming Renewal <i
-                    class="fa fa-chevron-right" aria-hidden="true"></i>
-                </p>
-              </a>
-              <br />
+        <section class="statistics">
+            <div class="container-fluid">
+                <div class="col-md-3" title="" id="school_count">
+                    <div class="boxExecutive" style="padding-bottom: 35px;">
+                        <div>
+                            <img src="/static/images/Bar_Chartnew.png" class="image">
+                            <p style="font-size: 11px;">School Count</p>
+                            <p class="boxvalue2" id="schoolcount"></p>
+                            <hr />
+                            <img src="/static/images/green.png" class="image2">
+                            <p class="boxHeading2">Community</p>
+                            <p class="boxvalue" id="trial" style="cursor: pointer;" onclick="cards('/executive_community')"></p>
+                            <br />
+                            <hr />
+                            <img src="/static/images/green.png" class="image2">
+                            <p class="boxHeading2">Cloud<br /></p>
+                            <p class="boxvalue" id="lsy" style="cursor: pointer;" onclick="cards('/executive_cloud')"></p>
+                            <br />
+                            <hr />
+                            <img src="/static/images/green.png" class="image2">
+                            <p class="boxHeading2">Explorer<br /></p>
+                            <p class="boxvalue" id="next6" style="cursor: pointer;" onclick="cards('/executive_explorer')"></p>
+                            <br />
+                            <hr />
+                            <a href="Transaction_Reporting">
+                                <p class="boxvalue" style="color: green;font-size: 11px !important;">View Upcoming Renewal <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                </p>
+                            </a>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-3" title="" id="total_students">
+                    <div class="boxExecutive" style="padding-bottom: 35px;">
+                        <div>
+                            <img src="/static/images/Bar_Chartnew.png" class="image">
+                            <p style="font-size: 11px;">Total Students</p>
+                            <p class="boxvalue2" id="totalstudent"></p>
+                            <hr />
+                            <img src="/static/images/green.png" class="image2">
+                            <p class="boxHeadingyear">Lifetime</p>
+                            <p class="boxvalue textcolor2" style="cursor: pointer;" id="active" onclick="cards('/executive_lifetime')"></p>
+                            <br />
+                            <hr />
+                            <img src="/static/images/green.png" class="image2">
+                            <p class="boxHeadingyear">Classroom App</p>
+                            <p class="boxvalue textcolor3" style="cursor: pointer;" id="passive" onclick="cards2('/executive_school')"></p>
+                            <br />
+                            <hr />
+                            <img src="/static/images/green.png" class="image2">
+                            <p class="boxHeadingyear">Home App</p>
+                            <p class="boxvalue textcolor4" style="cursor: pointer;" id="dormant" onclick="cards2('/executive_home')">
+                            </p>
+                            <br />
+                            <hr />
+                            <a href="Transaction_Reporting">
+                                <p class="boxvalue" style="color: green;font-size: 11px !important;">View Upcoming Renewal <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                </p>
+                            </a>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3" title="" id="total_usercount">
+                    <div class="boxExecutive">
+                        <div>
+                            <img src="/static/images/Bar_Chartnew.png" class="image">
+                            <p style="font-size: 11px;">Total Usercount</p>
+                            <p class="boxvalue2" id="usercount"></p>
+                            <hr />
+                            <img src="/static/images/green.png" class="image2">
+                            <p class="boxHeading2">Total Teachers</p>
+                            <p class="boxvalue" id="tcount"></p>
+                            <br />
+                            <hr />
+                            <img src="/static/images/green.png" class="image2">
+                            <p class="boxHeading2">Total Parents</p>
+                            <p class="boxvalue" id="p22count"></p>
+                            <br />
+                            <hr />
+                            <img src="/static/images/green.png" class="image2">
+                            <p class="boxHeading2">Mindful Minutes</p>
+                            <p class="boxvalue" id="mindful"></p>
+                            <br />
+                            <hr />
+                            <img src="/static/images/green.png" class="image2">
+                            <p class="boxHeading2">Playback Count</p>
+                            <p class="boxvalue" id="neverlogged"></p>
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3" title="" id="total_revenue_CSY">
+                    <div class="boxExecutive">
+                        <p style="margin: 0; text-align: center;">Total Revenue (CSY)</p>
+                        <p id="Total_amount2" style="margin: 0; text-align: center;">
+                        </p>
+                        <div id="containerpie" style="margin-left: 15px; height:214px;"></div>
+                        <hr />
+                        <a href="Transaction_Reporting">
+                            <p class="boxvalue" style="color: green;font-size: 11px !important;">View Revenue Overview<i class="fa fa-chevron-right" aria-hidden="true"></i>
+                            </p>
+                        </a>
+                        <br />
+
+                    </div>
+                </div>
+
             </div>
-          </div>
-        </div>
-
-
-        <div class="col-md-3" title="" id="total_students">
-          <div class="boxExecutive" style="padding-bottom: 35px;">
-            <div>
-              <img src="/static/images/Bar_Chartnew.png" class="image">
-              <p style="font-size: 11px;">Total Students</p>
-              <p class="boxvalue2" id="totalstudent"></p>
-              <hr />
-              <img src="/static/images/green.png" class="image2">
-              <p class="boxHeadingyear">Lifetime</p>
-              <p class="boxvalue textcolor2" style="cursor: pointer;" id="active"
-                onclick="cards('/executive_lifetime')"></p>
-              <br />
-              <hr />
-              <img src="/static/images/green.png" class="image2">
-              <p class="boxHeadingyear">Classroom App</p>
-              <p class="boxvalue textcolor3" style="cursor: pointer;" id="passive"
-                onclick="cards2('/executive_school')"></p>
-              <br />
-              <hr />
-              <img src="/static/images/green.png" class="image2">
-              <p class="boxHeadingyear">Home App</p>
-              <p class="boxvalue textcolor4" style="cursor: pointer;" id="dormant" onclick="cards2('/executive_home')">
-              </p>
-              <br />
-              <hr />
-              <a href="Transaction_Reporting">
-                <p class="boxvalue" style="color: green;font-size: 11px !important;">View Upcoming Renewal <i
-                    class="fa fa-chevron-right" aria-hidden="true"></i>
-                </p>
-              </a>
-              <br />
             </div>
-          </div>
-        </div>
-        <div class="col-md-3" title="" id="total_usercount">
-          <div class="boxExecutive">
-            <div>
-              <img src="/static/images/Bar_Chartnew.png" class="image">
-              <p style="font-size: 11px;">Total Usercount</p>
-              <p class="boxvalue2" id="usercount"></p>
-              <hr />
-              <img src="/static/images/green.png" class="image2">
-              <p class="boxHeading2">Total Teachers</p>
-              <p class="boxvalue" id="tcount"></p>
-              <br />
-              <hr />
-              <img src="/static/images/green.png" class="image2">
-              <p class="boxHeading2">Total Parents</p>
-              <p class="boxvalue" id="p22count"></p>
-              <br />
-              <hr />
-              <img src="/static/images/green.png" class="image2">
-              <p class="boxHeading2">Mindful Minutes</p>
-              <p class="boxvalue" id="mindful"></p>
-              <br />
-              <hr />
-              <img src="/static/images/green.png" class="image2">
-              <p class="boxHeading2">Playback Count</p>
-              <p class="boxvalue" id="neverlogged"></p>
-              <br />
-              <br />
+
             </div>
-          </div>
-        </div>
-        <div class="col-md-3" title="" id="total_revenue_CSY">
-          <div class="boxExecutive">
-            <p style="margin: 0; text-align: center;">Total Revenue (CSY)</p>
-            <p id="Total_amount2" style="margin: 0; text-align: center;">
-            </p>
-            <div id="containerpie" style="margin-left: 15px; height:214px;"></div>
-            <hr />
-            <a href="Transaction_Reporting">
-              <p class="boxvalue" style="color: green;font-size: 11px !important;">View Revenue Overview<i
-                  class="fa fa-chevron-right" aria-hidden="true"></i>
-              </p>
-            </a>
-            <br />
-
-          </div>
-        </div>
-
-      </div>
-      </div>
-
-      </div>
 
 
-    </section>
-    <hr />
-    <section class="charts" style="margin-bottom: 50px;">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-6">
-            <div
-              style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
-              <div style="padding-bottom: 44px;" title="" id="Practice_trend_playback">
-                <p style="float: right;">View Insights
-                </p>
-                <span style="float: right;" class="material-icons">
+        </section>
+        <hr />
+        <section class="charts" style="margin-bottom: 50px;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                            <div style="padding-bottom: 44px;" title="" id="Practice_trend_playback">
+                                <p style="float: right;">View Insights
+                                </p>
+                                <span style="float: right;" class="material-icons">
                   insights
                 </span>
-                <select name="Trends" id="practice_trendChart" class="drop-api">
+                                <select name="Trends" id="practice_trendChart" class="drop-api">
                   <option value="playback" class="">Playback Trend</option>
                   <option value="practice">Practice Trend</option>
                 </select>
-              </div>
-              <div id="container1"></div>
-              <hr />
-              <a href="Practice_Analytics">
-                <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
+                            </div>
+                            <div id="container1"></div>
+                            <hr />
+                            <a href="Practice_Analytics">
+                                <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
               float: right;">View PLAYBACK ANALYTICS <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                </p>
-              </a>
-              <br />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div
-              style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
-              <div style="padding-bottom: 44px;" title="" id="active_user_trend_playback">
-                <p style="float: right;">View Insights
-                </p>
-                <span style="float: right;" class="material-icons">
+                                </p>
+                            </a>
+                            <br />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                            <div style="padding-bottom: 44px;" title="" id="active_user_trend_playback">
+                                <p style="float: right;">View Insights
+                                </p>
+                                <span style="float: right;" class="material-icons">
                   insights
                 </span>
-                <select name="Trends" id="practice_activeChart" class="drop-api">
+                                <select name="Trends" id="practice_activeChart" class="drop-api">
                   <option value="Playback" class="">Active Playback Trend</option>
                   <option value="Practice">Active Practice Trend</option>
                 </select>
-              </div>
-              <div id="container33"></div>
-              <hr />
-              <a href="Practice_Analytics">
-                <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
+                            </div>
+                            <div id="container33"></div>
+                            <hr />
+                            <a href="Practice_Analytics">
+                                <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
                 float: right;">View PLAYBACK ANALYTICS <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                </p>
-              </a>
-              <br />
+                                </p>
+                            </a>
+                            <br />
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section>
-      <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;">
-        <div
-          style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
-          <div style="padding-bottom: 44px;" title="" id="practice_history_CSY_playback">
-            <p style="float: right;">View Insights
-            </p>
-            <span style="float: right;" class="material-icons">
+        </section>
+        <section>
+            <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;">
+                <div style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                    <div style="padding-bottom: 44px;" title="" id="practice_history_CSY_playback">
+                        <p style="float: right;">View Insights
+                        </p>
+                        <span style="float: right;" class="material-icons">
               insights
             </span>
-            <select name="Trends" id="practice_historyChart" class="drop-api">
+                        <select name="Trends" id="practice_historyChart" class="drop-api">
               <option value="playback" class="">Playback History CSY</option>
               <option value="practice">Practice History CSY</option>
             </select>
-          </div>
-          <div id="containerhistory2" style="height: 400px; width: 100%; "></div>
-          <hr />
-          <a href="Practice_Analytics">
-            <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
+                    </div>
+                    <div id="containerhistory2" style="height: 400px; width: 100%; "></div>
+                    <hr />
+                    <a href="Practice_Analytics">
+                        <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
         float: right;">View PLAYBACK ANALYTICS <i class="fa fa-chevron-right" aria-hidden="true"></i>
-            </p>
-          </a>
-          <br />
-        </div>
-      </div>
+                        </p>
+                    </a>
+                    <br />
+                </div>
+            </div>
 
-      <hr />
-      <!-- <div class="welcome" >
+            <hr />
+            <!-- <div class="welcome" >
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
@@ -664,31 +656,30 @@
     </div>
   </div> -->
 
-      <section class="charts" style="margin-bottom: 50px;">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12" title="" id="realtime_playback_sessions_USA">
-              <div
-                style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
-                <!-- <div style="padding-bottom: 44px;" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,">
+            <section class="charts" style="margin-bottom: 50px;">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12" title="" id="realtime_playback_sessions_USA">
+                            <div style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                                <!-- <div style="padding-bottom: 44px;" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,">
             <p style="float: right;">View Insights
             </p>
             <span style="float: right;" class="material-icons">
               insights
             </span>
           </div> -->
-                <p style="text-align: center;color: #000;">Realtime Playback Sessions (USA)</p>
-                <div id="containerreal"></div>
-                <hr />
-                <a href="Daily_Analytics">
-                  <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
+                                <p style="text-align: center;color: #000;">Realtime Playback Sessions (USA)</p>
+                                <div id="containerreal"></div>
+                                <hr />
+                                <a href="Daily_Analytics">
+                                    <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
             float: right;">View Daily Analytics <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                  </p>
-                </a>
-                <br />
-              </div>
-            </div>
-            <!-- <div class="col-md-6">
+                                    </p>
+                                </a>
+                                <br />
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-6">
               <div
                 style="padding: 10px;padding-bottom: 36px; background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
                 <div id="containermap"></div>
@@ -701,21 +692,21 @@
                 <br />
               </div>
             </div> -->
-          </div>
-        </div>
-      </section>
-      <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
+                    </div>
+                </div>
+            </section>
+            <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
   <div id='divPlotly'></div></div>
     <script>
         var plotly_data = {"data":[{"hovertemplate":"<b>%{hovertext}</b><br><br>USER ENGAGEMENT=%{x}<br>FAMILY ENGAGEMENT=%{y}<br>OVERALL PRACTICE=%{marker.size}<br>SCHOOL COUNT=%{marker.color}<extra></extra>","hovertext":["WICHITA","KRUM","LAUSD","WESTFIELD","YOUNGSTOWN","FAIRFIELD","CLARKSVILLE","ENGLEWOOD","PINELLAS","CHICO","BROWARD","SAN LEANARDO","RUSD","OROVILLE","AGAWAM","HILLSBOROUGH","SARASOTA","FLINT","LA JOYA","Community Consolidated School District 89","BELLEVILLE","WAYNE METRO","OGDEN","SALT LAKE","DOUGLAS","NYC - Queens South","Early learning Sarasota","PUSD"],"legendgroup":"","marker":{"color":[4,2,264,17,20,42,43,8,27,19,235,8,34,7,6,239,56,23,44,5,8,21,20,18,8,257,18,12],"coloraxis":"coloraxis","size":[3599,1110,13883,6926,5494,33243,26687,8198,4625,8159,9743,1503,60588,2398,3679,3337,50663,2138,2160,224,2525,305,5171,2681,89,1657,209,555],"sizemode":"area","sizeref":16.83,"symbol":"circle"},"mode":"markers","name":"","orientation":"v","showlegend":false,"type":"scatter","x":[71,81,8,29,28,42,24,26,19,31,12,22,51,39,33,6,40,4,35,5,76,49,25,26,10,8,55,19],"xaxis":"x","y":[50,53,39,44,18,37,38,35,56,45,40,0,44,33,35,35,51,0,50,33,0,0,50,29,0,52,50,29],"yaxis":"y"}],"layout":{"coloraxis":{"colorbar":{"title":{"text":"SCHOOL COUNT"}},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"height":450,"legend":{"itemsizing":"constant","tracegroupgap":0},"template":{"data":{"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5}},"type":"bar"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5}},"type":"barpolar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"histogram":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"histogram"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"#E5ECF6","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","gridwidth":2,"linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"bgcolor":"#E5ECF6","caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","zerolinewidth":2}}},"title":{"font":{"color":"#000000","family":"Montserrat","size":18},"text":"District Wise Teacher/Family Engagement Corelation (Since January)","x":0.5,"xanchor":"center","y":0.9,"yanchor":"top"},"width":1100,"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"USER ENGAGEMENT"},"type":"log"},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"FAMILY ENGAGEMENT"}}}}
         Plotly.react('divPlotly', plotly_data.data, plotly_data.layout,{displayModeBar: false});
     </script> -->
 
-    </section>
+        </section>
 
 
 
-    <!-- <div  style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;margin:10px 10px 10px 10px">
+        <!-- <div  style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;margin:10px 10px 10px 10px">
     <div style="padding-bottom: 44px;" title="District Wise Teacher Family Engagement Corelation (CSY)">
       <p style="float: right;">View Insights
       </p>
@@ -731,222 +722,223 @@
     <br />
     </div> -->
 
-    <hr />
+        <hr />
 
 
-  </section>
-  </section>
-  <!--<script src="/static/js/accessdom.js"></script>-->
-  <script src='/static/js/excellentexport.js'></script>
-  <script>
+    </section>
+    </section>
+    <!--<script src="/static/js/accessdom.js"></script>-->
+    <script src='/static/js/excellentexport.js'></script>
+    <script>
+    </script>
+    <script>
+        function cards(URL) {
+            $('#next').empty();
+            console.log(URL);
+            var modal2 = document.getElementById("myModal2");
+            modal2.style.display = "block";
+            $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+            var gif = document.getElementById("gif");
+            gif.style.display = "block";
+            $('#btnExport').show();
+            createDynamic(URL)
+        }
 
-      
-  </script>
-  <script>
-    function cards(URL) {
-      $('#next').empty();
-      console.log(URL);
-      var modal2 = document.getElementById("myModal2");
-      modal2.style.display = "block";
-      $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
-      var gif = document.getElementById("gif");
-      gif.style.display = "block";
-      $('#btnExport').show();
-      createDynamic(URL)
-    }
+        function cards2(URL) {
+            $('#next').empty();
+            console.log(URL);
+            var modal2 = document.getElementById("myModal2");
+            modal2.style.display = "block";
+            $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+            var gif = document.getElementById("gif");
+            gif.style.display = "block";
+            $('#btnExport').show();
+            createDynamic2(URL)
+        }
 
-    function cards2(URL) {
-      $('#next').empty();
-      console.log(URL);
-      var modal2 = document.getElementById("myModal2");
-      modal2.style.display = "block";
-      $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
-      var gif = document.getElementById("gif");
-      gif.style.display = "block";
-      $('#btnExport').show();
-      createDynamic2(URL)
-    }
-    function createDynamic(url) {
+        function createDynamic(url) {
 
-      var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": url,
-        "method": "GET",
-        success: function () {
-          var gif = document.getElementById("gif");
-          gif.style.display = "none";
-        },
-      }
-      $.ajax(settings).done(function (response) {
-        var data1 = JSON.parse(response);
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": url,
+                "method": "GET",
+                success: function() {
+                    var gif = document.getElementById("gif");
+                    gif.style.display = "none";
+                },
+            }
+            $.ajax(settings).done(function(response) {
+                var data1 = JSON.parse(response);
 
-        $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
+                $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
 
-        for (var i = 0; i < data1.data.length; i++) {
-
-
-          var datain = data1.data[i];
-          var resultDiv = createDynamicDiv(datain);
-
-          $("#dataTable").append(resultDiv);
+                for (var i = 0; i < data1.data.length; i++) {
 
 
+                    var datain = data1.data[i];
+                    var resultDiv = createDynamicDiv(datain);
 
+                    $("#dataTable").append(resultDiv);
+
+
+
+
+                }
+                //$('#dataTable1').append('</tbody></table>');
+                $('#dataTable').append('</tbody></table>');
+                dataTab();
+
+
+
+                $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
+                for (var i = 0; i < data1.data.length; i++) {
+
+
+                    var datain = data1.data[i];
+
+                    var resultDiv = createDynamicDiv(datain);
+                    $("#dataTable1").append(resultDiv);
+
+                }
+                $('#dataTable1').append('</tbody></table>');
+            })
+        }
+
+        function dataTab() {
+
+            $("#dataTable").DataTable({
+                "pageLength": 50
+            });
 
         }
-        //$('#dataTable1').append('</tbody></table>');
-        $('#dataTable').append('</tbody></table>');
-        dataTab();
 
-
-
-        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
-        for (var i = 0; i < data1.data.length; i++) {
-
-
-          var datain = data1.data[i];
-
-          var resultDiv = createDynamicDiv(datain);
-          $("#dataTable1").append(resultDiv);
-
-        }
-        $('#dataTable1').append('</tbody></table>');
-      })
-    }
-    function dataTab() {
-
-      $("#dataTable").DataTable({
-        "pageLength": 50
-      });
-
-    }
-    function createDynamicDiv(userList) {
-      var dynamicDiv = '';
-      console.log(userList)
+        function createDynamicDiv(userList) {
+            var dynamicDiv = '';
+            console.log(userList)
 
 
 
 
 
-      dynamicDiv += '<tr >' +
-        '<td class="tablelink"><a onclick="search22(\'' + userList[0] + '\')">' +
-        userList[0] +
-        "</td></a>" +
-        '<td>' + userList[1] + '</td>' +
-        '<td>' + userList[2] + '</td>' +
-        '<td>' + userList[3] + '</td>' +
-        '<td class="tablelink"><a onclick="schoolsearch22(\'' + userList[4] + '\')">' +
-        userList[4] +
-        "</td></a>" +
-        '<td>' + userList[5] + '</td>' +
-        '<td>' + userList[6] + '</td>' +
-        '<td>' + userList[7] + '</td>' +
-        '<td>' + userList[8] + '</td>' +
+            dynamicDiv += '<tr >' +
+                '<td class="tablelink"><a onclick="search22(\'' + userList[0] + '\')">' +
+                userList[0] +
+                "</td></a>" +
+                '<td>' + userList[1] + '</td>' +
+                '<td>' + userList[2] + '</td>' +
+                '<td>' + userList[3] + '</td>' +
+                '<td class="tablelink"><a onclick="schoolsearch22(\'' + userList[4] + '\')">' +
+                userList[4] +
+                "</td></a>" +
+                '<td>' + userList[5] + '</td>' +
+                '<td>' + userList[6] + '</td>' +
+                '<td>' + userList[7] + '</td>' +
+                '<td>' + userList[8] + '</td>' +
 
-        '</tr>'
-      return dynamicDiv;
-
-    }
-
-    function createDynamic2(url) {
-
-      var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": url,
-        "method": "GET",
-        success: function () {
-          var gif = document.getElementById("gif");
-          gif.style.display = "none";
-        },
-      }
-      $.ajax(settings).done(function (response) {
-        var data1 = JSON.parse(response);
-
-        $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
-
-        for (var i = 0; i < data1.data.length; i++) {
-
-
-          var datain = data1.data[i];
-          var resultDiv = createDynamicDiv2(datain);
-
-          $("#dataTable").append(resultDiv);
-
-
-
+                '</tr>'
+            return dynamicDiv;
 
         }
-        //$('#dataTable1').append('</tbody></table>');
-        $('#dataTable').append('</tbody></table>');
-        dataTab();
+
+        function createDynamic2(url) {
+
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": url,
+                "method": "GET",
+                success: function() {
+                    var gif = document.getElementById("gif");
+                    gif.style.display = "none";
+                },
+            }
+            $.ajax(settings).done(function(response) {
+                var data1 = JSON.parse(response);
+
+                $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
+
+                for (var i = 0; i < data1.data.length; i++) {
+
+
+                    var datain = data1.data[i];
+                    var resultDiv = createDynamicDiv2(datain);
+
+                    $("#dataTable").append(resultDiv);
 
 
 
-        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
-        for (var i = 0; i < data1.data.length; i++) {
+
+                }
+                //$('#dataTable1').append('</tbody></table>');
+                $('#dataTable').append('</tbody></table>');
+                dataTab();
 
 
-          var datain = data1.data[i];
 
-          var resultDiv = createDynamicDiv2(datain);
-          $("#dataTable1").append(resultDiv);
+                $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
+                for (var i = 0; i < data1.data.length; i++) {
+
+
+                    var datain = data1.data[i];
+
+                    var resultDiv = createDynamicDiv2(datain);
+                    $("#dataTable1").append(resultDiv);
+
+                }
+                $('#dataTable1').append('</tbody></table>');
+            })
+        }
+
+        function dataTab() {
+
+            $("#dataTable").DataTable({
+                "pageLength": 50
+            });
 
         }
-        $('#dataTable1').append('</tbody></table>');
-      })
-    }
-    function dataTab() {
 
-      $("#dataTable").DataTable({
-        "pageLength": 50
-      });
-
-    }
-    function createDynamicDiv2(userList) {
-      var dynamicDiv = '';
-      console.log(userList)
+        function createDynamicDiv2(userList) {
+            var dynamicDiv = '';
+            console.log(userList)
 
 
 
 
 
-      dynamicDiv += '<tr >' +
-        '<td>' + userList[0] + '</td>' +
-        '<td>' + userList[1] + '</td>' +
-        '<td>' + userList[2] + '</td>' +
-        '<td>' + userList[3] + '</td>' +
-        '<td>' + userList[4] + '</td>' +
-        '<td>' + userList[5] + '</td>' +
-        '<td>' + userList[6] + '</td>' +
-        '<td>' + userList[7] + '</td>' +
-        '<td>' + userList[8] + '</td>' +
+            dynamicDiv += '<tr >' +
+                '<td>' + userList[0] + '</td>' +
+                '<td>' + userList[1] + '</td>' +
+                '<td>' + userList[2] + '</td>' +
+                '<td>' + userList[3] + '</td>' +
+                '<td>' + userList[4] + '</td>' +
+                '<td>' + userList[5] + '</td>' +
+                '<td>' + userList[6] + '</td>' +
+                '<td>' + userList[7] + '</td>' +
+                '<td>' + userList[8] + '</td>' +
 
-        '</tr>'
-      return dynamicDiv;
+                '</tr>'
+            return dynamicDiv;
 
-    }
-
-
-  </script>
-  <script src="{{ url_for('static',filename='js/countapi.js') }}"></script>
-  <script src="{{ url_for('static',filename='js/search.js') }}"></script>
-  <!--<script src="{{ url_for('static',filename='js/contact.js') }}"></script>-->
-  <script src="{{ url_for('static',filename='js/snapshot.js') }}"></script>
-  <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
-  <script src="{{ url_for('static',filename='js/chatbot.js') }}"></script>
-  <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
-  <script src="{{ url_for('static',filename='js/exeactive.js') }}"></script>
-  <script src="{{ url_for('static',filename='js/exscriptbar.js') }}"></script>
-  <!-- partial -->
-  <script src="{{ url_for('static',filename='js/pie.js') }}"></script>
-  <script src="{{ url_for('static',filename='js/script.js') }}"></script>
-  <!-- <script  src="{{ url_for('static',filename='js/excellentexport.js') }}"></script> -->
-  <script src="{{ url_for('static',filename='js/transactions.js') }}"></script>
-  <script src="{{ url_for('static',filename='js/counts.js') }}"></script>
-  <script src="{{ url_for('static',filename='js/map-tablescript.js') }}"></script>
-  <script src="{{ url_for('static',filename='js/realtime.js') }}"></script>
+        }
+    </script>
+    <script src="{{ url_for('static',filename='js/countapi.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/search.js') }}"></script>
+    <!--<script src="{{ url_for('static',filename='js/contact.js') }}"></script>-->
+    <script src="{{ url_for('static',filename='js/snapshot.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/chatbot.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/exeactive.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/exscriptbar.js') }}"></script>
+    <!-- partial -->
+    <script src="{{ url_for('static',filename='js/pie.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <!-- <script  src="{{ url_for('static',filename='js/excellentexport.js') }}"></script> -->
+    <script src="{{ url_for('static',filename='js/transactions.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/counts.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/map-tablescript.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/realtime.js') }}"></script>
 </body>
 
 </html>

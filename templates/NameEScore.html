@@ -2,458 +2,455 @@
 <html lang="en">
 
 <head>
-  <link rel="icon" href="/static/images/favicon.ico" type="image/gif" sizes="16x16">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CAPXP District Report</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="icon" href="/static/images/favicon.ico" type="image/gif" sizes="16x16">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPXP District Report</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
 
-  <!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/bootstrap.min.css') }}"> -->
-  <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/exbarchat.css') }}"> -->
-  <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/map-table.css') }}"> -->
-  <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/mainpractice.css') }}"> -->
-  <!-- <link rel="stylesheet" type="text/css" href="/static/css/search2.css"> -->
-  <!-- <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css'> -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
-  <link rel='stylesheet'
-    href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css'>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css'>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/reset.min.css') }}">
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
-  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
-
-
-  <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
-  <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
-  <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
-  <script src="https://cdn.anychart.com/releases/v8/js/anychart-heatmap.min.js"></script>
-  <script src="https://cdn.anychart.com/releases/v8/js/anychart-data-adapter.min.js"></script>
-  <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
-  <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
-  <script src="https://cdn.anychart.com/releases/v8/js/anychart-polar.min.js"></script>
+    <!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/bootstrap.min.css') }}"> -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/exbarchat.css') }}"> -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/map-table.css') }}"> -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/mainpractice.css') }}"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="/static/css/search2.css"> -->
+    <!-- <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css'> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css'>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/reset.min.css') }}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
 
 
-  <!-- <link href="https://innerexplorer.org/css/index.css" rel="stylesheet"> -->
-  <!-- <link rel="stylesheet" type="text/css" href="https://innerexplorer.org/css/page.css">
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-heatmap.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-data-adapter.min.js"></script>
+    <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-polar.min.js"></script>
+
+
+    <!-- <link href="https://innerexplorer.org/css/index.css" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://innerexplorer.org/css/page.css">
     <link rel="stylesheet" type="text/css" href="https://innerexplorer.org/css/mm.css"> -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-173054579-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-173054579-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-    gtag('config', 'UA-173054579-1');
-  </script>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-EWVQZSV89G');
-  </script>
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+        gtag('config', 'UA-173054579-1');
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-EWVQZSV89G');
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
 </head>
 <script>
-
 </script>
 <style>
-  .ds_dp {
-    background-color: #fff;
-    border: 0;
-    color: #5cb85c;
-    width: 14%;
-    border-radius: 20px 0 0 20px;
-    padding: 20px;
-    margin-left: 30px;
-    margin-top: 20px;
-    float: left;
-  }
-
-  .mr1 {
-    margin-left: 0 !important;
-    width: 37% !important;
-    border-radius: 0 !important;
-  }
-
-  .mr2 {
-    margin-left: 0 !important;
-    width: 18% !important;
-    border-radius: 0 20px 20px 0;
-    height: 63px;
-  }
-
-  .threebox {
-    float: left;
-    width: 100%;
-    padding: 40px 0
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-
-
-  .sticky-wrapper {
-    overflow: auto;
-    position: relative;
-    margin: 0 auto 1.5em;
-    width: 75%;
-  }
-
-  table {
-    /* border-collapse: collapse; */
-    margin-bottom: 1em;
-    width: 100%;
-  }
-
-  caption {
-    caption-side: top;
-    font-weight: bold;
-    font-size: 1.1em;
-    font-family: "open sans", roboto;
-  }
-
-  th {
-    background-color: white;
-    font-weight: normal;
-  }
-
-  thead tr:nth-child(1) th {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  tbody th {
-    font-size: 10px !important;
-    position: sticky;
-    left: 0;
-    z-index: 10;
-  }
-
-  td,
-  th {
-    padding: 0 20px;
-    text-align: left;
-  }
-
-  td {
-    min-width: 20px;
-    width: 20px;
-    max-width: 30px;
-  }
-
-  .legend {
-    margin: 0 auto;
-    width: 25%;
-    font-family: roboto, arial;
-    font-size: 0.75em;
-  }
-
-  .color-square {
-    float: left;
-    width: 9%;
-    margin-right: 1%;
-    height: 1.5em;
-  }
-
-  .align-left {
-    float: left;
-  }
-
-  .align-right {
-    float: right;
-  }
-
-  .fa-snowflake {
-    color: #3C2EA8;
-  }
-
-  .cold {
-    color: #7A2EA1;
-  }
-
-  .fa-sun {
-    color: #F06E1D;
-  }
-
-  .hot {
-    color: #E61717;
-  }
-
-
-  .box-outer-nw {
-    float: left;
-    width: 100%;
-    padding: 0;
-    background: #ffffff none repeat scroll 0 0;
-    -moz-box-shadow: 0 0 10px #cccccc;
-    -webkit-box-shadow: 0 0 10px #cccccc;
-    -o-box-shadow: 0 0 10px #cccccc;
-    box-shadow: 0 0 10px #cccccc;
-    text-align: center
-  }
-
-  .box-outer-nw img {
-    width: 150px;
-    margin: 0 auto;
-    padding: 20px;
-    min-height: 1px;
-    opacity: 0.7;
-  }
-
-  .text-s {
-    float: left;
-    color: #464b48;
-    width: 100%;
-    margin: 0;
-    text-align: center;
-    font-size: 8px;
-    text-transform: uppercase;
-
-    padding: 15px 0
-  }
-
-  .threebox .col-md-4 a {
-    color: rgb(236, 236, 236)
-  }
-
-  .box-outer-nw:hover {
-    box-shadow: 0 0 18px #b1b1b1;
-  }
-
-  .box-outer-nw:hover img {
-    opacity: 1
-  }
-
-  .box_outer_color {
-    float: left;
-    width: 100%;
-  }
-
-  .districtdet {
-    float: right;
-  }
-
-  .box-outer-nw {
-    float: left;
-    width: 100%;
-    padding: 0;
-    background: #ffffff none repeat scroll 0 0;
-    -moz-box-shadow: 0 0 10px #cccccc;
-    -webkit-box-shadow: 0 0 10px #cccccc;
-    -o-box-shadow: 0 0 10px #cccccc;
-    box-shadow: 0 0 10px #cccccc;
-    text-align: center
-  }
-
-  .select_button {
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #50a756;
-    color: #fff;
-    margin-top: 25px;
-    border: 0;
-    box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
-  }
+    .ds_dp {
+        background-color: #fff;
+        border: 0;
+        color: #5cb85c;
+        width: 14%;
+        border-radius: 20px 0 0 20px;
+        padding: 20px;
+        margin-left: 30px;
+        margin-top: 20px;
+        float: left;
+    }
+    
+    .mr1 {
+        margin-left: 0 !important;
+        width: 37% !important;
+        border-radius: 0 !important;
+    }
+    
+    .mr2 {
+        margin-left: 0 !important;
+        width: 18% !important;
+        border-radius: 0 20px 20px 0;
+        height: 63px;
+    }
+    
+    .threebox {
+        float: left;
+        width: 100%;
+        padding: 40px 0
+    }
+    
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    .sticky-wrapper {
+        overflow: auto;
+        position: relative;
+        margin: 0 auto 1.5em;
+        width: 75%;
+    }
+    
+    table {
+        /* border-collapse: collapse; */
+        margin-bottom: 1em;
+        width: 100%;
+    }
+    
+    caption {
+        caption-side: top;
+        font-weight: bold;
+        font-size: 1.1em;
+        font-family: "open sans", roboto;
+    }
+    
+    th {
+        background-color: white;
+        font-weight: normal;
+    }
+    
+    thead tr:nth-child(1) th {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    
+    tbody th {
+        font-size: 10px !important;
+        position: sticky;
+        left: 0;
+        z-index: 10;
+    }
+    
+    td,
+    th {
+        padding: 0 20px;
+        text-align: left;
+    }
+    
+    td {
+        min-width: 20px;
+        width: 20px;
+        max-width: 30px;
+    }
+    
+    .legend {
+        margin: 0 auto;
+        width: 25%;
+        font-family: roboto, arial;
+        font-size: 0.75em;
+    }
+    
+    .color-square {
+        float: left;
+        width: 9%;
+        margin-right: 1%;
+        height: 1.5em;
+    }
+    
+    .align-left {
+        float: left;
+    }
+    
+    .align-right {
+        float: right;
+    }
+    
+    .fa-snowflake {
+        color: #3C2EA8;
+    }
+    
+    .cold {
+        color: #7A2EA1;
+    }
+    
+    .fa-sun {
+        color: #F06E1D;
+    }
+    
+    .hot {
+        color: #E61717;
+    }
+    
+    .box-outer-nw {
+        float: left;
+        width: 100%;
+        padding: 0;
+        background: #ffffff none repeat scroll 0 0;
+        -moz-box-shadow: 0 0 10px #cccccc;
+        -webkit-box-shadow: 0 0 10px #cccccc;
+        -o-box-shadow: 0 0 10px #cccccc;
+        box-shadow: 0 0 10px #cccccc;
+        text-align: center
+    }
+    
+    .box-outer-nw img {
+        width: 150px;
+        margin: 0 auto;
+        padding: 20px;
+        min-height: 1px;
+        opacity: 0.7;
+    }
+    
+    .text-s {
+        float: left;
+        color: #464b48;
+        width: 100%;
+        margin: 0;
+        text-align: center;
+        font-size: 8px;
+        text-transform: uppercase;
+        padding: 15px 0
+    }
+    
+    .threebox .col-md-4 a {
+        color: rgb(236, 236, 236)
+    }
+    
+    .box-outer-nw:hover {
+        box-shadow: 0 0 18px #b1b1b1;
+    }
+    
+    .box-outer-nw:hover img {
+        opacity: 1
+    }
+    
+    .box_outer_color {
+        float: left;
+        width: 100%;
+    }
+    
+    .districtdet {
+        float: right;
+    }
+    
+    .box-outer-nw {
+        float: left;
+        width: 100%;
+        padding: 0;
+        background: #ffffff none repeat scroll 0 0;
+        -moz-box-shadow: 0 0 10px #cccccc;
+        -webkit-box-shadow: 0 0 10px #cccccc;
+        -o-box-shadow: 0 0 10px #cccccc;
+        box-shadow: 0 0 10px #cccccc;
+        text-align: center
+    }
+    
+    .select_button {
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #50a756;
+        color: #fff;
+        margin-top: 25px;
+        border: 0;
+        box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
+    }
 </style>
 
 <style>
-  .pul li {
-    margin-top: 0 !important;
-  }
-
-  .card img {
-    padding: 4px 10px;
-    height: 90px;
-  }
-
-  .modal-content {
-    overflow: scroll;
-    width: 87% !important;
-  }
-
-  .districtname {
-    float: right;
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 20px;
-  }
+    .pul li {
+        margin-top: 0 !important;
+    }
+    
+    .card img {
+        padding: 4px 10px;
+        height: 90px;
+    }
+    
+    .modal-content {
+        overflow: scroll;
+        width: 87% !important;
+    }
+    
+    .districtname {
+        float: right;
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 20px;
+    }
 </style>
 
 <body class="body">
-  <nav class="navbar navbar-default">
-    <div class="">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="page_Heading" href="#">DISTRICT ENGAGEMENT</a>
-          <a href="homepage">
-            <img src="/static/images/capwhite.png" alt="" class="logo">
-          </a>
-        </div>
-        <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li style="left: 2px;
-            top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true"
-                style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i>
-              <p style="float: right;">Views</p>
-              <p id="count" style="float: right;margin-right: 3px;"></p>
-            </li>
-            <!--<li style="left: 10px;
+    <nav class="navbar navbar-default">
+        <div class="">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="page_Heading" href="#">DISTRICT ENGAGEMENT</a>
+                    <a href="homepage">
+                        <img src="/static/images/capwhite.png" alt="" class="logo">
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li style="left: 2px;
+            top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true" style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i>
+                            <p style="float: right;">Views</p>
+                            <p id="count" style="float: right;margin-right: 3px;"></p>
+                        </li>
+                        <!--<li style="left: 10px;
             top: 34px;
             color: #fff;
             cursor: pointer;" id="myBtn"><i class="fa fa-lightbulb-o" style="margin-top:2px;"></i><p style="float: right;">Insights</p><p style="float: right;margin-right: 3px; margin-left: 5px;">3</p></li>-->
-            <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true"
+                        <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true"
                   style="margin-top:2px;margin-right: 3px;"></i></a></li>
-            <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1"
+                        <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1"
                   class="fa fa-bars show-side-btn"></i></a></li>
-            <li style="margin-top: 27px;">
-              <div class="dropdown">
-                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown"
-                  style="border: 0;font-size: 16px; border-radius: 50%;">A<span id="logid"
+                        <li style="margin-top: 27px;">
+                            <div class="dropdown">
+                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">A<span id="logid"
                     style="display: none;">1</span></button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="login">Admin</a></li>
-                  <hr />
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>
-                </ul>
-              </div>
-          </ul>
-        </div>
-      </div>
-  </nav>
-  <aside class="side-nav" id="show-side-navigation1">
-    <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-    <ul class="categories" style="margin-top:35px;">
-      <li>
-        <i class="fa fa-home" aria-hidden="true"></i>
-        <a href="#">EXECUTIVE SUMMARY</a>
-        <ul class="side-nav-dropdown">
-          <li>
-            <a href="Executive_Dashboard">CAP SUMMARY</a>
-          </li>
-          <li><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
-          <li><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
-          <li><a href="aws_releases">COMPASS RELEASES</a></li>
-          <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
-          <li><a href="awsmain">AWS ANALYTICS</a></li>
-          <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-          
-
-        </ul>
-      </li>
-      <li class="active"><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
-        <ul class="side-nav-dropdown">
-          <li class="active2"><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
-          <li class="active2"><a href="Disctrictfilter">DISTRICT 360</a></li>
-          <li class="active2"><a href="partner">PARTNER PORTAL</a></li>
-            <li class="active2"><a href="Login_analytics">LOGIN ANALYTICS</a></li>
-          <!-- <li class="active2"><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
-          <!-- <li class="active2"><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->
-          <li class="active2"><a href="School_Search">SCHOOL SEARCH</a></li>
-          <li class="active2"><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
-          <li><a href="21daystreak">21 Day Streak</a></li>
-        </ul>
-      </li>
-      <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
-        <ul class="side-nav-dropdown">
-          <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
-          <li><a href="Scoology">SCHOOLOGY</a></li>
-          <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
-          <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-          <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
-          <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
-          <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
-          <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
-        </ul>
-      </li>
-      <li>
-        <i class="fa fa-dollar"></i><a href="#">REVENUE DASHBOARDS</a>
-        <ul class="side-nav-dropdown">
-          <li><a href="Transaction_Reporting">REVENUE OVERVIEW</a></li>
-          <li><a href="Donation">DONATION DASHBOARD</a></li>
-          <li><a href="School_Revenue">SCHOOL REVENUE</a></li>
-          <li><a href="Bill_later">BILL ME LATER</a></li>
-        </ul>
-      </li>
-      <li><i class="fa fa-bolt"></i><a href="#">FEEDBACK AND SURVEY</a>
-        <ul class="side-nav-dropdown">
-          <li><a href="feedback_Analyitcs">FEEDBACK ANAYLTICS</a></li>
-          <li><a href="sentiment">SENTIMENT ANAYLTICS</a></li>
-          <li><a href="feedback_Trends">FEEDBACK TRENDS</a></li>
-          <li><a href="Family_SURVEY">HOME SURVEY ANALYTICS</a></li>
-          <li><a href="feedback_Analyitcs_family">HOME FEEDBACK ANALYTICS</a></li>
-        </ul>
-      </li>
-      <li>
-        <i class="fa fa-users "></i><a href="#">SUBSCRIPTION DASHBOARDS</a>
-        <ul class="side-nav-dropdown">
-          <li><a href="Upcoming_Renewals">UPCOMING RENEWAL</a></li>
-          <li><a href="d1districts">D1 Districts</a></li>
-          <li><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
-          <li><a href="Sms_analytics">SMS ANALYTICS</a></li>
-
-        </ul>
-      </li>
-
-      <li><i class="fa fa-star"></i><a href="#">APP ANALYTICS</a>
-        <ul class="side-nav-dropdown">
-          <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
-          <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-          <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
-          <!--<li ><a href="Parents_map_view">HOME APP GEO</a></li>-->
-          <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
-          <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
-        </ul>
-      </li>
-      <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
-            style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
-      </li>
-      <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
-  </aside>
-  <section id="contents">
-    <!-- The Modal -->
-    <div id="myModal" class="modal">
-
-      <!-- Modal content -->
-      <div class="modal-content">
-
-        <div class="containercards">
-          <div class="row">
-            <div class="col-sm-11 mb-11">
-              <input type="text" id="myFilter" class="form-control" style="width: 20% !important;"
-                onkeyup="myFunction()" placeholder="Search any district">
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">Admin</a></li>
+                                    <hr />
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>
+                                </ul>
+                            </div>
+                    </ul>
+                </div>
             </div>
-            <button onclick="cose()" style="padding: 5px;
+    </nav>
+    <aside class="side-nav" id="show-side-navigation1">
+        <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
+        <ul class="categories" style="margin-top:35px;">
+            <li>
+                <i class="fa fa-home" aria-hidden="true"></i>
+                <a href="#">EXECUTIVE SUMMARY</a>
+                <ul class="side-nav-dropdown">
+                    <li>
+                        <a href="Executive_Dashboard">CAP SUMMARY</a>
+                    </li>
+                    <li><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
+                    <li><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
+                    <li><a href="aws_releases">COMPASS RELEASES</a></li>
+                    <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
+                    <li><a href="awsmain">AWS ANALYTICS</a></li>
+                    <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
+
+
+                </ul>
+            </li>
+            <li class="active"><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
+                <ul class="side-nav-dropdown">
+                    <li class="active2"><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
+                    <li class="active2"><a href="Disctrictfilter">DISTRICT 360</a></li>
+                    <li class="active2"><a href="partner">PARTNER PORTAL</a></li>
+                    <li class="active2"><a href="Login_analytics">LOGIN ANALYTICS</a></li>
+                    <!-- <li class="active2"><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
+                    <!-- <li class="active2"><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->
+                    <li class="active2"><a href="School_Search">SCHOOL SEARCH</a></li>
+                    <li class="active2"><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
+                    <li><a href="21daystreak">21 Day Streak</a></li>
+                </ul>
+            </li>
+            <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
+                    <li><a href="Scoology">SCHOOLOGY</a></li>
+                    <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
+                    <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
+                    <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
+                    <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
+                    <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
+                    <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
+                </ul>
+            </li>
+            <li>
+                <i class="fa fa-dollar"></i><a href="#">REVENUE DASHBOARDS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Transaction_Reporting">REVENUE OVERVIEW</a></li>
+                    <li><a href="Donation">DONATION DASHBOARD</a></li>
+                    <li><a href="School_Revenue">SCHOOL REVENUE</a></li>
+                    <li><a href="Bill_later">BILL ME LATER</a></li>
+                </ul>
+            </li>
+            <li><i class="fa fa-bolt"></i><a href="#">FEEDBACK AND SURVEY</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="feedback_Analyitcs">FEEDBACK ANAYLTICS</a></li>
+                    <li><a href="sentiment">SENTIMENT ANAYLTICS</a></li>
+                    <li><a href="feedback_Trends">FEEDBACK TRENDS</a></li>
+                    <li><a href="Family_SURVEY">HOME SURVEY ANALYTICS</a></li>
+                    <li><a href="feedback_Analyitcs_family">HOME FEEDBACK ANALYTICS</a></li>
+                </ul>
+            </li>
+            <li>
+                <i class="fa fa-users "></i><a href="#">SUBSCRIPTION DASHBOARDS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Upcoming_Renewals">UPCOMING RENEWAL</a></li>
+                    <li><a href="d1districts">D1 DISTRICTS</a></li>
+                    <li><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
+                    <li><a href="Sms_analytics">SMS ANALYTICS</a></li>
+
+                </ul>
+            </li>
+
+            <li><i class="fa fa-star"></i><a href="#">APP ANALYTICS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
+                    <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
+                    <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
+                    <!--<li ><a href="Parents_map_view">HOME APP GEO</a></li>-->
+                    <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
+                    <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
+                </ul>
+            </li>
+            <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
+            style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
+            </li>
+            <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
+    </aside>
+    <section id="contents">
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+
+                <div class="containercards">
+                    <div class="row">
+                        <div class="col-sm-11 mb-11">
+                            <input type="text" id="myFilter" class="form-control" style="width: 20% !important;" onkeyup="myFunction()" placeholder="Search any district">
+                        </div>
+                        <button onclick="cose()" style="padding: 5px;
               background-color: #50a756;
               color: white;
               float: right;">Close X</button>
-          </div>
-          <div class="row" id="myProducts2">
-          </div>
+                    </div>
+                    <div class="row" id="myProducts2">
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- <div class="input-Container ui-widget">
+        <!-- <div class="input-Container ui-widget">
       <input class="Date" style="width: 11%;
       margin-left: 27%;
       padding: 10px;
@@ -468,127 +465,121 @@
     </div>  -->
 
 
-    <section class="statistics">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-8">
-            <div class="box2" style="height: 125px;margin-top: 0px !important;">
-              <div class=" col-md-2">
-                <button class="select_button" onclick="modal2()">Select District</button>
-              </div>
-              <div class=" col-md-8">
-                <p style="font-size: 21px;margin: 28px;" id="districtid"></p>
-              </div>
+        <section class="statistics">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="box2" style="height: 125px;margin-top: 0px !important;">
+                            <div class=" col-md-2">
+                                <button class="select_button" onclick="modal2()">Select District</button>
+                            </div>
+                            <div class=" col-md-8">
+                                <p style="font-size: 21px;margin: 28px;" id="districtid"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" col-md-3" style="margin-left: 5%;">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="" onclick="hi()">District Engagement Score</p>
+                            <p style="margin: 0 4px; font-size: 26px; cursor: pointer; " id="Districtid"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class=" col-md-3" style="margin-left: 5%;">
-            <div class="box2 ">
-              <p style="font-size: 10px;" id="" onclick="hi()">District Engagement Score</p>
-              <p style="margin: 0 4px; font-size: 26px; cursor: pointer; " id="Districtid"></p>
+        </section>
+
+
+        <section class="statistics">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="" onclick="hi()">Active Users (%) </p>
+                            <p style="margin: 0 4px; font-size: 21px; " id="school"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="">Active Usage</p>
+                            <p style="margin: 0 4px; font-size: 21px;  " id="teacher"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="box2 ">
+                            <p style="font-size: 9px;" id="">Recent Engagement</p>
+                            <p style="margin: 0 4px; font-size: 21px;  " id="practice"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="">Consistent Weekly Playback</p>
+                            <p style="margin: 0 4px; font-size: 21px; " id="family"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+        </section>
+        <div id="disdetails" style="display: none;">
         </div>
-      </div>
-    </section>
-
-
-    <section class="statistics">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-2">
-            <div class="box2 ">
-              <p style="font-size: 10px;" id="" onclick="hi()">Active Users (%) </p>
-              <p style="margin: 0 4px; font-size: 21px; " id="school"></p>
+        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
+            <div id="container" style="height: 1000px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
             </div>
-          </div>
-          <div class="col-md-2">
-            <div class="box2 ">
-              <p style="font-size: 10px;" id="">Active Usage</p>
-              <p style="margin: 0 4px; font-size: 21px;  " id="teacher"></p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <div class="box2 ">
-              <p style="font-size: 9px;" id="">Recent Engagement</p>
-              <p style="margin: 0 4px; font-size: 21px;  " id="practice"></p>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <div class="box2 ">
-              <p style="font-size: 10px;" id="">Consistent Weekly Playback</p>
-              <p style="margin: 0 4px; font-size: 21px; " id="family"></p>
-            </div>
-          </div>
         </div>
-      </div>
-    </section>
-    <div id="disdetails" style="display: none;">
-    </div>
-    <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
-      <div id="container"
-        style="height: 1000px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
-      </div>
-    </div>
 
 
-    <section class="charts">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-6">
-              <div id="container2" style=" border-radius: 20px; height: 600px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
-          </div>
-          <div class="col-md-6">
-              <div id="container3" style=" border-radius: 20px;height: 600px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
-          </div>
+        <section class="charts">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="container2" style=" border-radius: 20px; height: 600px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="container3" style=" border-radius: 20px;height: 600px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
+            <div id="container4" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            </div>
         </div>
-      </div>
-    </section>
 
-    <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
-      <div id="container4"
-        style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
-      </div>
-    </div>
-
-    <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
+        <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
       <div id="container1"style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
     </div> -->
 
-    </div>
-    <div id="myModal2" class="modal2">
-      <!-- Modal content -->
-      <div class="modal2-content">
-        <div id="admin" class="col-md-12">
-          <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
-            <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()"
-              style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o"
-                aria-hidden="true"></i></a>
-            <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"
-              download="CapdataExecutivedashboard.csv" id="btnExport"
-              onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;"
-              href=""><i class="fa fa-download" aria-hidden="true"></i></a>
-
-            <div class="table-header">
-              <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
-            </div>
-            <div id="gif"></div>
-            <div class="custyle" id="next"></div>
-            <div class="custyle" id="next1"></div>
-          </div>
         </div>
-      </div>
-    </div>
-  </section>
-  <script src="https://code.highcharts.com/highcharts.js"></script>
+        <div id="myModal2" class="modal2">
+            <!-- Modal content -->
+            <div class="modal2-content">
+                <div id="admin" class="col-md-12">
+                    <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
+                        <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()" style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o"
+                aria-hidden="true"></i></a>
+                        <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a>
 
-  <script src="/static/js/countapi.js"></script>
-  <script src="/static/js/mail.js"></script>
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script src="/static/js/script.js"></script>
-  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-  <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
-  <script src="/static/js/newe.js"></script>
-  <script src="/static/js/excellentexport.js"></script>
+                        <div class="table-header">
+                            <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
+                        </div>
+                        <div id="gif"></div>
+                        <div class="custyle" id="next"></div>
+                        <div class="custyle" id="next1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <script src="/static/js/countapi.js"></script>
+    <script src="/static/js/mail.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="/static/js/script.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="/static/js/newe.js"></script>
+    <script src="/static/js/excellentexport.js"></script>
 </body>
 
 </html>
