@@ -1,1081 +1,1036 @@
 <!DOCTYPE html>
 <!-- partial:index.partial.html -->
 <html lang="en">
-  <head>
-  <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
+
+<head>
+    <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
     <meta charset="UTF-8">
     <title>CAPXP DISTRICT SPYDER VIEW</title>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/search2.css') }}">  
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/search2.css') }}">
 
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-<script src="https://code.highcharts.com/maps/highmaps.js"></script>
-<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/mapdata/countries/us/custom/us-small.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/mapdata/countries/us/custom/us-small.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-    <link rel="stylesheet" href="css/main.css">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/map-table.css') }}">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/buttonstyle.css') }}">
 
-  
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/bootstrap.min.css') }}">
-  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/journeystyle.css') }}">
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-EWVQZSV89G');
-</script>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/map-table.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/buttonstyle.css') }}">
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/journeystyle.css') }}">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWVQZSV89G"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-EWVQZSV89G');
+    </script>
 </head>
 <style>
- 
-  .section-2{
-    width: 100%;
-    
-    float: center;
-    padding-left: 100px;
-    max-height: 600px;
-    
+    .section-2 {
+        width: 100%;
+        float: center;
+        padding-left: 100px;
+        max-height: 600px;
     }
-    .btn{
-    }
+    
+    .btn {}
+    
     img:hover {
-	-webkit-transform: scale(1.1);
-	transform: scale(1.1);
-	-webkit-transition: .3s ease-in-out;
-	transition: .3s ease-in-out;
-}
-.ds_dp{
-  background-color: #fff;
-border: 0;
-color: #5cb85c;
-width: 14%;
-border-radius: 20px;
-padding: 20px;
-margin-left: 30px;
-margin-top: 20px;
-}
-  </style>
-
-<style>
-  .ds_dp {
-    background-color: #fff;
-    border: 0;
-    color: #5cb85c;
-    width: 14%;
-    border-radius: 20px 0 0 20px;
-    padding: 20px;
-    margin-left: 30px;
-    margin-top: 20px;
-    float: left;
-  }
-
-  .mr1 {
-    margin-left: 0 !important;
-    width: 37% !important;
-    border-radius: 0 !important;
-  }
-
-  .mr2 {
-    margin-left: 0 !important;
-    width: 18% !important;
-    border-radius: 0 20px 20px 0;
-    height: 63px;
-  }
-
-  .threebox {
-    float: left;
-    width: 100%;
-    padding: 40px 0
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-
-
-  .sticky-wrapper{
-    overflow: auto;
-    position:relative;
-    margin: 0 auto 1.5em;
-    width: 75%;
-}
-
-table{
-  /* border-collapse: collapse; */
-  margin-bottom: 1em;
-  width: 100%;
-}
-
-caption {
-  caption-side: top;
-  font-weight: bold;
-  font-size: 1.1em;
-  font-family: "open sans", roboto;
-}
-
-th {
-    background-color: white;
-    font-weight: normal;
-}
-
-thead tr:nth-child(1) th {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-tbody th {
-  font-size: 10px !important;
-  position: sticky;
-  left: 0;
-  z-index: 10;
-}
-
-td, th{
-  padding: 0 20px;
-text-align: left;
-}
-
-td{
-  min-width: 20px;
-  width: 20px;
-  max-width: 30px;
-}
-
-.legend{
-  margin: 0 auto;
-  width:25%;
-  font-family: roboto, arial;
-  font-size: 0.75em;
-}
-.color-square{
-  float:left;
-  width: 9%;
-  margin-right: 1%;
-  height:1.5em;
-}
-.align-left{
-  float: left;
-}
-.align-right{
-  float: right;
-}
-.fa-snowflake{
-  color:#3C2EA8;
-}
-.cold{
-  color:#7A2EA1;
-}
-
-.fa-sun{
-  color:#F06E1D;
-}
-
-.hot{
-  color:#E61717;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  .box-outer-nw {
-    float: left;
-    width: 100%;
-    padding: 0;
-    background: #ffffff none repeat scroll 0 0;
-    -moz-box-shadow: 0 0 10px #cccccc;
-    -webkit-box-shadow: 0 0 10px #cccccc;
-    -o-box-shadow: 0 0 10px #cccccc;
-    box-shadow: 0 0 10px #cccccc;
-    text-align: center
-  }
-
-  .box-outer-nw img {
-    width: 150px;
-    margin: 0 auto;
-    padding: 20px;
-    min-height: 1px;
-    opacity: 0.7;
-  }
-
-  .text-s {
-    float: left;
-    color: #464b48;
-    width: 100%;
-    margin: 0;
-    text-align: center;
-    font-size: 8px;
-    text-transform: uppercase;
-
-    padding: 15px 0
-  }
-
-  .threebox .col-md-4 a {
-    color: rgb(236, 236, 236)
-  }
-
-  .box-outer-nw:hover {
-    box-shadow: 0 0 18px #b1b1b1;
-  }
-
-  .box-outer-nw:hover img {
-    opacity: 1
-  }
-
-  .box_outer_color {
-    float: left;
-    width: 100%;
-  }
-
-.districtdet{
-  float: right;
-}
-
-  .box-outer-nw {
-    float: left;
-    width: 100%;
-    padding: 0;
-    background: #ffffff none repeat scroll 0 0;
-    -moz-box-shadow: 0 0 10px #cccccc;
-    -webkit-box-shadow: 0 0 10px #cccccc;
-    -o-box-shadow: 0 0 10px #cccccc;
-    box-shadow: 0 0 10px #cccccc;
-    text-align: center
-  }
-  .select_button{
-    padding: 10px;
-border-radius: 10px;
-background-color: #50a756;
-color: #fff;
-margin-top: 25px;
-border: 0;
-box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
-  }
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+        -webkit-transition: .3s ease-in-out;
+        transition: .3s ease-in-out;
+    }
+    
+    .ds_dp {
+        background-color: #fff;
+        border: 0;
+        color: #5cb85c;
+        width: 14%;
+        border-radius: 20px;
+        padding: 20px;
+        margin-left: 30px;
+        margin-top: 20px;
+    }
 </style>
 
 <style>
-  .pul li {
-    margin-top: 0 !important;
-  }
-
-  .card img {
-    padding: 0px 10px;
-    height: 135px;
-  }
-
-  .modal-content {
-    overflow: scroll;
-    width: 87% !important;
-  }
-  .districtname{
-    float: right;
-background-color: #fff;
-padding: 15px;
-border-radius: 20px;
-  }
+    .ds_dp {
+        background-color: #fff;
+        border: 0;
+        color: #5cb85c;
+        width: 14%;
+        border-radius: 20px 0 0 20px;
+        padding: 20px;
+        margin-left: 30px;
+        margin-top: 20px;
+        float: left;
+    }
+    
+    .mr1 {
+        margin-left: 0 !important;
+        width: 37% !important;
+        border-radius: 0 !important;
+    }
+    
+    .mr2 {
+        margin-left: 0 !important;
+        width: 18% !important;
+        border-radius: 0 20px 20px 0;
+        height: 63px;
+    }
+    
+    .threebox {
+        float: left;
+        width: 100%;
+        padding: 40px 0
+    }
+    
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    .sticky-wrapper {
+        overflow: auto;
+        position: relative;
+        margin: 0 auto 1.5em;
+        width: 75%;
+    }
+    
+    table {
+        /* border-collapse: collapse; */
+        margin-bottom: 1em;
+        width: 100%;
+    }
+    
+    caption {
+        caption-side: top;
+        font-weight: bold;
+        font-size: 1.1em;
+        font-family: "open sans", roboto;
+    }
+    
+    th {
+        background-color: white;
+        font-weight: normal;
+    }
+    
+    thead tr:nth-child(1) th {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    
+    tbody th {
+        font-size: 10px !important;
+        position: sticky;
+        left: 0;
+        z-index: 10;
+    }
+    
+    td,
+    th {
+        padding: 0 20px;
+        text-align: left;
+    }
+    
+    td {
+        min-width: 20px;
+        width: 20px;
+        max-width: 30px;
+    }
+    
+    .legend {
+        margin: 0 auto;
+        width: 25%;
+        font-family: roboto, arial;
+        font-size: 0.75em;
+    }
+    
+    .color-square {
+        float: left;
+        width: 9%;
+        margin-right: 1%;
+        height: 1.5em;
+    }
+    
+    .align-left {
+        float: left;
+    }
+    
+    .align-right {
+        float: right;
+    }
+    
+    .fa-snowflake {
+        color: #3C2EA8;
+    }
+    
+    .cold {
+        color: #7A2EA1;
+    }
+    
+    .fa-sun {
+        color: #F06E1D;
+    }
+    
+    .hot {
+        color: #E61717;
+    }
+    
+    .box-outer-nw {
+        float: left;
+        width: 100%;
+        padding: 0;
+        background: #ffffff none repeat scroll 0 0;
+        -moz-box-shadow: 0 0 10px #cccccc;
+        -webkit-box-shadow: 0 0 10px #cccccc;
+        -o-box-shadow: 0 0 10px #cccccc;
+        box-shadow: 0 0 10px #cccccc;
+        text-align: center
+    }
+    
+    .box-outer-nw img {
+        width: 150px;
+        margin: 0 auto;
+        padding: 20px;
+        min-height: 1px;
+        opacity: 0.7;
+    }
+    
+    .text-s {
+        float: left;
+        color: #464b48;
+        width: 100%;
+        margin: 0;
+        text-align: center;
+        font-size: 8px;
+        text-transform: uppercase;
+        padding: 15px 0
+    }
+    
+    .threebox .col-md-4 a {
+        color: rgb(236, 236, 236)
+    }
+    
+    .box-outer-nw:hover {
+        box-shadow: 0 0 18px #b1b1b1;
+    }
+    
+    .box-outer-nw:hover img {
+        opacity: 1
+    }
+    
+    .box_outer_color {
+        float: left;
+        width: 100%;
+    }
+    
+    .districtdet {
+        float: right;
+    }
+    
+    .box-outer-nw {
+        float: left;
+        width: 100%;
+        padding: 0;
+        background: #ffffff none repeat scroll 0 0;
+        -moz-box-shadow: 0 0 10px #cccccc;
+        -webkit-box-shadow: 0 0 10px #cccccc;
+        -o-box-shadow: 0 0 10px #cccccc;
+        box-shadow: 0 0 10px #cccccc;
+        text-align: center
+    }
+    
+    .select_button {
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #50a756;
+        color: #fff;
+        margin-top: 25px;
+        border: 0;
+        box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
+    }
 </style>
-  <body class="body">
-  
+
+<style>
+    .pul li {
+        margin-top: 0 !important;
+    }
+    
+    .card img {
+        padding: 0px 10px;
+        height: 135px;
+    }
+    
+    .modal-content {
+        overflow: scroll;
+        width: 87% !important;
+    }
+    
+    .districtname {
+        float: right;
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 20px;
+    }
+</style>
+
+<body class="body">
+
     <nav class="navbar navbar-default">
-      <div class="">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="page_Heading" href="#">DISTRICT SPYDER VIEW</a>
-          <a href="homepage">
-            <img src="{{ url_for('static',filename='images/capwhite.png') }}" alt=""
-              class="logo">
-          </a>
-        </div>
-        <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li style="left: 2px;
-            top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true" style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i><p style="float: right;">Views</p><p id="count" style="float: right;margin-right: 3px;"></p></li>
-             <!--<li style="left: 10px;
+        <div class="">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="page_Heading" href="#">DISTRICT SPYDER VIEW</a>
+                    <a href="homepage">
+                        <img src="{{ url_for('static',filename='images/capwhite.png') }}" alt="" class="logo">
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li style="left: 2px;
+            top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true" style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i>
+                            <p style="float: right;">Views</p>
+                            <p id="count" style="float: right;margin-right: 3px;"></p>
+                        </li>
+                        <!--<li style="left: 10px;
             top: 34px;
             color: #fff;
             cursor: pointer;" id="myBtn"><i class="fa fa-lightbulb-o" style="margin-top:2px;"></i><p style="float: right;">Insights</p><p style="float: right;margin-right: 3px; margin-left: 5px;">3</p></li>-->
-            <li style="left:10px;top:18px;" ><a id="share" href="#"><i class="fa fa-share" aria-hidden="true" style="margin-top:2px;margin-right: 3px;"></i></a></li>
-            <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1" class="fa fa-bars show-side-btn"></i></a></li>
-            <li style="margin-top: 27px;">
-              <div class="dropdown">
-                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid" style="display: none;">{{g.user.id}}</span></button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a></li>  
-                  <hr />
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>   
-                </ul>
-              </div>
-          </ul>
-        </div>
-        <!-- <div class="input-Container ui-widget">
+                        <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true" style="margin-top:2px;margin-right: 3px;"></i></a></li>
+                        <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1" class="fa fa-bars show-side-btn"></i></a></li>
+                        <li style="margin-top: 27px;">
+                            <div class="dropdown">
+                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid" style="display: none;">{{g.user.id}}</span></button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a></li>
+                                    <hr />
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>
+                                </ul>
+                            </div>
+                    </ul>
+                </div>
+                <!-- <div class="input-Container ui-widget">
         <i class="fa fa-search Icon"></i>
         <div id="iid" class="input-Field">
         </div>
         <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
         <p style="display: none;" id="tagdescription" ></p>
         <p style="display: none;" id="tagdescription" ></p> -->
-        <!--<div class="select_Bt">
+                <!--<div class="select_Bt">
         <select id="myselect" style="margin-top: 7px;">
           <option value="1">DASHBAORD</option>
           <option value="2">SCHOOL</option>
         </div>
       </select>-->
-      <!-- </div>      -->
-      </div>
-    </div>
+                <!-- </div>      -->
+            </div>
+        </div>
     </nav>
     <aside class="side-nav" id="show-side-navigation1">
-      <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
-      <ul class="categories" style="margin-top:35px;">
-        <li>
-          <i class="fa fa-home" aria-hidden="true"></i>
-          <a href="#">EXECUTIVE SUMMARY</a>
-          <ul class="side-nav-dropdown">
+        <!-- <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i> -->
+        <ul class="categories" style="margin-top:35px;">
             <li>
-              <a href="Executive_Dashboard">CAP SUMMARY</a></li>
-            <li><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
-            <li><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
-            <li><a href="aws_releases">COMPASS RELEASES</a></li>
-<li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
-            <li><a href="awsmain">AWS ANALYTICS</a></li>
-            <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                        
-            
-          </ul>
-        </li>
-        <li class="active"><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
-          <ul class="side-nav-dropdown">
-            <!-- <li class="active2"><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->
-            <li class="active2"><a href="School_Search">SCHOOL SEARCH</a></li>
-            <li class="active2"><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
-            <li class="active2"><a href="Disctrictfilter">DISTRICT 360</a></li>
-          <li class="active2"><a href="partner">PARTNER PORTAL</a></li>
-            <li class="active2"><a href="Login_analytics">LOGIN ANALYTICS</a></li>
-
-            <!-- <li><a href="District_level_view_RUSD">DISTRICT SPYDER VIEW</a></li> -->
-           <li class="active2"><a href="ddt">DISTRICT DDT</a></li>
-<!-- <li class="active2"><a href="district _race">DISTRICT RACE CHART</a></li>--><li class="active2"><a href="21daystreak">21 Day Streak</a></li>
-          </ul>
-        </li>
-        <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
-          <ul class="side-nav-dropdown">
-            <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
-            <li><a href="Scoology">SCHOOLOGY</a></li>
-            <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
-            <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
-            <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
-            <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
-            <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
-            <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
-          </ul>
-        </li>
-        <li>
-          <i class="fa fa-dollar"></i><a href="#">REVENUE DASHBOARDS</a>
-          <ul class="side-nav-dropdown">
-            <li><a href="Transaction_Reporting">REVENUE OVERVIEW</a></li>
-            <li><a href="Donation">DONATION DASHBOARD</a></li>
-            <li><a href="School_Revenue">SCHOOL REVENUE</a></li><li><a href="Bill_later">BILL ME LATER</a></li>
-          </ul>
-        </li>
-<li><i class="fa fa-bolt"></i><a href="#">FEEDBACK AND SURVEY</a>
-          <ul class="side-nav-dropdown">
-            <li><a href="feedback_Analyitcs">FEEDBACK ANAYLTICS</a></li>
-            <li><a href="sentiment">SENTIMENT ANAYLTICS</a></li>
-            <li><a href="feedback_Trends">FEEDBACK TRENDS</a></li>
-            <li><a href="Family_SURVEY">HOME SURVEY ANALYTICS</a></li>
-            <li><a href="feedback_Analyitcs_family">HOME FEEDBACK ANALYTICS</a></li>
-          </ul>
-        </li>
-        <li>
-          <i class="fa fa-users "></i><a href="#">SUBSCRIPTION DASHBOARDS</a>
-          <ul class="side-nav-dropdown">
-                        <li><a href="Upcoming_Renewals">UPCOMING RENEWAL</a></li>
-            <li><a href="d1districts">D1 DISTRICTS</a></li>
-<li><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
-            <li><a href="Sms_analytics">SMS ANALYTICS</a></li>
-            
-          </ul>
-        </li>
-        
-        <li><i class="fa fa-star"></i><a href="#">APP ANALYTICS</a>
-          <ul class="side-nav-dropdown">
-            <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
-            <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
-            <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
-            <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
-            <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
-            <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
-          </ul>
-        </li>
-        <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
-      </li>
-<!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
-</aside>
-  <section id="contents">
-    <!-- The Modal -->
-      
-    <div id="myModal" class="modal">
-
-      <!-- Modal content -->
-      <div class="modal-content">
-        <button onclick="cose()">Close X</button>
+                <i class="fa fa-home" aria-hidden="true"></i>
+                <a href="#">EXECUTIVE SUMMARY</a>
+                <ul class="side-nav-dropdown">
+                    <li>
+                        <a href="Executive_Dashboard">CAP SUMMARY</a></li>
+                    <li><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
+                    <li><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
+                    <li><a href="aws_releases">COMPASS RELEASES</a></li>
+                    <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
+                    <li><a href="awsmain">AWS ANALYTICS</a></li>
+                    <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
 
 
+                </ul>
+            </li>
+            <li class="active"><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
+                <ul class="side-nav-dropdown">
+                    <!-- <li class="active2"><a href="School_Analytics">SCHOOL ANALYTICS</a></li> -->
+                    <li class="active2"><a href="School_Search">SCHOOL SEARCH</a></li>
+                    <li class="active2"><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
+                    <li class="active2"><a href="Disctrictfilter">DISTRICT 360</a></li>
+                    <li class="active2"><a href="partner">PARTNER PORTAL</a></li>
+                    <li class="active2"><a href="Login_analytics">LOGIN ANALYTICS</a></li>
 
-        <div class="items row">
-          <div class="container">
-            <div class="row">
-              <div class="threebox p0">
-                <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title=""
-                  data-original-title="">
-                </a>
-                <div class="col-md-2 portalBox">
+                    <!-- <li><a href="District_level_view_RUSD">DISTRICT SPYDER VIEW</a></li> -->
+                    <li class="active2"><a href="ddt">DISTRICT DDT</a></li>
+                    <!-- <li class="active2"><a href="district _race">DISTRICT RACE CHART</a></li>-->
+                    <li class="active2"><a href="21daystreak">21 Day Streak</a></li>
+                </ul>
+            </li>
+            <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
+                    <li><a href="Scoology">SCHOOLOGY</a></li>
+                    <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
+                    <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
+                    <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
+                    <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
+                    <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
+                    <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
+                </ul>
+            </li>
+            <li>
+                <i class="fa fa-dollar"></i><a href="#">REVENUE DASHBOARDS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Transaction_Reporting">REVENUE OVERVIEW</a></li>
+                    <li><a href="Donation">DONATION DASHBOARD</a></li>
+                    <li><a href="School_Revenue">SCHOOL REVENUE</a></li>
+                    <li><a href="Bill_later">BILL ME LATER</a></li>
+                </ul>
+            </li>
+            <li><i class="fa fa-bolt"></i><a href="#">FEEDBACK AND SURVEY</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="feedback_Analyitcs">FEEDBACK ANAYLTICS</a></li>
+                    <li><a href="sentiment">SENTIMENT ANAYLTICS</a></li>
+                    <li><a href="feedback_Trends">FEEDBACK TRENDS</a></li>
+                    <li><a href="Family_SURVEY">HOME SURVEY ANALYTICS</a></li>
+                    <li><a href="feedback_Analyitcs_family">HOME FEEDBACK ANALYTICS</a></li>
+                </ul>
+            </li>
+            <li>
+                <i class="fa fa-users "></i><a href="#">SUBSCRIPTION DASHBOARDS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Upcoming_Renewals">UPCOMING RENEWAL</a></li>
+                    <li><a href="d1districts">D1 DISTRICTS</a></li>
+                    <li><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
+                    <li><a href="Sms_analytics">SMS ANALYTICS</a></li>
 
-                  
-                    <div onclick="distselect('5f2609807a1c0000950bb46d'),imgd('1')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()">
+                </ul>
+            </li>
 
-                      <img src="/static/images/1.png" class="img-responsive"
-                        alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Broward County<br/><span style="color: green;">PUBLIC SCHOOLS</span>
-                      </p>
+            <li><i class="fa fa-star"></i><a href="#">APP ANALYTICS</a>
+                <ul class="side-nav-dropdown">
+                    <li><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
+                    <li><a href="Familyapp_school">HOME APP SCHOOL</a></li>
+                    <!-- <li><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
+                    <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
+                    <!--<li><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
+                    <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
+                </ul>
+            </li>
+            <li style="margin-top: 150px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
+            </li>
+            <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
+    </aside>
+    <section id="contents">
+        <!-- The Modal -->
+
+        <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <button onclick="cose()">Close X</button>
+
+
+
+                <div class="items row">
+                    <div class="container">
+                        <div class="row">
+                            <div class="threebox p0">
+                                <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title="" data-original-title="">
+                                </a>
+                                <div class="col-md-2 portalBox">
+
+
+                                    <div onclick="distselect('5f2609807a1c0000950bb46d'),imgd('1')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()">
+
+                                        <img src="/static/images/1.png" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Broward County<br/><span style="color: green;">PUBLIC SCHOOLS</span>
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb45d'),imgd('2')">
+                                        <img src="/static/images/2.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Youngstown city<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb477'),imgd('3')">
+                                        <img src="/static/images/3.png" style="padding: 26px;" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Sarasota<br/><span style="color: green;">COUNTY SCHOOLS</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb47e'),imgd('4')">
+                                        <img src="/static/images/4.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Lajoya Independent<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb471'),imgd('5')">
+                                        <img src="/static/images/5.png" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Racine<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb472'),imgd('6')">
+                                        <img src="/static/images/6.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">oroville Elimentary<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-            
                 </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb45d'),imgd('2')">
-                      <img src="/static/images/2.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Youngstown city<br/><span style="color: green;">SCHOOL DISTRICT</span>
-                        
-                      </p>
+
+
+                <div class="items row">
+                    <div class="container">
+                        <div class="row">
+                            <div class="threebox p0">
+                                <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title="" data-original-title="">
+                                </a>
+                                <div class="col-md-2 portalBox">
+
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb45b'),imgd('7')">
+
+                                        <img src="/static/images/7.png" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Westfield<br/><span style="color: green;">PUBLIC SCHOOLS</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb461'),imgd('8')">
+                                        <img src="/static/images/8.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Englewood public<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb455'),imgd('9')">
+                                        <img src="/static/images/9.png" style="padding: 26px;" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Krum Independent<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb450'),imgd('10')">
+                                        <img src="/static/images/10.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Goleta union<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb460'),imgd('14')">
+                                        <img src="/static/images/14.jpg" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">CLARKSVILLE COUNTY<br/><span style="color: green;">SCHOOL SYSTEM</span>
+
+                                        </p>
+                                    </div>
+                                    </a>
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb45e'),imgd('11')">
+                                        <img src="/static/images/11.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">FAIRFIELD-SUISUN<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                
                 </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb477'),imgd('3')">
-                      <img src="/static/images/3.png" style="padding: 26px;"
-                        class="img-responsive" alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Sarasota<br/><span style="color: green;">COUNTY SCHOOLS</span>
-                        
-                      </p>
+
+
+                <div class="items row">
+                    <div class="container">
+                        <div class="row">
+                            <div class="threebox p0">
+                                <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title="" data-original-title="">
+                                </a>
+                                <div class="col-md-2 portalBox">
+
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb368'),imgd('12')">
+
+                                        <img src="/static/images/12.png" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">WICHITA FALLS<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f59e4836451a9089d7d4007'),imgd('13')">
+                                        <img src="/static/images/13.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">BELLEVILLE<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f7c01fa9387fd71ce6387cc'),imgd('queens')">
+                                        <img src="/static/images/queens.png" style="padding: 26px;" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">QUEENS SOUTH<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f6994386451a9089d7d4009'),imgd('ogden')">
+                                        <img src="/static/images/ogden.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">OGDEN<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb46c'),imgd('chico')">
+                                        <img src="/static/images/chico.png" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">CHICO<br/><span style="color: green;">SCHOOL DISTRICT</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb475'),imgd('agawam')">
+                                        <img src="/static/images/agawam_logo.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Agawam<br/><span style="color: green;">PUBLIC SCHOOL</span>
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  
                 </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb47e'),imgd('4')">
-                      <img src="/static/images/4.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Lajoya Independent<br/><span style="color: green;">SCHOOL DISTRICT</span>
-                        
-                      </p>
+
+
+                <div class="items row">
+                    <div class="container">
+                        <div class="row">
+                            <div class="threebox p0">
+                                <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title="" data-original-title="">
+                                </a>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb470'),imgd('san_leandro')">
+
+                                        <img src="/static/images/san_leandro.png" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">san leandro<br/><span style="color: green;">SCHOOL district</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f7413ef9387fd71ce6387cb'),imgd('douglas')">
+                                        <img src="/static/images/douglas.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">douglas<br/><span style="color: green;">SCHOOL district</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb476'),imgd('hillsborogh')">
+                                        <img src="/static/images/hillsborogh.png" style="padding: 26px;" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">hillsborough<br/><span style="color: green;">PUBLIC SCHOOL</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f6d7cbce6452eb06384db20'),imgd('salt_lake')">
+                                        <img src="/static/images/salt_lake.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">salt lake<br/><span style="color: green;">SCHOOL district</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f698b826451a9089d7d4008'),imgd('wayne')">
+                                        <img src="/static/images/wayne.png" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">wayne metro<br/><span style="color: green;">community  agency</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb466'),imgd('pinellas')">
+                                        <img src="/static/images/pinellas.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Pinellas<br/><span style="color: green;">County Schools</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  
                 </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb471'),imgd('5')">
-                      <img src="/static/images/5.png" class="img-responsive"
-                        alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Racine<br/><span style="color: green;">SCHOOL DISTRICT</span>                       
-                       
-                      </p>
+
+
+                <div class="items row">
+                    <div class="container">
+                        <div class="row">
+                            <div class="threebox p0">
+                                <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title="" data-original-title="">
+                                </a>
+                                <div class="col-md-2 portalBox">
+
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f8fcd33609e08b76029f644'),imgd('paradise_portal')">
+
+                                        <img src="/static/images/paradise_portal.png" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Paradise<br/><span style="color: green;">School District</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f895191609e08b76029f641'),imgd('early_sarasota')">
+                                        <img src="/static/images/early_sarsota.png" class="img-responsive" alt="School" style="color: #797979;">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Early Learing<br/><span style="color: green;">Coalition-Sarasota</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb47f'),imgd('ccsd_circle')">
+                                        <img src="/static/images/ccsd_circle.png" style="padding: 26px;" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">CCSD 89<br/><span style="color: green;">School District</span>
+
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 portalBox">
+
+                                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb47d'),imgd('flint_portal')">
+                                        <img src="/static/images/flint_portal.png" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">FLINT<br/><span style="color: green;">School District</span>
+
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  
                 </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb472'),imgd('6')">
-                      <img src="/static/images/6.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">oroville  Elimentary<br/><span style="color: green;">SCHOOL DISTRICT</span>
-   
-                      </p>
-                    </div>
-                  
-                </div>
-              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
-          </div>
         </div>
 
 
-        <div class="items row">
-          <div class="container">
-            <div class="row">
-              <div class="threebox p0">
-                <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title=""
-                  data-original-title="">
-                </a>
-                <div class="col-md-2 portalBox">
 
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb45b'),imgd('7')">
-
-                      <img src="/static/images/7.png" class="img-responsive"
-                        alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Westfield<br/><span style="color: green;">PUBLIC SCHOOLS</span>
-                        
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb461'),imgd('8')">
-                      <img src="/static/images/8.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Englewood public<br/><span style="color: green;">SCHOOL DISTRICT</span>
-                    
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb455'),imgd('9')">
-                      <img src="/static/images/9.png" style="padding: 26px;"
-                        class="img-responsive" alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Krum Independent<br/><span style="color: green;">SCHOOL DISTRICT</span>
-                
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb450'),imgd('10')">
-                      <img src="/static/images/10.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Goleta union<br/><span style="color: green;">SCHOOL DISTRICT</span>
-                      
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb460'),imgd('14')">
-                      <img src="/static/images/14.jpg" class="img-responsive"
-                        alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">CLARKSVILLE   COUNTY<br/><span style="color: green;">SCHOOL SYSTEM</span>                        
-                   
-                      </p>
-                    </div>
-                  </a>
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb45e'),imgd('11')">
-                      <img src="/static/images/11.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">FAIRFIELD-SUISUN<br/><span style="color: green;">SCHOOL DISTRICT</span>
-                    
-                      </p>
-                    </div>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="items row">
-          <div class="container">
-            <div class="row">
-              <div class="threebox p0">
-                <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title=""
-                  data-original-title="">
-                </a>
-                <div class="col-md-2 portalBox">
-
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb368'),imgd('12')">
-
-                      <img src="/static/images/12.png" class="img-responsive"
-                        alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">WICHITA FALLS<br/><span style="color: green;">SCHOOL DISTRICT</span>
-                        
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f59e4836451a9089d7d4007'),imgd('13')">
-                      <img src="/static/images/13.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">BELLEVILLE<br/><span style="color: green;">SCHOOL DISTRICT</span>
-                     
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f7c01fa9387fd71ce6387cc'),imgd('queens')">
-                      <img src="/static/images/queens.png" style="padding: 26px;"
-                        class="img-responsive" alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">QUEENS SOUTH<br/><span style="color: green;">SCHOOL DISTRICT</span>
-                    
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f6994386451a9089d7d4009'),imgd('ogden')">
-                      <img src="/static/images/ogden.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">OGDEN<br/><span style="color: green;">SCHOOL DISTRICT</span>
-                  
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb46c'),imgd('chico')">
-                      <img src="/static/images/chico.png" class="img-responsive"
-                        alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">CHICO<br/><span style="color: green;">SCHOOL DISTRICT</span>            
-                
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb475'),imgd('agawam')">
-                      <img src="/static/images/agawam_logo.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Agawam<br/><span style="color: green;">PUBLIC SCHOOL</span>
-                  
-                      </p>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="items row">
-          <div class="container">
-            <div class="row">
-              <div class="threebox p0">
-                <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title=""
-                  data-original-title="">
-                </a>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb470'),imgd('san_leandro')">
-
-                      <img src="/static/images/san_leandro.png" class="img-responsive"
-                        alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">san leandro<br/><span style="color: green;">SCHOOL district</span>
-                      
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f7413ef9387fd71ce6387cb'),imgd('douglas')">
-                      <img src="/static/images/douglas.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">douglas<br/><span style="color: green;">SCHOOL district</span>
-              
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb476'),imgd('hillsborogh')">
-                      <img src="/static/images/hillsborogh.png" style="padding: 26px;"
-                        class="img-responsive" alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">hillsborough<br/><span style="color: green;">PUBLIC SCHOOL</span>
-             
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f6d7cbce6452eb06384db20'),imgd('salt_lake')">
-                      <img src="/static/images/salt_lake.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">salt lake<br/><span style="color: green;">SCHOOL district</span>
-       
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f698b826451a9089d7d4008'),imgd('wayne')">
-                      <img src="/static/images/wayne.png" class="img-responsive"
-                        alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">wayne metro<br/><span style="color: green;">community  agency</span>                      
-          
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb466'),imgd('pinellas')">
-                      <img src="/static/images/pinellas.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Pinellas<br/><span style="color: green;">County Schools</span>
-                    
-                      </p>
-                    </div>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="items row">
-          <div class="container">
-            <div class="row">
-              <div class="threebox p0">
-                <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title=""
-                  data-original-title="">
-                </a>
-                <div class="col-md-2 portalBox">
-
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f8fcd33609e08b76029f644'),imgd('paradise_portal')">
-
-                      <img src="/static/images/paradise_portal.png" class="img-responsive"
-                        alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Paradise<br/><span style="color: green;">School District</span>
-     
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f895191609e08b76029f641'),imgd('early_sarasota')">
-                      <img src="/static/images/early_sarsota.png" class="img-responsive"
-                        alt="School" style="color: #797979;">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Early Learing<br/><span style="color: green;">Coalition-Sarasota</span>
-              
-                      </p>
-                    </div>
-                  
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb47f'),imgd('ccsd_circle')">
-                      <img src="/static/images/ccsd_circle.png" style="padding: 26px;"
-                        class="img-responsive" alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">CCSD 89<br/><span style="color: green;">School District</span>
-
-                      </p>
-                    </div>
-                </div>
-                <div class="col-md-2 portalBox">
-                  
-                    <div class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="distselect('5f2609807a1c0000950bb47d'),imgd('flint_portal')">
-                      <img src="/static/images/flint_portal.png" class="img-responsive"
-                        alt="School">
-                      <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">FLINT<br/><span style="color: green;">School District</span>                
-            
-                      </p>
-                    </div>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        
-
-
-
-
-        
-
-
-
-
-
-      </div>
-    </div>
-
-
-
-    <section class="statistics"> 
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-8">
-            <div class="box2" style="height: 125px;">
-              <div class=" col-md-2">
-                <button class="select_button" onclick="modal2()">Select District</button>
-              </div>
-              <div class=" col-md-8">
-                <p  style="font-size: 21px;margin: 28px;" id="districtid" ></p>
-              </div>
-          </div>
-       </div>
-       <div class=" col-md-3" style="margin-left: 5%;" id="imgdis">
-        
-      </div>
-    </div>
-    </div>
-  </div>
-</section>
-      <section class="statistics">
-        <div class="container-fluid">
-          <div class="row">
-            
-                    <div class="col-md-2">
-                      <div class="box2">
-                        <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="schoolcountdistrict"></p>
-                          <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">SCHOOL COUNT</p>
-
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-                      <div class="box2">
-                        <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="active2"></p>
-                          <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">ENGAGED</p>
-                          
-                        
-                       
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-
-                      <div class="box2" >
-                        <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="passive2" ></p>
-                          <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">ONBOARDING
-
-
-
-                          </p>
-                         
-                        
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-                      <div class="box2">
-                        <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="dormant2" ></p>
-                        <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">INTERVENTION<br /></p>
-                        
-                       
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-                      <div class="box2">
-                        <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="cl" ></p>
-                        <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">CLEVER<br /></p>
-                        
-                       
-                      </div>
-                    </div>
-                    <div class="col-md-2">
-                      <div class="box2">
-                        <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="sl" ></p>
-                        <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">SCHOOLOGY<br /></p>
-                        
-                       
-                      </div>
-                    </div>
-                    
-                  </div>
-                </div>
-              
-          </div>
-          
-        </div>
         <section class="statistics">
             <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-3">
-                  <div class="box"style="text-align: center; ">
-                    <div class="info" style="margin-left: 30px;">
-                      <h3 style="font-size: 40px;"id="usercount2"  ></h3>
-                      <br/>
-                        <p style="font-size: 20px; ">USER COUNT</p>
-                       
-    
-                      
-                    </div>
-                  </div>
-                  
-                </div>
-                <div class="col-md-2" class="button">
-    
-                  <div class="box2" >
-                    <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="power2" ></p>
-                      <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;"> POWER</p>
-                    
-                  </div>
-                </div>
-                    <div class="container-fluid">
-                      <div class="row">
-
-                          
-                            <div class="col-md-2">
-    
-                              <div class="box2" >
-                            <form class='autocomplete-container'>
-                              <div
-                                class='autocomplete'
-                                role='combobox'
-                                aria-expanded='false'
-                                aria-owns='autocomplete-results'
-                                aria-haspopup='listbox'
-                              >
-                              <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="active3" ></p>
-                              <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">ACTIVE</p>
-                              
-                              <button type='submit' class='button' aria-label='Search'>
-                              </button>
-                                   
-                                  </div>
-                                </div>
-                            
-                                
-                              </div>
-                              
-                            </form>
-                          
-                      
-                        <div class="col-md-2" class="button">
-    
-                          <div class="box2" >
-                            <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="passive3" ></p>
-                              <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;"> PASSIVE</p>
-                            
-                          </div>
-                        </div>
-                        <div class="col-md-2">
-                          <div class="box2 success">
-                            <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="dormant3" ></p>
-                              <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">DORMANT</p>
-                             
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  
-              </div>
-              
-            </div>
-      </section>
-    
-          <hr />
-          <div class="welcome2">
-              <div class="container-fluid">
                 <div class="row">
-                  <div class="col-md-12">
-                    <div class="content2">
-                        <div id="viz"></div>
+                    <div class="col-md-8">
+                        <div class="box2" style="height: 125px;">
+                            <div class=" col-md-2">
+                                <button class="select_button" onclick="modal2()">Select District</button>
+                            </div>
+                            <div class=" col-md-8">
+                                <p style="font-size: 21px;margin: 28px;" id="districtid"></p>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-        
-<hr />
-<div class="welcome2" id="scroll">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="content2" style="height: 720px;">
-<div class="col s12 m8">
-  
-  <div id="admin" class="col s12">
-    <div class="card material-table">
-      <div class="table-header">
-        <span id="container">SCHOOL DETAILS</span>
-        
-        <button class="btn btn-print" onclick="printData()" style="float: right;padding-left: 5px;"><i class="fa fa-print" aria-hidden="true" style="float: right; padding-left: 5px;width: 25px;" ></i> </button>
-      <button class="btn saveAsExcel" style="float: right;"><i class="fa fa-download" aria-hidden="true" style="float: right;  padding-left: 5px; width: 25px;"></i></button>
-        
-        
-        <div class="actions">
-          <a href="#" class="search-toggle waves-effect btn-flat nopadding"><i class="material-icons"></i></a>
-        </div>
-      </div>
-      <table id="datatable">
-        <thead>
-          <tr>
-            <th>USER NAME</th>
-    <th>USER EMAIL</th>
-    <th>SIGNUP DATE</th>
-    <th>LAST PRACTICE DATE</th>
-    
-    <th>RENEWAL DATE</th>
-    <th>PLAYBACK COUNT</th>
-          </tr>
-          <div class="table-footer">
-        
-          </div>
-        </thead>
-      </table>
-      
-    </div>
-  </div>
-</div>
+                    <div class=" col-md-3" style="margin-left: 5%;" id="imgdis">
 
-</div>
-</div></div></div></div>
-<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
-</section>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+        <section class="statistics">
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-md-2">
+                        <div class="box2">
+                            <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="schoolcountdistrict"></p>
+                            <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">SCHOOL COUNT</p>
+
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="box2">
+                            <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="active2"></p>
+                            <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">ENGAGED</p>
+
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+
+                        <div class="box2">
+                            <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="passive2"></p>
+                            <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">ONBOARDING
+
+
+
+                            </p>
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="box2">
+                            <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="dormant2"></p>
+                            <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">INTERVENTION<br /></p>
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="box2">
+                            <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="cl"></p>
+                            <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">CLEVER<br /></p>
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="box2">
+                            <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="sl"></p>
+                            <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">SCHOOLOGY<br /></p>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            </div>
+
+            </div>
+            <section class="statistics">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="box" style="text-align: center; ">
+                                <div class="info" style="margin-left: 30px;">
+                                    <h3 style="font-size: 40px;" id="usercount2"></h3>
+                                    <br/>
+                                    <p style="font-size: 20px; ">USER COUNT</p>
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-2" class="button">
+
+                            <div class="box2">
+                                <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="power2"></p>
+                                <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;"> POWER</p>
+
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+
+
+                                <div class="col-md-2">
+
+                                    <div class="box2">
+                                        <form class='autocomplete-container'>
+                                            <div class='autocomplete' role='combobox' aria-expanded='false' aria-owns='autocomplete-results' aria-haspopup='listbox'>
+                                                <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="active3"></p>
+                                                <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">ACTIVE</p>
+
+                                                <button type='submit' class='button' aria-label='Search'>
+                              </button>
+
+                                            </div>
+                                    </div>
+
+
+                                </div>
+
+                                </form>
+
+
+                                <div class="col-md-2" class="button">
+
+                                    <div class="box2">
+                                        <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="passive3"></p>
+                                        <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;"> PASSIVE</p>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="box2 success">
+                                        <p style=" font-size: 22px;  margin-top: 10px; margin-bottom: 0px;" id="dormant3"></p>
+                                        <p style="font-size: 12PX; margin-top: 5px; margin-left: 0px;">DORMANT</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <hr />
+            <div class="welcome2">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="content2">
+                                <div id="viz"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+            <div class="welcome2" id="scroll">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="content2" style="height: 720px;">
+                                <div class="col s12 m8">
+
+                                    <div id="admin" class="col s12">
+                                        <div class="card material-table">
+                                            <div class="table-header">
+                                                <span id="container">SCHOOL DETAILS</span>
+
+                                                <button class="btn btn-print" onclick="printData()" style="float: right;padding-left: 5px;"><i class="fa fa-print" aria-hidden="true" style="float: right; padding-left: 5px;width: 25px;" ></i> </button>
+                                                <button class="btn saveAsExcel" style="float: right;"><i class="fa fa-download" aria-hidden="true" style="float: right;  padding-left: 5px; width: 25px;"></i></button>
+
+
+                                                <div class="actions">
+                                                    <a href="#" class="search-toggle waves-effect btn-flat nopadding"><i class="material-icons"></i></a>
+                                                </div>
+                                            </div>
+                                            <table id="datatable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>USER NAME</th>
+                                                        <th>USER EMAIL</th>
+                                                        <th>SIGNUP DATE</th>
+                                                        <th>LAST PRACTICE DATE</th>
+
+                                                        <th>RENEWAL DATE</th>
+                                                        <th>PLAYBACK COUNT</th>
+                                                    </tr>
+                                                    <div class="table-footer">
+
+                                                    </div>
+                                                </thead>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+        </section>
 
     </section>
-  
-<!-- <div id="popup1" class="overlay">
+
+    <!-- <div id="popup1" class="overlay">
   <div class="popup">
     <h2 style="margin-left: 40px;">CONTACT US</h2>
     <a class="close" href="#" style="right: 67px !important;">&times;</a>
@@ -1137,7 +1092,7 @@ border-radius: 20px;
   </div>
 </div> -->
 
-  <!-- <div class="botIcon">
+    <!-- <div class="botIcon">
     <div class="botIconContainer">
       <div class="iconInner">
         <img src="{{ url_for('static',filename='images/compasslogo.png') }}">
@@ -1176,208 +1131,198 @@ border-radius: 20px;
       </div>
     </div>
   </div> -->
-<!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
-<script>
+    <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
+    <script>
+        $('#myselect').change(function() {
+            if (this.value == '1') {
+                var availableTags = [
+                    "CAP SUMMARY"
+                ];
+                $("#tag").autocomplete({
+                    source: availableTags,
+                });
+                $("#sid").empty();
+                $("#sid").append('<button onclick=search() id="hel">SEARCH</button>');
 
+            } else if (this.value == '2') {
 
-$('#myselect').change(function(){
-  if (this.value == '1') {
-    var availableTags = [
-      "CAP SUMMARY"
-        ];
-        $( "#tag" ).autocomplete({
-          source: availableTags,
+                $("#sid").empty();
+                var settings = {
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "https://mongospider.herokuapp.com/schoolname/5f155b8a3b6800007900da2a",
+                    "method": "GET"
+                }
+                $.ajax(settings).done(function(response) {
+                    var dataa = JSON.parse(response);
+                    var availableTags = dataa;
+                    $("#tag").autocomplete({
+                        source: availableTags,
+                    });
+                });
+                $("#sid").append('<button onclick=search2() id="hel">SEARCH</button>');
+
+            }
         });
-        $("#sid").empty();
-        $("#sid").append('<button onclick=search() id="hel">SEARCH</button>'); 
-        
-}
-else if (this.value == '2') {
-  
-    $("#sid").empty();
-    var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url":             "https://mongospider.herokuapp.com/schoolname/5f155b8a3b6800007900da2a",
-      "method": "GET"
-     }
-      $.ajax(settings).done(function (response) {
-      var dataa=JSON.parse(response);
-      var availableTags = dataa;
-      $( "#tag" ).autocomplete({
-      source: availableTags,
-    });
-      });      
-    $("#sid").append('<button onclick=search2() id="hel">SEARCH</button>'); 
-    
-}
-});
-  $("#district").val('1');
-  $('#district').change(function(){
-  if (this.value == '1') {
-  $("#viz").empty();
-  $("#schoolcountdistrict").empty();
-  $("#active2").empty();
-  $("#passive2").empty();
-  $("#dormant2").empty();
+        $("#district").val('1');
+        $('#district').change(function() {
+            if (this.value == '1') {
+                $("#viz").empty();
+                $("#schoolcountdistrict").empty();
+                $("#active2").empty();
+                $("#passive2").empty();
+                $("#dormant2").empty();
 
-  $("#usercount2").empty();
-  $("#power2").empty();
-  $("#active3").empty();
-  $("#passive3").empty();
-  $("#dormant3").empty();
-  spyder("/mongo/5f2609807a1c0000950bb471");
-  count("/card/5f2609807a1c0000950bb471");
-  }
-else if (this.value == '2') {
-  $("#viz").empty();
-  $("#schoolcountdistrict").empty();
-  $("#active2").empty();
-  $("#passive2").empty();
-  $("#dormant2").empty();
+                $("#usercount2").empty();
+                $("#power2").empty();
+                $("#active3").empty();
+                $("#passive3").empty();
+                $("#dormant3").empty();
+                spyder("/mongo/5f2609807a1c0000950bb471");
+                count("/card/5f2609807a1c0000950bb471");
+            } else if (this.value == '2') {
+                $("#viz").empty();
+                $("#schoolcountdistrict").empty();
+                $("#active2").empty();
+                $("#passive2").empty();
+                $("#dormant2").empty();
 
-  $("#usercount2").empty();
-  $("#power2").empty();
-  $("#active3").empty();
-  $("#passive3").empty();
-  $("#dormant3").empty();
-  spyder("/mongo/5f2609807a1c0000950bb476");
-  count("/card/5f2609807a1c0000950bb476");
-}
-else if (this.value == '3') {
-  $("#viz").empty();
-  $("#schoolcountdistrict").empty();
-  $("#active2").empty();
-  $("#passive2").empty();
-  $("#dormant2").empty();
+                $("#usercount2").empty();
+                $("#power2").empty();
+                $("#active3").empty();
+                $("#passive3").empty();
+                $("#dormant3").empty();
+                spyder("/mongo/5f2609807a1c0000950bb476");
+                count("/card/5f2609807a1c0000950bb476");
+            } else if (this.value == '3') {
+                $("#viz").empty();
+                $("#schoolcountdistrict").empty();
+                $("#active2").empty();
+                $("#passive2").empty();
+                $("#dormant2").empty();
 
-  $("#usercount2").empty();
-  $("#power2").empty();
-  $("#active3").empty();
-  $("#passive3").empty();
-  $("#dormant3").empty();
-  spyder("/mongo/5f2609807a1c0000950bb45e");
-  count("/card/5f2609807a1c0000950bb45e");
-}
-else if (this.value == '4') {
-  $("#viz").empty();
-  $("#schoolcountdistrict").empty();
-  $("#active2").empty();
-  $("#passive2").empty();
-  $("#dormant2").empty();
+                $("#usercount2").empty();
+                $("#power2").empty();
+                $("#active3").empty();
+                $("#passive3").empty();
+                $("#dormant3").empty();
+                spyder("/mongo/5f2609807a1c0000950bb45e");
+                count("/card/5f2609807a1c0000950bb45e");
+            } else if (this.value == '4') {
+                $("#viz").empty();
+                $("#schoolcountdistrict").empty();
+                $("#active2").empty();
+                $("#passive2").empty();
+                $("#dormant2").empty();
 
-  $("#usercount2").empty();
-  $("#power2").empty();
-  $("#active3").empty();
-  $("#passive3").empty();
-  $("#dormant3").empty();
-  spyder("/mongo/5f2609807a1c0000950bb45a");
-  count("/card/5f2609807a1c0000950bb45a");
-}
-else if (this.value == '5') {
-  $("#viz").empty();
-  $("#schoolcountdistrict").empty();
-  $("#active2").empty();
-  $("#passive2").empty();
-  $("#dormant2").empty();
+                $("#usercount2").empty();
+                $("#power2").empty();
+                $("#active3").empty();
+                $("#passive3").empty();
+                $("#dormant3").empty();
+                spyder("/mongo/5f2609807a1c0000950bb45a");
+                count("/card/5f2609807a1c0000950bb45a");
+            } else if (this.value == '5') {
+                $("#viz").empty();
+                $("#schoolcountdistrict").empty();
+                $("#active2").empty();
+                $("#passive2").empty();
+                $("#dormant2").empty();
 
-  $("#usercount2").empty();
-  $("#power2").empty();
-  $("#active3").empty();
-  $("#passive3").empty();
-  $("#dormant3").empty();
-  spyder("/mongo/5f2609807a1c0000950bb46d");
-  count("/card/5f2609807a1c0000950bb46d");
-}
-else if (this.value == '6') {
-  $("#viz").empty();
-  $("#schoolcountdistrict").empty();
-  $("#active2").empty();
-  $("#passive2").empty();
-  $("#dormant2").empty();
+                $("#usercount2").empty();
+                $("#power2").empty();
+                $("#active3").empty();
+                $("#passive3").empty();
+                $("#dormant3").empty();
+                spyder("/mongo/5f2609807a1c0000950bb46d");
+                count("/card/5f2609807a1c0000950bb46d");
+            } else if (this.value == '6') {
+                $("#viz").empty();
+                $("#schoolcountdistrict").empty();
+                $("#active2").empty();
+                $("#passive2").empty();
+                $("#dormant2").empty();
 
-  $("#usercount2").empty();
-  $("#power2").empty();
-  $("#active3").empty();
-  $("#passive3").empty();
-  $("#dormant3").empty();
-  spyder("/mongo/5f2609807a1c0000950bb45d");
-  count("/card/5f2609807a1c0000950bb45d");
-}
-else if (this.value == '7') {
-  $("#viz").empty();
-  $("#schoolcountdistrict").empty();
-  $("#active2").empty();
-  $("#passive2").empty();
-  $("#dormant2").empty();
+                $("#usercount2").empty();
+                $("#power2").empty();
+                $("#active3").empty();
+                $("#passive3").empty();
+                $("#dormant3").empty();
+                spyder("/mongo/5f2609807a1c0000950bb45d");
+                count("/card/5f2609807a1c0000950bb45d");
+            } else if (this.value == '7') {
+                $("#viz").empty();
+                $("#schoolcountdistrict").empty();
+                $("#active2").empty();
+                $("#passive2").empty();
+                $("#dormant2").empty();
 
-  $("#usercount2").empty();
-  $("#power2").empty();
-  $("#active3").empty();
-  $("#passive3").empty();
-  $("#dormant3").empty();
-  spyder("/mongo/5f2609807a1c0000950bb461");
-  count("/card/5f2609807a1c0000950bb461");
-}
-else if (this.value == '8') {
-  $("#viz").empty();
-  $("#schoolcountdistrict").empty();
-  $("#active2").empty();
-  $("#passive2").empty();
-  $("#dormant2").empty();
+                $("#usercount2").empty();
+                $("#power2").empty();
+                $("#active3").empty();
+                $("#passive3").empty();
+                $("#dormant3").empty();
+                spyder("/mongo/5f2609807a1c0000950bb461");
+                count("/card/5f2609807a1c0000950bb461");
+            } else if (this.value == '8') {
+                $("#viz").empty();
+                $("#schoolcountdistrict").empty();
+                $("#active2").empty();
+                $("#passive2").empty();
+                $("#dormant2").empty();
 
-  $("#usercount2").empty();
-  $("#power2").empty();
-  $("#active3").empty();
-  $("#passive3").empty();
-  $("#dormant3").empty();
-  spyder("https://mongospider.herokuapp.com/mongo/5f2609807a1c0000950bb477");
-  count("https://mongospider.herokuapp.com/card/5f2609807a1c0000950bb477");
-}
-else if (this.value == '9') {
-  $("#viz").empty();
-  $("#schoolcountdistrict").empty();
-  $("#active2").empty();
-  $("#passive2").empty();
-  $("#dormant2").empty();
+                $("#usercount2").empty();
+                $("#power2").empty();
+                $("#active3").empty();
+                $("#passive3").empty();
+                $("#dormant3").empty();
+                spyder("https://mongospider.herokuapp.com/mongo/5f2609807a1c0000950bb477");
+                count("https://mongospider.herokuapp.com/card/5f2609807a1c0000950bb477");
+            } else if (this.value == '9') {
+                $("#viz").empty();
+                $("#schoolcountdistrict").empty();
+                $("#active2").empty();
+                $("#passive2").empty();
+                $("#dormant2").empty();
 
-  $("#usercount2").empty();
-  $("#power2").empty();
-  $("#active3").empty();
-  $("#passive3").empty();
-  $("#dormant3").empty();
-  spyder("/mongo/5f2609807a1c0000950bb473");
-  count("/card/5f2609807a1c0000950bb473");
-}
-})
-</script>
-<script src="{{ url_for('static',filename='js/countapi.js') }}"></script>
-<script src="{{ url_for('static',filename='js/search.js') }}"></script>
+                $("#usercount2").empty();
+                $("#power2").empty();
+                $("#active3").empty();
+                $("#passive3").empty();
+                $("#dormant3").empty();
+                spyder("/mongo/5f2609807a1c0000950bb473");
+                count("/card/5f2609807a1c0000950bb473");
+            }
+        })
+    </script>
+    <script src="{{ url_for('static',filename='js/countapi.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/search.js') }}"></script>
 
-<script src="{{ url_for('static',filename='js/mail.js') }}"></script>
-           
+    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
 
-    
-<!-- partial -->
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
-<script src='https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js'></script>
+
+
+    <!-- partial -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js'></script>
+    <script src='https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js'></script>
 
 
 
 
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/d3plus/1.9.8/d3plus.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/5.14.2/d3.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/d3-force/1.1.0/d3-force.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/d3plus/1.9.8/d3plus.full.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3plus/1.9.8/d3plus.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/5.14.2/d3.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3-force/1.1.0/d3-force.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3plus/1.9.8/d3plus.full.js'></script>
 
-<script  src="{{ url_for('static',filename='js/ringscript.js') }}"></script>
-<script  src="{{ url_for('static',filename='js/buttonscript.js') }}"></script>
-<script  src="{{ url_for('static',filename='js/script.js') }}"></script>
-<script  src="{{ url_for('static',filename='js/snapshot.js') }}"></script>
-<script  src="{{ url_for('static',filename='js/Clickscript.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/ringscript.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/buttonscript.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/snapshot.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/Clickscript.js') }}"></script>
 
 
 
 </body>
+
 </html>
