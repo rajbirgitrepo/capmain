@@ -1823,3 +1823,8 @@ span.avtr figure {
     width: 20%;
     border: 0;
 }
+
+.side-nav-dropdown li a {
+    color: #337ab7 !important;
+    text-transform: uppercase;
+}
