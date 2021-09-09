@@ -124,14 +124,13 @@
         font-family: "open sans", roboto;
         margin-bottom: 10px;
     }
-    
-    .btn-success {
+    /* .btn-success {
         color: #FFF !important;
         padding: 9px 42px !important;
         background-color: #00a651 !important;
         border-color: #00a651 !important;
         font-size: 16px !important;
-    }
+    } */
     
     th {
         background-color: white;
@@ -172,6 +171,14 @@
     table td {
         font-size: 10px;
         padding: 10px 20px !important;
+    }
+    
+    .close-new-tab {
+        float: right;
+        background-color: white;
+        margin-bottom: 10px;
+        border: 2px solid black;
+        padding: 4px 3px;
     }
     
     .legend {
@@ -635,15 +642,12 @@
             <div class="modal2-content">
                 <div id="admin" class="col-md-12">
                     <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
-                        <div class="mb-1">
-                            <a class="btn btn-success btn-logion" onclick="gif2()" style="float: right;background-color: white;"><i class="fa fa-times-circle-o" aria-hidden="true"></i>
-                        </a>
-                        </div>
 
                         <!-- <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"  download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a> -->
                         <div class="table-header">
                             <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
-
+                            <button class="btn close-new-tab btn-logion" onclick="gif2()" style="float: right;background-color: white;"><i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                            </button>
                         </div>
                         <div id="gif"></div>
                         <div class="custyle" id="next"></div>
