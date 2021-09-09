@@ -7805,6 +7805,13 @@ def Executive_Dashboard():
     
     return render_template('Executive_Dashboard.html')
 
+@app.route('/Lead_Generation')
+def Lead_Generation():
+    if not g.user:
+        return redirect(url_for('login'))
+    
+    return render_template('Lead_Generation.html')
+
 
 @app.route('/School_Analytics')
 def School_Analytics():
