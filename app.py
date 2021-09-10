@@ -3013,13 +3013,160 @@ def partner_count_cards():
         dn=df1['district']
     except:
         dn=[0]
-    
-    
-#     print(lc)
+ 
     
     data={"schoolcount":str(sc[0]),"teachercount":str(tc[0]),"familycount":str(fc[0]),"teacherpracticecount":str(pct[0]),"parentspracticecount":str(pcp[0]),"logincount":str(lc[0]),
           'MINDFUL_MINUTES':str(mm[0]),'district':'Skillman'}
     return json.dumps(data)
+
+
+@app.route('/oms')
+def oms_records():
+    from numpyencoder import NumpyEncoder
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    # collection = db.Temp_Access
+    d4=DataFrame(list(db.oms_master.aggregate([
+        {"$match":
+         {
+            '$and':[
+               { "ADMIN_EMAIL" : {'$not':{'$regex':"1gen",'$options':'i'}}},
+                {"ADMIN_EMAIL" : {'$not':{'$regex':"north5special@gmail.com",'$options':'i'}}},
+                {"SCHOOL_NAME" : {'$not':{'$regex':"North Special School",'$options':'i'}}},
+
+               ]}},
+    #     {'$group':{'_id':'$FOUNDATION','pc':{'$sum':1},}},
+        {'$project':{'_id':1, 'OMS_ORDER_ID':'$OMS_ORDER_ID','FOUNDATION':'$FOUNDATION','LICENSE_TYPE':'$LICENSE_TYPE','DISTRICT':'$DISTRICT_NAME',
+                    'school':'$SCHOOL_NAME','CREATED_DATE':'$CREATED_DATE','ORDER_TYPE':'$ORDER_TYPE','status':'$STATUS'}}
+        ,{'$sort':{"CREATED_DATE":1}}
+    ])))
+
+    d5=DataFrame(list(db.oms_invoice.aggregate([
+        {"$match":
+         {
+            '$and':[
+               { "OMS_MASTER_ID.ADMIN_EMAIL" : {'$not':{'$regex':"1gen",'$options':'i'}}},
+                {"OMS_MASTER_ID.ADMIN_EMAIL" : {'$not':{'$regex':"north5special@gmail.com",'$options':'i'}}},
+                {"OMS_MASTER_ID.SCHOOL_NAME" : {'$not':{'$regex':"North Special School",'$options':'i'}}},
+
+               ]}},
+    #     {'$group':{'_id':'$FOUNDATION','pc':{'$sum':1},}},
+        {'$project':{'_id':1, "TOTAL_AMOUNT":'$TOTAL_AMOUNT','OMS_ORDER_ID':'$ORDER_ID','EMAIL':'$EMAIL',
+                  'INVOICE DATE':'$START_DATE','oms_upload_status':'$oms_upload_status','oms_master':'$OMS_MASTER_ID._id'}}
+    ])))
+    d6= pd.merge(d4,d5, on='OMS_ORDER_ID', how='outer')
+    d6=d6.replace({'ORDER_TYPE': {'R': 'RENEW', 'N': 'NEW ORDER'}})
+
+    d6['TOTAL_AMOUNT']=pd.to_numeric(d6['TOTAL_AMOUNT'])
+
+    Total_orders=d6['_id_x'].count()
+    Total_orders
+    Invoice_sent=d6['_id_y'].count()
+    Total_revenue=int(d6['TOTAL_AMOUNT'].sum())
+    Total_revenue
+
+    D1=d6.groupby('FOUNDATION').agg({'_id_x': ['count'], 'TOTAL_AMOUNT': ['sum']})
+    D1=D1.reset_index('inplace'==True)
+    D1.columns = D1.columns.get_level_values(0)
+    District=int(D1['TOTAL_AMOUNT'][0])
+    School=int(D1['TOTAL_AMOUNT'][1])
+
+
+    D2=d6.groupby('INVOICE DATE').agg({'_id_y': ['count'], 'TOTAL_AMOUNT': ['sum']})
+    D2=D2.reset_index('inplace'==True)
+    D2.columns = D2.columns.get_level_values(0)
+    D2['INVOICE DATE'] = pd.to_datetime(D2['INVOICE DATE'])
+    D2['INVOICE DATE'] = D2['INVOICE DATE'].astype(np.int64) / int(1e6)
+    D2['Cumulative_Amount'] = D2['TOTAL_AMOUNT'].cumsum()
+    DF1=D2[['INVOICE DATE','TOTAL_AMOUNT']]
+    TOTAL_AMOUNT=DF1.values.tolist()
+    DF2=D2[['INVOICE DATE','Cumulative_Amount']]
+    Cumulative=DF2.values.tolist()
+
+    Cards={'Total_revenue':Total_revenue,'Total_orders':Total_orders,'Invoice_sent':Invoice_sent,'School':School,'District':District}
+
+
+    Timeseries={'TOTAL_AMOUNT':TOTAL_AMOUNT,'Cumulative':Cumulative}
+
+
+    D3=d6.groupby('ORDER_TYPE').agg({'_id_x': ['count'], 'TOTAL_AMOUNT': ['sum']})
+    D3=D3.reset_index('inplace'==True)
+    D3.columns = D3.columns.get_level_values(0)
+    D3['TOTAL_AMOUNT']=D3['TOTAL_AMOUNT'].astype(int)
+#     D3=D3.astype(str)
+    Order_type=D3['ORDER_TYPE'].tolist()
+    TOTAL_AMOUNT=D3['TOTAL_AMOUNT'].tolist()
+    chart2 ={'Order_type':Order_type,'TOTAL_AMOUNT':TOTAL_AMOUNT}
+    data={'cards':Cards,'Timeseries':Timeseries,'chart2':chart2}
+    return json.dumps(data,cls=NumpyEncoder)
+
+
+@app.route('/oms_table')
+def oms_table():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    # collection = db.Temp_Access
+    d4=DataFrame(list(db.oms_master.aggregate([
+        {"$match":
+         {
+            '$and':[
+               { "ADMIN_EMAIL" : {'$not':{'$regex':"1gen",'$options':'i'}}},
+                {"ADMIN_EMAIL" : {'$not':{'$regex':"north5special@gmail.com",'$options':'i'}}},
+                {"SCHOOL_NAME" : {'$not':{'$regex':"North Special School",'$options':'i'}}},
+
+               ]}},
+    #     {'$group':{'_id':'$FOUNDATION','pc':{'$sum':1},}},
+        {'$project':{'_id':1, 'OMS_ORDER_ID':'$OMS_ORDER_ID','FOUNDATION':'$FOUNDATION','LICENSE_TYPE':'$LICENSE_TYPE','DISTRICT':'$DISTRICT_NAME',
+                    'school':'$SCHOOL_NAME','CREATED_DATE':'$CREATED_DATE','ORDER_TYPE':'$ORDER_TYPE','status':'$STATUS'}}
+        ,{'$sort':{"CREATED_DATE":1}}
+    ])))
+
+    d5=DataFrame(list(db.oms_invoice.aggregate([
+        {"$match":
+         {
+            '$and':[
+               { "OMS_MASTER_ID.ADMIN_EMAIL" : {'$not':{'$regex':"1gen",'$options':'i'}}},
+                {"OMS_MASTER_ID.ADMIN_EMAIL" : {'$not':{'$regex':"north5special@gmail.com",'$options':'i'}}},
+                {"OMS_MASTER_ID.SCHOOL_NAME" : {'$not':{'$regex':"North Special School",'$options':'i'}}},
+
+               ]}},
+    #     {'$group':{'_id':'$FOUNDATION','pc':{'$sum':1},}},
+        {'$project':{'_id':1, "TOTAL_AMOUNT":'$TOTAL_AMOUNT','OMS_ORDER_ID':'$ORDER_ID','EMAIL':'$EMAIL',
+                  'INVOICE DATE':'$START_DATE','oms_upload_status':'$oms_upload_status','oms_master':'$OMS_MASTER_ID._id'}}
+    ])))
+    d6= pd.merge(d4,d5, on='OMS_ORDER_ID', how='outer')
+    d6=d6.replace({'ORDER_TYPE': {'R': 'RENEW', 'N': 'NEW ORDER'}})
+
+    d6['TOTAL_AMOUNT']=pd.to_numeric(d6['TOTAL_AMOUNT'])
+
+    d6["NAME"] = d6["DISTRICT"] + d6["school"]
+    d7=d6[['FOUNDATION','NAME','CREATED_DATE','TOTAL_AMOUNT','LICENSE_TYPE','ORDER_TYPE','EMAIL']]
+
+
+
+    d7=d6[['FOUNDATION','NAME','CREATED_DATE','TOTAL_AMOUNT','LICENSE_TYPE','ORDER_TYPE','EMAIL']]
+    # d7['TOTAL_AMOUNT']=d7['TOTAL_AMOUNT'].fillna('')
+
+    d7=d7.fillna('')
+    data=d7.values.tolist()
+    
+    return json.dumps({'data':data})
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route('/partner_schoolwisefamilypracticecount_/')
 def PARTNER_schppcfamily():
@@ -7805,12 +7952,19 @@ def Executive_Dashboard():
     
     return render_template('Executive_Dashboard.html')
 
-@app.route('/Lead_Generation')
-def Lead_Generation():
+@app.route('/leadGeneration')
+def leadGeneration():
     if not g.user:
         return redirect(url_for('login'))
     
-    return render_template('Lead_Generation.html')
+    return render_template('leadGeneration.html')
+
+@app.route('/oms_dashboard')
+def oms_dashboard():
+    if not g.user:
+        return redirect(url_for('login'))
+    
+    return render_template('oms_dashboard.html')
 
 
 @app.route('/School_Analytics')
@@ -69206,6 +69360,55 @@ def dashboard_insights(dashtype):
     return json.dumps(dataf)
 
 # dashboard_insights('Executive_Summary')
+
+@app.route('/Lead_Generation')
+def lead_generation():
+
+    googleSheetId = '1PqiSqaWA4Gj8e8rTnMHq_WnKlOakdEps_RIKpdSrtHk'
+    worksheetName = 'Lead_Requests'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment=pd.read_csv(URL)
+
+    payment=payment[['S_No','Sub_title','Description','Date','Lead_Type','Conversion','Renewal_Date','Last_Payment_Amount']]
+    payment.fillna(0)
+
+    Total_lead_count=payment['Lead_Type'].count()
+    Total_conversion_count=payment['Conversion'].count()
+    Total_conversion_all_count=payment['Sub_title'].count()
+    Total_conversion_remaining_count=Total_conversion_all_count-Total_conversion_count
+
+    payment_lead=payment.groupby(['Lead_Type'])["S_No"].count().reset_index()
+    payment_date=payment.groupby(['Date'])["S_No"].count().reset_index()
+
+    Lead_Type_name=payment_lead['Lead_Type'].tolist()
+    Lead_Type_count=payment_lead['S_No'].tolist()
+
+    payment_date_date=payment_date['Date'].tolist()
+    payment_date_count=payment_date['S_No'].tolist()
+
+    data={'Total_lead_count':str(Total_lead_count),'Total_conversion_count':str(Total_conversion_count),
+          'Total_conversion_remaining_count':str(Total_conversion_remaining_count),
+          'Lead_Type_name':Lead_Type_name,'Lead_Type_count':Lead_Type_count,
+          'payment_date_date':payment_date_date,'payment_date_count':payment_date_count
+         }
+    return json.dumps(data)
+# lead_generation()
+
+@app.route('/Lead_Generation_Table')
+def lead_generation_table():
+    
+    googleSheetId = '1PqiSqaWA4Gj8e8rTnMHq_WnKlOakdEps_RIKpdSrtHk'
+    worksheetName = 'Lead_Requests'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    payment=pd.read_csv(URL)
+
+    payment=payment[['Sub_title','Description','Date','Lead_Type','Conversion','Renewal_Date','Last_Payment_Amount']]
+    payment=payment.fillna(0)
+
+    temp={'data':payment.values.tolist()}
+    
+    return json.dumps(temp)
+# lead_generation_table()
 
 @app.route('/Family_SURVEY')
 def Family_SURVEY():
