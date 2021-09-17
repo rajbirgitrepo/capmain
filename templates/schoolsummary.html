@@ -115,11 +115,11 @@
                 </div>
                 <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li style="left: 2px;
+                        <!-- <li style="left: 2px;
             top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true" style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i>
                             <p style="float: right;">Views</p>
                             <p id="count" style="float: right;margin-right: 3px;"></p>
-                        </li>
+                        </li>-->
                         <!--<li style="left: 10px;
             top: 34px;
             color: #fff;
@@ -384,7 +384,7 @@
 
         <div class="modal2-bg" style="display: none;"></div>
 
-        <div class="col-md-10" style="margin-bottom: 30px; margin-top: 20px;" title="" id="school_count_by_school_type">
+        <div class="col-md-10" style="margin-bottom: 30px; margin-top: 20px;" title="" id="school_count_by_school_type_LG">
             <div id="container7" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 0 0 20px 6px;">
             </div>
         </div>
@@ -392,7 +392,7 @@
         <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="user_count_by_school_type">
             <div id="containertotaluser" style="height: 400px; width: 120%; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
         </div>
-        <div class="col-md-10" style="margin-bottom: 30px; margin-top: 20px;" title="" id="school_count_by_USA_state">
+        <div class="col-md-10" style="margin-bottom: 30px; margin-top: 20px;" title="" id="school_count_by_school_type">
             <div class="select_Bt" style="width: 120%;">
                 <SELECT id="exc">
           <OPTION VALUE="1">USA</OPTION>
@@ -467,7 +467,7 @@
       </section>
     </div>-->
 
-        <div class="col-md-10" style="margin-bottom: 30px;margin-top: 30px;">
+        <div class="col-md-10" style="margin-bottom: 30px;margin-top: 30px;" title="" id="school_count_by_USA_state">
             <div class="select_Bt" style="width: 120%;">
                 <SELECT id="country">
             <OPTION VALUE='ALABAMA'>ALABAMA</OPTION>
@@ -549,12 +549,13 @@
             </div>
         </div>
     </section>
-    <script src="{{ url_for('static',filename='js/countapi.js') }}"></script>
+    <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
     <script src="{{ url_for('static',filename='js/search.js') }}"></script>
     <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
     <!-- partial -->
 
-    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
+<script src="{{ url_for('static',filename='js/script.js') }}"></script>
     <script src="{{ url_for('static',filename='js/schoolsummary2.js') }}"></script>
     <script src="{{ url_for('static',filename='js/excellentexport.js') }}"></script>
     <script src="{{ url_for('static',filename='js/map-tablescript.js') }}"></script>

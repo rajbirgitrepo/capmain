@@ -89,6 +89,7 @@ users.append(User(id=14,username='joan@innerexplorer.org',password='capxp2020',n
 users.append(User(id=15,username='dennette@innerexplorer.org',password='capxp2020',name='Dennette',nameinitial='D'))
 users.append(User(id=16,username='jhoulihan@innerexplorer.org',password='capxp2020',name='Janice',nameinitial='J'))
 users.append(User(id=17,username='lcahill@innerexplorer.org',password='capxp2020',name='Lisa',nameinitial='L'))
+users.append(User(id=18,username='ccassisa@innerexplorer.org',password='capxp2020',name='Christy',nameinitial='C'))
 
 app = Flask(__name__)
 app.secret_key = 'cap4g2020version10date8272020'
@@ -8375,7 +8376,7 @@ def Scoology():
     return render_template('Scoology.html')
 @app.route('/journeyprachis/<email>')
 def journeyprachischart(email):
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.audio_track_master
@@ -8427,7 +8428,7 @@ def journeyprachischart(email):
 @app.route('/family_table')
 def famtablenew():
     reader = geolite2.reader()
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@54.184.165.106:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote('F5tMazRj47cYqm33e') + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.user_master
@@ -14436,7 +14437,9 @@ def heat_csy_pc_teacher():
 
 @app.route('/districtheatmap/<districtid>/<startdate>/<enddate>')
 def heat_district(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
+    disdic={
+    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
+    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -16106,7 +16109,9 @@ def schppcfamily(districtid):
 
 @app.route('/schoolwisepracticecounttop20/<districtid>/<startdate>/<enddate>')
 def schwisepc(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
+    disdic={
+    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',    
+    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -16363,7 +16368,9 @@ def schwisepc(districtid,startdate,enddate):
 
 @app.route('/schoolwiseusercounttop20/<districtid>/<startdate>/<enddate>')
 def schwiseuc(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
+    disdic={
+    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',    
+    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -17476,7 +17483,9 @@ def attend_count_cards():
 
 @app.route('/monthwisepracticedistrict/<districtid>/<startdate>/<enddate>')
 def monthwisepc(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
+    disdic={
+    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',    
+    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -17773,7 +17782,9 @@ def monthwisepc(districtid,startdate,enddate):
 
 @app.route('/90daysuserpractising/<districtid>/<startdate>/<enddate>')
 def user_practice_90days(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
+    disdic={
+    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',    
+    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -18530,7 +18541,9 @@ def user_logins_90days(districtid):
 
 @app.route('/top20userspractisinginfo/<districtid>/<startdate>/<enddate>')
 def topusers_practice(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
+    disdic={
+    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',    
+    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -18696,7 +18709,9 @@ def topusers_practice(districtid,startdate,enddate):
 
 @app.route('/districtcardsinfo/<districtid>/<startdate>/<enddate>')
 def district_count_cards(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
+    disdic={
+    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',    
+    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -32911,9 +32926,17 @@ def other():
 
 def school_journey(emailid):
     graph={}
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
+    from datetime import datetime
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = MongoClient(mongo_uri)
-
+#     from datetime import datetime
+    today1= datetime.utcnow().replace(day=27) + timedelta(days=3)
+    print(today1)
+    tod1= today1+ timedelta(hours=4)
+    print(tod1)
+    start= tod1-timedelta(days=180)
+    start1=start.replace(day=1)
+    
     database = client["compass"]
     collection = database["user_master"]
     query = {}
@@ -32987,8 +33010,8 @@ def school_journey(emailid):
     dfatd = pd.DataFrame()
     try:
         username = urllib.parse.quote_plus('admin')
-        password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-        client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+        password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+        client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
         
         db=client.compass
         collection = db.audio_track_master.aggregate(
@@ -32996,7 +33019,7 @@ def school_journey(emailid):
              '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID._id':{"$in":email}},
                          
-              {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1)}}       
+              {'MODIFIED_DATE':{'$gte':start1}}       
               ]}},   
          
         {'$project':{"cursorStart" : 1.0, 
@@ -33043,12 +33066,22 @@ def school_journey(emailid):
         unique1=""
         prac=""
         tooo=""
-        month1=["Dec","Jan","Feb","Mar","Apr","May"]
+        import calendar
+        import datetime
+
+        MONTHS_NUM = 6
+        today_month = datetime.datetime.now().month
+        first_month = max(today_month - MONTHS_NUM, 0)
+        month1 = calendar.month_abbr[1:][first_month:today_month][::1]
+
+#         month1=["Dec","Jan","Feb","Mar","Apr","May"]
         unique1=[0,0,0,0,0,0,0,0,0,0]
         prac=[0,0,0,0,0,0,0,0,0,0]
         
-            
-    month12=["Dec","Jan","Feb","Mar","Apr","May"]
+    data4 = [['Jan', 1],['Feb', 2], ['Mar', 3], ['Apr', 4],['May', 5], ['Jun', 6], ['Jul', 7],['Aug', 8], ['Sep', 9], ['Oct', 10],['Nov', 11], ['Dec', 12]] 
+    df9 = pd.DataFrame(data4, columns = ['Monthname', 'Month'])   
+    month12=df9['Monthname'].tolist()
+#     month12=["Dec","Jan","Feb","Mar","Apr","May"]
     for i in month12:
         if i not in month1:
             month1.append(i)
@@ -33057,9 +33090,30 @@ def school_journey(emailid):
     hell=dict(zip(month1,unique1))
 #     print(hell)
     hell2=dict(zip(month1,prac))
-    month1=["Dec","Jan","Feb","Mar","Apr","May"]
-    unique1=[hell["Dec"],hell["Jan"],hell["Feb"],hell["Mar"],hell["Apr"],hell["May"]]
-    prac=[hell2["Dec"],hell2["Jan"],hell2["Feb"],hell2["Mar"],hell2["Apr"],hell2["May"]]
+    
+    
+     
+    import calendar
+    import datetime
+
+    MONTHS_NUM = 6
+    today_month = datetime.datetime.now().month
+    first_month = max(today_month - MONTHS_NUM, 0)
+    month1 = calendar.month_abbr[1:][first_month:today_month][::1]
+    prac=[]
+    unique1=[]
+    for i in month1:
+        
+        unique_=hell[i]
+        prac_=hell2[i]
+        prac.append(prac_)
+        unique1.append(unique_)
+       
+        
+#     month1=["Dec","Jan","Feb","Mar","Apr","May"]
+#     unique1=[hell["Dec"],hell["Jan"],hell["Feb"],hell["Mar"],hell["Apr"],hell["May"]]
+#     prac=[hell2["Dec"],hell2["Jan"],hell2["Feb"],hell2["Mar"],hell2["Apr"],hell2["May"]]
+    
     star_rating_cout=""
     try:
         collection = database["audio_feedback"]
@@ -33075,6 +33129,7 @@ def school_journey(emailid):
         star_rating_cout=0
     graph={'Star_5_Ratings_Recieved':[str(star_rating_cout)],'mindfulness_minutes':[str(total_mindfulnesminutes)],"schoolid":[str(school_id)],'school_name':[school_name],'state':[school_state],'city':[school_city],'country':[school_country],'user_count':[total_user],'school_practice_count':[total_practice],'month':month1,'unique_user':unique1,'practice_count':prac,'renewal_date':[expiry['SUBSCRIPTION_EXPIRE_DATE'][0].strftime("%d %b %Y ")]}
     data=[graph]
+#     print(hell['Sep'])
     return json.dumps(data)
 
 
@@ -35912,7 +35967,7 @@ def schoolsearch_em_id(name):
                     },
                      
              u"MODIFIED_DATE" : { 
-                 u"$gte" :  datetime.datetime(2020,8,1)
+                 u"$gte" :  csy_first_date()
             
         }
                 }
@@ -36195,7 +36250,7 @@ def schoolsearch_em_id(name):
                     },
                      
              u"MODIFIED_DATE" : { 
-                 u"$gte" :  datetime.datetime(2020,8,1)
+                 u"$gte" :  csy_first_date()
             
         }
                 }
@@ -36318,7 +36373,7 @@ def user_search_mongo(name):
 
     import urllib 
     import pandas as pd
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("I#L@teST^m0NGO_2o20!") + "@54.184.165.106:27017/"
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = MongoClient(mongo_uri)
     database = client["compass"]
     collection = database["user_master"]
@@ -36493,8 +36548,8 @@ def user_search_mongo(name):
 @app.route('/schoolsearch/<month>/<n>')
 def rating_month_info(month,n):
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection1 = db.audio_feedback
     collection2 = db.audio_track_master

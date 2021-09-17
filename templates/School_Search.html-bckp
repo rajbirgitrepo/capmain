@@ -598,7 +598,7 @@ opacity: 20%;
         <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-      <script src="{{ url_for('static',filename='js/countapi.js') }}"></script>
+      <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
       <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
              
       <script  src="{{ url_for('static',filename='js/script.js') }}"></script>

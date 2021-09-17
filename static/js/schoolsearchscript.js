@@ -1,38 +1,41 @@
 let str = window.location.href;
 console.log(str.substr(str.lastIndexOf("?")+1));
 var urlid = str.substr(str.lastIndexOf("?")+1);
-// if(urlid !== ''){
-//   URL = "/schoolsearchid/"+urlid
-//   $("#schoolname").empty();
-//   $("#practice").empty();
-//   $("#state").empty();
-//   $("#usercountse").empty();
-//   $("#adress").empty();
-//   $("#email").empty();
-//   $("#country").empty();
-//   $("#city").empty();
-//   $("#admin").empty();
-//   $("#ucount").empty();
-//   $("#pcount").empty();
-//   $("#mindfulness_minutes").empty();
-//   $("#ratings").empty();
-//   $("#school").empty();
-//   $("#city").empty();
-//   $("#state").empty();
-//   $("#country").empty();
-//   $("#signup").empty();
-//   $("#renewal").empty();
-//   $("#status").empty();
-//   console.log(URL);
-//   P(URL);
-//   $("#next").empty();
-//   $("#next1").empty();
-//   $("#btnExport").show();
-//   createDynamic(URL);
-// }
-// else{
-//   console.log("nohref");
-// }
+if(urlid !== ''){
+  URL = "/schoolsearchid/"+urlid
+  $("#schoolname").empty();
+  $("#practice").empty();
+  $("#state").empty();
+  $("#usercountse").empty();
+  $("#adress").empty();
+  $("#email").empty();
+  $("#country").empty();
+  $("#city").empty();
+  $("#admin").empty();
+  $("#ucount").empty();
+  $("#pcount").empty();
+  $("#mindfulness_minutes").empty();
+  $("#ratings").empty();
+  $("#school").empty();
+  $("#city").empty();
+  $("#state").empty();
+  $("#country").empty();
+  $("#signup").empty();
+  $("#renewal").empty();
+  $("#status").empty();
+  console.log(URL);
+  P(URL);
+  $("#next").empty();
+  $("#next1").empty();
+  $("#btnExport").show();
+  createDynamic(URL);
+}
+else if(urlid == "http://127.0.0.1:5000/School_Search"){
+  console.log("noID")
+}
+else{
+  console.log("nohref");
+}
 
 function createDynamic(url) {
 var settings = {
@@ -697,7 +700,7 @@ function jou2(url1){
     }
     else
     {
-      var a = document.getElementById("searchinputfamily").value;
+      var a = document.getElementById("familysearchinput").value;
       URL = "/familysearchid/"+a
     $("#fschoolname").empty();
     $("#fpractice").empty();
