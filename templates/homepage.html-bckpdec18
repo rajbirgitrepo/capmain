@@ -3,7 +3,7 @@ of Simple CSS Waves-->
 <html>
 <head>
   <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
-  <title>CAPXP 2020</title>
+  <title>CAPi6 2020</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
