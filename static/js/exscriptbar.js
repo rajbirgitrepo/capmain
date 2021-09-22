@@ -4,7 +4,7 @@ $(document).on('change', '#practice_trendChart', function() {
     $('#container1').empty();
     console.log(this.value)
     if (this.value == 'practice') {
-        document.getElementById('practinsight').title = 'your new title';
+        // document.getElementById('practinsight').title = 'your new title';
         playbackTrendChart2(this.value, 'Practice')
     } else {
         playbackTrendChart2(this.value, 'Playback')

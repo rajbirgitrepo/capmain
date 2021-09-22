@@ -360,7 +360,7 @@
             </li>
             <li class="active"><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
                 <ul class="side-nav-dropdown">
-                    <li class="active2"><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
+                    <!-- <li class="active2"><a href="NameEScore">DISTRICT ENGAGEMENT</a></li> -->
                     <li class="active2"><a href="Disctrictfilter">DISTRICT 360</a></li>
                     <li class="active2"><a href="partner">PARTNER PORTAL</a></li>
                     <li class="active2"><a href="Login_analytics">LOGIN ANALYTICS</a></li>
@@ -472,20 +472,17 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="box2" style="height: 125px;margin-top: 0px !important;">
-                            <div class=" col-md-2">
+                            <div class=" col-md-2" style="float: left;">
                                 <button class="select_button" onclick="modal2()">Select District</button>
                             </div>
-                            <div class=" col-md-8">
-                                <p style="font-size: 21px;margin: 28px;" id="districtid"></p>
+                            <div class=" col-md-7" style="float: left;">
+                                <p style="font-size: 21px;margin: 40px;" id="districtName"></p>
+                            </div>
+                            <div class=" col-md-3" style="margin-left: 5%;float: left;" id="imgdis">
                             </div>
                         </div>
                     </div>
-                    <div class=" col-md-3" style="margin-left: 5%;">
-                        <div class="box2 ">
-                            <p style="font-size: 10px;" id="" onclick="hi()">District Engagement Score</p>
-                            <p style="margin: 0 4px; font-size: 26px; cursor: pointer; " id="Districtid"></p>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </section>
@@ -494,25 +491,31 @@
         <section class="statistics">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class=" col-md-2" style="margin-left: 5%;" title="" id="district_engagement_score">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="" onclick="hi()">District Engagement Score</p>
+                            <p style="margin: 0 4px; font-size: 26px; cursor: pointer; " id="Districtid"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2" title="" id="active_users_percentage">
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="" onclick="hi()">Active Users (%) </p>
                             <p style="margin: 0 4px; font-size: 21px; " id="school"></p>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" title="" id="active_usage">
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="">Active Usage</p>
                             <p style="margin: 0 4px; font-size: 21px;  " id="teacher"></p>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" title="" id="recent_engagement">
                         <div class="box2 ">
                             <p style="font-size: 9px;" id="">Recent Engagement</p>
                             <p style="margin: 0 4px; font-size: 21px;  " id="practice"></p>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" title="" id="consistently_weekly_practices">
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="">Consistent Weekly Playback</p>
                             <p style="margin: 0 4px; font-size: 21px; " id="family"></p>
@@ -523,7 +526,7 @@
         </section>
         <div id="disdetails" style="display: none;">
         </div>
-        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" tile="" id="district_engagement_score">
+        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="">
             <div id="container" style="height: 1000px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
             </div>
         </div>
@@ -532,10 +535,10 @@
         <section class="charts">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-6" title="" id="recent_engagement">
+                    <div class="col-md-6">
                         <div id="container2" style=" border-radius: 20px; height: 600px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
                     </div>
-                    <div class="col-md-6" title="" id="consistently_weekly_practices">
+                    <div class="col-md-6">
                         <div id="container3" style=" border-radius: 20px;height: 600px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
                     </div>
                 </div>

@@ -65,7 +65,7 @@ $("#finaldate").text(f);
 $("#fromd").text(e);
 $("#tod").text(f);
 
-imgd('https://xp.innerexplorer.org/compass/styles/images/allnewportals/allnewportalsdistrict/sarasota.png');
+//imgd('https://xp.innerexplorer.org/compass/styles/images/allnewportals/allnewportalsdistrict/sarasota.png');
 
 function imgd(a) {
     console.log("iamge", a);
@@ -1144,6 +1144,7 @@ function cardcount(id, a, b) {
         url: URL,
         method: "GET",
     };
+    // console.log(url + "ankit");
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log("counts are fnctioning");

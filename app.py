@@ -8398,6 +8398,7 @@ def journeyprachischart(email):
                    { 'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
                    { 'USER_ID.EMAIL_ID':{'$ne':""}},
                    { 'USER_ID.schoolId._id':{"$in":ID}},
+                   {'MODIFIED_DATE':{'$gte':csy_first_date()}} ,
                     {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}]}},
             {"$match":
             {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
@@ -32972,6 +32973,9 @@ def school_journey(emailid):
     query["EMAIL_ID"] = {
         u"$not": Regex(u".*TEST.*", "i")
     }
+    query["EMAIL_ID"] = {
+        u"$not": Regex(u".*1gen.*", "i")
+    }
 
     query["IS_DISABLED"] = {
         u"$ne": u"Y"
@@ -33019,7 +33023,7 @@ def school_journey(emailid):
              '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID._id':{"$in":email}},
                          
-              {'MODIFIED_DATE':{'$gte':start1}}       
+             {'MODIFIED_DATE':{'$gte':csy_first_date()}} ,     
               ]}},   
          
         {'$project':{"cursorStart" : 1.0, 
@@ -35819,6 +35823,12 @@ def schoolsearch_em_id(name):
         query["USER_NAME"] = {
             u"$not": Regex(u".*TEST.*", "i")
         }
+        query["EMAIL_ID"] = {
+            u"$not": Regex(u".*TEST.*", "i")
+        }
+        query["EMAIL_ID"] = {
+            u"$not": Regex(u".*1gen.*", "i")
+        }
 
         query["IS_BLOCKED"] = {
             u"$ne": u"Y"
@@ -36100,6 +36110,12 @@ def schoolsearch_em_id(name):
         query["schoolId._id"] = ObjectId(name)
         #     query["EMAIL_ID"] = Regex(u".*amorgan@methacton\\.org.*", "i")
         query["USER_NAME"] = {
+            u"$not": Regex(u".*TEST.*", "i")
+        }
+        query["EMAIL_ID"] = {
+            u"$not": Regex(u".*1gen.*", "i")
+        }
+        query["EMAIL_ID"] = {
             u"$not": Regex(u".*TEST.*", "i")
         }
 
