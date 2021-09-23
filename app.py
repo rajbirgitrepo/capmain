@@ -55,6 +55,16 @@ from flask import Flask, make_response
 from flask import Flask,json, request, jsonify
 from dateutil.relativedelta import relativedelta
 
+#  new libraries to be imported 
+
+from pandas.tseries.holiday import USFederalHolidayCalendar
+from pandas.tseries.offsets import CustomBusinessDay
+from sklearn.preprocessing import StandardScaler
+import collections
+
+
+
+
 app = Flask(__name__)
 CORS(app)
 
@@ -90,6 +100,8 @@ users.append(User(id=15,username='dennette@innerexplorer.org',password='capxp202
 users.append(User(id=16,username='jhoulihan@innerexplorer.org',password='capxp2020',name='Janice',nameinitial='J'))
 users.append(User(id=17,username='lcahill@innerexplorer.org',password='capxp2020',name='Lisa',nameinitial='L'))
 users.append(User(id=18,username='ccassisa@innerexplorer.org',password='capxp2020',name='Christy',nameinitial='C'))
+users.append(User(id=19,username='arice@innerexplorer.org',password='capxp2020',name='Anitra',nameinitial='A'))
+
 
 app = Flask(__name__)
 app.secret_key = 'cap4g2020version10date8272020'
@@ -69480,6 +69492,490 @@ def lead_generation_table():
     
     return json.dumps(temp)
 # lead_generation_table()
+
+
+#<<<<<<<<<<<<<-----new code for E_score----------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+@app.route('/escores/<trackid>')
+
+
+def escore_overall(trackid):
+    def escore_school(trackid):
+        schoolcond_um={'schoolId._id':ObjectId(trackid)}
+        school_name_list=list(db_live.school_master.find({'_id':ObjectId(trackid)}))
+        school_name=school_name_list[0].get('NAME')
+
+        user_master_df=pd.DataFrame(list(db_live.user_master.aggregate(
+        [{"$match":{'$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'IS_DISABLED':{"$ne":'Y'}},
+                  {'IS_BLOCKED':{"$ne":'Y'}},
+                  {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                  {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                  {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                            schoolcond_um
+                           ]}},
+            {'$project':{
+                '_id':0,
+                'USER_ID':'$_id',
+                'USER_NAME':'$USER_NAME',
+                'EMAIL_ID':'$EMAIL_ID',
+                'SIGNUP_DATE':'$CREATED_DATE',
+                'SCHOOL_ID':'$schoolId._id',
+                'SCHOOL_NAME':'$schoolId.NAME',
+                'ROLE_ID':'$ROLE_ID.ROLE_ID'
+                }}
+
+            ])))
+
+        if user_master_df.empty:
+            score_output={
+            'SCHOOL_ID':trackid,
+            'SCHOOL_NAME':school_name,        
+            'ACTIVE_USER_SCORE_SCHOOL':0,
+                     'USAGE_SCORE_SCHOOL':0,
+                      'CWP_SCORE_SCHOOL':0,
+                      'RE_SCORE_SCHOOL':0,
+                      'E_SCORE_SCHOOL':0,
+                      'ACTIVE_SCHOOL':0
+            }
+
+            return score_output
+
+        audio_track_master_df=pd.DataFrame(list(db_live.audio_track_master.aggregate(
+        [{"$match":{
+                 '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                  {'cursorStart':{'$exists':1}},
+                  {'CURSOR_END':{'$exists':1}},
+                  {'USER_ID._id':{'$in':user_master_df['USER_ID'].tolist()}}       
+                  ]}},          
+                  {'$project':{
+                      '_id':0,
+                      'USER_ID':'$USER_ID._id',
+                      'PRACTICE_DATE':'$MODIFIED_DATE',
+                      'CURSOR_START':'$cursorStart',
+                      'CURSOR_END':'$CURSOR_END'
+                      }}             
+
+                  ])))
+
+        
+
+        # <<<<<<<<<<<<<<<<<<<<<<-----------------------------USAGE SCORE----------------->>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        if audio_track_master_df.empty:
+            score_output={
+            'SCHOOL_ID':trackid,
+            'SCHOOL_NAME':school_name,        
+            'ACTIVE_USER_SCORE_SCHOOL':0,
+                     'USAGE_SCORE_SCHOOL':0,
+                      'CWP_SCORE_SCHOOL':0,
+                      'RE_SCORE_SCHOOL':0,
+                      'E_SCORE_SCHOOL':0,
+                      'ACTIVE_SCHOOL':0
+            }
+
+            return score_output
+
+        audio_track_master_df['PRACTICE_DATE']=pd.to_datetime(audio_track_master_df['PRACTICE_DATE']).dt.date
+
+        practising_dates=audio_track_master_df.groupby('USER_ID')['PRACTICE_DATE'].apply(list).reset_index().rename(columns={'PRACTICE_DATE':'DATES_OF_PRACTICING'})
+
+        audio_track_master_df1=audio_track_master_df.groupby(['USER_ID']).agg({'PRACTICE_DATE':['min','max']
+                                                                              }).rename(columns={'min':'FIRST_PRAC_DATE','max':'LAST_PRAC_DATE'}).droplevel(axis=1, level=0).reset_index()
+
+
+
+        audio_track_master_df2=audio_track_master_df1.merge(practising_dates,how='left',on='USER_ID')
+
+        for i in range(len(audio_track_master_df2)):
+            new_value=list(set(audio_track_master_df2['DATES_OF_PRACTICING'][i]))
+            audio_track_master_df2['DATES_OF_PRACTICING'][i]=new_value
+
+        us_bd = CustomBusinessDay(calendar=USFederalHolidayCalendar())
+
+        BUSINESS_DAYS=[]
+        for i in range(len(audio_track_master_df2['FIRST_PRAC_DATE'])):
+            business_days=list(pd.date_range(start=audio_track_master_df2['FIRST_PRAC_DATE'][i],end=datetime.datetime.now().date(), freq=us_bd))
+            bd=[]
+            for j in range(len(business_days)):
+                bd.append(business_days[j].date())
+            BUSINESS_DAYS.append(bd)
+
+
+
+        audio_track_master_df2['BUSINESS_DAYS']=BUSINESS_DAYS
+
+        audio_track_master_df2['POSSIBLE_PRACTISING_DAYS']=''
+        for k in range(len(audio_track_master_df2['BUSINESS_DAYS'])):
+            possible_prac_dates=len(audio_track_master_df2['BUSINESS_DAYS'][k])
+            audio_track_master_df2['POSSIBLE_PRACTISING_DAYS'][k]=possible_prac_dates
+
+        audio_track_master_df2['TOTAL_PRACTICE_DAYS']=''
+        for l in range(len(audio_track_master_df2['DATES_OF_PRACTICING'])):
+            dys=len(list(set(audio_track_master_df2['DATES_OF_PRACTICING'][l]).intersection(audio_track_master_df2['BUSINESS_DAYS'][l])))
+            audio_track_master_df2['TOTAL_PRACTICE_DAYS'][l]=dys
+
+
+        final_data1=audio_track_master_df2
+
+        final_data1['USAGE_METRIC']=final_data1['TOTAL_PRACTICE_DAYS']/final_data1['POSSIBLE_PRACTISING_DAYS']
+
+
+        final_data1[['USAGE_METRIC_STANDARDISATION']] = StandardScaler().fit_transform(final_data1[['USAGE_METRIC']])
+
+        final_data1['USAGE_SCORE']=''
+        for i in range(len(final_data1['USAGE_METRIC_STANDARDISATION'])):
+            if final_data1['USAGE_METRIC_STANDARDISATION'][i]>=0:
+                uscore=(0.5+(final_data1['USAGE_METRIC_STANDARDISATION'][i]/max(final_data1['USAGE_METRIC_STANDARDISATION'])))/2*100
+                final_data1['USAGE_SCORE'][i]=round(uscore,0)
+            else:
+                uscore=((1-final_data1['USAGE_METRIC_STANDARDISATION'][i]/min(final_data1['USAGE_METRIC_STANDARDISATION']))/2)*100
+                final_data1['USAGE_SCORE'][i]=round(uscore,0)
+
+
+        # <<<<<<<<<<<<<<<<<<<<<<<<------------------CONSISTENT WEEKLY PRACTICE SCORE---------------------->>>>>>>>>>>>>>>>>>>>>>>>>
+
+        final_data2=final_data1
+
+        final_data2['WEEK_SINCE_FIRST_PRACTICE']=np.ceil(round((datetime.datetime.now().date()-final_data2['FIRST_PRAC_DATE'])/np.timedelta64(1,'W'),3))
+
+        PRACTISING_WEEK=[]
+        for i in range(len(final_data2)):
+            pw=[]
+            for j in range(len(final_data2['DATES_OF_PRACTICING'][i])):
+                week=np.ceil(round((final_data2['DATES_OF_PRACTICING'][i][j]-final_data2['FIRST_PRAC_DATE'][i])/datetime.timedelta(days=7),3))
+                if week==0:
+                    week=week+1
+                else:
+                    week=week
+                pw.append(week)
+            PRACTISING_WEEK.append(pw)
+
+
+        WEEK_PRAC_FREQ=[]
+        UNIQUE_WEEK_PRACTISED=[]
+        for i in range(len(PRACTISING_WEEK)):
+            WEEK_PRAC_FREQ.append(list(collections.Counter(PRACTISING_WEEK[i]).values()))
+            UNIQUE_WEEK_PRACTISED.append(list(collections.Counter(PRACTISING_WEEK[i]).keys()))
+
+
+        GAINED_POINTS=[]
+        for i in range(len(WEEK_PRAC_FREQ)):
+            points=[]
+            for j in range(len(WEEK_PRAC_FREQ[i])):
+                if WEEK_PRAC_FREQ[i][j]==1:
+                    point=1*WEEK_PRAC_FREQ[i][j]
+                elif WEEK_PRAC_FREQ[i][j]==2:
+                    point=3*WEEK_PRAC_FREQ[i][j]
+                elif WEEK_PRAC_FREQ[i][j]==3:
+                    point=10*WEEK_PRAC_FREQ[i][j]
+                elif WEEK_PRAC_FREQ[i][j]==4:
+                    point=15*WEEK_PRAC_FREQ[i][j]
+                else:
+                    point=20*WEEK_PRAC_FREQ[i][j]
+                points.append(point)
+            GAINED_POINTS.append(sum(points))
+
+
+        final_data2['PRACTISING_WEEK']=PRACTISING_WEEK
+        final_data2['UNIQUE_WEEK_PRACTISED']=UNIQUE_WEEK_PRACTISED
+        final_data2['WEEK_PRAC_FREQ']=WEEK_PRAC_FREQ
+        final_data2['GAINED_POINTS']=GAINED_POINTS
+        final_data2['CWP_SCORE']=round((final_data2['GAINED_POINTS']/(20*final_data2['WEEK_SINCE_FIRST_PRACTICE']))*100,0)
+        final_data2.loc[(final_data2['CWP_SCORE']>100),'CWP_SCORE'] = 100
+
+
+
+        # <<<<<<<<<<<<<<<<<<<<-------------------RECENT ENGAGEMENT SCORE------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        final_data3=final_data2
+
+        user_master_df['SIGNUP_DATE']=pd.to_datetime(user_master_df['SIGNUP_DATE']).dt.date
+
+        final_data3=user_master_df[['USER_ID','SIGNUP_DATE']].merge(final_data3,how='inner',on='USER_ID').reset_index(drop=True)
+
+        _30_day_data=[]
+        points_30_day=[]
+
+        _60_day_data=[]
+        points_60_day=[]
+
+        _180_day_data=[]
+        points_180_day=[]
+
+        _365_day_data=[]
+        points_365_day=[]
+
+        CSY_data=[]
+        points_csy_day=[]
+
+        Lifetime=[]
+        points_Lifetime=[]
+
+
+        for i in range(len(final_data3)):
+            if (datetime.datetime.now().date()-final_data3['SIGNUP_DATE'][i]).days>=30:
+                dates30=list(pd.date_range(start=datetime.datetime.now().date()-timedelta(days=30),end=datetime.datetime.now().date(), freq=us_bd))
+                dates30=[j.date() for j in dates30]
+                _30_days=len(list(set(final_data3['DATES_OF_PRACTICING'][i]).intersection(dates30)))
+                if (_30_days>0) and (_30_days<len(dates30)/6):
+                    points30=1
+                elif (_30_days==0):
+                    points30=0
+                else:
+                    points30=2
+            else:
+                _30_days='not eligible'
+                points30='not eligible'
+            _30_day_data.append(_30_days)
+            points_30_day.append(points30)
+
+
+
+        for i in range(len(final_data3)):
+            if (datetime.datetime.now().date()-final_data3['SIGNUP_DATE'][i]).days>=60:
+                dates60=list(pd.date_range(start=datetime.datetime.now().date()-timedelta(days=60),end=datetime.datetime.now().date(), freq=us_bd))
+                dates60=[j.date() for j in dates60]
+                _60_days=len(list(set(final_data3['DATES_OF_PRACTICING'][i]).intersection(dates60)))
+                if (_60_days>0) and (_60_days<len(dates60)/6):
+                    points60=1
+                elif (_60_days==0):
+                    points60=0
+                else:
+                    points60=2
+            else:
+                _60_days='not eligible'
+                points60='not eligible'        
+            _60_day_data.append(_60_days)
+            points_60_day.append(points60)
+
+
+
+        for i in range(len(final_data3)):
+            if (datetime.datetime.now().date()-final_data3['SIGNUP_DATE'][i]).days>=180:
+                dates180=list(pd.date_range(start=datetime.datetime.now().date()-timedelta(days=180),end=datetime.datetime.now().date(), freq=us_bd))
+                dates180=[j.date() for j in dates180]
+                _180_days=len(list(set(final_data3['DATES_OF_PRACTICING'][i]).intersection(dates180)))
+                if (_180_days>0) and (_180_days<len(dates180)/6):
+                    points180=1
+                elif (_180_days==0):
+                    points180=0
+                else:
+                    points180=2
+
+            else:
+                _180_days='not eligible'
+                points180='not eligible'
+
+            _180_day_data.append(_180_days)
+            points_180_day.append(points180)
+
+
+
+        for i in range(len(final_data3)):
+            if (datetime.datetime.now().date()-final_data3['SIGNUP_DATE'][i]).days>=365:
+                dates365=list(pd.date_range(start=datetime.datetime.now().date()-timedelta(days=365),end=datetime.datetime.now().date(), freq=us_bd))
+                dates365=[j.date() for j in dates365]
+                _365_days=len(list(set(final_data3['DATES_OF_PRACTICING'][i]).intersection(dates365)))
+                if (_365_days>0) and (_365_days<len(dates365)/6):
+                    points365=1
+                elif (_365_days==0):
+                    points365=0
+                else:
+                    points365=2
+            else:
+                _365_days='not eligible'
+                points365='not eligible'
+
+            _365_day_data.append(_365_days)
+            points_365_day.append(points365)
+
+
+        for i in range(len(final_data3)):
+            dates_csy=list(pd.date_range(start=csy_first_date().date(),end=datetime.datetime.now().date(), freq=us_bd))
+            dates_csy=[j.date() for j in dates_csy]
+            csy_days=len(list(set(final_data3['DATES_OF_PRACTICING'][i]).intersection(dates_csy)))
+            if (csy_days>0) and (csy_days<len(dates_csy)/6):
+                points_csy=1
+            elif (csy_days==0):
+                points_csy=0
+            else:
+                points_csy=2
+            CSY_data.append(csy_days)
+            points_csy_day.append(points_csy)
+
+
+
+
+
+        for i in range(len(final_data3)):
+            dates_lifetime=list(pd.date_range(start=final_data3['SIGNUP_DATE'][i],end=datetime.datetime.now().date(), freq=us_bd))
+            dates_lifetime=[j.date() for j in dates_lifetime]
+            lifetime_days=len(list(set(final_data3['DATES_OF_PRACTICING'][i]).intersection(dates_lifetime)))
+            if (lifetime_days>0) and (lifetime_days<len(dates_lifetime)/6):
+                points_lifetime=1
+            elif (lifetime_days==0):
+                points_lifetime=0
+            else:
+                points_lifetime=2
+
+            Lifetime.append(lifetime_days)
+            points_Lifetime.append(points_lifetime)
+
+
+
+
+        mergedata=[]
+        for m,n,o,p,q,r in zip(points_30_day,points_60_day,points_180_day,points_365_day,points_csy_day,points_Lifetime):
+            mergedata.append([m,n,o,p,q,r])
+
+
+        final_data3['RE_SCORE']=''
+        for i in range(len(mergedata)):
+            xs=[s for s,val in enumerate(mergedata[i]) if val!='not eligible']
+            check=len(xs)
+            if check>0:
+                re_score=(sum([mergedata[i][q] for q in xs])/(2*check))*100
+            else:
+                re_score=0
+            final_data3['RE_SCORE'][i]=round(re_score,0)
+
+
+        # <<<<<<<<<<<<<<<<------------------------------ACTIVE USER SCORE------------------------>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        days_since_signup=[]
+        for i in range(len(final_data3)):
+            d_snup=(datetime.datetime.now().date()-final_data3['SIGNUP_DATE'][i]).days
+            days_since_signup.append(d_snup)
+
+
+        ACTIVE_USER=[]
+        for i in range(len(days_since_signup)):
+            p_days=len(final_data3['DATES_OF_PRACTICING'][i])
+            if days_since_signup[i]>60:        
+                if p_days>=20:
+                    active_user=1
+                else:
+                    active_user=0
+            else:
+                if p_days>=round((days_since_signup[i]/60)*20,0):
+                    active_user=1
+                else:
+                    active_user=0
+
+            ACTIVE_USER.append(active_user)
+
+
+        final_data3['ACTIVE_USER']=ACTIVE_USER
+
+
+        ACTIVE_USER_SCORE_SCHOOL=round((len(final_data3[final_data3['ACTIVE_USER']>0])/len(user_master_df))*100,0)
+
+        USAGE_SCORE_SCHOOL=round(final_data3['USAGE_SCORE'].mean(),0)
+
+        CWP_SCORE_SCHOOL=round(final_data3['CWP_SCORE'].mean(),0)
+
+        RE_SCORE_SCHOOL=round(final_data3['RE_SCORE'].mean(),0)
+
+        E_SCORE_SCHOOL=round((ACTIVE_USER_SCORE_SCHOOL+USAGE_SCORE_SCHOOL+CWP_SCORE_SCHOOL+RE_SCORE_SCHOOL)/4,0)
+
+        if len(audio_track_master_df)>=5*len(user_master_df):
+
+            ACTIVE_SCHOOL=1
+        else:
+            ACTIVE_SCHOOL=0
+
+        score_output={
+            'SCHOOL_ID':trackid,
+            'SCHOOL_NAME':school_name,        
+            'ACTIVE_USER_SCORE_SCHOOL':ACTIVE_USER_SCORE_SCHOOL,
+                     'USAGE_SCORE_SCHOOL':USAGE_SCORE_SCHOOL,
+                      'CWP_SCORE_SCHOOL':CWP_SCORE_SCHOOL,
+                      'RE_SCORE_SCHOOL':RE_SCORE_SCHOOL,
+                      'E_SCORE_SCHOOL':E_SCORE_SCHOOL,
+                      'ACTIVE_SCHOOL':ACTIVE_SCHOOL  
+
+
+                     }
+
+        return score_output
+
+    if len(list(db_live.district_master.find({'_id':ObjectId(str(trackid))})))>0:
+        district_id=trackid
+        if district_id=='5f2609807a1c0000950bb45a':
+            district_name='LAUSD'
+        else:
+            districtname=list(db_live.district_master.find({'_id':ObjectId(district_id)}))
+            district_name=districtname[0].get('DISTRICT_NAME')
+            
+#         districtname=list(db_live.district_master.find({'_id':ObjectId(district_id)}))
+        
+        schoolids=db_live.user_master.distinct('schoolId._id',
+                                               
+                                               {'schoolId._id':{'$in':db_live.school_master.distinct('_id',                                               
+                                               {'CATEGORY':{'$regex':district_name,'$options':'i'}})}
+                                               })
+        df_s=[]
+        for ii in range(len(schoolids)):
+            schls= escore_school(str(schoolids[ii]))
+            df_s.append(schls)
+        schools_df=pd.DataFrame(df_s)
+        
+        ACTIVE_SCHOOL_SCORE=round(sum(schools_df['ACTIVE_SCHOOL'])/len(set(schoolids))*100,0)
+        E_SCORE=round((schools_df['ACTIVE_USER_SCORE_SCHOOL'].mean()+schools_df['USAGE_SCORE_SCHOOL'].mean()+schools_df['CWP_SCORE_SCHOOL'].mean()+schools_df['RE_SCORE_SCHOOL'].mean()+ACTIVE_SCHOOL_SCORE)/5)
+
+        temp={'ACTIVE_USER_SCORE':round(schools_df['ACTIVE_USER_SCORE_SCHOOL'].mean(),0),
+             'USAGE_SCORE':round(schools_df['USAGE_SCORE_SCHOOL'].mean(),0),
+              'CWP_SCORE':round(schools_df['CWP_SCORE_SCHOOL'].mean(),0),
+              'RE_SCORE':round(schools_df['RE_SCORE_SCHOOL'].mean(),0),
+              'ACTIVE_SCHOOL_SCORE':ACTIVE_SCHOOL_SCORE,
+              'E_SCORE':E_SCORE
+             }
+        
+        return json.dumps(temp)
+        
+    else:
+        df_single_s=[]        
+        schls= escore_school(trackid)
+        df_single_s.append(schls)
+        schools_df=pd.DataFrame(df_single_s)
+        temp={'ACTIVE_USER_SCORE':schools_df['ACTIVE_USER_SCORE_SCHOOL'][0],
+             'USAGE_SCORE':schools_df['USAGE_SCORE_SCHOOL'][0],
+              'CWP_SCORE':schools_df['CWP_SCORE_SCHOOL'][0],
+              'RE_SCORE':schools_df['RE_SCORE_SCHOOL'][0],
+              'E_SCORE':schools_df['E_SCORE_SCHOOL'][0]
+             }
+        
+        
+    return json.dumps(temp)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route('/Family_SURVEY')
 def Family_SURVEY():

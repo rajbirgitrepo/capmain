@@ -396,7 +396,8 @@
                 <a href="#">EXECUTIVE SUMMARY</a>
                 <ul class="side-nav-dropdown">
                     <li>
-                        <a href="Executive_Dashboard">CAP SUMMARY</a></li>
+                        <a href="Executive_Dashboard">CAP SUMMARY</a>
+                    </li>
                     <li><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
                     <li><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
                     <li><a href="aws_releases">COMPASS RELEASES</a></li>
@@ -474,7 +475,7 @@
                 </ul>
             </li>
             <li style="margin-top: 140px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
-            style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
+                        style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
             </li>
             <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
     </aside>
@@ -598,40 +599,45 @@
 
 
 
-        <div id="sticky-wrapper" style="border-radius: 20px;
+        <div title="" id="sticky-wrapper heat_map_360" style="border-radius: 20px;
         margin-top: 20px;
         box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
         background-color: #fff;
         margin: 20px;
-        padding: 10px;" title="" id="heat_map_360">
+        padding: 10px;">
             <select id="heat" style="margin-top: 7px;">
-          <option value="4" selected>Overall Playback Heat Map</option>
-          <option value="5">Teacher Wise Playback Heat Map</option>
-          <option value="6">Family Wise Playback Heat Map</option>
-          <option value="1" >Overall Active User Count</option>
-          <option value="2">Family Active User Count</option>
-          <option value="3">Teachers Active User Count</option>
-        </select>
+                <option value="4" selected>Overall Playback Heat Map</option>
+                <option value="5">Teacher Wise Playback Heat Map</option>
+                <option value="6">Family Wise Playback Heat Map</option>
+                <option value="1">Overall Active User Count</option>
+                <option value="2">Family Active User Count</option>
+                <option value="3">Teachers Active User Count</option>
+            </select>
             <p id="chartname" style="text-align: center;"></p>
             <div id="heat-map" class="table-header-design"></div>
         </div>
         <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="user_practice_history_360">
-            <div id="container2" style="height: 400px; width: 120%; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+            <div id="container2" style="height: 400px; width: 120%; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            </div>
         </div>
 
 
         <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="practice_trend_by_month_360">
-            <div id="container3" style="height: 400px; width: 120%; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+            <div id="container3" style="height: 400px; width: 120%; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            </div>
         </div>
         <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_school_user_count_360">
-            <div id="container4" style="height: 400px; width: 120%; border-radius: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+            <div id="container4" style="height: 400px; width: 120%; border-radius: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            </div>
         </div>
 
-        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_school_practice playback_count_360">
-            <div id="container6" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_school_practice_playback_count_360">
+            <div id="container6" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            </div>
         </div>
         <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_user_practice playback_count_360">
-            <div id="container5" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+            <div id="container5" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            </div>
         </div>
         <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
       <div id="container7"style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
@@ -649,7 +655,8 @@
                         <!-- <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"  download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a> -->
                         <div class="table-header">
                             <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
-                            <button class="btn close-new-tab btn-logion" onclick="gif2()" style="float: right;background-color: white;"><i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                            <button class="btn close-new-tab btn-logion" onclick="gif2()" style="float: right;background-color: white;"><i class="fa fa-times-circle-o"
+                                    aria-hidden="true"></i>
                             </button>
                         </div>
                         <div id="gif"></div>
