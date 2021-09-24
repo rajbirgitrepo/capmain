@@ -1553,14 +1553,14 @@ $(function() {
         {
             changeMonth: true,
             changeYear: true,
-            yearRange: "2015:2021",
+            yearRange: "2021:2021",
             dateFormat: "yy-mm-dd",
             onSelect: function(dateText, inst) {
                 $("#stardate").text(dateText);
             }
         });
     $("#datepicker").datepicker("setDate",
-        new Date(2015, 03, 01), )
+        new Date(2021, 07, 01), )
 });
 
 $(function() {
