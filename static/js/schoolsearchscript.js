@@ -1,7 +1,10 @@
 let str = window.location.href;
 console.log(str.substr(str.lastIndexOf("?") + 1));
 var urlid = str.substr(str.lastIndexOf("?") + 1);
-if (urlid !== '') {
+ if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1:5000/School_Search#") {
+    console.log("noID")
+}
+else if (urlid !== '') {
     URL = "/schoolsearchid/" + urlid
     $("#schoolname").empty();
     $("#practice").empty();
@@ -29,9 +32,7 @@ if (urlid !== '') {
     $("#next1").empty();
     $("#btnExport").show();
     createDynamic(URL);
-} else if (urlid == "http://127.0.0.1:5000/School_Search") {
-    console.log("noID")
-} else {
+}  else {
     console.log("nohref");
 }
 
@@ -211,6 +212,7 @@ function schoolsearch() {
         $("#status").empty();
         console.log(URL);
         P(URL);
+        escore(a);
         $("#next").empty();
         $("#next1").empty();
         $("#btnExport").show();
@@ -241,12 +243,49 @@ function schoolsearch() {
         $("#status").empty();
         console.log(URL);
         P(URL);
+        escore(a);
         $("#next").empty();
         $("#next1").empty();
         $("#btnExport").show();
         createDynamic(URL);
     }
 };
+
+
+function escore(a){
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url:"/escores/"+a,
+        method: "GET",
+        success: function() {
+            $("#error").empty()
+        },
+        error: function() {
+            $("#error").empty()
+            $("#error").append('<div style="background-color: #fff;color: #ff0033;width: 50%;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><button onclick="raisequery()" style="padding: 6px;background-color: #ff0033;color: #fff;float: right;border: 0;border-radius: 10px;font-size: 11px;">Raise Ticket</button><button onclick="dismiss()" style="padding: 6px;background-color: #fff;color: #ff0033;float: right;border: 0;border-radius: 10px;font-size: 11px;">Dismiss</button><p style="margin-top:4px;">Connection to this school data failed.</p></div>');
+        }
+    };
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(URL)
+        $("#schoolname").empty();
+        $("#practice").empty();
+        $("#state").empty();
+        $("#usercountse").empty();
+        $("#adress").empty();
+        $("#email").empty();
+        $("#country").empty();
+        $("#adress").text("ADDRESS: " + dataa.address);
+        $("#email").text("ADMIN EMAIL: " + dataa.admin_email);
+        $("#country").text("COUNTRY: " + dataa.country);
+        $("#city").text("CITY: " + dataa.city);
+        $("#admin").text("ADMIN NAME: " + dataa.admin_name);
+        $("#plan").text(dataa.plan);
+
+    });
+}
+
 
 function schoolsearch2() {
     var a = document.getElementById("searchinput").value;
@@ -680,7 +719,7 @@ function familysearch() {
     var a = document.getElementById("fsearchinputdescription").innerText;
     console.log(a);
     if (a !== '') {
-        URL = "/familysearchid/" + a
+        URL = "/family___journey_score/" + a
         $("#fschoolname").empty();
         $("#fpractice").empty();
         $("#fstate").empty();

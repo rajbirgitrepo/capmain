@@ -15,6 +15,7 @@ function myFunction() {
 }
 
 
+
 createboxes();
 
 function createboxes() {
@@ -40,9 +41,6 @@ function createDynamicDivcards(userList) {
     var dynamicDiv = '';
     console.log(userList)
 
-
-
-
     dynamicDiv += '<div class="col-md-2 card" style="border: none !important;"><div class=" portalBox" ><div class=" d-sm-flex justify-content-sm-between align-items-sm-center"><div class=" card-title text-s"><div onclick="distselect(\'' + userList[0] + '\'),imgd(\'' + userList[3] + '\')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()"><img src="' + userList[3] + '" class="img-responsive card_img"  alt="School"><p class="text-s" style="border-radius: 20px;background-color: #fafafa;">' + userList[1] + '</p></div></div></div></div></div>'
 
 
@@ -58,7 +56,7 @@ var currDate = d.getDate();
 
 var startDate = new Date(currYear, currMonth, currDate);
 console.log(startDate);
-var e = "2015-03-01";
+var e = "2021-08-01";
 var f = currYear + "-" + currMonth + "-" + currDate;
 $("#stardate").text(e);
 $("#finaldate").text(f);
@@ -1089,8 +1087,8 @@ function cards2(URL) {
 }
 distselect('5f2609807a1c0000950bb477');
 $("#disdetails").text('5f2609807a1c0000950bb477');
-
 function distselect(distid) {
+
     var a = document.getElementById("stardate").innerText;
     var b = document.getElementById("finaldate").innerText;
     $("#container").empty();
@@ -1112,9 +1110,13 @@ function distselect(distid) {
     $("#login").empty();
     $("#practice").empty();
     $("#family").empty();
+    $("#MINDFUL_MINUTES").empty();
+    $("#parentspractice").empty();
     $("#myDiv").empty();
     $("#myDiv2").empty();
     $("#disdetails").text(distid);
+    $("#gifload").empty();
+    $("#gifload").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
     var c = document.getElementById("disdetails").innerText;
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
@@ -1148,6 +1150,7 @@ function cardcount(id, a, b) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log("counts are fnctioning");
+        $("#gifload").empty();
         $("#school").text(dataa.schoolcount);
         $("#teacher").text(dataa.teachercount);
         $("#login").text(dataa.logincount);
