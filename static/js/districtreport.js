@@ -1153,8 +1153,8 @@ function cardcount(id, a, b) {
         $("#login").text(dataa.logincount);
         $("#practice").text(dataa.teacherpracticecount);
         $("#districtid").text(dataa.district);
-        $("#family").text(dataa.familycount);
         $("#MINDFUL_MINUTES").text(dataa.MINDFUL_MINUTES);
+        $("#family").text(dataa.familycount);
         $("#parentspractice").text(dataa.parentspracticecount);
 
     });
@@ -1567,7 +1567,7 @@ $(function() {
     $("#datepicker2").datepicker({
         changeMonth: true,
         changeYear: true,
-        yearRange: "2015:2021",
+        yearRange: "2021:2021",
         dateFormat: "yy-mm-dd",
         maxDate: new Date(),
         onSelect: function(dateText, inst) {
