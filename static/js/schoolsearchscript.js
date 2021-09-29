@@ -1,10 +1,9 @@
 let str = window.location.href;
 console.log(str.substr(str.lastIndexOf("?") + 1));
 var urlid = str.substr(str.lastIndexOf("?") + 1);
- if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1:5000/School_Search#") {
+if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1:5000/School_Search#") {
     console.log("noID")
-}
-else if (urlid !== '') {
+} else if (urlid !== '') {
     URL = "/schoolsearchid/" + urlid
     $("#schoolname").empty();
     $("#practice").empty();
@@ -32,7 +31,7 @@ else if (urlid !== '') {
     $("#next1").empty();
     $("#btnExport").show();
     createDynamic(URL);
-}  else {
+} else {
     console.log("nohref");
 }
 
@@ -217,6 +216,11 @@ function schoolsearch() {
         $("#next1").empty();
         $("#btnExport").show();
         createDynamic(URL);
+        $("#USAGE_SCORE").empty();
+        $("#ACTIVE_USER_SCORE").empty();
+        $("#CWP_SCORE").empty();
+        $("#E_SCORE").empty();
+        $("#RE_SCORE").empty();
         $("#searchinputdescription").empty();
     } else {
         var a = document.getElementById("searchinput").value;
@@ -252,11 +256,11 @@ function schoolsearch() {
 };
 
 
-function escore(a){
+function escore(a) {
     var settings = {
         async: true,
         crossDomain: true,
-        url:"/escores/"+a,
+        url: "/escores/" + a,
         method: "GET",
         success: function() {
             $("#error").empty()
@@ -269,19 +273,18 @@ function escore(a){
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(URL)
-        $("#schoolname").empty();
-        $("#practice").empty();
-        $("#state").empty();
-        $("#usercountse").empty();
-        $("#adress").empty();
-        $("#email").empty();
-        $("#country").empty();
-        $("#adress").text("ADDRESS: " + dataa.address);
-        $("#email").text("ADMIN EMAIL: " + dataa.admin_email);
-        $("#country").text("COUNTRY: " + dataa.country);
-        $("#city").text("CITY: " + dataa.city);
-        $("#admin").text("ADMIN NAME: " + dataa.admin_name);
-        $("#plan").text(dataa.plan);
+        $("#USAGE_SCORE").empty();
+        $("#ACTIVE_USER_SCORE").empty();
+        $("#CWP_SCORE").empty();
+        $("#E_SCORE").empty();
+        $("#RE_SCORE").empty();
+        $("#USAGE_SCORE").text(dataa.USAGE_SCORE);
+        $("#ACTIVE_USER_SCORE").text(dataa.ACTIVE_USER_SCORE);
+        $("#CWP_SCORE").text(dataa.CWP_SCORE);
+        $("#E_SCORE").text(dataa.E_SCORE);
+        $("#RE_SCORE").text(dataa.RE_SCORE);
+
+
 
     });
 }
@@ -311,6 +314,11 @@ function schoolsearch2() {
     $("#signup").empty();
     $("#renewal").empty();
     $("#status").empty();
+    $("#USAGE_SCORE").empty();
+    $("#ACTIVE_USER_SCORE").empty();
+    $("#CWP_SCORE").empty();
+    $("#E_SCORE").empty();
+    $("#RE_SCORE").empty();
     console.log(URL)
     $("#next").empty();
     $("#next1").empty();
@@ -401,22 +409,6 @@ function raisequery() {
     $("#error").append('<div style="background-color: #fff;color: green;width: 50%;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><button onclick="dismiss()" style="padding: 6px;background-color: #fff;color: #ff0033;float: right;border: 0;border-radius: 10px;font-size: 11px;">Dismiss</button><p style="margin-top:4px;">Your Query has been sent to Data Science Team and will be resolved asap.</p></div>');
 }
 
-// var settings = {
-//     "async": true,
-//     "crossDomain": true,
-//     "url": "/escores/" + a,
-//     "method": "GET"
-// }
-// $.ajax(settings).done(function(response) {
-//     var dataa = JSON.parse(response);
-//     console.log(a);
-//     $('#ACTIVE_USER_SCORE').text(dataa.ACTIVE_USER_SCORE);
-//     $('#CWP_SCORE').text(dataa.CWP_SCORE);
-//     $('#E_SCORE').text(dataa.E_SCORE);
-//     $('#RE_SCORE').text(dataa.RE_SCORE);
-//     $('#RE_SUSAGE_SCORECORE').text(dataa.USAGE_SCORE);
-
-// });
 
 function jou(url1) {
     var settings = {

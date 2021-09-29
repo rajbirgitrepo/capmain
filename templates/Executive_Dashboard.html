@@ -139,6 +139,14 @@
         bottom: -20px;
         top: auto;
     }
+    
+    div[title]:hover::after {
+        content: attr(title);
+        position: absolute;
+        top: -100%;
+        left: 0;
+        color: blue;
+    }
 </style>
 
 <script>

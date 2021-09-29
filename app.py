@@ -46971,7 +46971,9 @@ def Payment_Mode(startdate,enddate):
     "EMAIL_ID":"$USER_ID.EMAIL_ID"}}
     ,{"$unwind":"$Last_Payment_Date"}
     ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     payment_df1.replace(to_replace="NULL",value="NO INFO",inplace=True)
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
         'MONTGOMERY UPPER MIDDLE SCHOOL',
@@ -47219,7 +47221,10 @@ def Payment_History(startdate,enddate):
     "EMAIL_ID":"$USER_ID.EMAIL_ID"}}
     ,{"$unwind":"$Last_Payment_Date"}
     ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
+    
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
         'MONTGOMERY UPPER MIDDLE SCHOOL',
         'RIVER VALLEY ELEMENTARY',
@@ -47442,7 +47447,9 @@ def subtable(month):
     "EMAIL_ID":"$USER_ID.EMAIL_ID"}}
     ,{"$unwind":"$Last_Payment_Date"}
     ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
     'MONTGOMERY UPPER MIDDLE SCHOOL',
     'RIVER VALLEY ELEMENTARY',
@@ -47635,7 +47642,9 @@ def submonth():
     "EMAIL_ID":"$USER_ID.EMAIL_ID"}}
     ,{"$unwind":"$Last_Payment_Date"}
     ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
     'MONTGOMERY UPPER MIDDLE SCHOOL',
     'RIVER VALLEY ELEMENTARY',
@@ -47864,7 +47873,9 @@ def web_history_table(date):
     "EMAIL_ID":"$USER_ID.EMAIL_ID"}}
     ,{"$unwind":"$Last_Payment_Date"}
     ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
     'MONTGOMERY UPPER MIDDLE SCHOOL',
     'RIVER VALLEY ELEMENTARY',
@@ -48053,7 +48064,9 @@ def mobile_history_table(date):
     "EMAIL_ID":"$USER_ID.EMAIL_ID"}}
     ,{"$unwind":"$Last_Payment_Date"}
     ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
     'MONTGOMERY UPPER MIDDLE SCHOOL',
     'RIVER VALLEY ELEMENTARY',
@@ -50088,7 +50101,9 @@ def school_payment_csy():
         "STATE":"$USER_ID.schoolId.STATE","STATE_SHOT":"$USER_ID.schoolId.STATE_SHORT"}}
         ,{"$unwind":"$Last_Payment_Date"}
         ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
     'MONTGOMERY UPPER MIDDLE SCHOOL',
     'RIVER VALLEY ELEMENTARY',
@@ -50185,7 +50200,9 @@ def school_payment_csy_table(date):
         "STATE":"$USER_ID.schoolId.STATE","STATE_SHOT":"$USER_ID.schoolId.STATE_SHORT"}}
         ,{"$unwind":"$Last_Payment_Date"}
         ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
     'MONTGOMERY UPPER MIDDLE SCHOOL',
     'RIVER VALLEY ELEMENTARY',
@@ -50274,7 +50291,9 @@ def school_payment_map():
         "STATE":"$USER_ID.schoolId.STATE","STATE_SHOT":"$USER_ID.schoolId.STATE_SHORT"}}
         ,{"$unwind":"$Last_Payment_Date"}
         ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
     'MONTGOMERY UPPER MIDDLE SCHOOL',
     'RIVER VALLEY ELEMENTARY',
@@ -50365,7 +50384,9 @@ def school_payment_map_table(name):
         "STATE":"$USER_ID.schoolId.STATE","STATE_SHOT":"$USER_ID.schoolId.STATE_SHORT"}}
         ,{"$unwind":"$Last_Payment_Date"}
         ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
     'MONTGOMERY UPPER MIDDLE SCHOOL',
     'RIVER VALLEY ELEMENTARY',
@@ -50454,7 +50475,9 @@ def school_payment_weekly():
         "STATE":"$USER_ID.schoolId.STATE","STATE_SHOT":"$USER_ID.schoolId.STATE_SHORT"}}
         ,{"$unwind":"$Last_Payment_Date"}
         ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
     'MONTGOMERY UPPER MIDDLE SCHOOL',
     'RIVER VALLEY ELEMENTARY',
@@ -50563,7 +50586,9 @@ def school_payment_card():
         "STATE":"$USER_ID.schoolId.STATE","STATE_SHOT":"$USER_ID.schoolId.STATE_SHORT"}}
         ,{"$unwind":"$Last_Payment_Date"}
         ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
     'MONTGOMERY UPPER MIDDLE SCHOOL',
     'RIVER VALLEY ELEMENTARY',
@@ -50653,7 +50678,9 @@ def school_map_card():
         "STATE":"$USER_ID.schoolId.STATE","STATE_SHOT":"$USER_ID.schoolId.STATE_SHORT"}}
         ,{"$unwind":"$Last_Payment_Date"}
         ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
     'MONTGOMERY UPPER MIDDLE SCHOOL',
     'RIVER VALLEY ELEMENTARY',
@@ -69333,7 +69360,9 @@ def weekly_revanue(enddate):
     "EMAIL_ID":"$USER_ID.EMAIL_ID"}}
     ,{"$unwind":"$Last_Payment_Date"}
     ])
-    payment_df1= DataFrame(list(mydoc)).fillna("OTHERS")
+    payment_df1= DataFrame(list(mydoc))
+    payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
+    payment_df1= payment_df1.fillna('')
     payment_df1.replace(to_replace="NULL",value="NO INFO",inplace=True)
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
         'MONTGOMERY UPPER MIDDLE SCHOOL',
@@ -70551,11 +70580,10 @@ def lead_generation_table():
 
 
 def escore_overall(trackid):
-    # live server credentials
-    pd.options.mode.chained_assignment = None    
+    # live server credentials    
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
     db_live=client_live.compass   
-
+    pd.options.mode.chained_assignment = None
     def escore_school(trackid):
         schoolcond_um={'schoolId._id':ObjectId(trackid)}
         school_name_list=list(db_live.school_master.find({'_id':ObjectId(trackid)}))
@@ -70590,12 +70618,12 @@ def escore_overall(trackid):
             score_output={
             'SCHOOL_ID':trackid,
             'SCHOOL_NAME':school_name,        
-            'ACTIVE_USER_SCORE_SCHOOL':0,
-                     'USAGE_SCORE_SCHOOL':0,
-                      'CWP_SCORE_SCHOOL':0,
-                      'RE_SCORE_SCHOOL':0,
-                      'E_SCORE_SCHOOL':0,
-                      'ACTIVE_SCHOOL':0
+            'ACTIVE_USER_SCORE_SCHOOL':float(0),
+                     'USAGE_SCORE_SCHOOL':float(0),
+                      'CWP_SCORE_SCHOOL':float(0),
+                      'RE_SCORE_SCHOOL':float(0),
+                      'E_SCORE_SCHOOL':float(0),
+                      'ACTIVE_SCHOOL':float(0)
             }
 
             return score_output
@@ -70632,12 +70660,12 @@ def escore_overall(trackid):
             score_output={
             'SCHOOL_ID':trackid,
             'SCHOOL_NAME':school_name,        
-            'ACTIVE_USER_SCORE_SCHOOL':0,
-                     'USAGE_SCORE_SCHOOL':0,
-                      'CWP_SCORE_SCHOOL':0,
-                      'RE_SCORE_SCHOOL':0,
-                      'E_SCORE_SCHOOL':0,
-                      'ACTIVE_SCHOOL':0
+            'ACTIVE_USER_SCORE_SCHOOL':float(0),
+                     'USAGE_SCORE_SCHOOL':float(0),
+                      'CWP_SCORE_SCHOOL':float(0),
+                      'RE_SCORE_SCHOOL':float(0),
+                      'E_SCORE_SCHOOL':float(0),
+                      'ACTIVE_SCHOOL':float(0)
             }
 
             return score_output
@@ -70682,18 +70710,27 @@ def escore_overall(trackid):
             audio_track_master_df2['TOTAL_PRACTICE_DAYS'][l]=dys
 
 
-        final_data1=audio_track_master_df2
+        final_data1=audio_track_master_df2 
+        
+        final_data1['USAGE_METRIC']=''
+        for i in range(len(final_data1)):
+            if final_data1['POSSIBLE_PRACTISING_DAYS'][i]==0:
+                final_data1['USAGE_METRIC'][i]=0
+            else:
+                final_data1['USAGE_METRIC'][i]=final_data1['TOTAL_PRACTICE_DAYS'][i]/final_data1['POSSIBLE_PRACTISING_DAYS'][i]
+                
+                
 
-        final_data1['USAGE_METRIC']=final_data1['TOTAL_PRACTICE_DAYS']/final_data1['POSSIBLE_PRACTISING_DAYS']
-
+#         final_data1['USAGE_METRIC']=final_data1['TOTAL_PRACTICE_DAYS']/final_data1['POSSIBLE_PRACTISING_DAYS']
+        
         final_data1['USAGE_METRIC_STANDARDISATION']=''
         for kk in range(len(final_data1['USAGE_METRIC'])):
             svalue=(final_data1['USAGE_METRIC'][kk] - final_data1['USAGE_METRIC'].mean())/final_data1['USAGE_METRIC'].std()
             final_data1['USAGE_METRIC_STANDARDISATION'][kk]=svalue
-        
+            
 
 
-        # final_data1[['USAGE_METRIC_STANDARDISATION']] = StandardScaler().fit_transform(final_data1[['USAGE_METRIC']])
+#         final_data1['USAGE_METRIC_STANDARDISATION'] = StandardScaler().fit_transform(final_data1['USAGE_METRIC'])
 
         final_data1['USAGE_SCORE']=''
         for i in range(len(final_data1['USAGE_METRIC_STANDARDISATION'])):
@@ -70974,8 +71011,16 @@ def escore_overall(trackid):
 
     if len(list(db_live.district_master.find({'_id':ObjectId(str(trackid))})))>0:
         district_id=trackid
-        if district_id=='5f2609807a1c0000950bb45a':
-            district_name='LAUSD'
+        districtinfo={
+            '5f2609807a1c0000950bb45a':'LAUSD',
+            '5f2609807a1c0000950bb45c':'Comox Valley School District'
+        }
+        
+        if district_id in list(districtinfo):
+            district_name=districtinfo[district_id]
+        
+#         if district_id=='5f2609807a1c0000950bb45a':
+#             district_name='LAUSD'
         else:
             districtname=list(db_live.district_master.find({'_id':ObjectId(district_id)}))
             district_name=districtname[0].get('DISTRICT_NAME')

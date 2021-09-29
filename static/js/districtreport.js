@@ -1087,6 +1087,7 @@ function cards2(URL) {
 }
 distselect('5f2609807a1c0000950bb477');
 $("#disdetails").text('5f2609807a1c0000950bb477');
+
 function distselect(distid) {
 
     var a = document.getElementById("stardate").innerText;
@@ -1556,7 +1557,7 @@ $(function() {
         {
             changeMonth: true,
             changeYear: true,
-            yearRange: "2021:2021",
+            yearRange: "2015:2021",
             dateFormat: "yy-mm-dd",
             onSelect: function(dateText, inst) {
                 $("#stardate").text(dateText);
@@ -1570,7 +1571,7 @@ $(function() {
     $("#datepicker2").datepicker({
         changeMonth: true,
         changeYear: true,
-        yearRange: "2021:2021",
+        yearRange: "2015:2021",
         dateFormat: "yy-mm-dd",
         maxDate: new Date(),
         onSelect: function(dateText, inst) {
