@@ -146,7 +146,7 @@ $.ajax(settings).done(function(response) {
             lineWidth: 1,
             min: 0,
             title: {
-                text: "Practice User Count"
+                text: "Playback User Count"
             },
             stackLabels: {
                 enabled: false,
@@ -196,7 +196,7 @@ $.ajax(settings).done(function(response) {
                 data: dataa[1].bar2
 
             }, {
-                name: 'Practice User Count(CSY 2021-2022)',
+                name: 'Playback User Count(CSY 2021-2022)',
                 data: dataa[0].bar
             },
 
@@ -225,77 +225,54 @@ var settings = {
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-    console.log(dataa[0].bar, "data")
 
-    Highcharts.chart('container36', {
+    Highcharts.chart('container37', {
         chart: {
-            type: 'pie'
-        },
-        credits: {
-            enabled: false,
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            credits: {
+                enabled: false,
+            },
         },
         title: {
-            text: " Sentiment CSY"
-
-        },
-        colors: ['#8AE02B', '#01A451'],
-        xAxis: {
-            categories: dataa.Month,
-        },
-        yAxis: {
-            lineWidth: 1,
-            min: 0,
-            title: {
-                text: "Practice User Count"
-            },
-            stackLabels: {
-                enabled: false,
-                style: {
-                    fontWeight: 'bold',
-                    color: ( // theme
-                        Highcharts.defaultOptions.title.style &&
-                        Highcharts.defaultOptions.title.style.color
-                    ) || 'gray'
-                }
-            }
+            text: 'Sentiment CSY'
         },
         tooltip: {
-            headerFormat: '<b>{point.x}</b><br/>',
-            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
-        plotOptions: {
-            series: {
-                point: {
-
-                }
-            },
-            column: {
-                stacking: 'normal',
-                dataLabels: {
-                    enabled: false
-                }
+        accessibility: {
+            point: {
+                valueSuffix: '%'
             }
         },
-        legend: {
-            enabled: true,
-            itemStyle: {
-                fontSize: '10px',
-                fontWeight: '200'
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false,
+                    format: '<b>{point.name}</b>: {point.y}'
+                },
+                colors: [
+                    "#02A45A", "#03B761", "#05D36C", "#04C065", "#35D461",
+                ]
             }
         },
         series: [{
-                color: '#FFA500',
-                name: 'Negative',
-                data: dataa.donut.neg
-            },
-            {
-                color: '#01A451',
+            name: 'Sentiment CSY',
+            colorByPoint: true,
+            data: [{
                 name: 'Positive',
-                data: dataa.donut.pos
-            },
-
-
-        ]
+                y: dataa.donut.pos,
+                sliced: true,
+                selected: true
+            }, {
+                name: 'Negative',
+                y: dataa.donut.neg,
+            }, ]
+        }]
     });
 });
 
@@ -337,7 +314,7 @@ $.ajax(settings).done(function(response) {
             lineWidth: 1,
             min: 0,
             title: {
-                text: "Practice User Count"
+                text: "Playback User Count"
             },
             stackLabels: {
                 enabled: false,
@@ -398,7 +375,6 @@ var settings = {
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-    console.log(dataa.Playbacks, "data")
 
     Highcharts.chart('container38', {
         chart: {

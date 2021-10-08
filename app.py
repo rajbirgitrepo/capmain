@@ -44913,7 +44913,9 @@ def schoolrating_csy():
         {'RATING':{'$ne':0}},
         {'MODIFIED_DATE':{'$gte':csy_first_date()}}]}},
         
-    {'$group':{'_id':'$RATING' ,'count':{'$sum':1}}}
+    {'$group':{'_id':'$RATING' ,'count':{'$sum':1}}},
+           {'$sort':{'_id':-1}}
+        
     ])))
     rating=df['_id'].tolist()
     count=df['count'].tolist()
@@ -71920,6 +71922,1130 @@ def escore_overall(trackid):
         
         
     return json.dumps(temp)
+
+# DAILD
+@app.route('/Playback_Chart_daild')
+def day_playbacks():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
+    db=client.compass
+
+    mydatetime=datetime.datetime.utcnow()
+    # +timedelta(hours=4)
+    today_min=datetime.datetime.combine(mydatetime,datetime.time.min)
+    # +timedelta(hours=4)
+    today_max=datetime.datetime.combine(mydatetime, datetime.time.max)
+    # +timedelta(hours=4)
+
+
+    collection= db.audio_track_master
+    df_playback= DataFrame(list(collection.aggregate([{"$match":{
+    '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+    # {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+    #  {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+    {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+    {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+    {'MODIFIED_DATE': {'$gte':  today_min, '$lt':today_max}}
+    ]}},
+    {'$group':{'_id':{'$hour':{'date':'$MODIFIED_DATE'}}, 'Playbacks':{'$sum':1}
+    }}, {'$sort':{'_id':1}}
+    ])))
+
+
+    if df_playback.empty:
+        df= pf.DataFrame(columns=['Hour', 'Playbacks'])
+        for i in range(1):
+            df.loc[i]= ['None'],['No Practice have happened till now']
+            hr= df['Hour'].tolist()
+            rating=df['Playbacks'].tolist()
+            temp={"Hour":hr,"Playbacks":playback}
+
+    else:
+        hour=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+
+        count=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+        df_hour=pd.DataFrame({'hour':hour,'count':count})
+
+        df_merge=pd.merge(df_hour,df_playback, left_on='hour',right_on='_id', how='left')
+
+        df_fillna=df_merge.fillna(0)
+
+        df_fillna['Playbacks']=df_fillna['Playbacks'].astype(int)
+
+        df_final=df_fillna[['hour','Playbacks']]
+
+        df_final=df_final.sort_values(["hour","Playbacks"], ascending=(True,False))
+
+        hr= df_final['hour'].tolist()
+        playback=df_final['Playbacks'].tolist()
+
+        temp={"Hour":hr,"Playbacks":playback}
+
+        return json.dumps(temp)
+
+@app.route('/Feedback_Chart_daild')
+def day_hourly_feeds():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
+    db=client.compass
+
+    mydatetime=datetime.datetime.utcnow()
+    # +timedelta(hours=4)
+    today_min=datetime.datetime.combine(mydatetime,datetime.time.min)
+    # +timedelta(hours=4)
+    today_max=datetime.datetime.combine(mydatetime, datetime.time.max)
+    # +timedelta(hours=4)
+
+
+    collections= db.audio_feedback
+    df_feed=DataFrame(list(collections.aggregate([
+        {"$match":{'$and':[
+        {"USER.IS_DISABLED":{"$ne":"Y"}},     { "USER.IS_BLOCKED":{"$ne":"Y"}},
+        { "USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+         {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'MODIFIED_DATE': {'$gte':  today_min, '$lt':today_max}}, {'RATING':{'$ne':0}}
+            #         {'COMMENT':{'$nin':['',' ',None]}},
+
+    #         }]
+        ]}},
+    {'$group':{'_id':{'$hour':{'date':'$MODIFIED_DATE'}},'rating':{'$sum':1}}}, 
+        {'$sort':{'_id':1}}
+    ])))
+
+
+
+    if df_feed.empty:
+        df= pf.DataFrame(columns=['Hour', 'Rating'])
+        for i in range(1):
+            df.loc[i]= ['None'],['No Ratings have been given till now']
+            hr= df['Hour'].tolist()
+            rating=df['Rating'].tolist()
+            temp={"Hour":hr,"Rating":rating}
+
+    else:
+        hour=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+
+        count=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+        df_hour=pd.DataFrame({'hour':hour,'count':count})
+
+        df_merge=pd.merge(df_hour,df_feed, left_on='hour',right_on='_id', how='left')
+
+        df_fillna=df_merge.fillna(0)
+
+
+        df_fillna['rating']=df_fillna['rating'].astype(int)
+
+        df_final=df_fillna[['hour','rating']]
+
+        df_final=df_final.sort_values(["hour","rating"], ascending=(True,False))
+
+
+        hr= df_final['hour'].tolist()
+        rating=df_final['rating'].tolist()
+
+        temp={"Hour":hr,"Rating":rating}
+        return json.dumps(temp)
+
+
+# Sentiment Analysis
+from nltk.tokenize import word_tokenize
+from nltk.probability import FreqDist
+from nltk.corpus import stopwords
+from textblob import TextBlob, Word, Blobber    
+
+
+@app.route('/Sentiment_donut_dild')
+def donut_chart():
+    
+    clean_list=[]
+    news_headlines_senti = []
+    news_headlines_dict = {}
+    pnews_headlines=0
+    nnews_headlines=0
+    nenews_headlines = 0
+
+    mydatetime=datetime.datetime.utcnow()
+    # +timedelta(hours=4)
+    today_min=datetime.datetime.combine(mydatetime,datetime.time.min)
+    # +timedelta(hours=4)
+    today_max=datetime.datetime.combine(mydatetime, datetime.time.max)
+    # +timedelta(hours=4)
+
+
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_feedback
+    user_feed=[
+    {"$match":{'$and':[ {"USER.USER_NAME": { "$not": { "$regex": "test",'$options':'i'}}},
+    {"USER.USER_NAME":{ "$ne": ""}},
+    {"USER.EMAIL_ID":{ "$not": { "$regex": "test",'$options':'i'}}},
+    {"USER.EMAIL_ID":{ "$not": { "$regex": "1gen",'$options':'i'}}},
+    {'USER.EMAIL_ID':{ "$not": { "$regex": "tech@innerexplorer.org",'$options':'i'}}},
+    {"USER.EMAIL_ID":{ "$ne": ""}},{'USER.IS_BLOCKED':{"$ne":'Y'}}, {'USER.IS_DISABLED':{"$ne":'Y'}},
+       {'MODIFIED_DATE':{'$gte': today_min, '$lt':today_max}}, 
+    #                        {'RATING':{'$in':rating}},     
+    {'USER.INCOMPLETE_SIGNUP':{"$ne":'Y'}}
+    ]}},
+    { "$project": { "_id": "$USER._id", "USER_NAME": "$USER.USER_NAME","EMAIL": "$USER.EMAIL_ID", "RATING":1,
+    "LAST_COMMENT_DATE": "$MODIFIED_DATE", "AUDIO_NAME": "$AUDIO_ID.AUDIO_NAME", "NARRATOR_NAME": "$AUDIO_ID.NARRATEDBY",
+    "COMMENT":1, "PROGRAM_NAME": "$AUDIO_ID.PROGRAM_ID.PROGRAM_NAME"}}
+    ]
+    update_feed=list(collection.aggregate(user_feed))
+    df_feed=pd.DataFrame(update_feed).fillna("no info")
+
+    # list_of_names=df_feed["_id"].tolist()
+
+    collection1 = db.user_master
+    user_master=[
+    {"$match":{'$and':[ {"USER_NAME": { "$not": { "$regex": "test",'$options':'i'}}},
+    {"USER_NAME":{ "$ne": ""}},
+    {"EMAIL_ID":{ "$not": { "$regex": "test",'$options':'i'}}},
+    {"EMAIL_ID":{ "$not": { "$regex": "1gen",'$options':'i'}}},
+    {"EMAIL_ID":{ "$ne": ""}},  {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}
+    # ,{"_id":{"$in":list_of_names}}   
+    ]}},
+    { "$project": {"_id":"$_id",
+        "SCHOOL_NAME":"$schoolId.NAME", 'District_name':'$DISTRICT_ID.DISTRICT_NAME',
+    "CITY":"$schoolId.CITY","STATE":"$schoolId.STATE"}}
+    ]
+    update_user=list(collection1.aggregate(user_master))
+    df_user=pd.DataFrame(update_user).fillna("no info")
+
+    df01=pd.merge(df_feed,df_user,on="_id",how="left")
+
+    collection2 = db.subscription_master
+    user_sub=[
+    {"$match":{'$and':[{"USER_ID.USER_NAME": { "$not": { "$regex": "test",'$options':'i'}}},
+    {"USER_ID.USER_NAME":{ "$ne": ""}},
+    {"USER_ID.EMAIL_ID":{ "$not": { "$regex": "test",'$options':'i'}}},
+    {"USER_ID.EMAIL_ID":{ "$not": { "$regex": "1gen",'$options':'i'}}},
+    {"USER_ID.EMAIL_ID":{ "$ne": ""}},  
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, 
+    {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    # {"USER_ID._id":{"$in":list_of_names}}
+    ]}},
+    { "$project": {"_id":"$USER_ID._id","RENEWAL_DATE":"$SUBSCRIPTION_EXPIRE_DATE","PLAN_NAME":"$PLAN_ID.PLAN_NAME"}}]
+
+    update_sub=list(collection2.aggregate(user_sub))
+    df2_sub=pd.DataFrame(update_sub).fillna("no info")
+
+    df12=pd.merge(df01,df2_sub,on="_id",how="left")
+
+    collection_atm = db.audio_track_master
+    atm=[
+    {"$match":{'$and':[ {"USER_ID.USER_NAME": { "$not": { "$regex": "test",'$options':'i'}}},
+    {"USER_ID.USER_NAME":{ "$ne": ""}},
+    {"USER_ID.EMAIL_ID":{ "$not": { "$regex": "test",'$options':'i'}}},
+    {"USER_ID.EMAIL_ID":{ "$not": { "$regex": "1gen",'$options':'i'}}},
+    {"USER_ID.EMAIL_ID":{ "$ne": ""}},  
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, 
+    {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    # { "USER_ID._id":{"$in":list_of_names}},
+    ]}},
+    {"$group":{"_id": "$USER_ID._id","PRACTICE_COUNT":{"$sum":1}, 
+    "LAST_PRACTICE_DATE": {"$last": "$MODIFIED_DATE"},
+    }}
+    # { "$project": {"_id":"$USER_ID._id","PRACTICE_COUNT":1,"LAST_PRACTICE_DATE":1}}
+    ]
+    update_atm=list(collection_atm.aggregate(atm))
+    df3=pd.DataFrame(update_atm)
+
+
+    df123=pd.merge(df12,df3,on="_id",how="left")
+
+    def average(listt):
+        return sum(listt)/len(listt) 
+    df_rating=df123[df123['RATING']!=0]
+    listt=df_rating['RATING'].tolist()
+    Avg= round(average(listt),1)
+
+    xx=df123[df123["COMMENT"]!="no info"]
+    df_comments=xx[xx["COMMENT"]!=""]
+
+    comment_list=df_comments["COMMENT"].to_list()
+
+    # df_comments
+
+
+    newtexttoken=[]
+    for i in comment_list:
+        text_tokens= word_tokenize(i)
+        newtexttoken.append(text_tokens)
+    # newtexttoken    
+
+    newlist=[]
+    for i in newtexttoken:
+        for z in i:
+            newlist.append(z.lower())
+
+    # newlist 
+
+    st_words=stopwords.words('english')
+    st_words_spanish=stopwords.words('spanish')
+    tokens_without_sw= [word for word in newlist if not word in st_words]
+
+    # tokens_without_sw
+
+
+    token5=[]
+    for sentence in tokens_without_sw:
+        text3 = sentence.split('ing')
+
+        for i in text3:
+            token5.append(i)
+
+    words = [w.replace('liked', 'like') for w in token5]
+    words2 = [w.replace('relaxed', 'relax') for w in words]
+    words3 = [w.replace('relaxing', 'relax') for w in words2]
+    words4 = [w.replace('excitinging', 'excited') for w in words3]
+    # words
+
+    zxc=""
+    name=""
+    count=""
+
+    try:
+        xxx=[x for x in words4 if len(x)>3]
+        fdist=FreqDist(xxx)
+        df_fdist = pd.DataFrame.from_dict(fdist, orient='index')
+        df_fdist.columns = ['Frequency']
+        df_fdist.index.name = 'Term'
+        xc=df_fdist.sort_values(by='Frequency', ascending=False, na_position='first')
+        cc=xc[0:10]
+        name=cc.index.to_list()
+        count=cc["Frequency"].to_list()
+        zxc=' '.join(word for word in xxx)
+    except:
+        pass
+
+    for item in comment_list:
+        # trim
+        item = item.strip()
+        # Removing RT
+        item = item.replace('RT', '')
+        # Removing new line character
+        item = item.replace('\\n', '')
+        # Replace #word with word
+        news_headlines = re.sub(r'#([^\s]+)', r'\1', item)
+        # Convert @username to username
+        news_headlines = re.sub(r'@([^\s]+)', r'\1', item)
+        item = " ".join(re.findall("[a-zA-Z]+", item))
+        tmp_var = re.sub(r'^\S*\s', '', item)
+        clean_list.append(tmp_var)
+
+    for item in clean_list:
+        #print(item)
+        # create TextBlob object of passed news_headlines text
+        analysis = TextBlob(item)
+        # set sentiment
+        if analysis.sentiment.polarity > 0:
+            # saving sentiment of news_headlines
+            news_headlines_score = 'positive'
+            pnews_headlines = pnews_headlines + 1
+            news_headlines_dict[item] = news_headlines_score
+        elif analysis.sentiment.polarity == 0:
+            # saving sentiment of news_headlines
+            news_headlines_score = 'neutral'
+            nenews_headlines = nenews_headlines + 1
+            news_headlines_dict[item] = news_headlines_score
+        else:
+            # saving sentiment of news_headlines
+            news_headlines_score = 'negative'
+            nnews_headlines = nnews_headlines + 1
+            news_headlines_dict[item] = news_headlines_score
+
+
+    newssentiment=[]
+    for k, v in news_headlines_dict.items():
+        if v == "positive":
+            newssentiment.append({"sentiment":int(1),"text":k})
+        elif v == "negative":
+            newssentiment.append({"sentiment":int(-1),"text":k})
+        else:
+            newssentiment.append({"sentiment":int(0),"text":k})
+
+
+    newssentiment_dataframe=pd.DataFrame.from_dict(newssentiment)
+
+    neg = 100 * (nnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+    pos = 100 * (pnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+
+
+    donut={"donut":{"pos":round(pos, 2),"neg":round(neg, 2)}}
+
+    return json.dumps(donut)
+
+@app.route('/Feedback_card_dild')
+def day_feedback_card():
+    import datetime
+    import math
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection2=db.audio_feedback
+
+    mydatetime=datetime.datetime.utcnow()
+    yester= datetime.datetime.combine(mydatetime,datetime.time.min)
+    tod= datetime.datetime.combine(mydatetime,datetime.time.max)
+
+    start_15day=yester- timedelta(days=7)
+    startend= tod- timedelta(days=7)
+
+    #TEACHERS COMMENT PER FEEDBACK LAST WEEK
+    query1=[
+    {"$match":{'$and':[
+     {'USER.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    {"USER.IS_DISABLED":{"$ne":"Y"}},
+     { "USER.IS_BLOCKED":{"$ne":"Y"}},
+    { "USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+    { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+       {'MODIFIED_DATE':{'$gte':yester, '$lte':tod}}    ,    
+    #         {'COMMENT':{'$nin':['',' ',None]}},
+    {'RATING':{'$ne':0}}]}},
+
+    {'$group':{'_id':'null', 'rating':{'$sum':1}
+    }}
+    ]
+
+    commentsonfeed=list(collection2.aggregate(query1))
+    if len(commentsonfeed)>0:
+        commentsonfeedback=pd.DataFrame(commentsonfeed)
+        comments_per_feedback_teacher=commentsonfeedback[['rating']]
+    else:
+        comments_per_feedback_teacher=pd.DataFrame({'rating':[0]})
+
+
+    #PARENTS COMMENT PER FEEDBACK LAST WEEK
+    querya=[
+    {"$match":{'$and':[
+     {'USER.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+    {"USER.IS_DISABLED":{"$ne":"Y"}},
+     { "USER.IS_BLOCKED":{"$ne":"Y"}},
+    { "USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+    { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+       {'MODIFIED_DATE':{'$gte':yester, '$lte':tod}}    ,    
+    #        {'COMMENT':{'$nin':['',' ',None]}},
+    {'RATING':{'$ne':0}}]}},
+
+
+    {'$group':{'_id':'null', 'rating':{'$sum':1}
+    }}
+    ]
+
+    commentsonfeed2=list(collection2.aggregate(querya))
+    if len(commentsonfeed2)>0:
+        commentsonfeedback2=pd.DataFrame(commentsonfeed2)
+        comments_per_feedback_parents=commentsonfeedback2[['rating']]
+    else:
+        comments_per_feedback_parents=pd.DataFrame({'rating':[0]})
+
+
+
+    #TEACHERS COMMENT PER FEEDBACK before LAST WEEK
+    query4=[
+    {"$match":{'$and':[
+     {'USER.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    {"USER.IS_DISABLED":{"$ne":"Y"}},
+     { "USER.IS_BLOCKED":{"$ne":"Y"}},
+    { "USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+    { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+       {'MODIFIED_DATE':{'$gte':start_15day, '$lte':startend}}    ,   
+    #        {'COMMENT':{'$nin':['',' ',None]}},
+    {'RATING':{'$ne':0}}]}},
+
+    {'$group':{'_id':'null', 'rating':{'$sum':1}
+    }}
+    ]
+
+    commentsonfeed11=list(collection2.aggregate(query4))
+    if len(commentsonfeed11)>0:
+        commentsonfeedback11=pd.DataFrame(commentsonfeed11)
+        comments_per_feedback_before_last_week_teachers=commentsonfeedback11[['rating']]
+    else:
+        comments_per_feedback_before_last_week_teachers=pd.DataFrame({'rating':[0]})
+
+
+
+    #  PARENTS COMMENT PER FEEDBACK before LAST WEEK
+    queryB=[
+    {"$match":{'$and':[
+     {'USER.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+    {"USER.IS_DISABLED":{"$ne":"Y"}},
+     { "USER.IS_BLOCKED":{"$ne":"Y"}},
+    { "USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+    { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+       {'MODIFIED_DATE':{'$gte':start_15day, '$lt':startend}},    
+    #         {'COMMENT':{'$nin':['',' ',None]}},
+    {'RATING':{'$ne':0}}]}},
+
+
+    {'$group':{'_id':'null', 'rating':{'$sum':1}
+    }}
+    ]
+
+    commentsonfeed200=list(collection2.aggregate(queryB))
+    if len(commentsonfeed200)>0:
+        commentsonfeedback20=pd.DataFrame(commentsonfeed200)
+        comments_per_feedback_before_last_week_parents=commentsonfeedback20[['rating']]
+    else:
+        comments_per_feedback_before_last_week_parents=pd.DataFrame({'rating':[0]})
+
+
+
+    # AVERAGE FEEDBACK RATING LAST WEEK
+    query6=[
+    {"$match":{'$and':[
+    {"USER.IS_DISABLED":{"$ne":"Y"}},
+     { "USER.IS_BLOCKED":{"$ne":"Y"}},
+    { "USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+    { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+       {'MODIFIED_DATE':{'$gte':yester, '$lt':tod}}    ,    
+    #         {'COMMENT':{'$nin':['',' ',None]}},
+    {'RATING':{'$ne':0}}]}},
+    {'$project':{'_id':0, 'RATING':'$RATING'
+    }}
+    ]
+
+    avg_rating=list(collection2.aggregate(query6))
+    if len(avg_rating)>0:
+        avg_ratings=pd.DataFrame(avg_rating)
+        avg_ratings_lastweek=avg_ratings[['RATING']]
+        avg_ratings_last_week=pd.DataFrame({'avg_ratings_lastweek':round(avg_ratings_lastweek[avg_ratings_lastweek['RATING']!=0]['RATING'].mean(),1)}, index=[0])
+    else:
+        avg_ratings_lastweek=pd.DataFrame({'RATING':[0]})
+        avg_ratings_last_week=pd.DataFrame({'avg_ratings_lastweek':[0]})
+
+
+    query60=[
+    {"$match":{'$and':[
+    {"USER.IS_DISABLED":{"$ne":"Y"}},
+     { "USER.IS_BLOCKED":{"$ne":"Y"}},
+    { "USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+    { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+       {'MODIFIED_DATE':{'$gte':start_15day, '$lt':startend}}    ,   
+    #         {'COMMENT':{'$nin':['',' ',None]}},
+
+    {'RATING':{'$ne':0}}]}},
+
+    {'$project':{'_id':0, 'RATING':'$RATING'
+    }}
+    ]
+
+    avg_rate=list(collection2.aggregate(query60))
+    if len(avg_rate)>0:
+        avg_ratin=pd.DataFrame(avg_rate)
+        avg_ratings_before_lastweek=avg_ratin[['RATING']]
+        avg_ratings_beforee_last_week=pd.DataFrame({'avg_ratings_before_lastweek':round(avg_ratings_before_lastweek[avg_ratings_before_lastweek['RATING']!=0]['RATING'].mean(),1)}, index=[0])
+    else:
+        avg_ratings_before_lastweek=pd.DataFrame({'RATING':[0]})
+        avg_ratings_beforee_last_week=pd.DataFrame({'avg_ratings_before_lastweek':[0]})
+
+
+
+    TEACHER_Comment_per_feedbackchange=[]
+    teacher_PERCENTAGE_change=[]
+    if comments_per_feedback_before_last_week_teachers['rating'].iloc[0]> comments_per_feedback_teacher['rating'].iloc[0]:
+        xx=comments_per_feedback_before_last_week_teachers['rating'].iloc[0]-comments_per_feedback_teacher['rating'].iloc[0]
+        if comments_per_feedback_before_last_week_teachers['rating'].iloc[0]==0:
+            yy= round(xx/1*100,2)
+        else:
+            yy=xx/comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
+
+
+    #     if math.isnan(yy):
+    #         yy=0
+    #     else:
+    #         yy=yy
+    #     zz= round(yy*100,2)
+        TEACHER_Comment_per_feedbackchange.append('-1')
+        teacher_PERCENTAGE_change.append(yy)
+
+    elif comments_per_feedback_teacher['rating'].iloc[0] == comments_per_feedback_before_last_week_teachers['rating'].iloc[0]:
+        xx=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
+        yy= xx/comments_per_feedback_teacher['rating'].iloc[0]
+    #     if math.isnan(yy):
+    #         yy=0
+    #     else:
+    #         yy=yy
+    #     zz= round(yy*100,2)
+        TEACHER_Comment_per_feedbackchange.append('0')
+        teacher_PERCENTAGE_change.append(yy)
+
+    else:
+        pp=comments_per_feedback_teacher['rating'].iloc[0]-comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
+        if comments_per_feedback_before_last_week_teachers['rating'].iloc[0]==0:
+            qq= round(pp/1*100,2)
+        else:
+            qq= pp/comments_per_feedback_before_last_week_teachers['rating'].iloc[0]
+
+
+    #     if math.isnan(qq):
+    #         qq=0
+    #     else:
+    #         qq=qq 
+    #     rr=round(qq*100,2)
+        TEACHER_Comment_per_feedbackchange.append('1')
+        teacher_PERCENTAGE_change.append(qq)
+
+    import math
+    teacher_PERCENTAGE_change=[0 if math.isnan(i) else i for i in teacher_PERCENTAGE_change] 
+
+
+    PARENT_Comment_per_feedbackchange=[]
+    parent_PERCENTAGE_change=[]
+    if comments_per_feedback_before_last_week_parents['rating'].iloc[0]> comments_per_feedback_parents['rating'].iloc[0]:
+        pp=comments_per_feedback_before_last_week_parents['rating'].iloc[0]- comments_per_feedback_parents['rating'].iloc[0]
+        if comments_per_feedback_before_last_week_parents['rating'].iloc[0]==0:
+            qq=round(pp/1*100,2)
+        else:
+            qq= pp/comments_per_feedback_before_last_week_parents['rating'].iloc[0]
+    #     if math.isnan(qq):
+    #         qq=0
+    #     else:
+    #         qq=qq 
+    #     rr=round(qq*100,2)
+        PARENT_Comment_per_feedbackchange.append('-1')
+        parent_PERCENTAGE_change.append(qq)
+
+    elif comments_per_feedback_parents['rating'].iloc[0] == comments_per_feedback_before_last_week_parents['rating'].iloc[0]:
+        pp=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
+        qq= pp/comments_per_feedback_parents['rating'].iloc[0]
+    #     if math.isnan(qq):
+    #         qq=0
+    #     else:
+    #         qq=qq 
+    #     rr=round(qq*100,2)
+        PARENT_Comment_per_feedbackchange.append('0')
+        parent_PERCENTAGE_change.append(qq)
+
+    else:
+        pp=comments_per_feedback_parents['rating'].iloc[0]-comments_per_feedback_before_last_week_parents['rating'].iloc[0]
+        if comments_per_feedback_before_last_week_parents['rating'].iloc[0]==0:
+            qq= round(pp/1*100,2)
+        else:
+            qq= pp/comments_per_feedback_before_last_week_parents['rating'].iloc[0]
+
+
+    #     if math.isnan(qq):
+    #         qq=0
+    #     else:
+    #         qq=qq 
+    #     rr=round(qq*100,2)
+        PARENT_Comment_per_feedbackchange.append('1')
+        parent_PERCENTAGE_change.append(qq)
+
+    import math
+    parent_PERCENTAGE_change=[0 if math.isnan(i) else i for i in parent_PERCENTAGE_change] 
+
+
+
+    Average_FEEDBACK_Rating_change=[]
+    Average_feedback_PERCENTAGE=[]
+    if avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]> avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]:
+        aa=avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]- avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
+        if avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]==0:
+            bb= round(aa/1*100,2)
+        else:
+            bb= aa/avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
+
+
+    #     if math.isnan(bb):
+    #         bb=0
+    #     else:
+    #         bb=bb            
+    #     cc= round(bb*100,2)
+        Average_FEEDBACK_Rating_change.append('-1')
+        Average_feedback_PERCENTAGE.append(bb)
+
+
+    elif avg_ratings_last_week['avg_ratings_lastweek'].iloc[0] == avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]:
+        aa=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
+        bb= aa/avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]
+    #     if math.isnan(bb):
+    #         bb=0
+    #     else:
+    #         bb=bb            
+    #     cc= round(bb*100,2)
+        Average_FEEDBACK_Rating_change.append('0')
+        Average_feedback_PERCENTAGE.append(bb)
+
+    else:
+        aa=avg_ratings_last_week['avg_ratings_lastweek'].iloc[0]-avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
+        if avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]==0:
+            bb= round(aa/1*100,2)
+        else:
+            bb= aa/avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].iloc[0]
+
+
+    #     if math.isnan(bb):
+    #         bb=0
+    #     else:
+    #         bb=bb            
+    #     cc= round(bb*100,2)
+
+        Average_FEEDBACK_Rating_change.append('1')
+        Average_feedback_PERCENTAGE.append(bb)
+
+
+
+    data_final=pd.DataFrame({'TEACHER_FEEDBACK_RATING_LAST_WEEK':comments_per_feedback_teacher['rating'].tolist(),
+                             'TEACHER_FEEDBACK_RATING_BEFORE_LAST_WEEK':comments_per_feedback_before_last_week_teachers['rating'].tolist(),
+
+    'PARENT_FEEDBACK_RATING_LAST_WEEK':comments_per_feedback_parents['rating'].tolist(),
+    'PARENT_FEEDBACK_RATING_BEFORE_LAST_WEEK':comments_per_feedback_before_last_week_parents['rating'].tolist(),
+
+     'avg_ratings_before_lastweek':avg_ratings_beforee_last_week['avg_ratings_before_lastweek'].tolist(),
+     'Average_Rating_lastweek':avg_ratings_last_week['avg_ratings_lastweek'].tolist(),
+
+      'TEACHER_Comment_per_feedbackchange':TEACHER_Comment_per_feedbackchange,
+       'teacher_PERCENTAGE_change':teacher_PERCENTAGE_change,                      
+      'PARENT_Comment_per_feedbackchange':PARENT_Comment_per_feedbackchange,
+       'parent_PERCENTAGE_change':parent_PERCENTAGE_change,                      
+      'Average_FEEDBACK_Rating_change':Average_FEEDBACK_Rating_change,
+       'Average_feedback_PERCENTAGE':Average_feedback_PERCENTAGE                   
+                                })   
+
+
+    temp={}
+    for j in range(len(data_final.columns)):
+        key = data_final.columns[j]
+        value = [str(data_final[data_final.columns[j]].iloc[0])]
+        temp.update({key:value})
+        #     print(temp)
+    return json.dumps(temp)
+
+
+@app.route('/Playback_card_dild')
+def day_practice_card():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
+    db=client.compass
+    collection1= db.audio_track_master
+    mydatetime=datetime.datetime.utcnow()
+    #     -timedelta(hours=24)
+    yester= datetime.datetime.combine(mydatetime,datetime.time.min)
+    #     - timedelta(days=1)
+    tod= datetime.datetime.combine(mydatetime,datetime.time.max)
+    start_15day=yester- timedelta(days=7)
+    startend= tod- timedelta(days=7)
+    print(start_15day)
+    print(startend)
+
+    qr1=[{"$match":{
+    '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'MODIFIED_DATE':{'$gte': yester, '$lt':tod
+    }},
+    ]}},
+
+    {'$group':{'_id':'null', 
+
+    'parents_playback_24hr': {'$sum':{'$cond':[{'$eq':['$USER_ID.ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+    'teachers_playback_24hr': {'$sum':{'$cond':[{'$ne':['$USER_ID.ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+    'total_playback_24hr': {'$sum':1}            
+    }}]
+
+    list1= list(collection1.aggregate(qr1))
+    df_atm1= DataFrame(list1)
+    df_atm1[['parents_playback_24hr', 'teachers_playback_24hr','total_playback_24hr']]
+
+
+
+
+    qr2=[{"$match":{
+    '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'MODIFIED_DATE':{'$gte':start_15day
+                , '$lte': startend
+    }},
+    ]}},
+
+    {'$group':{'_id':'null', 
+
+    'parents_playback_48hrs': {'$sum':{'$cond':[{'$eq':['$USER_ID.ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+    'teachers_playback_48hrs': {'$sum':{'$cond':[{'$ne':['$USER_ID.ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+    'total_playback_48hrs': {'$sum':1}            
+    }}]
+
+    list2= list(collection1.aggregate(qr2))
+    df_atm2= DataFrame(list2)
+    df_atm2[['parents_playback_48hrs', 'teachers_playback_48hrs','total_playback_48hrs']]
+
+
+
+
+    PARENTSCHANGE=[]
+    PARENT_percentagechange=[]
+    if df_atm2['parents_playback_48hrs'].iloc[0] > df_atm1['parents_playback_24hr'].iloc[0]:
+        xx=df_atm2['parents_playback_48hrs'].iloc[0]-df_atm1['parents_playback_24hr'].iloc[0]
+        if df_atm2['parents_playback_48hrs'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:
+            yy=xx/df_atm2['parents_playback_48hrs'].iloc[0]
+
+    #         if math.isnan(yy):
+    #             yy=0
+    #         else:
+    #             yy=yy
+    #         zz= round(yy*100,2)
+        PARENTSCHANGE.append('-1')
+        PARENT_percentagechange.append(yy)
+
+    elif df_atm2['parents_playback_48hrs'].iloc[0] == df_atm1['parents_playback_24hr'].iloc[0]:
+        xx=df_atm2['parents_playback_48hrs'].iloc[0]-df_atm1['parents_playback_24hr'].iloc[0]
+        yy= xx/df_atm2['parents_playback_48hrs'].iloc[0]
+        if math.isnan(yy):
+            yy=0
+        else:
+            yy=yy
+        zz= round(yy*100,2)
+        PARENTSCHANGE.append('0')
+        PARENT_percentagechange.append(zz)
+
+    else:
+        xx=df_atm1['parents_playback_24hr'].iloc[0]-df_atm2['parents_playback_48hrs'].iloc[0]
+        if df_atm2['parents_playback_48hrs'].iloc[0]==0:
+            yy= round(xx/1*100,2)
+        else:
+            yy= xx/df_atm2['parents_playback_48hrs'].iloc[0]
+
+    #         if math.isnan(yy):
+    #             yy=0
+    #         else:
+    #             yy=yy
+    #         zz= round(yy*100,2)
+        PARENTSCHANGE.append('1')
+        PARENT_percentagechange.append(yy)
+
+
+
+    TEACHERSCHANGE=[]
+    TEACHER_percentagechange=[]
+    if df_atm2['teachers_playback_48hrs'].iloc[0] > df_atm1['teachers_playback_24hr'].iloc[0]:
+        aa=df_atm2['teachers_playback_48hrs'].iloc[0]-df_atm1['teachers_playback_24hr'].iloc[0]
+        if df_atm2['teachers_playback_48hrs'].iloc[0]==0:
+            bb=round(aa/1*100,2)
+        else:            
+            bb= aa/df_atm2['teachers_playback_48hrs'].iloc[0]   
+    #         if math.isnan(bb):
+    #             bb=0
+    #         else:
+    #             bb=bb
+    #         cc= round(bb*100,2)
+        TEACHERSCHANGE.append('-1')
+        TEACHER_percentagechange.append(bb)
+
+    elif df_atm2['teachers_playback_48hrs'].iloc[0] == df_atm1['teachers_playback_24hr'].iloc[0]:
+        aa=df_atm2['teachers_playback_48hrs'].iloc[0]-df_atm1['teachers_playback_24hr'].iloc[0]
+        bb= aa/df_atm2['teachers_playback_48hrs'].iloc[0]
+        if math.isnan(bb):
+            bb=0
+        else:
+            bb=bb
+        cc= round(bb*100,2)
+        TEACHERSCHANGE.append('0')
+        TEACHER_percentagechange.append(cc)
+
+
+    else:
+        aa=df_atm1['teachers_playback_24hr'].iloc[0]-df_atm2['teachers_playback_48hrs'].iloc[0]
+        if df_atm2['teachers_playback_48hrs'].iloc[0]==0:
+            bb= round(aa/1*100,2)
+        else:
+
+            bb= aa/df_atm2['teachers_playback_48hrs'].iloc[0]
+    #         if math.isnan(bb):
+    #             bb=0
+    #         else:
+    #             bb=bb
+    #         cc= round(bb*100,2)
+        TEACHERSCHANGE.append('1')
+        TEACHER_percentagechange.append(bb)
+
+
+    TOTALCHANGE=[]
+    TOTAL_percentagechange=[]
+    if df_atm2['total_playback_48hrs'].iloc[0] > df_atm1['total_playback_24hr'].iloc[0]:
+        pp=df_atm2['total_playback_48hrs'].iloc[0]-df_atm1['total_playback_24hr'].iloc[0]
+        if df_atm2['total_playback_48hrs'].iloc[0]==0:
+            qq= round(pp/1*100,2)
+        else:
+
+            qq= pp/df_atm2['total_playback_48hrs'].iloc[0]
+    #         if math.isnan(qq):
+    #             qq=0
+    #         else:
+    #             qq=qq
+    #         rr= round(qq*100,2)
+        TOTALCHANGE.append('-1')
+        TOTAL_percentagechange.append(qq)
+
+
+    elif df_atm2['total_playback_48hrs'].iloc[0] == df_atm1['total_playback_24hr'].iloc[0]:
+        pp=df_atm2['total_playback_48hrs'].iloc[0]-df_atm1['total_playback_24hr'].iloc[0]
+        qq= pp/df_atm2['total_playback_48hrs'].iloc[0]
+        if math.isnan(qq):
+            qq=0
+        else:
+            qq=qq
+        rr= round(qq*100,2)
+        TOTALCHANGE.append('0')
+        TOTAL_percentagechange.append(rr)
+
+
+    else: 
+        pp=df_atm1['total_playback_24hr'].iloc[0]-df_atm2['total_playback_48hrs'].iloc[0]
+        if df_atm2['total_playback_48hrs'].iloc[0]==0:
+            qq= round(pp/1*100,2)
+        else:
+
+            qq= pp/df_atm2['total_playback_48hrs'].iloc[0]
+    #         if math.isnan(qq):
+    #             qq=0
+    #         else:
+    #             qq=qq
+    #         rr= round(qq*100,2)
+        TOTALCHANGE.append('1')
+        TOTAL_percentagechange.append(qq)
+
+
+    parents_playback_24hr=df_atm1['parents_playback_24hr'].tolist()
+    teachers_playback_24hr=df_atm1['teachers_playback_24hr'].tolist()
+    total_playback_24hr=df_atm1['total_playback_24hr'].tolist()
+    parents_playback_48hrs =df_atm2['parents_playback_48hrs'].tolist()
+    teachers_playback_48hrs= df_atm2['teachers_playback_48hrs'].tolist()
+    total_playback_48hrs= df_atm2['total_playback_48hrs'].tolist()
+
+
+    temp={'parents_playback_24hr':parents_playback_24hr, 'PARENTSCHANGE':PARENTSCHANGE, 'PARENT_percentagechange':PARENT_percentagechange,
+          'teachers_playback_24hr':teachers_playback_24hr, 'TEACHERSCHANGE':TEACHERSCHANGE, 'TEACHER_percentagechange':TEACHER_percentagechange,
+          'total_playback_24hr':total_playback_24hr, 'TOTALCHANGE':TOTALCHANGE, 'TOTAL_percentagechange':TOTAL_percentagechange,
+          'parents_playback_48hrs':parents_playback_48hrs, 'teachers_playback_48hrs':teachers_playback_48hrs,
+          'total_playback_48hrs':total_playback_48hrs
+         }
+
+    return json.dumps(temp)
+
+
+@app.route('/Signup_card_dild')
+def day_signup_card():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection1= db.user_master
+
+    mydatetime=datetime.datetime.utcnow()
+    #     -timedelta(hours=24)
+    yester= datetime.datetime.combine(mydatetime,datetime.time.min)
+    #     - timedelta(days=1)
+    tod= datetime.datetime.combine(mydatetime,datetime.time.max)
+    start_15day=yester- timedelta(days=7)
+    startend= tod- timedelta(days=7)
+
+    qr1=[{"$match":{
+    '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'CREATED_DATE':{'$gt':yester , '$lte':tod}}
+    ]}},
+    {'$group':{'_id':'null', 
+    'parents_signup_last_week': {'$sum':{'$cond':[{'$eq':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+    'teachers_signup_last_week': {'$sum':{'$cond':[{'$ne':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+    'total_signup_last_week': {'$sum':1}            
+    }}]
+    list1= list(collection1.aggregate(qr1))
+    df_atm= DataFrame(list1)
+    df_atm1=df_atm[['parents_signup_last_week', 'teachers_signup_last_week','total_signup_last_week']]
+    qr2=[{"$match":{
+    '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'CREATED_DATE':{'$gte':start_15day
+                , '$lt': startend}}
+    ]}},
+    {'$group':{'_id':'null', 
+    'parents_signup_last_to_lastweek': {'$sum':{'$cond':[{'$eq':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+    'teachers_signup_last_to_lastweek': {'$sum':{'$cond':[{'$ne':['$ROLE_ID._id', ObjectId("5f155b8a3b6800007900da2b")]}, 1,0]}},
+    'total_signup_last_to_lastweek': {'$sum':1}            
+    }}]
+    list2= list(collection1.aggregate(qr2))
+    df_atm= DataFrame(list2)
+
+    df_atm2=df_atm[['parents_signup_last_to_lastweek', 'teachers_signup_last_to_lastweek','total_signup_last_to_lastweek']]
+
+
+    parentschange=[]
+    parents_Percentage_Change=[]
+    if df_atm2['parents_signup_last_to_lastweek'].iloc[0] > df_atm1['parents_signup_last_week'].iloc[0]:
+        xx=df_atm2['parents_signup_last_to_lastweek'].iloc[0]-df_atm1['parents_signup_last_week'].iloc[0]
+        if df_atm2['parents_signup_last_to_lastweek'].iloc[0]==0:
+            yy= round(xx/1*100,2)
+        else:        
+            yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
+    #         zz= round(yy*100,2)
+        parentschange.append('-1')
+        parents_Percentage_Change.append(yy)
+
+    elif df_atm2['parents_signup_last_to_lastweek'].iloc[0] == df_atm1['parents_signup_last_week'].iloc[0]:
+        xx=df_atm2['parents_signup_last_to_lastweek'].iloc[0]-df_atm1['parents_signup_last_week'].iloc[0]
+        if df_atm2['parents_signup_last_to_lastweek'].iloc[0] & df_atm1['parents_signup_last_week'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:
+
+            yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
+
+    #         zz= round(yy*100,2)
+        parentschange.append('0')
+        parents_Percentage_Change.append(yy)
+
+    else:
+        xx=df_atm1['parents_signup_last_week'].iloc[0]-df_atm2['parents_signup_last_to_lastweek'].iloc[0]
+        if df_atm2['parents_signup_last_to_lastweek'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:
+
+            yy= xx/df_atm2['parents_signup_last_to_lastweek'].iloc[0]
+    #         zz= round(yy*100,2)
+        parentschange.append('1')
+        parents_Percentage_Change.append(yy)
+
+
+    teacherschange=[]
+    Teacher_percentage_change=[]
+    if df_atm2['teachers_signup_last_to_lastweek'].iloc[0] > df_atm1['teachers_signup_last_week'].iloc[0]:
+        xx=df_atm2['teachers_signup_last_to_lastweek'].iloc[0]-df_atm1['teachers_signup_last_week'].iloc[0]
+        yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
+        zz= round(yy*100,2)
+        teacherschange.append('-1')
+        Teacher_percentage_change.append(zz)
+
+    elif df_atm2['teachers_signup_last_to_lastweek'].iloc[0] == df_atm1['teachers_signup_last_week'].iloc[0]:
+        xx=df_atm2['teachers_signup_last_to_lastweek'].iloc[0]-df_atm1['teachers_signup_last_week'].iloc[0]
+        if df_atm2['teachers_signup_last_to_lastweek'].iloc[0] &df_atm1['teachers_signup_last_week'].iloc[0]==0:
+            yy= round(xx/1*100,2)
+        else:
+            yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
+    #         zz= round(yy*100,2)
+
+        teacherschange.append('0')
+        Teacher_percentage_change.append(yy)
+
+    else:
+        xx=df_atm1['teachers_signup_last_week'].iloc[0]-df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
+        if df_atm2['teachers_signup_last_to_lastweek'].iloc[0]==0:
+            yy= round(xx/1*100,2)
+        else:
+            yy= xx/df_atm2['teachers_signup_last_to_lastweek'].iloc[0]
+
+    #         zz= round(yy*100,2)
+        teacherschange.append('1')
+        Teacher_percentage_change.append(yy)
+
+
+    totalchange=[]
+    Total_percentage_change=[]
+    if df_atm2['total_signup_last_to_lastweek'].iloc[0] > df_atm1['total_signup_last_week'].iloc[0]:
+        xx=df_atm2['total_signup_last_to_lastweek'].iloc[0]-df_atm1['total_signup_last_week'].iloc[0]
+
+        if df_atm2['total_signup_last_to_lastweek'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:
+
+            yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
+    #         zz= round(yy*100,2)
+        totalchange.append('-1')
+        Total_percentage_change.append(yy)
+
+    elif df_atm2['total_signup_last_to_lastweek'].iloc[0] == df_atm1['total_signup_last_week'].iloc[0]:        
+        xx=df_atm2['total_signup_last_to_lastweek'].iloc[0]-df_atm1['total_signup_last_week'].iloc[0]
+        if df_atm2['total_signup_last_to_lastweek'].iloc[0] & df_atm1['total_signup_last_week'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:
+            yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
+    #         zz= round(yy*100,2)
+        totalchange.append('0')
+        Total_percentage_change.append(yy)
+    else:
+        xx=df_atm1['total_signup_last_week'].iloc[0]-df_atm2['total_signup_last_to_lastweek'].iloc[0]
+        if df_atm2['total_signup_last_to_lastweek'].iloc[0]==0:
+            yy=round(xx/1*100,2)
+        else:
+            yy= xx/df_atm2['total_signup_last_to_lastweek'].iloc[0]
+    #         zz= round(yy*100,2)
+        totalchange.append('1')
+        Total_percentage_change.append(yy)
+
+
+    data=pd.DataFrame({'parents_signup_yesterday':df_atm1['parents_signup_last_week'].tolist(),
+                       'teachers_signup_yesterday':df_atm1['teachers_signup_last_week'].tolist(),
+    'total_signup_yesterday':df_atm1['total_signup_last_week'].tolist(),
+                       'parentschanged':parentschange, 'parents_Percentage_Change':parents_Percentage_Change,
+                       'teacherschanged':teacherschange, 'Teacher_percentage_change':Teacher_percentage_change,
+          'totalchanged':totalchange, 'Total_percentage_change':Total_percentage_change,
+               'parents_signup_lastweek':df_atm2['parents_signup_last_to_lastweek'].tolist(),
+                     'teachers_signup_lastweek':  df_atm2['teachers_signup_last_to_lastweek'].tolist(),
+                'total_signup_lastweek':       df_atm2['total_signup_last_to_lastweek'].tolist()
+
+                      })  
+    temp2={}
+
+    for j in range(len(data.columns)):
+        key= data.columns[j]
+        value=[str(data[data.columns[j]].iloc[0])]
+        temp2.update({key:value})
+        
+    return json.dumps(temp2)
+
 
 
 
