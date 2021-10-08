@@ -31,7 +31,7 @@ function playbackTrendChart2(selectValue2, t) {
                 enabled: false,
             },
             title: {
-                text: t + "Trend",
+                text: t + " Trend",
             },
             colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
             xAxis: {
@@ -105,6 +105,12 @@ function playbackTrendChart2(selectValue2, t) {
                     data: dataa[0].bar,
                 },
 
+                {
+                    type: "spline",
+                    color: "#FFFF00",
+                    name: t + " Count(LSY 2019-2020)",
+                    data: dataa[0].curve_LYTOLY,
+                },
                 {
                     type: "spline",
                     color: "#FF8300",

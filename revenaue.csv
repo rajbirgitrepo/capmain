@@ -1,50 +1,181 @@
 TYPE_OF_PAYMENT,USER_NAME,EMAIL_ID,DEVICE_USED,MODE_OF_PAYMENT,Last_Payment_Date,Payment_Amount
-FOUNDATION,Kyan Foundation,NO INFO,OFFLINE,CHEQUE,2021-08-02 00:00:00,14000.0
-FOUNDATION,Access Youth & Education Dept,NO INFO,OFFLINE,CHEQUE,2021-08-04 00:00:00,8000.0
-DISTRICT,Palm Springs USD,NO INFO,OFFLINE,CHEQUE,2021-08-06 00:00:00,88798.0
+FOUNDATION,0,0,0,0,0,0.0
+DISTRICT,Palms Springs Unified School District,NO EMAIL,OFFLINE,CHEQUE,2021-07-02 00:00:00,4200.0
 DISTRICT,Chula Vista Elementary School District,NO EMAIL,OFFLINE,CHEQUE,2021-07-13 00:00:00,135700.0
 DISTRICT,Needham Public Schools,NO EMAIL,OFFLINE,CHEQUE,2021-07-15 00:00:00,2800.0
 DISTRICT,Lubbock-Cooper ISD,NO EMAIL,OFFLINE,CHEQUE,2021-07-29 00:00:00,5600.0
-DISTRICT,Ogden School District,NO EMAIL,OFFLINE,CHEQUE,2021-09-08 00:00:00,7000.0
+DISTRICT,Ogden School District,NO EMAIL,OFFLINE,CHEQUE,2021-08-09 00:00:00,7000.0
 DISTRICT,San Leandro Unified School District,NO EMAIL,OFFLINE,CHEQUE,2021-08-17 00:00:00,20800.0
 DISTRICT,Ogden School District,NO EMAIL,OFFLINE,CHEQUE,2021-08-18 00:00:00,1400.0
 DISTRICT,Neosho School District,NO EMAIL,OFFLINE,CHEQUE,2021-08-31 00:00:00,2000.0
-DISTRICT,Mission Consolidated ISD,NO EMAIL,OFFLINE,CHEQUE,2021-08-31 00:00:00,27900.0
-DISTRICT,Racine Unified School District,NO EMAIL,OFFLINE,CHEQUE,2021-08-09 00:00:00,28000.0
+DISTRICT,Westfield Public Schools,NO EMAIL,OFFLINE,CHEQUE,2021-08-31 00:00:00,26400.0
+DISTRICT,Mission Consolidated ISD,NO EMAIL,OFFLINE,CHEQUE,2021-08-31 00:00:00,29700.0
+DISTRICT,Chico USD, NO EMAIL,OFFLINE,CHEQUE,2021-09-02 00:00:00,26600.0
+DISTRICT,Racine Unified School District,NO EMAIL,OFFLINE,CHEQUE,2021-09-08 00:00:00,28000.0
 DISTRICT,Fairfield-Suisun USD,NO EMAIL,OFFLINE,CHEQUE,2021-09-16 00:00:00,26600.0
+DISTRICT,Agawam Public Schools,NO EMAIL,OFFLINE,CHEQUE,2021-09-17 00:00:00,8000.0
+DISTRICT,Salt Lake City School District,NO EMAIL,OFFLINE,CHEQUE,2021-09-20 00:00:00,18000.0
+DISTRICT,Goleta District,NO EMAIL,OFFLINE,CHEQUE,2021-09-22 00:00:00,28000.0
+DISTRICT,Pasco County Schools,NO EMAIL,OFFLINE,CHEQUE,2021-09-24 00:00:00,98400.0
+DISTRICT,Palm Beach County Schools,NO EMAIL,OFFLINE,CHEQUE,2021-09-29 00:00:00,37800.0
+DISTRICT,Broward County Public Schools,NO EMAIL,OFFLINE,CHEQUE,2021-09-30 00:00:00,180750.0
 SCHOOL,Tracy Schenk,tschenk@pagosa.k12.co.us,WEBAPP,SQUARE PAYMENT,2021-09-23 00:00:00,1000.0
 SCHOOL,Kim Aman,KIm.F.Aman@k12.sd.us,WEBAPP,SQUARE PAYMENT,2021-08-12 00:00:00,1000.0
+SCHOOL,Gracie MacDonald,gracie.macdonald@sd71.bc.ca,WEBAPP,NO INFO,2021-07-31 00:00:00,450.0
 SCHOOL,Paula Moujallip,moujallip@unitedwaymiami.org,WEBAPP,SQUARE PAYMENT,2021-08-25 00:00:00,1000.0
 SCHOOL,Carla Jensen,cjensen@alpinedistrict.org,WEBAPP,SQUARE PAYMENT,2021-09-23 00:00:00,1000.0
+SCHOOL,Felicia Roggero,froggero@goleta.k12.ca.us,WEBAPP,PROMOCODE,2021-10-01 00:00:00,1000.0
 SCHOOL,Deborah Howard,dhoward@nwphs.org,WEBAPP,PAYPAL,2021-09-15 00:00:00,1400.0
 SCHOOL,Melissa Norwood ,mnorwood@mtrsd.org,NO INFO,APPLE,2021-08-13 00:00:00,89.98999786376953
+SCHOOL,Dora Cavallo,dora.cavallo@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30 00:00:00,1000.0
+SCHOOL,Vanessa Marullo,vanessa.marullo@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30 00:00:00,1000.0
+SCHOOL,Laura Dispenzere,laura.dispenzere@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30 00:00:00,1000.0
+SCHOOL,Sherri Zangari,sherri.zangari@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30 00:00:00,1000.0
+SCHOOL,Ricardo Acosta,ricardo.acosta@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30 00:00:00,1000.0
+SCHOOL,MaryAnn Gilligan,maryann.gilligan@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30 00:00:00,1000.0
+SCHOOL,Joe Rotonda,joseph.rotonda@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30 00:00:00,1000.0
+SCHOOL,Maria Murphy,maria.spina@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Nicole Pereira,nicole.pereira@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Heather MacIntyre,heather.macintyre@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Ashley Fontanez,ashley.fontanez@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Jayne Ostrowsky,jayne.ostrowsky@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Nicole Shanklin,nicole.shanklin@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Aimee Gere,aimee.gere@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Melissa Maucione,melissa.maucione@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Cara Robertello,cara.robertello@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Victoria Lago,victoria.lago@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Vanessa Marullo,vanessa.marulo@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Robert  Kearns,robert.kearns@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,carol bono,carol.bono@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Jaclyn Corino,jaclyn.corino@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Tracy Leardo,tracy.leardo@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Chrissy,chrissy.grasso@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Stephanie Mozeika,stephanie.mozeika@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Jacquelyn Falzo,jacquelyn.falzo@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Alyssa Banca,alyssa.banca@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Melissa Skorka,melissa.skorka@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Anthony Hernandez,anthony.hernandez@bellevilleschool.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Ann Monahan,ann.monahan@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Lisa Gabriele,lisa.gabriele@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Pamela Stoffers,pamela.stoffers@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Nicole Hausleben,nicole.hausleben@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Denise Gizzo,denise.gizzo@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Ashley Bidne,ashley.bidne@bellevillschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Ms. Iandolo,alexa.iandolo@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Christina Romano,christina.romano@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Christine Ignozza,christine.ignozza@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Sean Lowry,sean.lowry@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Gina Hollywood,gina.hollywood@belleville.k12.nj.us,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,John Resciniti,john.resciniti@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Nicole Coucoules,nicole.coucoules@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Mrs. Palmerezzi,laura.palmerezzi@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Joanne Giardelli,joanne.giardelli@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Yanelis Cabaleiro,yanelis.cabaleiro@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Erin Perri,erin.perri@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Sophia Piano,sophia.piano@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,jacqueline rivera,jacqueline.rivera@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Michelle Riccardelli,michelle.riccardelli@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Sharon Benson,sharon.benson@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Toni Castellani,toni.castellani@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Charlene DelGrande,Charlene.delgrande@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,James Philips,james.philips@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Laura Benkert,laura.benkert@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Melissa Brigati,melissa.brigati@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Genevieve,genevieve.trocolor@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Rebecca Rotino,Rebecca.Rotino@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Shannon Mulvaney,shannon.mulvaney@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,SHANNON,shannon.king@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Sade Diaz,sade.diaz@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Kristen Schwindt,kristen.schwindt@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Carly O'Mara,carly.omara@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Kaitlyn Povinelli,kaitlyn.povinelli@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Jennifer,jennifer.pelkowsky@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Donna,donna.roensch@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Shannon Grueter,shannon.grueter@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Paula Cascarano,paula.cascarano@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Alaina,alaina.chip@belleville.k12.nj.us,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Tina,tina.mastrangelo@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Erin McGarry (Bradley),erin.bradley@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Kimberly Recinos,kimberly.recinos@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Kara Minichini,kara.minichini@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Nancy Bevere,nancy.bevere@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Paula Metz,paula.metz@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Christie Mendez,christie.mendez@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Tracy,tracy.buckley@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Lynne Pedalino,lynne.pedalino@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Morgan Musso,morgan.musso@bellevileschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Lori Georgevich,lori.georgevich@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Amanda Algieri,amanda.algieri@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Charles Moran,charles.moran@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Ashley Bidne,ashley.bidne@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Sharon Greco,sharon.greco@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Morgan Musso,morgan.musso@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Heather,heather.soehngen@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Christa Woolis,christa.woolis@bellevilleschool.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Katherine Juskin,katherine.juskin@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Mary Beth Dimone,marybeth.dimone@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Chris Cahill,chris.cahill@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,kelly.berardesco,Kelly.berardesco@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Joy Colon ,joy.colon@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,andrew cruz,andrew.cruz@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Noelle Acacio,noelle.acacio@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Gabriella Oliveira,gabriella.oliveira@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Melissa,melissafrancis@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Melissa,melissa.francis@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Emily Abreu,emily.abreu@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Nicole,nicole.facchinei@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Cathy Parisi,cathy.parisi@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Aissa,aissa.sunga@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Nieves Kounouklos,nieves.kounouklos@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Jenny Reis,jenny.reis@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Jenna Pollio,jenna.pollio@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Cheryl Cleary,cheryl.cleary@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Melissa Florczak,melissa.florczak@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,David Muller,david.muller@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Lauren Grossel,lauren.grossel@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Linda Nicodemi ,linda.nicodemi@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Robert Lessard,robert.lessard@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Robert,lessard0208@aol.com,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,nikki hudak,nikki.hudak@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,AnnMarie,annmarie.albanese@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Erin Lewis,erin.lewis@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Stephanie Cheff,stephanie.cheff@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,David Ackerman,david.ackerman@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Nina Lambrugo,nina.lambrugo@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Antonella Fasolino,antonella.fasolino@bellevilleschool.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Nicole Auriemma,nicole.auriemma@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Emily Kafrouni,emily.kafrouni@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Victoria Matturro,victoria.matturro@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Taryn,taryn.omara@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Cara Steinwandtner,Cara.Steinwandtner@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
 SCHOOL,Marissa Bradley,mbradley@thesummitprep.org,WEBAPP,SQUARE PAYMENT,2021-09-01 00:00:00,1400.0
 SCHOOL,Rachael Salazar,rsalazar@bcbucks.org,WEBAPP,SIGNUP,2021-09-06 00:00:00,1400.0
-SCHOOL,Scott,sbarton@smusd.us,,APPLE,2021-09-22 00:00:00,89.98999786376953
-SCHOOL,Jamie Wright,jamie.wright@rogueriver.k12.or.us,OFFLINE,CHEQUE,2021-08-04 00:00:00,1400.0
-SCHOOL,Casaundra Hare,Chare@wayman.org,OFFLINE,CHEQUE,2021-07-15 00:00:00,583.62
+SCHOOL,Amanda Cruz,amanda.cruz@bellevilleschools.org,WEBAPP,CTO,2021-09-30 00:00:00,1000.0
+SCHOOL,Casaundra Hare,Chare@wayman.org,OFFLINE,CHEQUE,2021-07-15 00:00:00,584.0
 SCHOOL,Andy Stotz,andy.stotz@swcsd.us,OFFLINE,CHEQUE,2021-07-15 00:00:00,1400.0
+SCHOOL,Lynn Burt,lynnb@vacavilleusd.org,OFFLINE,CHEQUE,2021-08-10 00:00:00,1000.0
+SCHOOL,Sharon Grossman,grossmans@wellesleyps.org,OFFLINE,CHEQUE,2021-08-11 00:00:00,1400.0
 SCHOOL,Glenda Machrus,GMachrus@alamedaunified.org,OFFLINE,CHEQUE,2021-08-16 00:00:00,2200.0
 SCHOOL,Tamara,tamara.etterling@hallco.org,OFFLINE,CHEQUE,2021-08-16 00:00:00,18200.0
 SCHOOL,Kaitlin ODonnell,kodonnell@mtsd.us,OFFLINE,CHEQUE,2021-08-16 00:00:00,1000.0
 SCHOOL,Jennifer Kowieski,jkowieski@stcps.org,OFFLINE,CHEQUE,2021-08-25 00:00:00,1400.0
-SCHOOL,John Meiklejohn,jmiserve183@gmail.com,OFFLINE,CHEQUE,2021-08-31 00:00:00,26400.0
 SCHOOL,Amy Scully,ascully@hr-k12.org,OFFLINE,CHEQUE,2021-08-31 00:00:00,1000.0
-SCHOOL,Sharon Dunn,sharon.dunn@stockdaleisd.org,OFFLINE,CHEQUE,2021-08-09 00:00:00,1000.0
+SCHOOL,Alyson Reid,alyson.reid@schoolsofwestfield.org,OFFLINE,CHEQUE,2021-09-02 00:00:00,1400.0
+SCHOOL,Rachael Salazar,rsalazar@bcbucks.org,OFFLINE,CHEQUE,2021-09-02 00:00:00,1400.0
+SCHOOL,Sharon Dunn,sharon.dunn@stockdaleisd.org,OFFLINE,CHEQUE,2021-09-08 00:00:00,1000.0
 SCHOOL,Dr Cathy Cervantes,cathy_cervantes@cjusd.net,OFFLINE,CHEQUE,2021-09-09 00:00:00,883.0
 SCHOOL,Susan Hoeppner,projecthoeppner@gmail.com,OFFLINE,CHEQUE,2021-09-13 00:00:00,1400.0
-SCHOOL,Debra Donaldson,ddonaldson@agawamed.org,OFFLINE,CHEQUE,2021-09-17 00:00:00,8000.0
 SCHOOL,Jay Marden,jmarden@carmelunified.org,OFFLINE,CHEQUE,2021-09-17 00:00:00,1000.0
+SCHOOL,Deanna Suomala,suomalad@springfieldpublicschools.com,OFFLINE,CHEQUE,2021-09-24 00:00:00,1000.0
+SCHOOL,Mrs. Foglio,pfoglio@schools.nyc.gov,OFFLINE,CHEQUE,2021-09-27 00:00:00,1400.0
+SCHOOL,North Star Counseling Center,edservices@inyocoe.org,OFFLINE,CHEQUE,2021-09-27 00:00:00,3600.0
 DONATION,JACQUELINE SAMUDA,jacquelinesamuda01@gmail.com,COMPASS,ONLINE,2021-07-31 00:00:00,51.099998474121094
 DONATION,EVELINE JOSEPH,ejoseph5@bostonpublicschools.org,COMPASS,ONLINE,2021-09-01 00:00:00,50.0
 DONATION,MATTHEW MORRISON,matthew.g.morrison@gmail.com,COMPASS,ONLINE,2021-09-23 00:00:00,25.549999237060547
 DONATION,ROBERT SCHMEIDER,schmeiro@collierschools.com,COMPASS,ONLINE,2021-09-23 00:00:00,51.099998474121094
-DONATION,Paul Singh,paul@1gen.io,PAYPAL,ONLINE,2021-09-02 00:00:00,1.0
-DONATION,Sherita Ceasar,sherita_ceasar@cable.comcast.com,NFG,ONLINE,2021-09-03 00:00:00,2500.0
-DONATION,Kristie DeLuca,kristiecotter@me.com,CHEQUE,ONLINE,2021-09-03 00:00:00,1500.0
-DONATION,Sherita Ceasar,sherita_ceasar@cable.comcast.com,CHEQUE,ONLINE,2021-07-06 00:00:00,2500.0
-DONATION,Kristie DeLuca,kristiecotter@me.com,CHEQUE,ONLINE,2021-09-06 00:00:00,1500.0
-DONATION,Sherita Ceasar,sherita_ceasar@cable.comcast.com,NFG,ONLINE,2021-07-09 00:00:00,2500.0
+DONATION,Sherita Ceasar,sherita_ceasar@cable.comcast.com,NFG,ONLINE,2021-09-07 00:00:00,2500.0
 DONATION,Samantha Allison,sallison@innerexplorer.org,NFG,ONLINE,2021-09-14 00:00:00,2500.0
 DONATION,Paul Sugar,paulsugar@cox.net,PAYPAL,ONLINE,2021-09-16 00:00:00,127.75
-MOBILE,0,0,0,0,0,0.0
+DONATION,Kristie DeLuca,kristiecotter@me.com,NFG,ONLINE,2021-09-09 00:00:00,1500.0
+DONATION,Kathi Kemper,kathi.kemper.md@gmail.com,PAYPAL,ONLINE,2021-09-29 00:00:00,50.0
+MOBILE,Scott,sbarton@smusd.us,IOS,APPLE,2021-09-22 00:00:00,89.98999786376953

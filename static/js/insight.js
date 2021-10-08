@@ -118,6 +118,11 @@ $.ajax(settings).done(function(response) {
         document.getElementById("by_home").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].by_home;
         document.getElementById("by_school").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].by_school;
         document.getElementById("by_teacher").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].by_teacher;
+        document.getElementById("Activeuserscore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Active_User_Score;
+        document.getElementById("CWPScore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].CWP_Score;
+        document.getElementById("ReScore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Re_Score;
+        document.getElementById("EScore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].E_Score;
+        document.getElementById("Usage1").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Usage_Score;
 
     } else if (params == "School_Search_comparison") {
 

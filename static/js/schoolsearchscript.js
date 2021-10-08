@@ -708,67 +708,37 @@ function jou2(url1) {
 
 
 function familysearch() {
-    var a = document.getElementById("fsearchinputdescription").innerText;
+    //var a = document.getElementById("fsearchinputdescription").value;
+    var a = document.getElementById("familysearchinput").value;
     console.log(a);
-    if (a !== '') {
-        URL = "/family___journey_score/" + a
-        $("#fschoolname").empty();
-        $("#fpractice").empty();
-        $("#fstate").empty();
-        $("#fusercountse").empty();
-        $("#fadress").empty();
-        $("#femail").empty();
-        $("#fcountry").empty();
-        $("#fcity").empty();
-        $("#fadmin").empty();
-        $("#fucount").empty();
-        $("#fpcount").empty();
-        $("#fmindfulness_minutes").empty();
-        $("#fratings").empty();
-        $("#fschool").empty();
-        $("#fcity").empty();
-        $("#fstate").empty();
-        $("#fcountry").empty();
-        $("#fsignup").empty();
-        $("#frenewal").empty();
-        $("#fstatus").empty();
-        console.log(URL);
-        Pfam(URL);
-        $("#fnext").empty();
-        $("#fnext1").empty();
-        $("#fbtnExport").show();
-        createDynamic(URL);
-        $("#fsearchinputdescription").empty();
-    } else {
-        var a = document.getElementById("familysearchinput").value;
-        URL = "/familysearchid/" + a
-        $("#fschoolname").empty();
-        $("#fpractice").empty();
-        $("#fstate").empty();
-        $("#fusercountse").empty();
-        $("#fadress").empty();
-        $("#femail").empty();
-        $("#fcountry").empty();
-        $("#fcity").empty();
-        $("#fadmin").empty();
-        $("#fucount").empty();
-        $("#fpcount").empty();
-        $("#fmindfulness_minutes").empty();
-        $("#fratings").empty();
-        $("#fschool").empty();
-        $("#fcity").empty();
-        $("#fstate").empty();
-        $("#fcountry").empty();
-        $("#fsignup").empty();
-        $("#frenewal").empty();
-        $("#fstatus").empty();
-        console.log(URL);
-        Pfam(URL);
-        $("#fnext").empty();
-        $("#fnext1").empty();
-        $("#fbtnExport").show();
-        createDynamic(URL);
-    }
+    URL = "/family___journey_score/" + a
+    $("#fschoolname").empty();
+    $("#fpractice").empty();
+    $("#fstate").empty();
+    $("#fusercountse").empty();
+    $("#fadress").empty();
+    $("#femail").empty();
+    $("#fcountry").empty();
+    $("#fcity").empty();
+    $("#fadmin").empty();
+    $("#fucount").empty();
+    $("#fpcount").empty();
+    $("#fmindfulness_minutes").empty();
+    $("#fratings").empty();
+    $("#fschool").empty();
+    $("#fcity").empty();
+    $("#fstate").empty();
+    $("#fcountry").empty();
+    $("#fsignup").empty();
+    $("#frenewal").empty();
+    $("#fstatus").empty();
+    console.log(URL);
+    Pfam(URL);
+    $("#fnext").empty();
+    $("#fnext1").empty();
+    $("#fbtnExport").show();
+    createDynamic(URL);
+
 };
 
 
@@ -1096,9 +1066,8 @@ function usersearch() {
                 color: '#01a451',
                 type: 'spline',
                 name: dataa.Info[0].USER_NAME,
-                data: dataa.Chart.data.shp
-
-                , //Fri, 14 Jul 2017 00:00:00 GMT
+                data: dataa.Chart.data.shp,
+                //Fri, 14 Jul 2017 00:00:00 GMT
                 dataGrouping: {
                     enabled: false,
                 }

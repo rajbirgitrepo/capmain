@@ -4,7 +4,7 @@ $(document).on('change', '#practice_activeChart', function() {
     $('#container33').empty();
     console.log(this.value)
     if (this.value == 'practice') {
-        document.getElementById('activeInsight').title = 'your new title';
+        //document.getElementById('activeInsight').title = 'your new title';
         playbackTrendChart(this.value, 'Practice')
     } else {
         playbackTrendChart(this.value, 'Playback')
@@ -101,6 +101,12 @@ function playbackTrendChart(selectValue, t) {
 
                 {
                     type: 'spline',
+                    color: '#FFFF00',
+                    name: '(LSY 2019-2020)',
+                    data: dataa[0].curve_LYTOLY
+                },
+                {
+                    type: 'spline',
                     color: '#FF8300',
                     name: '(LSY 2020-2021)',
                     data: dataa[0].curve
@@ -109,6 +115,369 @@ function playbackTrendChart(selectValue, t) {
         });
     });
 }
+
+
+var settings = {
+    async: true,
+    crossDomain: true,
+    url: "/averagetrend/",
+    method: "GET",
+}
+$.ajax(settings).done(function(response) {
+    var dataa = JSON.parse(response);
+    console.log(dataa[0].bar, "data")
+
+    Highcharts.chart('container35', {
+        chart: {
+            type: 'column'
+        },
+        credits: {
+            enabled: false,
+        },
+        title: {
+            text: " Average Trend"
+
+        },
+        colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+        xAxis: {
+            categories: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
+        },
+        yAxis: {
+            lineWidth: 1,
+            min: 0,
+            title: {
+                text: "Practice User Count"
+            },
+            stackLabels: {
+                enabled: false,
+                style: {
+                    fontWeight: 'bold',
+                    color: ( // theme
+                        Highcharts.defaultOptions.title.style &&
+                        Highcharts.defaultOptions.title.style.color
+                    ) || 'gray'
+                }
+            }
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            series: {
+                point: {
+
+                }
+            },
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: false
+                }
+            }
+        },
+        legend: {
+            enabled: true,
+            itemStyle: {
+                fontSize: '10px',
+                fontWeight: '200'
+            }
+        },
+        series: [{
+                name: 'Clever',
+                data: dataa[3].barc
+            },
+            {
+                name: 'Schoology',
+                data: dataa[2].bars
+            }, {
+                name: 'Family Average Count(CSY2021-2022)',
+                fontSize: '8px',
+                data: dataa[1].bar2
+
+            }, {
+                name: 'Practice User Count(CSY 2021-2022)',
+                data: dataa[0].bar
+            },
+
+            {
+                type: 'spline',
+                color: '#FFFF00',
+                name: '(LSY 2019-2020)',
+                data: dataa[0].curve_LYTOLY
+            },
+            {
+                type: 'spline',
+                color: '#FF8300',
+                name: '(LSY 2020-2021)',
+                data: dataa[0].curve
+            }
+        ]
+    });
+});
+
+
+var settings = {
+    async: true,
+    crossDomain: true,
+    url: "/sentimentdonut_csy",
+    method: "GET",
+}
+$.ajax(settings).done(function(response) {
+    var dataa = JSON.parse(response);
+    console.log(dataa[0].bar, "data")
+
+    Highcharts.chart('container36', {
+        chart: {
+            type: 'pie'
+        },
+        credits: {
+            enabled: false,
+        },
+        title: {
+            text: " Sentiment CSY"
+
+        },
+        colors: ['#8AE02B', '#01A451'],
+        xAxis: {
+            categories: dataa.Month,
+        },
+        yAxis: {
+            lineWidth: 1,
+            min: 0,
+            title: {
+                text: "Practice User Count"
+            },
+            stackLabels: {
+                enabled: false,
+                style: {
+                    fontWeight: 'bold',
+                    color: ( // theme
+                        Highcharts.defaultOptions.title.style &&
+                        Highcharts.defaultOptions.title.style.color
+                    ) || 'gray'
+                }
+            }
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            series: {
+                point: {
+
+                }
+            },
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: false
+                }
+            }
+        },
+        legend: {
+            enabled: true,
+            itemStyle: {
+                fontSize: '10px',
+                fontWeight: '200'
+            }
+        },
+        series: [{
+                color: '#FFA500',
+                name: 'Negative',
+                data: dataa.donut.neg
+            },
+            {
+                color: '#01A451',
+                name: 'Positive',
+                data: dataa.donut.pos
+            },
+
+
+        ]
+    });
+});
+
+
+
+var settings = {
+    async: true,
+    crossDomain: true,
+    url: "/topdistrictplayback",
+    method: "GET",
+}
+$.ajax(settings).done(function(response) {
+    var dataa = JSON.parse(response);
+    console.log(dataa.Playbacks, "data")
+
+    Highcharts.chart('container36', {
+        chart: {
+            type: 'bar'
+        },
+        credits: {
+            enabled: false,
+        },
+        title: {
+            text: "Top District Playback"
+
+        },
+        colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+        xAxis: {
+            categories: dataa.District,
+            crosshair: false,
+            labels: {
+                style: {
+                    fontSize: "10px",
+                    rotation: 90,
+                },
+            }
+        },
+        yAxis: {
+            lineWidth: 1,
+            min: 0,
+            title: {
+                text: "Practice User Count"
+            },
+            stackLabels: {
+                enabled: false,
+                style: {
+                    fontWeight: 'bold',
+                    color: ( // theme
+                        Highcharts.defaultOptions.title.style &&
+                        Highcharts.defaultOptions.title.style.color
+                    ) || 'gray'
+                }
+            }
+        },
+        tooltip: {
+            style: {
+                color: 'Black',
+                fontWeight: 'bold'
+            },
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            series: {
+                point: {
+
+                }
+            },
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: false
+                }
+            }
+        },
+        legend: {
+            enabled: true,
+            itemStyle: {
+                fontSize: '10px',
+                fontWeight: '200'
+            }
+        },
+        series: [{
+                color: "#01A451",
+                name: 'Playbacks',
+                data: dataa.Playbacks
+            }
+
+        ]
+    });
+});
+
+
+
+var settings = {
+    async: true,
+    crossDomain: true,
+    url: "/feedbackrating_csy",
+    method: "GET",
+}
+$.ajax(settings).done(function(response) {
+    var dataa = JSON.parse(response);
+    console.log(dataa.Playbacks, "data")
+
+    Highcharts.chart('container38', {
+        chart: {
+            type: 'column'
+        },
+        credits: {
+            enabled: false,
+        },
+        title: {
+            text: "Feedback Rating CSY"
+
+        },
+        colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+        xAxis: {
+            categories: dataa.rating,
+            crosshair: false,
+            labels: {
+                style: {
+                    fontSize: "10px",
+                    rotation: 90,
+                },
+            }
+        },
+        yAxis: {
+            lineWidth: 1,
+            min: 0,
+            title: {
+                // text: "Practice User Count"
+            },
+            stackLabels: {
+                enabled: false,
+                style: {
+                    fontWeight: 'bold',
+                    color: ( // theme
+                        Highcharts.defaultOptions.title.style &&
+                        Highcharts.defaultOptions.title.style.color
+                    ) || 'gray'
+                }
+            }
+        },
+        tooltip: {
+            style: {
+                color: 'Black',
+                fontWeight: 'bold'
+            },
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            series: {
+                point: {
+
+                }
+            },
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: false
+                }
+            }
+        },
+        legend: {
+            enabled: true,
+            itemStyle: {
+                fontSize: '10px',
+                fontWeight: '200'
+            }
+        },
+        series: [{
+                color: "#01A451",
+                name: 'Counts',
+                data: dataa.count
+            }
+
+
+        ]
+    });
+});
+
 
 var settings = {
     "async": true,
@@ -346,12 +715,21 @@ function playbackTrendChart3(selectValue3, tx) {
                 }
             },
             series: [{
+                    "name": "Last SY (2019 - 2020)",
+                    "type": "line",
+                    "color": "#FFFF00",
+                    "xAxis": 0,
+                    "data": dataa.data.lsy_to_lsy
+
+                },
+                {
                     "name": "Last SY",
                     "type": "line",
                     "color": "#FF9933",
                     "xAxis": 0,
                     "data": dataa.data.lsy
-                }, {
+                },
+                {
                     "name": "Family",
                     "type": "column",
                     "color": "#8AE02B",

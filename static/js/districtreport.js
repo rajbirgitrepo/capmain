@@ -472,7 +472,7 @@ function charts(a, b, c) {
                             },
                         },
                         title: {
-                            text: "Practoce Count",
+                            text: "Playback Count",
                             style: {
                                 color: "#000",
                             },

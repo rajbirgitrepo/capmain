@@ -499,32 +499,32 @@
                     <section class="statistics card-design">
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-2" title="" id="Activeuserscore">
                                     <div class="box2 ">
                                         <p style="font-size: 10px;" id="">Active User Score</p>
                                         <p style="margin: 0 4px; font-size: 21px; " id="ACTIVE_USER_SCORE"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2" title="" id="CWPScore">
                                     <div class="box2 ">
                                         <p style="font-size: 10px;" id="">CWP Score</p>
                                         <p style="margin: 0 4px; font-size: 21px;" id="CWP_SCORE"></p>
                                     </div>
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-2" title="" id="ReScore">
                                     <div class="box2 ">
                                         <p style="font-size: 10px;" id="">Re Score</p>
                                         <p style="margin: 0 4px; font-size: 21px; " id="RE_SCORE"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2" title="" id="Usage1">
                                     <div class="box2 ">
                                         <p style="font-size: 10px;" id="">Usage Score</p>
                                         <p style="margin: 0 4px; font-size: 21px; " id="USAGE_SCORE"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2" title="" id="EScore">
                                     <div class="box2 ">
                                         <p style="font-size: 9px;" id="">E-Score</p>
                                         <p style="margin: 0 4px; font-size: 21px;" id="E_SCORE"></p>
@@ -569,6 +569,26 @@
                     </section>
                     <div class="col-md-10">
                         <div id="containerprac" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                        </div>
+                    </div>
+                    <div class="welcome2">
+                        <div class="container-fluid">
+                            <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
+                                <div class="row">
+                                    <div id="admin" class="col-md-12">
+                                        <div class="card material-table">
+                                            <div class="table-header">
+                                                <span class="table-title">SCHOOL DETAILS</span>
+
+                                            </div>
+                                            <a class="btn btn-success btn-logion" style="display:none; float: right;" download="Capdataschoolsearch.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href="">Export</a>
+
+                                            <div class="custyle" id="next"></div>
+                                            <div class="custyle" id="next1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -877,26 +897,7 @@
                 </div>
             </div>
         </div>
-        <div class="welcome2">
-            <div class="container-fluid">
-                <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
-                    <div class="row">
-                        <div id="admin" class="col-md-12">
-                            <div class="card material-table">
-                                <div class="table-header">
-                                    <span class="table-title">SCHOOL DETAILS</span>
 
-                                </div>
-                                <a class="btn btn-success btn-logion" style="display:none; float: right;" download="Capdataschoolsearch.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href="">Export</a>
-
-                                <div class="custyle" id="next"></div>
-                                <div class="custyle" id="next1"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </section>
     </section>

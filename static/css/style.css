@@ -1172,9 +1172,8 @@ span {
 }
 
 .drop-api {
-    border: none;
+    border: 1px solid;
     border-radius: 5px;
-    box-shadow: 1px 1px 3px;
     color: grey;
 }
 

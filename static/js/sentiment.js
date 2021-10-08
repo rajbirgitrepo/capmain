@@ -272,7 +272,7 @@
                   plotBorderWidth: null,
                   plotShadow: false,
                   height: 400,
-                  width: 350,
+                  width: 300,
                   type: 'pie'
               },
               title: {
