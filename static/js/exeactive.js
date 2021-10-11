@@ -146,7 +146,7 @@ $.ajax(settings).done(function(response) {
             lineWidth: 1,
             min: 0,
             title: {
-                text: "Playback User Count"
+                text: "Average User Count"
             },
             stackLabels: {
                 enabled: false,
@@ -184,19 +184,8 @@ $.ajax(settings).done(function(response) {
             }
         },
         series: [{
-                name: 'Clever',
-                data: dataa[3].barc
-            },
-            {
-                name: 'Schoology',
-                data: dataa[2].bars
-            }, {
-                name: 'Family Average Count(CSY2021-2022)',
-                fontSize: '8px',
-                data: dataa[1].bar2
-
-            }, {
                 name: 'Playback User Count(CSY 2021-2022)',
+                color: '#02A45A',
                 data: dataa[0].bar
             },
 
@@ -237,7 +226,7 @@ $.ajax(settings).done(function(response) {
             },
         },
         title: {
-            text: 'Sentiment Percebtage CSY'
+            text: 'Sentiment Percentage CSY'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -389,7 +378,7 @@ $.ajax(settings).done(function(response) {
         },
         colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
         xAxis: {
-            categories: dataa.rating,
+            categories: ['5 Star', '4 Star', '3 Star', '2 Star', '1 Star'],
             crosshair: false,
             labels: {
                 style: {

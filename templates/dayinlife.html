@@ -353,24 +353,24 @@
         <section class="statistics">
             <div class="container-fluid">
 
-                <div class="col-md-3" title="" id="new_signups_daily">
+                <div class="col-md-3">
                     <div class="boxExecutive">
                         <div>
-                            <p style="font-size: 11px;">Active User Right Now<span style="margin-left: 5px !important;" id="updownsigntotal"></span></p>
-                            <p class="boxvalue2" id="active_users" style="font-size: 35px; font-weight:700;"></p>
+                            <p style="font-size: 11px;">Active User Right Now<span style="margin-left: 5px !important;"></span></p>
+                            <p class="boxvalue2" id="active_users" style="font-weight:700;"></p>
                             <hr />
-                            <p style="font-size: 11px;">Web</p>
-                            <p class="boxvalue2" id="web_users"></p>
+                            <p class="boxHeading2">Web</p>
+                            <p class="boxvalue" id="web_users"></p>
+                            <br>
                             <hr />
 
                             <p class="boxHeading2">Mobile</p>
-                            <p class="boxvalue" id="home_users" onclick="cards2('')" style="cursor:pointer;"></p>
+                            <p class="boxvalue" id="home_users"></p>
                             <br />
                             <hr />
 
                             <p class="boxHeading2">LMS</p>
-
-                            <p class="boxvalue" id="lms_users" onclick="cards2('')" style="cursor:pointer;"></p>
+                            <p class="boxvalue" id="lms_users"></p>
                             <br />
                             <hr />
 
@@ -379,7 +379,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3" title="" id="total_practice_daily" style="margin-top: 83px;">
+                <div class="col-md-3">
                     <div class="boxExecutive">
                         <div>
                             <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
@@ -387,12 +387,12 @@
                             <p class="boxvalue2" id="usercount"></p>
                             <hr />
                             <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                            <p class="boxHeading2">Parent Signups<span style="margin-left: 5px !important;" id="updownpract"></span></p>
+                            <p class="boxHeading2">Parent Signups<span style="margin-left: 5px !important;" id="updownpracp"></span></p>
                             <p class="boxvalue" style="cursor:pointer;" onclick="cards3('')" id="neverlogged"></p>
                             <br />
                             <hr />
                             <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                            <p class="boxHeading2">Teacher Signups<span style="margin-left: 5px !important;" id="updownpracp"></span>
+                            <p class="boxHeading2">Teacher Signups<span style="margin-left: 5px !important;" id="updownpract"></span>
                             </p>
 
                             <p class="boxvalue" style="cursor:pointer;" onclick="cards3('')" id="totalstudent"></p>
@@ -406,7 +406,7 @@
                 </div>
                 <div>
 
-                    <div class="col-md-3" title="" id="average_feedback_daily" style="margin-top: 83px;">
+                    <div class="col-md-3">
                         <div class="boxExecutive">
                             <div>
                                 <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
@@ -426,20 +426,20 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3" style="margin-top: 83px;">
+                    <div class="col-md-3">
                         <div class="boxExecutive">
                             <div>
                                 <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
-                                <p style="font-size: 11px;">Avg. Feedback<span style="margin-left: 5px !important;" id="avg_feed"></span></p>
+                                <p style="font-size: 11px;">Avg. Feedback<span style="margin-left: 5px !important;" id="updownavgtotal"></span></p>
                                 <p class="boxvalue2" id="average_rating" onclick="cards4('')"></p>
                                 <hr />
                                 <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                                <p class="boxHeading2">No. of Parents Feedbacks<span style="margin-left: 5px !important;" id="avg_parents"></span></p>
+                                <p class="boxHeading2">No. of Parents Feedbacks<span style="margin-left: 5px !important;" id="updownavgcomment"></span></p>
                                 <p class="boxvalue" id="Parent_feedback" style="cursor:pointer;"></p>
                                 <br />
                                 <hr />
                                 <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                                <p class="boxHeading2">No. of Teacher Feedbacks<span style="margin-left: 5px !important;" id="avg_teacher"></span></p>
+                                <p class="boxHeading2">No. of Teacher Feedbacks<span style="margin-left: 5px !important;" id="updownavgper"></span></p>
                                 <p class="boxvalue" id="Teacher_feedback" style="cursor:pointer;"></p>
                                 <br />
                                 <hr />
@@ -456,12 +456,12 @@
 
         </section>
         <hr />
-        <div class="col-md-10" style="margin-top: 40px;" title="" id="practice_comparison_by_program_playback">
+        <!-- <div class="col-md-10" style="margin-top: 40px;" title="" id="practice_comparison_by_program_playback">
 
             <div id="container2" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
 
             </div>
-        </div>
+        </div> -->
         <section class="charts" style="margin-bottom: 50px;">
             <div class="container-fluid">
                 <div class="row">
@@ -480,7 +480,7 @@
                         </div>
                     </div>
                     <div class="col-md-6" style="margin-top: 50px;">
-                        <div id="container4" style="height: 400px; width: 80%; border-radius: 20px;float: left;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+                        <div id="container4" style="height: 510px; width: 100%; border-radius: 20px;float: left;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
                     </div>
                 </div>
                 <div class="row">

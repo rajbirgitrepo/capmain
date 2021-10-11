@@ -766,7 +766,7 @@ function familysearch() {
         $("#fstatus").empty();
         console.log(URL);
         Pfam(URL);
-        
+
         $("#fnext").empty();
         $("#fnext1").empty();
         $("#fbtnExport").show();
@@ -816,7 +816,7 @@ function Pfam(URL) {
             },
 
             title: {
-                text: 'FAMILY USERS PLAYBACK COMPARISON'
+                text: 'FAMILY USERS PLAYBACK HISTORY'
             },
             credits: false,
             xAxis: {
@@ -858,25 +858,26 @@ function Pfam(URL) {
             }],
 
             series: [{
-                color: '#01a451',
-                type: 'column',
-                name: dataa.Info[0].USER_NAME,
-                data: dataa.chart.data.shp
+                    color: '#01a451',
+                    type: 'column',
+                    name: dataa.Info[0].USER_NAME,
+                    data: dataa.chart.data.shp
 
-                , //Fri, 14 Jul 2017 00:00:00 GMT
-                dataGrouping: {
-                    enabled: false,
+                    , //Fri, 14 Jul 2017 00:00:00 GMT
+                    dataGrouping: {
+                        enabled: false,
+                    }
+                },
+                {
+                    color: '#ff9933',
+                    type: 'spline',
+                    name: 'Cumulative',
+                    data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
+                    dataGrouping: {
+                        enabled: false,
+                    }
                 }
-            },
-            {
-                color: '#01a451',
-                type: 'spline',
-                name: dataa.Info[0].USER_NAME,
-                data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
-                dataGrouping: {
-                    enabled: false,
-                }
-            }]
+            ]
 
         });
 
@@ -918,7 +919,7 @@ function joufam(url1) {
             },
 
             title: {
-                text: 'USERS PLAYBACK COMPARISON'
+                text: 'USERS PLAYBACK HISTORY'
             },
             credits: false,
             xAxis: {
@@ -960,29 +961,30 @@ function joufam(url1) {
             }],
 
             series: [{
-                color: '#01a451',
-                type: 'column',
-                name: dataa.Info[0].USER_NAME,
-                data: dataa.chart.data.shp
+                    color: '#01a451',
+                    type: 'column',
+                    name: dataa.Info[0].USER_NAME,
+                    data: dataa.chart.data.shp
 
-                , //Fri, 14 Jul 2017 00:00:00 GMT
-                dataGrouping: {
-                    enabled: false,
+                    , //Fri, 14 Jul 2017 00:00:00 GMT
+                    dataGrouping: {
+                        enabled: false,
+                    }
+                },
+                {
+                    color: '#ff9933',
+                    type: 'spline',
+                    name: 'Cumulative',
+                    data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
+                    dataGrouping: {
+                        enabled: false,
+                    }
                 }
-            },
-            {
-                color: '#01a451',
-                type: 'spline',
-                name: dataa.Info[0].USER_NAME,
-                data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
-                dataGrouping: {
-                    enabled: false,
-                }
-            }]
+            ]
 
         });
 
-       
+
     });
 
 };
@@ -1081,7 +1083,7 @@ function usersearch() {
             },
 
             title: {
-                text: 'USERS PLAYBACK COMPARISON'
+                text: 'USERS PLAYBACK HISTORY'
             },
             credits: false,
             xAxis: {
@@ -1123,25 +1125,26 @@ function usersearch() {
             }],
 
             series: [{
-                color: '#01a451',
-                type: 'column',
-                name: dataa.Info[0].USER_NAME,
-                data: dataa.chart.data.shp
+                    color: '#01a451',
+                    type: 'column',
+                    name: dataa.Info[0].USER_NAME,
+                    data: dataa.chart.data.shp
 
-                , //Fri, 14 Jul 2017 00:00:00 GMT
-                dataGrouping: {
-                    enabled: false,
+                    , //Fri, 14 Jul 2017 00:00:00 GMT
+                    dataGrouping: {
+                        enabled: false,
+                    }
+                },
+                {
+                    color: '#ff9933',
+                    type: 'spline',
+                    name: 'Cumulative',
+                    data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
+                    dataGrouping: {
+                        enabled: false,
+                    }
                 }
-            },
-            {
-                color: '#01a451',
-                type: 'spline',
-                name: dataa.Info[0].USER_NAME,
-                data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
-                dataGrouping: {
-                    enabled: false,
-                }
-            }]
+            ]
 
         });
 

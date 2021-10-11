@@ -28,7 +28,7 @@ $(function() {
                 lineWidth: 1,
                 min: 0,
                 title: {
-                    text: "Playback User Count"
+                    text: "Average User Count"
                 },
                 stackLabels: {
                     enabled: false,
@@ -66,19 +66,8 @@ $(function() {
                 }
             },
             series: [{
-                    name: 'Clever CSY',
-                    data: dataa[3].barc
-                },
-                {
-                    name: 'Schoology CSY',
-                    data: dataa[2].bars
-                }, {
-                    name: 'Family Count(CSY)',
-                    fontSize: '8px',
-                    data: dataa[1].bar2
-
-                }, {
                     name: 'Playback User Count(CSY)',
+                    color: '#02A45A',
                     data: dataa[0].bar
                 },
 

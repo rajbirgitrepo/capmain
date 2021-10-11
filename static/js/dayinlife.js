@@ -52,23 +52,6 @@ function cards2(URL) {
 }
 
 
-console.log("this is active");
-var settings = {
-    async: true,
-    crossDomain: true,
-    url: "/active_user_dild",
-    method: "GET",
-}
-$.ajax(settings).done(function(response) {
-    var dataa = JSON.parse(response);
-    console.log(dataa);
-
-    $("#active_users").text(dataa.data.active_users);
-    $("#web_users").text(dataa.data.web_users);
-    $("#home_users").text(dataa.data.home_users);
-    $("#lms_users").text(dataa.data.lms_users);
-
-});
 
 
 function charts(a) {
@@ -169,7 +152,7 @@ function charts(a) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "/practicehistorychartlatest/",
+        url: "/practicehistorychartlatest/playback",
         method: "GET",
     }
     $.ajax(settings).done(function(response) {
@@ -268,18 +251,10 @@ function charts(a) {
                 }
             },
             series: [{
-                    "name": "Last SY (2019 - 2020)",
-                    "type": "line",
-                    "color": "#FFFF00",
-                    "xAxis": 0,
-                    "data": dataa.data.lsy_to_lsy
-
-                },
-                {
                     "name": "Last SY",
                     "type": "line",
                     "color": "#FF9933",
-                    "xAxis": 1,
+                    "xAxis": 0,
                     "data": dataa.data.lsy
                 },
                 {
@@ -332,6 +307,9 @@ function charts(a) {
                 },
                 title: {
                     text: "Playback Chart"
+                },
+                credits: {
+                    enabled: false,
                 },
                 xAxis: [{
                     categories: ['1hr', '2hr', '3hr', '4hr', '5hr', '6hr', '7hr', '8hr', '9hr', '10hr', '11hr', '12hr', '13hr', '14hr', '15hr', '16hr', '17hr', '18hr', '19hr', '20hr', '21hr', '22hr', '23hr', '24hr']
@@ -421,6 +399,9 @@ function charts(a) {
                 title: {
                     text: "Feedback Chart"
                 },
+                credits: {
+                    enabled: false,
+                },
                 xAxis: [{
                     categories: ['1hr', '2hr', '3hr', '4hr', '5hr', '6hr', '7hr', '8hr', '9hr', '10hr', '11hr', '12hr', '13hr', '14hr', '15hr', '16hr', '17hr', '18hr', '19hr', '20hr', '21hr', '22hr', '23hr', '24hr']
                 }],
@@ -509,7 +490,7 @@ function charts(a) {
                 },
             },
             title: {
-                text: 'Sentiment Percebtage CSY'
+                text: 'Sentiment Percentage CSY'
             },
             tooltip: {
                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -889,57 +870,6 @@ function createDynamicDiv4(userList) {
 
 function cardscount(a) {
 
-    // var settings = {
-    //     async: true,
-    //     crossDomain: true,
-    //     url: "/active_user_dild",
-    //     method: "GET",
-    // };
-    // $.ajax(settings).done(function(response) {
-    //     var dataa = JSON.parse(response);
-    //     console.log(dataa + "active web")
-    //  var c = parseInt(dataa.totalchanged);
-
-    // if (c === 1) {
-    //     console.log("hello2")
-    //     document.getElementById("updownsigntotal").style.color = "green";
-    // } else if (c === -1) {
-    //     console.log("h2i")
-    //     document.getElementById("updownsigntotal").style.color = "#ff0000";
-    // } else {
-    //     document.getElementById("updownsigntotal").style.color = "grey";
-    // }
-    // var t = parseInt(dataa.teacherschanged[0]);
-
-    // if (t === 1) {
-    //     console.log("hello2")
-    //     document.getElementById("updownsignp").style.color = "green";
-    // } else if (t === -1) {
-    //     console.log("h2i")
-    //     document.getElementById("updownsignp").style.color = "#ff0000";
-    // } else {
-    //     document.getElementById("updownsignp").style.color = "grey";
-    // }
-    // var v = parseInt(dataa.parentschanged[0]);
-
-    // if (v === 1) {
-    //     console.log("hello2")
-    //     document.getElementById("updownsignt").style.color = "green";
-    // } else if (v === -1) {
-    //     console.log("h2i")
-    //     document.getElementById("updownsignt").style.color = "#ff0000";
-    // } else {
-    //     document.getElementById("updownsignt").style.color = "grey";
-    // }
-    // $("#updownsigntotal").text(parseFloat(dataa.Total_percentage_change[0]).toFixed(0) + "%");
-    // $("#updownsignp").text(parseFloat(dataa.Teacher_percentage_change[0]).toFixed(0) + "%");
-    // $("#updownsignt").text(parseFloat(dataa.parents_Percentage_Change[0]).toFixed(0) + "%");
-    // $("#usercount1").text(dataa.data.active_users);
-    // $("#usercount12").text(dataa.data.web_users);
-    // $("#neverlogged1").text(dataa.data.home_users);
-    // $("#totalstudent1").text(dataa.data.lms_users);
-    // });
-
     var settings = {
         async: true,
         crossDomain: true,
@@ -951,7 +881,7 @@ function cardscount(a) {
         var dataa = JSON.parse(response);
 
 
-        var c = parseInt(dataa.TOTALCHANGE);
+        var c = parseInt(dataa.totalchanged[0]);
 
         if (c === 1) {
             console.log("hello2")
@@ -963,7 +893,7 @@ function cardscount(a) {
             document.getElementById("updownpractotal").style.color = "grey";
         }
 
-        var t = parseInt(dataa.PARENTSCHANGE);
+        var t = parseInt(dataa.parentschanged[0]);
 
         if (t === 1) {
             console.log("hello2")
@@ -974,7 +904,7 @@ function cardscount(a) {
         } else {
             document.getElementById("updownpracp").style.color = "grey";
         }
-        var v = parseInt(dataa.TEACHERSCHANGE);
+        var v = parseInt(dataa.teacherschanged[0]);
 
         if (v === 1) {
             console.log("hello2")
@@ -986,8 +916,8 @@ function cardscount(a) {
             document.getElementById("updownpract").style.color = "grey";
         }
         $("#updownpractotal").text(parseFloat(dataa.Total_percentage_change[0]).toFixed(0) + "%");
-        $("#updownpracp").text(parseFloat(dataa.Teacher_percentage_change[0]).toFixed(0) + "%");
-        $("#updownpract").text(parseFloat(dataa.parents_Percentage_Change[0]).toFixed(0) + "%");
+        $("#updownpracp").text(parseFloat(dataa.parents_Percentage_Change[0]).toFixed(0) + "%");
+        $("#updownpract").text(parseFloat(dataa.Teacher_percentage_change[0]).toFixed(0) + "%");
         $("#usercount").text(dataa.total_signup_yesterday);
         $("#neverlogged").text(dataa.parents_signup_yesterday);
         $("#totalstudent").text(dataa.teachers_signup_yesterday);
@@ -1082,12 +1012,12 @@ function cardscount(a) {
 
         if (c === 1) {
             console.log("hello2")
-            document.getElementById("updownfbtotal").style.color = "green";
+            document.getElementById("updownavgtotal").style.color = "green";
         } else if (c === -1) {
             console.log("h2i")
-            document.getElementById("updownfbtotal").style.color = "#ff0000";
+            document.getElementById("updownavgtotal").style.color = "#ff0000";
         } else {
-            document.getElementById("updownfbtotal").style.color = "grey";
+            document.getElementById("updownavgtotal").style.color = "grey";
         }
 
 
@@ -1095,34 +1025,53 @@ function cardscount(a) {
 
         if (t === 1) {
             console.log("hello2")
-            document.getElementById("updownfbcomment").style.color = "green";
+            document.getElementById("updownavgcomment").style.color = "green";
         } else if (t === -1) {
             console.log("h2i")
-            document.getElementById("updownfbcomment").style.color = "#ff0000";
+            document.getElementById("updownavgcomment").style.color = "#ff0000";
         } else {
-            document.getElementById("updownfbcomment").style.color = "grey";
+            document.getElementById("updownavgcomment").style.color = "grey";
         }
         var v = parseInt(dataa.TEACHER_Comment_per_feedbackchange[0]);
 
         if (v === 1) {
             console.log("hello2")
-            document.getElementById("updownfbper").style.color = "green";
+            document.getElementById("updownavgper").style.color = "green";
         } else if (v === -1) {
             console.log("h2i")
-            document.getElementById("updownfbper").style.color = "#ff0000";
+            document.getElementById("updownavgper").style.color = "#ff0000";
         } else {
-            document.getElementById("updownfbper").style.color = "grey";
+            document.getElementById("updownavgper").style.color = "grey";
         }
 
 
-        $("#avg_feed").text(parseFloat(dataa.Average_feedback_PERCENTAGE[0]).toFixed(0) + "%");
-        $("#avg_parents").text(parseFloat(dataa.parent_PERCENTAGE_change[0]).toFixed(0) + "%");
-        $("#avg_teacher").text(parseFloat(dataa.teacher_PERCENTAGE_change[0]).toFixed(0) + "%");
-        $('#average_rating').text(dataa.Average_Rating_lastweek); 
+        $("#updownavgtotal").text(parseFloat(dataa.Average_feedback_PERCENTAGE[0]).toFixed(0) + "%");
+        $("#updownavgcomment").text(parseFloat(dataa.parent_PERCENTAGE_change[0]).toFixed(0) + "%");
+        $("#updownavgper").text(parseFloat(dataa.teacher_PERCENTAGE_change[0]).toFixed(0) + "%");
+        $('#average_rating').text(dataa.Average_FEEDBACK_Rating_change); 
         $('#Parent_feedback').text(dataa.PARENT_FEEDBACK_RATING_BEFORE_LAST_WEEK);
         $('#Teacher_feedback').text(dataa.TEACHER_FEEDBACK_RATING_BEFORE_LAST_WEEK);
 
     });
+
+    console.log("this is active");
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/active_user_dild",
+        method: "GET",
+    }
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa);
+
+        $("#active_users").text(dataa.data[0].active_users);
+        $("#web_users").text(dataa.data[0].web_users);
+        $("#home_users").text(dataa.data[0].home_users);
+        $("#lms_users").text(dataa.data[0].lms_users);
+
+    });
+
 }
 
 function cards(URL) {
