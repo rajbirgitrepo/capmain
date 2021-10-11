@@ -8086,6 +8086,13 @@ def Daily_Analytics():
     
     return render_template('Daily_Analytics.html')
 
+@app.route('/Day_In_Life')
+def Day_In_Life():
+    if not g.user:
+        return redirect(url_for('login'))
+    
+    return render_template('dayinlife.html')
+
 @app.route('/District_level_view_SKILLMAN')
 def District_level_view_SKILLMAN():
     if not g.user:
@@ -31103,7 +31110,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
            {'$project':{'_id':1,'TOTAL_LSYTOLSY':{'$size':'$auc'}}}])))
         df0.rename(columns = { '_id': 'Month'}, inplace = True)
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
@@ -31129,7 +31136,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
            {'$project':{'_id':1,'TOTAL_LSY':{'$size':'$auc'}}}])))
         df1.rename(columns = { '_id': 'Month'}, inplace = True)
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
@@ -31160,7 +31167,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
            {'$project':{'_id':1,'teacher_CSY':{'$size':'$auc'}}}])))
         if df2.empty == True:
             df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
@@ -31198,7 +31205,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
            {'$project':{'_id':1,'schoology_CSY':{'$size':'$auc'}}}])))
 
         if dfschoology.empty == True:
@@ -31234,7 +31241,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
            {'$project':{'_id':1,'clever_CSY':{'$size':'$auc'}}}])))
         if dfclever.empty == True:
             dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
@@ -31267,7 +31274,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
            {'$project':{'_id':1,'parents_CSY':{'$size':'$auc'}}}])))
         if df4.empty == True:
             df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
@@ -45210,7 +45217,7 @@ def average_trend_new_():
                                         "$lt":LSY_Date()}}]}},
        {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
     'TOTAL_USERS_PRACTICING':{'$sum':1},
-    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID.USER_ID'}
+    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID._id'}
      }}, 
      {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}}, 
      {'$sort':{'_id':1}},
@@ -45235,7 +45242,7 @@ def average_trend_new_():
                                         "$lt":csy_first_date()}}]}},
        {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
     'TOTAL_USERS_PRACTICING':{'$sum':1},
-    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID.USER_ID'}
+    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID._id'}
      }}, 
      {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}}, 
      {'$sort':{'_id':1}},
@@ -45249,7 +45256,8 @@ def average_trend_new_():
     # print(df1)
     df2 = DataFrame(list(collection.aggregate([
         {"$match":{
-     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+     '$and':[
+         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
              {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -45268,22 +45276,22 @@ def average_trend_new_():
                          }}]}},
        {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
     'TOTAL_USERS_PRACTICING':{'$sum':1},
-    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID.USER_ID'}
+    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID._id'}
      }}, 
      {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}}, 
      {'$sort':{'_id':1}},
     { "$project": { "teacher_CSY": {"$round":[{ "$divide": ["$TOTAL_USERS_PRACTICING", "$UNIQUE_USERS_PRACTICING"] },2 ]} } }
     ])))
     if df2.empty == True:
-        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'teacher_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
     else:
         df2
     df2.rename(columns = { '_id': 'Month'}, inplace = True)
     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
     df2['Month'] = df2['Month'].map(d)
     # df2
-    practice_left= pd.merge(df1, df2,on='Month', how='outer')
-    practice_left=practice_left.fillna(0)
+#     practice_left= pd.merge(df1, df2,on='Month', how='outer')
+#     practice_left=practice_left.fillna(0)
     #print(practice_left)
 
 
@@ -45309,7 +45317,7 @@ def average_trend_new_():
                          }}]}},
        {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
     'TOTAL_USERS_PRACTICING':{'$sum':1},
-    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID.USER_ID'}
+    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID._id'}
      }}, 
      {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}}, 
      {'$sort':{'_id':1}},
@@ -45347,7 +45355,7 @@ def average_trend_new_():
                          }}]}},
       {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
     'TOTAL_USERS_PRACTICING':{'$sum':1},
-    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID.USER_ID'}
+    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID._id'}
      }}, 
      {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}}, 
      {'$sort':{'_id':1}},
@@ -45383,7 +45391,7 @@ def average_trend_new_():
                          }}]}},
       {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
     'TOTAL_USERS_PRACTICING':{'$sum':1},
-    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID.USER_ID'}
+    'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID._id'}
      }}, 
      {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}}, 
      {'$sort':{'_id':1}},
@@ -45418,7 +45426,6 @@ def average_trend_new_():
     temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
 
     return json.dumps(temp)
-
 
 # <<<<<<<<<<<<<<<<<<<<<<<< Practice Bifurcation API >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -45458,8 +45465,8 @@ def average___trend_____(charttype):
     #     print("CSY",csy_first_date())
    
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username,       password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_track_master
    
@@ -45485,7 +45492,7 @@ def average___trend_____(charttype):
                          threshcond[0],
         {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
         'TOTAL_USERS_PRACTICING':{'$sum':1},
-        'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID'}
+        'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID._id'}
          }},
          {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}},
         
@@ -45523,7 +45530,7 @@ def average___trend_____(charttype):
                          threshcond[0],
         {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
         'TOTAL_USERS_PRACTICING':{'$sum':1},
-        'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID'}
+        'UNIQUE_USERS_PRACTICING':{'$addToSet':'$USER_ID._id'}
          }},
          {'$project':{'_id':1, 'TOTAL_USERS_PRACTICING':'$TOTAL_USERS_PRACTICING', 'UNIQUE_USERS_PRACTICING':{'$size':'$UNIQUE_USERS_PRACTICING'}}},
          {"$match":
@@ -72643,6 +72650,102 @@ def day_feedback_card():
         temp.update({key:value})
         #     print(temp)
     return json.dumps(temp)
+
+
+@app.route('/active_user_dild')
+def active_userss_():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
+    db=client.compass
+
+    mydatetime=datetime.datetime.utcnow()
+
+    today_min=datetime.datetime.combine(mydatetime,datetime.time.min)
+    # +timedelta(hours=4)
+    today_max=datetime.datetime.combine(mydatetime, datetime.time.max)
+    # +timedelta(hours=4)
+
+    collection= db.audio_track_master
+    df_playback= DataFrame(list(collection.aggregate([{"$match":{
+    '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+    {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+    {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+    {'MODIFIED_DATE': {'$gte':datetime.datetime.utcnow()-datetime.timedelta(minutes=5)}}
+    ]}},
+    {'$group':{'_id':'$USER_ID._id', 'practice':{'$sum':1}}}
+    ])))
+
+    if df_playback.empty:
+        data= {'active_users':str(0),'web_users':str(0),'home_users':str(0),'lms_users':str(0)}
+        temp={"data":data.values.tolist()}
+    else: 
+        list_of_users=df_playback['_id'].tolist()
+        active_users=str(len(df_playback))
+
+        collection2= db.user_master
+        df_web=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, {'DEVICE_USED':{'$regex':'webapp', '$options':'i'}},
+        {'_id':{'$in':list_of_users}}
+               ]}},
+        {'$group':{'_id':'$_id'}}])))
+
+        web_users=len(df_web)
+
+
+        df_home=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}, 
+                {'_id':{'$in':list_of_users}}
+        ]}},
+        {'$group':{'_id':'$_id'}}])))
+
+
+        df_classroom=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, {'DEVICE_USED':{'$not':{'$regex':'webapp', '$options':'i'}}},
+        {'_id':{'$in':list_of_users}}
+        ]}},
+        {'$group':{'_id':'$_id'}}])))
+
+        mobile=pd.concat([df_home,df_classroom])
+        mobile_users=len(mobile)
+
+        df_lms=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'_id':{'$in':list_of_users}}
+        ]}},
+        {"$match":{'$or':[{'DEVICE_USED':{'$regex':'clever', '$options':'i'}},{'DEVICE_USED':{'$regex':'schoology', '$options':'i'}}
+        ]}},
+        {'$group':{'_id':'$_id'}}])))
+
+        lms_users=len(df_lms)
+
+        data1= {'active_users':str(active_users),'web_users':str(web_users),'home_users':str(mobile_users),'lms_users':str(lms_users)}
+        temp={'data':[data1]} 
+    return json.dumps(temp)
+
 
 
 @app.route('/Playback_card_dild')

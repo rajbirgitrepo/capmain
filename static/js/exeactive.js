@@ -135,7 +135,7 @@ $.ajax(settings).done(function(response) {
             enabled: false,
         },
         title: {
-            text: " Average Trend"
+            text: " Average Playback Trend"
 
         },
         colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
@@ -237,7 +237,7 @@ $.ajax(settings).done(function(response) {
             },
         },
         title: {
-            text: 'Sentiment CSY'
+            text: 'Sentiment Percebtage CSY'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -256,7 +256,7 @@ $.ajax(settings).done(function(response) {
                     format: '<b>{point.name}</b>: {point.y}'
                 },
                 colors: [
-                    "#02A45A", "#03B761", "#05D36C", "#04C065", "#35D461",
+                    "#02A45A", "#ff9933"
                 ]
             }
         },
@@ -402,7 +402,7 @@ $.ajax(settings).done(function(response) {
             lineWidth: 1,
             min: 0,
             title: {
-                // text: "Practice User Count"
+                text: " Feedback Rating Count"
             },
             stackLabels: {
                 enabled: false,
@@ -691,14 +691,6 @@ function playbackTrendChart3(selectValue3, tx) {
                 }
             },
             series: [{
-                    "name": "Last SY (2019 - 2020)",
-                    "type": "line",
-                    "color": "#FFFF00",
-                    "xAxis": 0,
-                    "data": dataa.data.lsy_to_lsy
-
-                },
-                {
                     "name": "Last SY",
                     "type": "line",
                     "color": "#FF9933",
