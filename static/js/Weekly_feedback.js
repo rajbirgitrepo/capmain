@@ -884,6 +884,12 @@ function charts(a) {
 
 
 function cards2(URL) {
+    
+    document.getElementById('admin').style.display = "block";
+    console.log("cardsfunc")
+
+    document.getElementById('exTab1').style.display = "none";
+    // document.getElementById('tabtablemain').style.display = "none";
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
     $('#next').empty();
@@ -1342,6 +1348,11 @@ function cardscount(a) {
 }
 
 function cards(URL) {
+    
+    document.getElementById('admin').style.display = "block";
+    console.log("cardsfunc")
+    document.getElementById('exTab1').style.display = "none";
+    // document.getElementById('tabtablemain').style.display = "none";
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
     $('#next').empty();
@@ -1356,6 +1367,11 @@ function cards(URL) {
 }
 
 function cards2(URL) {
+
+    document.getElementById('admin').style.display = "block";
+    console.log("cardsfunc")
+    document.getElementById('exTab1').style.display = "none";
+    // document.getElementById('tabtablemain').style.display = "none";
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
     $('#next').empty();
@@ -1370,6 +1386,11 @@ function cards2(URL) {
 }
 
 function cards3(URL) {
+    
+    document.getElementById('admin').style.display = "block";
+    console.log("cardsfunc")
+    document.getElementById('exTab1').style.display = "none";
+    // document.getElementById('tabtablemain').style.display = "none";
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
     $('#next').empty();

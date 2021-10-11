@@ -6,7 +6,7 @@ $(function() {
         dateFormat: "yy-mm-dd",
         maxDate: new Date(),
         onSelect: function(dateText, inst) {
-            $("#finaldate").text(dateText);
+            $("#stardate1").text(dateText);
         }
     });
     var d = new Date();
@@ -28,7 +28,7 @@ var e = "2021-10-01";
 var f = currYear + "-" + currMonth + "-" + currDate;
 //   charts(e,f);
 // cardscount(e,f);
-$("#stardate1").text(e);
+$("#stardate1").text(f);
 //$("#finaldate").text(f);
 $("#fromd").text(e);
 $("#tod").text(f);
@@ -48,6 +48,9 @@ $('#rating').change(function() {
     $("#r1").text(value);
 });
 
+$("#r1").text("5");
+
+sub1();
 
 function sub1() {
     var a = document.getElementById("stardate1").innerText;
@@ -313,7 +316,7 @@ function createDynamic1(url) {
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
 
-        $("#next").prepend(
+        $("#next4").prepend(
             '<p>Positive</p><table class="table table-striped custab table-fixed" id = "dataTable3" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.positivetable.length; i++) {
@@ -408,4 +411,15 @@ function createDynamicDiv1(userList) {
         "</tr>";
 
     return dynamicDiv;
+}
+
+
+
+function showTabTable(){
+    document.getElementById('admin').style.display = "none";
+    document.getElementById('exTab1').style.display = "block";
+    // document.getElementById('tabtablemain').style.display = "block";
+    var modal2 = document.getElementById("myModal2");
+    modal2.style.display = "block";
+    console.log('extab');
 }

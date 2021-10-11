@@ -708,37 +708,70 @@ function jou2(url1) {
 
 
 function familysearch() {
-    //var a = document.getElementById("fsearchinputdescription").value;
-    var a = document.getElementById("familysearchinput").value;
+    $("#giffamily").empty();
+    $("#giffamily").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    var a = document.getElementById("fsearchinputdescription").innerText;
     console.log(a);
-    URL = "/family___journey_score/" + a
-    $("#fschoolname").empty();
-    $("#fpractice").empty();
-    $("#fstate").empty();
-    $("#fusercountse").empty();
-    $("#fadress").empty();
-    $("#femail").empty();
-    $("#fcountry").empty();
-    $("#fcity").empty();
-    $("#fadmin").empty();
-    $("#fucount").empty();
-    $("#fpcount").empty();
-    $("#fmindfulness_minutes").empty();
-    $("#fratings").empty();
-    $("#fschool").empty();
-    $("#fcity").empty();
-    $("#fstate").empty();
-    $("#fcountry").empty();
-    $("#fsignup").empty();
-    $("#frenewal").empty();
-    $("#fstatus").empty();
-    console.log(URL);
-    Pfam(URL);
-    $("#fnext").empty();
-    $("#fnext1").empty();
-    $("#fbtnExport").show();
-    createDynamic(URL);
-
+    if (a !== '') {
+        URL = "/family___journey_score/" + a
+        $("#fschoolname").empty();
+        $("#fpractice").empty();
+        $("#fstate").empty();
+        $("#fusercountse").empty();
+        $("#fadress").empty();
+        $("#femail").empty();
+        $("#fcountry").empty();
+        $("#fcity").empty();
+        $("#fadmin").empty();
+        $("#fucount").empty();
+        $("#fpcount").empty();
+        $("#fmindfulness_minutes").empty();
+        $("#fratings").empty();
+        $("#fschool").empty();
+        $("#fcity").empty();
+        $("#fstate").empty();
+        $("#fcountry").empty();
+        $("#fsignup").empty();
+        $("#frenewal").empty();
+        $("#fstatus").empty();
+        console.log(URL);
+        Pfam(URL);
+        $("#fnext").empty();
+        $("#fnext1").empty();
+        $("#fbtnExport").show();
+        createDynamic(URL);
+        $("#fsearchinputdescription").empty();
+    } else {
+        var a = document.getElementById("familysearchinput").value;
+        URL = "/family___journey_score/" + a
+        $("#fschoolname").empty();
+        $("#fpractice").empty();
+        $("#fstate").empty();
+        $("#fusercountse").empty();
+        $("#fadress").empty();
+        $("#femail").empty();
+        $("#fcountry").empty();
+        $("#fcity").empty();
+        $("#fadmin").empty();
+        $("#fucount").empty();
+        $("#fpcount").empty();
+        $("#fmindfulness_minutes").empty();
+        $("#fratings").empty();
+        $("#fschool").empty();
+        $("#fcity").empty();
+        $("#fstate").empty();
+        $("#fcountry").empty();
+        $("#fsignup").empty();
+        $("#frenewal").empty();
+        $("#fstatus").empty();
+        console.log(URL);
+        Pfam(URL);
+        
+        $("#fnext").empty();
+        $("#fnext1").empty();
+        $("#fbtnExport").show();
+        // createDynamic(URL);
+    }
 };
 
 
@@ -751,6 +784,7 @@ function Pfam(URL) {
         method: "GET",
         success: function() {
             $("#error").empty()
+            $("#giffamily").empty();
         },
         error: function() {
             $("#error").empty()
@@ -760,39 +794,92 @@ function Pfam(URL) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(URL)
-        $("#schoolname").empty();
-        $("#practice").empty();
-        $("#state").empty();
-        $("#usercountse").empty();
-        $("#adress").empty();
-        $("#email").empty();
-        $("#country").empty();
-        $("#city").empty();
-        $("#admin").empty();
-        $("#ucount").empty();
-        $("#pcount").empty();
-        $("#mindfulness_minutes").empty();
-        $("#ratings").empty();
-        $("#school").empty();
-        $("#city").empty();
-        $("#state").empty();
-        $("#country").empty();
-        $("#signup").empty();
-        $("#renewal").empty();
-        $("#status").empty();
-        $("#schoolname").text("SCHOOL NAME: " + dataa.school_name);
-        $("#practice").text(dataa.school_practice_count);
-        $("#state").text("STATE: " + dataa.state);
-        $("#usercountse").text(dataa.user_count);
-        $("#adress").text("ADDRESS: " + dataa.address);
-        $("#email").text("ADMIN EMAIL: " + dataa.admin_email);
-        $("#country").text("COUNTRY: " + dataa.country);
-        $("#city").text("CITY: " + dataa.city);
-        $("#admin").text("ADMIN NAME: " + dataa.admin_name);
-        $("#plan").text(dataa.plan);
-        var url1 = "/journey/" + dataa.admin_email;
-        joufam(url1);
-        historychartfam(dataa.admin_email)
+        $("#fschoolname").text("SCHOOL NAME: " + dataa.Info[0].SCHOOL_NAME);
+        $("#fname").text("USER NAME: " + dataa.Info[0].USER_NAME);
+        $("#fpractice").text("USER EMAIL: " + dataa.Info[0].USER_EMAIL);
+        $("#fstate").text("SIGNUP DATE: " + dataa.Info[0].SIGN_UP_DATE);
+        $("#fadress").text("ADDRESS: " + dataa.Info[0].ADDRESS);
+        $("#femail").text("COUNTRY: " + dataa.Info[0].COUNTRY);
+        $("#fcity").text("CITY: " + dataa.Info[0].CITY);
+        $("#fadmin").text("STATE: " + dataa.Info[0].STATE);
+        $("#fsignup").text("DISTRICT NAME: " + dataa.Info[0].DISTRICT_NAME);
+        $("#fucount").text(dataa.Info[0].LAST_PRACTICE_DATE);
+        $("#fpcount").text(dataa.Info[0].SCHOOL_PRACTICE_COUNT);
+        $("#fmindfulness_minutes").text(dataa.Info[0].SCHOOL_MINDFUL_MINUTES);
+        // var url1 = "/journey/" + dataa.admin_email;
+        // joufam(url1);
+        // historychartfam(dataa.admin_email)
+
+        var chart = Highcharts.stockChart('famcontainerprac', {
+            chart: {
+                type: 'column'
+            },
+
+            title: {
+                text: 'FAMILY USERS PLAYBACK COMPARISON'
+            },
+            credits: false,
+            xAxis: {
+                minRange: 1
+            },
+            plotOptions: {
+                series: {
+                    point: {
+
+                    }
+                }
+            },
+
+            navigator: {
+                series: {
+                    color: '#00FF00',
+                    animation: {
+                        duration: 0,
+                    }
+                },
+                xAxis: {
+                    minRange: 1
+                },
+
+
+            },
+            yAxis: [{
+                lineWidth: 1,
+                opposite: false,
+                title: {
+                    text: 'Playback Count'
+                }
+            }, {
+                lineWidth: 1,
+                opposite: true,
+                title: {
+                    text: 'Playback Count'
+                }
+            }],
+
+            series: [{
+                color: '#01a451',
+                type: 'column',
+                name: dataa.Info[0].USER_NAME,
+                data: dataa.chart.data.shp
+
+                , //Fri, 14 Jul 2017 00:00:00 GMT
+                dataGrouping: {
+                    enabled: false,
+                }
+            },
+            {
+                color: '#01a451',
+                type: 'spline',
+                name: dataa.Info[0].USER_NAME,
+                data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
+                dataGrouping: {
+                    enabled: false,
+                }
+            }]
+
+        });
+
     });
 };
 
@@ -825,104 +912,77 @@ function joufam(url1) {
         $("#funiqueusercount").text(datain[0].unique_user);
         $("#fmonths").text(datain[0].month);
 
-
-
-        Highcharts.chart("famgraph1", {
+        var chart = Highcharts.stockChart('container5', {
             chart: {
-                type: "line",
+                type: 'column'
             },
 
-            xAxis: {
-                categories: (function() {
-                    // generate an array of random data
-                    var data = [];
-                    for (i = 0; i <= datain[0].month.length; i++) {
-                        data.push([datain[0].month[i]]);
-                    }
-                    return data;
-                })(),
-            },
             title: {
-                text: "",
+                text: 'USERS PLAYBACK COMPARISON'
             },
-
-            exporting: {
-                enabled: false,
-            },
-            credits: { enabled: false },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: true,
-                    },
-                    enableMouseTracking: true,
-                },
-            },
-            series: [{
-                name: "PLAYBACK TREND",
-                data: (function() {
-                    // generate an array of random data
-                    var data = [];
-
-                    for (i = 0; i <= datain[0].practice_count.length; i++) {
-                        data.push([datain[0].practice_count[i]]);
-                    }
-                    return data;
-                })(),
-                color: "#01a451",
-            }, ],
-        });
-
-        Highcharts.chart("famgraph2", {
-            chart: {
-                type: "column",
-            },
-            title: {
-                text: "",
-            },
-
+            credits: false,
             xAxis: {
-                categories: (function() {
-                    // generate an array of random data
-                    var data1 = [];
-
-                    for (i = 0; i <= datain[0].month.length; i++) {
-                        data1.push([datain[0].month[i]]);
-                    }
-                    return data1;
-                })(),
-            },
-
-            exporting: {
-                enabled: false,
-            },
-
-            credits: { enabled: false },
-            legend: {
-                reversed: true,
+                minRange: 1
             },
             plotOptions: {
                 series: {
-                    stacking: "normal",
-                },
-            },
-            series: [{
-                name: "Unique User",
+                    point: {
 
-                data: (function() {
-                    // generate an array of random data
-                    var data = [];
-
-                    for (i = 0; i <= datain[0].month.length; i++) {
-                        a = 20;
-
-                        data.push([datain[0].unique_user[i]]);
                     }
-                    return data;
-                })(),
-                color: "#01a451",
-            }, ],
+                }
+            },
+
+            navigator: {
+                series: {
+                    color: '#00FF00',
+                    animation: {
+                        duration: 0,
+                    }
+                },
+                xAxis: {
+                    minRange: 1
+                },
+
+
+            },
+            yAxis: [{
+                lineWidth: 1,
+                opposite: false,
+                title: {
+                    text: 'Playback Count'
+                }
+            }, {
+                lineWidth: 1,
+                opposite: true,
+                title: {
+                    text: 'Playback Count'
+                }
+            }],
+
+            series: [{
+                color: '#01a451',
+                type: 'column',
+                name: dataa.Info[0].USER_NAME,
+                data: dataa.chart.data.shp
+
+                , //Fri, 14 Jul 2017 00:00:00 GMT
+                dataGrouping: {
+                    enabled: false,
+                }
+            },
+            {
+                color: '#01a451',
+                type: 'spline',
+                name: dataa.Info[0].USER_NAME,
+                data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
+                dataGrouping: {
+                    enabled: false,
+                }
+            }]
+
         });
+
+       
     });
 
 };
@@ -997,8 +1057,8 @@ function usersearch() {
         $("#uadmin").text("STATE: " + dataa.Info[0].STATE);
         $("#usignup").text("DISTRICT NAME: " + dataa.Info[0].DISTRICT_NAME);
         $("#uucount").text(dataa.Info[0].LAST_PRACTICE_DATE);
-        $("#upcount").text(dataa.Info[0].USER_PRACTICE_COUNT);
-        $("#umindfulness_minutes").text(dataa.Info[0].USER_MINDFUL_MINUTES);
+        $("#upcount").text(dataa.Info[0].SCHOOL_PRACTICE_COUNT);
+        $("#umindfulness_minutes").text(dataa.Info[0].SCHOOL_MINDFUL_MINUTES);
 
 
         // $("#u2schoolname").text("SCHOOL NAME: " + dataa.Info2[0].SCHOOL_NAME);
@@ -1064,10 +1124,20 @@ function usersearch() {
 
             series: [{
                 color: '#01a451',
+                type: 'column',
+                name: dataa.Info[0].USER_NAME,
+                data: dataa.chart.data.shp
+
+                , //Fri, 14 Jul 2017 00:00:00 GMT
+                dataGrouping: {
+                    enabled: false,
+                }
+            },
+            {
+                color: '#01a451',
                 type: 'spline',
                 name: dataa.Info[0].USER_NAME,
-                data: dataa.Chart.data.shp,
-                //Fri, 14 Jul 2017 00:00:00 GMT
+                data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
                 dataGrouping: {
                     enabled: false,
                 }
@@ -1127,7 +1197,7 @@ function usersearch() {
                 color: '#01a451',
                 type: 'spline',
                 name: dataa.Info[0].USER_NAME,
-                data: dataa.Chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
+                data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
                 dataGrouping: {
                     enabled: false,
                 }

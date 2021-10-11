@@ -538,6 +538,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-2" onclick="" style="cursor:pointer;" id="tableshowbuttonWeekly">
+                        <div class="" style=" margin-top: 38px;" >
+                        <button class="" style="background-color: #fff;
+                        outline: 0;
+                        color: #5cb85c;
+                        border-radius: 10px;
+                        padding: 8px;
+                        margin-left: 6px;
+                        border: 1px solid;
+                        box-shadow: -10px -10px 15px rgb(237, 239, 245), 10px 10px 15px rgba(0, 0, 0, 0.12);" onclick="showTabTable()">Sentiment User Data</button>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -577,103 +589,7 @@
                 </div>
             </section>
 
-            <div id="exTab1" class="" style="margin-top: 30px;">
-                <ul class="nav nav-pills" style="margin-left: 10px;">
-                    <li class="active">
-                        <a href="#1a" data-toggle="tab">POSITIVE</a>
-                    </li>
-                    <li><a href="#2a" data-toggle="tab">NEGETIVE</a>
-                    </li>
-                    <li><a href="#3a" data-toggle="tab">OVERALL</a>
-                    </li>
-                </ul>
-
-                <div class="tab-content clearfix">
-                    <div class="tab-pane active" id="1a">
-                        <section>
-                            <div class="welcome2">
-                                <div class="container-fluid">
-                                    <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
-                                        <div class="row">
-                                            <div id="admin1" class="col-md-12">
-                                                <div class="card material-table">
-                                                    <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable2');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
-                                                    </a>
-                                                    <div class="table-header">
-                                                        <span class="table-title" style="margin: 0 !important;">SCHOOL
-                                                            DETAILS</span>
-                                                    </div>
-
-                                                    <div class="custyle" id="next">
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="tab-pane" id="2a">
-                        <section>
-                            <div class="welcome2">
-                                <div class="container-fluid">
-                                    <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
-                                        <div class="row">
-                                            <div id="admin1" class="col-md-12">
-                                                <div class="card material-table">
-                                                    <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable2');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
-                                                    </a>
-                                                    <div class="table-header">
-                                                        <span class="table-title" style="margin: 0 !important;">SCHOOL
-                                                            DETAILS</span>
-                                                    </div>
-
-
-                                                    <div class="custyle" id="next1"></div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="tab-pane" id="3a">
-                        <section>
-                            <div class="welcome2">
-                                <div class="container-fluid">
-                                    <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
-                                        <div class="row">
-                                            <div id="admin1" class="col-md-12">
-                                                <div class="card material-table">
-                                                    <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable2');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
-                                                    </a>
-                                                    <div class="table-header">
-                                                        <span class="table-title" style="margin: 0 !important;">SCHOOL
-                                                            DETAILS</span>
-                                                    </div>
-
-
-                                                    <div class="custyle" id="next2">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-
+          
         </section>
         <hr />
         <div class="col-md-10" style="margin-top: 40px;" title="" id="practice_playback_count_weekly_comparison">
@@ -725,7 +641,7 @@
         <div id="myModal2" class="modal2">
             <!-- Modal content -->
             <div class="modal2-content">
-                <div id="admin" class="col-md-12">
+                <div id="admin" class="col-md-12" style="display: none;">
                     <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
                         <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()" style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o"
                                 aria-hidden="true"></i></a>
@@ -737,6 +653,101 @@
                         <div id="gif"></div>
                         <div class="custyle" id="next"></div>
                         <div class="custyle" id="next1"></div>
+                    </div>
+                </div>
+
+                <div id="exTab1" class="" style="margin-top: 30px;">
+                    <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()" style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o"
+                        aria-hidden="true"></i></a>
+                    <ul class="nav nav-pills" style="margin-left: 10px;">
+                        <li class="active">
+                            <a href="#1a" data-toggle="tab">POSITIVE</a>
+                        </li>
+                        <li><a href="#2a" data-toggle="tab">NEGETIVE</a>
+                        </li>
+                        <li><a href="#3a" data-toggle="tab">OVERALL</a>
+                        </li>
+                    </ul>
+    
+                    <div class="tab-content clearfix">
+                        <div class="tab-pane active" id="1a">
+                            <section>
+                                <div class="welcome2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
+                                            <div class="row">
+                                                <div id="admin1" class="col-md-12">
+                                                    <div class="card material-table">
+                                                        <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable2');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
+                                                        </a>
+                                                        <div class="table-header">
+                                                            <span class="table-title" style="margin: 0 !important;">SCHOOL
+                                                                DETAILS</span>
+                                                        </div>
+    
+                                                        <div class="custyle" id="next4">
+                                                        </div>
+    
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="tab-pane" id="2a">
+                            <section>
+                                <div class="welcome2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
+                                            <div class="row">
+                                                <div id="admin1" class="col-md-12">
+                                                    <div class="card material-table">
+                                                        <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable2');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
+                                                        </a>
+                                                        <div class="table-header">
+                                                            <span class="table-title" style="margin: 0 !important;">SCHOOL
+                                                                DETAILS</span>
+                                                        </div>
+    
+    
+                                                        <div class="custyle" id="next1"></div>
+    
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                        <div class="tab-pane" id="3a">
+                            <section>
+                                <div class="welcome2">
+                                    <div class="container-fluid">
+                                        <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
+                                            <div class="row">
+                                                <div id="admin1" class="col-md-12">
+                                                    <div class="card material-table">
+                                                        <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable2');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
+                                                        </a>
+                                                        <div class="table-header">
+                                                            <span class="table-title" style="margin: 0 !important;">SCHOOL
+                                                                DETAILS</span>
+                                                        </div>
+    
+    
+                                                        <div class="custyle" id="next2">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </div>
             </div>

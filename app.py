@@ -962,6 +962,7 @@ def queststreak():
     finalstreak = pd.merge(df2static, user_streak1, on="STREAK", how='left').fillna(0)
     temp={"STREAK":finalstreak["USER_ID"].tolist(),"streak_count":int(finalstreak["USER_ID"].sum())}
     return json.dumps(temp)
+
 @app.route('/questactivestreak')
 def questactivestreak():
     mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
@@ -8085,13 +8086,6 @@ def Daily_Analytics():
         return redirect(url_for('login'))
     
     return render_template('Daily_Analytics.html')
-
-@app.route('/Day_In_Life')
-def Day_In_Life():
-    if not g.user:
-        return redirect(url_for('login'))
-    
-    return render_template('dayinlife.html')
 
 @app.route('/District_level_view_SKILLMAN')
 def District_level_view_SKILLMAN():
@@ -22189,20 +22183,6 @@ def power_users():
     ACTIVETREND={'STREAK':power_user_streaks['STREAK'].values.tolist(),'line':power_user_streaks['Number_of_present_users_having_streak'].values.tolist(),'bar':power_user_streaks['Number_of_classroom_users_having_streak'].values.tolist()}
     ACTIVETREND=[ACTIVETREND]
     return json.dumps(ACTIVETREND)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 @app.route('/STREAKS')
@@ -72653,7 +72633,7 @@ def day_feedback_card():
 
 
 @app.route('/active_user_dild')
-def active_userss_():
+def active_userss__():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
@@ -72681,7 +72661,7 @@ def active_userss_():
     ])))
 
     if df_playback.empty:
-        data= {'active_users':str(0),'web_users':str(0),'home_users':str(0),'lms_users':str(0)}
+        data= {'active_users':str(0),'web_users':str(0),'mobile_users':str(0),'lms_users':str(0)}
         temp={"data":data.values.tolist()}
     else: 
         list_of_users=df_playback['_id'].tolist()
@@ -72720,12 +72700,17 @@ def active_userss_():
         {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
         {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, {'DEVICE_USED':{'$not':{'$regex':'webapp', '$options':'i'}}},
-        {'_id':{'$in':list_of_users}}
-        ]}},
+        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, 
+        {'_id':{'$nin':db.schoology_master.distinct("USER_ID._id")}},
+        {'_id':{'$nin':db.clever_master.distinct("USER_ID._id")}},
+        {'DEVICE_USED':{'$not':{'$regex':'webapp', '$options':'i'}}} , 
+        {'DEVICE_USED':{'$not':{'$regex':'clever', '$options':'i'}}},
+                {'DEVICE_USED':{'$not':{'$regex':'schoology', '$options':'i'}}},
+        {'_id':{'$in':list_of_users}}]}},
         {'$group':{'_id':'$_id'}}])))
 
-        mobile=pd.concat([df_home,df_classroom])
+
+        mobile=pd.concat([df_home,df_classroom]).reset_index(drop=True)
         mobile_users=len(mobile)
 
         df_lms=DataFrame(list(collection2.aggregate([{"$match":{
@@ -72742,9 +72727,10 @@ def active_userss_():
 
         lms_users=len(df_lms)
 
-        data1= {'active_users':str(active_users),'web_users':str(web_users),'home_users':str(mobile_users),'lms_users':str(lms_users)}
-        temp={'data':[data1]} 
+        data1= {'active_users':str(active_users),'web_users':str(web_users),'mobile_users':str(mobile_users),'lms_users':str(lms_users)}
+    temp={'data':[data1]} 
     return json.dumps(temp)
+
 
 
 
@@ -73149,6 +73135,106 @@ def day_signup_card():
         
     return json.dumps(temp2)
 
+@app.route('/active_users_on_day_dild')
+def active_userss_day():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
+    db=client.compass
+
+    mydatetime=datetime.datetime.utcnow()
+
+    today_min=datetime.datetime.combine(mydatetime,datetime.time.min)
+    # +timedelta(hours=4)
+    today_max=datetime.datetime.combine(mydatetime, datetime.time.max)
+    # +timedelta(hours=4)
+
+    collection= db.audio_track_master
+    df_playback= DataFrame(list(collection.aggregate([{"$match":{
+    '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+    {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+    {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+    {'MODIFIED_DATE': {'$gte':today_min, '$lt':today_max}}
+    ]}},
+    {'$group':{'_id':'$USER_ID._id', 'practice':{'$sum':1}}}
+    ])))
+
+    if df_playback.empty:
+        data= {'active_users':str(0),'web_users':str(0),'mobile_users':str(0),'lms_users':str(0)}
+        temp={"data":data.values.tolist()}
+    else: 
+        list_of_users=df_playback['_id'].tolist()
+        active_users=str(len(df_playback))
+
+        collection2= db.user_master
+        df_web=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, {'DEVICE_USED':{'$regex':'webapp', '$options':'i'}},
+        {'_id':{'$in':list_of_users}}
+               ]}},
+        {'$group':{'_id':'$_id'}}])))
+
+        web_users=len(df_web)
+
+
+        df_home=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}, 
+                {'_id':{'$in':list_of_users}}
+        ]}},
+        {'$group':{'_id':'$_id'}}])))
+
+
+        df_classroom=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, 
+        {'_id':{'$nin':db.schoology_master.distinct("USER_ID._id")}},
+        {'_id':{'$nin':db.clever_master.distinct("USER_ID._id")}},
+        {'DEVICE_USED':{'$not':{'$regex':'webapp', '$options':'i'}}} , 
+        {'DEVICE_USED':{'$not':{'$regex':'clever', '$options':'i'}}},
+                {'DEVICE_USED':{'$not':{'$regex':'schoology', '$options':'i'}}},
+        {'_id':{'$in':list_of_users}}]}},
+        {'$group':{'_id':'$_id'}}])))
+
+
+        mobile=pd.concat([df_home,df_classroom]).reset_index(drop=True)
+        mobile_users=len(mobile)
+
+        df_lms=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'_id':{'$in':list_of_users}}
+        ]}},
+        {"$match":{'$or':[{'DEVICE_USED':{'$regex':'clever', '$options':'i'}},{'DEVICE_USED':{'$regex':'schoology', '$options':'i'}}
+        ]}},
+        {'$group':{'_id':'$_id'}}])))
+
+        lms_users=len(df_lms)
+
+        data1= {'active_users':str(active_users),'web_users':str(web_users),'mobile_users':str(mobile_users),'lms_users':str(lms_users)}
+    temp={'data':[data1]} 
+    return json.dumps(temp)
+
+
 
 
 
@@ -73330,6 +73416,13 @@ def callibration():
         return redirect(url_for('login'))
         
     return render_template('callibration.html')
+
+@app.route('/Day_In_Life')
+def DayInLife():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('dailyinlife.html')
 
 @app.route('/Login_analytics')
 def loginAnalytics():
