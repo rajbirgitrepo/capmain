@@ -8084,13 +8084,8 @@ def Sms_analytics():
 def Daily_Analytics():
     if not g.user:
         return redirect(url_for('login'))
+    
     return render_template('Daily_Analytics.html')
-
-@app.route('/Day_In_Life')
-def Day_In_Life():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('dayinlife.html')
 
 @app.route('/District_level_view_SKILLMAN')
 def District_level_view_SKILLMAN():
@@ -73364,6 +73359,466 @@ def active_userss_day():
     temp={'data':[data1]} 
     return json.dumps(temp)
 
+@app.route('/Practice_per_minute_dild/<charttype>')
+def practice_per_mints_(charttype):
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote('F5tMazRj47cYqm33e') + "@52.41.36.115:27017/"
+    client = pymongo.MongoClient(mongo_uri)
+    db = client.compass
+    collection = db.audio_track_master_all
+    collection2 = db.audio_track_master
+
+    mydatetime=datetime.datetime.utcnow()
+    today_min=datetime.datetime.combine(mydatetime,datetime.time.min)
+    today_max=datetime.datetime.combine(mydatetime, datetime.time.max)
+
+    start_today=today_min.strftime('%Y-%m-%d %H:%M:%S')
+    end_today=today_max.strftime('%Y-%m-%d %H:%M:%S')
+
+    charttype=str(charttype).title()
+
+    if charttype=='Practice':
+        threshold=.5
+
+
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        ######################  USER PRACTICE 2019-2020(LSY) ############################################
+        df1 = DataFrame(list(collection2.aggregate([
+            {"$match":
+            {"$and" :[
+                {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'USER_ID.EMAIL_ID':{'$ne':""}},
+
+                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"MODIFIED_DATE":{"$gte": today_min
+                                             ,"$lte" : today_max
+                                    }},
+                {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+
+
+                {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+        practice_cond_dictonary_list[0],
+                    practice_cond_dictonary_list[1],
+                     threshcond[0],
+
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Users_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                        'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+
+        df2 = DataFrame(list(collection2.aggregate([{"$match":
+            {"$and" :[
+                {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'USER_ID.EMAIL_ID':{'$ne':""}},
+
+                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"MODIFIED_DATE":{"$gte": today_min
+                                             ,"$lte" : today_max
+                                    }},
+                {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+
+
+                {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}},                
+            ]}},
+                                                practice_cond_dictonary_list[0],
+                            practice_cond_dictonary_list[1],
+                             threshcond[0],
+
+                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                    'month':{'$month':'$MODIFIED_DATE'}},
+                            'date':{'$first':'$MODIFIED_DATE'}, 
+                            'Parents_Practice_CSY':{'$sum':1}}},
+                    {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                                'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                    {"$sort":{'Practice_date':1}}])))
+
+        schoology = DataFrame(list(collection2.aggregate([
+                    {"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                             { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                           {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                            {"MODIFIED_DATE":{"$gte": today_min
+                                                 ,"$lte" : today_max
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+                ]}},
+
+        practice_cond_dictonary_list[0],
+                            practice_cond_dictonary_list[1],
+                             threshcond[0],
+
+                    {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                    'month':{'$month':'$MODIFIED_DATE'}},
+                            'date':{'$first':'$MODIFIED_DATE'}, 
+                            'Parents_Practice_CSY':{'$sum':1}}},
+                    {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                                'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                    {"$sort":{'Practice_date':1}}])))
+            #     print(schoology,"schoology")
+                                      ########clever################################
+
+        clever = DataFrame(list(collection2.aggregate([{"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                             { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                            {"MODIFIED_DATE":{"$gte": today_min
+                                                 ,"$lte" : today_min
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+                ]}},
+        practice_cond_dictonary_list[0],
+                    practice_cond_dictonary_list[1],
+                     threshcond[0],
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+
+        df1['Practice_date']=pd.to_datetime(df1['Practice_date'], format="%Y-%m-%d %H:%M")
+        df5=df1.sort_values(by='Practice_date')
+        time_range=[]
+        # start = '2021-10-12 00:00:00'
+        # end = "2021-10-12 23:59:59"
+        delta = datetime.timedelta(seconds=60)
+        start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+        end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+        t = start
+        while t <= end :
+            x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+            t += delta
+            time_range.append(x)
+
+        df9 = pd.DataFrame(time_range,columns = ["Practice_date"])
+        df9['Practice_date']=pd.to_datetime(df9['Practice_date'])
+
+        df10=pd.merge(df5,df9, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')   
+
+        df10['Practice_date']=df10['Practice_date'].astype(np.int64)/int(1e6)
+
+        csy_users_list=df10[['Practice_date','Users_Practice_CSY']].values.astype(int).tolist()   
+
+        # Clever
+
+        if 'Practice_date' in list(clever.columns):
+            clever['Practice_date']=pd.to_datetime(clever['Practice_date'])
+            clever_sort=clever.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            clever=pd.DataFrame(time_range, columns=['Practice_date'])
+            clever['Parents_Practice_CSY'] = 0
+            clever_sort=clever.sort_values(by='Practice_date')
+
+        # Schoology
+
+        if 'Practice_date' in list(schoology.columns):
+            schoology['Practice_date']=pd.to_datetime(schoology['Practice_date'], format='%Y-%m-%d %H:%M')
+            schoology_sort=schoology.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            schoology=pd.DataFrame(time_range, columns=['Practice_date'])
+            schoology['Parents_Practice_CSY'] = 0
+            schoology_sort=schoology.sort_values(by='Practice_date')
+
+        # Parents 
+        df2['Practice_date'] = pd.to_datetime(df2['Practice_date'],format='%Y-%m-%d %H:%M')
+        df6=df2.sort_values(by='Practice_date')
+
+        time_range=[]
+        # start = '2021-10-12 00:00:00'
+        # end = "2021-10-12 23:59:59"
+        delta = datetime.timedelta(seconds=60)
+        start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+        end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+        t = start
+        while t <= end :
+            x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+            t += delta
+            time_range.append(x)
+
+        df_parents=pd.DataFrame(time_range, columns=['Practice_date'])
+        # # df_parents['value']=0
+        parents_datetime=pd.to_datetime(df_parents['Practice_date'])
+
+        parents=pd.merge(df6,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+        parents['Practice_date']=parents['Practice_date'].astype(np.int64)/int(1e6)
+        parents_final=parents[['Practice_date','Parents_Practice_CSY']].values.astype(int).tolist()
+
+
+        # cleverr
+        clever['Practice_date']=pd.to_datetime(clever['Practice_date'],format='%Y-%m-%d %H:%M')
+        clever_csy1=pd.merge(clever,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        clever_csy1['Practice_date']=clever_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        clever_parents_users=clever_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+
+
+        # schoologyyy
+        schoology_sort['Practice_date']=pd.to_datetime(schoology_sort['Practice_date'],format='%Y-%m-%d %H:%M')
+        schoology_csy1= pd.merge(schoology_sort,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        schoology_csy1['Practice_date']=schoology_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        schoology_parents_users=schoology_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+
+
+        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Clever':clever_parents_users, 'schoology':schoology_parents_users}}
+
+        return json.dumps(temp)
+
+
+    else:
+        ######################  USER PRACTICE 2019-2020(LSY) ############################################
+        df1 = DataFrame(list(collection2.aggregate([{
+                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}}, {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {'USER_ID.EMAIL_ID':{'$ne':""}},{"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},
+                        {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+
+                {"$match":{"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+
+                {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},'Users_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                            'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+        ##################### PARENTS ##########################################
+        df2 = DataFrame(list(collection2.aggregate([{
+                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                       {'USER_ID.EMAIL_ID':{'$ne':""}},
+                          {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                           {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}},                  
+                        {"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},                    
+                        {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}
+                                  ]}},
+                {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}},
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+        ########schoology################################
+        schoology = DataFrame(list(collection2.aggregate([{
+                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                        {'USER_ID.EMAIL_ID':{'$ne':""}},
+                          {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                       {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                       {"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},
+        #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
+                                 ]}},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+
+             {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}},
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+        ########clever################################
+        clever = DataFrame(list(collection2.aggregate([{
+                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                        {'USER_ID.EMAIL_ID':{'$ne':""}},
+                          {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                       {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                       {"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},
+
+        #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
+                                   ]}},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+                 {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}},
+                            'parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+        df1['Practice_date']=pd.to_datetime(df1['Practice_date'], format="%Y-%m-%d %H:%M")
+
+        df5=df1.sort_values(by='Practice_date')
+        time_range=[]
+        # start = '2021-10-12 00:00:00'
+        # end = "2021-10-12 23:59:59"
+        delta = datetime.timedelta(seconds=60)
+        start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+        end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+        t = start
+        while t <= end :
+            x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+            t += delta
+            time_range.append(x)
+
+        df9 = pd.DataFrame(time_range,columns = ["Practice_date"])
+        df9['Practice_date']=pd.to_datetime(df9['Practice_date'])
+
+        df10=pd.merge(df5,df9, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')   
+
+        df10['Practice_date']=df10['Practice_date'].astype(np.int64)/int(1e6)
+
+        csy_users_list=df10[['Practice_date','Users_Practice_CSY']].values.astype(int).tolist()   
+
+        # Clever
+
+        if 'Practice_date' in list(clever.columns):
+            clever['Practice_date']=pd.to_datetime(clever['Practice_date'])
+            clever_sort=clever.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            clever=pd.DataFrame(time_range, columns=['Practice_date'])
+            clever['Parents_Practice_CSY'] = 0
+            clever_sort=clever.sort_values(by='Practice_date')
+
+        # Schoology
+
+        if 'Practice_date' in list(schoology.columns):
+            schoology['Practice_date']=pd.to_datetime(schoology['Practice_date'])
+            schoology_sort=schoology.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            schoology=pd.DataFrame(time_range, columns=['Practice_date'])
+            schoology['Parents_Practice_CSY'] = 0
+            schoology_sort=schoology.sort_values(by='Practice_date')
+
+        # Parents 
+        df2['Practice_date'] = pd.to_datetime(df2['Practice_date'])
+        df6=df2.sort_values(by='Practice_date')
+
+        time_range=[]
+        # start = '2021-10-12 00:00:00'
+        # end = "2021-10-12 23:59:59"
+        delta = datetime.timedelta(seconds=60)
+        start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+        end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+        t = start
+        while t <= end :
+            x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+            t += delta
+            time_range.append(x)
+
+        df_parents=pd.DataFrame(time_range, columns=['Practice_date'])
+        # # df_parents['value']=0
+        parents_datetime=pd.to_datetime(df_parents['Practice_date'])
+
+        parents=pd.merge(df6,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+        parents['Practice_date']=parents['Practice_date'].astype(np.int64)/int(1e6)
+        parents_final=parents[['Practice_date','Parents_Practice_CSY']].values.astype(int).tolist()
+
+
+        # cleverr
+
+        clever_csy1=pd.merge(clever,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        clever_csy1['Practice_date']=clever_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        clever_parents_users=clever_csy1[["Practice_date","parents_Practice_CSY"]].values.astype(int).tolist()
+
+
+        # schoologyyy
+
+        schoology_csy1= pd.merge(schoology_sort,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        schoology_csy1['Practice_date']=schoology_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        schoology_parents_users=schoology_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+
+
+        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Clever':clever_parents_users, 'schoology':schoology_parents_users}}
+
+        return json.dumps(temp)
+
 
 
 
@@ -73564,6 +74019,12 @@ def reportcard():
 def logout():
     session.pop('user_id', None)
     return render_template('login.html')
+
+@app.route('/Day_In_Life')
+def Day_In_Life():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('dayinlife.html')
 
 if __name__ == '__main__':
    app.run()

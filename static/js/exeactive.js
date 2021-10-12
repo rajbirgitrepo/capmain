@@ -228,6 +228,9 @@ $.ajax(settings).done(function(response) {
         title: {
             text: 'Sentiment Percentage CSY'
         },
+        credits: {
+            enabled: false,
+        },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },

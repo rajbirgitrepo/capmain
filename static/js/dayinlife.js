@@ -149,144 +149,151 @@ function charts(a) {
 
     }
 
-    var settings = {
-        async: true,
-        crossDomain: true,
-        url: "/practicehistorychartlatest/playback",
-        method: "GET",
-    }
-    $.ajax(settings).done(function(response) {
-        var dataa = JSON.parse(response);
-        chart = new Highcharts.StockChart({
-            chart: {
-                renderTo: 'container2',
-                zoomType: 'x'
-            },
-            title: {
-                text: ' Playbacks Per Minute'
-            },
-            subtitle: {
-                text: ''
-            },
-            credits: {
-                enabled: false,
-            },
-            xAxis: [{
-                type: 'datetime',
-                events: {
-                    afterSetExtremes() {
-                        let bottomAxis = this,
-                            topAxis = this.chart.xAxis[1],
-                            diferenciaMin = Math.abs(bottomAxis.dataMin - bottomAxis.min),
-                            diferenciaMax = Math.abs(bottomAxis.dataMax - bottomAxis.max);
-                        topAxis.setExtremes(topAxis.dataMin + diferenciaMin, topAxis.dataMax - diferenciaMax, true)
-                    }
-                },
-                labels: {
-                    formatter: function() {
-                        return Highcharts.dateFormat(' %e,%b', this.value);
-                    }
-
-                }
-            }, {
-                type: 'datetime',
-                labels: {
-                    formatter: function() {
-                        return Highcharts.dateFormat(' %e,%b', this.value);
-                    }
-
-                },
-                opposite: true,
-                visible: false
-            }],
-            yAxis: {
-                title: {
-                    // text: ' Count'
-                },
-                visible: true,
-                opposite: false,
-                showLastLabel: true,
-                labels: {
-                    enabled: true,
-                    format: "{value}",
-                    align: "right"
-                },
-            },
-            tooltip: {
-                pointFormatter: function() {
-                    return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
-                }
-            },
-            legend: {
-                enabled: true,
-                itemStyle: {
-                    fontSize: '10px',
-                    fontWeight: '200'
-                }
-            },
-            navigator: {
-                enabled: true
-            },
-            rangeSelector: {
-                inputEnabled: false,
-                enabled: true
-            },
-            scrollbar: {
-                enabled: true
-            },
-            navigation: {
-                buttonOptions: {
-                    enabled: true
-                }
-            },
-            plotOptions: {
-                column: {
-                    stacking: 'normal'
-
-                },
-                series: {
-                    marker: {
-                        enabled: false
-                    }
-                }
-            },
-            series: [{
-                    "name": "Last SY",
-                    "type": "line",
-                    "color": "#FF9933",
-                    "xAxis": 0,
-                    "data": dataa.data.lsy
-                },
-                {
-                    "name": "Family",
-                    "type": "column",
-                    "color": "#8AE02B",
-                    "xAxis": 1,
-                    "data": dataa.data.pcsy
-                }, {
-                    "name": "School",
-                    "type": "column",
-                    "xAxis": 1,
-                    "color": "#01A451",
-                    "data": dataa.data.csy
-                },
-                {
-                    "name": "Clever",
-                    "type": "column",
-                    "xAxis": 1,
-                    "color": "#4f1faf",
-                    "data": dataa.data.clever
-                },
-                {
-                    "name": "Scoology",
-                    "type": "column",
-                    "xAxis": 1,
-                    "color": "#462cee",
-                    "data": dataa.data.schoology
-                }
-            ]
-        });
+    playbackTrendChart3('playback', 'Playback')
+    $("#practice_historyChart").val('playback');
+    $(document).on('change', '#practice_historyChart', function() {
+        $('#container2').empty();
+        console.log(this.value)
+        if (this.value == 'practice') {
+            // document.getElementById('historyInsight').title = 'your new title';
+            playbackTrendChart3(this.value, 'Practice')
+        } else {
+            playbackTrendChart3(this.value, 'Playback')
+        }
     });
+
+    function playbackTrendChart3(selectValue3, tx) {
+        var settings = {
+            async: true,
+            crossDomain: true,
+            url: "/Practice_per_minute_dild/" + selectValue3,
+            method: "GET",
+        };
+        $.ajax(settings).done(function(response) {
+            var dataa = JSON.parse(response);
+            chart = new Highcharts.StockChart({
+                chart: {
+                    renderTo: 'container2',
+                    zoomType: 'x'
+                },
+                title: {
+                    text: 'PRACTICE HISTORY'
+                },
+                subtitle: {
+                    text: ''
+                },
+
+                xAxis: [{
+                    type: 'datetime',
+                    events: {
+                        afterSetExtremes() {
+                            let bottomAxis = this,
+                                topAxis = this.chart.xAxis[1],
+                                diferenciaMin = Math.abs(bottomAxis.dataMin - bottomAxis.min),
+                                diferenciaMax = Math.abs(bottomAxis.dataMax - bottomAxis.max);
+                            topAxis.setExtremes(topAxis.dataMin + diferenciaMin, topAxis.dataMax - diferenciaMax, true)
+                        }
+                    },
+                    labels: {
+                        formatter: function() {
+                            return Highcharts.dateFormat(' %e,%b', this.value);
+                        }
+
+                    }
+                }, {
+                    type: 'datetime',
+                    labels: {
+                        formatter: function() {
+                            return Highcharts.dateFormat(' %e,%b', this.value);
+                        }
+
+                    },
+                    opposite: true,
+                    visible: false
+                }],
+
+                yAxis: {
+                    visible: true,
+                    opposite: false,
+                    showLastLabel: true,
+                    labels: {
+                        enabled: true,
+                        format: "{value}",
+                        align: "right"
+                    },
+                },
+
+                tooltip: {
+                    pointFormatter: function() {
+                        return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
+                    }
+                },
+
+                legend: {
+                    enabled: true
+                },
+
+                navigator: {
+                    enabled: true
+                },
+                rangeSelector: {
+                    inputEnabled: false,
+                    enabled: true
+                },
+
+                scrollbar: {
+                    enabled: true
+                },
+
+                navigation: {
+                    buttonOptions: {
+                        enabled: true
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+
+                    },
+                    series: {
+                        marker: {
+                            enabled: false
+                        }
+                    }
+                },
+
+                series: [{
+                        "name": "Parents Practice",
+                        "type": "line",
+                        "color": "#FF9933",
+                        "xAxis": 0,
+                        "data": dataa.data.Parents_practices
+                    },
+                    {
+                        "name": "Teacher Practice",
+                        "type": "Column",
+                        "color": "#8AE02B",
+                        "xAxis": 1,
+                        "data": dataa.data.teachers_practices
+                    },
+                    {
+                        "name": "Clever",
+                        "type": "Column",
+                        "xAxis": 1,
+                        "color": "#4f1faf",
+                        "data": dataa.data.Clever
+                    },
+                    {
+                        "name": "Scoology",
+                        "type": "Column",
+                        "xAxis": 1,
+                        "color": "#462cee",
+                        "data": dataa.data.schoology
+                    }
+                ]
+            });
+        });
+    }
 
     var settings = {
         "async": true,
@@ -306,7 +313,7 @@ function charts(a) {
                     zoomType: 'xy'
                 },
                 title: {
-                    text: "Playback Chart"
+                    text: "Playback Per Hour"
                 },
                 credits: {
                     enabled: false,
@@ -397,7 +404,7 @@ function charts(a) {
                     zoomType: 'xy'
                 },
                 title: {
-                    text: "Feedback Chart"
+                    text: "Feedback Per Hour"
                 },
                 credits: {
                     enabled: false,
@@ -491,6 +498,9 @@ function charts(a) {
             },
             title: {
                 text: 'Sentiment Percentage CSY'
+            },
+            credits: {
+                enabled: false,
             },
             tooltip: {
                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -1048,9 +1058,9 @@ function cardscount(a) {
         $("#updownavgtotal").text(parseFloat(dataa.Average_feedback_PERCENTAGE[0]).toFixed(0) + "%");
         $("#updownavgcomment").text(parseFloat(dataa.parent_PERCENTAGE_change[0]).toFixed(0) + "%");
         $("#updownavgper").text(parseFloat(dataa.teacher_PERCENTAGE_change[0]).toFixed(0) + "%");
-        $('#average_rating').text(dataa.Average_FEEDBACK_Rating_change); 
-        $('#Parent_feedback').text(dataa.PARENT_FEEDBACK_RATING_BEFORE_LAST_WEEK);
-        $('#Teacher_feedback').text(dataa.TEACHER_FEEDBACK_RATING_BEFORE_LAST_WEEK);
+        $('#average_rating').text(dataa.Average_Rating_lastweek); 
+        $('#Parent_feedback').text(dataa.PARENT_FEEDBACK_RATING_LAST_WEEK);
+        $('#Teacher_feedback').text(dataa.TEACHER_FEEDBACK_RATING_LAST_WEEK);
 
     });
 
@@ -1067,7 +1077,7 @@ function cardscount(a) {
 
         $("#active_users").text(dataa.data[0].active_users);
         $("#web_users").text(dataa.data[0].web_users);
-        $("#home_users").text(dataa.data[0].home_users);
+        $("#home_users").text(dataa.data[0].mobile_users);
         $("#lms_users").text(dataa.data[0].lms_users);
 
     });

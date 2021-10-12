@@ -415,11 +415,11 @@ function createDynamicDiv1(userList) {
 
 
 
-function showTabTable(){
-    document.getElementById('admin').style.display = "none";
-    document.getElementById('exTab1').style.display = "block";
-    // document.getElementById('tabtablemain').style.display = "block";
-    var modal2 = document.getElementById("myModal2");
-    modal2.style.display = "block";
-    console.log('extab');
-}
+// function showTabTable(){
+//     document.getElementById('admin').style.display = "none";
+//     document.getElementById('exTab1').style.display = "block";
+//     // document.getElementById('tabtablemain').style.display = "block";
+//     var modal2 = document.getElementById("myModal2");
+//     modal2.style.display = "block";
+//     console.log('extab');
+// }
