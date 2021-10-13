@@ -125,112 +125,112 @@ $('#firstnametable').change(function() {
 
 function charts(a) {
 
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": '/word_cloud_feedback_weekly/' + a,
-        "method": "GET",
-    }
-    $.ajax(settings).done(function(response) {
-        var dataa = JSON.parse(response);
+    // var settings = {
+    //     "async": true,
+    //     "crossDomain": true,
+    //     "url": '/word_cloud_feedback_weekly/' + a,
+    //     "method": "GET",
+    // }
+    // $.ajax(settings).done(function(response) {
+    //     var dataa = JSON.parse(response);
 
-        // $( "#avgrate" ).text(dataa.avg_rating);
-
-
-        am4core.useTheme(am4themes_animated);
-        // Themes end
+    //     // $( "#avgrate" ).text(dataa.avg_rating);
 
 
-        var chart = am4core.create("chartdiv", am4plugins_wordCloud.WordCloud);
-        var series = chart.series.push(new am4plugins_wordCloud.WordCloudSeries());
-
-        series.accuracy = 4;
-        series.step = 15;
-        series.rotationThreshold = 0.7;
-        series.maxCount = 200;
-        series.minWordLength = 2;
-        series.labels.template.tooltipText = "{word}: {value}";
-        series.fontFamily = "Courier New";
-        series.maxFontSize = am4core.percent(30);
-
-        series.text = dataa.word_cloud;
+    //     am4core.useTheme(am4themes_animated);
+    //     // Themes end
 
 
+    //     var chart = am4core.create("chartdiv", am4plugins_wordCloud.WordCloud);
+    //     var series = chart.series.push(new am4plugins_wordCloud.WordCloudSeries());
 
-        Chart.defaults.global.defaultFontFamily = "Lato";
+    //     series.accuracy = 4;
+    //     series.step = 15;
+    //     series.rotationThreshold = 0.7;
+    //     series.maxCount = 200;
+    //     series.minWordLength = 2;
+    //     series.labels.template.tooltipText = "{word}: {value}";
+    //     series.fontFamily = "Courier New";
+    //     series.maxFontSize = am4core.percent(30);
 
-        // var horizontalBarChart = new Chart(horizontalBarChartCanvas, {
-        //    type: 'horizontalBar',
-        //    data: {
-        //       labels: dataa.label,
-        //       datasets: [{
-        //          data: dataa.count,
-        //          backgroundColor: ["#4da555", "#4da555", "#4da555", "#4da555", "#4da555", "#4da555", "#4da555","#4da555", "#4da555", "#4da555"], 
-        //       }]
-        //    },
-        //    options: {
-        //       tooltips: {
-        //         enabled: true
-        //       },
-        //       responsive: true,
-        //       legend: {
-        //          display: false,
-        //          position: 'bottom',
-        //          fullWidth: true,
-        //          labels: {
-        //            boxWidth: 10,
-        //            padding: 50
-        //          }
-        //       },
-        //       scales: {
-        //          yAxes: [{
-        //            barPercentage: 0.75,
-        //            gridLines: {
-        //              display: true,
-        //              drawTicks: true,
-        //              drawOnChartArea: false
-        //            },
-        //            ticks: {
-        //              fontColor: '#555759',
-        //              fontFamily: 'Lato',
-        //              fontSize: 11
-        //            }
+    //     series.text = dataa.word_cloud;
 
-        //          }],
-        //          xAxes: [{
-        //              gridLines: {
-        //                display: true,
-        //                drawTicks: false,
-        //                tickMarkLength: 5,
-        //                drawBorder: false
-        //              },
-        //            ticks: {
-        //              padding: 5,
-        //              beginAtZero: true,
-        //              fontColor: '#ffffff',
-        //              fontFamily: 'Lato',
-        //              fontSize: 11,
-        //              callback: function(label, index, labels) {
-        //               return label/1000;
-        //              }
 
-        //            },
-        //             scaleLabel: {
-        //               display: true,
-        //               padding: 10,
-        //               fontFamily: 'Lato',
-        //               fontColor: '#555759',
-        //               fontSize: 16,
-        //               fontStyle: 700,
-        //               labelString: ''
-        //             },
 
-        //          }]
-        //       }
-        //    }
-        // });
+    //     Chart.defaults.global.defaultFontFamily = "Lato";
 
-    });
+    //     // var horizontalBarChart = new Chart(horizontalBarChartCanvas, {
+    //     //    type: 'horizontalBar',
+    //     //    data: {
+    //     //       labels: dataa.label,
+    //     //       datasets: [{
+    //     //          data: dataa.count,
+    //     //          backgroundColor: ["#4da555", "#4da555", "#4da555", "#4da555", "#4da555", "#4da555", "#4da555","#4da555", "#4da555", "#4da555"], 
+    //     //       }]
+    //     //    },
+    //     //    options: {
+    //     //       tooltips: {
+    //     //         enabled: true
+    //     //       },
+    //     //       responsive: true,
+    //     //       legend: {
+    //     //          display: false,
+    //     //          position: 'bottom',
+    //     //          fullWidth: true,
+    //     //          labels: {
+    //     //            boxWidth: 10,
+    //     //            padding: 50
+    //     //          }
+    //     //       },
+    //     //       scales: {
+    //     //          yAxes: [{
+    //     //            barPercentage: 0.75,
+    //     //            gridLines: {
+    //     //              display: true,
+    //     //              drawTicks: true,
+    //     //              drawOnChartArea: false
+    //     //            },
+    //     //            ticks: {
+    //     //              fontColor: '#555759',
+    //     //              fontFamily: 'Lato',
+    //     //              fontSize: 11
+    //     //            }
+
+    //     //          }],
+    //     //          xAxes: [{
+    //     //              gridLines: {
+    //     //                display: true,
+    //     //                drawTicks: false,
+    //     //                tickMarkLength: 5,
+    //     //                drawBorder: false
+    //     //              },
+    //     //            ticks: {
+    //     //              padding: 5,
+    //     //              beginAtZero: true,
+    //     //              fontColor: '#ffffff',
+    //     //              fontFamily: 'Lato',
+    //     //              fontSize: 11,
+    //     //              callback: function(label, index, labels) {
+    //     //               return label/1000;
+    //     //              }
+
+    //     //            },
+    //     //             scaleLabel: {
+    //     //               display: true,
+    //     //               padding: 10,
+    //     //               fontFamily: 'Lato',
+    //     //               fontColor: '#555759',
+    //     //               fontSize: 16,
+    //     //               fontStyle: 700,
+    //     //               labelString: ''
+    //     //             },
+
+    //     //          }]
+    //     //       }
+    //     //    }
+    //     // });
+
+    // });
 
 
 
@@ -387,8 +387,8 @@ function charts(a) {
                                 events: {
                                     click: function() {
 
-                                        $('#next').empty();
                                         $('#next1').empty();
+                                        $('#next11').empty();
 
                                         URL = '/teachers_practice_tablee_weekly/' + this.category;
                                         $('#btnExport').show();
@@ -516,8 +516,8 @@ function charts(a) {
                     //         events: {
                     //             click: function () {
 
-                    //              $('#next').empty();
                     //              $('#next1').empty();
+                    //              $('#next11').empty();
 
                     //              URL = '/teachers_practice_tablee_weekly/'+this.category;
                     //              $('#btnExport').show();
@@ -628,8 +628,8 @@ function charts(a) {
                             events: {
                                 click: function() {
 
-                                    $('#next').empty();
                                     $('#next1').empty();
+                                    $('#next11').empty();
 
                                     URL = '/parents_practice_tablee_weekly/' + this.category;
                                     $('#btnExport').show();
@@ -892,7 +892,7 @@ function cards2(URL) {
     // document.getElementById('tabtablemain').style.display = "none";
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
-    $('#next').empty();
+    $('#next1').empty();
     console.log(mainURL);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";
@@ -956,7 +956,7 @@ function createDynamic3(url) {
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
 
-        $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
+        $('#next1').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
@@ -975,7 +975,7 @@ function createDynamic3(url) {
 
 
 
-        $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
+        $('#next11').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
@@ -1037,7 +1037,7 @@ function createDynamic(url) {
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
 
-        $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
+        $('#next1').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
@@ -1056,7 +1056,7 @@ function createDynamic(url) {
 
 
 
-        $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
+        $('#next11').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
@@ -1119,7 +1119,7 @@ function createDynamic2(url) {
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
 
-        $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
+        $('#next1').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
@@ -1138,7 +1138,7 @@ function createDynamic2(url) {
 
 
 
-        $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
+        $('#next11').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
@@ -1355,7 +1355,7 @@ function cards(URL) {
     // document.getElementById('tabtablemain').style.display = "none";
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
-    $('#next').empty();
+    $('#next1').empty();
     console.log(mainURL);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";
@@ -1374,7 +1374,7 @@ function cards2(URL) {
     // document.getElementById('tabtablemain').style.display = "none";
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
-    $('#next').empty();
+    $('#next1').empty();
     console.log(mainURL);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";
@@ -1393,7 +1393,7 @@ function cards3(URL) {
     // document.getElementById('tabtablemain').style.display = "none";
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
-    $('#next').empty();
+    $('#next1').empty();
     console.log(mainURL);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";

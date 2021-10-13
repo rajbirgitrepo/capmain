@@ -303,9 +303,6 @@ function charts(a, d) {
 
 
 
-
-
-
 function createDynamic1(url) {
     var settings = {
         async: true,
@@ -316,21 +313,21 @@ function createDynamic1(url) {
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
 
-        $("#next4").prepend(
-            '<p>Positive</p><table class="table table-striped custab table-fixed" id = "dataTable3" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
+        $("#next").prepend(
+            '<p>Positive</p><table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.positivetable.length; i++) {
             var datain = data1.positivetable[i];
-            var resultDiv = createDynamicDiv1(datain);
+            var resultDiv = createDynamicDiv(datain);
 
-            $("#dataTable3").append(resultDiv);
+            $("#dataTable").append(resultDiv);
         }
-        //$('#dataTable2').append('</tbody></table>');
-        $("#dataTable3").append("</tbody></table>");
+        //$('#dataTable1').append('</tbody></table>');
+        $("#dataTable").append("</tbody></table>");
         dataTab();
 
         $("#next1").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable2"  ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable1"  ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
         );
 
         $("#next2").prepend(
@@ -339,14 +336,14 @@ function createDynamic1(url) {
         for (var i = 0; i < data1.negtable.length; i++) {
             var datain1 = data1.negtable[i];
 
-            var resultDiv = createDynamicDiv1(datain1);
-            $("#dataTable2").append(resultDiv);
+            var resultDiv = createDynamicDiv(datain1);
+            $("#dataTable1").append(resultDiv);
         }
-        $("#dataTable2").append("</tbody></table>");
+        $("#dataTable1").append("</tbody></table>");
         for (var i = 0; i < data1.overalltable.length; i++) {
             var datain2 = data1.overalltable[i];
 
-            var resultDiv = createDynamicDiv1(datain2);
+            var resultDiv = createDynamicDiv(datain2);
             $("#dataTable2").append(resultDiv);
         }
         $("#dataTable2").append("</tbody></table>");
@@ -355,10 +352,10 @@ function createDynamic1(url) {
 }
 
 function dataTab() {
-    $("#dataTable3").DataTable({
+    $("#dataTable").DataTable({
         pageLength: 10,
     });
-    $("#dataTable2").DataTable({
+    $("#dataTable1").DataTable({
         pageLength: 10,
     });
     $("#dataTable2").DataTable({
@@ -366,7 +363,7 @@ function dataTab() {
     });
 }
 
-function createDynamicDiv1(userList) {
+function createDynamicDiv(userList) {
     var dynamicDiv = "";
     console.log(userList);
 
@@ -412,14 +409,11 @@ function createDynamicDiv1(userList) {
 
     return dynamicDiv;
 }
-
-
-
-// function showTabTable(){
-//     document.getElementById('admin').style.display = "none";
-//     document.getElementById('exTab1').style.display = "block";
-//     // document.getElementById('tabtablemain').style.display = "block";
-//     var modal2 = document.getElementById("myModal2");
-//     modal2.style.display = "block";
-//     console.log('extab');
-// }
+function showTabTable(){
+    document.getElementById('admin').style.display = "none";
+    document.getElementById('exTab1').style.display = "block";
+    // document.getElementById('tabtablemain').style.display = "block";
+    var modal2 = document.getElementById("myModal2");
+    modal2.style.display = "block";
+    console.log('extab');
+}

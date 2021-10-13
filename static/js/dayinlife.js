@@ -177,12 +177,12 @@ function charts(a) {
                     zoomType: 'x'
                 },
                 title: {
-                    text: 'PRACTICE HISTORY'
+                    text: tx + ' Per Minute'
                 },
                 subtitle: {
                     text: ''
                 },
-
+                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                 xAxis: [{
                     type: 'datetime',
                     events: {
@@ -263,34 +263,31 @@ function charts(a) {
                 },
 
                 series: [{
-                        "name": "Parents Practice",
-                        "type": "line",
-                        "color": "#FF9933",
-                        "xAxis": 0,
-                        "data": dataa.data.Parents_practices
-                    },
-                    {
-                        "name": "Teacher Practice",
-                        "type": "Column",
-                        "color": "#8AE02B",
-                        "xAxis": 1,
-                        "data": dataa.data.teachers_practices
-                    },
-                    {
-                        "name": "Clever",
-                        "type": "Column",
-                        "xAxis": 1,
-                        "color": "#4f1faf",
-                        "data": dataa.data.Clever
-                    },
-                    {
-                        "name": "Scoology",
-                        "type": "Column",
-                        "xAxis": 1,
-                        "color": "#462cee",
-                        "data": dataa.data.schoology
-                    }
-                ]
+                    "name": "Clever",
+                    "type": "column",
+             
+                    "xAxis": 1,
+                    "data": dataa.data.Clever
+                }, {
+                    "name": "Schoology",
+                    "type": "column",
+                 
+                    "xAxis": 1,
+                    "data": dataa.data.schoology
+                }, {
+                    "name": "Home",
+                    "type": "column",
+                    "xAxis": 1,
+               
+                    "data": dataa.data.Parents_practices
+                },
+                {
+                    "name": "Classroom",
+                    "type": "column",
+                    "xAxis": 1,
+                    "data": dataa.data.teachers_practices
+                }]
+              
             });
         });
     }
