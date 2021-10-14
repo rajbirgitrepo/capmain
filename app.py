@@ -31090,7 +31090,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
            {'$project':{'_id':1,'TOTAL_LSYTOLSY':{'$size':'$auc'}}}])))
         df0.rename(columns = { '_id': 'Month'}, inplace = True)
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
@@ -31116,7 +31116,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
            {'$project':{'_id':1,'TOTAL_LSY':{'$size':'$auc'}}}])))
         df1.rename(columns = { '_id': 'Month'}, inplace = True)
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
@@ -31147,7 +31147,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
            {'$project':{'_id':1,'teacher_CSY':{'$size':'$auc'}}}])))
         if df2.empty == True:
             df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
@@ -31185,7 +31185,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
            {'$project':{'_id':1,'schoology_CSY':{'$size':'$auc'}}}])))
 
         if dfschoology.empty == True:
@@ -31221,7 +31221,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
            {'$project':{'_id':1,'clever_CSY':{'$size':'$auc'}}}])))
         if dfclever.empty == True:
             dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
@@ -31254,7 +31254,7 @@ def active_trend_new_(charttype):
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
                          threshcond[0],
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
            {'$project':{'_id':1,'parents_CSY':{'$size':'$auc'}}}])))
         if df4.empty == True:
             df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
@@ -73360,7 +73360,7 @@ def active_userss_day():
     return json.dumps(temp)
 
 @app.route('/Practice_per_minute_dild/<charttype>')
-def practice_per_mints_(charttype):
+def practice_per_minutee_(charttype):
     mongo_uri = "mongodb://admin:" + urllib.parse.quote('F5tMazRj47cYqm33e') + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
@@ -73575,7 +73575,7 @@ def practice_per_mints_(charttype):
             schoology_sort=schoology.sort_values(by='Practice_date')
 
         # Parents 
-        df2['Practice_date'] = pd.to_datetime(df2['Practice_date'],format='%Y-%m-%d %H:%M')
+        df2['Practice_date'] = pd.to_datetime(df2['Practice_date'])
         df6=df2.sort_values(by='Practice_date')
 
         time_range=[]
@@ -73600,7 +73600,7 @@ def practice_per_mints_(charttype):
 
 
         # cleverr
-        clever['Practice_date']=pd.to_datetime(clever['Practice_date'],format='%Y-%m-%d %H:%M')
+        clever['Practice_date']=pd.to_datetime(clever['Practice_date'])
         clever_csy1=pd.merge(clever,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
 
 
@@ -73609,7 +73609,7 @@ def practice_per_mints_(charttype):
 
 
         # schoologyyy
-        schoology_sort['Practice_date']=pd.to_datetime(schoology_sort['Practice_date'],format='%Y-%m-%d %H:%M')
+        schoology_sort['Practice_date']=pd.to_datetime(schoology_sort['Practice_date'])
         schoology_csy1= pd.merge(schoology_sort,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
 
 
@@ -73703,7 +73703,7 @@ def practice_per_mints_(charttype):
                  {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
                         'date':{'$first':'$MODIFIED_DATE'},  'Parents_Practice_CSY':{'$sum':1}}},
                 {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}},
-                            'parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
                 {"$sort":{'Practice_date':1}}])))
 
         df1['Practice_date']=pd.to_datetime(df1['Practice_date'], format="%Y-%m-%d %H:%M")
@@ -73798,16 +73798,16 @@ def practice_per_mints_(charttype):
 
 
         # cleverr
-
+        clever['Practice_date']=pd.to_datetime(clever['Practice_date'])
         clever_csy1=pd.merge(clever,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
 
 
         clever_csy1['Practice_date']=clever_csy1['Practice_date'].astype(np.int64)/int(1e6)
-        clever_parents_users=clever_csy1[["Practice_date","parents_Practice_CSY"]].values.astype(int).tolist()
+        clever_parents_users=clever_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
 
 
         # schoologyyy
-
+        schoology_sort['Practice_date']=pd.to_datetime(schoology_sort['Practice_date'])
         schoology_csy1= pd.merge(schoology_sort,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
 
 
@@ -73818,7 +73818,6 @@ def practice_per_mints_(charttype):
         temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Clever':clever_parents_users, 'schoology':schoology_parents_users}}
 
         return json.dumps(temp)
-
 
 
 

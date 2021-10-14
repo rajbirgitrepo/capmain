@@ -177,7 +177,7 @@ function charts(a) {
                     zoomType: 'x'
                 },
                 title: {
-                    text: tx + ' Per Minute'
+                    text: tx + ' Per 15 Minute'
                 },
                 subtitle: {
                     text: ''
@@ -263,31 +263,32 @@ function charts(a) {
                 },
 
                 series: [{
-                    "name": "Clever",
-                    "type": "column",
-             
-                    "xAxis": 1,
-                    "data": dataa.data.Clever
-                }, {
-                    "name": "Schoology",
-                    "type": "column",
-                 
-                    "xAxis": 1,
-                    "data": dataa.data.schoology
-                }, {
-                    "name": "Home",
-                    "type": "column",
-                    "xAxis": 1,
-               
-                    "data": dataa.data.Parents_practices
-                },
-                {
-                    "name": "Classroom",
-                    "type": "column",
-                    "xAxis": 1,
-                    "data": dataa.data.teachers_practices
-                }]
-              
+                        "name": "Clever",
+                        "type": "column",
+
+                        "xAxis": 1,
+                        "data": dataa.data.Clever
+                    }, {
+                        "name": "Schoology",
+                        "type": "column",
+
+                        "xAxis": 1,
+                        "data": dataa.data.schoology
+                    }, {
+                        "name": "Home",
+                        "type": "column",
+                        "xAxis": 1,
+
+                        "data": dataa.data.Parents_practices
+                    },
+                    {
+                        "name": "Classroom",
+                        "type": "column",
+                        "xAxis": 1,
+                        "data": dataa.data.teachers_practices
+                    }
+                ]
+
             });
         });
     }
