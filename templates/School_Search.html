@@ -360,11 +360,11 @@
         <div id="exTab1" class="container" style="padding-top: 30px;">
             <ul class="nav nav-pills">
                 <li class="active" title="" id="by_school">
-                    <a href="#1a" data-toggle="tab">By School</a>
+                    <a href="#1a" data-toggle="tab" id="tabNew1">By School</a>
                 </li>
                 <li title="" id="by_home"><a href="#2a" data-toggle="tab">By Home</a>
                 </li>
-                <li title="" id="by_teacher"><a href="#3a" data-toggle="tab">By Teacher</a>
+                <li title="" id="by_teacher"><a href="#3a" data-toggle="tab" id="tabNew">By Teacher</a>
                 </li>
             </ul>
 
@@ -1391,7 +1391,8 @@
     <script>
         function changeTab() {
             document.getElementById("by_teacher").classList.add("active");
-            document.getElementById("by_school").classList.remove("active");
+            document.getElementById("tabNew").attr("aria-expanded", "true");
+            document.getElementById("tabNew1").attr("aria-expanded", "false");
         }
     </script>
 

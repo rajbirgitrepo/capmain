@@ -34,6 +34,7 @@ function createboxes() {
             var resultDiv = createDynamicDivcards(datain);
             $("#myProducts2").append(resultDiv);
         }
+        modal2();
     })
 }
 
@@ -1085,7 +1086,7 @@ function cards2(URL) {
     $('#btnExport').show();
     createDynamic2(a);
 }
-distselect('5f2609807a1c0000950bb477');
+//distselect('5f2609807a1c0000950bb477');
 $("#disdetails").text('5f2609807a1c0000950bb477');
 
 function distselect(distid) {
