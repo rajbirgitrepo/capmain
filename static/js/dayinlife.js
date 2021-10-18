@@ -495,7 +495,7 @@ function charts(a) {
                 },
             },
             title: {
-                text: 'Sentiment Percentage CSY'
+                text: 'Sentiment Percentage'
             },
             credits: {
                 enabled: false,

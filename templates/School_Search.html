@@ -271,7 +271,7 @@
                     <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
                     <li><a href="awsmain">AWS ANALYTICS</a></li>
                     <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                   <li><a href="Day_In_Life">DAY IN LIFE</a></li>
+                    <li><a href="Day_In_Life">DAY IN LIFE</a></li>
 
 
                 </ul>
@@ -350,6 +350,7 @@
     <section id="contents">
         <!-- The Modal -->
 
+        <button onclick="changeTab()">Change Tab</button>
 
 
 
@@ -1387,7 +1388,12 @@
 
     <!-- partial -->
 
-
+    <script>
+        function changeTab() {
+            document.getElementById("by_teacher").classList.add("active");
+            document.getElementById("by_school").classList.remove("active");
+        }
+    </script>
 
 </body>
 
