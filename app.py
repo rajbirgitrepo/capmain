@@ -19992,7 +19992,8 @@ def district_user_table_parents(districtid,startdate,enddate):
         data.append([i,j,k,l,m,n,o,p,r,s])
     temp={"data":data}
     return json.dumps(temp)
-district_user_table_teacher('5f2609807a1c0000950bb477','2015-04-01','2021-04-13')
+    
+# district_user_table_teacher('5f2609807a1c0000950bb477','2015-04-01','2021-04-13')
     
     
     
@@ -40558,8 +40559,8 @@ def par__pracnew__(charttype):
 def mitpracnew():
     
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
 
     db=client.compass
     collection = db.audio_track_master
@@ -44499,57 +44500,43 @@ def parsignup():
 @app.route('/mitsignupsnew')
 def miitsignupnew():
     
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote('I#L@teST^m0NGO_2o20!') + "@54.184.165.106:27017/"
-    client = pymongo.MongoClient(mongo_uri)
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    
     db = client.compass
     collection = db.user_master
     dateStr = "2020-03-17T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
     query=[
-    {"$match":{'$and':[{'ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-                                                                 
-                  {"IS_DISABLED":{"$ne":"Y"}},
-                  {"IS_BLOCKED":{"$ne":"Y"}},
-                 {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
-    # //               {'IS_ADMIN':'Y'},
-                 {'EMAIL_ID':{'$ne':''}},
-                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                  
-            {"CREATED_DATE":{"$gte":myDatetime}}]}}, 
-     {"$group":{"_id":{"$dateToString": {"format": "%Y-%m-%d","date":'$CREATED_DATE'}}, 'distinct':{"$addToSet":'$_id'}}},
-     {"$project":{"_id":1, 'Total_parents':{'$size':'$distinct'}}},
-     { '$sort': { '_id': 1 }}
+    {"$match":{'ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b"), 
+        "IS_DISABLED":{"$ne":"Y"},
+        "INCOMPLETE_SIGNUP":{"$ne":"Y"},
+        "EMAIL_ID":{'$not':{'$regex':'test', '$options':'i'}},
+        'USER_TYPE':{"$regex":'mit','$options':'i'}, 
+        "EMAIL_ID":{"$ne": ""},
+        "EMAIL_ID":{'$not':{'$regex':'1gen', '$options':'i'}},
+        "USER_NAME":{'$not':{'$regex':'test', '$options':'i'}},
+        "CREATED_DATE":{"$gt":myDatetime}}},
+        {"$group":{"_id":"$_id","CREATED_DATE":{"$first": "$CREATED_DATE"}}},
+    {"$project":{"_id":0,'sign_up':{"$dateToString":{"format": "%Y-%m-%d","date":'$CREATED_DATE'}}}}
     ]
-    x=list(collection.aggregate(query))
-    res = [] 
-    for idx, sub in enumerate(x, start = 0): 
-        if idx == 0: 
-    #         res.append(list(sub.keys())) 
-            res.append(list(sub.values())) 
-        else: 
-            res.append(list(sub.values())) 
-    df = pd.DataFrame(res, columns = ['date', 'count'])
-    df['date'] = pd.to_datetime(df['date'], errors = 'coerce')
-    df['date'] = pd.to_datetime(df['date']) - timedelta(hours=4)
-    df2 = df.groupby([df['date'].dt.date]).sum()
+    df1=pd.DataFrame(list(collection.aggregate(query)))
+    df1['sign_upn'] = pd.to_datetime(df1['sign_up']) 
+    df2 = df1.groupby([df1['sign_upn'].dt.date]).count()
+
     cdate=[]
     for i in df2.index:
         x=i.strftime('%s')
         cdate.append(float(x)*1000)
     count=[]
-    for i in df2['count'] :
+    for i in df2['sign_up'] :
         count.append(i)
     count1=np.cumsum(count)
     df3 = pd.DataFrame(list(zip(cdate,count)), 
-                       columns =['date', 'count']) 
+                    columns =['date', 'count']) 
     df4 = pd.DataFrame(list(zip(cdate,count1)), 
-                       columns =['date', 'count'])
+                    columns =['date', 'count'])
     data = df3.values.tolist()
     data1 = df4.values.tolist()
     return json.dumps({"bar":data,"line":data1})
@@ -72070,7 +72057,7 @@ def day_playbacks():
 
 
     if df_playback.empty:
-        df= pf.DataFrame(columns=['Hour', 'Playbacks'])
+        df= pd.DataFrame(columns=['Hour', 'Playbacks'])
         for i in range(1):
             df.loc[i]= ['None'],['No Practice have happened till now']
             hr= df['Hour'].tolist()
@@ -72102,7 +72089,7 @@ def day_playbacks():
         return json.dumps(temp)
 
 @app.route('/Feedback_Chart_daild')
-def day_hourly_feeds():
+def day_hourly_feeds_():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
@@ -72135,12 +72122,13 @@ def day_hourly_feeds():
 
 
     if df_feed.empty:
-        df= pf.DataFrame(columns=['Hour', 'Rating'])
+        df= pd.DataFrame(columns=['Hour', 'Rating'])
         for i in range(1):
-            df.loc[i]= ['None'],['No Ratings have been given till now']
+            df.loc[i]= ['None'],['No Ratings were given today']
             hr= df['Hour'].tolist()
             rating=df['Rating'].tolist()
             temp={"Hour":hr,"Rating":rating}
+        return json.dumps(temp)
 
     else:
         hour=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
@@ -72165,7 +72153,8 @@ def day_hourly_feeds():
         rating=df_final['rating'].tolist()
 
         temp={"Hour":hr,"Rating":rating}
-        return json.dumps(temp)
+    return json.dumps(temp)
+
 
 
 # Sentiment Analysis
@@ -72176,7 +72165,7 @@ from textblob import TextBlob, Word, Blobber
 
 
 @app.route('/Sentiment_donut_dild')
-def donut_chart():
+def donut_chart_():
     
     clean_list=[]
     news_headlines_senti = []
@@ -72282,11 +72271,11 @@ def donut_chart():
 
     df123=pd.merge(df12,df3,on="_id",how="left")
 
-    def average(listt):
-        return sum(listt)/len(listt) 
-    df_rating=df123[df123['RATING']!=0]
-    listt=df_rating['RATING'].tolist()
-    Avg= round(average(listt),1)
+#     def average(listt):
+#         return sum(listt)/len(listt) 
+#     df_rating=df123[df123['RATING']!=0]
+#     listt=df_rating['RATING'].tolist()
+#     Avg= round(average(listt),1)
 
     xx=df123[df123["COMMENT"]!="no info"]
     df_comments=xx[xx["COMMENT"]!=""]
@@ -72403,6 +72392,8 @@ def donut_chart():
     donut={"donut":{"pos":round(pos, 2),"neg":round(neg, 2)}}
 
     return json.dumps(donut)
+
+
 
 @app.route('/Feedback_card_dild')
 def day_feedback_card():

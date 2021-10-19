@@ -177,7 +177,7 @@ function charts(a) {
                     zoomType: 'x'
                 },
                 title: {
-                    text: tx + ' Per 15 Minute'
+                    text: tx + ' Per Minute'
                 },
                 subtitle: {
                     text: ''
@@ -185,32 +185,20 @@ function charts(a) {
                 colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                 xAxis: [{
                     type: 'datetime',
-                    events: {
-                        afterSetExtremes() {
-                            let bottomAxis = this,
-                                topAxis = this.chart.xAxis[1],
-                                diferenciaMin = Math.abs(bottomAxis.dataMin - bottomAxis.min),
-                                diferenciaMax = Math.abs(bottomAxis.dataMax - bottomAxis.max);
-                            topAxis.setExtremes(topAxis.dataMin + diferenciaMin, topAxis.dataMax - diferenciaMax, true)
-                        }
-                    },
-                    labels: {
-                        formatter: function() {
-                            return Highcharts.dateFormat(' %e,%b', this.value);
-                        }
-
+                    dateTimeLabelFormats: {
+                        hour: '%I %p',
+                        minute: '%I:%M %p'
                     }
                 }, {
                     type: 'datetime',
-                    labels: {
-                        formatter: function() {
-                            return Highcharts.dateFormat(' %e,%b', this.value);
-                        }
-
+                    dateTimeLabelFormats: {
+                        hour: '%I %p',
+                        minute: '%I:%M %p'
                     },
-                    opposite: true,
-                    visible: false
+                    opposite: false,
+                    visible: true
                 }],
+
 
                 yAxis: {
                     visible: true,
@@ -234,7 +222,7 @@ function charts(a) {
                 },
 
                 navigator: {
-                    enabled: true
+                    enabled: false
                 },
                 rangeSelector: {
                     inputEnabled: false,
@@ -522,7 +510,7 @@ function charts(a) {
                 }
             },
             series: [{
-                name: 'Sentiment CSY',
+                name: 'Sentiment',
                 colorByPoint: true,
                 data: [{
                     name: 'Positive',
