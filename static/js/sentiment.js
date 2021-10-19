@@ -335,16 +335,16 @@
           var data1 = JSON.parse(response);
 
           $("#next").prepend(
-              '<p>Positive</p><table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
+              '<p>Positive</p><table class="table table-striped custab table-fixed" id = "dataTable3" ><thead ><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>EMAIL ID</th><th>COMMENT</th><th>AUDIO NAME</th><th>NARRATOR NAME</th><th>PROGRAM NAME</th><th>COMMENT DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
           );
           for (var i = 0; i < data1.positivetable.length; i++) {
               var datain = data1.positivetable[i];
               var resultDiv = createDynamicDiv(datain);
 
-              $("#dataTable").append(resultDiv);
+              $("#dataTable3").append(resultDiv);
           }
           //$('#dataTable1').append('</tbody></table>');
-          $("#dataTable").append("</tbody></table>");
+          $("#dataTable3").append("</tbody></table>");
           dataTab();
 
           $("#next1").prepend(
@@ -373,7 +373,7 @@
   }
 
   function dataTab() {
-      $("#dataTable").DataTable({
+      $("#dataTable3").DataTable({
           pageLength: 10,
       });
       $("#dataTable1").DataTable({

@@ -13,19 +13,16 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/journeystyle.css') }}">
 
-    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css'>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/map.js"></script>
-    <script src="https://code.highcharts.com/maps/modules/data.js"></script>
-    <script src="https://code.highcharts.com/mapdata/countries/us/custom/us-all-territories.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -348,9 +345,10 @@
             <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
     </aside>
     <section id="contents">
+
+
         <!-- The Modal -->
 
-        <!-- <button onclick="changeTab()">Change Tab</button> -->
 
 
 
@@ -359,17 +357,13 @@
 
         <div id="exTab1" class="container" style="padding-top: 30px;">
             <ul class="nav nav-pills">
-                <li class="active" title="" id="by_school">
-                    <a href="#1a" data-toggle="tab" id="tabNew1">By School</a>
-                </li>
-                <li title="" id="by_home"><a href="#2a" data-toggle="tab">By Home</a>
-                </li>
-                <li title="" id="by_teacher"><a href="#3a" data-toggle="tab" id="tabNew">By Teacher</a>
-                </li>
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">By School</a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">By Home</a></li>
+                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">By Teacher</a></li>
             </ul>
 
             <div class="tab-content clearfix">
-                <div class="tab-pane active" id="1a">
+                <div role="tabpanel" class="tab-pane active" id="home">
                     <div class="input-Container ui-widget" style="margin-left: 15px !important;">
                         <i class="fa fa-search Icon"></i>
                         <input class="input-Field" id="searchinput" placeholder="'Try Searching any school or admin email'" style="width: 45% !important;">
@@ -594,7 +588,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane" id="2a">
+              
+                    <div role="tabpanel" class="tab-pane" id="profile">
                     <div class="input-Container ui-widget" style="margin-left: 15px !important;">
                         <i class="fa fa-search Icon"></i>
                         <input class="input-Field" id="familysearchinput" placeholder="'Try Searching any school or email'" style="width: 45% !important;">
@@ -719,7 +714,7 @@
 
 
                 </div>
-                <div class="tab-pane" id="3a">
+                <div role="tabpanel" class="tab-pane" id="messages">
                     <div class="input-Container ui-widget" style="margin-left: 15px !important;">
                         <i class="fa fa-search Icon"></i>
                         <input class="input-Field" id="searchinputuser" placeholder="'Try Searching any teacher email'" style="width: 45% !important;">
@@ -962,6 +957,7 @@
     <script src="{{ url_for('static',filename='js/schoolsearchscript.js') }}"></script>
     <script src="{{ url_for('static',filename='js/excellentexport.js') }}"></script>
     <script>
+
         $("#searchschool").val(1);
         $("#searchinput").empty();
 

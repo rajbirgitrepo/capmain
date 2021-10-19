@@ -1,6 +1,7 @@
 let str = window.location.href;
 console.log(str.substr(str.lastIndexOf("?") + 1));
 var urlid = str.substr(str.lastIndexOf("?") + 1);
+document.getElementById('searchinput').value = '';
 if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1:5000/School_Search#") {
     console.log("noID")
 } else if (urlid !== '') {
@@ -86,7 +87,7 @@ function createDynamicDiv(userList) {
         "<td>" +
         userList[0] +
         "</td>" +
-        '<td><a onclick="search2(' + userList[1] + ')">' + userList[1] +
+        '<td><a style="color: #00a651;" onclick="clickableTable(\'' + userList[1] + '\')">' + userList[1] +
         "</td></a>" +
         "<td>" +
         userList[2] +
@@ -1210,4 +1211,14 @@ function usersearch() {
 
 
     });
+}
+
+function activaTab(tab){
+  $('.nav-pills a[href="#' + tab + '"]').tab('show');
+};
+function clickableTable(userEmail){
+    document.getElementById("searchinputuser").value = userEmail;
+    usersearch();
+    activaTab('messages')
+    window.scrollTo(0,0);
 }
