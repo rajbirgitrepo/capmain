@@ -387,8 +387,8 @@ function charts(a) {
                                 events: {
                                     click: function() {
 
-                                        $('#next').empty();
-                                        $('#next1').empty();
+                                        $('#next4').empty();
+                                        $('#next41').empty();
 
                                         URL = '/teachers_practice_tablee_weekly/' + this.category;
                                         $('#btnExport').show();
@@ -516,8 +516,8 @@ function charts(a) {
                     //         events: {
                     //             click: function () {
 
-                    //              $('#next').empty();
-                    //              $('#next1').empty();
+                    //              $('#next4').empty();
+                    //              $('#next41').empty();
 
                     //              URL = '/teachers_practice_tablee_weekly/'+this.category;
                     //              $('#btnExport').show();
@@ -628,8 +628,8 @@ function charts(a) {
                             events: {
                                 click: function() {
 
-                                    $('#next').empty();
-                                    $('#next1').empty();
+                                    $('#next4').empty();
+                                    $('#next41').empty();
 
                                     URL = '/parents_practice_tablee_weekly/' + this.category;
                                     $('#btnExport').show();
@@ -886,7 +886,7 @@ function charts(a) {
 function cards2(URL) {
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
-    $('#next').empty();
+    $('#next4').empty();
     console.log(mainURL);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";
@@ -950,43 +950,43 @@ function createDynamic3(url) {
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
 
-        $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
+        $('#next4').prepend('<table class="display" id = "dataTable4" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
             var datain = data1.data[i];
             var resultDiv = createDynamicDiv3(datain);
 
-            $("#dataTable").append(resultDiv);
+            $("#dataTable4").append(resultDiv);
 
 
 
 
         }
-        //$('#dataTable1').append('</tbody></table>');
-        $('#dataTable').append('</tbody></table>');
+        //$('#dataTable41').append('</tbody></table>');
+        $('#dataTable4').append('</tbody></table>');
         dataTab();
 
 
 
-        $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
+        $('#next41').prepend('<table class="display" id = "dataTable41" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE DATE</th><th>PROGRAM NAME</th><th>AUDIO DAY</th><th>MINDFUL MINUTES</th><th>AUDIO COMPLETION PERCENTAGE</th></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
             var datain = data1.data[i];
 
             var resultDiv = createDynamicDiv3(datain);
-            $("#dataTable1").append(resultDiv);
+            $("#dataTable41").append(resultDiv);
         }
 
 
-        $('#dataTable1').append('</tbody></table>');
+        $('#dataTable41').append('</tbody></table>');
     })
 }
 
 function dataTab() {
 
-    $("#dataTable").DataTable({
+    $("#dataTable4").DataTable({
         "pageLength": 50
     });
 
@@ -1031,43 +1031,43 @@ function createDynamic(url) {
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
 
-        $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
+        $('#next4').prepend('<table class="display" id = "dataTable4" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
             var datain = data1.data[i];
             var resultDiv = createDynamicDiv(datain);
 
-            $("#dataTable").append(resultDiv);
+            $("#dataTable4").append(resultDiv);
 
 
 
 
         }
-        //$('#dataTable1').append('</tbody></table>');
-        $('#dataTable').append('</tbody></table>');
+        //$('#dataTable41').append('</tbody></table>');
+        $('#dataTable4').append('</tbody></table>');
         dataTab();
 
 
 
-        $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
+        $('#next41').prepend('<table class="display" id = "dataTable41" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PROGRAM NAME</th><th>COMMENT</th><th>CREATED DATE</th><th>RATING</th><th>LANGUAGE</th></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
             var datain = data1.data[i];
 
             var resultDiv = createDynamicDiv(datain);
-            $("#dataTable1").append(resultDiv);
+            $("#dataTable41").append(resultDiv);
         }
 
 
-        $('#dataTable1').append('</tbody></table>');
+        $('#dataTable41').append('</tbody></table>');
     })
 }
 
 function dataTab() {
 
-    $("#dataTable").DataTable({
+    $("#dataTable4").DataTable({
         "pageLength": 50
     });
 
@@ -1113,43 +1113,43 @@ function createDynamic2(url) {
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
 
-        $('#next').prepend('<table class="display" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
+        $('#next4').prepend('<table class="display" id = "dataTable4" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
             var datain = data1.data[i];
             var resultDiv = createDynamicDiv2(datain);
 
-            $("#dataTable").append(resultDiv);
+            $("#dataTable4").append(resultDiv);
 
 
 
 
         }
-        //$('#dataTable1').append('</tbody></table>');
-        $('#dataTable').append('</tbody></table>');
+        //$('#dataTable41').append('</tbody></table>');
+        $('#dataTable4').append('</tbody></table>');
         dataTab();
 
 
 
-        $('#next1').prepend('<table class="display" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
+        $('#next41').prepend('<table class="display" id = "dataTable41" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>PRACTICE COUNT</th><th>CREATED DATE</th><th>LAST PRACTICE DATE</th><th>COUNTRY</th><th>STATE</th><th>CITY</th><th>PROGRAM NAME</th></tr ></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
 
             var datain = data1.data[i];
 
             var resultDiv = createDynamicDiv2(datain);
-            $("#dataTable1").append(resultDiv);
+            $("#dataTable41").append(resultDiv);
         }
 
 
-        $('#dataTable1').append('</tbody></table>');
+        $('#dataTable41').append('</tbody></table>');
     })
 }
 
 function dataTab() {
 
-    $("#dataTable").DataTable({
+    $("#dataTable4").DataTable({
         "pageLength": 50
     });
 
@@ -1344,7 +1344,7 @@ function cardscount(a) {
 function cards(URL) {
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
-    $('#next').empty();
+    $('#next4').empty();
     console.log(mainURL);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";
@@ -1359,7 +1359,7 @@ function cards(URL) {
 function cards2(URL) {
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
-    $('#next').empty();
+    $('#next4').empty();
     console.log(mainURL);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";
@@ -1374,7 +1374,7 @@ function cards2(URL) {
 function cards3(URL) {
     var dated = document.getElementById("stardate").innerText;
     var mainURL = URL + '/' + dated;
-    $('#next').empty();
+    $('#next4').empty();
     console.log(mainURL);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";

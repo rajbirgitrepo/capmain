@@ -214,6 +214,7 @@ function schoolsearch() {
         P(URL);
         schoolIDCharts(a)
         escore(a);
+        historychart(a)
         $("#next").empty();
         $("#next1").empty();
         $("#btnExport").show();
