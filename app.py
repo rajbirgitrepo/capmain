@@ -31818,7 +31818,7 @@ def schoolsearch_em_id(schoolid):
     if df1.empty == True:
         data={'Result':0}
     else:
-        df1
+        df1=df1.fillna('No info')
     column1 =['_id',"ID","school_name",'user',"Address","COUNTRY","CITY","STATE","USER_NAME","email_id","district_name","ROLE"]
     for i in column1:
         if i not in df1.columns:

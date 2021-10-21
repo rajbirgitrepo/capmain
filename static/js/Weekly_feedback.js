@@ -1353,6 +1353,7 @@ function cards(URL) {
     gif.style.display = "block";
     $('#btnExport').show();
     createDynamic(mainURL)
+    showTabTablecards()
 }
 
 function cards2(URL) {
@@ -1367,6 +1368,7 @@ function cards2(URL) {
     gif.style.display = "block";
     $('#btnExport').show();
     createDynamic2(mainURL)
+    showTabTablecards()
 }
 
 function cards3(URL) {
@@ -1381,4 +1383,12 @@ function cards3(URL) {
     gif.style.display = "block";
     $('#btnExport').show();
     createDynamic3(mainURL)
+    showTabTablecards()
+}
+
+function showTabTablecards() {
+    document.getElementById('admin').style.display = "block";
+    document.getElementById('exTab1').style.display = "none";
+
+    console.log('cardstable');
 }

@@ -212,6 +212,7 @@ function schoolsearch() {
         $("#status").empty();
         console.log(URL);
         P(URL);
+        schoolIDCharts(a)
         escore(a);
         $("#next").empty();
         $("#next1").empty();
@@ -249,6 +250,8 @@ function schoolsearch() {
         console.log(URL);
         P(URL);
         escore(a);
+        schoolIDCharts(a)
+        historychart(a)
         $("#next").empty();
         $("#next1").empty();
         $("#btnExport").show();
@@ -377,9 +380,28 @@ function P(URL) {
         $("#city").text("CITY: " + dataa.city);
         $("#admin").text("ADMIN NAME: " + dataa.admin_name);
         $("#plan").text(dataa.plan);
+        
+
+        $("#ucount").text(dataa.user_count);
+        $("#pcount").text(dataa.school_practice_count);
+        $("#mindfulness_minutes").text(dataa.mindfulness_minutes);
+        $("#ratings").text(dataa.Star_5_Ratings_Recieved);
+        // $("#school").text(datain[0].school_name);
+        // $("#city").text(datain[0].city);
+        // $("#state").text(datain[0].state);
+        // $("#country").text(datain[0].country);
+        $("#signup").text(dataa.signup_date);
+        $("#renewal").text(dataa.renewal_date);
+        $("#status").text(dataa.sub_status);
+        var practice = dataa.practice_count;
+
+        $("#practicecount").text(practice);
+        $("#uniqueusercount").text(dataa.unique_user);
+        $("#months").text(dataa.month);
+
         var url1 = "/journey/" + dataa.admin_email;
-        jou(url1);
-        historychart(dataa.admin_email)
+        // jou(url1);
+      
     });
 };
 
@@ -409,6 +431,7 @@ function raisequery() {
     $("#error").empty()
     $("#error").append('<div style="background-color: #fff;color: green;width: 50%;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><button onclick="dismiss()" style="padding: 6px;background-color: #fff;color: #ff0033;float: right;border: 0;border-radius: 10px;font-size: 11px;">Dismiss</button><p style="margin-top:4px;">Your Query has been sent to Data Science Team and will be resolved asap.</p></div>');
 }
+
 
 
 function jou(url1) {
@@ -536,6 +559,203 @@ function jou(url1) {
                 })(),
                 color: "#01a451",
             }, ],
+        });
+    });
+
+};
+
+
+function schoolIDCharts(url1) {
+    var t = "playback";
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/schoolactivetrendnew/" + url1,
+        method: "GET",
+    };
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa[0].bar, "data")
+        Highcharts.chart('graph2', {
+            chart: {
+                type: 'column'
+            },
+            credits: {
+                enabled: false,
+            },
+            title: {
+                text:"Active User Trend"
+
+            },
+            colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+            xAxis: {
+                categories: dataa[0].Month
+            },
+            yAxis: {
+                lineWidth: 1,
+                min: 0,
+                title: {
+                    text: t + " User Count"
+                },
+                stackLabels: {
+                    enabled: false,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                series: {
+                    point: {
+
+                    }
+                },
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: false
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                itemStyle: {
+                    fontSize: '10px',
+                    fontWeight: '200'
+                }
+            },
+            series: [{
+                    name: 'Clever',
+                    data: dataa[3].barc
+                },
+                {
+                    name: 'Schoology',
+                    data: dataa[2].bars
+                }, {
+                    name: 'Family ' + t + ' Count(CSY2021-2022)',
+                    fontSize: '8px',
+                    data: dataa[1].bar2
+
+                }, {
+                    name: t + ' User Count(CSY 2021-2022)',
+                    data: dataa[0].bar
+                },
+                {
+                    type: 'spline',
+                    color: '#FF8300',
+                    name: '(LSY 2020-2021)',
+                    data: dataa[0].curve
+                }
+            ]
+        });
+    });
+
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/schoolpracticetrendnew/" + url1,
+        method: "GET",
+    };
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa[0].bar, "data");
+ 
+        Highcharts.chart("graph1", {
+            chart: {
+                type: "column",
+            },
+            credits: {
+                enabled: false,
+            },
+            title: {
+                text: t + " Trend",
+            },
+            colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+            xAxis: {
+                categories: [
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec",
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                ],
+            },
+            yAxis: {
+                lineWidth: 1,
+                min: 0,
+                title: {
+                    text: t + " Count",
+                },
+                stackLabels: {
+                    enabled: false,
+                    style: {
+                        fontWeight: "bold",
+                        color:
+                        // theme
+                            (Highcharts.defaultOptions.title.style &&
+                                Highcharts.defaultOptions.title.style.color) ||
+                            "gray",
+                    },
+                },
+            },
+            tooltip: {
+                headerFormat: "<b>{point.x}</b><br/>",
+                pointFormat: "{series.name}: {point.y}<br/>Total: {point.stackTotal}",
+            },
+            legend: {
+                enabled: true,
+                itemStyle: {
+                    fontSize: '10px',
+                    fontWeight: '200'
+                }
+            },
+            plotOptions: {
+                series: { point: {} },
+                column: {
+                    stacking: "normal",
+                    dataLabels: {
+                        enabled: false,
+                    },
+                },
+            },
+            series: [{
+                    name: "Clever",
+                    data: dataa[3].barc,
+                },
+                {
+                    name: "Schoology",
+                    data: dataa[2].bars,
+                },
+                {
+                    name: "Family" + t + " Count(CSY2021-2022)",
+                    data: dataa[1].bar2,
+                },
+                {
+                    name: "User" + t + "Count(CSY2021-2022)",
+                    data: dataa[0].bar,
+                },
+                {
+                    type: "spline",
+                    color: "#FF8300",
+                    name: t + " Count(LSY 2020-2021)",
+                    data: dataa[0].curve,
+                },
+            ],
         });
     });
 
