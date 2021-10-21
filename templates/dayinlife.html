@@ -374,37 +374,33 @@
                             <p class="boxvalue" id="lms_users"></p>
                             <br />
                             <hr />
-
-
-
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="boxExecutive">
                         <div>
-                            <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
-                            <p style="font-size: 11px;">New Signups<span style="margin-left: 5px !important;" id="updownpractotal"></span></p>
-                            <p class="boxvalue2" id="usercount"></p>
+                            <p style="font-size: 11px;">Active User In Total<span style="margin-left: 5px !important;"></span></p>
+                            <p class="boxvalue2" id="activetotal" style="font-weight:700;"></p>
                             <hr />
-                            <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                            <p class="boxHeading2">Parent Signups<span style="margin-left: 5px !important;" id="updownpracp"></span></p>
-                            <p class="boxvalue" style="cursor:pointer;" onclick="cards3('')" id="neverlogged"></p>
-                            <br />
+                            <p class="boxHeading2">Web</p>
+                            <p class="boxvalue" id="webt"></p>
+                            <br>
                             <hr />
-                            <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                            <p class="boxHeading2">Teacher Signups<span style="margin-left: 5px !important;" id="updownpract"></span>
-                            </p>
 
-                            <p class="boxvalue" style="cursor:pointer;" onclick="cards3('')" id="totalstudent"></p>
+                            <p class="boxHeading2">Mobile</p>
+                            <p class="boxvalue" id="mobilet"></p>
                             <br />
                             <hr />
 
-
-
+                            <p class="boxHeading2">LMS</p>
+                            <p class="boxvalue" id="lmst"></p>
+                            <br />
+                            <hr />
                         </div>
                     </div>
                 </div>
+
                 <div>
 
                     <div class="col-md-3">
@@ -485,8 +481,18 @@
             <div class="container-fluid">
                 <div class="row">
 
+
                     <div class="col-md-6" style="margin-top: 50px;">
-                        <div style="padding: 10px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                        <div id="container4" style="height: 400px; width: 100%; border-radius: 20px;float: left;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+                    </div>
+                    <div class="col-md-6" style="margin-top: 50px;">
+                        <div id="container7" style="height: 400px; width: 100%; border-radius: 20px;float: left;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-7" style="margin-top: 50px;">
+                        <div style="padding: 10px;height: 420px;background-color: #fff; margin-bottom: -11px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
                             <p style="text-align: center;color: #000;">Realtime Playback Sessions (USA)</p>
                             <div id="containerreal"></div>
                             <hr/>
@@ -498,16 +504,8 @@
                             <br />
                         </div>
                     </div>
-                    <div class="col-md-6" style="margin-top: 50px;">
-                        <div id="container4" style="height: 510px; width: 100%; border-radius: 20px;float: left;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-7" style="margin-top: 50px;">
-                        <div id="container7" style="height: 400px; width: 100%; border-radius: 20px;float: left;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
-                    </div>
-                    <div class="col-md-5" style="margin-top: 50px;">
-                        <div id="container37" style=" box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                    <div class="col-md-5" style="margin-top: 50px; ">
+                        <div id="container37" style="height:420px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
                         </div>
                     </div>
                 </div>

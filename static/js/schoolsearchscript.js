@@ -381,18 +381,20 @@ function P(URL) {
         $("#city").text("CITY: " + dataa.city);
         $("#admin").text("ADMIN NAME: " + dataa.admin_name);
         $("#plan").text(dataa.plan);
-        
+
 
         $("#ucount").text(dataa.user_count);
-        $("#pcount").text(dataa.school_practice_count);
-        $("#mindfulness_minutes").text(dataa.mindfulness_minutes);
+        $("#pcount").text(dataa.PRACTICE_COUNT_csy);
+        $("#mindfulness_minutes").text(dataa.SCHOOL_MINDFUL_MINUTES_csy);
         $("#ratings").text(dataa.Star_5_Ratings_Recieved);
+        $("#MindLifetime").text(dataa.SCHOOL_MINDFUL_MINUTES_overall);
+        $("#LifeTimePlayback").text(dataa.school_practice_count);
         // $("#school").text(datain[0].school_name);
         // $("#city").text(datain[0].city);
         // $("#state").text(datain[0].state);
         // $("#country").text(datain[0].country);
         $("#signup").text(dataa.signup_date);
-        $("#renewal").text(dataa.renewal_date);
+        $("#renewal").text(dataa.RENEWAL_DATE);
         $("#status").text(dataa.sub_status);
         var practice = dataa.practice_count;
 
@@ -402,7 +404,7 @@ function P(URL) {
 
         var url1 = "/journey/" + dataa.admin_email;
         // jou(url1);
-      
+
     });
 };
 
@@ -497,7 +499,7 @@ function jou(url1) {
                 },
             },
             series: [{
-                name: "PLAYBACK TREND",
+                // name: "PLAYBACK TREND",
                 data: (function() {
                     // generate an array of random data
                     var data = [];
@@ -585,7 +587,7 @@ function schoolIDCharts(url1) {
                 enabled: false,
             },
             title: {
-                text:"Active User Trend"
+                text: "Active User Trend"
 
             },
             colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
@@ -668,7 +670,7 @@ function schoolIDCharts(url1) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa[0].bar, "data");
- 
+
         Highcharts.chart("graph1", {
             chart: {
                 type: "column",

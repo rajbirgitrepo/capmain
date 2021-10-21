@@ -286,28 +286,32 @@ function charts(a) {
                         "type": "column",
                         "xAxis": 1,
                         "color": "#462cee",
-                        "data": dataa.data.Clever
+                        "data": dataa.data.Clever,
+                        yAxis: 1
                     },
                     {
                         "name": "Parents Practices",
                         "type": "column",
                         "xAxis": 1,
                         "color": "#01A451",
-                        "data": dataa.data.Parents_practices
+                        "data": dataa.data.Parents_practices,
+                        yAxis: 1
                     },
                     {
                         "name": "Schoology",
                         "type": "column",
                         "xAxis": 1,
                         "color": "#4f1faf",
-                        "data": dataa.data.schoology
+                        "data": dataa.data.schoology,
+                        yAxis: 1
                     },
                     {
                         "name": "Teachers Practices",
                         "type": "column",
                         "xAxis": 1,
                         "color": "#8AE02B",
-                        "data": dataa.data.teachers_practices
+                        "data": dataa.data.teachers_practices,
+                        yAxis: 1
                     }
                 ]
             });
@@ -324,7 +328,7 @@ function charts(a) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         var c = dataa.Playbacks.map(Number);
-        //var d = dataa.yes.map(Number);
+        var d = dataa.Playback_last_week.map(Number);
 
 
         $(function() {
@@ -389,15 +393,22 @@ function charts(a) {
                     }
                 },
                 series: [{
-                    name: "Count",
-                    color: '#FF9933',
-                    type: 'line',
-                    yAxis: 0,
-                    data: c,
-                    tooltip: {
+                        name: "Playback",
+                        color: '#02A45A',
+                        type: 'column',
+                        yAxis: 0,
+                        data: c,
 
-                    }
-                }, ]
+                    },
+                    {
+                        name: "Playback Last Week",
+                        color: '#ff9933',
+                        type: 'line',
+                        yAxis: 0,
+                        data: d,
+
+                    },
+                ]
             });
         });
 
@@ -415,7 +426,7 @@ function charts(a) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         var p = dataa.Rating.map(Number);
-        //var d = dataa.yes.map(Number);
+        var d = dataa.Ratings_last_week.map(Number);
 
 
         $(function() {
@@ -480,15 +491,22 @@ function charts(a) {
                     }
                 },
                 series: [{
-                    name: 'Count',
-                    color: '#FF9933',
-                    type: 'line',
-                    yAxis: 0,
-                    data: p,
-                    tooltip: {
+                        name: 'Rating',
+                        color: '#02A45A',
+                        type: 'column',
+                        yAxis: 0,
+                        data: p,
 
-                    }
-                }, ]
+                    },
+                    {
+                        name: 'Rating Last Week',
+                        color: '#FF9933',
+                        type: 'line',
+                        yAxis: 0,
+                        data: d,
+
+                    },
+                ]
             });
         });
 
@@ -903,54 +921,55 @@ function cardscount(a) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "/Signup_card_dild",
+        url: "/totalactive_users_dild_",
         method: "GET",
     };
     console.log(a);
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
 
+        console.log(dataa);
+        // var c = parseInt(dataa.totalchanged[0]);
 
-        var c = parseInt(dataa.totalchanged[0]);
+        // if (c === 1) {
+        //     console.log("hello2")
+        //     document.getElementById("updownpractotal").style.color = "green";
+        // } else if (c === -1) {
+        //     console.log("h2i")
+        //     document.getElementById("updownpractotal").style.color = "#ff0000";
+        // } else {
+        //     document.getElementById("updownpractotal").style.color = "grey";
+        // }
 
-        if (c === 1) {
-            console.log("hello2")
-            document.getElementById("updownpractotal").style.color = "green";
-        } else if (c === -1) {
-            console.log("h2i")
-            document.getElementById("updownpractotal").style.color = "#ff0000";
-        } else {
-            document.getElementById("updownpractotal").style.color = "grey";
-        }
+        // var t = parseInt(dataa.parentschanged[0]);
 
-        var t = parseInt(dataa.parentschanged[0]);
+        // if (t === 1) {
+        //     console.log("hello2")
+        //     document.getElementById("updownpracp").style.color = "green";
+        // } else if (t === -1) {
+        //     console.log("h2i")
+        //     document.getElementById("updownpracp").style.color = "#ff0000";
+        // } else {
+        //     document.getElementById("updownpracp").style.color = "grey";
+        // }
+        // var v = parseInt(dataa.teacherschanged[0]);
 
-        if (t === 1) {
-            console.log("hello2")
-            document.getElementById("updownpracp").style.color = "green";
-        } else if (t === -1) {
-            console.log("h2i")
-            document.getElementById("updownpracp").style.color = "#ff0000";
-        } else {
-            document.getElementById("updownpracp").style.color = "grey";
-        }
-        var v = parseInt(dataa.teacherschanged[0]);
-
-        if (v === 1) {
-            console.log("hello2")
-            document.getElementById("updownpract").style.color = "green";
-        } else if (v === -1) {
-            console.log("h2i")
-            document.getElementById("updownpract").style.color = "#ff0000";
-        } else {
-            document.getElementById("updownpract").style.color = "grey";
-        }
-        $("#updownpractotal").text(parseFloat(dataa.Total_percentage_change[0]).toFixed(0) + "%");
-        $("#updownpracp").text(parseFloat(dataa.parents_Percentage_Change[0]).toFixed(0) + "%");
-        $("#updownpract").text(parseFloat(dataa.Teacher_percentage_change[0]).toFixed(0) + "%");
-        $("#usercount").text(dataa.total_signup_yesterday);
-        $("#neverlogged").text(dataa.parents_signup_yesterday);
-        $("#totalstudent").text(dataa.teachers_signup_yesterday);
+        // if (v === 1) {
+        //     console.log("hello2")
+        //     document.getElementById("updownpract").style.color = "green";
+        // } else if (v === -1) {
+        //     console.log("h2i")
+        //     document.getElementById("updownpract").style.color = "#ff0000";
+        // } else {
+        //     document.getElementById("updownpract").style.color = "grey";
+        // }
+        // $("#updownpractotal").text(parseFloat(dataa.Total_percentage_change[0]).toFixed(0) + "%");
+        // $("#updownpracp").text(parseFloat(dataa.parents_Percentage_Change[0]).toFixed(0) + "%");
+        // $("#updownpract").text(parseFloat(dataa.Teacher_percentage_change[0]).toFixed(0) + "%");
+        $("#activetotal").text(dataa.data[0].active_users);
+        $("#webt").text(dataa.data[0].lms_users);
+        $("#mobilet").text(dataa.data[0].mobile_users);
+        $("#lmst").text(dataa.data[0].web_users);
 
     });
 

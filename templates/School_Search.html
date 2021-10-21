@@ -72,12 +72,12 @@
     }
     
     .pcard .card [data-background-color="rose1"] {
-        background: linear-gradient(60deg, #ffa726, #fb8c00);
+        background: linear-gradient( 60deg, #66bb6a, #43a047);
         box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4);
     }
     
     .pcard .card [data-background-color="rose"] {
-        background: linear-gradient(60deg, #ec407a, #d81b60);
+        background: linear-gradient( 60deg, #66bb6a, #43a047);
         box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4);
     }
     
@@ -87,7 +87,7 @@
     }
     
     .pcard .card [data-background-color="blue"] {
-        background: linear-gradient(60deg, #26c6da, #00acc1);
+        background: linear-gradient( 60deg, #66bb6a, #43a047);
         box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 188, 212, 0.4);
     }
     
@@ -104,7 +104,7 @@
     }
     
     .pcard .card .card-content {
-        padding: 15px 20px;
+        padding: 9px 10px;
         position: relative;
         border-radius: 4px;
     }
@@ -176,6 +176,10 @@
         box-shadow: 2px 7px 14px 0px #f3f3f3 !important;
         background-color: #fff;
         border-radius: 20px;
+    }
+    
+    .f-12 {
+        font-size: 12px !important;
     }
 </style>
 <style>
@@ -425,12 +429,23 @@
                                                             <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
-                                                            <p class="category">Total Users</p>
+                                                            <p class="category f-12">Total Users</p>
                                                             <h3 class="card-title" id="ucount"></h3>
 
 
                                                         </div>
 
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="card card-stats">
+                                                        <div class="card-header" data-background-color="blue">
+                                                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <p class="category f-12">Average Rating</p>
+                                                            <h3 class="card-title" id="ratings"></h3>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -440,10 +455,21 @@
                                                             <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
-                                                            <p class="category" style="font-size: 12px;">Playback Count (CSY)</p>
+                                                            <p class="category f-12" style="font-size: 12px;">Playback Count (CSY)</p>
                                                             <h3 class="card-title" id="pcount"></h3>
                                                         </div>
 
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="card card-stats">
+                                                        <div class="card-header" data-background-color="blue">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <p class="category f-12">Playback Counts Lifetime</p>
+                                                            <h3 class="card-title" id="LifeTimePlayback"></h3>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -453,28 +479,26 @@
                                                             <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
-                                                            <p class="category"> Mindful Minutes</p>
+                                                            <p class="category f-12"> Mindful Minutes (CSY)</p>
                                                             <h3 class="card-title" style="font-size: 22px !important;" id="mindfulness_minutes"></h3>
                                                         </div>
-                                                        <!-- <div class="card-footer">
-                        <div class="stats">
-                          <i class="material-icons text-danger">warning</i> <a href="#pablo">Get More Space...</a>
-                        </div>
-                      </div> -->
+
                                                     </div>
                                                 </div>
+
 
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="blue">
-                                                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
-                                                            <p class="category">5 Star Ratings</p>
-                                                            <h3 class="card-title" id="ratings"></h3>
+                                                            <p class="category f-12">Mindfull Minutes Lifetime</p>
+                                                            <h3 class="card-title" id="MindLifetime"></h3>
                                                         </div>
                                                     </div>
                                                 </div>
+
 
                                             </div>
 
@@ -533,7 +557,7 @@
                                 <div class="col-md-6">
                                     <div class="card">
                                         <div class="card-header no-border">
-                                            <h4 class="card-title">Playback Trend</h4>
+                                            <!-- <h4 class="card-title">Playback Trend</h4> -->
                                         </div>
                                         <div class="card-body ">
                                             <div class="card-block">
@@ -547,8 +571,8 @@
                                 <div class="col-md-6">
                                     <div class="card">
                                         <div class="card-header no-border">
-                                            <h4 class="card-title">Active Trend
-                                            </h4>
+                                            <!-- <h4 class="card-title">Active Trend
+                                            </h4> -->
                                         </div>
                                         <div class="card-body ">
                                             <div class="card-block">
@@ -1075,7 +1099,7 @@
             }
             $.ajax(settings).done(function(response) {
                 var dataa = JSON.parse(response);
-
+                console.log(dataa);
                 var chart = Highcharts.stockChart('containerprac', {
                     chart: {
                         type: 'column'
