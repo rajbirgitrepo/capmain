@@ -57,80 +57,159 @@ function imgd(a) {
 }
 
 function charts(a) {
-    $("#container").empty();
+    $("#container21").empty();
     $("#container1").empty();
     $("#container2").empty();
     $("#container3").empty();
     $("#container4").empty();
-    anychart.onDocumentReady(function() {
-        // The data used in this sample can be obtained from the CDN
-        // https://cdn.anychart.com/samples/heat-map-charts/heat-map-with-scroll/data.json
-        anychart.data.loadJsonFile('/districtescore/' + a,
-            function(data) {
-                // Creates Heat Map
-                var chart = anychart.heatMap(data.chart1);
-                // var labels = chart.xAxis().labels();
-                // labels.enabled(false);
-                chart.xAxis().labels().width(80);
-                chart.xAxis().labels().height(90);
-                chart.tooltip().format("{%y}: {%heat}");
-                var colorScale = anychart.scales.ordinalColor();
-                colorScale.colors(['#FF8C00', '#d6ff6e', '#8ae02b', '#00a651']);
-                colorScale.ranges([
-                    { from: 0, to: 25 },
-                    { from: 25, to: 50 },
-                    { from: 50, to: 75 },
-                    { from: 75, to: 100 }
-                ]);
+    // anychart.onDocumentReady(function() {
+    //     // The data used in this sample can be obtained from the CDN
+    //     // https://cdn.anychart.com/samples/heat-map-charts/heat-map-with-scroll/data.json
+    //     anychart.data.loadJsonFile('/districtescore/' + a,
+    //         function(data) {
+    //             // Creates Heat Map
+    //             var chart = anychart.heatMap(data.chart1);
+    //             // var labels = chart.xAxis().labels();
+    //             // labels.enabled(false);
+    //             chart.xAxis().labels().width(80);
+    //             chart.xAxis().labels().height(90);
+    //             chart.tooltip().format("{%y}: {%heat}");
+    //             var colorScale = anychart.scales.ordinalColor();
+    //             colorScale.colors(['#FF8C00', '#d6ff6e', '#8ae02b', '#00a651']);
+    //             colorScale.ranges([
+    //                 { from: 0, to: 25 },
+    //                 { from: 25, to: 50 },
+    //                 { from: 50, to: 75 },
+    //                 { from: 75, to: 100 }
+    //             ]);
 
-                chart.colorScale(colorScale);
-                // Sets colorScale
-
-
-                // Sets chart title
-                chart
-                    .title()
-                    .enabled(true)
-                    .text('E-SCORE')
-                    .padding([0, 0, 20, 0]);
-
-                // Sets chart labels
-                chart.labels().enabled(true).format('{%Heat}');
-
-                // Sets Scrolls for Axes
-                chart.xScroller(true);
-                chart.yScroller(true);
+    //             chart.colorScale(colorScale);
+    //             // Sets colorScale
 
 
-                // Sets starting zoom for Axes
-                chart.xZoom().setToPointsCount(8);
-                chart.yZoom().setToPointsCount(15);
+    //             // Sets chart title
+    //             chart
+    //                 .title()
+    //                 .enabled(true)
+    //                 .text('E-SCORE')
+    //                 .padding([0, 0, 20, 0]);
 
-                // Sets chart and hover chart settings
-                chart.stroke('#fff');
-                chart
-                    .hovered()
-                    .stroke('2 #fff')
-                    .fill('#545f69')
-                    .labels({ fontColor: '#fff' });
+    //             // Sets chart labels
+    //             chart.labels().enabled(true).format('{%Heat}');
 
-                // Sets legend
-                chart
-                    .legend()
-                    .enabled(true)
-                    .align('center')
-                    .position('center-bottom')
-                    .itemsLayout('horizontal')
-                    .padding([10, 0, 0, 0]);
+    //             // Sets Scrolls for Axes
+    //             chart.xScroller(true);
+    //             chart.yScroller(true);
 
-                // set container id for the chart
-                chart.container('container');
-                // initiate chart drawing
-                chart.draw();
-            }
-        );
+
+    //             // Sets starting zoom for Axes
+    //             chart.xZoom().setToPointsCount(8);
+    //             chart.yZoom().setToPointsCount(15);
+
+    //             // Sets chart and hover chart settings
+    //             chart.stroke('#fff');
+    //             chart
+    //                 .hovered()
+    //                 .stroke('2 #fff')
+    //                 .fill('#545f69')
+    //                 .labels({ fontColor: '#fff' });
+
+    //             // Sets legend
+    //             chart
+    //                 .legend()
+    //                 .enabled(true)
+    //                 .align('center')
+    //                 .position('center-bottom')
+    //                 .itemsLayout('horizontal')
+    //                 .padding([10, 0, 0, 0]);
+
+    //             // set container id for the chart
+    //             chart.container('container');
+    //             // initiate chart drawing
+    //             chart.draw();
+    //         }
+    //     );
+    // });
+
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/escores/" + a,
+        method: "GET",
+    };
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa);
+        $(function() {
+            $("#container21").highcharts({
+                chart: {
+                    //   zoomType: "xy",
+                    type: "column"
+                },
+                title: {
+                    text: "E-Score",
+                },
+                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451', '#33FFD1'],
+                xAxis: [{
+                        categories: dataa.columchart.axis,
+                        labels: {
+                            rotation: 90,
+                        },
+                        title: {
+                            text: "E-SCORE RANGE",
+                            style: {
+                                color: "#000",
+                            },
+                        },
+                    },
+
+
+                ],
+                yAxis: [{
+
+                        //Primary yAxis
+                        lineWidth: 1,
+                        labels: {
+                            format: "{value}",
+                            style: {
+                                color: "#000",
+                            },
+                        },
+                        title: {
+                            text: "SCHOOL COUNT",
+                            style: {
+                                color: "#000",
+                            },
+                        },
+                    },
+
+                ],
+                tooltip: {
+                    shared: true,
+                },
+                plotOptions: {
+                    borderWidth: 2,
+                    series: {
+                        point: {
+
+                        }
+                    },
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }
+                },
+                series: [{
+                        name: 'School Count',
+                        data: dataa.columchart.schoolcount
+                    },
+
+                ],
+            });
+        });
     });
-
 
 
     anychart.onDocumentReady(function() {

@@ -166,15 +166,19 @@
             top: 34px;
             color: #fff;
             cursor: pointer;" id="myBtn"><i class="fa fa-lightbulb-o" style="margin-top:2px;"></i><p style="float: right;">Insights</p><p style="float: right;margin-right: 3px; margin-left: 5px;">3</p></li>-->
-                        <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true" style="margin-top:2px;margin-right: 3px;"></i></a></li>
-                        <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1" class="fa fa-bars show-side-btn"></i></a></li>
+                        <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true"
+                                    style="margin-top:2px;margin-right: 3px;"></i></a></li>
+                        <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1"
+                                    class="fa fa-bars show-side-btn"></i></a></li>
                         <li style="margin-top: 27px;">
                             <div class="dropdown">
-                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid" style="display: none;">{{g.user.id}}</span></button>
+                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span
+                                        id="logid" style="display: none;">{{g.user.id}}</span></button>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a></li>
                                     <hr />
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a>
+                                    </li>
                                 </ul>
                             </div>
                     </ul>
@@ -183,7 +187,8 @@
                     <i class="fa fa-search Icon"></i>
                     <div id="iid" class="input-Field">
                     </div>
-                    <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
+                    <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i
+                            class="fa fa-search Search_icon"></i></button>
                     <p style="display: none;" id="tagdescription"></p>
                     <p style="display: none;" id="tagdescription"></p>
                     <!--<div class="select_Bt">
@@ -204,14 +209,15 @@
                 <a href="#">EXECUTIVE SUMMARY</a>
                 <ul class="side-nav-dropdown">
                     <li>
-                        <a href="Executive_Dashboard">CAP SUMMARY</a></li>
+                        <a href="Executive_Dashboard">CAP SUMMARY</a>
+                    </li>
+                    <li><a href="Day_In_Life">DAY IN LIFE OF...</a></li>
                     <li><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
                     <li><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
                     <li><a href="aws_releases">COMPASS RELEASES</a></li>
                     <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
-                    <li><a href="awsmain">AWS ANALYTICS</a></li>
+                    <li><a href="aws">AWS ANALYTICS</a></li>
                     <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                    <li><a href="Day_In_Life">DAY IN LIFE</a></li>
 
 
                 </ul>
@@ -285,7 +291,8 @@
                     <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
                 </ul>
             </li>
-            <li style="margin-top: 160px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
+            <li style="margin-top: 160px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
+                        style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
             </li>
             <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
     </aside>
@@ -302,7 +309,9 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header no-border">
-                                        <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil" aria-hidden="true" style="float: right;cursor: pointer;" ></i></a></h4>
+                                        <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil"
+                                                    aria-hidden="true" style="float: right;cursor: pointer;"></i></a>
+                                        </h4>
 
 
                                     </div>
@@ -477,24 +486,24 @@
                         <div class="box2" style="height: 70px;">
                             <div class="" style="display: flex;">
                                 <SELECT id="program" class="Date">
-                    <option value="">Select Program</option>
-                    <OPTION VALUE="all">All</OPTION>
-                    <OPTION VALUE="Cloud">Cloud</OPTION>
-                    <OPTION VALUE="Community">Community</option>
-                    <OPTION VALUE="Explorer">Explorer</option> 
-                  <OPTION VALUE="IE Home App">IE Home App</option> 
-                   <OPTION VALUE="IE School App">IE School App</option> 
-                </SELECT>
+                                    <option value="">Select Program</option>
+                                    <OPTION VALUE="all">All</OPTION>
+                                    <OPTION VALUE="Cloud">Cloud</OPTION>
+                                    <OPTION VALUE="Community">Community</option>
+                                    <OPTION VALUE="Explorer">Explorer</option>
+                                    <OPTION VALUE="IE Home App">IE Home App</option>
+                                    <OPTION VALUE="IE School App">IE School App</option>
+                                </SELECT>
                                 <SELECT id="rating" class="Date">
-                    <option value="">Select Rating</option>
-                    <OPTION VALUE="all">all</OPTION>
-                    <OPTION VALUE="0">0</OPTION>
-                    <OPTION VALUE="1">1</OPTION>
-                    <OPTION VALUE="2">2</option>
-                    <OPTION VALUE="3">3</option> 
-                  <OPTION VALUE="4">4</option> 
-                   <OPTION VALUE="5">5</option> 
-                </SELECT>
+                                    <option value="">Select Rating</option>
+                                    <OPTION VALUE="all">all</OPTION>
+                                    <OPTION VALUE="0">0</OPTION>
+                                    <OPTION VALUE="1">1</OPTION>
+                                    <OPTION VALUE="2">2</option>
+                                    <OPTION VALUE="3">3</option>
+                                    <OPTION VALUE="4">4</option>
+                                    <OPTION VALUE="5">5</option>
+                                </SELECT>
                                 <input class="Date" type="text" id="datepicker" size="30">
                                 <input class="Date" type="text" id="datepicker2" size="30">
                                 <p style="display: none;" id="p1"></p>
@@ -527,12 +536,13 @@
 
         <section>
 
-            <hr/>
+            <hr />
             <section class="charts">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6">
-                            <div id="chartdiv" style=" border-radius: 20px;background-color: #fff;height: 300px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+                            <div id="chartdiv" style=" border-radius: 20px;background-color: #fff;height: 300px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <canvas id="horizontalBarChartCanvas" style=" border-radius: 20px; background-color: #fff;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></canvas>
@@ -545,10 +555,12 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6">
-                            <div id="containersent" style=" border-radius: 20px;background-color: #fff;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+                            <div id="containersent" style=" border-radius: 20px;background-color: #fff;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                            </div>
                         </div>
                         <div class="col-md-4">
-                            <div id="containerpie" style=" border-radius: 20px;background-color: #fff; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+                            <div id="containerpie" style=" border-radius: 20px;background-color: #fff; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -577,7 +589,8 @@
                                                     <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
                                                     </a>
                                                     <div class="table-header">
-                                                        <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
+                                                        <span class="table-title" style="margin: 0 !important;">SCHOOL
+                                                            DETAILS</span>
                                                     </div>
 
                                                     <div class="custyle" id="next">
@@ -602,7 +615,8 @@
                                                     <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
                                                     </a>
                                                     <div class="table-header">
-                                                        <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
+                                                        <span class="table-title" style="margin: 0 !important;">SCHOOL
+                                                            DETAILS</span>
                                                     </div>
 
 
@@ -627,7 +641,8 @@
                                                     <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
                                                     </a>
                                                     <div class="table-header">
-                                                        <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
+                                                        <span class="table-title" style="margin: 0 !important;">SCHOOL
+                                                            DETAILS</span>
                                                     </div>
 
 

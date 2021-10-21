@@ -87,7 +87,7 @@ function createDynamicDiv(userList) {
         "<td>" +
         userList[0] +
         "</td>" +
-        '<td><a style="color: #00a651;" onclick="clickableTable(\'' + userList[1] + '\')">' + userList[1] +
+        '<td><a style="color: #00a651;cursor:pointer;" onclick="clickableTable(\'' + userList[1] + '\')">' + userList[1] +
         "</td></a>" +
         "<td>" +
         userList[2] +
@@ -1213,12 +1213,13 @@ function usersearch() {
     });
 }
 
-function activaTab(tab){
-  $('.nav-pills a[href="#' + tab + '"]').tab('show');
+function activaTab(tab) {
+    $('.nav-pills a[href="#' + tab + '"]').tab('show');
 };
-function clickableTable(userEmail){
+
+function clickableTable(userEmail) {
     document.getElementById("searchinputuser").value = userEmail;
     usersearch();
     activaTab('messages')
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
 }

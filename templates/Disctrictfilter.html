@@ -170,7 +170,7 @@
     .table-design table th,
     table td {
         font-size: 10px;
-        padding: 10px 20px !important;
+        padding: 5px 20px !important;
     }
     
     .close-new-tab {
@@ -288,7 +288,7 @@
         border-radius: 10px;
         background-color: #50a756;
         color: #fff;
-        margin-top: 25px;
+        margin-top: 10px;
         border: 0;
         box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
     }
@@ -357,6 +357,10 @@
         color: #5cb85c;
         padding-top: 11px;
     }
+    
+    .statistics .box2 {
+        height: 100px !important;
+    }
 </style>
 
 
@@ -398,13 +402,13 @@
                     <li>
                         <a href="Executive_Dashboard">CAP SUMMARY</a>
                     </li>
+                    <li><a href="Day_In_Life">DAY IN LIFE OF...</a></li>
                     <li><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
                     <li><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
                     <li><a href="aws_releases">COMPASS RELEASES</a></li>
                     <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
-                    <li><a href="awsmain">AWS ANALYTICS</a></li>
+                    <li><a href="aws">AWS ANALYTICS</a></li>
                     <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-                    <li><a href="Day_In_Life">DAY IN LIFE</a></li>
 
 
 
@@ -530,7 +534,7 @@
                                 <button class="select_button" onclick="modal2()">Select District</button>
                             </div>
                             <div class=" col-md-8">
-                                <p style="font-size: 21px;margin: 40px;" id="districtid"></p>
+                                <p style="font-size: 21px;margin: 25px;" id="districtid"></p>
                             </div>
                         </div>
                     </div>
@@ -548,30 +552,55 @@
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="" onclick="hi()">Schools</p>
                             <p style="margin: 0 4px; font-size: 21px; cursor: pointer; " onclick="cards2('/districtschooltable/')" id="school"></p>
+                            <div style=" display: inline; float: left;margin-top: 10px; padding-right: 5px;">
+                                <p style="font-size: 9px;" id="">Engaged (LSY)</p>
+                                <p style="margin: 0 4px;font-size: 10px;" id="engaged_school_lsy"></p>
+                            </div>
+                            <div style=" display: inline; float: right; margin-top: 10px; padding-left: 0px; ">
+                                <p style="font-size: 9px;" id="">Engaged (CSY)</p>
+                                <p style="margin: 0px 5px;font-size: 10px;" id="engaged_school_csy"></p>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-2" title="" id="teachers_360">
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="">Teachers</p>
                             <p style="margin: 0 4px; font-size: 21px; cursor: pointer; " id="teacher" onclick="cards('/districtusertableteacher/')"></p>
+                            <div style=" display: inline; float: left;margin-top: 10px; padding-right: 5px;">
+                                <p style="font-size: 9px;" id="">Engaged (LSY)</p>
+                                <p style="margin: 0 4px;font-size: 10px;" id="engd_teacher_lsy"></p>
+                            </div>
+                            <div style=" display: inline; float: right; margin-top: 10px; padding-left: 0px; ">
+                                <p style="font-size: 9px;" id="">Engaged (CSY)</p>
+                                <p style="margin: 0px 5px;font-size: 10px;" id="engd_teacher_csy"></p>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-2" title="" id="practice_sessions_360">
                         <div class="box2 ">
-                            <p style="font-size: 9px;" id="">Playback Sessions</p>
+                            <p style="font-size: 9px;" id="">Teacher Playback Counts</p>
                             <p style="margin: 0 4px; font-size: 21px; cursor: pointer; " onclick="cards('/districtusertable/')" id="practice"></p>
+                            <div style=" display: inline; float: left;margin-top: 10px; padding-right: 5px;">
+                                <p style="font-size: 9px;" id="">Engaged (LSY)</p>
+                                <p style="margin: 0 4px;font-size: 10px;" id="engd_parent_lsy"></p>
+                            </div>
+                            <div style=" display: inline; float: right; margin-top: 10px; padding-left: 0px; ">
+                                <p style="font-size: 9px;" id="">Engaged (CSY)</p>
+                                <p style="margin: 0px 5px;font-size: 10px;" id="engd_parent_csy"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2" title="" id="mindful_minutes_360">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="">Mindful Minutes</p>
+                            <p style="margin: 0 4px; font-size: 21px; " id="MINDFUL_MINUTES"></p>
                         </div>
                     </div>
                     <div class="col-md-2" title="" id="family_count_360">
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="">Family Count</p>
                             <p style="margin: 0 4px; font-size: 21px; cursor: pointer; " id="family" onclick="cards('/districtusertableparent/')"></p>
-                        </div>
-                    </div>
-                    <div class="col-md-2" title="" id="mindful_minutes_360">
-                        <div class="box2 ">
-                            <p style="font-size: 10px;" id="">Mindful Minutes</p>
-                            <p style="margin: 0 4px; font-size: 21px; " id="MINDFUL_MINUTES"></p>
                         </div>
                     </div>
                     <div class="col-md-2" title="" id="family_parctice_count_360">
@@ -619,7 +648,7 @@
                 <option value="3">Teachers Active User Count</option>
             </select>
             <p id="chartname" style="text-align: center;"></p>
-            <div id="heat-map" class="table-header-design"></div>
+            <div id="heat-map" class="table-header-design" style="overflow: scroll;height: 300px;"></div>
         </div>
         <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="user_practice_history_360">
             <div id="container2" style="height: 400px; width: 120%; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
@@ -642,6 +671,10 @@
         </div>
         <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_user_practice playback_count_360">
             <div id="container5" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            </div>
+        </div>
+        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_user_practice playback_count_360">
+            <div id="container10" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
             </div>
         </div>
         <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">

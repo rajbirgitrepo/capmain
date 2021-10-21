@@ -136,17 +136,18 @@
             color: #fff;
             cursor: pointer;" id="myBtn"><i class="fa fa-lightbulb-o" style="margin-top:2px;"></i><p style="float: right;">Insights</p><p style="float: right;margin-right: 3px; margin-left: 5px;">3</p></li>-->
                         <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true"
-                  style="margin-top:2px;margin-right: 3px;"></i></a></li>
+                                    style="margin-top:2px;margin-right: 3px;"></i></a></li>
                         <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1"
-                  class="fa fa-bars show-side-btn"></i></a></li>
+                                    class="fa fa-bars show-side-btn"></i></a></li>
                         <li style="margin-top: 27px;">
                             <div class="dropdown">
-                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid"
-                    style="display: none;">{{g.user.id}}</span></button>
+                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span
+                                        id="logid" style="display: none;">{{g.user.id}}</span></button>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a></li>
                                     <hr />
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a>
+                                    </li>
                                 </ul>
                             </div>
                     </ul>
@@ -155,7 +156,8 @@
                     <i class="fa fa-search Icon"></i>
                     <div id="iid" class="input-Field">
                     </div>
-                    <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
+                    <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i
+                            class="fa fa-search Search_icon"></i></button>
                     <p style="display: none;" id="tagdescription"></p>
                     <p style="display: none;" id="tagdescription"></p>
                     <!--<div class="select_Bt">
@@ -178,6 +180,7 @@
                     <li>
                         <a href="Executive_Dashboard">CAP SUMMARY</a>
                     </li>
+                    <li><a href="Day_In_Life">DAY IN LIFE OF...</a></li>
                     <li><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
                     <li><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
                     <li><a href="aws_releases">COMPASS RELEASES</a></li>
@@ -254,7 +257,7 @@
                 </ul>
             </li>
             <li style="margin-top: 140px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
-            style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
+                        style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
             </li>
             <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
     </aside>
@@ -271,8 +274,9 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header no-border">
-                                        <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil" aria-hidden="true"
-                          style="float: right;cursor: pointer;"></i></a></h4>
+                                        <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil"
+                                                    aria-hidden="true" style="float: right;cursor: pointer;"></i></a>
+                                        </h4>
 
 
                                     </div>
@@ -329,7 +333,7 @@
                                                     <div class="card-content">
                                                         <p class="category">Playback Count</p>
                                                         <h3 class="card-title" id="pcount">
-                                                            </h3ee>
+                                                        </h3>
                                                     </div>
 
                                                 </div>
@@ -485,10 +489,12 @@
         <section>
             <hr />
             <div class="col-md-10">
-                <div id="container" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+                <div id="container" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                </div>
             </div>
             <div class="col-md-10" style="margin-top: 40px;">
-                <div id="container2" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+                <div id="container2" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                </div>
             </div>
             <div class="col-md-10" style="margin-top: 40px;">
 
@@ -504,8 +510,8 @@
                     <div class="modal2-content">
                         <div id="admin" class="col-md-12">
                             <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
-                                <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()" style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o"
-                    aria-hidden="true"></i></a>
+                                <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()" style=" float: right;margin: 5px 15px;" href="#"><i
+                                        class="fa fa-times-circle-o" aria-hidden="true"></i></a>
                                 <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a>
 
                                 <div class="table-header">

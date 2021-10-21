@@ -64,6 +64,7 @@ from pandas.tseries.holiday import USFederalHolidayCalendar
 from pandas.tseries.offsets import CustomBusinessDay
 from sklearn.preprocessing import StandardScaler
 import collections
+import os
 
 
 
@@ -193,6 +194,135 @@ practice_cond_dictonary_list=[{'$project':{
            ]
 
 
+disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
+    '6045e4d707ead7744b125854':'Adams County School District 14',
+    '5f2609807a1c0000950bb475':'Agawam School district',
+    '5f2609807a1c0000950bb481':'Alameda Unified School District',
+    '5f2609807a1c0000950bb47a':'Alpine School District',
+    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
+    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
+    '789':'Attendance works',
+    '6045e4d707ead7744b125855':'Aurora Public Schools',
+    '5f2609807a1c0000950bb463':'Austin Independent School District',
+    '5f59e4836451a9089d7d4007':'Belleville School District',
+    '6045e4d107ead7744b125849':'Berkeley Public Schools',
+    '5fe2e25d4d0ca68d7baf889d':'BGCA',
+    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
+    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
+    '5fe318b14d0ca68d7baf889e':'BLUE',
+    '6045e4c807ead7744b12583b':'Boston Public Schools',
+    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
+    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
+    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
+    '6045e4ca07ead7744b12583f':'Canyons School District',
+    '60473f8823e88e242074ebd2':'Champlain Valley School District',
+    '6045e4d907ead7744b125858':'Chicago Public Schools',
+    '5f2609807a1c0000950bb46c':'Chico Unified School District',
+    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
+    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
+    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
+    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
+    '5f2609807a1c0000950bb45c':'Comox Valley School District',
+    '5f2609807a1c0000950bb480':'Dell Texas',
+    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
+    '6045e4cb07ead7744b125840':'Denver Public Schools',
+    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
+    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
+    '6045e4c707ead7744b12583a':'Durham Public Schools',
+    '5f895191609e08b76029f641':'Early learning Sarasota',
+    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
+    '5f2609807a1c0000950bb461':'Englewood Public School District',
+    '5f2609807a1c0000950bb464':'Equity Education',
+    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
+    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
+    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
+    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
+    '5f2609807a1c0000950bb47d':'Flint Public Schools',
+    '6023a7269e8e623753fc305e':'Fulton County School System',
+    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
+    '6045e4d207ead7744b12584b':'Glenbard District 87',
+    '5f2609807a1c0000950bb450':'Goleta District',
+    '6045e4cd07ead7744b125844':'Granite School District',
+    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
+    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
+    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
+    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
+    '6045e4c707ead7744b125839':'Hartford Public Schools',
+    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
+    '6045e4ce07ead7744b125845':'Helena Public Schools',
+    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
+    '5f2609807a1c0000950bb476':'Hillsborough County',
+    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
+    '6045e4cc07ead7744b125842':'Houston Independent School District',
+    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
+    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
+    '6045e4d307ead7744b12584d':'KIPP Public Schools',
+    '5f2609807a1c0000950bb455':'Krum Independent School District',
+    '5f2609807a1c0000950bb47e':'La Joya School District',
+    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
+    '5f2609807a1c0000950bb45a':'LAUSD',
+    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
+    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
+    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
+    '6023a7499e8e623753fc305f':'Manatee County School District',
+    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
+    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
+    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
+    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
+    '6045e4d407ead7744b12584f':'Mill Valley School District',
+    '6045e4d307ead7744b12584e':'Millard School District',
+    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
+    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
+    '6045e4cf07ead7744b125847':'Muscatine Community School District',
+    '5fbcdf0ba84e48a64412a798':'Needham School District',
+    '5f2609807a1c0000950bb459':'North Special School District',
+    '6045e4c907ead7744b12583c':'Northside Independent School District',
+    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
+    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
+    '5f6994386451a9089d7d4009':'Ogden school district',
+    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
+    '6017ab3043ca9c39151838d4':'Oswego School District',
+    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
+    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
+    '5f2609807a1c0000950bb479':'Panorama Education',
+    '5f2609807a1c0000950bb46f':'Paradise Schools',
+    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
+    '6045e4de07ead7744b125860':'Paterson School District',
+    '5f2609807a1c0000950bb466':'Pinellas County Schools',
+    '5f2609807a1c0000950bb471':'Racine Unified Schools',
+    '6045e4d507ead7744b125850':'Rich School District',
+    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
+    '5f2609807a1c0000950bb478':'San Diego Unified School District',
+    '6045e4d507ead7744b125851':'San Francisco Unified School District',
+    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
+    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
+    '6045e4df07ead7744b125862':'San Marcos Unified School District',
+    '6045e4df07ead7744b125863':'San Marino Unified School District',
+    '5f2609807a1c0000950bb477':'Sarasota County',
+    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
+    '6045e4d807ead7744b125856':'School District of the Chathams',
+    '6045e4de07ead7744b125861':'Sevier School District',
+    '5f2609807a1c0000950bb473':'Skillman Foundation',
+    '123':'Skillman',
+    '6045e4e007ead7744b125864':'South Summit School District',
+    '60eea965ae7de54f57abf234':'Southfield Public Schools',
+    '5f2609807a1c0000950bb46a':'Springfield Public School',
+    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
+    '6045e4e007ead7744b125865':'Sudbury Public Schools',
+    '6045e4e107ead7744b125866':'Tooele County School District',
+    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
+    '6045e4d607ead7744b125852':'Upland Unified School District',
+    '5f2609807a1c0000950bb468':'Utah Board of Education',
+    '456':'UWBA',
+    '6023a7949e8e623753fc3061':'Wasatch County School District',
+    '6045e4e207ead7744b125867':'Washoe County School District',
+    '5f698b826451a9089d7d4008':'Wayne Metro',
+    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
+    '5f2609807a1c0000950bb45b':'Westfield Public School District',
+    '6045e4e207ead7744b125868':'Westford Public Schools',
+    '6045e4d207ead7744b12584c':'White River School District',
+    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
+    '5f2609807a1c0000950bb45d':'Youngstown'}
 
 def csy_first_date():
         date_today =datetime.date.today()
@@ -3265,4160 +3395,8 @@ def PARTNER_schppcfamily():
     return json.dumps(data)
 
 # ================Quarter
-@app.route('/monthwisepc/quarter1/<districtid>/<startdate>/<enddate>')
-def monthwisepc_quater1(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1= DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-#       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-        
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'practice_count':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'practice_count':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-        
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'teachers':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'teachers':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'parents':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'clever':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'scoology':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    
-    
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'scoology':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7= pd.merge(df6,df3,on='_id',how='left')
-    df8= pd.merge(df7,df4,on='_id',how='left')
-    df= pd.merge(df8,df5,on='_id',how='left')
 
-    df.rename(columns = { '_id': 'Month'}, inplace = True)
-
-    data = [['Aug', 8], ['Sep', 9], ['Oct', 10],['Nov', 11], ['Dec', 12], ['Jan', 1],['Feb', 2], ['Mar', 3], ['Apr', 4],['May', 5], ['Jun', 6], ['Jul', 7]] 
-
-
-# Create the pandas DataFrame 
-    df9 = pd.DataFrame(data, columns = ['Monthname', 'Month']) 
-
-    DF=pd.merge(df9,df, on='Month',how='left')
-    DF=DF.fillna(0)
-
-#         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-
-#         try:
-#             df['Month'] = df['Month'].map(d)
-#         except:
-#             pass
-
-    if df.empty == True:
-        Month=['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul',]
-
-        T=[0,0,0,0,0,0,0,0,0,0,0,0]
-    else:
-        Month=DF['Monthname'].tolist()
-
-        T=DF['teachers'].tolist()
-        P=DF['parents'].tolist()
-        C=DF['clever'].tolist()
-        S=DF['scoology'].tolist()
-        pc=DF['practice_count'].tolist()
-
-
-    data={'monthname':Month,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S}
-    return json.dumps(data)
-
-
-@app.route('/monthwisepc/quarter2/<districtid>/<startdate>/<enddate>')
-def monthwisepc_quater2(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1= DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-#       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-        
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'practice_count':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'practice_count':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-        
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'teachers':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'teachers':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'parents':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'clever':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'scoology':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    
-    
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'scoology':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7= pd.merge(df6,df3,on='_id',how='left')
-    df8= pd.merge(df7,df4,on='_id',how='left')
-    df= pd.merge(df8,df5,on='_id',how='left')
-
-    df.rename(columns = { '_id': 'Month'}, inplace = True)
-
-    data = [['Aug', 8], ['Sep', 9], ['Oct', 10],['Nov', 11], ['Dec', 12], ['Jan', 1],['Feb', 2], ['Mar', 3], ['Apr', 4],['May', 5], ['Jun', 6], ['Jul', 7]] 
-
-
-# Create the pandas DataFrame 
-    df9 = pd.DataFrame(data, columns = ['Monthname', 'Month']) 
-
-    DF=pd.merge(df9,df, on='Month',how='left')
-    DF=DF.fillna(0)
-
-#         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-
-#         try:
-#             df['Month'] = df['Month'].map(d)
-#         except:
-#             pass
-
-    if df.empty == True:
-        Month=['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul',]
-
-        T=[0,0,0,0,0,0,0,0,0,0,0,0]
-    else:
-        Month=DF['Monthname'].tolist()
-
-        T=DF['teachers'].tolist()
-        P=DF['parents'].tolist()
-        C=DF['clever'].tolist()
-        S=DF['scoology'].tolist()
-        pc=DF['practice_count'].tolist()
-
-
-    data={'monthname':Month,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S}
-    return json.dumps(data)
-
-
-@app.route('/monthwisepc/quarter3/<districtid>/<startdate>/<enddate>')
-def monthwisepc_quater3(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1= DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-#       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-        
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'practice_count':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'practice_count':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-        
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'teachers':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'teachers':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'parents':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'clever':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'scoology':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    
-    
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'scoology':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7= pd.merge(df6,df3,on='_id',how='left')
-    df8= pd.merge(df7,df4,on='_id',how='left')
-    df= pd.merge(df8,df5,on='_id',how='left')
-
-    df.rename(columns = { '_id': 'Month'}, inplace = True)
-
-    data = [['Aug', 8], ['Sep', 9], ['Oct', 10],['Nov', 11], ['Dec', 12], ['Jan', 1],['Feb', 2], ['Mar', 3], ['Apr', 4],['May', 5], ['Jun', 6], ['Jul', 7]] 
-
-
-# Create the pandas DataFrame 
-    df9 = pd.DataFrame(data, columns = ['Monthname', 'Month']) 
-
-    DF=pd.merge(df9,df, on='Month',how='left')
-    DF=DF.fillna(0)
-
-#         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-
-#         try:
-#             df['Month'] = df['Month'].map(d)
-#         except:
-#             pass
-
-    if df.empty == True:
-        Month=['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul',]
-
-        T=[0,0,0,0,0,0,0,0,0,0,0,0]
-    else:
-        Month=DF['Monthname'].tolist()
-
-        T=DF['teachers'].tolist()
-        P=DF['parents'].tolist()
-        C=DF['clever'].tolist()
-        S=DF['scoology'].tolist()
-        pc=DF['practice_count'].tolist()
-
-
-    data={'monthname':Month,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S}
-    return json.dumps(data)
-
-
-@app.route('/monthwisepc/quarter4/<districtid>/<startdate>/<enddate>')
-def monthwisepc_quater4(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1= DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-#       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-        
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'practice_count':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'practice_count':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-        
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'teachers':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'teachers':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'parents':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'clever':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-        {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-         {'USER_ID.EMAIL_ID':{'$ne':''}},
-                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-         {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-        {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-          {'$project':{'_id':1,'scoology':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-              ])))
-    
-    
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'scoology':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7= pd.merge(df6,df3,on='_id',how='left')
-    df8= pd.merge(df7,df4,on='_id',how='left')
-    df= pd.merge(df8,df5,on='_id',how='left')
-
-    df.rename(columns = { '_id': 'Month'}, inplace = True)
-
-    data = [['Aug', 8], ['Sep', 9], ['Oct', 10],['Nov', 11], ['Dec', 12], ['Jan', 1],['Feb', 2], ['Mar', 3], ['Apr', 4],['May', 5], ['Jun', 6], ['Jul', 7]] 
-
-
-# Create the pandas DataFrame 
-    df9 = pd.DataFrame(data, columns = ['Monthname', 'Month']) 
-
-    DF=pd.merge(df9,df, on='Month',how='left')
-    DF=DF.fillna(0)
-
-#         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-
-#         try:
-#             df['Month'] = df['Month'].map(d)
-#         except:
-#             pass
-
-    if df.empty == True:
-        Month=['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul',]
-
-        T=[0,0,0,0,0,0,0,0,0,0,0,0]
-    else:
-        Month=DF['Monthname'].tolist()
-
-        T=DF['teachers'].tolist()
-        P=DF['parents'].tolist()
-        C=DF['clever'].tolist()
-        S=DF['scoology'].tolist()
-        pc=DF['practice_count'].tolist()
-
-
-    data={'monthname':Month,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S}
-    return json.dumps(data)
-
-
-@app.route('/schoolwisepracticecounttop20/quarter1/<districtid>/<startdate>/<enddate>')
-def schwisepc_quater1(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    collection1 = db.user_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-#               {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-                      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'practice_count':'$pc','name':'$NAME'}},
-            { '$sort' : { 'practice_count' : -1}},
-                   {'$limit':20}
-                  ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[],'practice_count':[]})
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'teachers':'$pc'}},
-            { '$sort' : { 'teachers' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[],'teachers':[]})
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'parents':'$pc'}},
-            { '$sort' : { 'parents' : -1}},
-                   {'$limit':20}
-                  ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[],'clever':[]})
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'clever':'$pc'}},
-            { '$sort' : { 'clever' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[],'clever':[]})
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'scoology':'$pc'}},
-            { '$sort' : { 'scoology' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[],'scoology':[]})
-    
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7=pd.merge(df6,df3,on='_id',how='left')
-    df8=pd.merge(df7,df4,on='_id',how='left')
-    df=pd.merge(df8,df5,on='_id',how='left')
-    
-    df=df.fillna(0)
-    df
-    
-    if df.empty == True:
-        
-        schname=[]
-        teacher=[]
-        parent=[]
-        clever=[]
-        scoology=[]
-      
-    else:
-        schname=df['name'].tolist()
-        teacher=df['teachers'].tolist()
-        parent=df['parents'].tolist()
-        clever=df['clever'].tolist()
-        scoology=df['scoology'].tolist()
-   
-    data={'schname':schname,'Teachers':teacher,'Parents':parent,'Clever':clever,'Scoology':scoology}
-    
-    return json.dumps(data)
-
-
-@app.route('/schoolwisepracticecounttop20/quarter2/<districtid>/<startdate>/<enddate>')
-def schwisepc_quater2(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    collection1 = db.user_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-#               {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-                      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'practice_count':'$pc','name':'$NAME'}},
-            { '$sort' : { 'practice_count' : -1}},
-                   {'$limit':20}
-                  ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[],'practice_count':[]})
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'teachers':'$pc'}},
-            { '$sort' : { 'teachers' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[],'teachers':[]})
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'parents':'$pc'}},
-            { '$sort' : { 'parents' : -1}},
-                   {'$limit':20}
-                  ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[],'clever':[]})
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'clever':'$pc'}},
-            { '$sort' : { 'clever' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[],'clever':[]})
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'scoology':'$pc'}},
-            { '$sort' : { 'scoology' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[],'scoology':[]})
-    
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7=pd.merge(df6,df3,on='_id',how='left')
-    df8=pd.merge(df7,df4,on='_id',how='left')
-    df=pd.merge(df8,df5,on='_id',how='left')
-    
-    df=df.fillna(0)
-    df
-    
-    if df.empty == True:
-        
-        schname=[]
-        teacher=[]
-        parent=[]
-        clever=[]
-        scoology=[]
-      
-    else:
-        schname=df['name'].tolist()
-        teacher=df['teachers'].tolist()
-        parent=df['parents'].tolist()
-        clever=df['clever'].tolist()
-        scoology=df['scoology'].tolist()
-   
-    data={'schname':schname,'Teachers':teacher,'Parents':parent,'Clever':clever,'Scoology':scoology}
-    
-    return json.dumps(data)
-
-
-
-@app.route('/schoolwisepracticecounttop20/quarter3/<districtid>/<startdate>/<enddate>')
-def schwisepc_quater3(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    collection1 = db.user_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-#               {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-                      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'practice_count':'$pc','name':'$NAME'}},
-            { '$sort' : { 'practice_count' : -1}},
-                   {'$limit':20}
-                  ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[],'practice_count':[]})
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'teachers':'$pc'}},
-            { '$sort' : { 'teachers' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[],'teachers':[]})
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'parents':'$pc'}},
-            { '$sort' : { 'parents' : -1}},
-                   {'$limit':20}
-                  ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[],'clever':[]})
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'clever':'$pc'}},
-            { '$sort' : { 'clever' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[],'clever':[]})
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'scoology':'$pc'}},
-            { '$sort' : { 'scoology' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[],'scoology':[]})
-    
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7=pd.merge(df6,df3,on='_id',how='left')
-    df8=pd.merge(df7,df4,on='_id',how='left')
-    df=pd.merge(df8,df5,on='_id',how='left')
-    
-    df=df.fillna(0)
-    df
-    
-    if df.empty == True:
-        
-        schname=[]
-        teacher=[]
-        parent=[]
-        clever=[]
-        scoology=[]
-      
-    else:
-        schname=df['name'].tolist()
-        teacher=df['teachers'].tolist()
-        parent=df['parents'].tolist()
-        clever=df['clever'].tolist()
-        scoology=df['scoology'].tolist()
-   
-    data={'schname':schname,'Teachers':teacher,'Parents':parent,'Clever':clever,'Scoology':scoology}
-    
-    return json.dumps(data)
-
-
-
-@app.route('/schoolwisepracticecounttop20/quarter4/<districtid>/<startdate>/<enddate>')
-def schwisepc_quater4(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    collection1 = db.user_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-#               {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-                      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'practice_count':'$pc','name':'$NAME'}},
-            { '$sort' : { 'practice_count' : -1}},
-                   {'$limit':20}
-                  ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[],'practice_count':[]})
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'teachers':'$pc'}},
-            { '$sort' : { 'teachers' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[],'teachers':[]})
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'parents':'$pc'}},
-            { '$sort' : { 'parents' : -1}},
-                   {'$limit':20}
-                  ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[],'clever':[]})
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'clever':'$pc'}},
-            { '$sort' : { 'clever' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[],'clever':[]})
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-         {'$and': [
-              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-             {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-#                       {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y","CATEGORY":{'$regex':district, '$options':'i'}})}},
-        
-                 {'USER_ID.EMAIL_ID':{'$ne':''}},
-#               
-                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-                  {'$project':{'_id':1,'scoology':'$pc'}},
-            { '$sort' : { 'scoology' : -1}},
-#                    {'$limit':20}
-                  ])))
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[],'scoology':[]})
-    
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7=pd.merge(df6,df3,on='_id',how='left')
-    df8=pd.merge(df7,df4,on='_id',how='left')
-    df=pd.merge(df8,df5,on='_id',how='left')
-    
-    df=df.fillna(0)
-    df
-    
-    if df.empty == True:
-        
-        schname=[]
-        teacher=[]
-        parent=[]
-        clever=[]
-        scoology=[]
-      
-    else:
-        schname=df['name'].tolist()
-        teacher=df['teachers'].tolist()
-        parent=df['parents'].tolist()
-        clever=df['clever'].tolist()
-        scoology=df['scoology'].tolist()
-   
-    data={'schname':schname,'Teachers':teacher,'Parents':parent,'Clever':clever,'Scoology':scoology}
-    
-    return json.dumps(data)
-
-
-
-@app.route('/userpracticehistory/quarter1/<districtid>/<startdate>/<enddate>')
-def user_practice_quater1(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-#     from datetime import datetime
-#     from datetime import timedelta
-    
-#     today1= datetime.utcnow()
-#     tod1= today1+ timedelta(hours=4)
-#     start1= tod1-timedelta(days=90)
-    
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-#     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-            {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'user_count':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[],'user_count':[]})
-    
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'teachers':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[],'teachers':[]})
-    
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'parents':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[],'parents':[]})
-    
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'clever':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[],'clever':[]})
-    
-    
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'scoology':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[],'scoology':[]})
-        
-        
-        
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7= pd.merge(df6,df3,on='_id',how='left')
-    df8= pd.merge(df7,df4,on='_id',how='left')
-    DF= pd.merge(df8,df5,on='_id',how='left')
-    DF=DF.fillna(0)
-    # df['SCH_CREATED_DATE']=pd.to_datetime(df['SCH_CREATED_DATE'])
-    DF.rename(columns = { '_id': 'date'}, inplace = True)
-    
-    
-    if DF.empty == True:
-        date=[]
-        teachers=[]
-    else:
-        date=DF['date'].tolist()
-
-        T=DF['teachers'].tolist()
-        P=DF['parents'].tolist()
-        C=DF['clever'].tolist()
-        S=DF['scoology'].tolist()
-        uc=DF['user_count'].tolist()
-
-
-    data={'Date':date,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S}
-    return json.dumps(data)
-
-
-
-@app.route('/userpracticehistory/quarter2/<districtid>/<startdate>/<enddate>')
-def user_practice_quater2(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-#     from datetime import datetime
-#     from datetime import timedelta
-    
-#     today1= datetime.utcnow()
-#     tod1= today1+ timedelta(hours=4)
-#     start1= tod1-timedelta(days=90)
-    
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-#     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-            {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'user_count':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[],'user_count':[]})
-    
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'teachers':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[],'teachers':[]})
-    
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'parents':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[],'parents':[]})
-    
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'clever':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[],'clever':[]})
-    
-    
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'scoology':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[],'scoology':[]})
-        
-        
-        
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7= pd.merge(df6,df3,on='_id',how='left')
-    df8= pd.merge(df7,df4,on='_id',how='left')
-    DF= pd.merge(df8,df5,on='_id',how='left')
-    DF=DF.fillna(0)
-    # df['SCH_CREATED_DATE']=pd.to_datetime(df['SCH_CREATED_DATE'])
-    DF.rename(columns = { '_id': 'date'}, inplace = True)
-    
-    
-    if DF.empty == True:
-        date=[]
-        teachers=[]
-    else:
-        date=DF['date'].tolist()
-
-        T=DF['teachers'].tolist()
-        P=DF['parents'].tolist()
-        C=DF['clever'].tolist()
-        S=DF['scoology'].tolist()
-        uc=DF['user_count'].tolist()
-
-
-    data={'Date':date,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S}
-    return json.dumps(data)
-
-
-
-@app.route('/userpracticehistory/quarter3/<districtid>/<startdate>/<enddate>')
-def user_practice_quater3(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-#     from datetime import datetime
-#     from datetime import timedelta
-    
-#     today1= datetime.utcnow()
-#     tod1= today1+ timedelta(hours=4)
-#     start1= tod1-timedelta(days=90)
-    
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-#     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-            {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'user_count':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[],'user_count':[]})
-    
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'teachers':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[],'teachers':[]})
-    
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'parents':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[],'parents':[]})
-    
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'clever':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[],'clever':[]})
-    
-    
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'scoology':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[],'scoology':[]})
-        
-        
-        
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7= pd.merge(df6,df3,on='_id',how='left')
-    df8= pd.merge(df7,df4,on='_id',how='left')
-    DF= pd.merge(df8,df5,on='_id',how='left')
-    DF=DF.fillna(0)
-    # df['SCH_CREATED_DATE']=pd.to_datetime(df['SCH_CREATED_DATE'])
-    DF.rename(columns = { '_id': 'date'}, inplace = True)
-    
-    
-    if DF.empty == True:
-        date=[]
-        teachers=[]
-    else:
-        date=DF['date'].tolist()
-
-        T=DF['teachers'].tolist()
-        P=DF['parents'].tolist()
-        C=DF['clever'].tolist()
-        S=DF['scoology'].tolist()
-        uc=DF['user_count'].tolist()
-
-
-    data={'Date':date,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S}
-    return json.dumps(data)
-
-
-
-@app.route('/userpracticehistory/quarter4/<districtid>/<startdate>/<enddate>')
-def user_practice_quater4(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-#     from datetime import datetime
-#     from datetime import timedelta
-    
-#     today1= datetime.utcnow()
-#     tod1= today1+ timedelta(hours=4)
-#     start1= tod1-timedelta(days=90)
-    
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-#     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-            {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'user_count':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df1.empty:
-        df1=pd.DataFrame({'_id':[],'user_count':[]})
-    
-    df2 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'teachers':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df2.empty:
-        df2=pd.DataFrame({'_id':[],'teachers':[]})
-    
-    df3 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'parents':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df3.empty:
-        df3=pd.DataFrame({'_id':[],'parents':[]})
-    
-    df4 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'clever':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df4.empty:
-        df4=pd.DataFrame({'_id':[],'clever':[]})
-    
-    
-    df5 = DataFrame(list(collection.aggregate([
-    {"$match":
-     {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-# //               {'IS_ADMIN':'Y'},
-# //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},
-         {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
-              {'$project':{'_id':1,'scoology':'$pc'}},
-    { '$sort' : { '_id' : 1} }
-    
-
-# //               {'$count':'count'}
-              ])))
-    if df5.empty:
-        df5=pd.DataFrame({'_id':[],'scoology':[]})
-        
-        
-        
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7= pd.merge(df6,df3,on='_id',how='left')
-    df8= pd.merge(df7,df4,on='_id',how='left')
-    df= pd.merge(df8,df5,on='_id',how='left')
-    df=df.fillna(0)
-    # df['SCH_CREATED_DATE']=pd.to_datetime(df['SCH_CREATED_DATE'])
-    df.rename(columns = { '_id': 'date'}, inplace = True)
-    
-    
-    if df.empty == True:
-        date=[]
-        teachers=[]
-        parents=[]
-        clever=[]
-        scoology=[]
-        
-    else:
-        date=df['date'].tolist()
-
-        teachers=df['teachers'].tolist()
-        parents=df['parents'].tolist()
-        clever=df['clever'].tolist()
-        scoology=df['scoology'].tolist()
-        
-
-
-    data={'Date':date,'Teachers':teachers,'Parents':parents,'Clever':clever,'Scoology':scoology}
-    return json.dumps(data)
-
-
-
-@app.route('/top20userspractisinginfo/quarter1/<districtid>/<startdate>/<enddate>')
-def topusers_practice_quater1(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-
-
-    collection1 = db.user_master
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-    #           {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-               {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),
-                           '$lt':datetime.datetime(2020,11,1)}},  
-            {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':'$USER_ID._id','pc':{'$sum':1}}},
-              {'$project':{'_id':1,'practice_count':'$pc'}},
-    { '$sort' : { 'practice_count' : -1} }
-
-
-
-    # //               {'$count':'count'}
-              ])))
-    df1
-
-    df2=DataFrame(list(collection1.aggregate([{"$match":
-     {'$and': [
-    #         {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"IS_DISABLED":{"$ne":"Y"}},
-              {"IS_BLOCKED":{"$ne":"Y"}},
-             {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    #                  {'_id':{'$in':user}},
-    # //               {'IS_ADMIN':'Y'},
-         {'CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-
-             {'EMAIL_ID':{'$ne':''}},
-             {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-
-        {'$group':{'_id':'$_id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'user_name':{'$first':'$USER_NAME'}
-                  }},
-
-
-        {'$project':{'_id':1,'user_name':1,'school_name':1}},])))
-
-    df=pd.merge(df1,df2, how='left', on='_id')
-    df
-    if df.empty == True:
-
-        schname=[]
-        pc=[]
-
-    else:
-        df["users"] = df["user_name"] +','+' ' + df["school_name"]
-        schname=df['users'].tolist()
-        pc=df['practice_count'].tolist()
-
-
-
-    #     data=[]    
-    #     for i,k in zip(schname,uc):
-
-    #         data.append([i,k])
-
-    #     for i in range(len(schname)):
-    #             schname[i] = schname[i]
-    data={'schname':schname[0:20],'practicecount':pc[0:20]}
-
-    return json.dumps(data)
-
-
-
-@app.route('/top20userspractisinginfo/quarter2/<districtid>/<startdate>/<enddate>')
-def topusers_practice_quater2(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-
-
-    collection1 = db.user_master
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-    #           {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-               {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,11,1),
-                           '$lt':datetime.datetime(2021,2,1)}},  
-            {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':'$USER_ID._id','pc':{'$sum':1}}},
-              {'$project':{'_id':1,'practice_count':'$pc'}},
-    { '$sort' : { 'practice_count' : -1} }
-
-
-
-    # //               {'$count':'count'}
-              ])))
-    df1
-
-    df2=DataFrame(list(collection1.aggregate([{"$match":
-     {'$and': [
-    #         {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"IS_DISABLED":{"$ne":"Y"}},
-              {"IS_BLOCKED":{"$ne":"Y"}},
-             {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    #                  {'_id':{'$in':user}},
-    # //               {'IS_ADMIN':'Y'},
-         {'CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-
-             {'EMAIL_ID':{'$ne':''}},
-             {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-
-        {'$group':{'_id':'$_id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'user_name':{'$first':'$USER_NAME'}
-                  }},
-
-
-        {'$project':{'_id':1,'user_name':1,'school_name':1}},])))
-
-    df=pd.merge(df1,df2, how='left', on='_id')
-    df
-    if df.empty == True:
-
-        schname=[]
-        pc=[]
-
-    else:
-        df["users"] = df["user_name"] +','+' ' + df["school_name"]
-        schname=df['users'].tolist()
-        pc=df['practice_count'].tolist()
-
-
-
-    #     data=[]    
-    #     for i,k in zip(schname,uc):
-
-    #         data.append([i,k])
-
-    #     for i in range(len(schname)):
-    #             schname[i] = schname[i]
-    data={'schname':schname[0:20],'practicecount':pc[0:20]}
-
-    return json.dumps(data)
-
-
-
-
-@app.route('/top20userspractisinginfo/quarter3/<districtid>/<startdate>/<enddate>')
-def topusers_practice_quater3(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-
-
-    collection1 = db.user_master
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-    #           {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-               {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,2,1),
-                           '$lt':datetime.datetime(2021,5,1)}},  
-            {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':'$USER_ID._id','pc':{'$sum':1}}},
-              {'$project':{'_id':1,'practice_count':'$pc'}},
-    { '$sort' : { 'practice_count' : -1} }
-
-
-
-    # //               {'$count':'count'}
-              ])))
-    df1
-
-    df2=DataFrame(list(collection1.aggregate([{"$match":
-     {'$and': [
-    #         {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"IS_DISABLED":{"$ne":"Y"}},
-              {"IS_BLOCKED":{"$ne":"Y"}},
-             {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    #                  {'_id':{'$in':user}},
-    # //               {'IS_ADMIN':'Y'},
-         {'CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-
-             {'EMAIL_ID':{'$ne':''}},
-             {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-
-        {'$group':{'_id':'$_id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'user_name':{'$first':'$USER_NAME'}
-                  }},
-
-
-        {'$project':{'_id':1,'user_name':1,'school_name':1}},])))
-
-    df=pd.merge(df1,df2, how='left', on='_id')
-    df
-    if df.empty == True:
-
-        schname=[]
-        pc=[]
-
-    else:
-        df["users"] = df["user_name"] +','+' ' + df["school_name"]
-        schname=df['users'].tolist()
-        pc=df['practice_count'].tolist()
-
-
-
-    #     data=[]    
-    #     for i,k in zip(schname,uc):
-
-    #         data.append([i,k])
-
-    #     for i in range(len(schname)):
-    #             schname[i] = schname[i]
-    data={'schname':schname[0:20],'practicecount':pc[0:20]}
-
-    return json.dumps(data)
-
-
-
-@app.route('/top20userspractisinginfo/quarter4/<districtid>/<startdate>/<enddate>')
-def topusers_practice_quater4(districtid,startdate,enddate):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    district=disdic[districtid]
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
-
-
-    collection1 = db.user_master
-    df1 = DataFrame(list(collection.aggregate([
-    {"$match":
-    {'$and': [
-    #           {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-    # //             {'USER_ID.IS_PORTAL':'Y'},
-             {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-               {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,5,1)}},  
-            {'USER_ID.CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        {'$group':{'_id':'$USER_ID._id','pc':{'$sum':1}}},
-              {'$project':{'_id':1,'practice_count':'$pc'}},
-    { '$sort' : { 'practice_count' : -1} }
-
-
-
-    # //               {'$count':'count'}
-              ])))
-    df1
-
-    df2=DataFrame(list(collection1.aggregate([{"$match":
-     {'$and': [
-    #         {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"IS_DISABLED":{"$ne":"Y"}},
-              {"IS_BLOCKED":{"$ne":"Y"}},
-             {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    #                  {'_id':{'$in':user}},
-    # //               {'IS_ADMIN':'Y'},
-         {'CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-
-             {'EMAIL_ID':{'$ne':''}},
-             {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                       {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-
-        {'$group':{'_id':'$_id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'user_name':{'$first':'$USER_NAME'}
-                  }},
-
-
-        {'$project':{'_id':1,'user_name':1,'school_name':1}},])))
-
-    df=pd.merge(df1,df2, how='left', on='_id')
-    df
-    if df.empty == True:
-
-        schname=[]
-        pc=[]
-
-    else:
-        df["users"] = df["user_name"] +','+' ' + df["school_name"]
-        schname=df['users'].tolist()
-        pc=df['practice_count'].tolist()
-
-
-
-    #     data=[]    
-    #     for i,k in zip(schname,uc):
-
-    #         data.append([i,k])
-
-    #     for i in range(len(schname)):
-    #             schname[i] = schname[i]
-    data={'schname':schname[0:20],'practicecount':pc[0:20]}
-
-    return json.dumps(data)
-
+ 
 
 
 
@@ -8395,30 +4373,41 @@ def Scoology():
         return redirect(url_for('login'))
     
     return render_template('Scoology.html')
-@app.route('/journeyprachis/<email>')
-def journeyprachischart(email):
+
+
+@app.route('/journeyprachis/<schoolid>')
+def journeyprachischart(schoolid):
     mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
     collection = db.audio_track_master
     collection2 = db.user_master
     ##############EMAIL##############
-    Email = DataFrame(list(collection2.aggregate([{"$match":{"$or":[ {'EMAIL_ID':{'$regex' :""+email+"", '$options' : 'i'}},
-                    {"EMAIL_ID":""+email+""}]}},{"$match":{'$and':[{'USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
-                    {'IS_DISABLED':{"$ne":'Y'}},{'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-                    {'IS_BLOCKED':{"$ne":'Y'}},
-                    {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}]}}
-                    ,{"$group": {"_id": '$schoolId._id'}},
-            {'$project':{'schoolId':'$_id',"_id":0}}
+    Email = DataFrame(list(collection2.aggregate([
+        {"$match":{'$and':[{"schoolId._id":ObjectId(""+schoolid+"")},
+#              {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+            {'IS_DISABLED':{"$ne":'Y'}},
+        {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                    {'EMAIL_ID':{"$ne":''}},
+        {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
+          {'schoolId.NAME':{"$not":{"$regex":'test', '$options':'i'}}},
+             {'EMAIL_ID':{"$not":{"$regex":"Test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{"$not":{"$regex":"TEST",'$options':'i'}}},
+        {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}
+            ]}},
+#                   {"$group": {"_id": '$schoolId._id'}},
+            {'$project':{'_id':'$_id','school':"$schoolId._id"}}
             ])))
-    ID=Email["schoolId"].tolist()
+    ID=Email["_id"].tolist()
     ######################  SCHOOL PRACTICE 2019-2021 ############################################
     df1 = DataFrame(list(collection.aggregate([{
             '$match':{"$and" :[{'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                    { 'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
                    { 'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
                    { 'USER_ID.EMAIL_ID':{'$ne':""}},
-                   { 'USER_ID.schoolId._id':{"$in":ID}},
+                   { 'USER_ID._id':{"$in":ID}},
                    {'MODIFIED_DATE':{'$gte':csy_first_date()}} ,
                     {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}]}},
             {"$match":
@@ -8446,6 +4435,60 @@ def journeyprachischart(email):
         shpcum=df3.values.tolist()
         temp={'data':{'shp':shp,'shpcum':shpcum}}
         return json.dumps(temp)
+# journeyprachischart('5f2bcad8ba0be61b0c1e9d5e')
+
+
+# @app.route('/journeyprachis/<email>')
+# def journeyprachischart(email):
+#     mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
+#     client = pymongo.MongoClient(mongo_uri)
+#     db = client.compass
+#     collection = db.audio_track_master
+#     collection2 = db.user_master
+#     ##############EMAIL##############
+#     Email = DataFrame(list(collection2.aggregate([{"$match":{"$or":[ {'EMAIL_ID':{'$regex' :""+email+"", '$options' : 'i'}},
+#                     {"EMAIL_ID":""+email+""}]}},{"$match":{'$and':[{'USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
+#                     {'IS_DISABLED':{"$ne":'Y'}},{'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+#                     {'IS_BLOCKED':{"$ne":'Y'}},
+#                     {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}]}}
+#                     ,{"$group": {"_id": '$schoolId._id'}},
+#             {'$project':{'schoolId':'$_id',"_id":0}}
+#             ])))
+#     ID=Email["schoolId"].tolist()
+#     ######################  SCHOOL PRACTICE 2019-2021 ############################################
+#     df1 = DataFrame(list(collection.aggregate([{
+#             '$match':{"$and" :[{'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+#                    { 'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+#                    { 'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+#                    { 'USER_ID.EMAIL_ID':{'$ne':""}},
+#                    { 'USER_ID.schoolId._id':{"$in":ID}},
+#                    {'MODIFIED_DATE':{'$gte':csy_first_date()}} ,
+#                     {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+#             {"$match":
+#             {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+#                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+#                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+#                     {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+#             {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+#                             'month':{'$month':'$MODIFIED_DATE'}},
+#                     'date':{'$first':'$MODIFIED_DATE'}, 
+#                     'Users_Practice_CSY':{'$sum':1}}},
+#             {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+#                         'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
+#             {"$sort":{'Practice_date':1}}])))
+#     #school_practice_history
+#     if df1.empty:
+#         shp =0
+#     else:
+#         df1['Practice_date'] = pd.to_datetime(df1['Practice_date'])
+#         df5=df1.sort_values(by='Practice_date')
+#         df5['Practice_date']=df5['Practice_date'].astype(np.int64)/int(1e6)
+#         shp=df5[["Practice_date","Users_Practice_CSY"]].values.tolist()
+#         df5['Cumulative_Amount'] = df5['Users_Practice_CSY'].cumsum()
+#         df3=df5[['Practice_date','Cumulative_Amount']]
+#         shpcum=df3.values.tolist()
+#         temp={'data':{'shp':shp,'shpcum':shpcum}}
+#         return json.dumps(temp)
 
 @app.route('/family_table')
 def famtablenew():
@@ -14459,135 +10502,7 @@ def heat_csy_pc_teacher():
 
 @app.route('/districtheatmap/<districtid>/<startdate>/<enddate>')
 def heat_district(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
+    
     import collections
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -14651,7 +10566,8 @@ def heat_district(districtid,startdate,enddate):
         {'$group':{'_id':'$USER_ID.schoolId._id','uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
               {'$project':{'_id':1,'active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
     { '$sort' : { 'active_user_count' : -1} },
-    {'$limit':30}])))
+#     {'$limit':30}
+    ])))
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
@@ -14731,135 +10647,7 @@ def heat_district(districtid,startdate,enddate):
 # --------
 @app.route('/familydistrictheatmap/<districtid>/<startdate>/<enddate>')
 def heat_district_family_active(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
+    
     import collections
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -14922,7 +10710,8 @@ def heat_district_family_active(districtid,startdate,enddate):
         {'$group':{'_id':'$USER_ID.schoolId._id','uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
               {'$project':{'_id':1,'active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
     { '$sort' : { 'active_user_count' : -1} },
-    {'$limit':30}])))
+#     {'$limit':30}
+    ])))
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
@@ -15002,135 +10791,6 @@ def heat_district_family_active(districtid,startdate,enddate):
 #---
 @app.route('/teachersdistrictheatmap/<districtid>/<startdate>/<enddate>')
 def heat_district_teachers_active(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
     import collections
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -15193,7 +10853,8 @@ def heat_district_teachers_active(districtid,startdate,enddate):
         {'$group':{'_id':'$USER_ID.schoolId._id','uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
               {'$project':{'_id':1,'active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
     { '$sort' : { 'active_user_count' : -1} },
-    {'$limit':30}])))
+#     {'$limit':30}
+    ])))
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
@@ -15274,135 +10935,6 @@ def heat_district_teachers_active(districtid,startdate,enddate):
 
 @app.route('/districtheatmappracteacher/<districtid>/<startdate>/<enddate>')
 def heat_district_teachers_prac(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
     import collections
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -15465,7 +10997,8 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
         {'$group':{'_id':'$USER_ID.schoolId._id','uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
               {'$project':{'_id':1,'active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
     { '$sort' : { 'active_user_count' : -1} },
-    {'$limit':30}])))
+#     {'$limit':30}
+    ])))
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
@@ -15545,135 +11078,6 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
 
 @app.route('/districtheatmappracfamily/<districtid>/<startdate>/<enddate>')
 def heat_district_family_prac(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
     import collections
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -15736,7 +11140,8 @@ def heat_district_family_prac(districtid,startdate,enddate):
         {'$group':{'_id':'$USER_ID.schoolId._id','uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
               {'$project':{'_id':1,'active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
     { '$sort' : { 'active_user_count' : -1} },
-    {'$limit':30}])))
+#     {'$limit':30}
+    ])))
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
@@ -15816,135 +11221,6 @@ def heat_district_family_prac(districtid,startdate,enddate):
 
 @app.route('/districtheatmappractice/<districtid>/<startdate>/<enddate>')
 def heatmap_prac_district(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
     import collections
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -16007,7 +11283,8 @@ def heatmap_prac_district(districtid,startdate,enddate):
         {'$group':{'_id':'$USER_ID.schoolId._id','uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
               {'$project':{'_id':1,'active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
     { '$sort' : { 'active_user_count' : -1} },
-    {'$limit':30}])))
+#     {'$limit':30}
+    ])))
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
@@ -16182,137 +11459,8 @@ def weekprogpracsummary():
 
 
 @app.route('/schoolwiseusercounttop20/<districtid>/<startdate>/<enddate>')
-def schwiseuc(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
-    
+def schwiseucc(districtid,startdate,enddate):
+
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -16337,8 +11485,8 @@ def schwiseuc(districtid,startdate,enddate):
                  {'EMAIL_ID':{'$ne':''}},
                 {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
 #                   
-             {'CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
+#              {'CREATED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
 #              {'DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
 #              
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -16352,6 +11500,43 @@ def schwiseuc(districtid,startdate,enddate):
                   ])))
     if df1.empty:
         df1=pd.DataFrame({'_id':[],'user_count':[]})
+    else:
+        df1
+    school=df1['_id'].tolist()
+        
+    df0 = DataFrame(list(db.audio_track_master.aggregate([
+    {"$match":
+    {'$and': [
+    #       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    #             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+    #             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.schoolId._id':{'$ne':None}},
+    # //               {'IS_ADMIN':'Y'},
+       {'USER_ID.schoolId._id':{'$in':school}},
+         {'USER_ID.EMAIL_ID':{'$ne':''}},
+#                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'Broward', '$options':'i'}})}},
+    #                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
+    #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
+#              {'MODIFIED_DATE':{'$gte':csy_first_date()}},
+        {'MODIFIED_DATE':{"$gte": myDatetime1 ,
+                             "$lte":myDatetime2}},
+    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+    {'$group':{'_id':'$USER_ID.schoolId._id','pc':{'$addToSet':'$USER_ID._id'},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
+          {'$project':{'_id':1,'active':{'$size':'$pc'}}},
+    { '$sort' : { 'active' : -1} },
+         {'$limit':20}
+          ])))
+    if df0.empty:
+        df0=pd.DataFrame({'_id':[],'active':[]})
     
     df2 = DataFrame(list(collection.aggregate([
     {"$match":
@@ -16359,8 +11544,8 @@ def schwiseuc(districtid,startdate,enddate):
              {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
             {"_id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
             {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-             {'CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
+#              {'CREATED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
                 {"IS_DISABLED":{"$ne":"Y"}},
                   {"IS_BLOCKED":{"$ne":"Y"}},
                  {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -16396,8 +11581,8 @@ def schwiseuc(districtid,startdate,enddate):
                 { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
     # //               {'IS_ADMIN':'Y'},
 #                 {'IS_PORTAL':'Y'},
-              {'CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
+#               {'CREATED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
                  {'EMAIL_ID':{'$ne':''}},
 #                    
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -16421,10 +11606,11 @@ def schwiseuc(districtid,startdate,enddate):
             {"_id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
             {"_id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
                 {"IS_DISABLED":{"$ne":"Y"}},
+             
                   {"IS_BLOCKED":{"$ne":"Y"}},
                  {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-             {'CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
+#              {'CREATED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
              
                 { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -16453,8 +11639,8 @@ def schwiseuc(districtid,startdate,enddate):
             {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                 {"IS_DISABLED":{"$ne":"Y"}},
                   {"IS_BLOCKED":{"$ne":"Y"}},
-              {'CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
+#               {'CREATED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
                  {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -16476,8 +11662,9 @@ def schwiseuc(districtid,startdate,enddate):
         df5=pd.DataFrame({'_id':[],'scoology':[]})
     
     
-    df6= pd.merge(df1,df2,on='_id',how='left')
-    df7=pd.merge(df6,df3,on='_id',how='left')
+    df6= pd.merge(df1,df0,on='_id',how='left')
+    df9= pd.merge(df6,df2,on='_id',how='left')
+    df7=pd.merge(df9,df3,on='_id',how='left')
     df8=pd.merge(df7,df4,on='_id',how='left')
     df=pd.merge(df8,df5,on='_id',how='left')
     
@@ -16493,6 +11680,7 @@ def schwiseuc(districtid,startdate,enddate):
         parent=[]
         clever=[]
         scoology=[]
+        active=[]
       
     else:
         schname=df['name'].tolist()
@@ -16500,150 +11688,19 @@ def schwiseuc(districtid,startdate,enddate):
         parent=df['parents'].tolist()
         clever=df['clever'].tolist()
         scoology=df['scoology'].tolist()
+        active=df['active'].tolist()
    
-    data={'schname':schname,'Teachers':teacher,'Parents':parent,'Clever':clever,'Scoology':scoology}
+    data={'schname':schname,'Teachers':teacher,'Parents':parent,'Clever':clever,'Scoology':scoology,'active':active}
     
     return json.dumps(data)
 
 
-
-
-
-
-
+# schwiseucc('5f2609807a1c0000950bb46d','2021-08-01','2021-10-19')
 
 
 @app.route('/schoolwisepracticecounttop20/<districtid>/<startdate>/<enddate>')
 def schwisepc(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
+    
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -17684,135 +12741,7 @@ def attend_count_cards():
 
 @app.route('/monthwisepracticedistrict/<districtid>/<startdate>/<enddate>')
 def monthwisepc(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
+    
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -17821,6 +12750,45 @@ def monthwisepc(districtid,startdate,enddate):
     district=disdic[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
+    pre_start= myDatetime1 - relativedelta(years=1)
+    print(pre_start)
+    pre_end=myDatetime2 - relativedelta(years=1)
+    print(pre_end)
+    df0= DataFrame(list(collection.aggregate([
+    {"$match":
+    {'$and': [
+#       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.schoolId._id':{'$ne':None}},
+    # //               {'IS_ADMIN':'Y'},
+        
+    # //             {'USER_ID.IS_PORTAL':'Y'},
+         {'USER_ID.EMAIL_ID':{'$ne':''}},
+                 {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+#                {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
+#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
+#          {'MODIFIED_DATE':{'$gte':csy_first_date()}},
+        {'MODIFIED_DATE':{"$gte": pre_start ,
+                             "$lte":pre_end}},
+    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
+          {'$project':{'_id':1,'practice_count_lsy':'$pc'}},
+    { '$sort' : { '_id' : 1} }
+              ])))
+    if df0.empty:
+        df0=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'practice_count_lsy':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    
+    
     df1= DataFrame(list(collection.aggregate([
     {"$match":
     {'$and': [
@@ -17992,7 +12960,8 @@ def monthwisepc(districtid,startdate,enddate):
         df5=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'scoology':[0,0,0,0,0,0,0,0,0,0,0,0]})
     
     df6= pd.merge(df1,df2,on='_id',how='left')
-    df7= pd.merge(df6,df3,on='_id',how='left')
+    df66= pd.merge(df6,df0,on='_id',how='left')
+    df7= pd.merge(df66,df3,on='_id',how='left')
     df8= pd.merge(df7,df4,on='_id',how='left')
     df= pd.merge(df8,df5,on='_id',how='left')
 
@@ -18020,152 +12989,24 @@ def monthwisepc(districtid,startdate,enddate):
         T=[0,0,0,0,0,0,0,0,0,0,0,0]
     else:
         Month=DF['Monthname'].tolist()
-
+        
         T=DF['teachers'].tolist()
         P=DF['parents'].tolist()
         C=DF['clever'].tolist()
         S=DF['scoology'].tolist()
         pc=DF['practice_count'].tolist()
+        lsy=DF['practice_count_lsy'].tolist()
 
 
-    data={'monthname':Month,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S}
+    data={'monthname':Month,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S,'lsy':lsy}
     return json.dumps(data)
-
-
+# monthwisepc('5f2609807a1c0000950bb46d','2021-08-01','2021-10-19')
 
 
 
 @app.route('/90daysuserpractising/<districtid>/<startdate>/<enddate>')
 def user_practice_90days(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
+    
     from datetime import datetime
     from datetime import timedelta
     
@@ -18850,135 +13691,6 @@ def user_logins_90days(districtid):
 
 @app.route('/top20userspractisinginfo/<districtid>/<startdate>/<enddate>')
 def topusers_practice(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -19070,137 +13782,250 @@ def topusers_practice(districtid,startdate,enddate):
 
     return json.dumps(data)
 
+
+@app.route('/districtfeedbackrating_csy/<districtid>/<startdate>/<enddate>')
+def dis_schoolrating_csy(districtid,startdate,enddate):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_feedback
+    district=disdic[districtid]
+    myDatetime1 = dateutil.parser.parse(startdate)
+    myDatetime2 = dateutil.parser.parse(enddate)
+
+    df1=DataFrame(list(db.user_master.aggregate([
+        {"$match":
+         {
+            '$and':[
+    # // #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"IS_DISABLED":{"$ne":"Y"}},
+              {"IS_BLOCKED":{"$ne":"Y"}},
+             {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                {'EMAIL_ID':{'$ne':''}},
+  {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+
+#                 {'schoolId._id':{'$in':school}},
+                
+                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+
+         }},
+        {'$project':{'_id':'$_id','school':'$schoolId._id' }}
+        ])))
+
+    user=df1['_id'].tolist() 
+
+    
+    df = DataFrame(list(collection.aggregate([
+     {"$match":{'$and':[
+         
+           {'USER._id':{'$in':user}},
+      
+        {'RATING':{'$ne':0}},
+        {'MODIFIED_DATE':{"$gte": myDatetime1 ,
+                             "$lte":myDatetime2}},
+
+     ]}},
+        
+    {'$group':{'_id':'$RATING' ,'count':{'$sum':1}}},
+           {'$sort':{'_id':-1}}
+        
+    ])))
+    rating=df['_id'].tolist()
+    count=df['count'].tolist()
+
+    temp={'rating':rating,'count':count}
+    return json.dumps(temp)
+
+
+@app.route('/districtsentimentdonut_csy/<districtid>/<startdate>/<enddate>')
+def dis_sentiment_pie(districtid,startdate,enddate):
+    clean_list=[]
+    news_headlines_senti = []
+    news_headlines_dict = {}
+    pnews_headlines=0
+    nnews_headlines=0
+    nenews_headlines = 0
+    # date1=startdate
+    # date2=enddate
+    today = date.today()
+    d1 = today.strftime("%Y-%m-%d")
+    # myDatetimestrt = dateutil.parser.parse(date1)
+    # myDatetimeend = dateutil.parser.parse(date2)
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_feedback
+    district=disdic[districtid]
+    myDatetime1 = dateutil.parser.parse(startdate)
+    myDatetime2 = dateutil.parser.parse(enddate)
+
+    df1=DataFrame(list(db.user_master.aggregate([
+        {"$match":
+         {
+            '$and':[
+    # // #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"IS_DISABLED":{"$ne":"Y"}},
+              {"IS_BLOCKED":{"$ne":"Y"}},
+             {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                {'EMAIL_ID':{'$ne':''}},
+                {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+
+                
+                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+
+         }},
+        {'$project':{'_id':'$_id','school':'$schoolId._id' }}
+        ])))
+
+    userid=df1['_id'].tolist() 
+
+    user=[
+    {"$match":{'$and':[ {'USER._id':{'$in':userid}},
+      
+#         {'RATING':{'$ne':0}},
+         {'MODIFIED_DATE':{"$gte": myDatetime1 ,
+                             "$lte":myDatetime2}},
+                        ]}},
+    { "$project": { "USER_ID": "$USER._id", "USER_NAME": "$USER.USER_NAME","_id":0, "EMAIL": "$USER.EMAIL_ID", "RATING":1,
+    "LAST_COMMENT_DATE": "$MODIFIED_DATE", "AUDIO_NAME": "$AUDIO_ID.AUDIO_NAME", "NARRATOR_NAME": "$AUDIO_ID.NARRATEDBY",
+    "COMMENT":1, "PROGRAM_NAME": "$AUDIO_ID.PROGRAM_ID.PROGRAM_NAME"}}
+    ]
+    update=list(collection.aggregate(user))
+    df=pd.DataFrame(update).fillna("no info")
+    list_of_names=df["USER_ID"].to_list()
+    df
+
+    # def Average(lst):
+    #     return sum(lst) / len(lst)
+
+    # # Driver Code
+    # lst =df123["RATING"].to_list()
+    # average = Average(lst)
+    # average
+
+    #     print(df123["COMMENT"],"lola")
+    xx=df[df["COMMENT"]!="no info"]
+    xxc=xx[xx["COMMENT"]!=""]
+
+    comment_list=xxc["COMMENT"].to_list()
+    comment_list
+    newtexttoken=[]
+    for i in comment_list:
+        text_tokens = word_tokenize(i)
+        newtexttoken.append(text_tokens)
+    newlist=[]
+    for i in newtexttoken:
+        for z in i:
+            newlist.append(z.lower())
+    st_word=stopwords.words('english')
+    tokens_without_sw= [word for word in newlist if not word in st_word]
+    token5=[]
+    for sentence in tokens_without_sw:
+    #     print(sentence)
+        text3 = sentence.split('ing')
+    #     print(text3,"text3")
+        for i in text3:
+    #         print(i)
+            token5.append(i)
+    words = [w.replace('liked', 'like') for w in token5]
+    words2 = [w.replace('relaxed', 'relax') for w in words]
+    words3 = [w.replace('relaxing', 'relax') for w in words2]
+    words4 = [w.replace('excitinging', 'excited') for w in words3]
+    #     print(words4)
+    zxc=""
+    name=""
+    count=""
+    try:
+        xcvv=[x for x in words4 if len(x)>3]
+        fdist=FreqDist(xcvv)
+        df_fdist = pd.DataFrame.from_dict(fdist, orient='index')
+    #         print(df_fdist)
+        df_fdist.columns = ['Frequency']
+        df_fdist.index.name = 'Term'
+        xc=df_fdist.sort_values(by='Frequency', ascending=False, na_position='first')
+        #     tt=xc.drop(["i","it","we","made","us","the","feeling","some","students"])
+        cc=xc[0:10]
+        name=cc.index.to_list()
+        count=cc["Frequency"].to_list()
+        zxc=' '.join(word for word in xcvv)
+    except:
+        pass
+    for item in comment_list:
+        # trim
+        item = item.strip()
+        # Removing RT
+        item = item.replace('RT', '')
+        # Removing new line character
+        item = item.replace('\\n', '')
+        # Replace #word with word
+        news_headlines = re.sub(r'#([^\s]+)', r'\1', item)
+        # Convert @username to username
+        news_headlines = re.sub(r'@([^\s]+)', r'\1', item)
+        item = " ".join(re.findall("[a-zA-Z]+", item))
+        tmp_var = re.sub(r'^\S*\s', '', item)
+        clean_list.append(tmp_var)
+    for item in clean_list:
+            #print(item)
+            # create TextBlob object of passed news_headlines text
+            analysis = TextBlob(item)
+            # set sentiment
+            if analysis.sentiment.polarity > 0:
+                # saving sentiment of news_headlines
+                news_headlines_score = 'positive'
+                pnews_headlines = pnews_headlines + 1
+                news_headlines_dict[item] = news_headlines_score
+            elif analysis.sentiment.polarity == 0:
+                # saving sentiment of news_headlines
+                news_headlines_score = 'neutral'
+                nenews_headlines = nenews_headlines + 1
+                news_headlines_dict[item] = news_headlines_score
+            else:
+                # saving sentiment of news_headlines
+                news_headlines_score = 'negative'
+                nnews_headlines = nnews_headlines + 1
+                news_headlines_dict[item] = news_headlines_score
+    # print(clean_list)
+    newssentiment=[]
+    # for k, v in news_headlines_dict.items():
+    #     print(k,':',v)
+    for k, v in news_headlines_dict.items():
+
+        if v == "positive":
+            newssentiment.append({"sentiment":int(1),"text":k})
+        elif v == "negative":
+            newssentiment.append({"sentiment":int(-1),"text":k})
+        else:
+            newssentiment.append({"sentiment":int(0),"text":k})
+
+    #print(newssentiment)
+    newssentiment_dataframe=pd.DataFrame.from_dict(newssentiment)
+    # newssentiment_dataframe.to_csv("news_headlines_sentiment.csv", encoding='utf-8', index=False)
+    neg = 100 * (nnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+    pos = 100 * (pnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+
+    word_chart={"donut":{"pos":round(pos, 2),"neg":round(neg, 2)}}
+    
+    return json.dumps(word_chart)
+# sentiment_pie('5f2609807a1c0000950bb46d','2021-08-01','2021-10-19')
+
+
+
+
 @app.route('/districtcardsinfo/<districtid>/<startdate>/<enddate>')
 def district_count_cards(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
+    
     from datetime import datetime
     from datetime import timedelta
     
@@ -19294,7 +14119,7 @@ def district_count_cards(districtid,startdate,enddate):
     df3=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
-    # //          {'ROLE_ID._id' :{'$':ObjectId("5f155b8a3b6800007900da2b")}},
+          {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -19305,44 +14130,109 @@ def district_count_cards(districtid,startdate,enddate):
 #                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
                                {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
     #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
-#                  {'MODIFIED_DATE':{'$gte':csy_first_date()}},
-             {'MODIFIED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
+                 {'MODIFIED_DATE':{'$gte':csy_first_date()}},
+#             
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'','pc':{'$sum':1},'MINDFUL_MINUTES':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}}}},
-                  {'$project':{'_id':1,'practice_sessions':'$pc','MINDFUL_MINUTES':'$MINDFUL_MINUTES'}}])))
-   
-
-    df4=DataFrame(list(db.login_trackin.aggregate([{"$match":
+            {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID._id'}}},
+                  {'$project':{'_id':1,'engd_teacher_csy':{'$size':'$pc'}}}])))
+    df33=DataFrame(list(collection2.aggregate([
+     {"$match":
          {'$and': [
-    #           {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+          {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                {'USER_ID.schoolId._id':{'$ne':None}},
-    # //               {'IS_ADMIN':'Y'},
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
     # //             {'USER_ID.IS_PORTAL':'Y'},
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
 #                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-    #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
-#                  {'LAST_LOGGED_IN':{'$gte':start1}},
-             {'CREATED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
-             
-    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
+                               {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+    #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
+                 {'MODIFIED_DATE':{'$gte':LSY_Date()}},
+#             
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-            {'$group':{'_id':'','pc':{'$sum':1}}},
-                  {'$project':{'_id':1,'logins':'$pc'}}])))
+            {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID._id'}}},
+                  {'$project':{'_id':1,'engd_teacher_lsy':{'$size':'$pc'}}}])))
+    df333=DataFrame(list(collection2.aggregate([
+     {"$match":
+         {'$and': [
+          {'ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    # //             {'USER_ID.IS_PORTAL':'Y'},
+                 {'USER_ID.EMAIL_ID':{'$ne':''}},
+#                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
+                               {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+    #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
+                 {'MODIFIED_DATE':{'$gte':csy_first_date()}},
+#             
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+            {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID._id'}}},
+                  {'$project':{'_id':1,'engd_parent_csy':{'$size':'$pc'}}}])))
+    df3333=DataFrame(list(collection2.aggregate([
+     {"$match":
+         {'$and': [
+          {'ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    # //             {'USER_ID.IS_PORTAL':'Y'},
+                 {'USER_ID.EMAIL_ID':{'$ne':''}},
+#                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
+                               {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+    #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
+                 {'MODIFIED_DATE':{'$gte':LSY_Date()}},
+#             
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+            {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID._id'}}},
+                  {'$project':{'_id':1,'engd_parent_lsy':{'$size':'$pc'}}}])))
+   
+   
+
+#     df4=DataFrame(list(db.login_trackin.aggregate([{"$match":
+#          {'$and': [
+#     #           {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+#                 {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+#                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+#                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+#                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#                 {'USER_ID.schoolId._id':{'$ne':None}},
+#     # //               {'IS_ADMIN':'Y'},
+#                   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+#     # //             {'USER_ID.IS_PORTAL':'Y'},
+#                  {'USER_ID.EMAIL_ID':{'$ne':''}},
+# #                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
+#     #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
+# #                  {'LAST_LOGGED_IN':{'$gte':start1}},
+#              {'CREATED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
+             
+#     # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
+#                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+#                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+#             {'$group':{'_id':'','pc':{'$sum':1}}},
+#                   {'$project':{'_id':1,'logins':'$pc'}}])))
     df6=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
@@ -19366,7 +14256,7 @@ def district_count_cards(districtid,startdate,enddate):
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'','pc':{'$sum':1},'MINDFUL_MINUTES':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}}}},
-                  {'$project':{'_id':1,'practice_sessions_t':'$pc'}}])))
+                  {'$project':{'_id':1,'practice_sessions_t':'$pc','MINDFUL_MINUTES_t':'$MINDFUL_MINUTES'}}])))
    
     df7=DataFrame(list(collection2.aggregate([
      {"$match":
@@ -19391,9 +14281,116 @@ def district_count_cards(districtid,startdate,enddate):
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'','pc':{'$sum':1},'MINDFUL_MINUTES':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}}}},
-                  {'$project':{'_id':1,'practice_sessions_p':'$pc'}}])))
-   
+                  {'$project':{'_id':1,'practice_sessions_p':'$pc','MINDFUL_MINUTES_p':'$MINDFUL_MINUTES'}}])))
+    
+    df77=DataFrame(list(collection2.aggregate([
+     {"$match":
+         {'$and': [
+#              {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    # //             {'USER_ID.IS_PORTAL':'Y'},
+                 {'USER_ID.EMAIL_ID':{'$ne':''}},
+#                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
+                               {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+    #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
+#                  {'MODIFIED_DATE':{'$gte':csy_first_date()}},
+             {'MODIFIED_DATE':{"$gte": myDatetime1 ,
+                             "$lte":myDatetime2}},
+    # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+            {'$group':{'_id':'','pc':{'$sum':1},'MINDFUL_MINUTES':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}}}},
+                  {'$project':{'_id':1,'practice_sessions':'$pc','MINDFUL_MINUTES':'$MINDFUL_MINUTES'}}])))
+    
+    
+    
+    
+    df0=DataFrame(list(collection2.aggregate([
+     {"$match":
+         {'$and': [
+    # //          {'ROLE_ID._id' :{'$':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    # //             {'USER_ID.IS_PORTAL':'Y'},
+                 {'USER_ID.EMAIL_ID':{'$ne':''}},
+#                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
+                               {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+    #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
+                 {'MODIFIED_DATE':{'$gte':csy_first_date()}},
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+            {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID.schoolId._id'}}},
+                  {'$project':{'_id':1,'engdschool_csy':{'$size':'$pc'}}}])))
+    df00=DataFrame(list(collection2.aggregate([
+     {"$match":
+         {'$and': [
+    # //          {'ROLE_ID._id' :{'$':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    # //             {'USER_ID.IS_PORTAL':'Y'},
+                 {'USER_ID.EMAIL_ID':{'$ne':''}},
+#                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
+                               {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+    #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
+                 {'MODIFIED_DATE':{'$gte':LSY_Date()}},
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+            {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID.schoolId._id'}}},
+                  {'$project':{'_id':1,'engdschool_lsy':{'$size':'$pc'}}}])))
 
+    
+    engd_parent_lsy=[0]
+    try:
+        engd_parent_lsy=df3333['engd_parent_lsy']
+    except:
+        engd_parent_lsy=[0]
+    engd_parent_csy=[0]
+    try:
+        engd_parent_csy=df333['engd_parent_csy']
+    except:
+        engd_parent_csy=[0]
+        
+    engd_teacher_csy=[0]
+    try:
+        engd_teacher_csy=df3['engd_teacher_csy']
+    except:
+        engd_teacher_csy=[0]
+    engd_teacher_lsy=[0]
+    try:
+        engd_teacher_lsy=df33['engd_teacher_lsy']
+    except:
+        engd_teacher_lsy=[0]
+        
+    
+    
+    
+    engdschool_lsy=[0]
+    try:
+        engdschool_lsy=df00['engdschool_lsy']
+    except:
+        engdschool_lsy=[0]
+        
+    engdschool_csy=[0]
+    try:
+        engdschool_csy=df0['engdschool_csy']
+    except:
+        engdschool_csy=[0]
     sc=[0]
     try:
         sc=df1['school_count']
@@ -19416,11 +14413,29 @@ def district_count_cards(districtid,startdate,enddate):
         pcp=df7['practice_sessions_p']
     except:
         pcp=[0]
+        
+    mmt=[0]
+    try:
+        mmt=df6['MINDFUL_MINUTES_t']
+    except:
+        mmt=[0]
+    mmp=[0]
+    try:
+        mmp=df7['MINDFUL_MINUTES_p']
+    except:
+        mmp=[0]     
+            
+        
     mm=[0]
     try:
-        mm=df3['MINDFUL_MINUTES']
+        mm=df77['MINDFUL_MINUTES']
     except:
         mm=[0]
+    pc=[0]
+    try:
+        pc=df77['practice_sessions']
+    except:
+        pc=[0]
     
     lc=[0]
     try:
@@ -19433,10 +14448,7 @@ def district_count_cards(districtid,startdate,enddate):
         fc=df5['family_count']
     except:
         fc=[0]
-    
-    
-    
-    
+
     dn=[0]
     try:
         dn=df1['district']
@@ -19454,146 +14466,17 @@ def district_count_cards(districtid,startdate,enddate):
     try:
         Pa=df10['PARTNER_CATEGORY']
     except:
-        Pa=[0]
-    
-    
-#     print(lc)
-    
-    data={"schoolcount":str(sc[0]),"teachercount":str(tc[0]),"familycount":str(fc[0]),"teacherpracticecount":str(pct[0]),"parentspracticecount":str(pcp[0]),"logincount":str(lc[0]),
-          'MINDFUL_MINUTES':str(round(mm[0])),'district':str(dn[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
+        Pa=[0]    
+    data={"schoolcount":str(sc[0]),"engd_teacher_lsy":str(engd_teacher_lsy[0]),"engd_teacher_csy":str(engd_teacher_csy[0]),
+          "engd_parent_csy":str(engd_parent_csy[0]),"engd_parent_lsy":str(engd_parent_lsy[0]),
+          "engaged_school_csy":str(engdschool_csy[0]),"engaged_school_lsy":str(engdschool_lsy[0]),"teachercount":str(tc[0]),"familycount":str(fc[0]),"teacherpracticecount":str(pct[0]),"parentspracticecount":str(pcp[0]),
+          'MINDFUL_MINUTES':str(round(mm[0])),'MINDFUL_MINUTES_Teacher':str(round(mmt[0])),'MINDFUL_MINUTES_parent':str(round(mmp[0])),'district':str(dn[0]),"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
     return json.dumps(data)
+# district_count_cards('5f59e4836451a9089d7d4007','2021-08-01','2021-10-19')
 
 @app.route('/districtusertableteacher/<districtid>/<startdate>/<enddate>')
 def district_user_table_teacher(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
+   
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -19731,135 +14614,6 @@ def district_user_table_teacher(districtid,startdate,enddate):
 
 @app.route('/districtusertableparent/<districtid>/<startdate>/<enddate>')
 def district_user_table_parents(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -20000,135 +14754,7 @@ def district_user_table_parents(districtid,startdate,enddate):
     
 @app.route('/districtschooltable/<districtid>/<startdate>/<enddate>')
 def district_school_table(districtid,startdate,enddate):
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Education and Preshool',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
+    
     
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -31573,7 +26199,6 @@ def district_daily_(datestr):
     client=MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
 
 
-
     db=client.compass
     collection = db.audio_track_master
     collection2=db.audio_feedback
@@ -36770,615 +31395,1225 @@ def school_engagement12():
     
     return json.dumps(dicnry)
 
-
-
-@app.route('/schoolsearchid/<name>')
-def schoolsearch_em_id(name):
-    if "@" in name:
-        print( "Found!")
-#         def school_search_email_d1_mongo1(emaail):
-        from bson.regex import Regex
-        from pymongo import MongoClient
-        from flask import Flask,json
-
-        import urllib 
-        import pandas as pd
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
-        client = pymongo.MongoClient(mongo_uri)
-        # db = client.compass
-        # client = MongoClient("mongodb://host:port/")
-        database = client["compass"]
-        collection = database["user_master"]
-        query = {}
-        query["EMAIL_ID"] = Regex(name, "i")
-        query["ROLE_ID.ROLE_NAME"] = {
-                    u"$not": Regex(u".*PRESENT.*", "i")
-                }
-
-        projection = {}
-        projection["schoolId._id"] = 1.0
+@app.route('/schoolpracticetrendnew/<schoolid>')
+def school_practice_trend(schoolid):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    from datetime import datetime
+    df00 = DataFrame(list(db.user_master.aggregate([
+        {"$match":
+            {'schoolId._id':ObjectId(""+schoolid+"")}
+        },
+        {'$project':{'_id':1,'school':'$schoolId._id'}}])))
+    school=df00['_id'].tolist()
     
-        cursor1 = collection.find(query, projection = projection)
-        dfum1=(list(cursor1))
-#         print(dfum1)
-        dfm2=pd.json_normalize(dfum1, max_level=1)
-        xvbnm=dfm2["schoolId._id"][0]
-#         print(xvbnm)
-        name1=name.replace("%20"," ")
-#         print(name1,"hola")
-        from bson.regex import Regex
-        from pymongo import MongoClient
-        from flask import Flask,json
+    df1 = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[
 
-        import urllib 
-        import pandas as pd
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
-        client = pymongo.MongoClient(mongo_uri)
-        # client = MongoClient("mongodb://host:port/")
-        database = client["compass"]
-        collection = database["user_master"]
-        name=xvbnm
-        # Created with Studio 3T, the IDE for MongoDB - https://studio3t.com
-        query = {}
-    #     query["schoolId.NAME"] = name1
-        query["schoolId._id"] = ObjectId(name)
-        #     query["EMAIL_ID"] = Regex(u".*amorgan@methacton\\.org.*", "i")
-        query["USER_NAME"] = {
-            u"$not": Regex(u".*TEST.*", "i")
-        }
-        query["EMAIL_ID"] = {
-            u"$not": Regex(u".*TEST.*", "i")
-        }
-        query["EMAIL_ID"] = {
-            u"$not": Regex(u".*1gen.*", "i")
-        }
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+         {'USER_ID._id':{'$in':school}},
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
 
-        query["IS_BLOCKED"] = {
-            u"$ne": u"Y"
-        }
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": LSY_Date(),
+                                        "$lt":csy_first_date()}}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+       {'$project':{'_id':1,'TOTAL_LSY':'$pc'}}])))
+    df1.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    df1['Month'] = df1['Month'].map(d)
 
-        query["ROLE_ID.ROLE_NAME"] = {
-            u"$not": Regex(u".*PRESENT.*", "i")
-        }
-
-        query["IS_DISABLED"] = {
-            u"$ne": u"Y"
-        }
-
-        query["INCOMPLETE_SIGNUP"] = {
-            u"$ne": u"Y"
-        }
-
-        # query["DEVICE_USED"] = Regex(u".*webapp.*", "i")
-
-        projection = {}
-        projection["USER_ID.USER_ID"] = 1.0
-        projection["EMAIL_ID"] = 1.0
-        projection["CREATED_DATE"] = 1.0
-
-        projection["USER_NAME"] = 1.0
-        projection["IS_ADMIN"] = 1.0
-        projection["schoolId.ADDRESS"] = 1.0
-        projection["schoolId.CITY"] = 1.0
-        projection["schoolId.STATE"] = 1.0
-        projection["schoolId.COUNTRY"] = 1.0
-        projection["schoolId.NAME"] = 1.0
-
-        cursor = collection.find(query, projection = projection)
-        dfum=(list(cursor))
-        dfum=pd.json_normalize(dfum, max_level=1)
-        schoolname=dfum["schoolId.NAME"][0]
-        country=dfum["schoolId.COUNTRY"][0]
-        city=dfum["schoolId.CITY"][0]
-        state=dfum["schoolId.STATE"][0]
-        address=dfum["schoolId.ADDRESS"][0]
-
-        admin1=dfum[dfum['IS_ADMIN']=='Y']
-
-        admin2=admin1['USER_NAME']
-        admin3=list(admin2)
-        admin=admin3[0]
-        adminemail1=admin1['EMAIL_ID']
-        admine=list(adminemail1)
-        # adminemail=[dfum['EMAIL_ID'][dfum['IS_ADMIN']=='Y']][0]
-        adminemail=admine[0]
-    #     print(adminemail)
-        email=list(dfum['EMAIL_ID'])
-    #     print(email)
-        totaluser=len(email)
-        collection = database["audio_track_master"]
-
-    #     Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
-
-        pipeline = [
-            {
-                u"$match": {
-                    u"USER_ID.EMAIL_ID": {
-                        u"$in": email
-                    }
-                }
-
-            }, 
-            {
-                u"$group": {
-                    u"_id": {
-                        u"USER_ID\u1390_id": u"$USER_ID._id"
-                    },
-                    u"MAX(MODIFIED_DATE)": {
-                        u"$max": u"$MODIFIED_DATE"
-                    },
-                    u"COUNT(USER_ID\u1390_id)": {
-                        u"$sum": 1
-                    }
-                }
-            }, 
-            {
-                u"$project": {
-                    u"USER_ID._id": u"$_id.USER_ID\u1390_id",
-                    u"MAX(MODIFIED_DATE)": u"$MAX(MODIFIED_DATE)",
-                    u"COUNT(USER_ID\u1390_id)": u"$COUNT(USER_ID\u1390_id)",
-                    u"_id": 0
-                }
-            }
-        ]
-
-        cursor = collection.aggregate(
-            pipeline, 
-            allowDiskUse = True
-        )
-        dfatd=list(cursor)
-        dfatd=pd.json_normalize(dfatd, max_level=1)
-    #     print(dfatd)
-        collection = database["subscription_master"]
-
-        # Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
-
-        pipeline = [
-            {
-                u"$match": {
-                    u"USER_ID.EMAIL_ID": {
-                        u"$in": email
-                    }
-                }
-            }, 
-            {
-                u"$group": {
-                    u"_id": {
-                        u"USER_ID\u1390_id": u"$USER_ID._id"
-                    },
-                    u"MAX(SUBSCRIPTION_EXPIRE_DATE)": {
-                        u"$max": u"$SUBSCRIPTION_EXPIRE_DATE"
-                    }
-                }
-            }, 
-            {
-                u"$project": {
-                    u"MAX(SUBSCRIPTION_EXPIRE_DATE)": u"$MAX(SUBSCRIPTION_EXPIRE_DATE)",
-                    u"USER_ID._id": u"$_id.USER_ID\u1390_id",
-                    u"_id": 0
-                }
-            }
-        ]
-
-        cursor = collection.aggregate(
-            pipeline, 
-            allowDiskUse = True
-        )
-        dfsbm=list(cursor)
-        dfsbm=pd.json_normalize(dfsbm, max_level=1)
-    #     print(dfatd,"atd")
-        ############################################################
-        collection = database["audio_track_master"]
-
-    #     Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
-
-        pipeline = [
-            {
-                u"$match": {
-                    u"USER_ID.EMAIL_ID": {
-                        u"$in": email
-                    },
-                     
-             u"MODIFIED_DATE" : { 
-                 u"$gte" :  csy_first_date()
-            
-        }
-                }
-
-            }, 
-            {
-                u"$group": {
-                    u"_id": {
-                        u"USER_ID\u1390_id": u"$USER_ID._id"
-                    },
-                    u"MAX(MODIFIED_DATE)": {
-                        u"$max": u"$MODIFIED_DATE"
-                    },
-                    u"COUNT(USER_ID\u1390_id)": {
-                        u"$sum": 1
-                    }
-                }
-            }, 
-            {
-                u"$project": {
-                    u"CSYUSER_ID._id": u"$_id.USER_ID\u1390_id",
-                    u"CSYCOUNT(USER_ID\u1390_id)": u"$COUNT(USER_ID\u1390_id)",
-                    u"_id": 0
-                }
-            }
-        ]
-
-        cursor1 = collection.aggregate(
-            pipeline, 
-            allowDiskUse = True
-        )
-        dfatdcsy=list(cursor1)
-        dfatdcsy1=pd.json_normalize(dfatdcsy, max_level=1)
-        ####################################################################
-
-        try:
-            dffinal=pd.merge(dfum,dfatd,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
-            dffinal1=pd.merge(dffinal,dfatdcsy1,left_on='_id',right_on='CSYUSER_ID._id',how='left',suffixes=('_',''))
-            dffinalnew=pd.merge(dffinal1,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
-        except:
-            dfum['MAX(MODIFIED_DATE)']='NO PRACTICE'
-            dfum['COUNT(USER_ID᎐_id)']=0
-            dffinal=dfum
-            dffinal1=dffinal
-            dffinal1['CSYCOUNT(USER_ID᎐_id)']=0
-            dffinalnew=pd.merge(dffinal,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
-
-
-
-    #     schoolname=dfum["schoolId.NAME"][0]
-        country=dfum["schoolId.COUNTRY"][0]
-        city=dfum["schoolId.CITY"][0]
-        state=dfum["schoolId.STATE"][0]
-        address=dfum["schoolId.ADDRESS"][0]
-    #     admin=[dfum['USER_NAME'][dfum['IS_ADMIN']=='Y']][0]
-    #     admin=admin[0]
-    #     adminemail=[dfum['EMAIL_ID'][dfum['IS_ADMIN']=='Y']][0]
-    #     adminemail=adminemail[0]
-        email=list(dfum['EMAIL_ID'])
-        totaluser=len(email)
-        dffinalnew['MAX(MODIFIED_DATE)'].fillna("NO PRACTICE", inplace=True)
-        dffinalnew['MAX(SUBSCRIPTION_EXPIRE_DATE)'].fillna(" ", inplace=True)
-        dffinalnew['COUNT(USER_ID᎐_id)'].fillna(0, inplace=True)
-        dffinalnew['CSYCOUNT(USER_ID᎐_id)'].fillna(0, inplace=True)
-        pracsum=sum(list(dffinalnew['COUNT(USER_ID᎐_id)']))
-        dffinalnew.fillna(value=pd.np.nan, inplace=True)
-        
-
-        MAX=[]
-        for i in dffinalnew['MAX(MODIFIED_DATE)']:
-            if  i != 'NO PRACTICE' :
-                MAX.append(i.strftime("%d %b %Y "))
-            else:
-                MAX.append("NO PRACTICE")
-        SUBSCRIPTION_EXPIRE_DATE=[]
-        for i in dffinalnew['MAX(SUBSCRIPTION_EXPIRE_DATE)']:
-            if  i != ' ' :
-                SUBSCRIPTION_EXPIRE_DATE.append(i.strftime("%d %b %Y "))
-            else:
-                SUBSCRIPTION_EXPIRE_DATE.append(" ")        
-        CREATED_DATE=[]
-        for i in dffinalnew['CREATED_DATE']:
-            if  i != ' ' :
-                CREATED_DATE.append(i.strftime("%d %b %Y "))
-            else: 
-                CREATED_DATE.append(" ")
-        data=[]
-
-        for T,k,l,m,o,p,q in zip(dffinalnew['USER_NAME'].tolist(),dffinalnew['EMAIL_ID'].tolist(),CREATED_DATE,MAX,SUBSCRIPTION_EXPIRE_DATE,dffinalnew['COUNT(USER_ID᎐_id)'].tolist(),dffinalnew['CSYCOUNT(USER_ID᎐_id)'].tolist()):
-            #print(p,q,r)
-            data.append([T,k,l,m,o,p,q])
-        database = client["compass"]
-        collection = database["subscription_master"]
-        query = {}
-        query["USER_ID.EMAIL_ID"] = {
-            u"$in": [
-                adminemail
-            ]
-        }
-        projection = {}
-        projection["PLAN_ID.PLAN_NAME"] = 1.0
-        cursor = collection.find(query, projection = projection)
-        plandf=list(cursor)
-        plandf=pd.json_normalize(plandf, max_level=1)
-        plannameadmin=plandf["PLAN_ID.PLAN_NAME"][0]
-        temp={"data":data,"school_practice_count":str(pracsum),"school_name":schoolname,"country":country,"state":state,"city":city,"address":address,"admin_name":admin,"admin_email":adminemail,"plan":plannameadmin,"user_count":totaluser}
-    #     ,"school_practice_count":str(card_detail['school_practice_count1'][0])
-    #     temp={"data":data}
-        return json.dumps(temp)
+    df2 = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+             {'USER_ID._id':{'$in':school}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+#              {'USER_ID.schoolId._id':ObjectId("5f2bcad8ba0be61b0c1e9d5e")},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+       {'$project':{'_id':1,'teacher_CSY':'$pc'}}])))
+    if df2.empty == True:
+        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
     else:
-        print ("Not found!")
-#         def school_searchid_mongo1(name):
-        name1=name.replace("%20"," ")
-        print(name1,"hola")
-        from bson.regex import Regex
-        from pymongo import MongoClient
-        from flask import Flask,json
+        df2
+    df2.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    df2['Month'] = df2['Month'].map(d)
 
-        import urllib 
-        import pandas as pd
-        mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
-        client = pymongo.MongoClient(mongo_uri)
-        # client = MongoClient("mongodb://host:port/")
-        database = client["compass"]
-        collection = database["user_master"]
+    practice_left= pd.merge(df1, df2,on='Month', how='outer')
+    practice_left=practice_left.fillna(0)    
 
-        # Created with Studio 3T, the IDE for MongoDB - https://studio3t.com
-        query = {}
-    #     query["schoolId.NAME"] = name1
-        query["schoolId._id"] = ObjectId(name)
-        #     query["EMAIL_ID"] = Regex(u".*amorgan@methacton\\.org.*", "i")
-        query["USER_NAME"] = {
-            u"$not": Regex(u".*TEST.*", "i")
-        }
-        query["EMAIL_ID"] = {
-            u"$not": Regex(u".*1gen.*", "i")
-        }
-        query["EMAIL_ID"] = {
-            u"$not": Regex(u".*TEST.*", "i")
-        }
+    dfschoology = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+            {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+         {'USER_ID._id':{'$in':school}},
+#          {'USER_ID.schoolId._id':ObjectId("5f2bcad8ba0be61b0c1e9d5e")},
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+       {'$project':{'_id':1,'schoology_CSY':'$pc'}}])))
 
-        query["IS_BLOCKED"] = {
-            u"$ne": u"Y"
-        }
+    if dfschoology.empty == True:
+        dfschoology=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'schoology_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        dfschoology
+    dfschoology.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    dfschoology['Month'] = dfschoology['Month'].map(d)
+    dfschoology=dfschoology.fillna(0)
 
-        query["ROLE_ID.ROLE_NAME"] = {
-            u"$not": Regex(u".*PRESENT.*", "i")
-        }
 
-        query["IS_DISABLED"] = {
-            u"$ne": u"Y"
-        }
+    dfclever = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+            {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+            {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+          {'USER_ID._id':{'$in':school}},
+#          {'USER_ID.schoolId._id':ObjectId("5f2bcad8ba0be61b0c1e9d5e")},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+       {'$project':{'_id':1,'clever_CSY':'$pc'}}])))
+    if dfclever.empty == True:
+        dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        dfclever
+    dfclever.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    dfclever['Month'] = dfclever['Month'].map(d)
+    dfclever=dfclever.fillna(0)
 
-        query["INCOMPLETE_SIGNUP"] = {
-            u"$ne": u"Y"
-        }
+    df4 = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+           {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID._id':{'$in':school}},
+#              {'USER_ID.schoolId._id':ObjectId("5f2bcad8ba0be61b0c1e9d5e")},
+             {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+              {"USER_ID.CREATED_DATE":{"$gte": datetime(2020,3,17)}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+       {'$project':{'_id':1,'parents_CSY':'$pc'}}])))
+    if df4.empty == True:
+        df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        df4
+    df4.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    df4['Month'] = df4['Month'].map(d)
+    # df2
+   
+    practice_LSY= pd.merge(df1, df2,on='Month', how='left')
+    practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
-        # query["DEVICE_USED"] = Regex(u".*webapp.*", "i")
+    mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
+    d = dict(enumerate(calendar.month_abbr))
+    mon['Month'] = mon['Month'].map(d)
 
-        projection = {}
-        projection["USER_ID.USER_ID"] = 1.0
-        projection["EMAIL_ID"] = 1.0
-        projection["CREATED_DATE"] = 1.0
+    data=pd.merge(mon,practice_CSY,on='Month',how='left').fillna(0)
+    Month=data['Month'].tolist()
+    TOTAL_LSY=data['TOTAL_LSY'].tolist()
+   
+    teacher_CSY=data['teacher_CSY'].tolist()
+    parents_CSY=data['parents_CSY'].tolist()
+    schoology_CSY=data['schoology_CSY'].tolist()
+    clever_CSY=data['clever_CSY'].tolist()
+    temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
 
-        projection["USER_NAME"] = 1.0
-        projection["IS_ADMIN"] = 1.0
-        projection["schoolId.ADDRESS"] = 1.0
-        projection["schoolId.CITY"] = 1.0
-        projection["schoolId.STATE"] = 1.0
-        projection["schoolId.COUNTRY"] = 1.0
-        projection["schoolId.NAME"] = 1.0
+    return json.dumps(temp)
+# school_practice_trend('5f2bcad8ba0be61b0c1e9d5e')
 
-        cursor = collection.find(query, projection = projection)
-        dfum=(list(cursor))
-        dfum=pd.json_normalize(dfum, max_level=1)
-        schoolname=dfum["schoolId.NAME"][0]
-        country=dfum["schoolId.COUNTRY"][0]
-        city=dfum["schoolId.CITY"][0]
-        state=dfum["schoolId.STATE"][0]
-        address=dfum["schoolId.ADDRESS"][0]
+@app.route('/schoolactivetrendnew/<schoolid>')
+def school_active_trend(schoolid):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_track_master
+    from datetime import datetime
+    df00 = DataFrame(list(db.user_master.aggregate([
+        {"$match":
+            {'schoolId._id':ObjectId(""+schoolid+"")}
+        },
+        {'$project':{'_id':1,'school':'$schoolId._id'}}])))
+    school=df00['_id'].tolist()
+    
+    df1 = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[
 
-        admin1=dfum[dfum['IS_ADMIN']=='Y']
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+         {'USER_ID._id':{'$in':school}},
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
 
-        admin2=admin1['USER_NAME']
-        admin3=list(admin2)
-        admin=admin3[0]
-        adminemail1=admin1['EMAIL_ID']
-        admine=list(adminemail1)
-        # adminemail=[dfum['EMAIL_ID'][dfum['IS_ADMIN']=='Y']][0]
-        adminemail=admine[0]
-    #     print(adminemail)
-        email=list(dfum['EMAIL_ID'])
-    #     print(email)
-        totaluser=len(email)
-        collection = database["audio_track_master"]
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": LSY_Date(),
+                                        "$lt":csy_first_date()}}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$addToSet':'$USER_ID._id'}}},
+       {'$project':{'_id':1,'TOTAL_LSY':{'$size':'$pc'}}}])))
+    df1.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    df1['Month'] = df1['Month'].map(d)
 
-    #     Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
+    df2 = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+             {'USER_ID._id':{'$in':school}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+#              {'USER_ID.schoolId._id':ObjectId("5f2bcad8ba0be61b0c1e9d5e")},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$addToSet':'$USER_ID._id'}}},
+       {'$project':{'_id':1,'teacher_CSY':{'$size':'$pc'}}}])))
+    if df2.empty == True:
+        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        df2
+    df2.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    df2['Month'] = df2['Month'].map(d)
 
-        pipeline = [
-            {
-                u"$match": {
-                    u"USER_ID.EMAIL_ID": {
-                        u"$in": email
-                    }
-                }
+    practice_left= pd.merge(df1, df2,on='Month', how='outer')
+    practice_left=practice_left.fillna(0)    
 
-            }, 
-            {
-                u"$group": {
-                    u"_id": {
-                        u"USER_ID\u1390_id": u"$USER_ID._id"
-                    },
-                    u"MAX(MODIFIED_DATE)": {
-                        u"$max": u"$MODIFIED_DATE"
-                    },
-                    u"COUNT(USER_ID\u1390_id)": {
-                        u"$sum": 1
-                    }
-                }
-            }, 
-            {
-                u"$project": {
-                    u"USER_ID._id": u"$_id.USER_ID\u1390_id",
-                    u"MAX(MODIFIED_DATE)": u"$MAX(MODIFIED_DATE)",
-                    u"COUNT(USER_ID\u1390_id)": u"$COUNT(USER_ID\u1390_id)",
-                    u"_id": 0
-                }
-            }
-        ]
+    dfschoology = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+            {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+         {'USER_ID._id':{'$in':school}},
+#          {'USER_ID.schoolId._id':ObjectId("5f2bcad8ba0be61b0c1e9d5e")},
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$addToSet':'$USER_ID._id'}}},
+       {'$project':{'_id':1,'schoology_CSY':{'$size':'$pc'}}}])))
 
-        cursor = collection.aggregate(
-            pipeline, 
-            allowDiskUse = True
-        )
-        dfatd=list(cursor)
-        dfatd=pd.json_normalize(dfatd, max_level=1)
-    #     print(dfatd)
-        collection = database["subscription_master"]
+    if dfschoology.empty == True:
+        dfschoology=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'schoology_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        dfschoology
+    dfschoology.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    dfschoology['Month'] = dfschoology['Month'].map(d)
+    dfschoology=dfschoology.fillna(0)
 
-        # Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
 
-        pipeline = [
-            {
-                u"$match": {
-                    u"USER_ID.EMAIL_ID": {
-                        u"$in": email
-                    }
-                }
-            }, 
-            {
-                u"$group": {
-                    u"_id": {
-                        u"USER_ID\u1390_id": u"$USER_ID._id"
-                    },
-                    u"MAX(SUBSCRIPTION_EXPIRE_DATE)": {
-                        u"$max": u"$SUBSCRIPTION_EXPIRE_DATE"
-                    }
-                }
-            }, 
-            {
-                u"$project": {
-                    u"MAX(SUBSCRIPTION_EXPIRE_DATE)": u"$MAX(SUBSCRIPTION_EXPIRE_DATE)",
-                    u"USER_ID._id": u"$_id.USER_ID\u1390_id",
-                    u"_id": 0
-                }
-            }
-        ]
+    dfclever = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+            {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+            {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+          {'USER_ID._id':{'$in':school}},
+#          {'USER_ID.schoolId._id':ObjectId("5f2bcad8ba0be61b0c1e9d5e")},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$addToSet':'$USER_ID._id'}}},
+       {'$project':{'_id':1,'clever_CSY':{'$size':'$pc'}}}])))
+    if dfclever.empty == True:
+        dfclever=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        dfclever
+    dfclever.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    dfclever['Month'] = dfclever['Month'].map(d)
+    dfclever=dfclever.fillna(0)
 
-        cursor = collection.aggregate(
-            pipeline, 
-            allowDiskUse = True
-        )
-        dfsbm=list(cursor)
-        dfsbm=pd.json_normalize(dfsbm, max_level=1)
-    #     print(dfatd,"atd")
-        ############################################################
-        collection = database["audio_track_master"]
+    df4 = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+           {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID._id':{'$in':school}},
+#              {'USER_ID.schoolId._id':ObjectId("5f2bcad8ba0be61b0c1e9d5e")},
+             {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+              {"USER_ID.CREATED_DATE":{"$gte": datetime(2020,3,17)}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$addToSet':'$USER_ID._id'}}},
+       {'$project':{'_id':1,'parents_CSY':{'$size':'$pc'}}}])))
+    if df4.empty == True:
+        df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        df4
+    df4.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    df4['Month'] = df4['Month'].map(d)
+    # df2
+   
+    practice_LSY= pd.merge(df1, df2,on='Month', how='left')
+    practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
-    #     Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
+    mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
+    d = dict(enumerate(calendar.month_abbr))
+    mon['Month'] = mon['Month'].map(d)
 
-        pipeline = [
-            {
-                u"$match": {
-                    u"USER_ID.EMAIL_ID": {
-                        u"$in": email
-                    },
-                     
-             u"MODIFIED_DATE" : { 
-                 u"$gte" :  csy_first_date()
+    data=pd.merge(mon,practice_CSY,on='Month',how='left').fillna(0)
+    Month=data['Month'].tolist()
+    TOTAL_LSY=data['TOTAL_LSY'].tolist()
+   
+    teacher_CSY=data['teacher_CSY'].tolist()
+    parents_CSY=data['parents_CSY'].tolist()
+    schoology_CSY=data['schoology_CSY'].tolist()
+    clever_CSY=data['clever_CSY'].tolist()
+    temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+
+    return json.dumps(temp)
+# school_active_trend('5f2bcad8ba0be61b0c1e9d5e')
+
+
+
+
+
+
+
+
+@app.route('/schoolsearchid/<schoolid>')
+def schoolsearch_em_id(schoolid):
+    from datetime import datetime
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
+    client = MongoClient(mongo_uri)
+    
+    db = client["compass"]
+    df1=DataFrame(list(db.user_master.aggregate([
+        {"$match":{"$and":[
+        {"schoolId._id":ObjectId(""+schoolid+"")},
+#              {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'EMAIL_ID':{"$ne":''}},
+    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
+      {'schoolId.NAME':{"$not":{"$regex":'test', '$options':'i'}}},
+         {'EMAIL_ID':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":"TEST",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}
+        ]}},
+    {"$project":{"_id":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME",'user':"$USER_NAME",'CREATED_DATE':{'$max':{"$dateToString":{"format":"%Y-%m-%d","date":'$CREATED_DATE'}}},
+
+                 "Address":"$schoolId.ADDRESS","COUNTRY":"$schoolId.COUNTRY","CITY":"$schoolId.CITY","STATE":"$schoolId.STATE","USER_NAME":"$USER_NAME",
+                "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME","ROLE":'$ROLE_ID.ROLE_NAME'
+                }}
+    ])))
+    df1
+    if df1.empty == True:
+        data={'Result':0}
+    else:
+        df1
+    column1 =['_id',"ID","school_name",'user',"Address","COUNTRY","CITY","STATE","USER_NAME","email_id","district_name","ROLE"]
+    for i in column1:
+        if i not in df1.columns:
+            df1[i] = 'No info'
+    email=df1['_id'].tolist()
+    school=df1['ID'].tolist()
+    
+    df3=DataFrame(list(db.audio_track_master.aggregate([
+        {"$match":{'$and':[
+                       {'USER_ID._id':{"$in":email}},
+                            {'MODIFIED_DATE':{'$gte':csy_first_date()}}
+        ]}},    
+
+
+        {'$group':{'_id' : '$USER_ID._id', 'pc':{'$sum':1},'Mindful_Minutes_csy':{'$sum':{'$round':
+                      [{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']},60]},0]}},
+        'AUDIO_DAY':{'$last':'$PROGRAM_AUDIO_ID.AUDIO_DAY'},
+        'PROGRAM':{'$last':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'},
+        'AUDIO':{'$last':'$PROGRAM_AUDIO_ID.AUDIO_NAME'},
+        'last_practice_date_csy':{'$max':{"$dateToString":{"format":"%Y-%m-%d","date":'$MODIFIED_DATE'}}}, }}
+
+        ]))).fillna(0)
+    column3 =['_id','last_practice_date_csy',"AUDIO_DAY",'PROGRAM','AUDIO','pc','Mindful_Minutes']
+    if df3.empty==True:
+        df3=pd.DataFrame({'_id':email,"last_practice_date_csy":['NO PRACTICE'],'AUDIO_DAY':['No info'],'PROGRAM':['No info'],'AUDIO':['No info'],'pc':[0],'Mindful_Minutes_csy':[0]})
+
+    for i in column3:
+        df3=df3.fillna('')
+        if i not in df3.columns:
+            df3[i] = 'No info'
             
-        }
-                }
-
-            }, 
-            {
-                u"$group": {
-                    u"_id": {
-                        u"USER_ID\u1390_id": u"$USER_ID._id"
-                    },
-                    u"MAX(MODIFIED_DATE)": {
-                        u"$max": u"$MODIFIED_DATE"
-                    },
-                    u"COUNT(USER_ID\u1390_id)": {
-                        u"$sum": 1
-                    }
-                }
-            }, 
-            {
-                u"$project": {
-                    u"CSYUSER_ID._id": u"$_id.USER_ID\u1390_id",
-                    u"CSYCOUNT(USER_ID\u1390_id)": u"$COUNT(USER_ID\u1390_id)",
-                    u"_id": 0
-                }
-            }
-        ]
-
-        cursor1 = collection.aggregate(
-            pipeline, 
-            allowDiskUse = True
-        )
-        dfatdcsy=list(cursor1)
-        dfatdcsy1=pd.json_normalize(dfatdcsy, max_level=1)
-        ####################################################################
-
-        try:
-            dffinal=pd.merge(dfum,dfatd,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
-            dffinal1=pd.merge(dffinal,dfatdcsy1,left_on='_id',right_on='CSYUSER_ID._id',how='left',suffixes=('_',''))
-            dffinalnew=pd.merge(dffinal1,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
-        except:
-            dfum['MAX(MODIFIED_DATE)']='NO PRACTICE'
-            dfum['COUNT(USER_ID᎐_id)']=0
-            dffinal=dfum
-            dffinal1=dffinal
-            dffinal1['CSYCOUNT(USER_ID᎐_id)']=0
-            dffinalnew=pd.merge(dffinal,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
+    df0=DataFrame(list(db.audio_track_master.aggregate([
+        {"$match":{'$and':[
+                       {'USER_ID._id':{"$in":email}},
+#                             {'MODIFIED_DATE':{'$gte':csy_first_date()}}
+        ]}},    
 
 
+        {'$group':{'_id' : '$USER_ID._id', 'pc_overall':{'$sum':1},'Mindful_Minutes_overall':{'$sum':{'$round':
+                      [{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']},60]},0]}},
+        'AUDIO_DAY':{'$last':'$PROGRAM_AUDIO_ID.AUDIO_DAY'},
+        'PROGRAM':{'$last':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'},
+        'AUDIO':{'$last':'$PROGRAM_AUDIO_ID.AUDIO_NAME'},
+        'last_practice_date':{'$max':{"$dateToString":{"format":"%Y-%m-%d","date":'$MODIFIED_DATE'}}}, }}
 
-    #     schoolname=dfum["schoolId.NAME"][0]
-        country=dfum["schoolId.COUNTRY"][0]
-        city=dfum["schoolId.CITY"][0]
-        state=dfum["schoolId.STATE"][0]
-        address=dfum["schoolId.ADDRESS"][0]
-    #     admin=[dfum['USER_NAME'][dfum['IS_ADMIN']=='Y']][0]
-    #     admin=admin[0]
-    #     adminemail=[dfum['EMAIL_ID'][dfum['IS_ADMIN']=='Y']][0]
-    #     adminemail=adminemail[0]
-        email=list(dfum['EMAIL_ID'])
-        totaluser=len(email)
-        dffinalnew['MAX(MODIFIED_DATE)'].fillna("NO PRACTICE", inplace=True)
-        dffinalnew['MAX(SUBSCRIPTION_EXPIRE_DATE)'].fillna(" ", inplace=True)
-        dffinalnew['COUNT(USER_ID᎐_id)'].fillna(0, inplace=True)
-        dffinalnew['CSYCOUNT(USER_ID᎐_id)'].fillna(0, inplace=True)
-        pracsum=sum(list(dffinalnew['COUNT(USER_ID᎐_id)']))
-        dffinalnew.fillna(value=pd.np.nan, inplace=True)
+        ])))
+    column0 =['_id','last_practice_date',"AUDIO_DAY",'PROGRAM','AUDIO','pc_overall','Mindful_Minutes']
+    if df0.empty==True:
+        df0=pd.DataFrame({'_id':email,"last_practice_date":['NO PRACTICE'],'AUDIO_DAY':['No info'],'PROGRAM':['No info'],'AUDIO':['No info'],'pc_overall':[0],'Mindful_Minutes_overall':[0]})
+
+    for i in column0:
+        df0=df0.fillna('')
+        if i not in df0.columns:
+            df0[i] = 'No info'        
+            
+    
+
+
+    df4=DataFrame(list(db.subscription_master.aggregate([
+        {"$match":{'$and':[
+                       {'USER_ID._id':{"$in":email}},
+                          ]}},    
+
+
+        {'$project':{'_id' : '$USER_ID._id',
+        'PLAN':'$PLAN_ID.PLAN_NAME',
+        'Renewal_date':{'$max':{"$dateToString":{"format":"%Y-%m-%d","date":'$SUBSCRIPTION_EXPIRE_DATE'}}}, }}
+
+        ])))
+    if df4.empty==True:
+        df4=pd.DataFrame({'_id':email,"Renewal_date":['No info'],'PLAN':['No info']})
+    column4 =['Renewal_date',"PLAN"]
+    for i in column4:
+        if i not in df4.columns:
+            df4[i] = 'No info'
+
+    df=pd.merge(df1,df3,on='_id',how='left')
+    df['pc']=df['pc'].fillna(0)
+    df['Mindful_Minutes_csy']=df['Mindful_Minutes_csy'].fillna(0)
+    dff=pd.merge(df,df0,on='_id',how='left')
+    dff['pc_overall']=dff['pc_overall'].fillna(0)
+    dff['last_practice_date']=dff['last_practice_date'].fillna('NO PRACTICE')
+    dff['Mindful_Minutes_overall']=dff['Mindful_Minutes_overall'].fillna(0)
+    dfff=pd.merge(dff,df4,on='_id',how='left')
+    DF=dfff[['user','email_id','CREATED_DATE','last_practice_date','Renewal_date','pc_overall','pc','last_practice_date','Mindful_Minutes_csy','Mindful_Minutes_overall']]
+    DFF=dfff[['user','email_id','CREATED_DATE','last_practice_date','Renewal_date','pc_overall','pc']]
+    table=DFF.values.tolist()
+           
+    
+    table=DFF.values.tolist()
+    
+    pc=DF['pc'].sum()
+    pc_overall=DF['pc_overall'].sum()
+    Mindful_Minutes_csy=DF['Mindful_Minutes_csy'].sum()
+    Mindful_Minutes_overall=DF['Mindful_Minutes_overall'].sum()
+    
+    
+    
+    
+    df00=DataFrame(list(db.user_master.aggregate([
+        {"$match":{"$and":[
+        {"schoolId._id":{"$in":school}},
+               {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+
+#              {'IS_ADMIN':'Y'},
+        ]}},
+        {'$group':{'_id':'','uc':{'$addToSet':'$_id'}}},
+    {"$project":{"_id":0,"user_count":{"$size":'$uc'}}}
+    ])))
+#     column2 =['ADMIN_NAME',"ADMIN_EMAIL"]
+
+
+    if df00.empty==True:
+        df00=pd.DataFrame({"user_count":[0]})
+    else:
+        df00
+
+    df2=DataFrame(list(db.user_master.aggregate([
+        {"$match":{"$and":[
+        {"schoolId._id":{"$in":school}},
+
+             {'IS_ADMIN':'Y'},
+        ]}},
+    {"$project":{"ADMIN_EMAIL":"$EMAIL_ID","ADMIN_NAME":"$USER_NAME"}}
+    ])))
+    column2 =['ADMIN_NAME',"ADMIN_EMAIL"]
+
+
+    if df2.empty==True:
+        df2=pd.DataFrame({"ADMIN_EMAIL":['No info'],'ADMIN_NAME':['No info']})
+
+    for i in column2:       
+        if i not in df2.columns:
+            df2[i] = 'No info'
+#        
+    ADMIN_NAME=df2['ADMIN_NAME'].tolist()
+    ADMIN_EMAIL=df2['ADMIN_EMAIL'].tolist()
+
+    
+ 
+    df5=DataFrame(list(db.audio_feedback.aggregate([
+        {"$match":{'$and':[
+                       {'USER._id':{"$in":email}},
+            {'MODIFIED_DATE':{'$gte':csy_first_date()}}
+#             {'COMMENT':{'$ne':None}}
+                          ]}},    
+
+
+        {'$group':{'_id' : '$USER.schoolId._id', 'rating':{"$avg":"$RATING"},'COMMENT':{'$last':'$COMMENT'},
+
+        'COMMENT_DATE':{'$max':{"$dateToString":{"format":"%Y-%m-%d","date":'$MODIFIED_DATE'}}},}}
+
+        ])))
+    if df5.empty==True:
+        df5=pd.DataFrame({"COMMENT_DATE":['No info'],'rating':[0],'COMMENT':['No info']})
+    column5 =['COMMENT_DATE',"rating","COMMENT"]
+    for i in column5:
+        if i not in df5.columns:
+            df5[i] = 'No info'
+
+    
+   
+
+
+
+    data={'user_count':str(df00['user_count'][0]),
+        'Star_5_Ratings_Recieved':str(round(df5['rating'][0])),'DISTRICT':df1['district_name'][0],
+        'SCHOOL_MINDFUL_MINUTES_csy':str(int(Mindful_Minutes_csy)),
+                   'SCHOOL_MINDFUL_MINUTES_overall':str(int(Mindful_Minutes_overall)),
+           'school_name':df1['school_name'][0],'address':df1['Address'][0],'state':df1['STATE'][0],'city':df1['CITY'][0],'country':df1['COUNTRY'][0],
+           'admin_email':ADMIN_EMAIL,'admin_name':ADMIN_NAME,'PRACTICE_COUNT_csy':str(int(pc)),'school_practice_count':str(int(pc_overall)),
+           'RENEWAL_DATE':max(DF['Renewal_date']),
+          'plan':df4['PLAN'][0],'data':table
+                  }
+
+
+    return json.dumps(data)
+# schoolsearch_em_id('5f2bcadaba0be61b0c1ea1ee')
+
+# new0('5f2bcad8ba0be61b0c1e9d5e')
+# '5f2bcad8ba0be61b0c1e9d5e'
+# lamundson@thecapitolschool.com
+
+
+
+
+
+
+# @app.route('/schoolsearchid/<name>')
+# def schoolsearch_em_id(name):
+#     if "@" in name:
+#         print( "Found!")
+# #         def school_search_email_d1_mongo1(emaail):
+#         from bson.regex import Regex
+#         from pymongo import MongoClient
+#         from flask import Flask,json
+
+#         import urllib 
+#         import pandas as pd
+#         mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
+#         client = pymongo.MongoClient(mongo_uri)
+#         # db = client.compass
+#         # client = MongoClient("mongodb://host:port/")
+#         database = client["compass"]
+#         collection = database["user_master"]
+#         query = {}
+#         query["EMAIL_ID"] = Regex(name, "i")
+#         query["ROLE_ID.ROLE_NAME"] = {
+#                     u"$not": Regex(u".*PRESENT.*", "i")
+#                 }
+
+#         projection = {}
+#         projection["schoolId._id"] = 1.0
+    
+#         cursor1 = collection.find(query, projection = projection)
+#         dfum1=(list(cursor1))
+# #         print(dfum1)
+#         dfm2=pd.json_normalize(dfum1, max_level=1)
+#         xvbnm=dfm2["schoolId._id"][0]
+# #         print(xvbnm)
+#         name1=name.replace("%20"," ")
+# #         print(name1,"hola")
+#         from bson.regex import Regex
+#         from pymongo import MongoClient
+#         from flask import Flask,json
+
+#         import urllib 
+#         import pandas as pd
+#         mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
+#         client = pymongo.MongoClient(mongo_uri)
+#         # client = MongoClient("mongodb://host:port/")
+#         database = client["compass"]
+#         collection = database["user_master"]
+#         name=xvbnm
+#         # Created with Studio 3T, the IDE for MongoDB - https://studio3t.com
+#         query = {}
+#     #     query["schoolId.NAME"] = name1
+#         query["schoolId._id"] = ObjectId(name)
+#         #     query["EMAIL_ID"] = Regex(u".*amorgan@methacton\\.org.*", "i")
+#         query["USER_NAME"] = {
+#             u"$not": Regex(u".*TEST.*", "i")
+#         }
+#         query["EMAIL_ID"] = {
+#             u"$not": Regex(u".*TEST.*", "i")
+#         }
+#         query["EMAIL_ID"] = {
+#             u"$not": Regex(u".*1gen.*", "i")
+#         }
+
+#         query["IS_BLOCKED"] = {
+#             u"$ne": u"Y"
+#         }
+
+#         query["ROLE_ID.ROLE_NAME"] = {
+#             u"$not": Regex(u".*PRESENT.*", "i")
+#         }
+
+#         query["IS_DISABLED"] = {
+#             u"$ne": u"Y"
+#         }
+
+#         query["INCOMPLETE_SIGNUP"] = {
+#             u"$ne": u"Y"
+#         }
+
+#         # query["DEVICE_USED"] = Regex(u".*webapp.*", "i")
+
+#         projection = {}
+#         projection["USER_ID.USER_ID"] = 1.0
+#         projection["EMAIL_ID"] = 1.0
+#         projection["CREATED_DATE"] = 1.0
+
+#         projection["USER_NAME"] = 1.0
+#         projection["IS_ADMIN"] = 1.0
+#         projection["schoolId.ADDRESS"] = 1.0
+#         projection["schoolId.CITY"] = 1.0
+#         projection["schoolId.STATE"] = 1.0
+#         projection["schoolId.COUNTRY"] = 1.0
+#         projection["schoolId.NAME"] = 1.0
+
+#         cursor = collection.find(query, projection = projection)
+#         dfum=(list(cursor))
+#         dfum=pd.json_normalize(dfum, max_level=1)
+#         schoolname=dfum["schoolId.NAME"][0]
+#         country=dfum["schoolId.COUNTRY"][0]
+#         city=dfum["schoolId.CITY"][0]
+#         state=dfum["schoolId.STATE"][0]
+#         address=dfum["schoolId.ADDRESS"][0]
+
+#         admin1=dfum[dfum['IS_ADMIN']=='Y']
+
+#         admin2=admin1['USER_NAME']
+#         admin3=list(admin2)
+#         admin=admin3[0]
+#         adminemail1=admin1['EMAIL_ID']
+#         admine=list(adminemail1)
+#         # adminemail=[dfum['EMAIL_ID'][dfum['IS_ADMIN']=='Y']][0]
+#         adminemail=admine[0]
+#     #     print(adminemail)
+#         email=list(dfum['EMAIL_ID'])
+#     #     print(email)
+#         totaluser=len(email)
+#         collection = database["audio_track_master"]
+
+#     #     Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
+
+#         pipeline = [
+#             {
+#                 u"$match": {
+#                     u"USER_ID.EMAIL_ID": {
+#                         u"$in": email
+#                     }
+#                 }
+
+#             }, 
+#             {
+#                 u"$group": {
+#                     u"_id": {
+#                         u"USER_ID\u1390_id": u"$USER_ID._id"
+#                     },
+#                     u"MAX(MODIFIED_DATE)": {
+#                         u"$max": u"$MODIFIED_DATE"
+#                     },
+#                     u"COUNT(USER_ID\u1390_id)": {
+#                         u"$sum": 1
+#                     }
+#                 }
+#             }, 
+#             {
+#                 u"$project": {
+#                     u"USER_ID._id": u"$_id.USER_ID\u1390_id",
+#                     u"MAX(MODIFIED_DATE)": u"$MAX(MODIFIED_DATE)",
+#                     u"COUNT(USER_ID\u1390_id)": u"$COUNT(USER_ID\u1390_id)",
+#                     u"_id": 0
+#                 }
+#             }
+#         ]
+
+#         cursor = collection.aggregate(
+#             pipeline, 
+#             allowDiskUse = True
+#         )
+#         dfatd=list(cursor)
+#         dfatd=pd.json_normalize(dfatd, max_level=1)
+#     #     print(dfatd)
+#         collection = database["subscription_master"]
+
+#         # Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
+
+#         pipeline = [
+#             {
+#                 u"$match": {
+#                     u"USER_ID.EMAIL_ID": {
+#                         u"$in": email
+#                     }
+#                 }
+#             }, 
+#             {
+#                 u"$group": {
+#                     u"_id": {
+#                         u"USER_ID\u1390_id": u"$USER_ID._id"
+#                     },
+#                     u"MAX(SUBSCRIPTION_EXPIRE_DATE)": {
+#                         u"$max": u"$SUBSCRIPTION_EXPIRE_DATE"
+#                     }
+#                 }
+#             }, 
+#             {
+#                 u"$project": {
+#                     u"MAX(SUBSCRIPTION_EXPIRE_DATE)": u"$MAX(SUBSCRIPTION_EXPIRE_DATE)",
+#                     u"USER_ID._id": u"$_id.USER_ID\u1390_id",
+#                     u"_id": 0
+#                 }
+#             }
+#         ]
+
+#         cursor = collection.aggregate(
+#             pipeline, 
+#             allowDiskUse = True
+#         )
+#         dfsbm=list(cursor)
+#         dfsbm=pd.json_normalize(dfsbm, max_level=1)
+#     #     print(dfatd,"atd")
+#         ############################################################
+#         collection = database["audio_track_master"]
+
+#     #     Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
+
+#         pipeline = [
+#             {
+#                 u"$match": {
+#                     u"USER_ID.EMAIL_ID": {
+#                         u"$in": email
+#                     },
+                     
+#              u"MODIFIED_DATE" : { 
+#                  u"$gte" :  csy_first_date()
+            
+#         }
+#                 }
+
+#             }, 
+#             {
+#                 u"$group": {
+#                     u"_id": {
+#                         u"USER_ID\u1390_id": u"$USER_ID._id"
+#                     },
+#                     u"MAX(MODIFIED_DATE)": {
+#                         u"$max": u"$MODIFIED_DATE"
+#                     },
+#                     u"COUNT(USER_ID\u1390_id)": {
+#                         u"$sum": 1
+#                     }
+#                 }
+#             }, 
+#             {
+#                 u"$project": {
+#                     u"CSYUSER_ID._id": u"$_id.USER_ID\u1390_id",
+#                     u"CSYCOUNT(USER_ID\u1390_id)": u"$COUNT(USER_ID\u1390_id)",
+#                     u"_id": 0
+#                 }
+#             }
+#         ]
+
+#         cursor1 = collection.aggregate(
+#             pipeline, 
+#             allowDiskUse = True
+#         )
+#         dfatdcsy=list(cursor1)
+#         dfatdcsy1=pd.json_normalize(dfatdcsy, max_level=1)
+#         ####################################################################
+
+#         try:
+#             dffinal=pd.merge(dfum,dfatd,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
+#             dffinal1=pd.merge(dffinal,dfatdcsy1,left_on='_id',right_on='CSYUSER_ID._id',how='left',suffixes=('_',''))
+#             dffinalnew=pd.merge(dffinal1,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
+#         except:
+#             dfum['MAX(MODIFIED_DATE)']='NO PRACTICE'
+#             dfum['COUNT(USER_ID᎐_id)']=0
+#             dffinal=dfum
+#             dffinal1=dffinal
+#             dffinal1['CSYCOUNT(USER_ID᎐_id)']=0
+#             dffinalnew=pd.merge(dffinal,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
+
+
+
+#     #     schoolname=dfum["schoolId.NAME"][0]
+#         country=dfum["schoolId.COUNTRY"][0]
+#         city=dfum["schoolId.CITY"][0]
+#         state=dfum["schoolId.STATE"][0]
+#         address=dfum["schoolId.ADDRESS"][0]
+#     #     admin=[dfum['USER_NAME'][dfum['IS_ADMIN']=='Y']][0]
+#     #     admin=admin[0]
+#     #     adminemail=[dfum['EMAIL_ID'][dfum['IS_ADMIN']=='Y']][0]
+#     #     adminemail=adminemail[0]
+#         email=list(dfum['EMAIL_ID'])
+#         totaluser=len(email)
+#         dffinalnew['MAX(MODIFIED_DATE)'].fillna("NO PRACTICE", inplace=True)
+#         dffinalnew['MAX(SUBSCRIPTION_EXPIRE_DATE)'].fillna(" ", inplace=True)
+#         dffinalnew['COUNT(USER_ID᎐_id)'].fillna(0, inplace=True)
+#         dffinalnew['CSYCOUNT(USER_ID᎐_id)'].fillna(0, inplace=True)
+#         pracsum=sum(list(dffinalnew['COUNT(USER_ID᎐_id)']))
+#         dffinalnew.fillna(value=pd.np.nan, inplace=True)
         
 
-        MAX=[]
-        for i in dffinalnew['MAX(MODIFIED_DATE)']:
-            if  i != 'NO PRACTICE' :
-                MAX.append(i.strftime("%d %b %Y "))
-            else:
-                MAX.append("NO PRACTICE")
-        SUBSCRIPTION_EXPIRE_DATE=[]
-        for i in dffinalnew['MAX(SUBSCRIPTION_EXPIRE_DATE)']:
-            if  i != ' ' :
-                SUBSCRIPTION_EXPIRE_DATE.append(i.strftime("%d %b %Y "))
-            else:
-                SUBSCRIPTION_EXPIRE_DATE.append(" ")        
-        CREATED_DATE=[]
-        for i in dffinalnew['CREATED_DATE']:
-            if  i != ' ' :
-                CREATED_DATE.append(i.strftime("%d %b %Y "))
-            else: 
-                CREATED_DATE.append(" ")
-        data=[]
+#         MAX=[]
+#         for i in dffinalnew['MAX(MODIFIED_DATE)']:
+#             if  i != 'NO PRACTICE' :
+#                 MAX.append(i.strftime("%d %b %Y "))
+#             else:
+#                 MAX.append("NO PRACTICE")
+#         SUBSCRIPTION_EXPIRE_DATE=[]
+#         for i in dffinalnew['MAX(SUBSCRIPTION_EXPIRE_DATE)']:
+#             if  i != ' ' :
+#                 SUBSCRIPTION_EXPIRE_DATE.append(i.strftime("%d %b %Y "))
+#             else:
+#                 SUBSCRIPTION_EXPIRE_DATE.append(" ")        
+#         CREATED_DATE=[]
+#         for i in dffinalnew['CREATED_DATE']:
+#             if  i != ' ' :
+#                 CREATED_DATE.append(i.strftime("%d %b %Y "))
+#             else: 
+#                 CREATED_DATE.append(" ")
+#         data=[]
 
-        for T,k,l,m,o,p,q in zip(dffinalnew['USER_NAME'].tolist(),dffinalnew['EMAIL_ID'].tolist(),CREATED_DATE,MAX,SUBSCRIPTION_EXPIRE_DATE,dffinalnew['COUNT(USER_ID᎐_id)'].tolist(),dffinalnew['CSYCOUNT(USER_ID᎐_id)'].tolist()):
-            #print(p,q,r)
-            data.append([T,k,l,m,o,p,q])
-        database = client["compass"]
-        collection = database["subscription_master"]
-        query = {}
-        query["USER_ID.EMAIL_ID"] = {
-            u"$in": [
-                adminemail
-            ]
-        }
-        projection = {}
-        projection["PLAN_ID.PLAN_NAME"] = 1.0
-        cursor = collection.find(query, projection = projection)
-        plandf=list(cursor)
-        plandf=pd.json_normalize(plandf, max_level=1)
-        plannameadmin=plandf["PLAN_ID.PLAN_NAME"][0]
-        temp={"data":data,"school_practice_count":str(pracsum),"school_name":schoolname,"country":country,"state":state,"city":city,"address":address,"admin_name":admin,"admin_email":adminemail,"plan":plannameadmin,"user_count":totaluser}
-    #     ,"school_practice_count":str(card_detail['school_practice_count1'][0])
-    #     temp={"data":data}
-        return json.dumps(temp)
+#         for T,k,l,m,o,p,q in zip(dffinalnew['USER_NAME'].tolist(),dffinalnew['EMAIL_ID'].tolist(),CREATED_DATE,MAX,SUBSCRIPTION_EXPIRE_DATE,dffinalnew['COUNT(USER_ID᎐_id)'].tolist(),dffinalnew['CSYCOUNT(USER_ID᎐_id)'].tolist()):
+#             #print(p,q,r)
+#             data.append([T,k,l,m,o,p,q])
+#         database = client["compass"]
+#         collection = database["subscription_master"]
+#         query = {}
+#         query["USER_ID.EMAIL_ID"] = {
+#             u"$in": [
+#                 adminemail
+#             ]
+#         }
+#         projection = {}
+#         projection["PLAN_ID.PLAN_NAME"] = 1.0
+#         cursor = collection.find(query, projection = projection)
+#         plandf=list(cursor)
+#         plandf=pd.json_normalize(plandf, max_level=1)
+#         plannameadmin=plandf["PLAN_ID.PLAN_NAME"][0]
+#         temp={"data":data,"school_practice_count":str(pracsum),"school_name":schoolname,"country":country,"state":state,"city":city,"address":address,"admin_name":admin,"admin_email":adminemail,"plan":plannameadmin,"user_count":totaluser}
+#     #     ,"school_practice_count":str(card_detail['school_practice_count1'][0])
+#     #     temp={"data":data}
+#         return json.dumps(temp)
+#     else:
+#         print ("Not found!")
+# #         def school_searchid_mongo1(name):
+#         name1=name.replace("%20"," ")
+#         print(name1,"hola")
+#         from bson.regex import Regex
+#         from pymongo import MongoClient
+#         from flask import Flask,json
+
+#         import urllib 
+#         import pandas as pd
+#         mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
+#         client = pymongo.MongoClient(mongo_uri)
+#         # client = MongoClient("mongodb://host:port/")
+#         database = client["compass"]
+#         collection = database["user_master"]
+
+#         # Created with Studio 3T, the IDE for MongoDB - https://studio3t.com
+#         query = {}
+#     #     query["schoolId.NAME"] = name1
+#         query["schoolId._id"] = ObjectId(name)
+#         #     query["EMAIL_ID"] = Regex(u".*amorgan@methacton\\.org.*", "i")
+#         query["USER_NAME"] = {
+#             u"$not": Regex(u".*TEST.*", "i")
+#         }
+#         query["EMAIL_ID"] = {
+#             u"$not": Regex(u".*1gen.*", "i")
+#         }
+#         query["EMAIL_ID"] = {
+#             u"$not": Regex(u".*TEST.*", "i")
+#         }
+
+#         query["IS_BLOCKED"] = {
+#             u"$ne": u"Y"
+#         }
+
+#         query["ROLE_ID.ROLE_NAME"] = {
+#             u"$not": Regex(u".*PRESENT.*", "i")
+#         }
+
+#         query["IS_DISABLED"] = {
+#             u"$ne": u"Y"
+#         }
+
+#         query["INCOMPLETE_SIGNUP"] = {
+#             u"$ne": u"Y"
+#         }
+
+#         # query["DEVICE_USED"] = Regex(u".*webapp.*", "i")
+
+#         projection = {}
+#         projection["USER_ID.USER_ID"] = 1.0
+#         projection["EMAIL_ID"] = 1.0
+#         projection["CREATED_DATE"] = 1.0
+
+#         projection["USER_NAME"] = 1.0
+#         projection["IS_ADMIN"] = 1.0
+#         projection["schoolId.ADDRESS"] = 1.0
+#         projection["schoolId.CITY"] = 1.0
+#         projection["schoolId.STATE"] = 1.0
+#         projection["schoolId.COUNTRY"] = 1.0
+#         projection["schoolId.NAME"] = 1.0
+
+#         cursor = collection.find(query, projection = projection)
+#         dfum=(list(cursor))
+#         dfum=pd.json_normalize(dfum, max_level=1)
+#         schoolname=dfum["schoolId.NAME"][0]
+#         country=dfum["schoolId.COUNTRY"][0]
+#         city=dfum["schoolId.CITY"][0]
+#         state=dfum["schoolId.STATE"][0]
+#         address=dfum["schoolId.ADDRESS"][0]
+
+#         admin1=dfum[dfum['IS_ADMIN']=='Y']
+
+#         admin2=admin1['USER_NAME']
+#         admin3=list(admin2)
+#         admin=admin3[0]
+#         adminemail1=admin1['EMAIL_ID']
+#         admine=list(adminemail1)
+#         # adminemail=[dfum['EMAIL_ID'][dfum['IS_ADMIN']=='Y']][0]
+#         adminemail=admine[0]
+#     #     print(adminemail)
+#         email=list(dfum['EMAIL_ID'])
+#     #     print(email)
+#         totaluser=len(email)
+#         collection = database["audio_track_master"]
+
+#     #     Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
+
+#         pipeline = [
+#             {
+#                 u"$match": {
+#                     u"USER_ID.EMAIL_ID": {
+#                         u"$in": email
+#                     }
+#                 }
+
+#             }, 
+#             {
+#                 u"$group": {
+#                     u"_id": {
+#                         u"USER_ID\u1390_id": u"$USER_ID._id"
+#                     },
+#                     u"MAX(MODIFIED_DATE)": {
+#                         u"$max": u"$MODIFIED_DATE"
+#                     },
+#                     u"COUNT(USER_ID\u1390_id)": {
+#                         u"$sum": 1
+#                     }
+#                 }
+#             }, 
+#             {
+#                 u"$project": {
+#                     u"USER_ID._id": u"$_id.USER_ID\u1390_id",
+#                     u"MAX(MODIFIED_DATE)": u"$MAX(MODIFIED_DATE)",
+#                     u"COUNT(USER_ID\u1390_id)": u"$COUNT(USER_ID\u1390_id)",
+#                     u"_id": 0
+#                 }
+#             }
+#         ]
+
+#         cursor = collection.aggregate(
+#             pipeline, 
+#             allowDiskUse = True
+#         )
+#         dfatd=list(cursor)
+#         dfatd=pd.json_normalize(dfatd, max_level=1)
+#     #     print(dfatd)
+#         collection = database["subscription_master"]
+
+#         # Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
+
+#         pipeline = [
+#             {
+#                 u"$match": {
+#                     u"USER_ID.EMAIL_ID": {
+#                         u"$in": email
+#                     }
+#                 }
+#             }, 
+#             {
+#                 u"$group": {
+#                     u"_id": {
+#                         u"USER_ID\u1390_id": u"$USER_ID._id"
+#                     },
+#                     u"MAX(SUBSCRIPTION_EXPIRE_DATE)": {
+#                         u"$max": u"$SUBSCRIPTION_EXPIRE_DATE"
+#                     }
+#                 }
+#             }, 
+#             {
+#                 u"$project": {
+#                     u"MAX(SUBSCRIPTION_EXPIRE_DATE)": u"$MAX(SUBSCRIPTION_EXPIRE_DATE)",
+#                     u"USER_ID._id": u"$_id.USER_ID\u1390_id",
+#                     u"_id": 0
+#                 }
+#             }
+#         ]
+
+#         cursor = collection.aggregate(
+#             pipeline, 
+#             allowDiskUse = True
+#         )
+#         dfsbm=list(cursor)
+#         dfsbm=pd.json_normalize(dfsbm, max_level=1)
+#     #     print(dfatd,"atd")
+#         ############################################################
+#         collection = database["audio_track_master"]
+
+#     #     Created with Studio 3T, the IDE for MongoDB - https://studio3t.com/
+
+#         pipeline = [
+#             {
+#                 u"$match": {
+#                     u"USER_ID.EMAIL_ID": {
+#                         u"$in": email
+#                     },
+                     
+#              u"MODIFIED_DATE" : { 
+#                  u"$gte" :  csy_first_date()
+            
+#         }
+#                 }
+
+#             }, 
+#             {
+#                 u"$group": {
+#                     u"_id": {
+#                         u"USER_ID\u1390_id": u"$USER_ID._id"
+#                     },
+#                     u"MAX(MODIFIED_DATE)": {
+#                         u"$max": u"$MODIFIED_DATE"
+#                     },
+#                     u"COUNT(USER_ID\u1390_id)": {
+#                         u"$sum": 1
+#                     }
+#                 }
+#             }, 
+#             {
+#                 u"$project": {
+#                     u"CSYUSER_ID._id": u"$_id.USER_ID\u1390_id",
+#                     u"CSYCOUNT(USER_ID\u1390_id)": u"$COUNT(USER_ID\u1390_id)",
+#                     u"_id": 0
+#                 }
+#             }
+#         ]
+
+#         cursor1 = collection.aggregate(
+#             pipeline, 
+#             allowDiskUse = True
+#         )
+#         dfatdcsy=list(cursor1)
+#         dfatdcsy1=pd.json_normalize(dfatdcsy, max_level=1)
+#         ####################################################################
+
+#         try:
+#             dffinal=pd.merge(dfum,dfatd,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
+#             dffinal1=pd.merge(dffinal,dfatdcsy1,left_on='_id',right_on='CSYUSER_ID._id',how='left',suffixes=('_',''))
+#             dffinalnew=pd.merge(dffinal1,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
+#         except:
+#             dfum['MAX(MODIFIED_DATE)']='NO PRACTICE'
+#             dfum['COUNT(USER_ID᎐_id)']=0
+#             dffinal=dfum
+#             dffinal1=dffinal
+#             dffinal1['CSYCOUNT(USER_ID᎐_id)']=0
+#             dffinalnew=pd.merge(dffinal,dfsbm,left_on='_id',right_on='USER_ID._id',how='left',suffixes=('_',''))
+
+
+
+#     #     schoolname=dfum["schoolId.NAME"][0]
+#         country=dfum["schoolId.COUNTRY"][0]
+#         city=dfum["schoolId.CITY"][0]
+#         state=dfum["schoolId.STATE"][0]
+#         address=dfum["schoolId.ADDRESS"][0]
+#     #     admin=[dfum['USER_NAME'][dfum['IS_ADMIN']=='Y']][0]
+#     #     admin=admin[0]
+#     #     adminemail=[dfum['EMAIL_ID'][dfum['IS_ADMIN']=='Y']][0]
+#     #     adminemail=adminemail[0]
+#         email=list(dfum['EMAIL_ID'])
+#         totaluser=len(email)
+#         dffinalnew['MAX(MODIFIED_DATE)'].fillna("NO PRACTICE", inplace=True)
+#         dffinalnew['MAX(SUBSCRIPTION_EXPIRE_DATE)'].fillna(" ", inplace=True)
+#         dffinalnew['COUNT(USER_ID᎐_id)'].fillna(0, inplace=True)
+#         dffinalnew['CSYCOUNT(USER_ID᎐_id)'].fillna(0, inplace=True)
+#         pracsum=sum(list(dffinalnew['COUNT(USER_ID᎐_id)']))
+#         dffinalnew.fillna(value=pd.np.nan, inplace=True)
+        
+
+#         MAX=[]
+#         for i in dffinalnew['MAX(MODIFIED_DATE)']:
+#             if  i != 'NO PRACTICE' :
+#                 MAX.append(i.strftime("%d %b %Y "))
+#             else:
+#                 MAX.append("NO PRACTICE")
+#         SUBSCRIPTION_EXPIRE_DATE=[]
+#         for i in dffinalnew['MAX(SUBSCRIPTION_EXPIRE_DATE)']:
+#             if  i != ' ' :
+#                 SUBSCRIPTION_EXPIRE_DATE.append(i.strftime("%d %b %Y "))
+#             else:
+#                 SUBSCRIPTION_EXPIRE_DATE.append(" ")        
+#         CREATED_DATE=[]
+#         for i in dffinalnew['CREATED_DATE']:
+#             if  i != ' ' :
+#                 CREATED_DATE.append(i.strftime("%d %b %Y "))
+#             else: 
+#                 CREATED_DATE.append(" ")
+#         data=[]
+
+#         for T,k,l,m,o,p,q in zip(dffinalnew['USER_NAME'].tolist(),dffinalnew['EMAIL_ID'].tolist(),CREATED_DATE,MAX,SUBSCRIPTION_EXPIRE_DATE,dffinalnew['COUNT(USER_ID᎐_id)'].tolist(),dffinalnew['CSYCOUNT(USER_ID᎐_id)'].tolist()):
+#             #print(p,q,r)
+#             data.append([T,k,l,m,o,p,q])
+#         database = client["compass"]
+#         collection = database["subscription_master"]
+#         query = {}
+#         query["USER_ID.EMAIL_ID"] = {
+#             u"$in": [
+#                 adminemail
+#             ]
+#         }
+#         projection = {}
+#         projection["PLAN_ID.PLAN_NAME"] = 1.0
+#         cursor = collection.find(query, projection = projection)
+#         plandf=list(cursor)
+#         plandf=pd.json_normalize(plandf, max_level=1)
+#         plannameadmin=plandf["PLAN_ID.PLAN_NAME"][0]
+#         temp={"data":data,"school_practice_count":str(pracsum),"school_name":schoolname,"country":country,"state":state,"city":city,"address":address,"admin_name":admin,"admin_email":adminemail,"plan":plannameadmin,"user_count":totaluser}
+#     #     ,"school_practice_count":str(card_detail['school_practice_count1'][0])
+#     #     temp={"data":data}
+#         return json.dumps(temp)
 
 
 
@@ -71673,8 +66908,7 @@ def escore_overall(trackid):
         
         final_data1['USAGE_METRIC_STANDARDISATION']=''
         for kk in range(len(final_data1['USAGE_METRIC'])):
-            if math.isnan(final_data1['USAGE_METRIC'].std()):
-                    
+            if math.isnan(final_data1['USAGE_METRIC'].std()):                    
                 svalue=0
             else:                    
                 svalue=(final_data1['USAGE_METRIC'][kk] - final_data1['USAGE_METRIC'].mean())/final_data1['USAGE_METRIC'].std()
@@ -71994,6 +67228,42 @@ def escore_overall(trackid):
             df_s.append(schls)
         schools_df=pd.DataFrame(df_s)
         
+        schools_df['SCORE_TYPE']=''
+
+        for i in range(len(schools_df)):
+            if schools_df['E_SCORE_SCHOOL'][i]<=25:
+                schools_df['SCORE_TYPE'][i]='0-25'
+            elif schools_df['E_SCORE_SCHOOL'][i]<=50:
+                schools_df['SCORE_TYPE'][i]='26-50'
+            elif schools_df['E_SCORE_SCHOOL'][i]<=75:
+                schools_df['SCORE_TYPE'][i]='51-75'
+            else:
+                schools_df['SCORE_TYPE'][i]='76-100'
+                
+                
+        
+        import os
+        file_name = str(trackid)+'_school_e_scores.csv'
+
+        if(os.path.exists(file_name) and os.path.isfile(file_name)):
+            os.remove(file_name)
+                
+        schools_df.to_csv(str(trackid)+'_school_e_scores.csv',index=False)
+                
+    
+                
+        new_schools_df=schools_df.groupby('SCORE_TYPE')['SCHOOL_ID'].count().reset_index().rename(columns={'SCHOOL_ID':'School_Count'})
+
+        score_type=pd.DataFrame({'SCORE_TYPE':[
+            '0-25','26-50','51-75','76-100'
+        ]})
+        
+        
+        
+        
+        new_schools_df1=score_type.merge(new_schools_df,how='left',on='SCORE_TYPE').fillna(0)
+        
+        
         ACTIVE_SCHOOL_SCORE=round(sum(schools_df['ACTIVE_SCHOOL'])/len(set(schoolids))*100,0)
         E_SCORE=round((schools_df['ACTIVE_USER_SCORE_SCHOOL'].mean()+schools_df['USAGE_SCORE_SCHOOL'].mean()+schools_df['CWP_SCORE_SCHOOL'].mean()+schools_df['RE_SCORE_SCHOOL'].mean()+ACTIVE_SCHOOL_SCORE)/5)
 
@@ -72002,11 +67272,18 @@ def escore_overall(trackid):
               'CWP_SCORE':round(schools_df['CWP_SCORE_SCHOOL'].mean(),0),
               'RE_SCORE':round(schools_df['RE_SCORE_SCHOOL'].mean(),0),
               'ACTIVE_SCHOOL_SCORE':ACTIVE_SCHOOL_SCORE,
-              'E_SCORE':E_SCORE
-             }
+              'E_SCORE':E_SCORE,
+              'columchart':{'axis':new_schools_df1['SCORE_TYPE'].tolist(),
+                           'schoolcount':new_schools_df1['School_Count'].tolist()
+#               '0-25':new_schools_df1[new_schools_df1['SCORE_TYPE']=='0-25'].reset_index()['School_Count'][0],
+#               '26-50':new_schools_df1[new_schools_df1['SCORE_TYPE']=='26-50'].reset_index()['School_Count'][0],
+#               '51-75':new_schools_df1[new_schools_df1['SCORE_TYPE']=='51-75'].reset_index()['School_Count'][0],
+#               '76-100':new_schools_df1[new_schools_df1['SCORE_TYPE']=='76-100'].reset_index()['School_Count'][0],
+              
+                            }}
         
         return json.dumps(temp)
-        
+#         return new_schools_df1   
     else:
         df_single_s=[]        
         schls= escore_school(trackid)
@@ -72022,9 +67299,25 @@ def escore_overall(trackid):
         
     return json.dumps(temp)
 
+
+
+@app.route('/escores/<trackid>/<scoretype>')
+def schoolscores(trackid,scoretype):
+    df=pd.read_csv(str(trackid)+'_school_e_scores.csv',sep=',')
+    new_df=df[df['SCORE_TYPE']==scoretype][['SCHOOL_NAME', 'ACTIVE_USER_SCORE_SCHOOL',
+       'USAGE_SCORE_SCHOOL', 'CWP_SCORE_SCHOOL', 'RE_SCORE_SCHOOL',
+       'E_SCORE_SCHOOL']]   
+    
+    if new_df.empty:
+        return json.dumps({'data':'No Data Available'})
+    
+    return json.dumps({'data':new_df.values.tolist()})
+
+
+
 # DAILD
 @app.route('/Playback_Chart_daild')
-def day_playbacks():
+def day_playbacks_():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
@@ -72036,6 +67329,14 @@ def day_playbacks():
     # +timedelta(hours=4)
     today_max=datetime.datetime.combine(mydatetime, datetime.time.max)
     # +timedelta(hours=4)
+    
+#     week before
+    week_before=datetime.datetime.utcnow()-timedelta(days=7)
+    # +timedelta(hours=4)
+    week_before_min=datetime.datetime.combine(week_before,datetime.time.min)
+    # +timedelta(hours=4)
+    week_before_max=datetime.datetime.combine(week_before, datetime.time.max)
+    # +timedelta(hours=4)
 
 
     collection= db.audio_track_master
@@ -72045,21 +67346,35 @@ def day_playbacks():
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
     {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
-    # {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-    #  {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
     {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-    {'MODIFIED_DATE': {'$gte':  today_min, '$lt':today_max}}
+    {'MODIFIED_DATE': {'$gte':today_min, '$lt':today_max}}
+    ]}},
+    {'$group':{'_id':{'$hour':{'date':'$MODIFIED_DATE'}}, 'Playbacks':{'$sum':1}
+    }}, {'$sort':{'_id':1}}
+    ])))
+
+    
+    playback_week_before= DataFrame(list(collection.aggregate([{"$match":{
+    '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+    {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+    {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+    {'MODIFIED_DATE': {'$gte': week_before_min, '$lt':week_before_max}}
     ]}},
     {'$group':{'_id':{'$hour':{'date':'$MODIFIED_DATE'}}, 'Playbacks':{'$sum':1}
     }}, {'$sort':{'_id':1}}
     ])))
 
 
+    
     if df_playback.empty:
         df= pd.DataFrame(columns=['Hour', 'Playbacks'])
         for i in range(1):
-            df.loc[i]= ['None'],['No Practice have happened till now']
+            df.loc[i]= ['None'],['No Practice happened till now']
             hr= df['Hour'].tolist()
             rating=df['Playbacks'].tolist()
             temp={"Hour":hr,"Playbacks":playback}
@@ -72084,12 +67399,32 @@ def day_playbacks():
         hr= df_final['hour'].tolist()
         playback=df_final['Playbacks'].tolist()
 
-        temp={"Hour":hr,"Playbacks":playback}
+        
+        #week_before
+        df_merge_wb=pd.merge(df_hour,playback_week_before, left_on='hour',right_on='_id', how='left')
+
+        df_fillna_wb=df_merge_wb.fillna(0)
+
+        df_fillna_wb['Playbacks']=df_fillna_wb['Playbacks'].astype(int)
+
+        df_final_wb=df_fillna_wb[['hour','Playbacks']]
+
+        df_final_wb=df_final_wb.sort_values(["hour","Playbacks"], ascending=(True,False))
+
+        hr_wb= df_final_wb['hour'].tolist()
+        playback_wb=df_final_wb['Playbacks'].tolist()
+
+
+        temp={"Hour":hr,"Playbacks":playback, "Playback_last_week":playback_wb}
 
         return json.dumps(temp)
+    
+
+
+
 
 @app.route('/Feedback_Chart_daild')
-def day_hourly_feeds_():
+def day_hourly_feed_():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
@@ -72102,7 +67437,15 @@ def day_hourly_feeds_():
     today_max=datetime.datetime.combine(mydatetime, datetime.time.max)
     # +timedelta(hours=4)
 
+#     week before
+    week_before=datetime.datetime.utcnow()-timedelta(days=7)
+    # +timedelta(hours=4)
+    week_before_min=datetime.datetime.combine(week_before,datetime.time.min)
+    # +timedelta(hours=4)
+    week_before_max=datetime.datetime.combine(week_before, datetime.time.max)
+    # +timedelta(hours=4)
 
+    
     collections= db.audio_feedback
     df_feed=DataFrame(list(collections.aggregate([
         {"$match":{'$and':[
@@ -72111,6 +67454,21 @@ def day_hourly_feeds_():
          {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
          {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
     {'MODIFIED_DATE': {'$gte':  today_min, '$lt':today_max}}, {'RATING':{'$ne':0}}
+            #         {'COMMENT':{'$nin':['',' ',None]}},
+
+    #         }]
+        ]}},
+    {'$group':{'_id':{'$hour':{'date':'$MODIFIED_DATE'}},'rating':{'$sum':1}}}, 
+        {'$sort':{'_id':1}}
+    ])))
+
+    df_feed_week_beofre=DataFrame(list(collections.aggregate([
+        {"$match":{'$and':[
+        {"USER.IS_DISABLED":{"$ne":"Y"}},     { "USER.IS_BLOCKED":{"$ne":"Y"}},
+        { "USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+         {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'MODIFIED_DATE': {'$gte':  week_before_min, '$lt':week_before_max}}, {'RATING':{'$ne':0}}
             #         {'COMMENT':{'$nin':['',' ',None]}},
 
     #         }]
@@ -72140,8 +67498,6 @@ def day_hourly_feeds_():
         df_merge=pd.merge(df_hour,df_feed, left_on='hour',right_on='_id', how='left')
 
         df_fillna=df_merge.fillna(0)
-
-
         df_fillna['rating']=df_fillna['rating'].astype(int)
 
         df_final=df_fillna[['hour','rating']]
@@ -72151,10 +67507,22 @@ def day_hourly_feeds_():
 
         hr= df_final['hour'].tolist()
         rating=df_final['rating'].tolist()
+        
+#         week_before
+        df_merge_wb=pd.merge(df_hour,df_feed_week_beofre, left_on='hour',right_on='_id', how='left')
+        df_fillna_wb=df_merge_wb.fillna(0)
+        df_fillna_wb['rating']=df_fillna_wb['rating'].astype(int)
 
-        temp={"Hour":hr,"Rating":rating}
+        df_final_wb=df_fillna_wb[['hour','rating']]
+
+        df_final_wb=df_final_wb.sort_values(["hour","rating"], ascending=(True,False))
+        hr_wb= df_final_wb['hour'].tolist()
+        rating_wb=df_final_wb['rating'].tolist()
+
+
+        
+        temp={"Hour":hr,"Rating":rating,"Ratings_last_week":rating_wb}
     return json.dumps(temp)
-
 
 
 # Sentiment Analysis
@@ -73251,6 +68619,107 @@ def day_signup_card():
         
     return json.dumps(temp2)
 
+@app.route('/totalactive_users_dild_')
+def active_users_today():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
+    db=client.compass
+
+    mydatetime=datetime.datetime.utcnow()
+
+    today_min=datetime.datetime.combine(mydatetime,datetime.time.min)
+    # +timedelta(hours=4)
+    today_max=datetime.datetime.combine(mydatetime, datetime.time.max)
+    # +timedelta(hours=4)
+
+    collection= db.audio_track_master
+    df_playback= DataFrame(list(collection.aggregate([{"$match":{
+    '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+    {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+    {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+    {'MODIFIED_DATE': {'$gte':today_min, '$lte':today_max}}
+    ]}},
+    {'$group':{'_id':'$USER_ID._id', 'practice':{'$sum':1}}}
+    ])))
+
+    if df_playback.empty:
+        data= {'active_users':str(0),'web_users':str(0),'mobile_users':str(0),'lms_users':str(0)}
+        temp={"data":data.values.tolist()}
+    else: 
+        list_of_users=df_playback['_id'].tolist()
+        active_users=str(len(df_playback))
+
+        collection2= db.user_master
+        df_web=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, {'DEVICE_USED':{'$regex':'webapp', '$options':'i'}},
+        {'_id':{'$in':list_of_users}}
+               ]}},
+        {'$group':{'_id':'$_id'}}])))
+
+        web_users=len(df_web)
+
+
+        df_home=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}, 
+                {'_id':{'$in':list_of_users}}
+        ]}},
+        {'$group':{'_id':'$_id'}}])))
+
+
+        df_classroom=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, 
+        {'_id':{'$nin':db.schoology_master.distinct("USER_ID._id")}},
+        {'_id':{'$nin':db.clever_master.distinct("USER_ID._id")}},
+        {'DEVICE_USED':{'$not':{'$regex':'webapp', '$options':'i'}}} , 
+        {'DEVICE_USED':{'$not':{'$regex':'clever', '$options':'i'}}},
+                {'DEVICE_USED':{'$not':{'$regex':'schoology', '$options':'i'}}},
+        {'_id':{'$in':list_of_users}}]}},
+        {'$group':{'_id':'$_id'}}])))
+
+
+        mobile=pd.concat([df_home,df_classroom]).reset_index(drop=True)
+        mobile_users=len(mobile)
+
+        df_lms=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'_id':{'$in':list_of_users}}
+        ]}},
+        {"$match":{'$or':[{'DEVICE_USED':{'$regex':'clever', '$options':'i'}},{'DEVICE_USED':{'$regex':'schoology', '$options':'i'}}
+        ]}},
+        {'$group':{'_id':'$_id'}}])))
+
+        lms_users=len(df_lms)
+
+        data1= {'active_users':str(active_users),'web_users':str(web_users),'mobile_users':str(mobile_users),'lms_users':str(lms_users)}
+    temp={'data':[data1]} 
+    return json.dumps(temp)
+
+
+
 @app.route('/active_users_on_day_dild')
 def active_userss_day():
     username = urllib.parse.quote_plus('admin')
@@ -73809,6 +69278,584 @@ def practice_per_minutee_(charttype):
         temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Clever':clever_parents_users, 'schoology':schoology_parents_users}}
 
         return json.dumps(temp)
+
+
+@app.route('/Practice_per_minute_DAILD_updated/<charttype>')
+def practice_per_minn_(charttype):
+    mongo_uri = "mongodb://admin:" + urllib.parse.quote('F5tMazRj47cYqm33e') + "@52.41.36.115:27017/"
+    client = pymongo.MongoClient(mongo_uri)
+    db = client.compass
+    collection2 = db.audio_track_master
+
+    mydatetime=datetime.datetime.utcnow()
+    today_min=datetime.datetime.combine(mydatetime,datetime.time.min)
+    today_max=datetime.datetime.combine(mydatetime, datetime.time.max)
+
+    start_today=today_min.strftime('%Y-%m-%d %H:%M:%S')
+    end_today=today_max.strftime('%Y-%m-%d %H:%M:%S')
+
+    charttype=str(charttype).title()
+
+    if charttype=='Practice':
+        threshold=.5
+
+
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        ######################  USER PRACTICE 2019-2020(LSY) ############################################
+        df1 = DataFrame(list(collection2.aggregate([
+            {"$match":
+            {"$and" :[
+                {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'USER_ID.EMAIL_ID':{'$ne':""}},
+
+                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"MODIFIED_DATE":{"$gte": today_min
+                                             ,"$lte" : today_max
+                                    }},
+                {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+
+
+                {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+        practice_cond_dictonary_list[0],
+                    practice_cond_dictonary_list[1],
+                     threshcond[0],
+
+            {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                    'Users_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                        'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+
+        df2 = DataFrame(list(collection2.aggregate([{"$match":
+            {"$and" :[
+                {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'USER_ID.EMAIL_ID':{'$ne':""}},
+
+                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"MODIFIED_DATE":{"$gte": today_min
+                                             ,"$lte" : today_max
+                                    }},
+                {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+
+
+                {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}},                
+            ]}},
+                                                practice_cond_dictonary_list[0],
+                            practice_cond_dictonary_list[1],
+                             threshcond[0],
+
+              {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                            'Parents_Practice_CSY':{'$sum':1}}},
+                    {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                                'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                    {"$sort":{'Practice_date':1}}])))
+
+        schoology = DataFrame(list(collection2.aggregate([
+                    {"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                             { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                           {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                            {"MODIFIED_DATE":{"$gte": today_min
+                                                 ,"$lte" : today_max
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+                ]}},
+
+        practice_cond_dictonary_list[0],
+                            practice_cond_dictonary_list[1],
+                             threshcond[0],
+
+                  {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                            'Parents_Practice_CSY':{'$sum':1}}},
+                    {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                                'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                    {"$sort":{'Practice_date':1}}])))
+            #     print(schoology,"schoology")
+                                      ########clever################################
+
+        clever = DataFrame(list(collection2.aggregate([{"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                             { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                            {"MODIFIED_DATE":{"$gte": today_min
+                                                 ,"$lte" : today_max
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+                ]}},
+        practice_cond_dictonary_list[0],
+                    practice_cond_dictonary_list[1],
+                     threshcond[0],
+           {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+
+        ########Ratingss################################
+        collection4= db.audio_feedback
+        ratings=DataFrame(list(collection4.aggregate([
+
+        {"$match":
+             {'$and': [
+                    {"USER.IS_DISABLED":{"$ne":"Y"}},
+                      {"USER.IS_BLOCKED":{"$ne":"Y"}},
+                 {'USER.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
+                     {"USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                  {'USER.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+
+                    { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                               {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                                 {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                 {'RATING':{'$ne':0}},
+                 {'MODIFIED_DATE':{'$gte':today_min,
+                                     '$lte':today_max
+                                     }},
+                    ]}},
+              practice_cond_dictonary_list[0],
+                    practice_cond_dictonary_list[1],
+        #              threshcond[0],
+           {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                                'date':{'$first':'$MODIFIED_DATE'},
+                      'ratings':{'$sum':1}}},
+                        {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+            'ratings':'$ratings'}}, 
+                        {"$sort":{'Practice_date':1}}])))
+
+
+        df1['Practice_date']=pd.to_datetime(df1['Practice_date'], format="%Y-%m-%d %H:%M")
+        df5=df1.sort_values(by='Practice_date')
+        time_range=[]
+        # start = '2021-10-12 00:00:00'
+        # end = "2021-10-12 23:59:59"
+        delta = datetime.timedelta(seconds=60)
+        start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+        end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+        t = start
+        while t <= end :
+            x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+            t += delta
+            time_range.append(x)
+
+        df9 = pd.DataFrame(time_range,columns = ["Practice_date"])
+        df9['Practice_date']=pd.to_datetime(df9['Practice_date'])
+
+        df10=pd.merge(df5,df9, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')   
+
+        df10['Practice_date']=df10['Practice_date'].astype(np.int64)/int(1e6)
+
+        csy_users_list=df10[['Practice_date','Users_Practice_CSY']].values.astype(int).tolist()   
+
+
+        # ratings
+        ratings['Practice_date']=pd.to_datetime(ratings['Practice_date'], format="%Y-%m-%d %H:%M")
+        df5ratings=ratings.sort_values(by='Practice_date')
+        time_range=[]
+        # start = '2021-10-12 00:00:00'
+        # end = "2021-10-12 23:59:59"
+        delta = datetime.timedelta(seconds=60)
+        start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+        end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+        t = start
+        while t <= end :
+            x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+            t += delta
+            time_range.append(x)
+
+        df9ratings = pd.DataFrame(time_range,columns = ["Practice_date"])
+        df9ratings['Practice_date']=pd.to_datetime(df9ratings['Practice_date'])
+
+        df_rating=pd.merge(df5ratings,df9ratings, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')   
+
+        df_rating['Practice_date']=df_rating['Practice_date'].astype(np.int64)/int(1e6)
+
+        ratings=df_rating[['Practice_date','ratings']].values.astype(int).tolist()   
+
+
+        # Clever
+
+        if 'Practice_date' in list(clever.columns):
+            clever['Practice_date']=pd.to_datetime(clever['Practice_date'])
+            clever_sort=clever.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            clever=pd.DataFrame(time_range, columns=['Practice_date'])
+            clever['Parents_Practice_CSY'] = 0
+            clever_sort=clever.sort_values(by='Practice_date')
+
+        # Schoology
+
+        if 'Practice_date' in list(schoology.columns):
+            schoology['Practice_date']=pd.to_datetime(schoology['Practice_date'], format='%Y-%m-%d %H:%M')
+            schoology_sort=schoology.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            schoology=pd.DataFrame(time_range, columns=['Practice_date'])
+            schoology['Parents_Practice_CSY'] = 0
+            schoology_sort=schoology.sort_values(by='Practice_date')
+
+
+
+        # Parents 
+        df2['Practice_date'] = pd.to_datetime(df2['Practice_date'])
+        df6=df2.sort_values(by='Practice_date')
+
+        time_range=[]
+        # start = '2021-10-12 00:00:00'
+        # end = "2021-10-12 23:59:59"
+        delta = datetime.timedelta(seconds=60)
+        start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+        end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+        t = start
+        while t <= end :
+            x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+            t += delta
+            time_range.append(x)
+
+        df_parents=pd.DataFrame(time_range, columns=['Practice_date'])
+        # # df_parents['value']=0
+        parents_datetime=pd.to_datetime(df_parents['Practice_date'])
+
+        parents=pd.merge(df6,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+        parents['Practice_date']=parents['Practice_date'].astype(np.int64)/int(1e6)
+        parents_final=parents[['Practice_date','Parents_Practice_CSY']].values.astype(int).tolist()
+
+
+        # cleverr
+        clever['Practice_date']=pd.to_datetime(clever['Practice_date'])
+        clever_csy1=pd.merge(clever,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        clever_csy1['Practice_date']=clever_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        clever_parents_users=clever_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+
+
+        # schoologyyy
+        schoology_sort['Practice_date']=pd.to_datetime(schoology_sort['Practice_date'])
+        schoology_csy1= pd.merge(schoology_sort,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        schoology_csy1['Practice_date']=schoology_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        schoology_parents_users=schoology_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+
+
+
+        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Clever':clever_parents_users, 'schoology':schoology_parents_users, 'ratings':ratings}}
+
+        return json.dumps(temp)
+
+
+    else:
+        ######################  USER PRACTICE 2019-2020(LSY) ############################################
+        df1 = DataFrame(list(collection2.aggregate([{
+                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}}, {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {'USER_ID.EMAIL_ID':{'$ne':""}},{"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},
+                        {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+
+                {"$match":{"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+
+                {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},'Users_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                            'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+        ##################### PARENTS ##########################################
+        df2 = DataFrame(list(collection2.aggregate([{
+                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                       {'USER_ID.EMAIL_ID':{'$ne':""}},
+                          {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                           {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}},                  
+                        {"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},                    
+                        {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}
+                                  ]}},
+                {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}},
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+        ########schoology################################
+        schoology = DataFrame(list(collection2.aggregate([{
+                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                        {'USER_ID.EMAIL_ID':{'$ne':""}},
+                          {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                       {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                       {"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},
+        #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
+                                 ]}},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+
+             {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}},
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+        ########clever################################
+        clever = DataFrame(list(collection2.aggregate([{
+                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                        {'USER_ID.EMAIL_ID':{'$ne':""}},
+                          {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                       {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                       {"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},
+
+        #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
+                                   ]}},
+                {"$match":
+                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+                 {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  'Parents_Practice_CSY':{'$sum':1}}},
+                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}},
+                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                {"$sort":{'Practice_date':1}}])))
+
+        df1['Practice_date']=pd.to_datetime(df1['Practice_date'], format="%Y-%m-%d %H:%M")
+
+
+        ########Ratingss################################
+        collection4= db.audio_feedback
+        ratings=DataFrame(list(collection4.aggregate([
+
+        {"$match":
+             {'$and': [
+                    {"USER.IS_DISABLED":{"$ne":"Y"}},
+                      {"USER.IS_BLOCKED":{"$ne":"Y"}},
+                 {'USER.schoolId.BLOCKED_BY_CAP':{'$ne':'Y'}},
+                     {"USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                  {'USER.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+
+                    { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                               {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                                 {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                 {'RATING':{'$ne':0}},
+                 {'MODIFIED_DATE':{'$gte':today_min,
+                                     '$lte':today_max
+                                     }},
+                    ]}},
+           {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                                'date':{'$first':'$MODIFIED_DATE'},
+                      'ratings':{'$sum':1}}},
+                        {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+            'ratings':'$ratings'
+                                    }}, 
+                        {"$sort":{'Practice_date':1}}])))
+
+
+        df1['Practice_date']=pd.to_datetime(df1['Practice_date'], format="%Y-%m-%d %H:%M")        
+        df5=df1.sort_values(by='Practice_date')
+        time_range=[]
+        # start = '2021-10-12 00:00:00'
+        # end = "2021-10-12 23:59:59"
+        delta = datetime.timedelta(seconds=60)
+        start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+        end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+        t = start
+        while t <= end :
+            x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+            t += delta
+            time_range.append(x)
+
+        df9 = pd.DataFrame(time_range,columns = ["Practice_date"])
+        df9['Practice_date']=pd.to_datetime(df9['Practice_date'])
+
+        df10=pd.merge(df5,df9, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')   
+
+        df10['Practice_date']=df10['Practice_date'].astype(np.int64)/int(1e6)
+
+        csy_users_list=df10[['Practice_date','Users_Practice_CSY']].values.astype(int).tolist()   
+
+
+        # ratings
+        start_today=today_min.strftime('%Y-%m-%d %H:%M:%S')
+        end_today=today_max.strftime('%Y-%m-%d %H:%M:%S')
+        ratings['Practice_date']=pd.to_datetime(ratings['Practice_date'], format="%Y-%m-%d %H:%M")
+        df5ratings=ratings.sort_values(by='Practice_date')
+        time_range=[]
+        # start = '2021-10-12 00:00:00'
+        # end = "2021-10-12 23:59:59"
+        delta = datetime.timedelta(seconds=60)
+        start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+        end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+        t = start
+        while t <= end :
+            x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+            t += delta
+            time_range.append(x)
+
+        df9ratings = pd.DataFrame(time_range,columns = ["Practice_date"])
+        df9ratings['Practice_date']=pd.to_datetime(df9ratings['Practice_date'])
+
+        df_rating=pd.merge(df5ratings,df9ratings, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')   
+
+        df_rating['Practice_date']=df_rating['Practice_date'].astype(np.int64)/int(1e6)
+
+        ratings=df_rating[['Practice_date','ratings']].values.astype(int).tolist()   
+
+
+        # Clever
+
+        if 'Practice_date' in list(clever.columns):
+            clever['Practice_date']=pd.to_datetime(clever['Practice_date'])
+            clever_sort=clever.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            clever=pd.DataFrame(time_range, columns=['Practice_date'])
+            clever['Parents_Practice_CSY'] = 0
+            clever_sort=clever.sort_values(by='Practice_date')
+
+        # Schoology
+
+        if 'Practice_date' in list(schoology.columns):
+            schoology['Practice_date']=pd.to_datetime(schoology['Practice_date'])
+            schoology_sort=schoology.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            schoology=pd.DataFrame(time_range, columns=['Practice_date'])
+            schoology['Parents_Practice_CSY'] = 0
+            schoology_sort=schoology.sort_values(by='Practice_date')
+
+        # Parents 
+        df2['Practice_date'] = pd.to_datetime(df2['Practice_date'])
+        df6=df2.sort_values(by='Practice_date')
+
+        time_range=[]
+        # start = '2021-10-12 00:00:00'
+        # end = "2021-10-12 23:59:59"
+        delta = datetime.timedelta(seconds=60)
+        start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+        end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+        t = start
+        while t <= end :
+            x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+            t += delta
+            time_range.append(x)
+
+        df_parents=pd.DataFrame(time_range, columns=['Practice_date'])
+        # # df_parents['value']=0
+        parents_datetime=pd.to_datetime(df_parents['Practice_date'])
+
+        parents=pd.merge(df6,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+        parents['Practice_date']=parents['Practice_date'].astype(np.int64)/int(1e6)
+        parents_final=parents[['Practice_date','Parents_Practice_CSY']].values.astype(int).tolist()
+
+
+        # cleverr
+        clever['Practice_date']=pd.to_datetime(clever['Practice_date'])
+        clever_csy1=pd.merge(clever,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        clever_csy1['Practice_date']=clever_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        clever_parents_users=clever_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+
+
+        # schoologyyy
+        schoology_sort['Practice_date']=pd.to_datetime(schoology_sort['Practice_date'])
+        schoology_csy1= pd.merge(schoology_sort,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        schoology_csy1['Practice_date']=schoology_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        schoology_parents_users=schoology_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+
+    
+        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Clever':clever_parents_users, 'schoology':schoology_parents_users,'ratings':ratings}}
+
+        return json.dumps(temp)
+
+
+
 
 
 

@@ -94,6 +94,9 @@ function charts(a, b, c) {
                 title: {
                     text: "User Playback History",
                 },
+                credits: {
+                    enabled: false,
+                },
                 colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                 xAxis: [{
                         categories: dataa.Date,
@@ -187,6 +190,7 @@ function charts(a, b, c) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
+        console.log("/monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c);
         $(function() {
             $("#container3").highcharts({
                 chart: {
@@ -196,6 +200,9 @@ function charts(a, b, c) {
                 },
                 title: {
                     text: "Playback Trend By Month",
+                },
+                credits: {
+                    enabled: false,
                 },
                 colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                 xAxis: [{
@@ -266,6 +273,12 @@ function charts(a, b, c) {
                     }, {
                         name: 'Classroom',
                         data: dataa.Teachers
+
+                    }, {
+                        name: 'LSY',
+                        data: dataa.lsy,
+                        color: '#FF9933',
+                        type: 'line'
                     },
                 ],
             });
@@ -346,14 +359,18 @@ function charts(a, b, c) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
+        console.log("/schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c);
         $(function() {
             $("#container4").highcharts({
                 chart: {
                     zoomType: "xy",
-                    type: "bar"
+                    type: "column"
                 },
                 title: {
                     text: "Top 20 School User Count",
+                },
+                credits: {
+                    enabled: false,
                 },
                 colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                 xAxis: [{
@@ -426,6 +443,14 @@ function charts(a, b, c) {
                         data: dataa.Teachers,
                         stack: 0
                     },
+                    {
+                        name: 'Engaged Users',
+                        color: '#FF9933',
+                        type: 'line',
+                        data: dataa.active,
+                        yAxis: 0,
+                        //stack: 0
+                    }
                 ],
             });
         });
@@ -447,11 +472,14 @@ function charts(a, b, c) {
         $(function() {
             $("#container5").highcharts({
                 chart: {
-                    zoomType: "xy",
+                    // zoomType: "xy",
                     type: "bar"
                 },
                 title: {
-                    text: "Top 20 User Playback Count",
+                    text: "Top 20 Champion Playback Count",
+                },
+                credits: {
+                    enabled: false,
                 },
                 colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                 xAxis: [{
@@ -515,11 +543,11 @@ function charts(a, b, c) {
         $(function() {
             $("#container5").highcharts({
                 chart: {
-                    zoomType: "xy",
+                    //zoomType: "xy",
                     type: "bar"
                 },
                 title: {
-                    text: "Top 20 User Playback Count",
+                    text: "Top 20 Champion Playback Count",
                 },
                 xAxis: [{
                     categories: [],
@@ -587,14 +615,18 @@ function charts(a, b, c) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
+        //console.log("/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c);
         $(function() {
             $("#container6").highcharts({
                 chart: {
-                    zoomType: "xy",
-                    type: "bar"
+                    // zoomType: "xy",
+                    type: "column"
                 },
                 title: {
                     text: "Top 20 School Playback Count",
+                },
+                credits: {
+                    enabled: false,
                 },
                 colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                 xAxis: [{
@@ -645,6 +677,7 @@ function charts(a, b, c) {
                 plotOptions: {
                     series: {
                         stacking: 'normal',
+                        //  pointWidth: 5
                     }
                 },
                 series: [{
@@ -668,6 +701,92 @@ function charts(a, b, c) {
                         stack: 0
                     },
                 ],
+            });
+        });
+    });
+
+
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "top20userspractisinginfo/6045e4c807ead7744b12583b/2020-08-01/2021-07-31",
+        method: "GET",
+    };
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa);
+        //console.log("/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c);
+        $(function() {
+            $("#container10").highcharts({
+                chart: {
+                    // zoomType: "xy",
+                    type: "column"
+                },
+                title: {
+                    text: "Top 20 Champions in LSY",
+                },
+                credits: {
+                    enabled: false,
+                },
+                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+                xAxis: [{
+                    categories: dataa.schname,
+                    labels: {
+                        style: {
+                            fontSize: "8px",
+                            rotation: 0,
+                        },
+                    }
+                }, ],
+                yAxis: [{
+                        //Primary yAxis
+                        lineWidth: 1,
+                        labels: {
+                            format: "{value}",
+                            style: {
+                                color: "#000",
+                            },
+                        },
+                        title: {
+                            text: "Playback Count",
+                            style: {
+                                color: "#000",
+                            },
+                        },
+                    },
+                    {
+                        //Secondary yAxis
+                        title: {
+                            text: "",
+                            style: {
+                                color: "#4572A7",
+                            },
+                        },
+                        labels: {
+                            format: "{value}",
+                            style: {
+                                color: "#4572A7",
+                            },
+                        },
+                        opposite: false,
+                    },
+                ],
+                tooltip: {
+                    shared: true,
+                },
+                plotOptions: {
+                    series: {
+                        stacking: 'normal',
+                        //  pointWidth: 5
+                    }
+                },
+                series: [{
+                    name: "Playback Count",
+                    showInLegend: false,
+                    color: "#01a451",
+                    type: "column",
+                    data: dataa.practicecount,
+                }],
             });
         });
     });
@@ -1112,6 +1231,12 @@ function distselect(distid) {
     $("#login").empty();
     $("#practice").empty();
     $("#family").empty();
+    $("#engaged_school_csy").empty();
+    $("#engaged_school_lsy").empty();
+    $("#engd_parent_csy").empty();
+    $("#engd_parent_lsy").empty();
+    $("#engd_teacher_csy").empty();
+    $("#engd_teacher_lsy").empty();
     $("#MINDFUL_MINUTES").empty();
     $("#parentspractice").empty();
     $("#myDiv").empty();
@@ -1160,6 +1285,12 @@ function cardcount(id, a, b) {
         $("#districtid").text(dataa.district);
         $("#MINDFUL_MINUTES").text(dataa.MINDFUL_MINUTES);
         $("#family").text(dataa.familycount);
+        $("#engaged_school_csy").text(dataa.engaged_school_csy);
+        $("#engaged_school_lsy").text(dataa.engaged_school_lsy);
+        $("#engd_parent_csy").text(dataa.engd_parent_csy);
+        $("#engd_parent_lsy").text(dataa.engd_parent_lsy);
+        $("#engd_teacher_csy").text(dataa.engd_teacher_csy);
+        $("#engd_teacher_lsy").text(dataa.engd_teacher_lsy);
         $("#parentspractice").text(dataa.parentspracticecount);
 
     });

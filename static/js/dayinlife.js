@@ -166,12 +166,15 @@ function charts(a) {
         var settings = {
             async: true,
             crossDomain: true,
-            url: "/Practice_per_minute_dild/" + selectValue3,
+            url: "/Practice_per_minute_DAILD_updated/" + selectValue3,
             method: "GET",
         };
         $.ajax(settings).done(function(response) {
             var dataa = JSON.parse(response);
+            console.log(dataa);
+
             chart = new Highcharts.StockChart({
+
                 chart: {
                     renderTo: 'container2',
                     zoomType: 'x'
@@ -179,37 +182,58 @@ function charts(a) {
                 title: {
                     text: tx + ' Per Minute'
                 },
+                legend: {
+                    enabled: true,
+                    itemStyle: {
+                        fontSize: '10px',
+                        fontWeight: '200'
+                    }
+                },
                 subtitle: {
                     text: ''
                 },
-                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+
                 xAxis: [{
                     type: 'datetime',
-                    dateTimeLabelFormats: {
-                        hour: '%I %p',
-                        minute: '%I:%M %p'
+                    events: {
+                        afterSetExtremes() {
+                            let bottomAxis = this,
+                                topAxis = this.chart.xAxis[1];
+                            topAxis.setExtremes(bottomAxis.min - 86400000, bottomAxis.max - 86400000, true)
+                        }
                     }
                 }, {
                     type: 'datetime',
-                    dateTimeLabelFormats: {
-                        hour: '%I %p',
-                        minute: '%I:%M %p'
-                    },
-                    opposite: false,
-                    visible: true
+                    opposite: true,
+                    visible: false
                 }],
 
-
-                yAxis: {
+                yAxis: [{
                     visible: true,
                     opposite: false,
                     showLastLabel: true,
+                    title: {
+                        text: tx + ' Count'
+                    },
                     labels: {
                         enabled: true,
                         format: "{value}",
                         align: "right"
                     },
-                },
+                }, {
+                    visible: true,
+                    opposite: false,
+                    showLastLabel: true,
+                    opposite: true,
+                    title: {
+                        text: 'Rating'
+                    },
+                    labels: {
+                        enabled: true,
+                        format: "{value}",
+                        align: "left"
+                    },
+                }],
 
                 tooltip: {
                     pointFormatter: function() {
@@ -222,7 +246,7 @@ function charts(a) {
                 },
 
                 navigator: {
-                    enabled: false
+                    enabled: true
                 },
                 rangeSelector: {
                     inputEnabled: false,
@@ -251,34 +275,44 @@ function charts(a) {
                 },
 
                 series: [{
+                        "name": "Rating",
+                        "type": "line",
+                        "color": "#FF9933",
+                        "xAxis": 0,
+                        "data": dataa.data.ratings,
+                        yAxis: 1
+                    }, {
                         "name": "Clever",
                         "type": "column",
-
                         "xAxis": 1,
+                        "color": "#462cee",
                         "data": dataa.data.Clever
-                    }, {
-                        "name": "Schoology",
-                        "type": "column",
-
-                        "xAxis": 1,
-                        "data": dataa.data.schoology
-                    }, {
-                        "name": "Home",
+                    },
+                    {
+                        "name": "Parents Practices",
                         "type": "column",
                         "xAxis": 1,
-
+                        "color": "#01A451",
                         "data": dataa.data.Parents_practices
                     },
                     {
-                        "name": "Classroom",
+                        "name": "Schoology",
                         "type": "column",
                         "xAxis": 1,
+                        "color": "#4f1faf",
+                        "data": dataa.data.schoology
+                    },
+                    {
+                        "name": "Teachers Practices",
+                        "type": "column",
+                        "xAxis": 1,
+                        "color": "#8AE02B",
                         "data": dataa.data.teachers_practices
                     }
                 ]
-
             });
         });
+
     }
 
     var settings = {
