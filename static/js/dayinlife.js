@@ -280,7 +280,7 @@ function charts(a) {
                         "color": "#FF9933",
                         "xAxis": 0,
                         "data": dataa.data.ratings,
-                        yAxis: 0
+                        yAxis: 1
                     }, {
                         "name": "Clever",
                         "type": "column",
@@ -319,8 +319,8 @@ function charts(a) {
 
     }
     playbackTrendChart4('playback', 'Playback')
-    $("#practice_historyChart2").val('playback');
-    $(document).on('change', '#practice_historyChart2', function() {
+    $("#practice_historyChart_new").val('playback');
+    $(document).on('change', '#practice_historyChart_new', function() {
         $('#container12').empty();
         console.log(this.value)
         if (this.value == 'practice') {
@@ -335,7 +335,7 @@ function charts(a) {
         var settings = {
             async: true,
             crossDomain: true,
-            url: "/Program_wise_per_minute_DAILD_updated" + selectValue4,
+            url: "/Program_wise_per_minute_DAILD_updated/" + selectValue4,
             method: "GET",
         };
         $.ajax(settings).done(function(response) {
@@ -382,21 +382,21 @@ function charts(a) {
                     opposite: false,
                     showLastLabel: true,
                     title: {
-                        text: tx + ' Count'
+                        text: txt + ' Count'
                     },
-                    labels: {
-                        enabled: true,
-                        format: "{value}",
-                        align: "right"
-                    },
+                    // labels: {
+                    //     enabled: true,
+                    //     format: "{value}",
+                    //     align: "right"
+                    // },
                 }, {
                     visible: true,
                     opposite: false,
                     showLastLabel: true,
                     opposite: true,
-                    title: {
-                        text: 'Rating'
-                    },
+                    // title: {
+                    //     text: 'Rating'
+                    // },
                     labels: {
                         enabled: true,
                         format: "{value}",
@@ -447,12 +447,14 @@ function charts(a) {
                         "name": "Elementary",
                         "type": "line",
                         "color": "#FF9933",
+                        "xAxis": 0,
                         "data": dataa.data.elementary,
 
                     }, {
                         "name": "Middle",
                         "type": "line",
-                        "color": "#462cee",
+                        "color": "#FFFF00",
+                        "xAxis": 0,
                         "data": dataa.data.middle,
 
                     },
@@ -460,6 +462,7 @@ function charts(a) {
                         "name": "High",
                         "type": "line",
                         "color": "#01A451",
+                        "xAxis": 0,
                         "data": dataa.data.high,
 
                     },
@@ -467,6 +470,7 @@ function charts(a) {
                         "name": "Early Learning",
                         "type": "line",
                         "color": "#4f1faf",
+                        "xAxis": 0,
                         "data": dataa.data.early_learning,
 
                     },
@@ -474,6 +478,7 @@ function charts(a) {
                         "name": "Wellness",
                         "type": "line",
                         "color": "#8AE02B",
+                        "xAxis": 0,
                         "data": dataa.data.wellness,
 
                     }

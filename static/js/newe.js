@@ -58,6 +58,7 @@ function imgd(a) {
 
 function charts(a) {
     $("#container21").empty();
+    $("#container22").empty();
     $("#container1").empty();
     $("#container2").empty();
     $("#container3").empty();
@@ -134,7 +135,7 @@ function charts(a) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "/escores/" + a,
+        url: "/escoresnew/" + a,
         method: "GET",
     };
     $.ajax(settings).done(function(response) {
@@ -153,7 +154,7 @@ function charts(a) {
                 xAxis: [{
                         categories: dataa.columchart.axis,
                         labels: {
-                            rotation: 90,
+                            rotation: 0,
                         },
                         title: {
                             text: "E-SCORE RANGE",
@@ -211,7 +212,133 @@ function charts(a) {
             });
         });
     });
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "/escoresnew/" + a,
+        "method": "GET"
+    }
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        var c = dataa.mothwise_col_chart.monthvalues_escore.map(Number);
+        var p = dataa.mothwise_col_chart.monthvalues_active_user_score.map(Number);
+        var e = dataa.mothwise_col_chart.monthvalues_cwp_score.map(Number);
+        var g = dataa.mothwise_col_chart.monthvalues_active_school_score.map(Number);
+        var h = dataa.mothwise_col_chart.monthvalues_re_score.map(Number);
 
+
+
+        $(function() {
+            $("#container22").highcharts({
+                chart: {
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: "E-score Trend"
+                },
+                credits: {
+                    enabled: false,
+                },
+                xAxis: [{
+                    categories: dataa.mothwise_col_chart.months,
+                }],
+                yAxis: [{ //Primary yAxis
+                    lineWidth: 1,
+                    labels: {
+                        format: '{value}',
+                        style: {
+                            color: '#000'
+                        }
+                    },
+                    legend: {
+                        enabled: true,
+                        itemStyle: {
+                            fontSize: '10px',
+                            fontWeight: '200',
+                        }
+                    },
+                    title: {
+                        text: 'Count',
+                        style: {
+                            color: '#000'
+                        }
+                    }
+                }, { //Secondary yAxis
+                    title: {
+                        text: '',
+                        style: {
+                            color: '#4572A7'
+                        }
+                    },
+                    labels: {
+                        format: '{value}',
+                        style: {
+                            color: '#4572A7'
+                        }
+                    },
+                    opposite: false
+                }],
+                tooltip: {
+                    shared: true
+                },
+                plotOptions: {
+                    borderWidth: 2,
+                    series: {
+                        point: {
+
+                        }
+                    }
+                },
+                series: [{
+                        name: "E-score",
+                        color: '#02A45A',
+                        type: 'column',
+                        yAxis: 0,
+                        maxPointWidth: 60,
+                        data: c,
+
+                    },
+                    {
+                        name: "Active User",
+                        color: '#FF9933',
+                        type: 'line',
+                        yAxis: 0,
+                        maxPointWidth: 60,
+                        data: p,
+
+                    },
+                    {
+                        name: "CWP Score",
+                        color: '#8AE02B',
+                        type: 'line',
+                        yAxis: 0,
+                        maxPointWidth: 60,
+                        data: e,
+
+                    },
+                    {
+                        name: "Active School",
+                        color: '#8AE02B',
+                        type: 'line',
+                        yAxis: 0,
+                        maxPointWidth: 60,
+                        data: g,
+
+                    },
+                    {
+                        name: "Re-score",
+                        color: '#FFFF00',
+                        type: 'line',
+                        yAxis: 0,
+                        maxPointWidth: 60,
+                        data: h,
+
+                    },
+                ]
+            });
+        });
+
+    });
 
     anychart.onDocumentReady(function() {
         // The data used in this sample can be obtained from the CDN
@@ -735,6 +862,7 @@ function distselect(distid) {
     $("#family").empty();
     $("#myDiv").empty();
     $("#myDiv2").empty();
+    $("#Districtid").empty();
     $("#disdetails").text(distid);
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
@@ -747,7 +875,7 @@ function distselect(distid) {
 }
 
 function cardcount(id, a, b) {
-    URL = "/districtescore/" + id;
+    URL = "/escoresnew/" + id;
     var settings = {
         async: true,
         crossDomain: true,
@@ -761,12 +889,12 @@ function cardcount(id, a, b) {
         $("#teacher").empty()
         $("#login").empty()
         $("#practice").empty()
-        $("#school").text(dataa.cards.p_of_Active_Users);
-        $("#teacher").text(dataa.cards.Active_Usage);
-        $("#practice").text(dataa.cards.Recent_Engagement);
-        $("#family").text(dataa.cards.Consistent_Weekly_Practice);
-        $("#districtid").text(dataa.cards.district);
-        $("#Districtid").text(dataa.cards.District_Engagement_Score);
+        $("#school").text(dataa.ACTIVE_USER_SCORE);
+        $("#teacher").text(dataa.USAGE_SCORE);
+        $("#practice").text(dataa.RE_SCORE);
+        $("#family").text(dataa.CWP_SCORE);
+        //$("#districtid").text(dataa.cards.district);
+        $("#Districtid").text(dataa.E_SCORE);
 
     });
 }

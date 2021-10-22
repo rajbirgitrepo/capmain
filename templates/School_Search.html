@@ -1098,98 +1098,130 @@
             }
             $.ajax(settings).done(function(response) {
                 var dataa = JSON.parse(response);
-                console.log(dataa);
-                var chart = Highcharts.stockChart('containerprac', {
+                chart = new Highcharts.StockChart({
                     chart: {
-                        type: 'column'
-                    },
-                    rangeSelector: {
-                        selected: 0,
-                        inputEnabled: false
+                        renderTo: 'containerprac',
+                        zoomType: 'x'
                     },
                     title: {
                         text: 'Playback History'
                     },
-                    credits: false,
-                    xAxis: {
-                        minRange: 1
+                    subtitle: {
+                        text: ''
                     },
-                    plotOptions: {
-                        series: {
-                            point: {
-
-                            }
-                        }
+                    credits: {
+                        enabled: false,
                     },
-
-                    navigator: {
-                        series: {
-                            color: '#00FF00',
-                            animation: {
-                                duration: 0,
+                    xAxis: [{
+                        type: 'datetime',
+                        events: {
+                            afterSetExtremes() {
+                                let bottomAxis = this,
+                                    topAxis = this.chart.xAxis[1],
+                                    diferenciaMin = Math.abs(bottomAxis.dataMin - bottomAxis.min),
+                                    diferenciaMax = Math.abs(bottomAxis.dataMax - bottomAxis.max);
+                                topAxis.setExtremes(topAxis.dataMin + diferenciaMin, topAxis.dataMax - diferenciaMax, true)
                             }
                         },
-                        xAxis: {
-                            minRange: 1
-                        },
+                        labels: {
+                            formatter: function() {
+                                return Highcharts.dateFormat(' %e,%b', this.value);
+                            }
 
-
-                    },
-                    yAxis: [{
-                        lineWidth: 1,
-                        opposite: false,
-                        title: {
-                            text: 'Playback History'
                         }
                     }, {
-                        lineWidth: 1,
+                        type: 'datetime',
+                        labels: {
+                            formatter: function() {
+                                return Highcharts.dateFormat(' %e,%b', this.value);
+                            }
+
+                        },
                         opposite: true,
-                        title: {
-                            text: 'Cumulative Amount(USD)'
-                        }
+                        visible: false
                     }],
+                    yAxis: {
+                        title: {
+                            text: 'Playback Count'
+                        },
+                        visible: true,
+                        opposite: false,
+                        showLastLabel: true,
+                        labels: {
+                            enabled: true,
+                            format: "{value}",
+                            align: "right"
+                        },
+                    },
+                    tooltip: {
+                        pointFormatter: function() {
+                            return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
+                        }
+                    },
+                    legend: {
+                        enabled: true,
+                        itemStyle: {
+                            fontSize: '10px',
+                            fontWeight: '200'
+                        }
+                    },
+                    navigator: {
+                        enabled: true
+                    },
+                    rangeSelector: {
+                        inputEnabled: false,
+                        enabled: true
+                    },
+                    scrollbar: {
+                        enabled: true
+                    },
+                    navigation: {
+                        buttonOptions: {
+                            enabled: true
+                        }
+                    },
                     plotOptions: {
+                        column: {
+                            stacking: 'normal'
+
+                        },
                         series: {
-                            point: {
-                                events: {
-                                    click: function() {
-
-                                        //                var a = new Date(this.x ).toLocaleString('sv-SE', { day:'numeric',month:'numeric', year:'numeric', hour12:false } );
-
-                                        //            URL = 'https://cap.innerexplorer.org/donationcsytable/'+a ;
-                                        // console.log(URL);               
-                                        // $("#next").empty();
-                                        // $("#btnExport").show();
-                                        // console.log(URL);
-                                        // createDynamic(URL);
-                                        // cardscroll();
-                                    }
-                                }
+                            marker: {
+                                enabled: false
                             }
                         }
                     },
-
                     series: [{
-                        type: 'column',
-                        color: '#01a451',
-                        name: 'Playback count',
-                        data: dataa.data.shp, //Fri, 14 Jul 2017 00:00:00 GMT
-                        dataGrouping: {
-                            enabled: false,
-                        },
-
+                        "name": "Last SY",
+                        "type": "line",
+                        "color": "#FF9933",
+                        "xAxis": 0,
+                        "data": dataa.data.lsy
                     }, {
-                        type: 'line',
-                        color: '#FF9933',
-                        name: 'Cumalative Playback count',
-                        data: dataa.data.shpcum,
-                        yAxis: 1, //Fri, 14 Jul 2017 00:00:00 GMT
-                        dataGrouping: {
-                            enabled: false,
-                        },
-
+                        "name": "Family",
+                        "type": "column",
+                        "color": "#8AE02B",
+                        "xAxis": 1,
+                        "data": dataa.data.pcsy
+                    }, {
+                        "name": "School",
+                        "type": "column",
+                        "xAxis": 1,
+                        "color": "#01A451",
+                        "data": dataa.data.csy
+                    }, {
+                        "name": "Clever",
+                        "type": "column",
+                        "xAxis": 1,
+                        "color": "#4f1faf",
+                        "data": dataa.data.clever
+                    }, {
+                        "name": "Scoology",
+                        "type": "column",
+                        "xAxis": 1,
+                        "color": "#462cee",
+                        "data": dataa.data.schoology
                     }]
-
                 });
             });
 
@@ -1310,90 +1342,127 @@
         function zerochart() {
             var chart = Highcharts.stockChart('containerprac', {
                 chart: {
-                    type: 'column'
+                    //renderTo: 'containerprac',
+                    // zoomType: 'x'
                 },
-
                 title: {
-                    text: 'Playback History'
+                    text: 'Playback History CSY'
                 },
-                credits: false,
-                xAxis: {
-                    minRange: 1
+                subtitle: {
+                    text: ''
                 },
-                plotOptions: {
-                    series: {
-                        point: {
-
-                        }
-                    }
+                credits: {
+                    enabled: false,
                 },
-
-                navigator: {
-                    series: {
-                        color: '#00FF00',
-                        animation: {
-                            duration: 0,
+                xAxis: [{
+                    type: 'datetime',
+                    events: {
+                        afterSetExtremes() {
+                            let bottomAxis = this,
+                                topAxis = this.chart.xAxis[1],
+                                diferenciaMin = Math.abs(bottomAxis.dataMin - bottomAxis.min),
+                                diferenciaMax = Math.abs(bottomAxis.dataMax - bottomAxis.max);
+                            topAxis.setExtremes(topAxis.dataMin + diferenciaMin, topAxis.dataMax - diferenciaMax, true)
                         }
                     },
-                    xAxis: {
-                        minRange: 1
-                    },
+                    labels: {
+                        formatter: function() {
+                            return Highcharts.dateFormat(' %e,%b', this.value);
+                        }
 
-
-                },
-                yAxis: [{
-                    lineWidth: 1,
-                    opposite: false,
-                    title: {
-                        text: 'Playback History'
                     }
                 }, {
-                    lineWidth: 1,
+                    type: 'datetime',
+                    labels: {
+                        formatter: function() {
+                            return Highcharts.dateFormat(' %e,%b', this.value);
+                        }
+
+                    },
                     opposite: true,
-                    title: {
-                        text: 'Cumulative Amount(USD)'
-                    }
+                    visible: false
                 }],
+                yAxis: {
+                    title: {
+                        text: 'Playback Count'
+                    },
+                    visible: true,
+                    opposite: false,
+                    showLastLabel: true,
+                    labels: {
+                        enabled: true,
+                        format: "{value}",
+                        align: "right"
+                    },
+                },
+                tooltip: {
+                    pointFormatter: function() {
+                        return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
+                    }
+                },
+                legend: {
+                    enabled: true,
+                    itemStyle: {
+                        fontSize: '10px',
+                        fontWeight: '200'
+                    }
+                },
+                navigator: {
+                    enabled: true
+                },
+                rangeSelector: {
+                    inputEnabled: false,
+                    enabled: true
+                },
+                scrollbar: {
+                    enabled: true
+                },
+                navigation: {
+                    buttonOptions: {
+                        enabled: true
+                    }
+                },
                 plotOptions: {
+                    column: {
+                        stacking: 'normal'
+
+                    },
                     series: {
-                        point: {
-                            events: {
-                                click: function() {
-
-                                    //                var a = new Date(this.x ).toLocaleString('sv-SE', { day:'numeric',month:'numeric', year:'numeric', hour12:false } );
-
-                                    //            URL = 'https://cap.innerexplorer.org/donationcsytable/'+a ;
-                                    // console.log(URL);               
-                                    // $("#next").empty();
-                                    // $("#btnExport").show();
-                                    // console.log(URL);
-                                    // createDynamic(URL);
-                                    // cardscroll();
-                                }
-                            }
+                        marker: {
+                            enabled: false
                         }
                     }
                 },
-
                 series: [{
-                    type: 'column',
-                    color: '#01a451',
-                    name: 'Playback count',
-                    data: [], //Fri, 14 Jul 2017 00:00:00 GMT
-                    dataGrouping: {
-                        enabled: false,
-                    },
-
+                    "name": "Last SY",
+                    "type": "line",
+                    "color": "#FF9933",
+                    "xAxis": 0,
+                    "data": dataa.data.lsy
                 }, {
-                    type: 'line',
-                    color: '#FF9933',
-                    name: 'Cumalative Playback count',
-                    data: [],
-                    yAxis: 1, //Fri, 14 Jul 2017 00:00:00 GMT
-                    dataGrouping: {
-                        enabled: false,
-                    },
-
+                    "name": "Family",
+                    "type": "column",
+                    "color": "#8AE02B",
+                    "xAxis": 1,
+                    "data": dataa.data.pcsy
+                }, {
+                    "name": "School",
+                    "type": "column",
+                    "xAxis": 1,
+                    "color": "#01A451",
+                    "data": dataa.data.csy
+                }, {
+                    "name": "Clever",
+                    "type": "column",
+                    "xAxis": 1,
+                    "color": "#4f1faf",
+                    "data": dataa.data.clever
+                }, {
+                    "name": "Scoology",
+                    "type": "column",
+                    "xAxis": 1,
+                    "color": "#462cee",
+                    "data": dataa.data.schoology
                 }]
 
             });
