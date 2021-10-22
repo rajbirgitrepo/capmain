@@ -280,38 +280,202 @@ function charts(a) {
                         "color": "#FF9933",
                         "xAxis": 0,
                         "data": dataa.data.ratings,
-                        yAxis: 1
+                        yAxis: 0
                     }, {
                         "name": "Clever",
                         "type": "column",
-                        "xAxis": 1,
+                        "xAxis": 0,
                         "color": "#462cee",
                         "data": dataa.data.Clever,
-                        yAxis: 1
+                        yAxis: 0
                     },
                     {
                         "name": "Parents Practices",
                         "type": "column",
-                        "xAxis": 1,
+                        "xAxis": 0,
                         "color": "#01A451",
                         "data": dataa.data.Parents_practices,
-                        yAxis: 1
+                        yAxis: 0
                     },
                     {
                         "name": "Schoology",
                         "type": "column",
-                        "xAxis": 1,
+                        "xAxis": 0,
                         "color": "#4f1faf",
                         "data": dataa.data.schoology,
-                        yAxis: 1
+                        yAxis: 0
                     },
                     {
                         "name": "Teachers Practices",
                         "type": "column",
-                        "xAxis": 1,
+                        "xAxis": 0,
                         "color": "#8AE02B",
                         "data": dataa.data.teachers_practices,
-                        yAxis: 1
+                        yAxis: 0
+                    }
+                ]
+            });
+        });
+
+    }
+    playbackTrendChart4('playback', 'Playback')
+    $("#practice_historyChart2").val('playback');
+    $(document).on('change', '#practice_historyChart2', function() {
+        $('#container12').empty();
+        console.log(this.value)
+        if (this.value == 'practice') {
+            // document.getElementById('historyInsight').title = 'your new title';
+            playbackTrendChart4(this.value, 'Practice')
+        } else {
+            playbackTrendChart4(this.value, 'Playback')
+        }
+    });
+
+    function playbackTrendChart4(selectValue4, txt) {
+        var settings = {
+            async: true,
+            crossDomain: true,
+            url: "/Program_wise_per_minute_DAILD_updated" + selectValue4,
+            method: "GET",
+        };
+        $.ajax(settings).done(function(response) {
+            var dataa = JSON.parse(response);
+            console.log(dataa);
+
+            chart = new Highcharts.StockChart({
+
+                chart: {
+                    renderTo: 'container12',
+                    zoomType: 'x'
+                },
+                title: {
+                    text: txt + ' Per Minute by Program'
+                },
+                legend: {
+                    enabled: true,
+                    itemStyle: {
+                        fontSize: '10px',
+                        fontWeight: '200'
+                    }
+                },
+                subtitle: {
+                    text: ''
+                },
+
+                xAxis: [{
+                    type: 'datetime',
+                    events: {
+                        afterSetExtremes() {
+                            let bottomAxis = this,
+                                topAxis = this.chart.xAxis[1];
+                            topAxis.setExtremes(bottomAxis.min - 86400000, bottomAxis.max - 86400000, true)
+                        }
+                    }
+                }, {
+                    type: 'datetime',
+                    opposite: true,
+                    visible: false
+                }],
+
+                yAxis: [{
+                    visible: true,
+                    opposite: false,
+                    showLastLabel: true,
+                    title: {
+                        text: tx + ' Count'
+                    },
+                    labels: {
+                        enabled: true,
+                        format: "{value}",
+                        align: "right"
+                    },
+                }, {
+                    visible: true,
+                    opposite: false,
+                    showLastLabel: true,
+                    opposite: true,
+                    title: {
+                        text: 'Rating'
+                    },
+                    labels: {
+                        enabled: true,
+                        format: "{value}",
+                        align: "left"
+                    },
+                }],
+
+                tooltip: {
+                    pointFormatter: function() {
+                        return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
+                    }
+                },
+
+                legend: {
+                    enabled: true
+                },
+
+                navigator: {
+                    enabled: false
+                },
+                rangeSelector: {
+                    inputEnabled: false,
+                    enabled: true
+                },
+
+                scrollbar: {
+                    enabled: true
+                },
+
+                navigation: {
+                    buttonOptions: {
+                        enabled: true
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+
+                    },
+                    series: {
+                        marker: {
+                            enabled: false
+                        }
+                    }
+                },
+
+                series: [{
+                        "name": "Elementary",
+                        "type": "line",
+                        "color": "#FF9933",
+                        "data": dataa.data.elementary,
+
+                    }, {
+                        "name": "Middle",
+                        "type": "line",
+                        "color": "#462cee",
+                        "data": dataa.data.middle,
+
+                    },
+                    {
+                        "name": "High",
+                        "type": "line",
+                        "color": "#01A451",
+                        "data": dataa.data.high,
+
+                    },
+                    {
+                        "name": "Early Learning",
+                        "type": "line",
+                        "color": "#4f1faf",
+                        "data": dataa.data.early_learning,
+
+                    },
+                    {
+                        "name": "Wellness",
+                        "type": "line",
+                        "color": "#8AE02B",
+                        "data": dataa.data.wellness,
+
                     }
                 ]
             });
@@ -514,6 +678,7 @@ function charts(a) {
         $("#Downloads2").append(dataa.totalt);
 
     });
+
 
     var settings = {
         async: true,

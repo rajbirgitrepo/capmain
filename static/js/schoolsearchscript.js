@@ -946,10 +946,13 @@ function familysearch() {
         $("#femail").empty();
         $("#fcountry").empty();
         $("#fcity").empty();
+        $("#graph1").empty();
         $("#fadmin").empty();
         $("#fucount").empty();
         $("#fpcount").empty();
         $("#fmindfulness_minutes").empty();
+        $("#MindLifetime").empty();
+        $("#LifeTimePlayback").empty();
         $("#fratings").empty();
         $("#fschool").empty();
         $("#fcity").empty();

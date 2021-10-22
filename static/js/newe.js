@@ -149,7 +149,7 @@ function charts(a) {
                 title: {
                     text: "E-Score",
                 },
-                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451', '#33FFD1'],
+                colors: ['#02A45A'],
                 xAxis: [{
                         categories: dataa.columchart.axis,
                         labels: {
@@ -203,6 +203,7 @@ function charts(a) {
                 },
                 series: [{
                         name: 'School Count',
+                        maxPointWidth: 40,
                         data: dataa.columchart.schoolcount
                     },
 

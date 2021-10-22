@@ -720,7 +720,7 @@ function charts(a, b, c) {
             $("#container10").highcharts({
                 chart: {
                     // zoomType: "xy",
-                    type: "column"
+                    type: "bar"
                 },
                 title: {
                     text: "Top 20 Champions in LSY",
@@ -733,8 +733,8 @@ function charts(a, b, c) {
                     categories: dataa.schname,
                     labels: {
                         style: {
-                            fontSize: "8px",
-                            rotation: 0,
+                            fontSize: "10px",
+                            rotation: 90,
                         },
                     }
                 }, ],
@@ -784,7 +784,7 @@ function charts(a, b, c) {
                     name: "Playback Count",
                     showInLegend: false,
                     color: "#01a451",
-                    type: "column",
+                    type: "bar",
                     data: dataa.practicecount,
                 }],
             });
@@ -792,6 +792,154 @@ function charts(a, b, c) {
     });
 
 
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/districtsentimentdonut_csy" + "/" + a + "/" + b + "/" + c,
+        method: "GET",
+    }
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+
+        Highcharts.chart('container37', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie',
+                credits: {
+                    enabled: false,
+                },
+            },
+            title: {
+                text: 'Sentiment Percentage'
+            },
+            credits: {
+                enabled: false,
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false,
+                        format: '<b>{point.name}</b>: {point.y}'
+                    },
+                    colors: [
+                        "#02A45A", "#ff9933"
+                    ]
+                }
+            },
+            series: [{
+                name: 'Sentiment CSY',
+                colorByPoint: true,
+                data: [{
+                    name: 'Positive',
+                    y: dataa.donut.pos,
+                    sliced: true,
+                    selected: true
+                }, {
+                    name: 'Negative',
+                    y: dataa.donut.neg,
+                }, ]
+            }]
+        });
+    });
+
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/districtfeedbackrating_csy" + "/" + a + "/" + b + "/" + c,
+        method: "GET",
+    }
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+
+        Highcharts.chart('container38', {
+            chart: {
+                type: 'column'
+            },
+            credits: {
+                enabled: false,
+            },
+            title: {
+                text: "Feedback Rating CSY"
+
+            },
+            colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+            xAxis: {
+                categories: ['5 Star', '4 Star', '3 Star', '2 Star', '1 Star'],
+                crosshair: false,
+                labels: {
+                    style: {
+                        fontSize: "10px",
+                        rotation: 90,
+                    },
+                }
+            },
+            yAxis: {
+                lineWidth: 1,
+                min: 0,
+                title: {
+                    text: " Feedback Rating Count"
+                },
+                stackLabels: {
+                    enabled: false,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray'
+                    }
+                }
+            },
+            tooltip: {
+                style: {
+                    color: 'Black',
+                    fontWeight: 'bold'
+                },
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                series: {
+                    point: {
+
+                    }
+                },
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: false
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                itemStyle: {
+                    fontSize: '10px',
+                    fontWeight: '200'
+                }
+            },
+            series: [{
+                    color: "#01A451",
+                    name: 'Ratings',
+                    data: dataa.count
+                }
+
+
+            ]
+        });
+    });
 
     // var settings = {
     //   async: true,
@@ -1218,6 +1366,9 @@ function distselect(distid) {
     $("#container3").empty();
     $("#container4").empty();
     $("#container5").empty();
+    $("#container37").empty();
+    $("#container38").empty();
+    $("#container10").empty();
     $("#container6").empty();
     $('#heat-map').empty()
     $("#container7").empty();
@@ -1237,6 +1388,10 @@ function distselect(distid) {
     $("#engd_parent_lsy").empty();
     $("#engd_teacher_csy").empty();
     $("#engd_teacher_lsy").empty();
+    $("#practicecount").empty();
+    $("#MINDFUL_MINUTES_Teacher").empty();
+    $("#parentspracticecount").empty();
+    $("#MINDFUL_MINUTES_parent").empty();
     $("#MINDFUL_MINUTES").empty();
     $("#parentspractice").empty();
     $("#myDiv").empty();
@@ -1277,6 +1432,7 @@ function cardcount(id, a, b) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log("counts are fnctioning");
+        console.log(URL);
         $("#gifload").empty();
         $("#school").text(dataa.schoolcount);
         $("#teacher").text(dataa.teachercount);
@@ -1291,7 +1447,14 @@ function cardcount(id, a, b) {
         $("#engd_parent_lsy").text(dataa.engd_parent_lsy);
         $("#engd_teacher_csy").text(dataa.engd_teacher_csy);
         $("#engd_teacher_lsy").text(dataa.engd_teacher_lsy);
-        $("#parentspractice").text(dataa.parentspracticecount);
+        $("#MINDFUL_MINUTES_Teacher").text(dataa.MINDFUL_MINUTES_Teacher);
+        $("#MINDFUL_MINUTES_parent").text(dataa.MINDFUL_MINUTES_parent);
+        $("#parentspracticecount").text(dataa.parentspracticecount);
+        $("#practicecount").text(dataa.practicecount);
+        // $("#teachercount").text(dataa.teachercount);
+        // $("#schoolcount").text(dataa.schoolcount);
+        // $("#engd_teacher_csy").text(dataa.engd_teacher_csy);
+        // $("#engd_teacher_lsy").text(dataa.engd_teacher_lsy);
 
     });
 }

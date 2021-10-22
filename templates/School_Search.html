@@ -272,8 +272,7 @@
                     <li><a href="aws_releases">COMPASS RELEASES</a></li>
                     <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
                     <li><a href="aws">AWS ANALYTICS</a></li>
-                    <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li>
-
+                    <!-- <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li> -->
 
                 </ul>
             </li>
@@ -399,11 +398,11 @@
                                                 <p id="city"></p>
                                                 <p id="state"></p>
                                                 <p id="country"></p>
-                                                <p style="float: left;margin-right: 9px;"><b>Plan Name:</b>
-                                                    <p id="plan"></p>
+                                                <p style="display: inline;"><b>Plan Name:</b>
+                                                    <p id="plan" style="display: inline;"></p>
                                                 </p>
-                                                <p style="float: left;margin-right: 9px;"><b>Renewal Date:</b>
-                                                    <p id="renewal"></p>
+                                                <p style="display: inline;"><b>Renewal Date:</b>
+                                                    <p style="display: inline;" id="renewal"></p>
                                                 </p>
                                                 </a>
                                                 </p>
@@ -424,7 +423,7 @@
                                         <div class="">
                                             <div class="pcard">
                                                 <div class="col-md-6 col-sm-6">
-                                                    <div class="card card-stats">
+                                                    <div class="card card-stats mt-0">
                                                         <div class="card-header" data-background-color="rose1">
                                                             <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
@@ -438,7 +437,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 col-sm-6">
-                                                    <div class="card card-stats">
+                                                    <div class="card card-stats mt-0">
                                                         <div class="card-header" data-background-color="blue">
                                                             <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
