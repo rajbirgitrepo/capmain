@@ -49,7 +49,8 @@ $('#rating').change(function() {
 });
 
 $("#r1").text("5");
-
+// var a = document.getElementById("stardate1").innerText;
+// var d = "05";
 sub1();
 
 function sub1() {
@@ -61,16 +62,17 @@ function sub1() {
     $("#fromd").text(a);
     $("#tod").text(d);
 }
-var a = document.getElementById("stardate1").innerText;
-var d = "05";
-charts(a, d);
+
+// charts(a, d);
 
 function charts(a, d) {
     var a = document.getElementById("stardate1").innerText;
     var d = document.getElementById("r1").innerText;
     console.log('/weekly_sentiment/' + a + "/" + d)
     URL = '/weekly_sentiment/' + a + "/" + d;
-
+    $("#next").empty();
+    $("#next1").empty();
+    $("#next2").empty();
     createDynamic1(URL);
 
 
@@ -318,8 +320,7 @@ function createDynamic1(url) {
         );
         for (var i = 0; i < data1.positivetable.length; i++) {
             var datain = data1.positivetable[i];
-            var resultDiv = createDynamicDiv(datain);
-
+            var resultDiv = createDynamicDivsentiment(datain);
             $("#dataTable").append(resultDiv);
         }
         //$('#dataTable1').append('</tbody></table>');
@@ -336,14 +337,14 @@ function createDynamic1(url) {
         for (var i = 0; i < data1.negtable.length; i++) {
             var datain1 = data1.negtable[i];
 
-            var resultDiv = createDynamicDiv(datain1);
+            var resultDiv = createDynamicDivsentiment(datain1);
             $("#dataTable1").append(resultDiv);
         }
         $("#dataTable1").append("</tbody></table>");
         for (var i = 0; i < data1.overalltable.length; i++) {
             var datain2 = data1.overalltable[i];
 
-            var resultDiv = createDynamicDiv(datain2);
+            var resultDiv = createDynamicDivsentiment(datain2);
             $("#dataTable2").append(resultDiv);
         }
         $("#dataTable2").append("</tbody></table>");
@@ -363,7 +364,7 @@ function dataTab() {
     });
 }
 
-function createDynamicDiv(userList) {
+function createDynamicDivsentiment(userList) {
     var dynamicDiv = "";
     console.log(userList);
 

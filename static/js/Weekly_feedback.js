@@ -965,7 +965,7 @@ function createDynamic3(url) {
         }
         //$('#dataTable41').append('</tbody></table>');
         $('#dataTable4').append('</tbody></table>');
-        dataTab();
+        dataTab2();
 
 
 
@@ -984,13 +984,7 @@ function createDynamic3(url) {
     })
 }
 
-function dataTab() {
 
-    $("#dataTable4").DataTable({
-        "pageLength": 50
-    });
-
-}
 
 
 function createDynamicDiv3(userList) {
@@ -1046,7 +1040,7 @@ function createDynamic(url) {
         }
         //$('#dataTable41').append('</tbody></table>');
         $('#dataTable4').append('</tbody></table>');
-        dataTab();
+        dataTab2();
 
 
 
@@ -1065,13 +1059,6 @@ function createDynamic(url) {
     })
 }
 
-function dataTab() {
-
-    $("#dataTable4").DataTable({
-        "pageLength": 50
-    });
-
-}
 
 
 function createDynamicDiv(userList) {
@@ -1128,7 +1115,7 @@ function createDynamic2(url) {
         }
         //$('#dataTable41').append('</tbody></table>');
         $('#dataTable4').append('</tbody></table>');
-        dataTab();
+        dataTab2();
 
 
 
@@ -1147,7 +1134,7 @@ function createDynamic2(url) {
     })
 }
 
-function dataTab() {
+function dataTab2() {
 
     $("#dataTable4").DataTable({
         "pageLength": 50
