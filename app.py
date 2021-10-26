@@ -71314,6 +71314,7 @@ def jira_type(datestr):
     df3["Waiting for Customer"]=df3["Waiting for Customer"].astype(int)
 
 
+
     df3["IE_Team_Raised"] =df2.sum(axis = 1)
     dff = df3[(df3['Date'] == datestr)]
     #     dff.T
