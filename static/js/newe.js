@@ -48,7 +48,7 @@ function createDynamicDivcards(userList) {
 
     return dynamicDiv;
 }
-imgd('5');
+//imgd('5');
 
 function imgd(a) {
     console.log("iamge", a);
@@ -135,7 +135,7 @@ function charts(a) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "/escoresnew/" + a,
+        url: "/escores/" + a,
         method: "GET",
     };
     $.ajax(settings).done(function(response) {
@@ -152,39 +152,33 @@ function charts(a) {
                 },
                 colors: ['#02A45A'],
                 xAxis: [{
-                        categories: dataa.columchart.axis,
-                        labels: {
-                            rotation: 0,
-                        },
-                        title: {
-                            text: "E-SCORE RANGE",
-                            style: {
-                                color: "#000",
-                            },
+                    categories: dataa.columchart.axis,
+                    labels: {
+                        rotation: 0,
+                    },
+                    title: {
+                        text: "E-SCORE RANGE",
+                        style: {
+                            color: "#000",
                         },
                     },
-
-
-                ],
+                }, ],
                 yAxis: [{
-
-                        //Primary yAxis
-                        lineWidth: 1,
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#000",
-                            },
-                        },
-                        title: {
-                            text: "SCHOOL COUNT",
-                            style: {
-                                color: "#000",
-                            },
+                    //Primary yAxis
+                    lineWidth: 1,
+                    labels: {
+                        format: "{value}",
+                        style: {
+                            color: "#000",
                         },
                     },
-
-                ],
+                    title: {
+                        text: "SCHOOL COUNT",
+                        style: {
+                            color: "#000",
+                        },
+                    },
+                }, ],
                 tooltip: {
                     shared: true,
                 },
@@ -192,8 +186,20 @@ function charts(a) {
                     borderWidth: 2,
                     series: {
                         point: {
-
-                        }
+                            events: {
+                                click: function() {
+                                    URL = "/escores/" + a + "/" + this.category;
+                                    $('#next').empty();
+                                    console.log(URL);
+                                    var modal2 = document.getElementById("myModal2");
+                                    modal2.style.display = "block";
+                                    var gif = document.getElementById("gif");
+                                    gif.style.display = "block";
+                                    $('#btnExport').show();
+                                    createDynamic(URL);
+                                },
+                            },
+                        },
                     },
                     column: {
                         stacking: 'normal',
@@ -203,12 +209,10 @@ function charts(a) {
                     }
                 },
                 series: [{
-                        name: 'School Count',
-                        maxPointWidth: 40,
-                        data: dataa.columchart.schoolcount
-                    },
-
-                ],
+                    name: 'School Count',
+                    maxPointWidth: 40,
+                    data: dataa.columchart.schoolcount
+                }, ],
             });
         });
     });
@@ -648,7 +652,7 @@ function createDynamic(url) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ACTIVE USER SCORE</th><th>USAGE SCORE</th><th>CWP SCORE</th><th>RE-SCORE</th><th>E-SCORE</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -661,7 +665,7 @@ function createDynamic(url) {
         dataTab();
 
         $("#next1").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>ACTIVE USER SCORE</th><th>USAGE SCORE</th><th>CWP SCORE</th><th>RE-SCORE</th><th>E-SCORE</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -694,6 +698,9 @@ function createDynamicDiv(userList) {
         userList[0] +
         "</td>" +
         "<td>" +
+        userList[1] +
+        "</td>" +
+        "<td>" +
         userList[2] +
         "</td>" +
         "<td>" +
@@ -704,21 +711,6 @@ function createDynamicDiv(userList) {
         "</td>" +
         "<td>" +
         userList[5] +
-        "</td>" +
-        "<td>" +
-        userList[6] +
-        "</td>" +
-        "<td>" +
-        userList[7] +
-        "</td>" +
-        "<td>" +
-        userList[8] +
-        "</td>" +
-        "<td>" +
-        userList[9] +
-        "</td>" +
-        "<td style='font-size: 10px;width: 20%;'>" +
-        userList[1] +
         "</td>" +
         "</tr>";
 
@@ -741,7 +733,7 @@ function createDynamic2(url) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>CATEGORY</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ACTIVE USER SCORE</th><th>USAGE SCORE</th><th>CWP SCORE</th><th>RE-SCORE</th><th>E-SCORE</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -754,7 +746,7 @@ function createDynamic2(url) {
         dataTab();
 
         $("#next1").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>CATEGORY</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>ACTIVE USER SCORE</th><th>USAGE SCORE</th><th>CWP SCORE</th><th>RE-SCORE</th><th>E-SCORE</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -796,19 +788,6 @@ function createDynamicDiv2(userList) {
         "<td>" +
         userList[5] +
         "</td>" +
-        "<td>" +
-        userList[6] +
-        "</td>" +
-        "<td>" +
-        userList[7] +
-        "</td>" +
-        "<td>" +
-        userList[8] +
-        "</td>" +
-        "<td>" +
-        userList[9] +
-        "</td>" +
-
         "</tr>";
 
     return dynamicDiv;
@@ -854,7 +833,7 @@ function cards2(URL) {
 distselect('5f2609807a1c0000950bb471');
 
 function distselect(distid) {
-    $("#districtid").empty();
+    $("#districtid1").empty();
     $("#school").empty();
     $("#teacher").empty();
     $("#login").empty();
@@ -893,7 +872,7 @@ function cardcount(id, a, b) {
         $("#teacher").text(dataa.USAGE_SCORE);
         $("#practice").text(dataa.RE_SCORE);
         $("#family").text(dataa.CWP_SCORE);
-        //$("#districtid").text(dataa.cards.district);
+        $("#districtid1").text(dataa.DISTRICT_NAME);
         $("#Districtid").text(dataa.E_SCORE);
 
     });

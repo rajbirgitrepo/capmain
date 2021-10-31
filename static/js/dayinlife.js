@@ -201,7 +201,10 @@ function charts(a) {
                                 topAxis = this.chart.xAxis[1];
                             topAxis.setExtremes(bottomAxis.min - 86400000, bottomAxis.max - 86400000, true)
                         }
-                    }
+                    },
+
+                    min: 0,
+                    max: 5
                 }, {
                     type: 'datetime',
                     opposite: true,
@@ -215,11 +218,7 @@ function charts(a) {
                     title: {
                         text: tx + ' Count'
                     },
-                    labels: {
-                        enabled: true,
-                        format: "{value}",
-                        align: "right"
-                    },
+
                 }, {
                     visible: true,
                     opposite: false,
@@ -228,11 +227,7 @@ function charts(a) {
                     title: {
                         text: 'Rating'
                     },
-                    labels: {
-                        enabled: true,
-                        format: "{value}",
-                        align: "left"
-                    },
+
                 }],
 
                 tooltip: {
@@ -246,11 +241,12 @@ function charts(a) {
                 },
 
                 navigator: {
-                    enabled: true
+                    enabled: false
                 },
                 rangeSelector: {
                     inputEnabled: false,
-                    enabled: true
+                    enabled: true,
+                    selected: 1
                 },
 
                 scrollbar: {
@@ -276,18 +272,19 @@ function charts(a) {
 
                 series: [{
                         "name": "Rating",
+
                         "type": "line",
                         "color": "#FF9933",
                         "xAxis": 0,
                         "data": dataa.data.ratings,
-                        yAxis: 1
+                        "yAxis": 1
                     }, {
                         "name": "Clever",
                         "type": "column",
                         "xAxis": 0,
                         "color": "#462cee",
                         "data": dataa.data.Clever,
-                        yAxis: 0
+                        "yAxis": 0
                     },
                     {
                         "name": "Parents Practices",
@@ -295,7 +292,7 @@ function charts(a) {
                         "xAxis": 0,
                         "color": "#01A451",
                         "data": dataa.data.Parents_practices,
-                        yAxis: 0
+                        "yAxis": 0
                     },
                     {
                         "name": "Schoology",
@@ -303,7 +300,7 @@ function charts(a) {
                         "xAxis": 0,
                         "color": "#4f1faf",
                         "data": dataa.data.schoology,
-                        yAxis: 0
+                        "yAxis": 0
                     },
                     {
                         "name": "Teachers Practices",
@@ -311,10 +308,14 @@ function charts(a) {
                         "xAxis": 0,
                         "color": "#8AE02B",
                         "data": dataa.data.teachers_practices,
-                        yAxis: 0
+                        "yAxis": 0
                     }
                 ]
+
             });
+            chart.xAxis[0].setExtremes(new Date('2021-10-25 15:00').getTime(), new Date('2021-10-25 16:00').getTime());
+
+
         });
 
     }
@@ -384,19 +385,13 @@ function charts(a) {
                     title: {
                         text: txt + ' Count'
                     },
-                    // labels: {
-                    //     enabled: true,
-                    //     format: "{value}",
-                    //     align: "right"
-                    // },
+
                 }, {
                     visible: true,
                     opposite: false,
                     showLastLabel: true,
                     opposite: true,
-                    // title: {
-                    //     text: 'Rating'
-                    // },
+
                     labels: {
                         enabled: true,
                         format: "{value}",
@@ -449,6 +444,7 @@ function charts(a) {
                         "color": "#FF9933",
                         "xAxis": 0,
                         "data": dataa.data.elementary,
+                        "yAxis": 1
 
                     }, {
                         "name": "Middle",
@@ -456,6 +452,7 @@ function charts(a) {
                         "color": "#FFFF00",
                         "xAxis": 0,
                         "data": dataa.data.middle,
+                        "yAxis": 0
 
                     },
                     {
@@ -464,6 +461,7 @@ function charts(a) {
                         "color": "#01A451",
                         "xAxis": 0,
                         "data": dataa.data.high,
+                        "yAxis": 0
 
                     },
                     {
@@ -472,6 +470,7 @@ function charts(a) {
                         "color": "#4f1faf",
                         "xAxis": 0,
                         "data": dataa.data.early_learning,
+                        "yAxis": 0
 
                     },
                     {
@@ -480,10 +479,12 @@ function charts(a) {
                         "color": "#8AE02B",
                         "xAxis": 0,
                         "data": dataa.data.wellness,
+                        "yAxis": 0
 
                     }
                 ]
             });
+            chart.xAxis[0].setExtremes(new Date('2021-10-25 15:00').getTime(), new Date('2021-10-25 16:00').getTime());
         });
 
     }
@@ -1170,41 +1171,41 @@ function cardscount(a) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
 
-        var c = parseInt(dataa.TOTAL_percentagechange[0]);
+        // var c = parseInt(dataa.TOTAL_percentagechange[0]);
 
-        if (c === 1) {
-            console.log("hello2")
-            document.getElementById("updownfbtotal").style.color = "green";
-        } else if (c === -1) {
-            console.log("h2i")
-            document.getElementById("updownfbtotal").style.color = "#ff0000";
-        } else {
-            document.getElementById("updownfbtotal").style.color = "grey";
-        }
+        // if (c === 1) {
+        //     console.log("hello2")
+        //     document.getElementById("updownfbtotal").style.color = "green";
+        // } else if (c === -1) {
+        //     console.log("h2i")
+        //     document.getElementById("updownfbtotal").style.color = "#ff0000";
+        // } else {
+        //     document.getElementById("updownfbtotal").style.color = "grey";
+        // }
 
 
-        var t = parseInt(dataa.PARENT_percentagechange[0]);
+        // var t = parseInt(dataa.PARENT_percentagechange[0]);
 
-        if (t === 1) {
-            console.log("hello2")
-            document.getElementById("updownfbcomment").style.color = "green";
-        } else if (t === -1) {
-            console.log("h2i")
-            document.getElementById("updownfbcomment").style.color = "#ff0000";
-        } else {
-            document.getElementById("updownfbcomment").style.color = "grey";
-        }
-        var v = parseInt(dataa.TEACHER_percentagechange[0]);
+        // if (t === 1) {
+        //     console.log("hello2")
+        //     document.getElementById("updownfbcomment").style.color = "green";
+        // } else if (t === -1) {
+        //     console.log("h2i")
+        //     document.getElementById("updownfbcomment").style.color = "#ff0000";
+        // } else {
+        //     document.getElementById("updownfbcomment").style.color = "grey";
+        // }
+        // var v = parseInt(dataa.TEACHER_percentagechange[0]);
 
-        if (v === 1) {
-            console.log("hello2")
-            document.getElementById("updownfbper").style.color = "green";
-        } else if (v === -1) {
-            console.log("h2i")
-            document.getElementById("updownfbper").style.color = "#ff0000";
-        } else {
-            document.getElementById("updownfbper").style.color = "grey";
-        }
+        // if (v === 1) {
+        //     console.log("hello2")
+        //     document.getElementById("updownfbper").style.color = "green";
+        // } else if (v === -1) {
+        //     console.log("h2i")
+        //     document.getElementById("updownfbper").style.color = "#ff0000";
+        // } else {
+        //     document.getElementById("updownfbper").style.color = "grey";
+        // }
 
 
         $("#updownfbtotal").text(parseFloat(dataa.TOTALCHANGE[0]).toFixed(0) + "%");
@@ -1227,41 +1228,41 @@ function cardscount(a) {
         var dataa = JSON.parse(response);
         console.log(dataa);
 
-        var c = parseInt(dataa.Average_feedback_PERCENTAGE[0]);
+        // var c = parseInt(dataa.Average_feedback_PERCENTAGE[0]);
 
-        if (c === 1) {
-            console.log("hello2")
-            document.getElementById("updownavgtotal").style.color = "green";
-        } else if (c === -1) {
-            console.log("h2i")
-            document.getElementById("updownavgtotal").style.color = "#ff0000";
-        } else {
-            document.getElementById("updownavgtotal").style.color = "grey";
-        }
+        // if (c === 1) {
+        //     console.log("hello2")
+        //     document.getElementById("updownavgtotal").style.color = "green";
+        // } else if (c === -1) {
+        //     console.log("h2i")
+        //     document.getElementById("updownavgtotal").style.color = "#ff0000";
+        // } else {
+        //     document.getElementById("updownavgtotal").style.color = "grey";
+        // }
 
 
-        var t = parseInt(dataa.PARENT_Comment_per_feedbackchange[0]);
+        // var t = parseInt(dataa.PARENT_Comment_per_feedbackchange[0]);
 
-        if (t === 1) {
-            console.log("hello2")
-            document.getElementById("updownavgcomment").style.color = "green";
-        } else if (t === -1) {
-            console.log("h2i")
-            document.getElementById("updownavgcomment").style.color = "#ff0000";
-        } else {
-            document.getElementById("updownavgcomment").style.color = "grey";
-        }
-        var v = parseInt(dataa.TEACHER_Comment_per_feedbackchange[0]);
+        // if (t === 1) {
+        //     console.log("hello2")
+        //     document.getElementById("updownavgcomment").style.color = "green";
+        // } else if (t === -1) {
+        //     console.log("h2i")
+        //     document.getElementById("updownavgcomment").style.color = "#ff0000";
+        // } else {
+        //     document.getElementById("updownavgcomment").style.color = "grey";
+        // }
+        // var v = parseInt(dataa.TEACHER_Comment_per_feedbackchange[0]);
 
-        if (v === 1) {
-            console.log("hello2")
-            document.getElementById("updownavgper").style.color = "green";
-        } else if (v === -1) {
-            console.log("h2i")
-            document.getElementById("updownavgper").style.color = "#ff0000";
-        } else {
-            document.getElementById("updownavgper").style.color = "grey";
-        }
+        // if (v === 1) {
+        //     console.log("hello2")
+        //     document.getElementById("updownavgper").style.color = "green";
+        // } else if (v === -1) {
+        //     console.log("h2i")
+        //     document.getElementById("updownavgper").style.color = "#ff0000";
+        // } else {
+        //     document.getElementById("updownavgper").style.color = "grey";
+        // }
 
 
         $("#updownavgtotal").text(parseFloat(dataa.Average_feedback_PERCENTAGE[0]).toFixed(0) + "%");

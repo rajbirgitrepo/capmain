@@ -19,6 +19,7 @@ DISTRICT,Goleta District,NO EMAIL,OFFLINE,CHEQUE,2021-09-22 00:00:00,28000.0
 DISTRICT,Pasco County Schools,NO EMAIL,OFFLINE,CHEQUE,2021-09-24 00:00:00,98400.0
 DISTRICT,Palm Beach County Schools,NO EMAIL,OFFLINE,CHEQUE,2021-09-29 00:00:00,37800.0
 DISTRICT,Broward County Public Schools,NO EMAIL,OFFLINE,CHEQUE,2021-09-30 00:00:00,180750.0
+DISTRICT,Oroville City Elementary School District,NO EMAIL,OFFLINE,CHEQUE,2021-10-19 00:00:00,21600.0
 SCHOOL,Tracy Schenk,tschenk@pagosa.k12.co.us,WEBAPP,SQUARE PAYMENT,2021-09-23 00:00:00,1000.0
 SCHOOL,Kim Aman,KIm.F.Aman@k12.sd.us,WEBAPP,SQUARE PAYMENT,2021-08-12 00:00:00,1000.0
 SCHOOL,Gracie MacDonald,gracie.macdonald@sd71.bc.ca,WEBAPP,NO INFO,2021-07-31 00:00:00,450.0
@@ -167,6 +168,8 @@ SCHOOL,Josiane Dickenson,josiane_dickenson@upland.k12.ca.us,WEBAPP,INVITED USER,
 SCHOOL,Laura Vega,laura_vega@upland.k12.ca.us,WEBAPP,INVITED USER,2021-07-28 00:00:00,1400.0
 SCHOOL,Kelley Smith,kelley_smith@upland.k12.ca.us,WEBAPP,INVITED USER,2021-07-28 00:00:00,1400.0
 SCHOOL,Lisa Harich,lisa_harich@upland.k12.ca.us,WEBAPP,INVITED USER,2021-07-28 00:00:00,1400.0
+SCHOOL,Brooke Ober,Brooke@mindbrighttherapy.com,WEBAPP,SQUARE PAYMENT,2021-10-26 00:00:00,1000.0
+SCHOOL,,,,,2021-10-31 00:00:00,0.0
 SCHOOL,Casaundra Hare,Chare@wayman.org,OFFLINE,CHEQUE,2021-07-15 00:00:00,584.0
 SCHOOL,Andy Stotz,andy.stotz@swcsd.us,OFFLINE,CHEQUE,2021-07-15 00:00:00,1400.0
 SCHOOL,Lynn Burt,lynnb@vacavilleusd.org,OFFLINE,CHEQUE,2021-08-10 00:00:00,1000.0
@@ -187,6 +190,10 @@ SCHOOL,Mrs. Foglio,pfoglio@schools.nyc.gov,OFFLINE,CHEQUE,2021-09-27 00:00:00,14
 SCHOOL,North Star Counseling Center,edservices@inyocoe.org,OFFLINE,CHEQUE,2021-09-27 00:00:00,3600.0
 SCHOOL,Tenecha Bland,tbland@developingkids.org,OFFLINE,CHEQUE,2021-10-08 00:00:00,250.0
 SCHOOL,Trish,trisha_banks_noble@upland.k12.ca.us,OFFLINE,CHEQUE,2021-10-12 00:00:00,1400.0
+SCHOOL,Staci Anderson,stacianderson@mtsd.us,OFFLINE,CHEQUE,2021-10-14 00:00:00,1400.0
+SCHOOL,Caryn,caryn_sanchez@upland.k12.ca.us,OFFLINE,CHEQUE,2021-10-18 00:00:00,1400.0
+SCHOOL,Gregory Bayse,greg_bayse@needham.k12.ma.us,OFFLINE,CHEQUE,2021-10-18 00:00:00,1400.0
+SCHOOL,Susan Hoeppner,projecthoeppner@gmail.com,OFFLINE,CHEQUE,2021-10-18 00:00:00,3600.0
 DONATION,JACQUELINE SAMUDA,jacquelinesamuda01@gmail.com,COMPASS,ONLINE,2021-07-31 00:00:00,51.099998474121094
 DONATION,EVELINE JOSEPH,ejoseph5@bostonpublicschools.org,COMPASS,ONLINE,2021-09-01 00:00:00,50.0
 DONATION,MATTHEW MORRISON,matthew.g.morrison@gmail.com,COMPASS,ONLINE,2021-09-23 00:00:00,25.549999237060547
@@ -196,4 +203,5 @@ DONATION,Samantha Allison,sallison@innerexplorer.org,NFG,ONLINE,2021-09-14 00:00
 DONATION,Paul Sugar,paulsugar@cox.net,PAYPAL,ONLINE,2021-09-16 00:00:00,127.75
 DONATION,Kristie DeLuca,kristiecotter@me.com,NFG,ONLINE,2021-09-09 00:00:00,1500.0
 DONATION,Kathi Kemper,kathi.kemper.md@gmail.com,PAYPAL,ONLINE,2021-09-29 00:00:00,50.0
+MOBILE,Emily Blossom,emilyblossom@berkeley.net,IOS,PAYPAL,2021-10-31 00:00:00,1000.0
 MOBILE,Scott,sbarton@smusd.us,IOS,APPLE,2021-09-22 00:00:00,89.98999786376953

@@ -1146,68 +1146,106 @@ function joufam(url1) {
             },
 
             title: {
-                text: 'USERS PLAYBACK HISTORY'
+                text: 'User Playback History'
             },
-            credits: false,
-            xAxis: {
-                minRange: 1
+            subtitle: {
+                text: ''
             },
-            plotOptions: {
-                series: {
-                    point: {
-
-                    }
-                }
+            credits: {
+                enabled: false,
             },
-
-            navigator: {
-                series: {
-                    color: '#00FF00',
-                    animation: {
-                        duration: 0,
+            xAxis: [{
+                type: 'datetime',
+                events: {
+                    afterSetExtremes() {
+                        let bottomAxis = this,
+                            topAxis = this.chart.xAxis[1],
+                            diferenciaMin = Math.abs(bottomAxis.dataMin - bottomAxis.min),
+                            diferenciaMax = Math.abs(bottomAxis.dataMax - bottomAxis.max);
+                        topAxis.setExtremes(topAxis.dataMin + diferenciaMin, topAxis.dataMax - diferenciaMax, true)
                     }
                 },
-                xAxis: {
-                    minRange: 1
-                },
+                labels: {
+                    formatter: function() {
+                        return Highcharts.dateFormat(' %e,%b', this.value);
+                    }
 
-
-            },
-            yAxis: [{
-                lineWidth: 1,
-                opposite: false,
-                title: {
-                    text: 'Playback Count'
                 }
             }, {
-                lineWidth: 1,
+                type: 'datetime',
+                labels: {
+                    formatter: function() {
+                        return Highcharts.dateFormat(' %e,%b', this.value);
+                    }
+
+                },
                 opposite: true,
+                visible: false
+            }],
+            yAxis: {
                 title: {
                     text: 'Playback Count'
-                }
-            }],
-
-            series: [{
-                    color: '#01a451',
-                    type: 'column',
-                    name: dataa.Info[0].USER_NAME,
-                    data: dataa.chart.data.shp
-
-                    , //Fri, 14 Jul 2017 00:00:00 GMT
-                    dataGrouping: {
-                        enabled: false,
-                    }
                 },
-                {
-                    color: '#ff9933',
-                    type: 'spline',
-                    name: 'Cumulative',
-                    data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
-                    dataGrouping: {
-                        enabled: false,
+                visible: true,
+                opposite: false,
+                showLastLabel: true,
+                labels: {
+                    enabled: true,
+                    format: "{value}",
+                    align: "right"
+                },
+            },
+            tooltip: {
+                pointFormatter: function() {
+                    return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
+                enabled: true,
+                itemStyle: {
+                    fontSize: '10px',
+                    fontWeight: '200'
+                }
+            },
+            navigator: {
+                enabled: true
+            },
+            rangeSelector: {
+                inputEnabled: false,
+                enabled: true
+            },
+            scrollbar: {
+                enabled: true
+            },
+            navigation: {
+                buttonOptions: {
+                    enabled: true
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+
+                },
+                series: {
+                    marker: {
+                        enabled: false
                     }
                 }
-            ]
+            },
+            series: [{
+                "name": "LSY",
+                "type": "line",
+                "color": "#FF9933",
+                "xAxis": 0,
+                "data": dataa.chart.data.lsy
+            }, {
+                "name": "CSY",
+                "type": "column",
+                "xAxis": 1,
+                "color": "#01A451",
+                "data": dataa.chart.data.csy
+            }]
 
         });
 
@@ -1284,7 +1322,7 @@ function usersearch() {
         $("#uemail").text("COUNTRY: " + dataa.Info[0].COUNTRY);
         $("#ucity").text("CITY: " + dataa.Info[0].CITY);
         $("#uadmin").text("STATE: " + dataa.Info[0].STATE);
-        $("#usignup").text("DISTRICT NAME: " + dataa.Info[0].DISTRICT_NAME);
+        $("#usignup").text("DISTRICT NAME: " + dataa.Info[0].DISTRICT);
         $("#uucount").text(dataa.Info[0].LAST_PRACTICE_DATE);
         $("#upcount").text(dataa.Info[0].SCHOOL_PRACTICE_COUNT);
         $("#umindfulness_minutes").text(dataa.Info[0].SCHOOL_MINDFUL_MINUTES);
@@ -1310,68 +1348,106 @@ function usersearch() {
             },
 
             title: {
-                text: 'USERS PLAYBACK HISTORY'
+                text: 'User Playback History'
             },
-            credits: false,
-            xAxis: {
-                minRange: 1
+            subtitle: {
+                text: ''
             },
-            plotOptions: {
-                series: {
-                    point: {
-
-                    }
-                }
+            credits: {
+                enabled: false,
             },
-
-            navigator: {
-                series: {
-                    color: '#00FF00',
-                    animation: {
-                        duration: 0,
+            xAxis: [{
+                type: 'datetime',
+                events: {
+                    afterSetExtremes() {
+                        let bottomAxis = this,
+                            topAxis = this.chart.xAxis[1],
+                            diferenciaMin = Math.abs(bottomAxis.dataMin - bottomAxis.min),
+                            diferenciaMax = Math.abs(bottomAxis.dataMax - bottomAxis.max);
+                        topAxis.setExtremes(topAxis.dataMin + diferenciaMin, topAxis.dataMax - diferenciaMax, true)
                     }
                 },
-                xAxis: {
-                    minRange: 1
-                },
+                labels: {
+                    formatter: function() {
+                        return Highcharts.dateFormat(' %e,%b', this.value);
+                    }
 
-
-            },
-            yAxis: [{
-                lineWidth: 1,
-                opposite: false,
-                title: {
-                    text: 'Playback Count'
                 }
             }, {
-                lineWidth: 1,
+                type: 'datetime',
+                labels: {
+                    formatter: function() {
+                        return Highcharts.dateFormat(' %e,%b', this.value);
+                    }
+
+                },
                 opposite: true,
+                visible: false
+            }],
+            yAxis: {
                 title: {
                     text: 'Playback Count'
-                }
-            }],
-
-            series: [{
-                    color: '#01a451',
-                    type: 'column',
-                    name: dataa.Info[0].USER_NAME,
-                    data: dataa.chart.data.shp
-
-                    , //Fri, 14 Jul 2017 00:00:00 GMT
-                    dataGrouping: {
-                        enabled: false,
-                    }
                 },
-                {
-                    color: '#ff9933',
-                    type: 'spline',
-                    name: 'Cumulative',
-                    data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
-                    dataGrouping: {
-                        enabled: false,
+                visible: true,
+                opposite: false,
+                showLastLabel: true,
+                labels: {
+                    enabled: true,
+                    format: "{value}",
+                    align: "right"
+                },
+            },
+            tooltip: {
+                pointFormatter: function() {
+                    return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
+                enabled: true,
+                itemStyle: {
+                    fontSize: '10px',
+                    fontWeight: '200'
+                }
+            },
+            navigator: {
+                enabled: true
+            },
+            rangeSelector: {
+                inputEnabled: false,
+                enabled: true
+            },
+            scrollbar: {
+                enabled: true
+            },
+            navigation: {
+                buttonOptions: {
+                    enabled: true
+                }
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+
+                },
+                series: {
+                    marker: {
+                        enabled: false
                     }
                 }
-            ]
+            },
+            series: [{
+                "name": "LSY",
+                "type": "line",
+                "color": "#FF9933",
+                "xAxis": 0,
+                "data": dataa.chart.data.lsy
+            }, {
+                "name": "CSY",
+                "type": "column",
+                "xAxis": 1,
+                "color": "#01A451",
+                "data": dataa.chart.data.csy
+            }]
 
         });
 

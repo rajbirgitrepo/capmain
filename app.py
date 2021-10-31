@@ -5408,8 +5408,8 @@ def realtimemaprcount():
               {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
               {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
               {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
-              {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-              {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+            #   {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+            #   {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
               {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
               {'MODIFIED_DATE': {'$gte': datetime.datetime.utcnow()-datetime.timedelta(seconds=300)}}
@@ -7309,6 +7309,29 @@ def _excecutivecount_():
         {"$project":{'_id':0,'parents':{'$size':'$distincts'}}}])))
 
     Parents=df6['parents'][0]
+    df44 = DataFrame(list(database.audio_feedback.aggregate([
+    {"$match":
+     {
+        '$and':[
+#             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER.IS_DISABLED":{"$ne":"Y"}},
+          {"USER.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+            {'USER.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER.EMAIL_ID':{'$ne':''}},  
+             {'USER.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+     { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':csy_first_date()}},
+                       {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+
+     }},
+    {'$group':{'_id':{},'rating':{'$avg':'$RATING'}}},
+    {'$project':{'_id':0, 'rating':'$rating'}}
+
+    ])))
+    avg_rating=df44['rating'][0]
 
 
 
@@ -7323,6 +7346,7 @@ def _excecutivecount_():
          "never_logged_in":str(Never_logged_in),
          "practice_count":str(practice_count),
          'Techers':str(Teachers),
+          'avg_rating':str(round(avg_rating)),
           'Homeappusers':str(Parents)}
 
     # print(temp)
@@ -10836,8 +10860,8 @@ def heat_district(districtid,startdate,enddate):
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
 
-                {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$schoolId._id'}}},
-                      {'$project':{'_id':1,'schools':'$ID'}},
+                {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
+                      {'$project':{'_id':1,'name':'$ID'}},
 
                       ])))
 
@@ -10867,7 +10891,7 @@ def heat_district(districtid,startdate,enddate):
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
-    df2=DataFrame(list(collection.aggregate([
+    df22=DataFrame(list(collection.aggregate([
     {"$match":
         {'$and': [
             
@@ -10882,13 +10906,14 @@ def heat_district(districtid,startdate,enddate):
 
 
             {'$group':{'_id':{'school':'$USER_ID.schoolId._id','month':{'$month':'$MODIFIED_DATE'}},'uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
-                  {'$project':{'_id':0,'school':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
+                  {'$project':{'_id':0,'_id':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'school':'$NAME','practice_count':'$pc'}},
         { '$sort' : { 'name' : 1,'month'  :1} },
 
 
     # //               {'$count':'count'}
                   ])))
     # df2
+    df2=pd.merge(df,df22, on='_id',how='right')
 
     df1=df2
     df1=df1.sort_values(by=['name'], ascending=True)
@@ -10981,8 +11006,8 @@ def heat_district_family_active(districtid,startdate,enddate):
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
 
-                {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$schoolId._id'}}},
-                      {'$project':{'_id':1,'schools':'$ID'}},
+                {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
+                      {'$project':{'_id':1,'name':'$ID'}},
 
                       ])))
 
@@ -11011,7 +11036,7 @@ def heat_district_family_active(districtid,startdate,enddate):
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
-    df2=DataFrame(list(collection.aggregate([
+    df22=DataFrame(list(collection.aggregate([
     {"$match":
         {'$and': [
             
@@ -11026,13 +11051,14 @@ def heat_district_family_active(districtid,startdate,enddate):
 
 
             {'$group':{'_id':{'school':'$USER_ID.schoolId._id','month':{'$month':'$MODIFIED_DATE'}},'uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
-                  {'$project':{'_id':0,'school':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
+                  {'$project':{'_id':0,'_id':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'school':'$NAME','practice_count':'$pc'}},
         { '$sort' : { 'name' : 1,'month'  :1} },
 
 
     # //               {'$count':'count'}
                   ])))
     # df2
+    df2=pd.merge(df,df22, on='_id',how='right')
 
     df1=df2
     df1=df1.sort_values(by=['name'], ascending=True)
@@ -11124,8 +11150,8 @@ def heat_district_teachers_active(districtid,startdate,enddate):
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
 
-                {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$schoolId._id'}}},
-                      {'$project':{'_id':1,'schools':'$ID'}},
+                {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
+                      {'$project':{'_id':1,'name':'$ID'}},
 
                       ])))
 
@@ -11154,7 +11180,7 @@ def heat_district_teachers_active(districtid,startdate,enddate):
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
-    df2=DataFrame(list(collection.aggregate([
+    df22=DataFrame(list(collection.aggregate([
     {"$match":
         {'$and': [
             
@@ -11169,13 +11195,14 @@ def heat_district_teachers_active(districtid,startdate,enddate):
 
 
             {'$group':{'_id':{'school':'$USER_ID.schoolId._id','month':{'$month':'$MODIFIED_DATE'}},'uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
-                  {'$project':{'_id':0,'school':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
+                  {'$project':{'_id':0,'_id':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'school':'$NAME','practice_count':'$pc'}},
         { '$sort' : { 'name' : 1,'month'  :1} },
 
 
     # //               {'$count':'count'}
                   ])))
     # df2
+    df2=pd.merge(df,df22, on='_id',how='right')
 
     df1=df2
     df1=df1.sort_values(by=['name'], ascending=True)
@@ -11268,8 +11295,8 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
 
-                {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$schoolId._id'}}},
-                      {'$project':{'_id':1,'schools':'$ID'}},
+                {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
+                      {'$project':{'_id':1,'name':'$ID'}},
 
                       ])))
 
@@ -11298,7 +11325,7 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
-    df2=DataFrame(list(collection.aggregate([
+    df22=DataFrame(list(collection.aggregate([
     {"$match":
         {'$and': [
             
@@ -11313,14 +11340,14 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
 
 
             {'$group':{'_id':{'school':'$USER_ID.schoolId._id','month':{'$month':'$MODIFIED_DATE'}},'uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
-                  {'$project':{'_id':0,'school':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
+                  {'$project':{'_id':0,'_id':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'school':'$NAME','practice_count':'$pc'}},
         { '$sort' : { 'name' : 1,'month'  :1} },
 
 
     # //               {'$count':'count'}
                   ])))
     # df2
-
+    df2=pd.merge(df,df22, on='_id',how='right')
     df1=df2
     df1=df1.sort_values(by=['name'], ascending=True)
     # x=df1[df1['NAME_DISTRICT']=="Belleville School District"]
@@ -11411,8 +11438,8 @@ def heat_district_family_prac(districtid,startdate,enddate):
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
 
-                {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$schoolId._id'}}},
-                      {'$project':{'_id':1,'schools':'$ID'}},
+                {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
+                      {'$project':{'_id':1,'name':'$ID'}},
 
                       ])))
 
@@ -11441,7 +11468,7 @@ def heat_district_family_prac(districtid,startdate,enddate):
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
-    df2=DataFrame(list(collection.aggregate([
+    df22=DataFrame(list(collection.aggregate([
     {"$match":
         {'$and': [
             
@@ -11456,13 +11483,14 @@ def heat_district_family_prac(districtid,startdate,enddate):
 
 
             {'$group':{'_id':{'school':'$USER_ID.schoolId._id','month':{'$month':'$MODIFIED_DATE'}},'uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
-                  {'$project':{'_id':0,'school':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
+                  {'$project':{'_id':0,'_id':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'school':'$NAME','practice_count':'$pc'}},
         { '$sort' : { 'name' : 1,'month'  :1} },
 
 
     # //               {'$count':'count'}
                   ])))
     # df2
+    df2=pd.merge(df,df22, on='_id',how='right')
 
     df1=df2
     df1=df1.sort_values(by=['name'], ascending=True)
@@ -11516,7 +11544,7 @@ def heat_district_family_prac(districtid,startdate,enddate):
 
 
 @app.route('/districtheatmappractice/<districtid>/<startdate>/<enddate>')
-def heatmap_prac_district(districtid,startdate,enddate):
+def heatmap_prac_district(districtid,startdate,enddate):   
     import collections
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -11525,9 +11553,10 @@ def heatmap_prac_district(districtid,startdate,enddate):
     collection = db.audio_track_master
     collection2=db.user_master
     district=disdic[districtid]
-
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
+
+   
 
     df=DataFrame(list(collection2.aggregate([{"$match":
              {'$and': [
@@ -11539,14 +11568,13 @@ def heatmap_prac_district(districtid,startdate,enddate):
                     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
 #                             {'DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
-                     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-
-#                  {'CREATED_DATE':{"$gte": myDatetime1 ,
-#                              "$lte":myDatetime2}},
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
         # //               {'IS_ADMIN':'Y'},
     #                      {'DISTRICT_ID._id':{'$ne':None}},
                     {'schoolId._id':{'$ne':None}},
                      {'EMAIL_ID':{'$ne':''}},
+#                  {'CREATED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
 
 #                   {'DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
                      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -11554,8 +11582,8 @@ def heatmap_prac_district(districtid,startdate,enddate):
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
 
-                {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$schoolId._id'}}},
-                      {'$project':{'_id':1,'schools':'$ID'}},
+                {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
+                      {'$project':{'_id':1,'name':'$ID'}},
 
                       ])))
 
@@ -11573,7 +11601,8 @@ def heatmap_prac_district(districtid,startdate,enddate):
 
 #  {'MODIFIED_DATE':{'$gte':csy_first_date()}},
     {'MODIFIED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}}]}},
+                             "$lte":myDatetime2}}
+    ]}},
 
 
         {'$group':{'_id':'$USER_ID.schoolId._id','uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
@@ -11584,7 +11613,7 @@ def heatmap_prac_district(districtid,startdate,enddate):
     top=list(df3['_id'])
 #     print(df3)
 #     df3.to_csv('file1.csv')
-    df2=DataFrame(list(collection.aggregate([
+    df22=DataFrame(list(collection.aggregate([
     {"$match":
         {'$and': [
             
@@ -11599,13 +11628,14 @@ def heatmap_prac_district(districtid,startdate,enddate):
 
 
             {'$group':{'_id':{'school':'$USER_ID.schoolId._id','month':{'$month':'$MODIFIED_DATE'}},'uc':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'}}},
-                  {'$project':{'_id':0,'school':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'name':'$NAME','practice_count':'$pc'}},
+                  {'$project':{'_id':0,'_id':'$_id.school','month':'$_id.month','active_user_count':{'$size':'$uc'},'school':'$NAME','practice_count':'$pc'}},
         { '$sort' : { 'name' : 1,'month'  :1} },
 
 
     # //               {'$count':'count'}
                   ])))
     # df2
+    df2=pd.merge(df,df22, on='_id',how='right')
 
     df1=df2
     df1=df1.sort_values(by=['name'], ascending=True)
@@ -11653,10 +11683,7 @@ def heatmap_prac_district(districtid,startdate,enddate):
         data[i] =practice_count
     data=collections.OrderedDict(sorted(data.items()))
     data={'meanTemp':data}
-
-    
-    return json.dumps(data)    
-    
+    return json.dumps(data)
 
 
 
@@ -14051,7 +14078,7 @@ def topusers_practice(districtid,startdate,enddate):
                   }},
 
 
-        {'$project':{'_id':1,'user_name':1,'school_name':1}},])))
+        {'$project':{'_id':1,'user_name':1,'school_name':1}},]))).fillna('No info')
 
     df=pd.merge(df1,df2, how='left', on='_id')
     df
@@ -14415,7 +14442,7 @@ def district_count_cards(districtid,startdate,enddate):
     df3=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
-          {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+          {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -14437,7 +14464,7 @@ def district_count_cards(districtid,startdate,enddate):
     df33=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
-          {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+          {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -14459,7 +14486,7 @@ def district_count_cards(districtid,startdate,enddate):
     df333=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
-          {'ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+          {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -14481,7 +14508,7 @@ def district_count_cards(districtid,startdate,enddate):
     df3333=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
-          {'ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+          {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
                   {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                  {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -14766,7 +14793,7 @@ def district_count_cards(districtid,startdate,enddate):
     data={"schoolcount":str(sc[0]),"engd_teacher_lsy":str(engd_teacher_lsy[0]),"engd_teacher_csy":str(engd_teacher_csy[0]),
           "engd_parent_csy":str(engd_parent_csy[0]),"engd_parent_lsy":str(engd_parent_lsy[0]),
           "engaged_school_csy":str(engdschool_csy[0]),"engaged_school_lsy":str(engdschool_lsy[0]),"teachercount":str(tc[0]),"familycount":str(fc[0]),"teacherpracticecount":str(pct[0]),"parentspracticecount":str(pcp[0]),
-          'MINDFUL_MINUTES':str(round(mm[0])),'MINDFUL_MINUTES_Teacher':str(round(mmt[0])),'MINDFUL_MINUTES_parent':str(round(mmp[0])),'district':str(dn[0]),"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
+          'MINDFUL_MINUTES':str(round(int(mm[0]))),'MINDFUL_MINUTES_Teacher':str(round(int(mmt[0]))),'MINDFUL_MINUTES_parent':str(round(int(mmp[0]))),'district':str(dn[0]),"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
     return json.dumps(data)
 # district_count_cards('5f59e4836451a9089d7d4007','2021-08-01','2021-10-19')
 
@@ -31726,6 +31753,10 @@ def school_practice_trend(schoolid):
                                         "$lt":csy_first_date()}}]}},
        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
        {'$project':{'_id':1,'TOTAL_LSY':'$pc'}}])))
+    if df1.empty == True:
+        df1=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'TOTAL_LSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        df1
     df1.rename(columns = { '_id': 'Month'}, inplace = True)
     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
     df1['Month'] = df1['Month'].map(d)
@@ -31753,7 +31784,7 @@ def school_practice_trend(schoolid):
        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
        {'$project':{'_id':1,'teacher_CSY':'$pc'}}])))
     if df2.empty == True:
-        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'teacher_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
     else:
         df2
     df2.rename(columns = { '_id': 'Month'}, inplace = True)
@@ -31860,17 +31891,19 @@ def school_practice_trend(schoolid):
     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
     df4['Month'] = df4['Month'].map(d)
     # df2
-   
-    practice_LSY= pd.merge(df1, df2,on='Month', how='left')
-    practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
-    practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
-    practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
-
     mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
     d = dict(enumerate(calendar.month_abbr))
     mon['Month'] = mon['Month'].map(d)
+   
+    practice_LSYy= pd.merge(mon, df1,on='Month', how='left')
+    practice_LSY= pd.merge(practice_LSYy, df2,on='Month', how='left')
+    practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+    data =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
-    data=pd.merge(mon,practice_CSY,on='Month',how='left').fillna(0)
+    
+
+#     data=pd.merge(mon,practice_CSY,on='Month',how='left').fillna(0)
     Month=data['Month'].tolist()
     TOTAL_LSY=data['TOTAL_LSY'].tolist()
    
@@ -31880,7 +31913,7 @@ def school_practice_trend(schoolid):
     clever_CSY=data['clever_CSY'].tolist()
     temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
 
-    return json.dumps(temp)
+    return  json.dumps(temp)
 # school_practice_trend('5f2bcad8ba0be61b0c1e9d5e')
 
 @app.route('/schoolactivetrendnew/<schoolid>')
@@ -31918,6 +31951,10 @@ def school_active_trend(schoolid):
                                         "$lt":csy_first_date()}}]}},
        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$addToSet':'$USER_ID._id'}}},
        {'$project':{'_id':1,'TOTAL_LSY':{'$size':'$pc'}}}])))
+    if df1.empty == True:
+        df1=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'TOTAL_LSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        df1
     df1.rename(columns = { '_id': 'Month'}, inplace = True)
     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
     df1['Month'] = df1['Month'].map(d)
@@ -31945,7 +31982,7 @@ def school_active_trend(schoolid):
        {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$addToSet':'$USER_ID._id'}}},
        {'$project':{'_id':1,'teacher_CSY':{'$size':'$pc'}}}])))
     if df2.empty == True:
-        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        df2=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'teacher_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
     else:
         df2
     df2.rename(columns = { '_id': 'Month'}, inplace = True)
@@ -32052,17 +32089,18 @@ def school_active_trend(schoolid):
     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
     df4['Month'] = df4['Month'].map(d)
     # df2
-   
-    practice_LSY= pd.merge(df1, df2,on='Month', how='left')
-    practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
-    practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
-    practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
-
     mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
     d = dict(enumerate(calendar.month_abbr))
     mon['Month'] = mon['Month'].map(d)
 
-    data=pd.merge(mon,practice_CSY,on='Month',how='left').fillna(0)
+    practice_LSYy= pd.merge(mon, df1,on='Month', how='left')
+    practice_LSY= pd.merge(practice_LSYy, df2,on='Month', how='left')
+    practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+    data =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
+
+    
+    
     Month=data['Month'].tolist()
     TOTAL_LSY=data['TOTAL_LSY'].tolist()
    
@@ -32092,7 +32130,7 @@ def schoolsearch_em_id(schoolid):
     df1=DataFrame(list(db.user_master.aggregate([
         {"$match":{"$and":[
         {"schoolId._id":ObjectId(""+schoolid+"")},
-#              {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -32137,10 +32175,15 @@ def schoolsearch_em_id(schoolid):
         'last_practice_date_csy':{'$max':{"$dateToString":{"format":"%Y-%m-%d","date":'$MODIFIED_DATE'}}}, }}
 
         ]))).fillna(0)
-    column3 =['_id','last_practice_date_csy',"AUDIO_DAY",'PROGRAM','AUDIO','pc','Mindful_Minutes']
+    
+    
     if df3.empty==True:
-        df3=pd.DataFrame({'_id':email,"last_practice_date_csy":['NO PRACTICE'],'AUDIO_DAY':['No info'],'PROGRAM':['No info'],'AUDIO':['No info'],'pc':[0],'Mindful_Minutes_csy':[0]})
-
+        df3=pd.DataFrame({'_id':email})
+        df3['last_practice_date_csy'] = pd.Series(['NO PRACTICE' for x in range(len(df3.index))])
+        df3['pc'] = pd.Series([0 for x in range(len(df3.index))])
+        df3['Mindful_Minutes_csy'] = pd.Series([0 for x in range(len(df3.index))])
+#         df3 = df3.transpose()
+    column3 =['_id','last_practice_date_csy','pc','Mindful_Minutes_csy']
     for i in column3:
         df3=df3.fillna('')
         if i not in df3.columns:
@@ -32161,10 +32204,13 @@ def schoolsearch_em_id(schoolid):
         'last_practice_date':{'$max':{"$dateToString":{"format":"%Y-%m-%d","date":'$MODIFIED_DATE'}}}, }}
 
         ])))
-    column0 =['_id','last_practice_date',"AUDIO_DAY",'PROGRAM','AUDIO','pc_overall','Mindful_Minutes']
+    
     if df0.empty==True:
-        df0=pd.DataFrame({'_id':email,"last_practice_date":['NO PRACTICE'],'AUDIO_DAY':['No info'],'PROGRAM':['No info'],'AUDIO':['No info'],'pc_overall':[0],'Mindful_Minutes_overall':[0]})
-
+        df0=pd.DataFrame({'_id':email})
+        df0['last_practice_date'] = pd.Series(['NO PRACTICE' for x in range(len(df0.index))])
+        df0['pc_overall'] = pd.Series([0 for x in range(len(df0.index))])
+        df0['Mindful_Minutes_overall'] = pd.Series([0 for x in range(len(df0.index))])
+    column0 =['_id','last_practice_date','pc_overall','Mindful_Minutes_overall']
     for i in column0:
         df0=df0.fillna('')
         if i not in df0.columns:
@@ -32185,7 +32231,9 @@ def schoolsearch_em_id(schoolid):
 
         ])))
     if df4.empty==True:
-        df4=pd.DataFrame({'_id':email,"Renewal_date":['No info'],'PLAN':['No info']})
+        df4=pd.DataFrame({'_id':email})
+        df4['PLAN'] = pd.Series(['NO INFO' for x in range(len(df4.index))])
+        df4['Renewal_date'] = pd.Series(['NO INFO' for x in range(len(df4.index))])
     column4 =['Renewal_date',"PLAN"]
     for i in column4:
         if i not in df4.columns:
@@ -32204,7 +32252,7 @@ def schoolsearch_em_id(schoolid):
     table=DFF.values.tolist()
            
     
-    table=DFF.values.tolist()
+    
     
     pc=DF['pc'].sum()
     pc_overall=DF['pc_overall'].sum()
@@ -32281,7 +32329,7 @@ def schoolsearch_em_id(schoolid):
 
 
     data={'user_count':str(df00['user_count'][0]),
-        'Star_5_Ratings_Recieved':str(round(df5['rating'][0])),'DISTRICT':df1['district_name'][0],
+        'Star_5_Ratings_Recieved':str(int(round(df5['rating'][0]))),'DISTRICT':df1['district_name'][0],
         'SCHOOL_MINDFUL_MINUTES_csy':str(int(Mindful_Minutes_csy)),
                    'SCHOOL_MINDFUL_MINUTES_overall':str(int(Mindful_Minutes_overall)),
            'school_name':df1['school_name'][0],'address':df1['Address'][0],'state':df1['STATE'][0],'city':df1['CITY'][0],'country':df1['COUNTRY'][0],
@@ -32292,6 +32340,9 @@ def schoolsearch_em_id(schoolid):
 
 
     return json.dumps(data)
+#     return df0
+# schoolsearch_em_id('5f2bca32ba0be61b0c1cf643')
+
 # schoolsearch_em_id('5f2bcadaba0be61b0c1ea1ee')
 
 # new0('5f2bcad8ba0be61b0c1e9d5e')
@@ -32299,6 +32350,370 @@ def schoolsearch_em_id(schoolid):
 # lamundson@thecapitolschool.com
 
 
+@app.route('/wordcloud_schoolsearch/<schoolid>')
+def wordcloud_schoolsearch(schoolid):
+    import nltk
+    from nltk.corpus import stopwords
+    from textblob import TextBlob
+    from nltk import FreqDist
+    import re
+    clean_list=[]
+    news_headlines_senti = []
+    news_headlines_dict = {}
+    pnews_headlines=0
+    nnews_headlines=0
+    nenews_headlines = 0
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+
+
+    collection1=db.user_master
+    query=[{"$match":{"$and":[
+        {"schoolId._id":ObjectId(""+schoolid+"")},
+             {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'EMAIL_ID':{"$ne":''}},
+    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
+      {'schoolId.NAME':{"$not":{"$regex":'test', '$options':'i'}}},
+         {'EMAIL_ID':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":"TEST",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}
+        ]}},
+        {'$project':{
+            '_id':0,
+            'USER_ID':'$_id',
+            'schoolId':'$schoolId._id'
+            }}]
+    schoolinfo=DataFrame(list(collection1.aggregate(query)))
+    list_of_names1=schoolinfo["USER_ID"].to_list()
+#     schoolId=schoolinfo[0].get('schoolId')
+    collection=db.audio_feedback
+#     mydatetime= dateutil.parser.parse(datestr)
+#     yester= pd.to_datetime(mydatetime) +timedelta(hours=4)
+#     tod=mydatetime+ timedelta(hours=4)
+#     start= tod- timedelta(days=8)+timedelta(days=1)
+#     start_15day= start-timedelta(days=8)+timedelta(days=1)
+    user=[
+    {"$match":{'$and':[ 
+        
+        { "USER._id":{"$in":list_of_names1}},
+               
+#                 {'MODIFIED_DATE':{'$gte': start, '$lt':yester}},
+#                 {'USER._id':{'$in':db.user_master.distinct('_id',{'schoolId._id':schoolId})}},
+                 {'MODIFIED_DATE':{'$gte':csy_first_date()}},
+                       
+            
+                       {'COMMENT':{'$nin':['',' ', None,'.']}},
+                  {'USER.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                        ]}},
+    { "$project": { "USER_ID": "$USER._id", "USER_NAME": "$USER.USER_NAME","_id":0, "EMAIL": "$USER.EMAIL_ID", "RATING":1,
+    "LAST_COMMENT_DATE": "$MODIFIED_DATE", "AUDIO_NAME": "$AUDIO_ID.AUDIO_NAME", "NARRATOR_NAME": "$AUDIO_ID.NARRATEDBY",
+    "COMMENT":1, "PROGRAM_NAME": "$AUDIO_ID.PROGRAM_ID.PROGRAM_NAME"}}
+    ]
+    update=list(collection.aggregate(user))
+    df123=pd.DataFrame(update).fillna("no info")
+    if df123.empty:
+        return json.dumps({'Result':0})
+    else:
+        list_of_names=df123["USER_ID"].to_list()
+        xx=df123[df123["COMMENT"]!="no info"]
+        xxc=xx[xx["COMMENT"]!=""]
+        comment_list=xxc["COMMENT"].to_list()
+        newtexttoken=[]
+        
+        import nltk
+    #     nltk.download('punkt')
+    #     nltk.download()
+        nltk.download('stopwords')
+    
+        for i in comment_list:
+            text_tokens = nltk.tokenize.word_tokenize(i)
+            newtexttoken.append(text_tokens)
+        newlist=[]
+        for i in newtexttoken:
+            for z in i:
+                newlist.append(z.lower())
+        st_word=stopwords.words('english')
+        tokens_without_sw= [word for word in newlist if not word in st_word]
+        token5=[]
+        for sentence in tokens_without_sw:
+            text3 = sentence.split('ing')    
+            for i in text3:
+                token5.append(i)
+        words = [w.replace('liked', 'like') for w in token5]
+        words2 = [w.replace('relaxed', 'relax') for w in words]
+        words3 = [w.replace('relaxing', 'relax') for w in words2]
+        words4 = [w.replace('excitinging', 'excited') for w in words3]
+        zxc=""
+        name=""
+        count=""
+        try:
+            xcvv=[x for x in words4 if len(x)>3]
+            fdist=FreqDist(xcvv)
+            df_fdist = pd.DataFrame.from_dict(fdist, orient='index')
+        #         print(df_fdist)
+            df_fdist.columns = ['Frequency']
+            df_fdist.index.name = 'Term'
+            xc=df_fdist.sort_values(by='Frequency', ascending=False, na_position='first')
+            #     tt=xc.drop(["i","it","we","made","us","the","feeling","some","students"])
+            cc=xc[0:10]
+            name=cc.index.to_list()
+            count=cc["Frequency"].to_list()
+            zxc=' '.join(word for word in xcvv)
+        except:
+            pass
+        for item in comment_list:
+            # trim
+            item = item.strip()
+            # Removing RT
+            item = item.replace('RT', '')
+            # Removing new line character
+            item = item.replace('\\n', '')
+            # Replace #word with word
+            news_headlines = re.sub(r'#([^\s]+)', r'\1', item)
+            # Convert @username to username
+            news_headlines = re.sub(r'@([^\s]+)', r'\1', item)
+            item = " ".join(re.findall("[a-zA-Z]+", item))
+            tmp_var = re.sub(r'^\S*\s', '', item)
+            clean_list.append(tmp_var)
+        for item in clean_list:
+                #print(item)
+                # create TextBlob object of passed news_headlines text
+                analysis = TextBlob(item)
+                # set sentiment
+                if analysis.sentiment.polarity > 0:
+                    # saving sentiment of news_headlines
+                    news_headlines_score = 'positive'
+                    pnews_headlines = pnews_headlines + 1
+                    news_headlines_dict[item] = news_headlines_score
+                elif analysis.sentiment.polarity == 0:
+                    # saving sentiment of news_headlines
+                    news_headlines_score = 'neutral'
+                    nenews_headlines = nenews_headlines + 1
+                    news_headlines_dict[item] = news_headlines_score
+                else:
+                    # saving sentiment of news_headlines
+                    news_headlines_score = 'negative'
+                    nnews_headlines = nnews_headlines + 1
+                    news_headlines_dict[item] = news_headlines_score
+        # print(clean_list)
+        newssentiment=[]
+        # for k, v in news_headlines_dict.items():
+        #     print(k,':',v)
+        for k, v in news_headlines_dict.items():
+            if v == "positive":
+                newssentiment.append({"sentiment":int(1),"text":k})
+            elif v == "negative":
+                newssentiment.append({"sentiment":int(-1),"text":k})
+            else:
+                newssentiment.append({"sentiment":int(0),"text":k})
+        newssentiment_dataframe=pd.DataFrame.from_dict(newssentiment)
+#         neg = 100 * (nnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+#         pos = 100 * (pnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+        
+        try:
+            neg = 100 * (nnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+        except ZeroDivisionError:
+            neg = 0
+
+        try:
+            pos = 100 * (pnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+        except ZeroDivisionError:
+            pos = 0
+        
+        df123["SCORE"]=""
+        for i in range(len(df123)):
+            try:
+                analysis = TextBlob(df123["COMMENT"][i])
+                if analysis.sentiment.polarity > 0:
+                    df123.at[i,"SCORE"]= 1
+        #             
+                elif analysis.sentiment.polarity == 0:
+                    df123.at[i,"SCORE"]= 0
+                else:
+                    df123.at[i,"SCORE"]= -1
+            except:
+                df123.at[i,"SCORE"]= 0
+#         df123['just_date'] = df123['LAST_COMMENT_DATE'].dt.date
+        df123['just_date']=pd.to_datetime(df123['LAST_COMMENT_DATE'], errors='coerce')
+    
+        xccx=df123.sort_values(by='just_date')
+        xccx=df123.dropna()
+        negdf=xccx[xccx["SCORE"]==-1]
+        posdf=xccx[xccx["SCORE"]==1]
+        df123['LAST_COMMENT_DATE']=pd.to_datetime(df123["LAST_COMMENT_DATE"]).dt.strftime('%Y-%m-%d')
+        positivep=df123[df123["SCORE"]==1]
+        df1234=positivep.groupby(["LAST_COMMENT_DATE"])["SCORE"].count().reset_index()
+        df14i=df1234[["LAST_COMMENT_DATE","SCORE"]]
+        df14i['LAST_COMMENT_DATE'] = pd.to_datetime(df14i['LAST_COMMENT_DATE'])
+        df15i=df14i.sort_values(by='LAST_COMMENT_DATE')
+        df15i['LAST_COMMENT_DATE']=df15i['LAST_COMMENT_DATE'].astype(np.int64)/int(1e6)
+        shp1=df15i[["LAST_COMMENT_DATE","SCORE"]].values.tolist()
+        negativen=df123[df123["SCORE"]==-1]
+        df12345=negativen.groupby(["LAST_COMMENT_DATE"])["SCORE"].count().reset_index()
+        df14ii=df12345[["LAST_COMMENT_DATE","SCORE"]]
+        df14ii['LAST_COMMENT_DATE'] = pd.to_datetime(df14ii['LAST_COMMENT_DATE'])
+        df15ii=df14ii.sort_values(by='LAST_COMMENT_DATE')
+        df15ii['LAST_COMMENT_DATE']=df15ii['LAST_COMMENT_DATE'].astype(np.int64)/int(1e6)
+        shp2=df15ii[["LAST_COMMENT_DATE","SCORE"]].values.tolist()
+        df123['LAST_COMMENT_DATE']=pd.to_datetime(df123["LAST_COMMENT_DATE"]).dt.strftime('%Y-%m-%d')
+        word_chart={"word_cloud":zxc}
+#         word_chart={'positive':shp1,'negative':shp2,"word_cloud":zxc,"label":name,"count":count,"donut":{"pos":round(pos, 2),"neg":round(neg, 2)}}
+        return json.dumps(word_chart)
+# wordcloud('5f2bcad8ba0be61b0c1e9d5e')
+
+
+@app.route('/schoolseacrhprogram_chart/<schoolid>')
+def prog_prac_admin_search(schoolid):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+
+    
+    collection = db.user_master
+    user=[
+        {"$match":{"$and":[
+        {"schoolId._id":ObjectId(""+schoolid+"")},
+             {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'EMAIL_ID':{"$ne":''}},
+    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
+      {'schoolId.NAME':{"$not":{"$regex":'test', '$options':'i'}}},
+         {'EMAIL_ID':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":"TEST",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}
+        ]}},
+              { "$project": { "USER_ID":"$_id","_id":0,
+                            }}
+        ]
+    update=list(collection.aggregate(user))
+    df00=pd.DataFrame(update)
+#     print(df00,'DF00')
+    list_of_names1=df00["USER_ID"].to_list()
+    collection = db.audio_track_master
+    prog_prac_table1 = DataFrame(list(collection.aggregate([
+     {"$match":{
+         '$and':[ { "USER_ID._id":{"$in":list_of_names1}},
+        
+        {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{"$not":{"$regex":"wellness",'$options':'i'}}},
+            {'PROGRAM_AUDIO_ID.AUDIO_DAY':{"$not":{"$regex":"bonus",'$options':'i'}}},
+          {'PROGRAM_AUDIO_ID.AUDIO_DAY':{"$not":{"$regex":"sound",'$options':'i'}}},
+            {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$not':{'$regex':'Counselor','$options':'i'}}},    
+            {"PROGRAM_AUDIO_ID.AUDIO_DAY":{"$not":{"$regex":'Bonus','$options':'i'}}},
+                  {"MODIFIED_DATE":{'$gte':csy_first_date()}},
+#               
+#                       {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':{'$nin':[1,2,3,4,5,6,7,8]}},
+#         {'MODIFIED_DATE':{'$gte': startdate, '$lte':enddate}}
+                ]}},
+    {'$group':{'_id':{'pn':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID','Month':{'$month':'$MODIFIED_DATE'}}, 'auc': {'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},
+               'pg':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}}},
+    {'$project':{'pg':'$pg','pn':'$_id.pn','Month':'$_id.Month', 'Active_usercount in 2020-2021':{'$size':'$auc'},'_id':0,'pc':'$pc'}},
+      { "$sort":{'pg' : 1 }}])))
+    df1 = pd.DataFrame(prog_prac_table1)
+
+#     print(df1,'DF1')
+    index=[0,1,2,3,4,5,6,7,8,9,10,11]
+    if df1.empty:
+        data={"month": ["Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"], 
+              "elem": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "prek": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+              "mid": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "high": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+             "elem_pc": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "prek_pc": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+              "mid_pc": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "high_pc": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
+    else:
+        df1["pn"]=df1["pn"].replace({1:11, 2:12, 3:13, 4:9})
+        data = [['Aug', 8], ['Sep', 9], ['Oct', 10],['Nov', 11], ['Dec', 12], ['Jan', 1],['Feb', 2], ['Mar', 3], ['Apr', 4],['May', 5], ['Jun', 6], ['Jul', 7]] 
+        df9 = pd.DataFrame(data, columns = ['Monthname', 'Month']) 
+
+        DF=pd.merge(df9,df1, on='Month',how='left').fillna(0)
+        DF=DF.sort_values(by=['pn'])
+        month=DF['Month'].tolist()
+        prog_prac_table=DF
+        month=['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul']
+
+        elem=[]
+        mid=[]
+        pre=[]
+        high=[]
+        elem_pc=[]
+        mid_pc=[]
+        pre_pc=[]
+        high_pc=[]
+
+
+        for i in set(prog_prac_table.pn.tolist()):
+            for j in month:
+#                     print(j)
+                if i==11:
+                    df=prog_prac_table[prog_prac_table['pn']==i]
+
+                    try:
+                        df__=df[df['Monthname']==j]['Active_usercount in 2020-2021']
+                        pre.append(int(df__))
+                        
+                        df_=df[df['Monthname']==j]['pc']
+                        pre_pc.append(int(df_))
+
+                    except:
+                        pre_pc.append(0)
+                        pre.append(0)
+            
+                elif i==12:
+                    df=prog_prac_table[prog_prac_table['pn']==i]
+                    try:
+                        df__=df[df['Monthname']==j]['Active_usercount in 2020-2021']
+                        elem.append(int(df__))
+                        df_=df[df['Monthname']==j]['pc']
+                        elem_pc.append(int(df_))
+
+                    except:
+                        elem_pc.append(0)
+                        elem.append(0)
+                elif i==13:
+                    df=prog_prac_table[prog_prac_table['pn']==i]
+                    try:
+                        df__=df[df['Monthname']==j]['Active_usercount in 2020-2021']
+                        mid.append(int(df__))
+                        df_=df[df['Monthname']==j]['pc']
+                        mid_pc.append(int(df_))
+
+                    except:
+                        mid_pc.append(0)
+                        mid.append(0)
+                elif i==9:
+                    df=prog_prac_table[prog_prac_table['pn']==i]
+#                         print(df)
+                    try:
+                        df__=df[df['Monthname']==j]['Active_usercount in 2020-2021']
+#                             print(df)
+                        high.append(int(df__))
+                        df_=df[df['Monthname']==j]['pc']
+                        high_pc.append(int(df_))
+
+                    except:
+                        high_pc.append(0)
+                        high.append(0)            
+                else:
+                    break
+
+            ll=[0,0,0,0,0,0,0,0,0,0,0,0]
+        if len(elem)==0:    elem = ll
+        if len(pre)==0:    pre =  ll
+        if len(mid)==0:    mid =  ll
+        if len(high)==0:    high = ll
+#             if len(alls)==0:    alls = ll
+        data={'month':month,'elem':elem,'prek':pre,'mid':mid,'high':high,'elem_pc':elem_pc,'prek_pc':pre_pc,'mid_pc':mid_pc,'high_pc':high_pc}
+    return json.dumps(data)
+#     return df1
+# prog_prac_admin('5f2bcad8ba0be61b0c1e9d5e')
 
 
 
@@ -55984,7 +56399,7 @@ def new0(name):
 #     start1=start.replace(day=1)
     
     db = client["compass"]
-    df1=DataFrame(list(db.user_master.aggregate([
+    df11=DataFrame(list(db.user_master.aggregate([
         {"$match":{"$and":[
         {"EMAIL_ID":name},
              {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
@@ -56000,24 +56415,24 @@ def new0(name):
 #     {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}
         ]}},
     {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME",'user':"$USER_NAME",
-                 "Address":"$schoolId.ADDRESS","COUNTRY":"$schoolId.COUNTRY","CITY":"$schoolId.CITY","STATE":"$schoolId.STATE","USER_NAME":"$USER_NAME",
+                 "Address":"$schoolId.ADDRESS","COUNTRY":"$schoolId.COUNTRY","CITY":"$schoolId.CITY","STATE":"$schoolId.STATE","USER_NAME":"$USER_NAME", 'SIGN_UP_DATE':{"$dateToString":{"format":"%Y-%m-%d","date":'$CREATED_DATE'}},
                 "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME","ROLE":'$ROLE_ID.ROLE_NAME'
                 }}
     ])))
-    if df1.empty == True:
+    if df11.empty == True:
         data={'Result':0}
     else:
-        df1
-    column1 =['USER_ID',"ID","school_name",'user',"Address","COUNTRY","CITY","STATE","USER_NAME","email_id","district_name","ROLE"]
+        df11
+    column1 =['USER_ID',"ID","school_name",'user',"SIGN_UP_DATE","Address","COUNTRY","CITY","STATE","USER_NAME","email_id","district_name","ROLE"]
     for i in column1:
-        if i not in df1.columns:
-            df1[i] = 'No info'
+        if i not in df11.columns:
+            df11[i] = 'No info'
 
    
-    df1["ROLE"].replace({"PRESENT": "PARENT", "user":"Teacher",'admin':'ADMIN','donor':'donor','oms':'OMS'}, inplace=True)
+    df11["ROLE"].replace({"PRESENT": "PARENT", "user":"Teacher",'admin':'ADMIN','donor':'donor','oms':'OMS'}, inplace=True)
     
-    email=df1['USER_ID'].tolist()
-    school=df1['ID'].tolist()
+    email=df11['USER_ID'].tolist()
+    school=df11['ID'].tolist()
     
     
     df2=DataFrame(list(db.user_master.aggregate([
@@ -56041,7 +56456,7 @@ def new0(name):
     ADMIN_NAME=df2['ADMIN_NAME'].tolist()
     ADMIN_EMAIL=df2['ADMIN_EMAIL'].tolist()
 
-    df3=DataFrame(list(db.audio_track_master.aggregate([
+    df33=DataFrame(list(db.audio_track_master.aggregate([
         {"$match":{'$and':[
                        {'USER_ID._id':{"$in":email}},
                             {'MODIFIED_DATE':{'$gte':csy_first_date()}}]}},    
@@ -56056,12 +56471,12 @@ def new0(name):
            
         ])))
     column3 =['last_practice_date',"AUDIO_DAY",'PROGRAM','AUDIO','pc','Mindful_Minutes']
-    if df3.empty==True:
-        df3=pd.DataFrame({"last_practice_date":['No info'],'AUDIO_DAY':['No info'],'PROGRAM':['No info'],'AUDIO':['No info'],'pc':['0'],'Mindful_Minutes':['0']})
+    if df33.empty==True:
+        df33=pd.DataFrame({"last_practice_date":['No Practice'],'AUDIO_DAY':['No info'],'PROGRAM':['No info'],'AUDIO':['No info'],'pc':['0'],'Mindful_Minutes':['0']})
 
     for i in column3:
-        if i not in df3.columns:
-            df3[i] = 'No info'
+        if i not in df33.columns:
+            df33[i] = 'No info'
             
             
     
@@ -56099,7 +56514,7 @@ def new0(name):
            
         ])))
     if df5.empty==True:
-        df5=pd.DataFrame({"COMMENT_DATE":['No info'],'rating':['0'],'COMMENT':['No info']})
+        df5=pd.DataFrame({"COMMENT_DATE":['No Comment'],'rating':['No Rating'],'COMMENT':['No Comment']})
     column5 =['COMMENT_DATE',"rating","COMMENT"]
     for i in column5:
         if i not in df5.columns:
@@ -56130,66 +56545,91 @@ def new0(name):
 
     
 #     =====For practice history chart
-    df7= DataFrame(list(db.audio_track_master.aggregate([
-        {"$match":{'$and':[ 
-                            { "USER_ID._id":{"$in":email}},
-                              ] }},
+    df1 = DataFrame(list(db.audio_track_master.aggregate([{"$match":
+        {"$and" :[
+             {'USER_ID._id':{"$in":email}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date()
+#                                     
+                                }},
+            ]}},
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Users_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+    if df1.empty == True:
+        df1=pd.DataFrame({'Practice_date':[],'Users_Practice_CSY':[]})
+    else:
+        df1
+   
+    df3 = DataFrame(list(db.audio_track_master.aggregate([{"$match":{'$and':[
+        
+                       {'USER_ID._id':{"$in":email}},
+                    {'MODIFIED_DATE':{"$gte":LSY_Date(),"$lt": csy_first_date()}}]}},
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'}, 
+                        'Total_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Total_Practice_LSY':'$Total_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+    if df3.empty == True:
+        df3=pd.DataFrame({'Practice_date':[],'Total_Practice_LSY':[]})
+    else:
+        df3
+    df1['Practice_date'] = pd.to_datetime(df1['Practice_date'])
 
 
-            {"$group":{"_id": {"$dateToString":{"format":"%Y-%m-%d","date":"$MODIFIED_DATE"}},"PRACTICE_COUNT":{"$sum":1},
-            "MINDFUL_MINUTES":{"$sum":{"$round":[{"$divide":[{"$subtract":['$CURSOR_END','$cursorStart']},60]},2]}}, 
-
-                      }},
-        { "$project": {"MINDFUL_MINUTES":1,"PRACTICE_COUNT":1}}
-        ])))
-       
-    if df7.empty:
-        temp={'data':[]}
-        return (temp)
-    else: 
-        df7
-    df14i=df7[["_id","PRACTICE_COUNT"]]
-    df14i['_id'] = pd.to_datetime(df14i['_id'])
-    df15i=df14i.sort_values(by='_id')
-    df15i['_id']=df15i['_id'].astype(np.int64)/int(1e6)
-    shp=df15i[["_id","PRACTICE_COUNT"]].values.tolist()
-    df15i['Cumulative_Amount'] = df15i['PRACTICE_COUNT'].cumsum()
-    df16i=df15i[['_id','Cumulative_Amount']]
-    shpcum=df16i.values.tolist()
-    temp={'data':{'shp':shp,'shpcum':shpcum}}
+    df55=df1.sort_values(by='Practice_date')
     
-    data={'Info':[{'ROLE':df1['ROLE'][0],
-        'Star_5_Ratings_Recieved':str(df5['rating'][0]),'DISTRICT':df1['district_name'][0],'USER_NAME':df1['user'][0] ,'USER_EMAIL':df1['email_id'][0],   
-        'SCHOOL_MINDFUL_MINUTES':str(df3['Mindful_Minutes'][0]),
-           'SCHOOL_NAME':df1['school_name'][0],'ADDRESS':df1['Address'][0],'STATE':df1['STATE'][0],'CITY':df1['CITY'][0],'COUNTRY':df1['COUNTRY'][0],
-           'ADMIN_EMAIL':ADMIN_EMAIL,'ADMIN_NAME':ADMIN_NAME,'SCHOOL_PRACTICE_COUNT':str(df3['pc'][0]),
-           'Last_AUDIO':df3['AUDIO'][0],'Last_PROGRAM':df3['PROGRAM'][0],
-           'Last_AUDIO_DAY':df3['AUDIO_DAY'][0],'login_count_csy':str(df6['login_count_CSY'][0]),
+    df77=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
+    df99 = pd.DataFrame(df77,columns = ["Practice_date"])
+    df99['value'] = 0
+
+    uscy1= df55.merge(df99, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+    uscy1['Practice_date']=uscy1['Practice_date'].astype(np.int64)/int(1e6)
+    uscy=uscy1[["Practice_date","Users_Practice_CSY"]].values.tolist()
+
+    df3['Practice_date'] = pd.to_datetime(df3['Practice_date'])
+    df44=df3.sort_values(by='Practice_date')
+    dfl=pd.date_range(start=str(csy_first_date().date()-relativedelta(years=1)), end=str(csy_first_date().date()-relativedelta(days=1)))
+    dfl9 = pd.DataFrame(dfl,columns = ["Practice_date"])
+    dfl9['value'] = 0
+    plcy1= df44.merge(dfl9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+    plcy1['Practice_date']=plcy1['Practice_date'].astype(np.int64)/int(1e6)
+    plcy=plcy1[["Practice_date","Total_Practice_LSY"]].values.tolist()
+
+
+    temp={'data':{'csy':uscy,'lsy':plcy}}
+
+    data={'Info':[{'ROLE':df11['ROLE'][0],'SIGN_UP_DATE':df11['SIGN_UP_DATE'][0],
+        'Star_5_Ratings_Recieved':str(df5['rating'][0]),'DISTRICT':df11['district_name'][0],'USER_NAME':df11['user'][0] ,'USER_EMAIL':df11['email_id'][0],   
+        'SCHOOL_MINDFUL_MINUTES':str(df33['Mindful_Minutes'][0]),
+           'SCHOOL_NAME':df11['school_name'][0],'ADDRESS':df11['Address'][0],'STATE':df11['STATE'][0],'CITY':df11['CITY'][0],'COUNTRY':df11['COUNTRY'][0],
+           'ADMIN_EMAIL':ADMIN_EMAIL,'ADMIN_NAME':ADMIN_NAME,'SCHOOL_PRACTICE_COUNT':str(df33['pc'][0]),
+           'Last_AUDIO':df33['AUDIO'][0],'Last_PROGRAM':df33['PROGRAM'][0],
+           'Last_AUDIO_DAY':df33['AUDIO_DAY'][0],'login_count_csy':str(df6['login_count_CSY'][0]),
            'LAST_LOGGED_IN':df6['LAST_LOGGED_IN'][0],'Comment':df5['COMMENT'][0],'Last_Comment_date':df5['COMMENT_DATE'][0],
-           'RENEWAL_DATE':df4['Renewal_date'][0],'LAST_PRACTICE_DATE':df3['last_practice_date'][0],
-          'PLAN_NAME':df4['PLAN'][0]}],'chart':temp}
+           'RENEWAL_DATE':df4['Renewal_date'][0],'LAST_PRACTICE_DATE':df33['last_practice_date'][0],
+          'PLAN_NAME':df4['PLAN'][0]}],
+          'chart':temp}
 
 
     return json.dumps(data)
+# new0('sandra.quotson@youngstown.k12.oh.us')
    
 
 @app.route("/family___journey_score/<name>")
-
-def new0_family_(name):
+def new0_family(name):
     graph={}
     from datetime import datetime
     mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = MongoClient(mongo_uri)
-# #     from datetime import datetime
-#     today1= datetime.utcnow().replace(day=27) + timedelta(days=3)
-#     print(today1)
-#     tod1= today1+ timedelta(hours=4)
-#     print(tod1)
-#     start= tod1-timedelta(days=180)
-#     start1=start.replace(day=1)
     
     db = client["compass"]
-    df1=DataFrame(list(db.user_master.aggregate([
+    df11=DataFrame(list(db.user_master.aggregate([
         {"$match":{"$and":[
         {"EMAIL_ID":name},
              {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
@@ -56205,24 +56645,24 @@ def new0_family_(name):
 #     {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}
         ]}},
     {"$project":{"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME",'user':"$USER_NAME",
-                 "Address":"$schoolId.ADDRESS","COUNTRY":"$schoolId.COUNTRY","CITY":"$schoolId.CITY","STATE":"$schoolId.STATE","USER_NAME":"$USER_NAME",
+                 "Address":"$schoolId.ADDRESS","COUNTRY":"$schoolId.COUNTRY","CITY":"$schoolId.CITY","STATE":"$schoolId.STATE","USER_NAME":"$USER_NAME", 'SIGN_UP_DATE':{"$dateToString":{"format":"%Y-%m-%d","date":'$CREATED_DATE'}},
                 "email_id":"$EMAIL_ID","district_name":"$DISTRICT_ID.DISTRICT_NAME","ROLE":'$ROLE_ID.ROLE_NAME'
                 }}
     ])))
-    if df1.empty == True:
+    if df11.empty == True:
         data={'Result':0}
     else:
-        df1
-    column1 =['USER_ID',"ID","school_name",'user',"Address","COUNTRY","CITY","STATE","USER_NAME","email_id","district_name","ROLE"]
+        df11
+    column1 =['USER_ID',"ID","school_name",'user',"SIGN_UP_DATE","Address","COUNTRY","CITY","STATE","USER_NAME","email_id","district_name","ROLE"]
     for i in column1:
-        if i not in df1.columns:
-            df1[i] = 'No info'
+        if i not in df11.columns:
+            df11[i] = 'No info'
 
    
-    df1["ROLE"].replace({"PRESENT": "PARENT", "user":"Teacher",'admin':'ADMIN','donor':'donor','oms':'OMS'}, inplace=True)
+    df11["ROLE"].replace({"PRESENT": "PARENT", "user":"Teacher",'admin':'ADMIN','donor':'donor','oms':'OMS'}, inplace=True)
     
-    email=df1['USER_ID'].tolist()
-    school=df1['ID'].tolist()
+    email=df11['USER_ID'].tolist()
+    school=df11['ID'].tolist()
     
     
     df2=DataFrame(list(db.user_master.aggregate([
@@ -56246,7 +56686,7 @@ def new0_family_(name):
     ADMIN_NAME=df2['ADMIN_NAME'].tolist()
     ADMIN_EMAIL=df2['ADMIN_EMAIL'].tolist()
 
-    df3=DataFrame(list(db.audio_track_master.aggregate([
+    df33=DataFrame(list(db.audio_track_master.aggregate([
         {"$match":{'$and':[
                        {'USER_ID._id':{"$in":email}},
                             {'MODIFIED_DATE':{'$gte':csy_first_date()}}]}},    
@@ -56261,12 +56701,12 @@ def new0_family_(name):
            
         ])))
     column3 =['last_practice_date',"AUDIO_DAY",'PROGRAM','AUDIO','pc','Mindful_Minutes']
-    if df3.empty==True:
-        df3=pd.DataFrame({"last_practice_date":['No info'],'AUDIO_DAY':['No info'],'PROGRAM':['No info'],'AUDIO':['No info'],'pc':['0'],'Mindful_Minutes':['0']})
+    if df33.empty==True:
+        df33=pd.DataFrame({"last_practice_date":['No Practice'],'AUDIO_DAY':['No info'],'PROGRAM':['No info'],'AUDIO':['No info'],'pc':['0'],'Mindful_Minutes':['0']})
 
     for i in column3:
-        if i not in df3.columns:
-            df3[i] = 'No info'
+        if i not in df33.columns:
+            df33[i] = 'No info'
             
             
     
@@ -56304,7 +56744,7 @@ def new0_family_(name):
            
         ])))
     if df5.empty==True:
-        df5=pd.DataFrame({"COMMENT_DATE":['No info'],'rating':['0'],'COMMENT':['No info']})
+        df5=pd.DataFrame({"COMMENT_DATE":['No Comment'],'rating':['No Rating'],'COMMENT':['No Comment']})
     column5 =['COMMENT_DATE',"rating","COMMENT"]
     for i in column5:
         if i not in df5.columns:
@@ -56329,55 +56769,82 @@ def new0_family_(name):
         if i not in df2.columns:
             if i == "login_count_CSY":
                 df5[i] = 'No info'
-
-
-   
-
     
 #     =====For practice history chart
-    df7= DataFrame(list(db.audio_track_master.aggregate([
-        {"$match":{'$and':[ 
-                            { "USER_ID._id":{"$in":email}},
-                              ] }},
+    df1 = DataFrame(list(db.audio_track_master.aggregate([{"$match":
+        {"$and" :[
+             {'USER_ID._id':{"$in":email}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date()
+#                                     
+                                }},
+            ]}},
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Users_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+    if df1.empty == True:
+        df1=pd.DataFrame({'Practice_date':[],'Users_Practice_CSY':[]})
+    else:
+        df1
+   
+    df3 = DataFrame(list(db.audio_track_master.aggregate([{"$match":{'$and':[
+        
+                       {'USER_ID._id':{"$in":email}},
+                    {'MODIFIED_DATE':{"$gte":LSY_Date(),"$lt": csy_first_date()}}]}},
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'}, 
+                        'Total_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Total_Practice_LSY':'$Total_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+    if df3.empty == True:
+        df3=pd.DataFrame({'Practice_date':[],'Total_Practice_LSY':[]})
+    else:
+        df3
+    df1['Practice_date'] = pd.to_datetime(df1['Practice_date'])
 
 
-            {"$group":{"_id": {"$dateToString":{"format":"%Y-%m-%d","date":"$MODIFIED_DATE"}},"PRACTICE_COUNT":{"$sum":1},
-            "MINDFUL_MINUTES":{"$sum":{"$round":[{"$divide":[{"$subtract":['$CURSOR_END','$cursorStart']},60]},2]}}, 
-
-                      }},
-        { "$project": {"MINDFUL_MINUTES":1,"PRACTICE_COUNT":1}}
-        ])))
-       
-    if df7.empty:
-        temp={'data':[]}
-        return (temp)
-    else: 
-        df7
-    df14i=df7[["_id","PRACTICE_COUNT"]]
-    df14i['_id'] = pd.to_datetime(df14i['_id'])
-    df15i=df14i.sort_values(by='_id')
-    df15i['_id']=df15i['_id'].astype(np.int64)/int(1e6)
-    shp=df15i[["_id","PRACTICE_COUNT"]].values.tolist()
-    df15i['Cumulative_Amount'] = df15i['PRACTICE_COUNT'].cumsum()
-    df16i=df15i[['_id','Cumulative_Amount']]
-    shpcum=df16i.values.tolist()
-    temp={'data':{'shp':shp,'shpcum':shpcum}}
+    df55=df1.sort_values(by='Practice_date')
     
-    data={'Info':[{'ROLE':df1['ROLE'][0],
-        'Star_5_Ratings_Recieved':str(df5['rating'][0]),'DISTRICT':df1['district_name'][0],'USER_NAME':df1['user'][0] ,'USER_EMAIL':df1['email_id'][0],   
-        'SCHOOL_MINDFUL_MINUTES':str(df3['Mindful_Minutes'][0]),
-           'SCHOOL_NAME':df1['school_name'][0],'ADDRESS':df1['Address'][0],'STATE':df1['STATE'][0],'CITY':df1['CITY'][0],'COUNTRY':df1['COUNTRY'][0],
-           'ADMIN_EMAIL':ADMIN_EMAIL,'ADMIN_NAME':ADMIN_NAME,'SCHOOL_PRACTICE_COUNT':str(df3['pc'][0]),
-           'Last_AUDIO':df3['AUDIO'][0],'Last_PROGRAM':df3['PROGRAM'][0],
-           'Last_AUDIO_DAY':df3['AUDIO_DAY'][0],'login_count_csy':str(df6['login_count_CSY'][0]),
+    df77=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
+    df99 = pd.DataFrame(df77,columns = ["Practice_date"])
+    df99['value'] = 0
+
+    uscy1= df55.merge(df99, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+    uscy1['Practice_date']=uscy1['Practice_date'].astype(np.int64)/int(1e6)
+    uscy=uscy1[["Practice_date","Users_Practice_CSY"]].values.tolist()
+
+    df3['Practice_date'] = pd.to_datetime(df3['Practice_date'])
+    df44=df3.sort_values(by='Practice_date')
+    dfl=pd.date_range(start=str(csy_first_date().date()-relativedelta(years=1)), end=str(csy_first_date().date()-relativedelta(days=1)))
+    dfl9 = pd.DataFrame(dfl,columns = ["Practice_date"])
+    dfl9['value'] = 0
+    plcy1= df44.merge(dfl9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+    plcy1['Practice_date']=plcy1['Practice_date'].astype(np.int64)/int(1e6)
+    plcy=plcy1[["Practice_date","Total_Practice_LSY"]].values.tolist()
+
+
+    temp={'data':{'csy':uscy,'lsy':plcy}}
+
+    data={'Info':[{'ROLE':df11['ROLE'][0],'SIGN_UP_DATE':df11['SIGN_UP_DATE'][0],
+        'Star_5_Ratings_Recieved':str(df5['rating'][0]),'DISTRICT':df11['district_name'][0],'USER_NAME':df11['user'][0] ,'USER_EMAIL':df11['email_id'][0],   
+        'SCHOOL_MINDFUL_MINUTES':str(df33['Mindful_Minutes'][0]),
+           'SCHOOL_NAME':df11['school_name'][0],'ADDRESS':df11['Address'][0],'STATE':df11['STATE'][0],'CITY':df11['CITY'][0],'COUNTRY':df11['COUNTRY'][0],
+           'ADMIN_EMAIL':ADMIN_EMAIL,'ADMIN_NAME':ADMIN_NAME,'SCHOOL_PRACTICE_COUNT':str(df33['pc'][0]),
+           'Last_AUDIO':df33['AUDIO'][0],'Last_PROGRAM':df33['PROGRAM'][0],
+           'Last_AUDIO_DAY':df33['AUDIO_DAY'][0],'login_count_csy':str(df6['login_count_CSY'][0]),
            'LAST_LOGGED_IN':df6['LAST_LOGGED_IN'][0],'Comment':df5['COMMENT'][0],'Last_Comment_date':df5['COMMENT_DATE'][0],
-           'RENEWAL_DATE':df4['Renewal_date'][0],'LAST_PRACTICE_DATE':df3['last_practice_date'][0],
-          'PLAN_NAME':df4['PLAN'][0]}],'chart':temp}
+           'RENEWAL_DATE':df4['Renewal_date'][0],'LAST_PRACTICE_DATE':df33['last_practice_date'][0],
+          'PLAN_NAME':df4['PLAN'][0]}],
+          'chart':temp}
 
 
     return json.dumps(data)
-   
-
+# new0('sandra.quotson@youngstown.k12.oh.us')
 
 
 
@@ -68468,7 +68935,7 @@ def day_feedback_card():
 
 
 @app.route('/active_user_dild')
-def active_userss__():
+def active_userss_s():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
@@ -68509,12 +68976,14 @@ def active_userss__():
         {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
         {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, {'DEVICE_USED':{'$regex':'webapp', '$options':'i'}},
+            {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}, 
+                    {'DEVICE_USED':{'$regex':'webApp', '$options':'i'}},
         {'_id':{'$in':list_of_users}}
                ]}},
-        {'$group':{'_id':'$_id'}}])))
+        {'$group':{'_id':'$_id', 'device':{'$first':'$DEVICE_USED'}}}])))
 
         web_users=len(df_web)
+
 
 
         df_home=DataFrame(list(collection2.aggregate([{"$match":{
@@ -68535,36 +69004,60 @@ def active_userss__():
         {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
         {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, 
+        {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}, 
         {'_id':{'$nin':db.schoology_master.distinct("USER_ID._id")}},
         {'_id':{'$nin':db.clever_master.distinct("USER_ID._id")}},
         {'DEVICE_USED':{'$not':{'$regex':'webapp', '$options':'i'}}} , 
         {'DEVICE_USED':{'$not':{'$regex':'clever', '$options':'i'}}},
                 {'DEVICE_USED':{'$not':{'$regex':'schoology', '$options':'i'}}},
         {'_id':{'$in':list_of_users}}]}},
-        {'$group':{'_id':'$_id'}}])))
+        {'$group':{'_id':'$_id', 'device':{'$first':'$DEVICE_USED'}}}])))
 
 
         mobile=pd.concat([df_home,df_classroom]).reset_index(drop=True)
         mobile_users=len(mobile)
 
-        df_lms=DataFrame(list(collection2.aggregate([{"$match":{
+        df_clever=DataFrame(list(collection2.aggregate([{"$match":{
         '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+                    {'_id':{'$nin':db.schoology_master.distinct('USER_ID._id')}},
+                    {'_id':{'$in':db.clever_master.distinct('USER_ID._id')}},
         {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-        {'_id':{'$in':list_of_users}}
+        {'_id':{'$in':list_of_users}},
+                  {'DEVICE_USED':{'$regex':'clever', '$options':'i'}},
         ]}},
-        {"$match":{'$or':[{'DEVICE_USED':{'$regex':'clever', '$options':'i'}},{'DEVICE_USED':{'$regex':'schoology', '$options':'i'}}
+
+        {'$group':{'_id':'$_id'}}])))
+
+        clever_users=len(df_clever)
+
+        df_schoology=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+                    {'_id':{'$in':db.schoology_master.distinct('USER_ID._id')}},
+                    {'_id':{'$nin':db.clever_master.distinct('USER_ID._id')}},
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'_id':{'$in':list_of_users}},
+
+                {'DEVICE_USED':{'$regex':'schoology', '$options':'i'}}
         ]}},
         {'$group':{'_id':'$_id'}}])))
 
-        lms_users=len(df_lms)
+
+        schoology_users=len(df_schoology)
+
+        lms=pd.concat([df_clever,df_schoology]).reset_index(drop=True)
+        lms_users=len(lms)
+
 
         data1= {'active_users':str(active_users),'web_users':str(web_users),'mobile_users':str(mobile_users),'lms_users':str(lms_users)}
     temp={'data':[data1]} 
     return json.dumps(temp)
+
 
 
 
@@ -68971,7 +69464,7 @@ def day_signup_card():
     return json.dumps(temp2)
 
 @app.route('/totalactive_users_dild_')
-def active_users_today():
+def active_users_todayy():
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
@@ -68986,7 +69479,7 @@ def active_users_today():
 
     collection= db.audio_track_master
     df_playback= DataFrame(list(collection.aggregate([{"$match":{
-    '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -68995,7 +69488,8 @@ def active_users_today():
     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
     {'MODIFIED_DATE': {'$gte':today_min, '$lte':today_max}}
     ]}},
-    {'$group':{'_id':'$USER_ID._id', 'practice':{'$sum':1}}}
+    {'$group':{'_id':'$USER_ID._id', 'users':{'$addToSet':'$USER_ID._id'}}},
+    {'$project':{'_id':1, 'users':{'$size':'$users'}}}
     ])))
 
     if df_playback.empty:
@@ -69012,13 +69506,13 @@ def active_users_today():
         {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
         {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, {'DEVICE_USED':{'$regex':'webapp', '$options':'i'}},
+        {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}, 
+                {'DEVICE_USED':{'$regex':'webapp', '$options':'i'}},
         {'_id':{'$in':list_of_users}}
                ]}},
-        {'$group':{'_id':'$_id'}}])))
+        {'$group':{'_id':'$_id', 'device':{'$first':'$DEVICE_USED'}}}])))
 
         web_users=len(df_web)
-
 
         df_home=DataFrame(list(collection2.aggregate([{"$match":{
         '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -69038,36 +69532,60 @@ def active_users_today():
         {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
         {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-        {'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2a")}}, 
+        {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}, 
         {'_id':{'$nin':db.schoology_master.distinct("USER_ID._id")}},
         {'_id':{'$nin':db.clever_master.distinct("USER_ID._id")}},
         {'DEVICE_USED':{'$not':{'$regex':'webapp', '$options':'i'}}} , 
         {'DEVICE_USED':{'$not':{'$regex':'clever', '$options':'i'}}},
                 {'DEVICE_USED':{'$not':{'$regex':'schoology', '$options':'i'}}},
         {'_id':{'$in':list_of_users}}]}},
-        {'$group':{'_id':'$_id'}}])))
+        {'$group':{'_id':'$_id', 'device':{'$first':'$DEVICE_USED'}}}])))
 
 
         mobile=pd.concat([df_home,df_classroom]).reset_index(drop=True)
         mobile_users=len(mobile)
 
-        df_lms=DataFrame(list(collection2.aggregate([{"$match":{
+        df_clever=DataFrame(list(collection2.aggregate([{"$match":{
         '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+                    {'_id':{'$nin':db.schoology_master.distinct('USER_ID._id')}},
+                    {'_id':{'$in':db.clever_master.distinct('USER_ID._id')}},
         {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-        {'_id':{'$in':list_of_users}}
+        {'_id':{'$in':list_of_users}},
+                  {'DEVICE_USED':{'$regex':'clever', '$options':'i'}},
         ]}},
-        {"$match":{'$or':[{'DEVICE_USED':{'$regex':'clever', '$options':'i'}},{'DEVICE_USED':{'$regex':'schoology', '$options':'i'}}
+
+        {'$group':{'_id':'$_id'}}])))
+
+        clever_users=len(df_clever)
+
+        df_schoology=DataFrame(list(collection2.aggregate([{"$match":{
+        '$and':[{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_BLOCKED':{"$ne":'Y'}}, 
+                    {'_id':{'$in':db.schoology_master.distinct('USER_ID._id')}},
+                    {'_id':{'$nin':db.clever_master.distinct('USER_ID._id')}},
+        {'IS_DISABLED':{"$ne":'Y'}}, {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'_id':{'$in':list_of_users}},
+
+                {'DEVICE_USED':{'$regex':'schoology', '$options':'i'}}
         ]}},
         {'$group':{'_id':'$_id'}}])))
 
-        lms_users=len(df_lms)
+
+        schoology_users=len(df_schoology)
+
+        lms=pd.concat([df_clever,df_schoology]).reset_index(drop=True)
+        lms_users=len(lms)
+
 
         data1= {'active_users':str(active_users),'web_users':str(web_users),'mobile_users':str(mobile_users),'lms_users':str(lms_users)}
     temp={'data':[data1]} 
     return json.dumps(temp)
+
 
 
 
@@ -69808,6 +70326,7 @@ def practice_per_minn_(charttype):
 
 
         df1['Practice_date']=pd.to_datetime(df1['Practice_date'], format="%Y-%m-%d %H:%M")
+        df1['Practice_date']=df1['Practice_date']-timedelta(hours=4)
         df5=df1.sort_values(by='Practice_date')
         time_range=[]
         # start = '2021-10-12 00:00:00'
@@ -69833,6 +70352,7 @@ def practice_per_minn_(charttype):
 
         # ratings
         ratings['Practice_date']=pd.to_datetime(ratings['Practice_date'], format="%Y-%m-%d %H:%M")
+        ratings['Practice_date']=ratings['Practice_date']-timedelta(hours=4)
         df5ratings=ratings.sort_values(by='Practice_date')
         time_range=[]
         # start = '2021-10-12 00:00:00'
@@ -69860,6 +70380,7 @@ def practice_per_minn_(charttype):
 
         if 'Practice_date' in list(clever.columns):
             clever['Practice_date']=pd.to_datetime(clever['Practice_date'])
+            clever['Practice_date']=clever['Practice_date']-timedelta(hours=4)
             clever_sort=clever.sort_values(by='Practice_date')
         else:
             time_range=[]
@@ -69881,6 +70402,7 @@ def practice_per_minn_(charttype):
 
         if 'Practice_date' in list(schoology.columns):
             schoology['Practice_date']=pd.to_datetime(schoology['Practice_date'], format='%Y-%m-%d %H:%M')
+            schoology['Practice_date']=schoology['Practice_date']-timedelta(hours=4)
             schoology_sort=schoology.sort_values(by='Practice_date')
         else:
             time_range=[]
@@ -69902,6 +70424,7 @@ def practice_per_minn_(charttype):
 
         # Parents 
         df2['Practice_date'] = pd.to_datetime(df2['Practice_date'])
+        df2['Practice_date']=df2['Practice_date']-timedelta(hours=4)
         df6=df2.sort_values(by='Practice_date')
 
         time_range=[]
@@ -70066,6 +70589,7 @@ def practice_per_minn_(charttype):
 
 
         df1['Practice_date']=pd.to_datetime(df1['Practice_date'], format="%Y-%m-%d %H:%M")        
+        df1['Practice_date']=df1['Practice_date']-timedelta(hours=4)
         df5=df1.sort_values(by='Practice_date')
         time_range=[]
         # start = '2021-10-12 00:00:00'
@@ -70093,6 +70617,7 @@ def practice_per_minn_(charttype):
         start_today=today_min.strftime('%Y-%m-%d %H:%M:%S')
         end_today=today_max.strftime('%Y-%m-%d %H:%M:%S')
         ratings['Practice_date']=pd.to_datetime(ratings['Practice_date'], format="%Y-%m-%d %H:%M")
+        ratings['Practice_date']=ratings['Practice_date']-timedelta(hours=4)
         df5ratings=ratings.sort_values(by='Practice_date')
         time_range=[]
         # start = '2021-10-12 00:00:00'
@@ -70120,6 +70645,7 @@ def practice_per_minn_(charttype):
 
         if 'Practice_date' in list(clever.columns):
             clever['Practice_date']=pd.to_datetime(clever['Practice_date'])
+            clever['Practice_date']=clever['Practice_date']-timedelta(hours=4)
             clever_sort=clever.sort_values(by='Practice_date')
         else:
             time_range=[]
@@ -70141,6 +70667,7 @@ def practice_per_minn_(charttype):
 
         if 'Practice_date' in list(schoology.columns):
             schoology['Practice_date']=pd.to_datetime(schoology['Practice_date'])
+            schoology['Practice_date']=schoology['Practice_date']-timedelta(hours=4)
             schoology_sort=schoology.sort_values(by='Practice_date')
         else:
             time_range=[]
@@ -70160,6 +70687,7 @@ def practice_per_minn_(charttype):
 
         # Parents 
         df2['Practice_date'] = pd.to_datetime(df2['Practice_date'])
+        df2['Practice_date']=df2['Practice_date']-timedelta(hours=4)
         df6=df2.sort_values(by='Practice_date')
 
         time_range=[]
@@ -70405,6 +70933,7 @@ def practice_per_min_program(charttype):
         if 'Practice_date' in list(df_elem.columns):
             df_elem.loc[(df_elem['program_id']==2)|(df_elem['program_id']==16),'program_id']=12
             df_elem['Practice_date']=pd.to_datetime(df_elem['Practice_date'], format="%Y-%m-%d %H:%M")
+            df_elem['Practice_date']=df_elem['Practice_date']-timedelta(hours=4)
             df5=df_elem.sort_values(by='Practice_date')
             time_range=[]
             delta = datetime.timedelta(seconds=60)
@@ -70474,6 +71003,7 @@ def practice_per_min_program(charttype):
             df_middle.loc[(df_middle['program_id']==3)&(df_middle['program_id']==17),'program_id']=13
 
             df_middle['Practice_date']=pd.to_datetime(df_middle['Practice_date'], format="%Y-%m-%d %H:%M")
+            df_middle['Practice_date']=df_middle['Practice_date']-timedelta(hours=4)
             df6=df_middle.sort_values(by='Practice_date')
             time_range=[]
             delta = datetime.timedelta(seconds=60)
@@ -70518,6 +71048,7 @@ def practice_per_min_program(charttype):
             df_high.loc[(df_high['program_id']==4)&(df_high['program_id']==14),'program_id']=9
 
             df_high['Practice_date']=pd.to_datetime(df_high['Practice_date'], format="%Y-%m-%d %H:%M")
+            df_high['Practice_date']=df_high['Practice_date']-timedelta(hours=4)
             df7=df_high.sort_values(by='Practice_date')
             time_range=[]
             delta = datetime.timedelta(seconds=60)
@@ -70562,6 +71093,7 @@ def practice_per_min_program(charttype):
             df_early.loc[(df_early['program_id']==1)&(df_early['program_id']==15),'program_id']=11
 
             df_early['Practice_date']=pd.to_datetime(df_early['Practice_date'], format="%Y-%m-%d %H:%M")
+            df_early['Practice_date']=df_early['Practice_date']-timedelta(hours=4)
             df8=df_early.sort_values(by='Practice_date')
             time_range=[]
             delta = datetime.timedelta(seconds=60)
@@ -70607,6 +71139,7 @@ def practice_per_min_program(charttype):
         if 'Practice_date' in list(df_wellness.columns):
             df_wellness.loc[(df_wellness['program_id']==5 )& (df_wellness['program_id']==6 )& (df_wellness['program_id']==7) & (df_wellness['program_id']==8),'program_id']=10
             df_wellness['Practice_date']=pd.to_datetime(df_wellness['Practice_date'], format="%Y-%m-%d %H:%M")
+            df_wellness['Practice_date']=df_wellness['Practice_date']-timedelta(hours=4)
             df99=df_wellness.sort_values(by='Practice_date')
             time_range=[]
             delta = datetime.timedelta(seconds=60)
@@ -70831,6 +71364,7 @@ def practice_per_min_program(charttype):
         if 'Practice_date' in list(df_elem.columns):
             df_elem.loc[(df_elem['program_id']==2)|(df_elem['program_id']==16),'program_id']=12
             df_elem['Practice_date']=pd.to_datetime(df_elem['Practice_date'], format="%Y-%m-%d %H:%M")
+            df_elem['Practice_date']=df_elem['Practice_date']-timedelta(hours=4)
             df5=df_elem.sort_values(by='Practice_date')
             time_range=[]
             delta = datetime.timedelta(seconds=60)
@@ -70873,6 +71407,7 @@ def practice_per_min_program(charttype):
 
         # RATINGS
         df_ratings['Practice_date']=pd.to_datetime(df_ratings['Practice_date'], format="%Y-%m-%d %H:%M")
+
         df5ratings=df_ratings.sort_values(by='Practice_date')
         time_range=[]
         delta = datetime.timedelta(seconds=60)
@@ -70900,6 +71435,7 @@ def practice_per_min_program(charttype):
             df_middle.loc[(df_middle['program_id']==3)&(df_middle['program_id']==17),'program_id']=13
 
             df_middle['Practice_date']=pd.to_datetime(df_middle['Practice_date'], format="%Y-%m-%d %H:%M")
+            df_middle['Practice_date']=df_middle['Practice_date']-timedelta(hours=4)
             df6=df_middle.sort_values(by='Practice_date')
             time_range=[]
             delta = datetime.timedelta(seconds=60)
@@ -70944,6 +71480,7 @@ def practice_per_min_program(charttype):
             df_high.loc[(df_high['program_id']==4)&(df_high['program_id']==14),'program_id']=9
 
             df_high['Practice_date']=pd.to_datetime(df_high['Practice_date'], format="%Y-%m-%d %H:%M")
+            df_high['Practice_date']=df_high['Practice_date']-timedelta(hours=4)
             df7=df_high.sort_values(by='Practice_date')
             time_range=[]
             delta = datetime.timedelta(seconds=60)
@@ -70988,6 +71525,7 @@ def practice_per_min_program(charttype):
             df_early.loc[(df_early['program_id']==1)&(df_early['program_id']==15),'program_id']=11
 
             df_early['Practice_date']=pd.to_datetime(df_early['Practice_date'], format="%Y-%m-%d %H:%M")
+            df_early['Practice_date']=df_early['Practice_date']-timedelta(hours=4)
             df8=df_early.sort_values(by='Practice_date')
             time_range=[]
             delta = datetime.timedelta(seconds=60)
@@ -71033,6 +71571,7 @@ def practice_per_min_program(charttype):
         if 'Practice_date' in list(df_wellness.columns):
             df_wellness.loc[(df_wellness['program_id']==5 )& (df_wellness['program_id']==6 )& (df_wellness['program_id']==7) & (df_wellness['program_id']==8),'program_id']=10
             df_wellness['Practice_date']=pd.to_datetime(df_wellness['Practice_date'], format="%Y-%m-%d %H:%M")
+            df_wellness['Practice_date']=df_wellness['Practice_date']-timedelta(hours=4)
             df99=df_wellness.sort_values(by='Practice_date')
             time_range=[]
             delta = datetime.timedelta(seconds=60)

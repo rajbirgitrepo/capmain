@@ -278,7 +278,7 @@
             </li>
             <li class="active"><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
                 <ul class="side-nav-dropdown">
-                    <!-- <li class="active2"><a href="NameEScore">DISTRICT ENGAGEMENT</a></li> -->
+                    <li class="active2"><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
                     <li class="active2"><a href="Disctrictfilter">DISTRICT 360</a></li>
                     <li class="active2"><a href="partner">PARTNER PORTAL</a></li>
                     <li class="active2"><a href="Login_analytics">LOGIN ANALYTICS</a></li>
@@ -588,6 +588,14 @@
                         <div id="containerprac" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div id="container40" style="height: 400px;margin-top:20px; width: 100%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="chartdiv" style=" border-radius: 20px;margin-top:20px;background-color: #fff;height: 400px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                        </div>
+                    </div>
                     <div class="welcome2">
                         <div class="container-fluid">
                             <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
@@ -674,7 +682,7 @@
                                                             <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
-                                                            <p class="category">Last Playback Date</p>
+                                                            <p class="category f-12">Last Playback Date(CSY)</p>
                                                             <h3 class="card-title" id="fucount" style="font-size: 19px !important;"></h3>
 
 
@@ -689,7 +697,7 @@
                                                             <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
-                                                            <p class="category">Playback Count</p>
+                                                            <p class="category f-12">Playback Count(CSY)</p>
                                                             <h3 class="card-title" id="fpcount"></h3>
                                                         </div>
 
@@ -702,7 +710,7 @@
                                                             <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
-                                                            <p class="category"> Mindful Minutes</p>
+                                                            <p class="category f-12"> Mindful Minutes(CSY)</p>
                                                             <h3 class="card-title" style="font-size: 22px !important;" id="fmindfulness_minutes"></h3>
                                                         </div>
                                                         <!-- <div class="card-footer">
@@ -794,7 +802,7 @@
                                                             <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
-                                                            <p class="category">Last Playback Date</p>
+                                                            <p class="category f-12">Last Playback Date(CSY)</p>
                                                             <h3 class="card-title" id="uucount" style="font-size: 19px !important;"></h3>
 
 
@@ -809,7 +817,7 @@
                                                             <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
-                                                            <p class="category">Playback Count</p>
+                                                            <p class="category f-12">Playback Count(CSY)</p>
                                                             <h3 class="card-title" id="upcount"></h3>
                                                         </div>
 
@@ -822,7 +830,7 @@
                                                             <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
-                                                            <p class="category"> Mindful Minutes</p>
+                                                            <p class="category f-12"> Mindful Minutes(CSY)</p>
                                                             <h3 class="card-title" style="font-size: 22px !important;" id="umindfulness_minutes"></h3>
                                                         </div>
                                                         <!-- <div class="card-footer">
@@ -1224,6 +1232,263 @@
                     }]
                 });
             });
+
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": '/wordcloud_schoolsearch/' + a,
+                "method": "GET",
+            }
+            $.ajax(settings).done(function(response) {
+                var dataa = JSON.parse(response);
+                console.log('/wordcloud_schoolsearch/' + a, );
+                console.log(dataa);
+                $("#avgrate").text(dataa.avg_rating);
+
+
+                am4core.useTheme(am4themes_animated);
+                // Themes end
+
+
+                var chart = am4core.create("chartdiv", am4plugins_wordCloud.WordCloud);
+                var series = chart.series.push(new am4plugins_wordCloud.WordCloudSeries());
+
+                series.accuracy = 4;
+                series.step = 15;
+                series.rotationThreshold = 0.7;
+                series.maxCount = 200;
+                series.minWordLength = 2;
+                series.labels.template.tooltipText = "{word}: {value}";
+                series.fontFamily = "Courier New";
+                series.maxFontSize = am4core.percent(30);
+
+                series.text = dataa.word_cloud;
+
+
+
+                Chart.defaults.global.defaultFontFamily = "Lato";
+
+                var horizontalBarChart = new Chart(horizontalBarChartCanvas, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: dataa.label,
+                        datasets: [{
+                            data: dataa.count,
+                            backgroundColor: ["#4da555", "#4da555", "#4da555", "#4da555", "#4da555", "#4da555", "#4da555", "#4da555", "#4da555", "#4da555"],
+                        }]
+                    },
+                    options: {
+                        tooltips: {
+                            enabled: true
+                        },
+                        responsive: true,
+                        legend: {
+                            display: false,
+                            position: 'bottom',
+                            fullWidth: true,
+                            labels: {
+                                boxWidth: 10,
+                                padding: 50
+                            }
+                        },
+                        scales: {
+                            yAxes: [{
+                                barPercentage: 0.75,
+                                gridLines: {
+                                    display: true,
+                                    drawTicks: true,
+                                    drawOnChartArea: false
+                                },
+                                ticks: {
+                                    fontColor: '#555759',
+                                    fontFamily: 'Lato',
+                                    fontSize: 11
+                                }
+
+                            }],
+                            xAxes: [{
+                                gridLines: {
+                                    display: true,
+                                    drawTicks: false,
+                                    tickMarkLength: 5,
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    padding: 5,
+                                    beginAtZero: true,
+                                    fontColor: '#ffffff',
+                                    fontFamily: 'Lato',
+                                    fontSize: 11,
+                                    callback: function(label, index, labels) {
+                                        return label / 1000;
+                                    }
+
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    padding: 10,
+                                    fontFamily: 'Lato',
+                                    fontColor: '#555759',
+                                    fontSize: 16,
+                                    fontStyle: 700,
+                                    labelString: ''
+                                },
+
+                            }]
+                        }
+                    }
+                });
+            });
+
+            var settings = {
+                async: true,
+                crossDomain: true,
+                url: "/schoolseacrhprogram_chart/" + a,
+                method: "GET",
+            }
+            $.ajax(settings).done(function(response) {
+                var dataa = JSON.parse(response);
+                console.log(dataa);
+                console.log("/schoolseacrhprogram_chart/" + a);
+
+                chart = new Highcharts.StockChart({
+
+                    chart: {
+                        renderTo: 'container40',
+                        zoomType: 'x'
+                    },
+                    title: {
+                        text: 'School Program'
+                    },
+                    legend: {
+                        enabled: true,
+                        itemStyle: {
+                            fontSize: '10px',
+                            fontWeight: '200'
+                        }
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+
+                    xAxis: [{
+
+                        categories: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                        crosshair: true
+
+
+
+                    }, {
+
+                        opposite: true,
+                        visible: false
+                    }],
+
+                    yAxis: [{
+                        visible: true,
+                        opposite: false,
+                        showLastLabel: true,
+                        title: {
+                            text: ' Count'
+                        },
+
+                    }, {
+                        visible: true,
+                        opposite: false,
+                        showLastLabel: true,
+                        opposite: true,
+                        title: {
+                            text: 'Playback'
+                        },
+
+                    }],
+
+                    tooltip: {
+                        pointFormatter: function() {
+                            return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
+                        }
+                    },
+
+                    legend: {
+                        enabled: true
+                    },
+
+                    navigator: {
+                        enabled: false
+                    },
+                    rangeSelector: {
+                        inputEnabled: false,
+                        enabled: true,
+                        selected: 1
+                    },
+
+                    scrollbar: {
+                        enabled: true
+                    },
+
+                    navigation: {
+                        buttonOptions: {
+                            enabled: true
+                        }
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal'
+
+                        },
+                        series: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    series: [{
+                        "name": "Elementary",
+                        "type": "column",
+                        "color": "#FF9933",
+                        "xAxis": 0,
+                        "data": dataa.elem,
+                        "yAxis": 1
+
+                    }, {
+                        "name": "Middle",
+                        "type": "column",
+                        "color": "#FFFF00",
+                        "xAxis": 0,
+                        "data": dataa.elem_pc,
+                        "yAxis": 0
+
+                    }, {
+                        "name": "High",
+                        "type": "column",
+                        "color": "#01A451",
+                        "xAxis": 0,
+                        "data": dataa.high,
+                        "yAxis": 0
+
+                    }, {
+                        "name": "Early Learning",
+                        "type": "column",
+                        "color": "#4f1faf",
+                        "xAxis": 0,
+                        "data": dataa.high_pc,
+                        "yAxis": 0
+
+                    }, {
+                        "name": "Wellness",
+                        "type": "column",
+                        "color": "#8AE02B",
+                        "xAxis": 0,
+                        "data": dataa.prek,
+                        "yAxis": 0
+
+                    }]
+                });
+
+            });
+
+
+
 
         };
 

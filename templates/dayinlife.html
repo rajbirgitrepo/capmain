@@ -154,7 +154,7 @@
             </li>
             <li><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
                 <ul class="side-nav-dropdown">
-                    <!-- <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li> -->
+                    <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
                     <li><a href="Disctrictfilter">DISTRICT 360</a></li>
                     <li><a href="partner">PARTNER PORTAL</a></li>
                     <li><a href="Login_analytics">LOGIN ANALYTICS</a></li>
@@ -380,7 +380,7 @@
                 <div class="col-md-3">
                     <div class="boxExecutive">
                         <div>
-                            <p style="font-size: 11px;">Active User In Total<span style="margin-left: 5px !important;"></span></p>
+                            <p style="font-size: 11px;">Daily Active Users<span style="margin-left: 5px !important;"></span></p>
                             <p class="boxvalue2" id="activetotal" style="font-weight:700;"></p>
                             <hr />
                             <p class="boxHeading2">Web</p>
@@ -407,17 +407,20 @@
                         <div class="boxExecutive">
                             <div>
                                 <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
-                                <p style="font-size: 11px;">Total Playback<span style="margin-left: 5px !important;" id="updownfbtotal"></span></p>
+                                <!-- <p style="font-size: 11px;">Total Playback<span style="margin-left: 5px !important;" id="updownfbtotal"></span></p> -->
+                                <p style="font-size: 11px;">Total Playback</p>
                                 <p class="boxvalue2" id="avgfb"></p>
                                 <hr />
                                 <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                                <p class="boxHeading2">Parents Playback<span style="margin-left: 5px !important;" id="updownfbper"></span></p>
-                                <p class="boxvalue" id="comments2" onclick="cards('/')" style="cursor:pointer;"></p>
+                                <p class="boxHeading2">Parents Playback</p>
+                                <!-- <p class="boxHeading2">Parents Playback<span style="margin-left: 5px !important;" id="updownfbper"></span></p> -->
+                                <p class="boxvalue" id="comments2" style="cursor:pointer;"></p>
                                 <br />
                                 <hr />
                                 <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                                <p class="boxHeading2">Teacher Playback<span style="margin-left: 5px !important;" id="updownfbcomment"></span></p>
-                                <p class="boxvalue" id="comments" onclick="cards('/')" style="cursor:pointer;"></p>
+                                <!-- <p class="boxHeading2">Teacher Playback<span style="margin-left: 5px !important;" id="updownfbcomment"></span></p> -->
+                                <p class="boxHeading2">Teacher Playback</p>
+                                <p class="boxvalue" id="comments" style="cursor:pointer;"></p>
                                 <br />
                                 <hr />
                             </div>
@@ -427,17 +430,20 @@
                         <div class="boxExecutive">
                             <div>
                                 <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
-                                <p style="font-size: 11px;">Avg. Feedback<span style="margin-left: 5px !important;" id="updownavgtotal"></span></p>
-                                <p class="boxvalue2" id="average_rating" onclick="cards4('')"></p>
+                                <!-- <p style="font-size: 11px;">Avg. Feedback<span style="margin-left: 5px !important;" id="updownavgtotal"></span></p> -->
+                                <p style="font-size: 11px;">Avg. Feedback</p>
+                                <p class="boxvalue2" id="average_rating"></p>
                                 <hr />
                                 <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                                <p class="boxHeading2">No. of Parents Feedbacks<span style="margin-left: 5px !important;" id="updownavgcomment"></span></p>
-                                <p class="boxvalue" id="Parent_feedback" style="cursor:pointer;"></p>
+                                <!-- <p class="boxHeading2">No. of Parents Feedbacks<span style="margin-left: 5px !important;" id="updownavgcomment"></span></p> -->
+                                <p class="boxHeading2">No. of Parents Feedbacks</p>
+                                <p class="boxvalue" id="Parent_feedback"></p>
                                 <br />
                                 <hr />
                                 <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                                <p class="boxHeading2">No. of Teacher Feedbacks<span style="margin-left: 5px !important;" id="updownavgper"></span></p>
-                                <p class="boxvalue" id="Teacher_feedback" style="cursor:pointer;"></p>
+                                <!-- <p class="boxHeading2">No. of Teacher Feedbacks<span style="margin-left: 5px !important;" id="updownavgper"></span></p> -->
+                                <p class="boxHeading2">No. of Teacher Feedbacks</p>
+                                <p class="boxvalue" id="Teacher_feedback"></p>
                                 <br />
                                 <hr />
                             </div>

@@ -260,25 +260,29 @@ function charts(a, b, c) {
                 },
                 series: [{
                         name: 'Clever',
-                        data: dataa.Clever
+                        data: dataa.Clever,
+                        stack: 'male'
                     },
                     {
                         name: 'Schoology',
-                        data: dataa.Scoology
+                        data: dataa.Scoology,
+                        stack: 'male'
                     }, {
                         name: 'Home',
                         fontSize: '8px',
-                        data: dataa.Parents
+                        data: dataa.Parents,
+                        stack: 'male'
 
                     }, {
                         name: 'Classroom',
-                        data: dataa.Teachers
+                        data: dataa.Teachers,
+                        stack: 'male'
 
                     }, {
                         name: 'LSY',
                         data: dataa.lsy,
                         color: '#FF9933',
-                        type: 'line'
+                        stack: 'female'
                     },
                 ],
             });
@@ -709,12 +713,13 @@ function charts(a, b, c) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "top20userspractisinginfo/6045e4c807ead7744b12583b/2020-08-01/2021-07-31",
+        url: "top20userspractisinginfo/" + a + "/2020-08-01/2021-07-31",
         method: "GET",
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
+        console.log(url);
         //console.log("/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c);
         $(function() {
             $("#container10").highcharts({
