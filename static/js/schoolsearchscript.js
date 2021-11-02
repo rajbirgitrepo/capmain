@@ -28,6 +28,9 @@ if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1
     $("#status").empty();
     console.log(URL);
     P(URL);
+    escore(urlid);
+    schoolIDCharts(urlid)
+    historychart(urlid)
     $("#next").empty();
     $("#next1").empty();
     $("#btnExport").show();
