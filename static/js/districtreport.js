@@ -1198,10 +1198,10 @@ function createDynamicDiv(userList) {
 
     dynamicDiv +=
         "<tr >" +
-        '<td><a style="color: #00a651;cursor:pointer;" onclick="clickableTableSchoolName(\'' + userList[10] + '\')">' +
+        "<td>" +
         userList[0] +
         "</td>" +
-        "<td>" +
+        '<td><a style="color: #00a651;cursor:pointer;" onclick="clickableTableSchoolName(\'' + userList[10] + '\')">' +
         userList[2] +
         "</td>" +
         "<td>" +
