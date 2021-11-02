@@ -1384,7 +1384,6 @@ function distselect(distid) {
     $("#districtid").empty();
     $("#school").empty();
     $("#teacher").empty();
-    $("#login").empty();
     $("#practice").empty();
     $("#family").empty();
     $("#engaged_school_csy").empty();

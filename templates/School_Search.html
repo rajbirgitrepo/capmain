@@ -23,6 +23,12 @@
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
 
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/plugins/wordCloud.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="https://code.highcharts.com/mapdata/countries/us/custom/us-all-territories.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -165,7 +171,7 @@
     }
     
     .mtsection .card-contentt {
-        height: 295px;
+        height: 320px;
     }
     
     .mtsection img {
@@ -593,7 +599,15 @@
                         </div>
                     </div>
                     <div class="col-md-6">
+                        <div id="container44" style="height: 400px;margin-top:20px; width: 100%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div id="chartdiv" style=" border-radius: 20px;margin-top:20px;background-color: #fff;height: 400px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="container41" style=" border-radius: 20px;margin-top:20px;background-color: #fff;height: 400px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
                         </div>
                     </div>
                     <div class="welcome2">
@@ -646,18 +660,21 @@
                                             <div class="card-block">
                                                 <p id="fsearchinputdescription" style="display: none;"></p>
                                                 <p id="fschoolname"></p>
+                                                <p id="fadminname"></p>
+                                                <p id="fadminuser"></p>
                                                 <p id="fadmin"></p>
                                                 <p id="femail"></p>
                                                 <p id="fadress"></p>
                                                 <p id="fcity"></p>
                                                 <p id="fstate"></p>
                                                 <p id="fcountry"></p>
-                                                <p style="float: left;margin-right: 9px;"><b>Plan Name:</b>
+                                                <p id="fdistrict"></p>
+                                                <!-- <p style="float: left;margin-right: 9px;"><b>Plan Name:</b>
                                                     <p id="fplan"></p>
                                                 </p>
                                                 <p style="float: left;margin-right: 9px;"><b>Renewal Date:</b>
                                                     <p id="frenewal"></p>
-                                                </p>
+                                                </p> -->
                                                 </a>
                                                 </p>
 
@@ -703,6 +720,30 @@
 
                                                     </div>
                                                 </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="card card-stats">
+                                                        <div class="card-header" data-background-color="rose">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <p class="category f-12">Completed Audio(CSY)</p>
+                                                            <h3 class="card-title" id="completehome"></h3>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="card card-stats">
+                                                        <div class="card-header" data-background-color="rose">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <p class="category f-12">Unique Audio Played (CSY)</p>
+                                                            <h3 class="card-title" id="Uniquehome"></h3>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
 
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
@@ -721,7 +762,17 @@
                                                     </div>
                                                 </div>
 
-
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="card card-stats">
+                                                        <div class="card-header" data-background-color="blue">
+                                                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <p class="category f-12">Average Rating</p>
+                                                            <h3 class="card-title" id="ratingshome"></h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
                                             </div>
 
@@ -738,6 +789,14 @@
 
                     <div class="col-md-10">
                         <div id="famcontainerprac" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="container81" style="height: 400px;margin-top:20px; width: 100%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="container82" style="height: 400px;margin-top:20px; width: 100%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
                         </div>
                     </div>
 
@@ -771,6 +830,7 @@
                                         <div class="card-body card-contentt">
                                             <div class="card-block">
                                                 <p id="uschoolname"></p>
+                                                <p id="adminEmail"></p>
                                                 <p id="uname"></p>
                                                 <p id="upractice"></p>
                                                 <p id="ustate"></p>
@@ -823,6 +883,30 @@
 
                                                     </div>
                                                 </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="card card-stats">
+                                                        <div class="card-header" data-background-color="rose">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <p class="category f-12">Completed Audio(CSY)</p>
+                                                            <h3 class="card-title" id="completeAudio"></h3>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="card card-stats">
+                                                        <div class="card-header" data-background-color="rose">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <p class="category f-12">Unique Audio Played (CSY)</p>
+                                                            <h3 class="card-title" id="uniqueAudio"></h3>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
 
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
@@ -841,7 +925,17 @@
                                                     </div>
                                                 </div>
 
-
+                                                <div class="col-md-6 col-sm-6">
+                                                    <div class="card card-stats">
+                                                        <div class="card-header" data-background-color="blue">
+                                                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
+                                                        </div>
+                                                        <div class="card-content">
+                                                            <p class="category f-12">Average Rating</p>
+                                                            <h3 class="card-title" id="ratingsRecieved"></h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
                                             </div>
 
@@ -864,6 +958,14 @@
 
                     <div class="col-md-10">
                         <div id="container5" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="container17" style="height: 400px;margin-top:20px; width: 100%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="container18" style="height: 400px;margin-top:20px; width: 100%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
                         </div>
                     </div>
 
@@ -1349,134 +1451,263 @@
                 var dataa = JSON.parse(response);
                 console.log(dataa);
                 console.log("/schoolseacrhprogram_chart/" + a);
+                $(function() {
+                    $("#container40").highcharts({
+                        chart: {
+                            zoomType: "xy",
+                            type: "column"
 
-                chart = new Highcharts.StockChart({
+                        },
+                        title: {
+                            text: "Active User Count by Programs",
+                        },
+                        credits: {
+                            enabled: false,
+                        },
+                        colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+                        xAxis: [{
+                            categories: dataa.month,
+                        }, ],
+                        yAxis: [{
+                            //Primary yAxis
+                            lineWidth: 1,
+                            labels: {
+                                format: "{value}",
+                                style: {
+                                    color: "#000",
+                                },
+                            },
+                            title: {
+                                text: "Playback Count",
+                                style: {
+                                    color: "#000",
+                                },
+                            },
+                        }, {
+                            //Secondary yAxis
+                            title: {
+                                text: "",
+                                style: {
+                                    color: "#4572A7",
+                                },
+                            },
+                            labels: {
+                                format: "{value}",
+                                style: {
+                                    color: "#4572A7",
+                                },
+                            },
+                            opposite: false,
+                        }, ],
+                        tooltip: {
+                            shared: true,
+                        },
+                        plotOptions: {
+                            borderWidth: 2,
+                            series: {
+                                point: {
 
+                                }
+                            },
+                            column: {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: false
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Elementry',
+                            data: dataa.elem,
+                            stack: 'male'
+                        }, {
+                            name: 'High',
+                            data: dataa.high,
+                            stack: 'male'
+                        }, {
+                            name: 'Middle',
+                            fontSize: '8px',
+                            data: dataa.mid,
+                            stack: 'male'
+
+                        }, {
+                            name: 'Early Learning',
+                            data: dataa.prek,
+                            stack: 'male'
+
+                        }, ],
+                    });
+                });
+            });
+            var settings = {
+                async: true,
+                crossDomain: true,
+                url: "/schoolseacrhprogram_chart/" + a,
+                method: "GET",
+            }
+            $.ajax(settings).done(function(response) {
+                var dataa = JSON.parse(response);
+                console.log(dataa);
+                console.log("/schoolseacrhprogram_chart/" + a);
+                $(function() {
+                    $("#container44").highcharts({
+                        chart: {
+                            zoomType: "xy",
+                            type: "column"
+
+                        },
+                        title: {
+                            text: "Playback Count by Programs",
+                        },
+                        credits: {
+                            enabled: false,
+                        },
+                        colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+                        xAxis: [{
+                            categories: dataa.month,
+                        }, ],
+                        yAxis: [{
+                            //Primary yAxis
+                            lineWidth: 1,
+                            labels: {
+                                format: "{value}",
+                                style: {
+                                    color: "#000",
+                                },
+                            },
+                            title: {
+                                text: "Playback Count",
+                                style: {
+                                    color: "#000",
+                                },
+                            },
+                        }, {
+                            //Secondary yAxis
+                            title: {
+                                text: "",
+                                style: {
+                                    color: "#4572A7",
+                                },
+                            },
+                            labels: {
+                                format: "{value}",
+                                style: {
+                                    color: "#4572A7",
+                                },
+                            },
+                            opposite: false,
+                        }, ],
+                        tooltip: {
+                            shared: true,
+                        },
+                        plotOptions: {
+                            borderWidth: 2,
+                            series: {
+                                point: {
+
+                                }
+                            },
+                            column: {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: false
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Elementry',
+                            data: dataa.elem_pc,
+                            stack: 'female'
+                        }, {
+                            name: 'High',
+                            data: dataa.high_pc,
+                            stack: 'female'
+                        }, {
+                            name: 'Middle',
+                            fontSize: '8px',
+                            data: dataa.mid_pc,
+                            stack: 'female'
+
+                        }, {
+                            name: 'Early Learning',
+                            data: dataa.prek_pc,
+                            stack: 'female'
+
+                        }, ],
+                    });
+                });
+            });
+
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "/schoolaudio_completion/" + a,
+                "method": "GET"
+            }
+            $.ajax(settings).done(function(response) {
+                var dataa = JSON.parse(response);
+                console.log(dataa);
+                console.log("/schoolaudio_completion/" + a);
+                Highcharts.chart('container41', {
                     chart: {
-                        renderTo: 'container40',
-                        zoomType: 'x'
+                        type: 'column'
                     },
                     title: {
-                        text: 'School Program'
-                    },
-                    legend: {
-                        enabled: true,
-                        itemStyle: {
-                            fontSize: '10px',
-                            fontWeight: '200'
-                        }
+                        text: 'Average Audio Completion(CSY)'
                     },
                     subtitle: {
                         text: ''
                     },
-
                     xAxis: {
-            categories: dataa.month
-        },
-
-                    yAxis: [{
-                        visible: true,
-                        opposite: false,
-                        showLastLabel: true,
+                        categories: dataa.temp1.percentage_of_audio_completed[0],
+                        tickmarkPlacement: 'on',
                         title: {
-                            text: ' Count'
-                        },
-
-                    }, {
-                        visible: true,
+                            enabled: false
+                        }
+                    },
+                    yAxis: [{
+                        lineWidth: 1,
                         opposite: false,
-                        showLastLabel: true,
+                        title: {
+                            text: 'Count'
+                        }
+                    }, {
+                        lineWidth: 1,
                         opposite: true,
                         title: {
-                            text: 'Playback'
-                        },
-
+                            text: 'Cumulative Count'
+                        }
                     }],
-
                     tooltip: {
-                        pointFormatter: function() {
-                            return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
-                        }
-                    },
-
-                    legend: {
-                        enabled: true
-                    },
-
-                    navigator: {
-                        enabled: false
-                    },
-                    rangeSelector: {
-                        inputEnabled: false,
-                        enabled: true,
-                        selected: 1
-                    },
-
-                    scrollbar: {
-                        enabled: true
-                    },
-
-                    navigation: {
-                        buttonOptions: {
-                            enabled: true
-                        }
+                        split: true,
+                        valueSuffix: ''
                     },
                     plotOptions: {
-                        column: {
-                            stacking: 'normal'
-
-                        },
-                        series: {
+                        area: {
+                            stacking: 'normal',
+                            lineColor: '#666666',
+                            lineWidth: 1,
                             marker: {
+                                lineWidth: 1,
+                                lineColor: '#666666',
                                 enabled: false
                             }
                         }
                     },
                     series: [{
-                        "name": "Elementary",
-                        "type": "column",
-                        "color": "#FF9933",
-                        "xAxis": 0,
-                        "data": dataa.elem,
-                        "yAxis": 1
-
+                        name: 'Cumulative Audio Completion',
+                        color: '#DCDCDC',
+                        type: "area",
+                        data: dataa.temp1.cumulative_audio_completion
                     }, {
-                        "name": "Middle",
-                        "type": "column",
-                        "color": "#FFFF00",
-                        "xAxis": 0,
-                        "data": dataa.elem_pc,
-                        "yAxis": 0
+                        name: 'Audio Completion',
+                        color: '#00a651',
+                        yAxis: 0,
 
-                    }, {
-                        "name": "High",
-                        "type": "column",
-                        "color": "#01A451",
-                        "xAxis": 0,
-                        "data": dataa.high,
-                        "yAxis": 0
-
-                    }, {
-                        "name": "Early Learning",
-                        "type": "column",
-                        "color": "#4f1faf",
-                        "xAxis": 0,
-                        "data": dataa.high_pc,
-                        "yAxis": 0
-
-                    }, {
-                        "name": "Wellness",
-                        "type": "column",
-                        "color": "#8AE02B",
-                        "xAxis": 0,
-                        "data": dataa.prek,
-                        "yAxis": 0
-
+                        data: dataa.temp1.number_of_audios_compelted
                     }]
                 });
-
             });
-
 
 
 
@@ -1590,6 +1821,7 @@
 
                 });
             });
+
 
         };
 
@@ -1723,6 +1955,7 @@
             });
         }
     </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js'></script>
     <script src="{{ url_for('static',filename='js/schoolsearchscript.js') }}"></script>
     <script src="{{ url_for('static',filename='js/excellentexport.js') }}"></script>
     <script src="/static/js/mail.js"></script>

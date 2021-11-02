@@ -203,8 +203,6 @@ function charts(a) {
                         }
                     },
 
-                    min: 0,
-                    max: 5
                 }, {
                     type: 'datetime',
                     opposite: true,
@@ -313,7 +311,7 @@ function charts(a) {
                 ]
 
             });
-            chart.xAxis[0].setExtremes(new Date('2021-10-25 15:00').getTime(), new Date('2021-10-25 16:00').getTime());
+            chart.xAxis[0].setExtremes(new Date('2021-11-02 15:00').getTime(), new Date('2021-11-02 16:00').getTime());
 
 
         });
@@ -484,7 +482,7 @@ function charts(a) {
                     }
                 ]
             });
-            chart.xAxis[0].setExtremes(new Date('2021-10-25 15:00').getTime(), new Date('2021-10-25 16:00').getTime());
+            chart.xAxis[0].setExtremes(new Date('2021-11-02 15:00').getTime(), new Date('2021-11-02 16:00').getTime());
         });
 
     }
@@ -1138,9 +1136,9 @@ function cardscount(a) {
         // $("#updownpracp").text(parseFloat(dataa.parents_Percentage_Change[0]).toFixed(0) + "%");
         // $("#updownpract").text(parseFloat(dataa.Teacher_percentage_change[0]).toFixed(0) + "%");
         $("#activetotal").text(dataa.data[0].active_users);
-        $("#webt").text(dataa.data[0].lms_users);
+        $("#webt").text(dataa.data[0].web_users);
         $("#mobilet").text(dataa.data[0].mobile_users);
-        $("#lmst").text(dataa.data[0].web_users);
+        $("#lmst").text(dataa.data[0].lms_users);
 
     });
 

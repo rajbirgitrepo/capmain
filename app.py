@@ -14799,8 +14799,7 @@ def district_count_cards(districtid,startdate,enddate):
 
 @app.route('/districtusertableteacher/<districtid>/<startdate>/<enddate>')
 def district_user_table_teacher(districtid,startdate,enddate):
-   
-    
+
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -14840,11 +14839,11 @@ def district_user_table_teacher(districtid,startdate,enddate):
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
 
-            {'$group':{'_id':'$_id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'user_name':{'$first':'$USER_NAME'},'EMAIL':{'$first':'$EMAIL_ID'},'date':{'$first':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}}},'country':{'$first':'$schoolId.COUNTRY'},
+            {'$group':{'_id':'$_id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'school_id':{'$first':'$schoolId._id'},'user_name':{'$first':'$USER_NAME'},'EMAIL':{'$first':'$EMAIL_ID'},'date':{'$first':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}}},'country':{'$first':'$schoolId.COUNTRY'},
                       'State':{'$first':'$schoolId.STATE'},'city':{'$first':'$schoolId.CITY'}}},
 
 
-            {'$project':{'_id':1,'Created_date':'$date','country':1,'State':1,'user_name':1,'EMAIL':1,'school_name':1,'city':1}},])))
+            {'$project':{'_id':1,'Created_date':'$date','country':1,'State':1,'user_name':1,'EMAIL':1,'school_name':1,'city':1,'school_id':'$school_id'}},])))
 
 
     
@@ -14919,7 +14918,7 @@ def district_user_table_teacher(districtid,startdate,enddate):
     df['city'].fillna("NO INFO", inplace=True)
     df['city'].replace("NULL","NO INFO", inplace=True)
     df['State'].fillna("NO INFO", inplace=True)
-    df['State'].replace(F"NULL","NO INFO", inplace=True)
+    df['State'].replace("NULL","NO INFO", inplace=True)
 
 
 
@@ -14928,16 +14927,15 @@ def district_user_table_teacher(districtid,startdate,enddate):
     df['Subscription_expire_date']=df['Subscription_expire_date'].fillna('No Info')
 
     data=[]
-    for i,j,k,l,m,n,o,p,r,s in zip(df['user_name'].tolist(),df['EMAIL'].tolist(),df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['Subscription_expire_date'].tolist()):
-        data.append([i,j,k,l,m,n,o,p,r,s])
+    for i,j,k,l,m,n,o,p,r,s,q in zip(df['user_name'].tolist(),df['EMAIL'].tolist(),df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['Subscription_expire_date'].tolist(),df['school_id'].tolist()):
+        data.append([i,j,k,l,m,n,o,p,r,s,q])
     temp={"data":data}
-    return json.dumps(temp)
+    return json.dumps(temp,default=str)
 
 
 
 @app.route('/districtusertableparent/<districtid>/<startdate>/<enddate>')
 def district_user_table_parents(districtid,startdate,enddate):
-    
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -14977,11 +14975,11 @@ def district_user_table_parents(districtid,startdate,enddate):
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
 
-            {'$group':{'_id':'$_id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'user_name':{'$first':'$USER_NAME'},'EMAIL':{'$first':'$EMAIL_ID'},'date':{'$first':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}}},'country':{'$first':'$schoolId.COUNTRY'},
+            {'$group':{'_id':'$_id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'school_id':{'$first':'$schoolId._id'},'user_name':{'$first':'$USER_NAME'},'EMAIL':{'$first':'$EMAIL_ID'},'date':{'$first':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}}},'country':{'$first':'$schoolId.COUNTRY'},
                       'State':{'$first':'$schoolId.STATE'},'city':{'$first':'$schoolId.CITY'}}},
 
 
-            {'$project':{'_id':1,'Created_date':'$date','country':1,'State':1,'user_name':1,'EMAIL':1,'school_name':1,'city':1}},])))
+            {'$project':{'_id':1,'Created_date':'$date','country':1,'State':1,'user_name':1,'EMAIL':1,'school_name':1,'city':1,'school_id':'$school_id'}},])))
 
 
     
@@ -15065,10 +15063,10 @@ def district_user_table_parents(districtid,startdate,enddate):
     df['Subscription_expire_date']=df['Subscription_expire_date'].fillna('No Info')
 
     data=[]
-    for i,j,k,l,m,n,o,p,r,s in zip(df['user_name'].tolist(),df['EMAIL'].tolist(),df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['Subscription_expire_date'].tolist()):
-        data.append([i,j,k,l,m,n,o,p,r,s])
+    for i,j,k,l,m,n,o,p,r,s,q in zip(df['user_name'].tolist(),df['EMAIL'].tolist(),df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['Subscription_expire_date'].tolist(),df['school_id'].tolist()):
+        data.append([i,j,k,l,m,n,o,p,r,s,q])
     temp={"data":data}
-    return json.dumps(temp)
+    return json.dumps(temp,default=str)
     
 # district_user_table_teacher('5f2609807a1c0000950bb477','2015-04-01','2021-04-13')
     
@@ -15077,14 +15075,11 @@ def district_user_table_parents(districtid,startdate,enddate):
     
 @app.route('/districtschooltable/<districtid>/<startdate>/<enddate>')
 def district_school_table(districtid,startdate,enddate):
-    
-    
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
 
-    
     collection2=db.school_master
     collection=db.user_master
     collection1=db.audio_track_master
@@ -15199,20 +15194,16 @@ def district_school_table(districtid,startdate,enddate):
     df['State'].fillna("NO INFO", inplace=True)
     df['State'].replace("NULL","NO INFO", inplace=True)
    
-
-
     df['Created_date']=df['Created_date'].fillna(0)
     df['last_practice_date']=df['last_practice_date'].fillna('NO PRACTICE')
     df['Subscription_expire_date']=df['Subscription_expire_date'].fillna('No Info')
 
     data=[]
-    for i,j,k,l,m,n,o,p,r in zip(df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['usercount'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['Subscription_expire_date'].tolist()):
-        data.append([i,j,k,l,m,n,o,p,r])
+    for i,j,k,l,m,n,o,p,r,s in zip(df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['usercount'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['Subscription_expire_date'].tolist(),df['schoolid_'].tolist()):
+        data.append([i,j,k,l,m,n,o,p,r,s])
     temp={"data":data}
     
-    return json.dumps(temp)
-
-
+    return json.dumps(temp,default=str)
 
 
 
@@ -32115,9 +32106,463 @@ def school_active_trend(schoolid):
 
 
 
+@app.route('/user_audio_completion/<emailid>')
+def user_audio_completion_____(emailid):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
+    db=client.compass
+
+    collection1= db.audio_track_master
+
+    qr1=[{"$match":{
+    '$and':[
+        {'USER_ID.EMAIL_ID':""+emailid+""},
+        {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    #         {'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    #     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    #     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+
+    #     {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    #     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    #     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    #     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, 
+#         {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'MODIFIED_DATE':{'$gte':csy_first_date()
+    }},
+    ]}},
+
+
+    {'$project':{'_id':'$USER_ID._id', 'modified_date':'$MODIFIED_DATE',
+                 'AUDIO_ID':'$PROGRAM_AUDIO_ID._id', 'Program_Name':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME',
+              'Audio_Length':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH', 'start':'$cursorStart','end':'$CURSOR_END'             
+
+    }}]
+
+    list1= list(collection1.aggregate(qr1))
+    userprac_trend= DataFrame(list1)
+    if userprac_trend.empty is True:
+        data={'Result':0}
+        return json.dumps(data)
+    else:
+        userprac_trend.start.fillna(0, inplace=True)
+#         userprac_trend=userprac_trend.fillna(0)
+        columns=userprac_trend.columns
+        #     print(columns)
+        if not 'Start' in columns :
+            userprac_trend['Start']=0
+        else:
+            userprac_trend
+
+        userprac_trend.loc[(userprac_trend['Audio_Length']<userprac_trend['end']),'end'] = userprac_trend['Audio_Length']
+
+        userprac_trend['completed_precentage']=round(((userprac_trend.end-userprac_trend.start)/userprac_trend.Audio_Length*100),0)
+
+        userprac_trend['completed_precentage']=round(userprac_trend['completed_precentage'],0)
+
+        dd=userprac_trend.groupby('completed_precentage').count().reset_index().rename({'AUDIO_ID':'Audio_Count'},axis=1)
+
+        userprac_trend[userprac_trend.completed_precentage < 0]=0
+
+
+        userprac_trend['start']=userprac_trend['start'].fillna(0)
+        userprac_trend['end']=userprac_trend['end'].fillna(0)
+        userprac_trend['completed_precentage']=userprac_trend['completed_precentage'].fillna(0)
+        userprac_trend['AUDIO_ID']=userprac_trend['AUDIO_ID'].fillna(0)
+
+
+        dd=userprac_trend.groupby('completed_precentage')['AUDIO_ID'].count().reset_index().rename({'AUDIO_ID':'Audio_Count'},axis=1)
+
+        dd['cumulativesum_line']= dd['Audio_Count'].cumsum()
+
+
+        percentage_of_audio_completed= dd.completed_precentage.tolist(),
+        number_of_audios_compelted=dd.Audio_Count.tolist()
+        cumulative_audio_completion=dd.cumulativesum_line.tolist()
+
+        temp1={'percentage_of_audio_completed':percentage_of_audio_completed,'number_of_audios_compelted':number_of_audios_compelted,
+             'cumulative_audio_completion':cumulative_audio_completion}
+#         data={'temp':temp}
+        
+        qr1=[{"$match":{
+        '$and':[
+            {'USER_ID.EMAIL_ID':""+emailid+""},
+            {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        #         {'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        #     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        #     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+
+
+        #     {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        #     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        #     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        #     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        # {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{"$not":{"$regex":"wellness",'$options':'i'}}},
+        #             {'PROGRAM_AUDIO_ID.AUDIO_DAY':{"$not":{"$regex":"bonus",'$options':'i'}}},
+        #           {'PROGRAM_AUDIO_ID.AUDIO_DAY':{"$not":{"$regex":"sound",'$options':'i'}}},
+        #             {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$not':{'$regex':'Counselor','$options':'i'}}},    
+        #             {"PROGRAM_AUDIO_ID.AUDIO_DAY":{"$not":{"$regex":'Bonus','$options':'i'}}},
+
+        {'MODIFIED_DATE':{'$gte':csy_first_date()
+        }},
+        ]}},
+
+
+        {'$group':{'_id':'$PROGRAM_AUDIO_ID._id','audio_day':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_DAY'}, 'modified_date':{'$max':'$MODIFIED_DATE'},
+                     'Program_Name':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'},
+                  'Audio_Length':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH'}, 'start':{'$min':'$cursorStart'},'end':{'$max':'$CURSOR_END'  }           
+
+        }}]
+
+        list1= list(collection1.aggregate(qr1))
+        userprac_trend= DataFrame(list1)
+        columns=userprac_trend.columns
+        #     print(columns)
+        if not 'Start' in columns :
+            userprac_trend['Start']=0
+        else:
+            userprac_trend
+        # userprac_trend
+        userprac_trend.start.fillna(0, inplace=True)
+
+        userprac_trend.loc[(userprac_trend['Audio_Length']<userprac_trend['end']),'end'] = userprac_trend['Audio_Length']
+
+        userprac_trend['completed_precentage']=round(((userprac_trend.end-userprac_trend.start)/userprac_trend.Audio_Length*100),0)
+
+        userprac_trend['completed_precentage']=round(userprac_trend['completed_precentage'],0)
+
+        userprac_trend[userprac_trend.completed_precentage < 0]=0
+
+
+        userprac_trend['start']=userprac_trend['start'].fillna(0)
+        userprac_trend['end']=userprac_trend['end'].fillna(0)
+        userprac_trend['completed_precentage']=userprac_trend['completed_precentage'].fillna(0)
+        userprac_trend['_id']=userprac_trend['_id'].fillna(0)
+
+
+        dd=userprac_trend.groupby('completed_precentage')['_id'].count().reset_index().rename({'_id':'Audio_Count'},axis=1)
+        dd['cumulativesum_line']= dd['Audio_Count'].cumsum()
+
+
+        percentage_of_audio_completed= dd.completed_precentage.tolist(),
+        number_of_audios_compelted=dd.Audio_Count.tolist()
+        cumulative_audio_completion=dd.cumulativesum_line.tolist()
+
+        temp2={'percentage_of_uniuqe_audio_completed':percentage_of_audio_completed,'number_of_audios_compelted':number_of_audios_compelted,
+             'cumulative_unique_audio_played':cumulative_audio_completion}
+
+        data = {'temp1':temp1,'temp2':temp2}      
+        
+        return json.dumps(data)
+# user_audio_completion_____('sadhna@1gen.io')
+
+
+@app.route('/family_audio_completion/<emailid>')
+def family_audio_completion_____(emailid):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
+    db=client.compass
+
+    collection1= db.audio_track_master
+
+    qr1=[{"$match":{
+    '$and':[
+        {'USER_ID.EMAIL_ID':""+emailid+""},
+        {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+    #         {'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    #     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    #     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+
+    #     {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    #     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    #     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    #     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, 
+#         {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'MODIFIED_DATE':{'$gte':csy_first_date()
+    }},
+    ]}},
+
+
+    {'$project':{'_id':'$USER_ID._id', 'modified_date':'$MODIFIED_DATE',
+                 'AUDIO_ID':'$PROGRAM_AUDIO_ID._id', 'Program_Name':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME',
+              'Audio_Length':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH', 'start':'$cursorStart','end':'$CURSOR_END'             
+
+    }}]
+
+    list1= list(collection1.aggregate(qr1))
+    userprac_trend= DataFrame(list1)
+    if userprac_trend.empty is True:
+        data={'Result':0}
+        return json.dumps(data)
+    else:
+        userprac_trend.start.fillna(0, inplace=True)
+#         userprac_trend=userprac_trend.fillna(0)
+        columns=userprac_trend.columns
+        #     print(columns)
+        if not 'Start' in columns :
+            userprac_trend['Start']=0
+        else:
+            userprac_trend
+
+        userprac_trend.loc[(userprac_trend['Audio_Length']<userprac_trend['end']),'end'] = userprac_trend['Audio_Length']
+
+        userprac_trend['completed_precentage']=round(((userprac_trend.end-userprac_trend.start)/userprac_trend.Audio_Length*100),0)
+
+        userprac_trend['completed_precentage']=round(userprac_trend['completed_precentage'],0)
+
+        dd=userprac_trend.groupby('completed_precentage').count().reset_index().rename({'AUDIO_ID':'Audio_Count'},axis=1)
+
+        userprac_trend[userprac_trend.completed_precentage < 0]=0
+
+
+        userprac_trend['start']=userprac_trend['start'].fillna(0)
+        userprac_trend['end']=userprac_trend['end'].fillna(0)
+        userprac_trend['completed_precentage']=userprac_trend['completed_precentage'].fillna(0)
+        userprac_trend['AUDIO_ID']=userprac_trend['AUDIO_ID'].fillna(0)
+
+
+        dd=userprac_trend.groupby('completed_precentage')['AUDIO_ID'].count().reset_index().rename({'AUDIO_ID':'Audio_Count'},axis=1)
+
+        dd['cumulativesum_line']= dd['Audio_Count'].cumsum()
+
+
+        percentage_of_audio_completed= dd.completed_precentage.tolist(),
+        number_of_audios_compelted=dd.Audio_Count.tolist()
+        cumulative_audio_completion=dd.cumulativesum_line.tolist()
+
+        temp1={'percentage_of_audio_completed':percentage_of_audio_completed,'number_of_audios_compelted':number_of_audios_compelted,
+             'cumulative_audio_completion':cumulative_audio_completion}
+#         data={'temp':temp}
+        
+        qr1=[{"$match":{
+        '$and':[
+            {'USER_ID.EMAIL_ID':""+emailid+""},
+            {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+        #         {'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        #     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        #     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+
+
+        #     {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        #     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+        #     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        #     {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        # {'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':{"$not":{"$regex":"wellness",'$options':'i'}}},
+        #             {'PROGRAM_AUDIO_ID.AUDIO_DAY':{"$not":{"$regex":"bonus",'$options':'i'}}},
+        #           {'PROGRAM_AUDIO_ID.AUDIO_DAY':{"$not":{"$regex":"sound",'$options':'i'}}},
+        #             {'PROGRAM_AUDIO_ID.AUDIO_DAY':{'$not':{'$regex':'Counselor','$options':'i'}}},    
+        #             {"PROGRAM_AUDIO_ID.AUDIO_DAY":{"$not":{"$regex":'Bonus','$options':'i'}}},
+
+        {'MODIFIED_DATE':{'$gte':csy_first_date()
+        }},
+        ]}},
+
+
+        {'$group':{'_id':'$PROGRAM_AUDIO_ID._id','audio_day':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_DAY'}, 'modified_date':{'$max':'$MODIFIED_DATE'},
+                     'Program_Name':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'},
+                  'Audio_Length':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH'}, 'start':{'$min':'$cursorStart'},'end':{'$max':'$CURSOR_END'  }           
+
+        }}]
+
+        list1= list(collection1.aggregate(qr1))
+        userprac_trend= DataFrame(list1)
+        columns=userprac_trend.columns
+        #     print(columns)
+        if not 'Start' in columns :
+            userprac_trend['Start']=0
+        else:
+            userprac_trend
+        # userprac_trend
+        userprac_trend.start.fillna(0, inplace=True)
+
+        userprac_trend.loc[(userprac_trend['Audio_Length']<userprac_trend['end']),'end'] = userprac_trend['Audio_Length']
+
+        userprac_trend['completed_precentage']=round(((userprac_trend.end-userprac_trend.start)/userprac_trend.Audio_Length*100),0)
+
+        userprac_trend['completed_precentage']=round(userprac_trend['completed_precentage'],0)
+
+        userprac_trend[userprac_trend.completed_precentage < 0]=0
+
+
+        userprac_trend['start']=userprac_trend['start'].fillna(0)
+        userprac_trend['end']=userprac_trend['end'].fillna(0)
+        userprac_trend['completed_precentage']=userprac_trend['completed_precentage'].fillna(0)
+        userprac_trend['_id']=userprac_trend['_id'].fillna(0)
+
+
+        dd=userprac_trend.groupby('completed_precentage')['_id'].count().reset_index().rename({'_id':'Audio_Count'},axis=1)
+        dd['cumulativesum_line']= dd['Audio_Count'].cumsum()
+
+
+        percentage_of_audio_completed= dd.completed_precentage.tolist(),
+        number_of_audios_compelted=dd.Audio_Count.tolist()
+        cumulative_audio_completion=dd.cumulativesum_line.tolist()
+
+        temp2={'percentage_of_uniuqe_audio_completed':percentage_of_audio_completed,'number_of_audios_compelted':number_of_audios_compelted,
+             'cumulative_unique_audio_played':cumulative_audio_completion}
+
+        data = {'temp1':temp1,'temp2':temp2}      
+        
+        return json.dumps(data)
+# user_audio_completion_____('sadhna@1gen.io')
 
 
 
+
+
+@app.route('/schoolaudio_completion/<schoolid>')
+def school_audio_completion_____(schoolid):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
+    db=client.compass
+
+    collection1= db.audio_track_master
+    
+    df1=DataFrame(list(db.user_master.aggregate([
+        {"$match":{"$and":[
+        {"schoolId._id":ObjectId(""+schoolid+"")},
+             {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'EMAIL_ID':{"$ne":''}},
+    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
+      {'schoolId.NAME':{"$not":{"$regex":'test', '$options':'i'}}},
+         {'EMAIL_ID':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":"TEST",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}
+        ]}},
+    {"$project":{"_id":"$_id","ID":"$schoolId._id",
+                }}
+    ])))
+    df1
+    if df1.empty == True:
+        data={'Result':0}
+    else:
+        df1=df1.fillna('No info')
+    column1 =['_id',"ID"]
+    for i in column1:
+        if i not in df1.columns:
+            df1[i] = 0
+    email=df1['_id'].tolist()
+    school=df1['ID'].tolist()
+
+    qr1=[{"$match":{
+    '$and':[
+        {'USER_ID._id':{'$in':email}},
+    {'MODIFIED_DATE':{'$gte':csy_first_date()
+    }},
+    ]}},
+
+
+    {'$project':{'_id':'$USER_ID._id', 'modified_date':'$MODIFIED_DATE',
+                 'AUDIO_ID':'$PROGRAM_AUDIO_ID._id', 'Program_Name':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME',
+              'Audio_Length':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH', 'start':'$cursorStart','end':'$CURSOR_END'             
+
+    }}]
+
+    list1= list(collection1.aggregate(qr1))
+    userprac_trend= DataFrame(list1)
+    if userprac_trend.empty is True:
+        data={'Result':0}
+        return json.dumps(data)
+    else:
+        userprac_trend.start.fillna(0, inplace=True)
+#         userprac_trend=userprac_trend.fillna(0)
+        columns=userprac_trend.columns
+        #     print(columns)
+        if not 'Start' in columns :
+            userprac_trend['Start']=0
+        else:
+            userprac_trend
+
+        userprac_trend.loc[(userprac_trend['Audio_Length']<userprac_trend['end']),'end'] = userprac_trend['Audio_Length']
+
+        userprac_trend['completed_precentage']=round(((userprac_trend.end-userprac_trend.start)/userprac_trend.Audio_Length*100),0)
+
+        userprac_trend['completed_precentage']=round(userprac_trend['completed_precentage'],0)
+
+        dd=userprac_trend.groupby('completed_precentage').count().reset_index().rename({'AUDIO_ID':'Audio_Count'},axis=1)
+
+        userprac_trend[userprac_trend.completed_precentage < 0]=0
+
+
+        userprac_trend['start']=userprac_trend['start'].fillna(0)
+        userprac_trend['end']=userprac_trend['end'].fillna(0)
+        userprac_trend['completed_precentage']=userprac_trend['completed_precentage'].fillna(0)
+        userprac_trend['AUDIO_ID']=userprac_trend['AUDIO_ID'].fillna(0)
+
+
+        dd=userprac_trend.groupby('completed_precentage')['AUDIO_ID'].count().reset_index().rename({'AUDIO_ID':'Audio_Count'},axis=1)
+
+        dd['cumulativesum_line']= dd['Audio_Count'].cumsum()
+
+
+        percentage_of_audio_completed= dd.completed_precentage.tolist(),
+        number_of_audios_compelted=dd.Audio_Count.tolist()
+        cumulative_audio_completion=dd.cumulativesum_line.tolist()
+
+        temp1={'percentage_of_audio_completed':percentage_of_audio_completed,'number_of_audios_compelted':number_of_audios_compelted,
+             'cumulative_audio_completion':cumulative_audio_completion}
+#         data={'temp':temp}
+        
+        qr1=[{"$match":{
+        '$and':[
+           {'USER_ID._id':{'$in':email}},
+        {'MODIFIED_DATE':{'$gte':csy_first_date()
+        }},
+        ]}},
+
+
+        {'$group':{'_id':'$PROGRAM_AUDIO_ID._id','audio_day':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_DAY'}, 'modified_date':{'$max':'$MODIFIED_DATE'},
+                     'Program_Name':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'},
+                  'Audio_Length':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH'}, 'start':{'$min':'$cursorStart'},'end':{'$max':'$CURSOR_END'  }           
+
+        }}]
+
+        list1= list(collection1.aggregate(qr1))
+        userprac_trend= DataFrame(list1)
+        columns=userprac_trend.columns
+        #     print(columns)
+        if not 'Start' in columns :
+            userprac_trend['Start']=0
+        else:
+            userprac_trend
+        # userprac_trend
+        userprac_trend.start.fillna(0, inplace=True)
+
+        userprac_trend.loc[(userprac_trend['Audio_Length']<userprac_trend['end']),'end'] = userprac_trend['Audio_Length']
+
+        userprac_trend['completed_precentage']=round(((userprac_trend.end-userprac_trend.start)/userprac_trend.Audio_Length*100),0)
+
+        userprac_trend['completed_precentage']=round(userprac_trend['completed_precentage'],0)
+
+        userprac_trend[userprac_trend.completed_precentage < 0]=0
+
+
+        userprac_trend['start']=userprac_trend['start'].fillna(0)
+        userprac_trend['end']=userprac_trend['end'].fillna(0)
+        userprac_trend['completed_precentage']=userprac_trend['completed_precentage'].fillna(0)
+        userprac_trend['_id']=userprac_trend['_id'].fillna(0)
+
+
+        dd=userprac_trend.groupby('completed_precentage')['_id'].count().reset_index().rename({'_id':'Audio_Count'},axis=1)
+        dd['cumulativesum_line']= dd['Audio_Count'].cumsum()
+
+
+        percentage_of_audio_completed= dd.completed_precentage.tolist(),
+        number_of_audios_compelted=dd.Audio_Count.tolist()
+        cumulative_audio_completion=dd.cumulativesum_line.tolist()
+
+        temp2={'percentage_of_uniuqe_audio_completed':percentage_of_audio_completed,'number_of_audios_compelted':number_of_audios_compelted,
+             'cumulative_unique_audio_played':cumulative_audio_completion}
+
+        data = {'temp1':temp1,'temp2':temp2}      
+        
+        return json.dumps(data)
 
 
 @app.route('/schoolsearchid/<schoolid>')
@@ -56478,7 +56923,45 @@ def new0(name):
         if i not in df33.columns:
             df33[i] = 'No info'
             
-            
+    userprac_trend=DataFrame(list(db.audio_track_master.aggregate([{"$match":{
+    '$and':[
+         {'USER_ID._id':{"$in":email}},
+  
+    {'MODIFIED_DATE':{'$gte':csy_first_date()
+    }},
+    ]}},
+    {'$group':{'_id':'$PROGRAM_AUDIO_ID._id','audio_day':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_DAY'}, 'modified_date':{'$max':'$MODIFIED_DATE'},
+                 'Program_Name':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'},
+              'Audio_Length':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH'}, 'start':{'$min':'$cursorStart'},'end':{'$max':'$CURSOR_END'  }           
+    }}])))
+    if userprac_trend.empty is True:
+        completed=0
+        count=0
+    else:
+        columns=userprac_trend.columns
+            #     print(columns)
+        if not 'Start' in columns :
+            userprac_trend['Start']=0
+        else:
+            userprac_trend
+        userprac_trend.start.fillna(0, inplace=True)
+
+        userprac_trend.loc[(userprac_trend['Audio_Length']<userprac_trend['end']),'end'] = userprac_trend['Audio_Length']
+
+        userprac_trend['completed_precentage']=round(((userprac_trend.end-userprac_trend.start)/userprac_trend.Audio_Length*100),0)
+
+        userprac_trend['completed_precentage']=round(userprac_trend['completed_precentage'],0)
+
+        userprac_trend[userprac_trend.completed_precentage < 0]=0
+
+
+        userprac_trend['start']=userprac_trend['start'].fillna(0)
+        userprac_trend['end']=userprac_trend['end'].fillna(0)
+        userprac_trend['completed_precentage']=userprac_trend['completed_precentage'].fillna(0)
+        userprac_trend['_id']=userprac_trend['_id'].fillna(0)
+        count=userprac_trend['_id'].count()
+        completed_audio=userprac_trend[userprac_trend.completed_precentage == 100].reset_index()
+        completed=completed_audio['completed_precentage'].count()
     
     df4=DataFrame(list(db.subscription_master.aggregate([
         {"$match":{'$and':[
@@ -56604,12 +57087,12 @@ def new0(name):
 
     temp={'data':{'csy':uscy,'lsy':plcy}}
 
-    data={'Info':[{'ROLE':df11['ROLE'][0],'SIGN_UP_DATE':df11['SIGN_UP_DATE'][0],
-        'Star_5_Ratings_Recieved':str(df5['rating'][0]),'DISTRICT':df11['district_name'][0],'USER_NAME':df11['user'][0] ,'USER_EMAIL':df11['email_id'][0],   
-        'SCHOOL_MINDFUL_MINUTES':str(df33['Mindful_Minutes'][0]),
+    data={'Info':[{'ROLE':df11['ROLE'][0],'school_id':df11['ID'][0],'SIGN_UP_DATE':df11['SIGN_UP_DATE'][0],
+        'Star_5_Ratings_Recieved':str(int(round(df5['rating'][0]))),'DISTRICT':df11['district_name'][0],'USER_NAME':df11['user'][0] ,'USER_EMAIL':df11['email_id'][0],   
+        'SCHOOL_MINDFUL_MINUTES':str(int(round(df33['Mindful_Minutes'][0]))),
            'SCHOOL_NAME':df11['school_name'][0],'ADDRESS':df11['Address'][0],'STATE':df11['STATE'][0],'CITY':df11['CITY'][0],'COUNTRY':df11['COUNTRY'][0],
            'ADMIN_EMAIL':ADMIN_EMAIL,'ADMIN_NAME':ADMIN_NAME,'SCHOOL_PRACTICE_COUNT':str(df33['pc'][0]),
-           'Last_AUDIO':df33['AUDIO'][0],'Last_PROGRAM':df33['PROGRAM'][0],
+           'Last_AUDIO':df33['AUDIO'][0],'Last_PROGRAM':df33['PROGRAM'][0],'Unique_audio_play':count, 'Completed_audio':completed,
            'Last_AUDIO_DAY':df33['AUDIO_DAY'][0],'login_count_csy':str(df6['login_count_CSY'][0]),
            'LAST_LOGGED_IN':df6['LAST_LOGGED_IN'][0],'Comment':df5['COMMENT'][0],'Last_Comment_date':df5['COMMENT_DATE'][0],
            'RENEWAL_DATE':df4['Renewal_date'][0],'LAST_PRACTICE_DATE':df33['last_practice_date'][0],
@@ -56617,16 +57100,23 @@ def new0(name):
           'chart':temp}
 
 
-    return json.dumps(data)
-# new0('sandra.quotson@youngstown.k12.oh.us')
+    return json.dumps(data,default=str)
    
 
 @app.route("/family___journey_score/<name>")
+
 def new0_family(name):
     graph={}
     from datetime import datetime
     mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = MongoClient(mongo_uri)
+# #     from datetime import datetime
+#     today1= datetime.utcnow().replace(day=27) + timedelta(days=3)
+#     print(today1)
+#     tod1= today1+ timedelta(hours=4)
+#     print(tod1)
+#     start= tod1-timedelta(days=180)
+#     start1=start.replace(day=1)
     
     db = client["compass"]
     df11=DataFrame(list(db.user_master.aggregate([
@@ -56708,7 +57198,45 @@ def new0_family(name):
         if i not in df33.columns:
             df33[i] = 'No info'
             
-            
+    userprac_trend=DataFrame(list(db.audio_track_master.aggregate([{"$match":{
+    '$and':[
+         {'USER_ID._id':{"$in":email}},
+  
+    {'MODIFIED_DATE':{'$gte':csy_first_date()
+    }},
+    ]}},
+    {'$group':{'_id':'$PROGRAM_AUDIO_ID._id','audio_day':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_DAY'}, 'modified_date':{'$max':'$MODIFIED_DATE'},
+                 'Program_Name':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'},
+              'Audio_Length':{'$first':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH'}, 'start':{'$min':'$cursorStart'},'end':{'$max':'$CURSOR_END'  }           
+    }}])))
+    if userprac_trend.empty is True:
+        completed=0
+        count=0
+    else:
+        columns=userprac_trend.columns
+            #     print(columns)
+        if not 'Start' in columns :
+            userprac_trend['Start']=0
+        else:
+            userprac_trend
+        userprac_trend.start.fillna(0, inplace=True)
+
+        userprac_trend.loc[(userprac_trend['Audio_Length']<userprac_trend['end']),'end'] = userprac_trend['Audio_Length']
+
+        userprac_trend['completed_precentage']=round(((userprac_trend.end-userprac_trend.start)/userprac_trend.Audio_Length*100),0)
+
+        userprac_trend['completed_precentage']=round(userprac_trend['completed_precentage'],0)
+
+        userprac_trend[userprac_trend.completed_precentage < 0]=0
+
+
+        userprac_trend['start']=userprac_trend['start'].fillna(0)
+        userprac_trend['end']=userprac_trend['end'].fillna(0)
+        userprac_trend['completed_precentage']=userprac_trend['completed_precentage'].fillna(0)
+        userprac_trend['_id']=userprac_trend['_id'].fillna(0)
+        count=userprac_trend['_id'].count()
+        completed_audio=userprac_trend[userprac_trend.completed_precentage == 100].reset_index()
+        completed=completed_audio['completed_precentage'].count()
     
     df4=DataFrame(list(db.subscription_master.aggregate([
         {"$match":{'$and':[
@@ -56769,6 +57297,10 @@ def new0_family(name):
         if i not in df2.columns:
             if i == "login_count_CSY":
                 df5[i] = 'No info'
+
+
+   
+
     
 #     =====For practice history chart
     df1 = DataFrame(list(db.audio_track_master.aggregate([{"$match":
@@ -56830,12 +57362,12 @@ def new0_family(name):
 
     temp={'data':{'csy':uscy,'lsy':plcy}}
 
-    data={'Info':[{'ROLE':df11['ROLE'][0],'SIGN_UP_DATE':df11['SIGN_UP_DATE'][0],
+    data={'Info':[{'ROLE':df11['ROLE'][0],'school_id':df11['ID'][0],'SIGN_UP_DATE':df11['SIGN_UP_DATE'][0],
         'Star_5_Ratings_Recieved':str(df5['rating'][0]),'DISTRICT':df11['district_name'][0],'USER_NAME':df11['user'][0] ,'USER_EMAIL':df11['email_id'][0],   
         'SCHOOL_MINDFUL_MINUTES':str(df33['Mindful_Minutes'][0]),
            'SCHOOL_NAME':df11['school_name'][0],'ADDRESS':df11['Address'][0],'STATE':df11['STATE'][0],'CITY':df11['CITY'][0],'COUNTRY':df11['COUNTRY'][0],
            'ADMIN_EMAIL':ADMIN_EMAIL,'ADMIN_NAME':ADMIN_NAME,'SCHOOL_PRACTICE_COUNT':str(df33['pc'][0]),
-           'Last_AUDIO':df33['AUDIO'][0],'Last_PROGRAM':df33['PROGRAM'][0],
+           'Last_AUDIO':df33['AUDIO'][0],'Last_PROGRAM':df33['PROGRAM'][0],'Unique_audio_play':count, 'Completed_audio':completed,
            'Last_AUDIO_DAY':df33['AUDIO_DAY'][0],'login_count_csy':str(df6['login_count_CSY'][0]),
            'LAST_LOGGED_IN':df6['LAST_LOGGED_IN'][0],'Comment':df5['COMMENT'][0],'Last_Comment_date':df5['COMMENT_DATE'][0],
            'RENEWAL_DATE':df4['Renewal_date'][0],'LAST_PRACTICE_DATE':df33['last_practice_date'][0],
@@ -56843,7 +57375,7 @@ def new0_family(name):
           'chart':temp}
 
 
-    return json.dumps(data)
+    return json.dumps(data,default=str)
 # new0('sandra.quotson@youngstown.k12.oh.us')
 
 

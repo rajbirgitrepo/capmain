@@ -951,8 +951,14 @@ function familysearch() {
         $("#fcity").empty();
         $("#graph1").empty();
         $("#fadmin").empty();
+        $("#fadminname").empty();
+        $("#fdistrict").empty();
+        $("#fadminuser").empty();
         $("#fucount").empty();
         $("#fpcount").empty();
+        $("#Uniquehome").empty();
+        $("#completehome").empty();
+        $("#ratingshome").empty();
         $("#fmindfulness_minutes").empty();
         $("#MindLifetime").empty();
         $("#LifeTimePlayback").empty();
@@ -966,6 +972,7 @@ function familysearch() {
         $("#fstatus").empty();
         console.log(URL);
         Pfam(URL);
+        AudioUn(a);
         $("#fnext").empty();
         $("#fnext1").empty();
         $("#fbtnExport").show();
@@ -996,6 +1003,7 @@ function familysearch() {
         $("#fstatus").empty();
         console.log(URL);
         Pfam(URL);
+        AudioUn(a);
 
         $("#fnext").empty();
         $("#fnext1").empty();
@@ -1004,6 +1012,149 @@ function familysearch() {
     }
 };
 
+function AudioUn(a) {
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "/family_audio_completion/" + a,
+        "method": "GET"
+    }
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa);
+        Highcharts.chart('container81', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Average Audio Completion(CSY)'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: dataa.temp1.percentage_of_audio_completed[0],
+                tickmarkPlacement: 'on',
+                title: {
+                    enabled: false
+                }
+            },
+            yAxis: [{
+                lineWidth: 1,
+                opposite: false,
+                title: {
+                    text: 'Count'
+                }
+            }, {
+                lineWidth: 1,
+                opposite: true,
+                title: {
+                    text: 'Cumulative Count'
+                }
+            }],
+            tooltip: {
+                split: true,
+                valueSuffix: ''
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#666666',
+                        enabled: false
+                    }
+                }
+            },
+            series: [{
+                name: 'Cumulative Audio Completion',
+                color: '#DCDCDC',
+                type: "area",
+                data: dataa.temp1.cumulative_audio_completion
+            }, {
+                name: 'Audio Completion',
+                color: '#00a651',
+                yAxis: 0,
+
+                data: dataa.temp1.number_of_audios_compelted
+            }]
+        });
+    });
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "/family_audio_completion/" + a,
+        "method": "GET"
+    }
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa);
+        console.log("/family_audio_completion/" + a, );
+
+        Highcharts.chart('container82', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Unique Audio Completion(CSY)'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: dataa.temp2.percentage_of_uniuqe_audio_completed[0],
+                tickmarkPlacement: 'on',
+                title: {
+                    enabled: false
+                }
+            },
+            yAxis: [{
+                lineWidth: 1,
+                opposite: false,
+                title: {
+                    text: 'Count'
+                }
+            }, {
+                lineWidth: 1,
+                opposite: true,
+                title: {
+                    text: 'Cumulative Count'
+                }
+            }],
+            tooltip: {
+                split: true,
+                valueSuffix: ''
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#666666',
+                        enabled: false
+                    }
+                }
+            },
+            series: [{
+                name: 'Cumulative Audio Completion',
+                color: '#DCDCDC',
+                type: "area",
+                data: dataa.temp2.cumulative_unique_audio_played
+            }, {
+                name: 'Audio Completion',
+                color: '#00a651',
+                yAxis: 0,
+
+                data: dataa.temp2.number_of_audios_compelted
+            }]
+        });
+    });
+
+}
 
 function Pfam(URL) {
     console.log(URL)
@@ -1032,8 +1183,13 @@ function Pfam(URL) {
         $("#femail").text("COUNTRY: " + dataa.Info[0].COUNTRY);
         $("#fcity").text("CITY: " + dataa.Info[0].CITY);
         $("#fadmin").text("STATE: " + dataa.Info[0].STATE);
-        $("#fsignup").text("DISTRICT NAME: " + dataa.Info[0].DISTRICT_NAME);
+        $("#fadminname").text("ADMIN EMAIL: " + dataa.Info[0].ADMIN_EMAIL);
+        $("#fadminuser").text("USER EMAIL: " + dataa.Info[0].USER_EMAIL);
+        $("#fdistrict").text("DISTRICT NAME: " + dataa.Info[0].DISTRICT);
         $("#fucount").text(dataa.Info[0].LAST_PRACTICE_DATE);
+        $("#Uniquehome").text(dataa.Info[0].Unique_audio_play);
+        $("#completehome").text(dataa.Info[0].Completed_audio);
+        $("#ratingshome").text(dataa.Info[0].Star_5_Ratings_Recieved);
         $("#fpcount").text(dataa.Info[0].SCHOOL_PRACTICE_COUNT);
         $("#fmindfulness_minutes").text(dataa.Info[0].SCHOOL_MINDFUL_MINUTES);
         // var url1 = "/journey/" + dataa.admin_email;
@@ -1112,6 +1268,9 @@ function Pfam(URL) {
         });
 
     });
+
+
+
 };
 
 
@@ -1129,7 +1288,10 @@ function joufam(url1) {
         $("#fucount").text(datain[0].user_count);
         $("#fpcount").text(datain[0].school_practice_count);
         $("#fmindfulness_minutes").text(datain[0].mindfulness_minutes);
-        $("#fratings").text(datain[0].Star_5_Ratings_Recieved);
+        // $("#fratings").text(datain[0].Star_5_Ratings_Recieved);
+        $("#Uniquehome").text(dataa.Info[0].Unique_audio_play);
+        $("#completehome").text(dataa.Info[0].Completed_audio);
+        $("#ratingshome").text(dataa.Info[0].Star_5_Ratings_Recieved);
         // $("#fschool").text(datain[0].school_name);
         // $("#fcity").text(datain[0].city);
         // $("#fstate").text(datain[0].state);
@@ -1281,8 +1443,13 @@ function usersearch() {
     $("#usignup").empty();
     $("#uucount").empty();
     $("#upcount").empty();
+    $("#ratingsRecieved").empty();
+    $("#completeAudio").empty();
+    $("#uniqueAudio").empty();
     $("#umindfulness_minutes").empty();
     $("#uschoolname1").empty();
+    $("#uschoolname").empty();
+    $("#adminEmail").empty();
     $("#u2practice1").empty();
     $("#u2state1").empty();
     $("#u2usercountse1").empty();
@@ -1318,6 +1485,7 @@ function usersearch() {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         $("#uschoolname").text("SCHOOL NAME: " + dataa.Info[0].SCHOOL_NAME);
+        $("#adminEmail").text("ADMIN EMAIL: " + dataa.Info[0].ADMIN_EMAIL);
         $("#uname").text("USER NAME: " + dataa.Info[0].USER_NAME);
         $("#upractice").text("USER EMAIL: " + dataa.Info[0].USER_EMAIL);
         $("#ustate").text("SIGNUP DATE: " + dataa.Info[0].SIGN_UP_DATE);
@@ -1328,6 +1496,9 @@ function usersearch() {
         $("#usignup").text("DISTRICT NAME: " + dataa.Info[0].DISTRICT);
         $("#uucount").text(dataa.Info[0].LAST_PRACTICE_DATE);
         $("#upcount").text(dataa.Info[0].SCHOOL_PRACTICE_COUNT);
+        $("#ratingsRecieved").text(dataa.Info[0].Star_5_Ratings_Recieved);
+        $("#completeAudio").text(dataa.Info[0].Completed_audio);
+        $("#uniqueAudio").text(dataa.Info[0].Unique_audio_play);
         $("#umindfulness_minutes").text(dataa.Info[0].SCHOOL_MINDFUL_MINUTES);
 
 
@@ -1515,6 +1686,148 @@ function usersearch() {
         });
 
 
+    });
+
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "/user_audio_completion/" + a,
+        "method": "GET"
+    }
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa);
+        Highcharts.chart('container17', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Average Audio Completion(CSY)'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: dataa.temp1.percentage_of_audio_completed[0],
+                tickmarkPlacement: 'on',
+                title: {
+                    enabled: false
+                }
+            },
+            yAxis: [{
+                lineWidth: 1,
+                opposite: false,
+                title: {
+                    text: 'Count'
+                }
+            }, {
+                lineWidth: 1,
+                opposite: true,
+                title: {
+                    text: 'Cumulative Count'
+                }
+            }],
+            tooltip: {
+                split: true,
+                valueSuffix: ''
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#666666',
+                        enabled: false
+                    }
+                }
+            },
+            series: [{
+                name: 'Cumulative Audio Completion',
+                color: '#DCDCDC',
+                type: "area",
+                data: dataa.temp1.cumulative_audio_completion
+            }, {
+                name: 'Audio Completion',
+                color: '#00a651',
+                yAxis: 0,
+
+                data: dataa.temp1.number_of_audios_compelted
+            }]
+        });
+    });
+
+
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "/user_audio_completion/" + a,
+        "method": "GET"
+    }
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa);
+
+        Highcharts.chart('container18', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Unique Audio Completion(CSY)'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: dataa.temp2.percentage_of_uniuqe_audio_completed[0],
+                tickmarkPlacement: 'on',
+                title: {
+                    enabled: false
+                }
+            },
+            yAxis: [{
+                lineWidth: 1,
+                opposite: false,
+                title: {
+                    text: 'Count'
+                }
+            }, {
+                lineWidth: 1,
+                opposite: true,
+                title: {
+                    text: 'Cumulative Count'
+                }
+            }],
+            tooltip: {
+                split: true,
+                valueSuffix: ''
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
+                    lineWidth: 1,
+                    marker: {
+                        lineWidth: 1,
+                        lineColor: '#666666',
+                        enabled: false
+                    }
+                }
+            },
+            series: [{
+                name: 'Cumulative Audio Completion',
+                color: '#DCDCDC',
+                type: "area",
+                data: dataa.temp2.cumulative_unique_audio_played
+            }, {
+                name: 'Audio Completion',
+                color: '#00a651',
+                yAxis: 0,
+
+                data: dataa.temp2.number_of_audios_compelted
+            }]
+        });
     });
 }
 
