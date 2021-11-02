@@ -1091,7 +1091,7 @@ function Pfam(URL) {
                     color: '#01a451',
                     type: 'column',
                     name: dataa.Info[0].USER_NAME,
-                    data: dataa.chart.data.shp
+                    data: dataa.chart.data.csy
 
                     , //Fri, 14 Jul 2017 00:00:00 GMT
                     dataGrouping: {
@@ -1102,7 +1102,7 @@ function Pfam(URL) {
                     color: '#ff9933',
                     type: 'spline',
                     name: 'Cumulative',
-                    data: dataa.chart.data.shpcum, //Fri, 14 Jul 2017 00:00:00 GMT
+                    data: dataa.chart.data.lsy, //Fri, 14 Jul 2017 00:00:00 GMT
                     dataGrouping: {
                         enabled: false,
                     }
