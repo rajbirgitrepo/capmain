@@ -86,7 +86,9 @@ function gif2(){
   $('#gif').empty();
 }
 
-
+function clickableTableSchoolName(a){
+  window.open("/School_Search?" + a);
+}
 
 $(function () {
   $(document).tooltip({
