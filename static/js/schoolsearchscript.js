@@ -2,7 +2,7 @@ let str = window.location.href;
 console.log(str.substr(str.lastIndexOf("?") + 1));
 var urlid = str.substr(str.lastIndexOf("?") + 1);
 document.getElementById('searchinput').value = '';
-if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1:5000/School_Search#") {
+if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1:5000/School_Search#" || urlid == "https://testcapxp.innerexplorer.org/School_Search" || urlid == "https://testcapxp.innerexplorer.org/School_Search#" || urlid == "https://cap.innerexplorer.org/School_Search" || urlid == "https://cap.innerexplorer.org/School_Search#") {
     console.log("noID")
 } else if (urlid !== '') {
     URL = "/schoolsearchid/" + urlid
