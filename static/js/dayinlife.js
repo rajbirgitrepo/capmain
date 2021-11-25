@@ -229,9 +229,10 @@ function charts(a) {
                 }],
 
                 tooltip: {
-                    pointFormatter: function() {
-                        return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
-                    }
+                    // pointFormatter: function() {
+                    //     return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
+                    // }
+                    valueDecimals: 0
                 },
 
                 legend: {
@@ -311,7 +312,7 @@ function charts(a) {
                 ]
 
             });
-            chart.xAxis[0].setExtremes(new Date('2021-11-02 15:00').getTime(), new Date('2021-11-02 16:00').getTime());
+            //  chart.xAxis[0].setExtremes(new Date('2021-11-11 15:00').getTime(), new Date('2021-11-11 16:00').getTime());
 
 
         });
@@ -398,9 +399,10 @@ function charts(a) {
                 }],
 
                 tooltip: {
-                    pointFormatter: function() {
-                        return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
-                    }
+                    // pointFormatter: function() {
+                    //     return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
+                    // }
+                    valueDecimals: 0
                 },
 
                 legend: {
@@ -482,7 +484,7 @@ function charts(a) {
                     }
                 ]
             });
-            chart.xAxis[0].setExtremes(new Date('2021-11-02 15:00').getTime(), new Date('2021-11-02 16:00').getTime());
+            // chart.xAxis[0].setExtremes(new Date('2021-11-11 15:00').getTime(), new Date('2021-11-11 16:00').getTime());
         });
 
     }

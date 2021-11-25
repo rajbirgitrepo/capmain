@@ -42,7 +42,7 @@ function createDynamicDivcards(userList) {
     var dynamicDiv = '';
     console.log(userList)
 
-    dynamicDiv += '<div class="col-md-2 card" style="border: none !important;"><div class=" portalBox" ><div class=" d-sm-flex justify-content-sm-between align-items-sm-center"><div class=" card-title text-s"><div onclick="distselect(\'' + userList[0] + '\'),imgd(\'' + userList[3] + '\')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()"><img src="' + userList[3] + '" class="img-responsive card_img"  alt="School"><p class="text-s" style="border-radius: 20px;background-color: #fafafa;">' + userList[1] + '</p></div></div></div></div></div>'
+    dynamicDiv += '<div class="col-md-2 card " style="border: none !important;"><div class=" portalBox clearfix" ><div class=" d-sm-flex justify-content-sm-between align-items-sm-center"><div class=" card-title text-s"><div onclick="distselect(\'' + userList[0] + '\'),imgd(\'' + userList[3] + '\')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()"><img src="' + userList[3] + '" class="img-responsive card_img"  alt="School"><p class="text-s" style="border-radius: 20px;background-color: #fafafa;">' + userList[1] + '</p></div></div></div></div></div>'
 
 
     return dynamicDiv;
@@ -73,15 +73,13 @@ function imgd(a) {
 }
 
 function charts(a, b, c) {
-
-
-
     var settings = {
         async: true,
         crossDomain: true,
         url: "/90daysuserpractising" + "/" + a + "/" + b + "/" + c,
         method: "GET",
     };
+
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
@@ -146,8 +144,21 @@ function charts(a, b, c) {
                     borderWidth: 2,
                     series: {
                         point: {
-
-                        }
+                            events: {
+                                click: function() {
+                                    URL = "/90daystable/" + a + "/" + this.category;
+                                    $('#next').empty();
+                                    console.log(URL);
+                                    var modal2 = document.getElementById("myModal2");
+                                    modal2.style.display = "block";
+                                    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+                                    var gif = document.getElementById("gif");
+                                    gif.style.display = "block";
+                                    $('#btnExport').show();
+                                    createDynamic(URL);
+                                },
+                            },
+                        },
                     },
                     column: {
                         stacking: 'normal',
@@ -164,18 +175,258 @@ function charts(a, b, c) {
                         name: 'Schoology',
                         data: dataa.Scoology
                     }, {
-                        name: 'Home',
+                        name: 'Family',
                         fontSize: '8px',
                         data: dataa.Parents
 
                     }, {
-                        name: 'Classroom',
+                        name: 'Teacher',
                         data: dataa.Teachers
                     },
                 ],
             });
         });
     });
+
+    $(document).on('change', '#historyPlayback', function() {
+        $('#container2').empty();
+        // $("#waiting").append("<p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p>");
+        console.log(this.value)
+        if (this.value == '2') {
+            var settings = {
+                async: true,
+                crossDomain: true,
+                url: "last90daysuserpractising/" + a,
+                method: "GET",
+            };
+            $.ajax(settings).done(function(response) {
+                var dataa = JSON.parse(response);
+                console.log(dataa);
+                $(function() {
+                    $("#container2").highcharts({
+                        chart: {
+                            zoomType: "xy",
+                            type: "column"
+                        },
+                        title: {
+                            text: "User Playback History Last 90 Days",
+                        },
+                        credits: {
+                            enabled: false,
+                        },
+                        colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+                        xAxis: [{
+                                categories: dataa.Date,
+                                labels: {
+                                    rotation: 90,
+                                }
+                            },
+
+                        ],
+                        yAxis: [{
+                                //Primary yAxis
+                                lineWidth: 1,
+                                labels: {
+                                    format: "{value}",
+                                    style: {
+                                        color: "#000",
+                                    },
+                                },
+                                title: {
+                                    text: "Playback Count",
+                                    style: {
+                                        color: "#000",
+                                    },
+                                },
+                            },
+                            {
+                                //Secondary yAxis
+                                title: {
+                                    text: "",
+                                    style: {
+                                        color: "#4572A7",
+                                    },
+                                },
+                                labels: {
+                                    format: "{value}",
+                                    style: {
+                                        color: "#4572A7",
+                                    },
+                                },
+                                opposite: false,
+                            },
+                        ],
+                        tooltip: {
+                            shared: true,
+                        },
+                        plotOptions: {
+                            borderWidth: 2,
+                            series: {
+                                point: {
+                                    events: {
+                                        click: function() {
+                                            URL = "/90daystable/" + a + "/" + this.category;
+                                            $('#next').empty();
+                                            console.log(URL);
+                                            var modal2 = document.getElementById("myModal2");
+                                            modal2.style.display = "block";
+                                            $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+                                            var gif = document.getElementById("gif");
+                                            gif.style.display = "block";
+                                            $('#btnExport').show();
+                                            createDynamic(URL);
+                                        },
+                                    },
+                                },
+                            },
+                            column: {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: false
+                                }
+                            }
+                        },
+                        series: [{
+                                name: 'Clever',
+                                data: dataa.Clever
+                            },
+                            {
+                                name: 'Schoology',
+                                data: dataa.Scoology
+                            }, {
+                                name: 'Family',
+                                fontSize: '8px',
+                                data: dataa.Parents
+
+                            }, {
+                                name: 'Teacher',
+                                data: dataa.Teachers
+                            },
+                        ],
+                    });
+                });
+            });
+        } else {
+            var settings = {
+                async: true,
+                crossDomain: true,
+                url: "/90daysuserpractising" + "/" + a + "/" + b + "/" + c,
+                method: "GET",
+            };
+
+            $.ajax(settings).done(function(response) {
+                var dataa = JSON.parse(response);
+                console.log(dataa);
+                $(function() {
+                    $("#container2").highcharts({
+                        chart: {
+                            zoomType: "xy",
+                            type: "column"
+                        },
+                        title: {
+                            text: "User Playback History",
+                        },
+                        credits: {
+                            enabled: false,
+                        },
+                        colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+                        xAxis: [{
+                                categories: dataa.Date,
+                                labels: {
+                                    rotation: 90,
+                                }
+                            },
+
+                        ],
+                        yAxis: [{
+                                //Primary yAxis
+                                lineWidth: 1,
+                                labels: {
+                                    format: "{value}",
+                                    style: {
+                                        color: "#000",
+                                    },
+                                },
+                                title: {
+                                    text: "Playback Count",
+                                    style: {
+                                        color: "#000",
+                                    },
+                                },
+                            },
+                            {
+                                //Secondary yAxis
+                                title: {
+                                    text: "",
+                                    style: {
+                                        color: "#4572A7",
+                                    },
+                                },
+                                labels: {
+                                    format: "{value}",
+                                    style: {
+                                        color: "#4572A7",
+                                    },
+                                },
+                                opposite: false,
+                            },
+                        ],
+                        tooltip: {
+                            shared: true,
+                        },
+                        plotOptions: {
+                            borderWidth: 2,
+                            series: {
+                                point: {
+                                    events: {
+                                        click: function() {
+                                            URL = "/90daystable/" + a + "/" + this.category;
+                                            $('#next').empty();
+                                            console.log(URL);
+                                            var modal2 = document.getElementById("myModal2");
+                                            modal2.style.display = "block";
+                                            $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+                                            var gif = document.getElementById("gif");
+                                            gif.style.display = "block";
+                                            $('#btnExport').show();
+                                            createDynamic(URL);
+                                        },
+                                    },
+                                },
+                            },
+                            column: {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: false
+                                }
+                            }
+                        },
+                        series: [{
+                                name: 'Clever',
+                                data: dataa.Clever
+                            },
+                            {
+                                name: 'Schoology',
+                                data: dataa.Scoology
+                            }, {
+                                name: 'Family',
+                                fontSize: '8px',
+                                data: dataa.Parents
+
+                            }, {
+                                name: 'Teacher',
+                                data: dataa.Teachers
+                            },
+                        ],
+                    });
+                });
+            });
+
+        }
+    });
+    $("#historyPlayback").val(1);
+
+
 
 
     var settings = {
@@ -268,13 +519,13 @@ function charts(a, b, c) {
                         data: dataa.Scoology,
                         stack: 'male'
                     }, {
-                        name: 'Home',
+                        name: 'Family',
                         fontSize: '8px',
                         data: dataa.Parents,
                         stack: 'male'
 
                     }, {
-                        name: 'Classroom',
+                        name: 'Teacher',
                         data: dataa.Teachers,
                         stack: 'male'
 
@@ -437,13 +688,13 @@ function charts(a, b, c) {
                         data: dataa.Scoology,
                         stack: 0
                     }, {
-                        name: 'Home',
+                        name: 'Family',
                         fontSize: '8px',
                         data: dataa.Parents,
                         stack: 0
 
                     }, {
-                        name: 'Classroom',
+                        name: 'Teacher',
                         data: dataa.Teachers,
                         stack: 0
                     },
@@ -480,7 +731,7 @@ function charts(a, b, c) {
                     type: "bar"
                 },
                 title: {
-                    text: "Top 20 Champion Playback Count",
+                    text: "Top 20 Champion in CSY",
                 },
                 credits: {
                     enabled: false,
@@ -694,13 +945,13 @@ function charts(a, b, c) {
                         data: dataa.Scoology,
                         stack: 0
                     }, {
-                        name: 'Home',
+                        name: 'Family',
                         fontSize: '8px',
                         data: dataa.Parents,
                         stack: 0
 
                     }, {
-                        name: 'Classroom',
+                        name: 'Teacher',
                         data: dataa.Teachers,
                         stack: 0
                     },
@@ -796,6 +1047,95 @@ function charts(a, b, c) {
         });
     });
 
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/districtfeedbackrating_csy" + "/" + a + "/" + b + "/" + c,
+        method: "GET",
+    }
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa)
+        Highcharts.chart('container38', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                height: 250,
+                width: 235,
+                type: 'pie',
+                credits: {
+                    enabled: false,
+                },
+            },
+            title: {
+                text: null
+            },
+            credits: {
+                enabled: false,
+            },
+            tooltip: {
+                // pointFormat: '{series.name}: <b>{point.percentage:.1f}</b>',
+                valueDecimals: 0
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: ''
+                }
+            },
+            navigation: {
+                buttonOptions: {
+                    enabled: false
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false,
+                        format: '<b>{point.name}</b>: {point.y}'
+                    },
+                    colors: [
+                        "#02A45A", "#ff9933"
+                    ]
+                }
+            },
+            series: [{
+                name: 'Ratings',
+                colorByPoint: true,
+                data: [{
+                        name: '1 Star',
+                        y: dataa.donut.one,
+                        // sliced: true,
+                        // selected: true,
+                        color: '#FF0000'
+                    },
+                    {
+                        name: '2 Star',
+                        y: dataa.donut.two,
+                        color: '#DC143C'
+                    },
+                    {
+                        name: '3 Star',
+                        y: dataa.donut.three,
+                        color: '#FF9933'
+                    },
+                    {
+                        name: '4 Star',
+                        y: dataa.donut.four,
+                        color: '#05D36C'
+                    },
+                    {
+                        name: '5 Star',
+                        y: dataa.donut.five,
+                        color: '#02A45A'
+                    },
+                ]
+            }]
+        });
+    });
+
 
     var settings = {
         async: true,
@@ -859,92 +1199,92 @@ function charts(a, b, c) {
         });
     });
 
-    var settings = {
-        async: true,
-        crossDomain: true,
-        url: "/districtfeedbackrating_csy" + "/" + a + "/" + b + "/" + c,
-        method: "GET",
-    }
-    $.ajax(settings).done(function(response) {
-        var dataa = JSON.parse(response);
+    // var settings = {
+    //     async: true,
+    //     crossDomain: true,
+    //     url: "/districtfeedbackrating_csy" + "/" + a + "/" + b + "/" + c,
+    //     method: "GET",
+    // }
+    // $.ajax(settings).done(function(response) {
+    //     var dataa = JSON.parse(response);
 
-        Highcharts.chart('container38', {
-            chart: {
-                type: 'column'
-            },
-            credits: {
-                enabled: false,
-            },
-            title: {
-                text: "Feedback Rating CSY"
+    //     Highcharts.chart('container38', {
+    //         chart: {
+    //             type: 'column'
+    //         },
+    //         credits: {
+    //             enabled: false,
+    //         },
+    //         title: {
+    //             text: "Feedback Rating CSY"
 
-            },
-            colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
-            xAxis: {
-                categories: ['5 Star', '4 Star', '3 Star', '2 Star', '1 Star'],
-                crosshair: false,
-                labels: {
-                    style: {
-                        fontSize: "10px",
-                        rotation: 90,
-                    },
-                }
-            },
-            yAxis: {
-                lineWidth: 1,
-                min: 0,
-                title: {
-                    text: " Feedback Rating Count"
-                },
-                stackLabels: {
-                    enabled: false,
-                    style: {
-                        fontWeight: 'bold',
-                        color: ( // theme
-                            Highcharts.defaultOptions.title.style &&
-                            Highcharts.defaultOptions.title.style.color
-                        ) || 'gray'
-                    }
-                }
-            },
-            tooltip: {
-                style: {
-                    color: 'Black',
-                    fontWeight: 'bold'
-                },
-                headerFormat: '<b>{point.x}</b><br/>',
-                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-            },
-            plotOptions: {
-                series: {
-                    point: {
+    //         },
+    //         colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+    //         xAxis: {
+    //             categories: ['5 Star', '4 Star', '3 Star', '2 Star', '1 Star'],
+    //             crosshair: false,
+    //             labels: {
+    //                 style: {
+    //                     fontSize: "10px",
+    //                     rotation: 90,
+    //                 },
+    //             }
+    //         },
+    //         yAxis: {
+    //             lineWidth: 1,
+    //             min: 0,
+    //             title: {
+    //                 text: " Feedback Rating Count"
+    //             },
+    //             stackLabels: {
+    //                 enabled: false,
+    //                 style: {
+    //                     fontWeight: 'bold',
+    //                     color: ( // theme
+    //                         Highcharts.defaultOptions.title.style &&
+    //                         Highcharts.defaultOptions.title.style.color
+    //                     ) || 'gray'
+    //                 }
+    //             }
+    //         },
+    //         tooltip: {
+    //             style: {
+    //                 color: 'Black',
+    //                 fontWeight: 'bold'
+    //             },
+    //             headerFormat: '<b>{point.x}</b><br/>',
+    //             pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    //         },
+    //         plotOptions: {
+    //             series: {
+    //                 point: {
 
-                    }
-                },
-                column: {
-                    stacking: 'normal',
-                    dataLabels: {
-                        enabled: false
-                    }
-                }
-            },
-            legend: {
-                enabled: true,
-                itemStyle: {
-                    fontSize: '10px',
-                    fontWeight: '200'
-                }
-            },
-            series: [{
-                    color: "#01A451",
-                    name: 'Ratings',
-                    data: dataa.count
-                }
+    //                 }
+    //             },
+    //             column: {
+    //                 stacking: 'normal',
+    //                 dataLabels: {
+    //                     enabled: false
+    //                 }
+    //             }
+    //         },
+    //         legend: {
+    //             enabled: true,
+    //             itemStyle: {
+    //                 fontSize: '10px',
+    //                 fontWeight: '200'
+    //             }
+    //         },
+    //         series: [{
+    //                 color: "#01A451",
+    //                 name: 'Ratings',
+    //                 data: dataa.count
+    //             }
 
 
-            ]
-        });
-    });
+    //         ]
+    //     });
+    // });
 
     // var settings = {
     //   async: true,
@@ -1030,12 +1370,12 @@ function charts(a, b, c) {
     //         name: 'Schoology',
     //         data: dataa.Scoology
     //       },{
-    //             name: 'Home',
+    //             name: 'Family',
     //             fontSize:'8px',
     //             data: dataa.Parents
 
     //         }, {
-    //             name: 'Classroom',
+    //             name: 'Teacher',
     //             data: dataa.Teachers
     //         },
     //       ],
@@ -1123,12 +1463,12 @@ function charts(a, b, c) {
     //           name: 'Schoology',
     //           data: dataa.Scoology
     //         },{
-    //               name: 'Home',
+    //               name: 'Family',
     //               fontSize:'8px',
     //               data: dataa.Parents
 
     //           }, {
-    //               name: 'Classroom',
+    //               name: 'Teacher',
     //               data: dataa.Teachers
     //           },
     //         ],
@@ -1382,6 +1722,8 @@ function distselect(distid) {
     $("#login").empty()
     $("#practice").empty()
     $("#districtid").empty();
+    $("#state").empty();
+    $("#avgrating").empty();
     $("#school").empty();
     $("#teacher").empty();
     $("#practice").empty();
@@ -1455,7 +1797,8 @@ function cardcount(id, a, b) {
         $("#MINDFUL_MINUTES_parent").text(dataa.MINDFUL_MINUTES_parent);
         $("#parentspracticecount").text(dataa.parentspracticecount);
         $("#practicecount").text(dataa.practicecount);
-        // $("#teachercount").text(dataa.teachercount);
+        $("#state").text(dataa.state);
+        $("#avgrating").text(dataa.rating);
         // $("#schoolcount").text(dataa.schoolcount);
         // $("#engd_teacher_csy").text(dataa.engd_teacher_csy);
         // $("#engd_teacher_lsy").text(dataa.engd_teacher_lsy);
@@ -1467,6 +1810,18 @@ function dateSub() {
     var c = document.getElementById("disdetails").innerText;
     distselect(c);
 }
+
+//CODE FOR PDF EXTRACT 
+$("#btnPrint").on("click", function() {
+    var divContents = $(".containerPrint").html();
+    var printWindow = window.open('', '', 'height=400,width=800');
+    printWindow.document.write('<html><head><title>DIV Contents</title>');
+    printWindow.document.write('</head><body >');
+    printWindow.document.write(divContents);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+});
 
 function heatnew(b) {
     console.log(b);

@@ -8,21 +8,19 @@
     <title>CAPi6 District Report</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
 
-    <!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/bootstrap.min.css') }}"> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/exbarchat.css') }}"> -->
-    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/map-table.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/map-table.css') }}">
     <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/mainpractice.css') }}"> -->
     <!-- <link rel="stylesheet" type="text/css" href="/static/css/search2.css"> -->
-    <!-- <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css'> -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/datatable_bootstrap.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/datatable_bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/map-table.css') }}">
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css'>
+    <!-- <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css'> -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/reset.min.css') }}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -31,16 +29,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-heatmap.min.js"></script>
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-data-adapter.min.js"></script>
-    <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
-    <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
-    <script src="https://cdn.anychart.com/releases/v8/js/anychart-polar.min.js"></script>
+    <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> -->
 
 
     <!-- <link href="https://innerexplorer.org/css/index.css" rel="stylesheet"> -->
@@ -49,6 +38,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -341,41 +332,30 @@
 
 <body class="body">
     <nav class="navbar navbar-default">
-        <div class="">
+        <div class="" style="width: 100%;">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="page_Heading" href="#">DISTRICT ENGAGEMENT</a>
+
                     <a href="homepage">
                         <img src="/static/images/capwhite.png" alt="" class="logo">
                     </a>
+                    <a class="page_Heading" href="#" style="float: left !important;">DISTRICT ENGAGEMENT</a>
                 </div>
-                <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <!-- <li style="left: 2px;
-            top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true" style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i>
-                            <p style="float: right;">Views</p>
-                            <p id="count" style="float: right;margin-right: 3px;"></p>
-                        </li>-->
-                        <!--<li style="left: 10px;
-            top: 34px;
-            color: #fff;
-            cursor: pointer;" id="myBtn"><i class="fa fa-lightbulb-o" style="margin-top:2px;"></i><p style="float: right;">Insights</p><p style="float: right;margin-right: 3px; margin-left: 5px;">3</p></li>-->
-                        <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true"
-                  style="margin-top:2px;margin-right: 3px;"></i></a></li>
-                        <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1"
-                  class="fa fa-bars show-side-btn"></i></a></li>
-                        <li style="margin-top: 27px;">
-                            <div class="dropdown">
-                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">A<span id="logid"
-                    style="display: none;">1</span></button>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">Admin</a></li>
-                                    <hr />
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>
-                                </ul>
-                            </div>
-                    </ul>
-                </div>
+                <!-- <div class="navbar-collapse navbar-right" id="bs-example-navbar-collapse-1" style="float: right;margin-top: 31px;">
+          <ul id="menu">
+            <li><a id="share" href="#"><i class="fa fa-share" aria-hidden="true" style="margin-top:2px;margin-right: 3px;"></i></a></li>
+            <li><a href="#"><i data-show="show-side-navigation1" class="fa fa-bars show-side-btn"></i></a></li>
+            <li><i class="fa fa-eye" aria-hidden="true" style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i><p style="float: right;">Views</p><p id="count" style="float: right;margin-right: 3px;"></p></li>
+            <li><div class="dropdown">
+              <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid" style="display: none;">1</span></button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                <li role="presentation" id="usname"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a></li>  
+                <hr />
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>   
+              </ul>
+            </div></li>
+          </ul> 
+        </div> -->
             </div>
     </nav>
     <aside class="side-nav" id="show-side-navigation1">

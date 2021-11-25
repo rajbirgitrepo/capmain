@@ -18,6 +18,8 @@ if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1
     $("#ucount").empty();
     $("#pcount").empty();
     $("#mindfulness_minutes").empty();
+    $("#LifeTimePlayback").empty();
+    $("#MindLifetime").empty();
     $("#ratings").empty();
     $("#school").empty();
     $("#city").empty();
@@ -196,6 +198,7 @@ function schoolsearch() {
         $("#schoolname").empty();
         $("#practice").empty();
         $("#state").empty();
+        $("#schoolDistrict").empty();
         $("#usercountse").empty();
         $("#adress").empty();
         $("#email").empty();
@@ -204,11 +207,14 @@ function schoolsearch() {
         $("#admin").empty();
         $("#ucount").empty();
         $("#pcount").empty();
+        $("#LifeTimePlayback").empty();
+        $("#MindLifetime").empty();
         $("#mindfulness_minutes").empty();
         $("#ratings").empty();
         $("#school").empty();
         $("#city").empty();
         $("#state").empty();
+        $("#schoolDistrict").empty();
         $("#country").empty();
         $("#signup").empty();
         $("#renewal").empty();
@@ -234,6 +240,7 @@ function schoolsearch() {
         $("#schoolname").empty();
         $("#practice").empty();
         $("#state").empty();
+        $("#schoolDistrict").empty();
         $("#usercountse").empty();
         $("#adress").empty();
         $("#email").empty();
@@ -247,6 +254,7 @@ function schoolsearch() {
         $("#school").empty();
         $("#city").empty();
         $("#state").empty();
+        $("#schoolDistrict").empty();
         $("#country").empty();
         $("#signup").empty();
         $("#renewal").empty();
@@ -305,6 +313,7 @@ function schoolsearch2() {
     $("#schoolname").empty();
     $("#practice").empty();
     $("#state").empty();
+    $("#schoolDistrict").empty();
     $("#usercountse").empty();
     $("#adress").empty();
     $("#email").empty();
@@ -313,11 +322,14 @@ function schoolsearch2() {
     $("#admin").empty();
     $("#ucount").empty();
     $("#pcount").empty();
+    $("#LifeTimePlayback").empty();
+    $("#MindLifetime").empty();
     $("#mindfulness_minutes").empty();
     $("#ratings").empty();
     $("#school").empty();
     $("#city").empty();
     $("#state").empty();
+    $("#schoolDistrict").empty();
     $("#country").empty();
     $("#signup").empty();
     $("#renewal").empty();
@@ -369,7 +381,7 @@ function P(URL) {
         $("#ratings").empty();
         $("#school").empty();
         $("#city").empty();
-        $("#state").empty();
+        $("#schoolDistrict").empty();
         $("#country").empty();
         $("#signup").empty();
         $("#renewal").empty();
@@ -377,6 +389,7 @@ function P(URL) {
         $("#schoolname").text("SCHOOL NAME: " + dataa.school_name);
         $("#practice").text(dataa.school_practice_count);
         $("#state").text("STATE: " + dataa.state);
+        $("#state").text("DISTRICT: " + dataa.DISTRICT);
         $("#usercountse").text(dataa.user_count);
         $("#adress").text("ADDRESS: " + dataa.address);
         $("#email").text("ADMIN EMAIL: " + dataa.admin_email);

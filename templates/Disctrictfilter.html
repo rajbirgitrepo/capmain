@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
-
+    <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> -->
 
 
     <!-- <link href="https://innerexplorer.org/css/index.css" rel="stylesheet"> -->
@@ -158,6 +158,21 @@
         z-index: 10;
     } */
     
+    .printpos {
+        position: absolute;
+        right: 10px;
+        top: 15px;
+    }
+    
+    .print_btn {
+        border-radius: 5px;
+        padding: 4px 5px;
+        background: white;
+        border: 1px solid gray;
+        color: #50a756;
+        outline: none;
+    }
+    
     tbody th {
         font-size: 10px !important;
         position: sticky;
@@ -202,6 +217,10 @@
         width: 25%;
         font-family: roboto, arial;
         font-size: 0.75em;
+    }
+    
+    .ui-datepicker {
+        width: 26em !important;
     }
     
     .color-square {
@@ -341,6 +360,7 @@
         background-color: #fff;
         background-clip: border-box;
         border-radius: 0.25rem;
+        height: 150px;
     }
     
     .bg-dark {
@@ -548,8 +568,11 @@
                             <div class=" col-md-2" style="float: left;">
                                 <button class="select_button" onclick="modal2()">Select District</button>
                             </div>
-                            <div class=" col-md-8">
-                                <p style="font-size: 21px;margin: 25px;" id="districtid"></p>
+                            <div class=" col-md-7">
+                                <p style="font-size: 21px;margin: 20px 15px;" id="districtid"></p>
+                            </div>
+                            <div class=" col-md-3">
+                                <p style="font-size: 21px;margin: 20px 15px;" id="state"></p>
                             </div>
                         </div>
                     </div>
@@ -651,6 +674,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="boxExecutive">
+                            <div>
+                                <p style="font-size: 11px;">Average Rating</p>
+                                <p class="boxvalue2" id="avgrating" style="font-size: 25px;"></p>
+                            </div>
+
+                            <div id="container38" style="height: 233px;width: 100%;">
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -743,12 +778,13 @@
         margin: 20px;
         padding: 10px;"></div> -->
 
-        <div title="" id="sticky-wrapper heat_map_360" style="border-radius: 20px;
+        <div title="" id="sticky-wrapper heat_map_360 chart-container" style="border-radius: 20px;
         margin-top: 20px;
         box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
         background-color: #fff;
         margin: 20px;
-        padding: 10px;">
+        padding: 10px;
+        position: relative;">
             <select id="heat" style="margin-top: 7px;">
                 <option value="4" selected>Overall Playback Heat Map</option>
                 <option value="5">Teacher Wise Playback Heat Map</option>
@@ -758,10 +794,27 @@
                 <option value="3">Teachers Active User Count</option>
             </select>
             <p id="chartname" style="text-align: center;"></p>
-            <div id="heat-map" class="table-header-design" style="overflow: scroll;height: 300px;"></div>
+
+            <button class="print_btn printpos" id="btnPrint">Print Heat Map</button>
+            <div>
+
+                <div id="heat-map" class="table-header-design containerPrint" style="overflow: scroll;height: auto;max-height: 500px;"></div>
+            </div>
         </div>
-        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="user_practice_history_360">
-            <div id="container2" style="height: 400px; width: 120%; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+        <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="user_practice_history_360">
+            <div style="
+            background-color: #ffff;
+            border-radius: 20px;
+            box-shadow: rgb(0 0 0 / 10%) 2px 10px 20px;
+            padding: 10px;
+        ">
+                <select id="historyPlayback" style="margin-top: 7px;">
+                    <option value="1" selected>User Playback History</option>
+                    <option value="2">User Playback History Last 90 Days</option>
+                </select>
+                <!-- <div id="waiting"></div> -->
+                <div id="container2" style="height: 400px; width: 100%;">
+                </div>
             </div>
         </div>
 
@@ -780,22 +833,32 @@
             </div>
         </div> -->
 
-        <div class="col-md-6" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_user_practice playback_count_360">
-            <div id="container5" style="height: 510pxpx; width: 100%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+        <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_user_practice playback_count_360">
+            <div style="background-color: #ffffff;border-radius: 20px; box-shadow: rgb(0 0 0 / 10%) 2px 10px 20px; overflow: hidden;">
+                <div id="container5" style="height: 510pxpx; width: 100%; margin-top: 20px;">
+                </div>
+                <hr />
+                <a href="Weekly_Analytics">
+                    <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
+              float: right;">View PLAYBACK ANALYTICS <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </p>
+                </a>
+                <br />
             </div>
+
         </div>
         <div class="col-md-6" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_user_practice playback_count_360">
-            <div id="container10" style="height: 510pxpx; width: 100%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            <div id="container10" style="height: 510pxpx; width: 100%; border-radius: 20px; margin-top: 2px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
             </div>
         </div>
         <div class="col-md-6">
-            <div id="container37" style=" margin-top: 20px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+            <div id="container37" style=" margin-top: 2px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
             </div>
         </div>
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
             <div id="container38" style=" margin-top: 20px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
             </div>
-        </div>
+        </div> -->
 
         <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
       <div id="container7"style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>

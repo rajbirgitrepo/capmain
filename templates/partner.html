@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/journeystyle.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/exbarchat.css') }}">
-    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/map-table.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/map-table.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/mainpractice.css') }}">
     <link rel="stylesheet" type="text/css" href="/static/css/search2.css">
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css'>
@@ -86,6 +86,22 @@
 <script>
 </script>
 <style>
+    .image {
+        float: right;
+        width: 90px;
+        height: 38px;
+        opacity: 100%;
+        margin-top: 15px;
+    }
+    
+    .image2 {
+        float: left;
+        width: 1%;
+        opacity: 100%;
+        margin-top: 4px;
+        margin-right: 10px;
+    }
+    
     .ds_dp {
         background-color: #fff;
         border: 0;
@@ -146,23 +162,29 @@
         font-weight: normal;
     }
     
-    thead tr:nth-child(1) th {
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-    
     tbody th {
         font-size: 10px !important;
         position: sticky;
         left: 0;
         z-index: 10;
     }
+    /* thead tr:nth-child(1) th {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }*/
     
-    td,
-    th {
-        padding: 0 20px;
-        text-align: left;
+    .table-header-design table th {
+        padding: 5px 20px !important;
+        background-color: transparent !important;
+        color: black !important;
+        border-bottom: none !important;
+    }
+    
+    .table-design table th,
+    table td {
+        font-size: 8px !important;
+        padding: 5px 17px !important;
     }
     
     td {
@@ -285,6 +307,21 @@
 </style>
 
 <style>
+    .printpos {
+        position: absolute;
+        right: 10px;
+        top: 15px;
+    }
+    
+    .print_btn {
+        border-radius: 5px;
+        padding: 4px 5px;
+        background: white;
+        border: 1px solid gray;
+        color: #50a756;
+        outline: none;
+    }
+    
     .pul li {
         margin-top: 0 !important;
     }
@@ -486,6 +523,17 @@
                                     </div>
 
                                 </div>
+                                <div class="col-md-2 portalBox">
+
+
+                                    <div onclick="distselect('619268dd81f00a4319a65a52'),imgd('access')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()">
+
+                                        <img src="/static/images/access.png" class="img-responsive" alt="School">
+                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Access Community</span>
+                                        </p>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -534,45 +582,112 @@
         <section class="statistics">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-2" title="" id="schools">
-                        <div class="box2 ">
-                            <p style="font-size: 10px;" id="" onclick="hi()">Schools</p>
-                            <p style="margin: 0 4px; font-size: 21px; cursor: pointer; " onclick="cards2('/districtschooltable/')" id="school"></p>
+                    <div class="col-md-3">
+                        <div class="boxExecutive">
+                            <div>
+                                <img src="/static/images/Bar_Chartnew.png" class="image">
+                                <p style="font-size: 11px;">School</p>
+                                <p class="boxvalue2" onclick="cards2('/districtschooltable/')" id="school" style="cursor: pointer;"></p>
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Engaged in CSY</p>
+                                <p class="boxvalue" id="engaged_school_csy"></p>
+                                <br />
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Engaged in LSY</p>
+                                <p class="boxvalue" id="engaged_school_lsy"></p>
+                                <br />
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Playback Count</p>
+                                <p class="boxvalue" id="practicecount"></p>
+                                <br />
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Mindful Minutes</p>
+                                <p class="boxvalue" id="MINDFUL_MINUTES"></p>
+                                <br />
+                                <br />
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-2" title="" id="teachers">
-                        <div class="box2 ">
-                            <p style="font-size: 10px;" id="">Teachers</p>
-                            <p style="margin: 0 4px; font-size: 21px; cursor: pointer; " id="teacher" onclick="cards('/districtusertableteacher/')"></p>
+                    <div class="col-md-3">
+                        <div class="boxExecutive">
+                            <div>
+                                <img src="/static/images/Bar_Chartnew.png" class="image">
+                                <p style="font-size: 11px;">Teacher</p>
+                                <p class="boxvalue2" onclick="cards('/districtusertableteacher/')" id="teacher" style="cursor: pointer;"></p>
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Engaged in CSY</p>
+                                <p class="boxvalue" id="engd_teacher_csy"></p>
+                                <br />
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Engaged in LSY</p>
+                                <p class="boxvalue" id="engd_teacher_lsy"></p>
+                                <br />
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Playback Count</p>
+                                <p class="boxvalue" id="practice"></p>
+                                <br />
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Mindful Minutes</p>
+                                <p class="boxvalue" id="MINDFUL_MINUTES_Teacher"></p>
+                                <br />
+                                <br />
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-2" title="" id="practice_sessions">
-                        <div class="box2 ">
-                            <p style="font-size: 9px;" id="">Playback Sessions</p>
-                            <p style="margin: 0 4px; font-size: 21px; cursor: pointer; " onclick="cards('/districtusertable/')" id="practice"></p>
+                    <div class="col-md-3">
+                        <div class="boxExecutive">
+                            <div>
+                                <img src="/static/images/Bar_Chartnew.png" class="image">
+                                <p style="font-size: 11px;">Family</p>
+                                <p class="boxvalue2" onclick="cards('/districtusertableparent/')" id="family" style="cursor: pointer;"></p>
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Engaged in CSY</p>
+                                <p class="boxvalue" id="engd_parent_csy"></p>
+                                <br />
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Engaged in LSY</p>
+                                <p class="boxvalue" id="engd_parent_lsy"></p>
+                                <br />
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Playback Count</p>
+                                <p class="boxvalue" id="parentspracticecount"></p>
+                                <br />
+                                <hr />
+                                <img src="/static/images/green.png" class="image2">
+                                <p class="boxHeading2">Mindful Minutes</p>
+                                <p class="boxvalue" id="MINDFUL_MINUTES_parent"></p>
+                                <br />
+                                <br />
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-2" title="" id="family_count">
-                        <div class="box2 ">
-                            <p style="font-size: 10px;" id="">Family Count</p>
-                            <p style="margin: 0 4px; font-size: 21px; " id="family" onclick="cards('/districtusertableparent/')"></p>
-                        </div>
-                    </div>
-                    <div class="col-md-2" title="" id="mindful_minutes">
-                        <div class="box2 ">
-                            <p style="font-size: 10px;" id="">Mindful Minutes</p>
-                            <p style="margin: 0 4px; font-size: 21px; " id="MINDFUL_MINUTES"></p>
-                        </div>
-                    </div>
-                    <div class="col-md-2" title="" id="family_parctice_count">
-                        <div class="box2 ">
-                            <p style="font-size: 10px;" id="">Family Playback Count</p>
-                            <p style="margin: 0 4px; font-size: 21px; " id="parentspractice"></p>
+                    <div class="col-md-3">
+                        <div class="boxExecutive">
+                            <div>
+                                <p style="font-size: 11px;">Average Rating</p>
+                                <p class="boxvalue2" id="avgrating" style="font-size: 25px;"></p>
+                            </div>
+
+                            <div id="container38" style="height: 233px;width: 100%;">
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        <div id="gifload"></div>
         <div id="disdetails" style="display: none;">
         </div>
 
@@ -592,25 +707,44 @@
 
 
 
-        <div title="" id="sticky-wrapper heat_map_insight" style="border-radius: 20px;
+        <div title="" id="sticky-wrapper heat_map_360 chart-container" style="border-radius: 20px;
         margin-top: 20px;
         box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
         background-color: #fff;
         margin: 20px;
-        padding: 10px;">
+        padding: 10px;
+        position: relative;">
             <select id="heat" style="margin-top: 7px;">
-          <option value="4" selected>Overall Playback Heat Map</option>
-          <option value="5">Teacher Wise Playback Heat Map</option>
-          <option value="6">Family Wise Playback Heat Map</option>
-          <option value="1" >Overall Active User Count</option>
-          <option value="2">Family Active User Count</option>
-          <option value="3">Teachers Active User Count</option>
-        </select>
+                <option value="4" selected>Overall Playback Heat Map</option>
+                <option value="5">Teacher Wise Playback Heat Map</option>
+                <option value="6">Family Wise Playback Heat Map</option>
+                <option value="1">Overall Active User Count</option>
+                <option value="2">Family Active User Count</option>
+                <option value="3">Teachers Active User Count</option>
+            </select>
             <p id="chartname" style="text-align: center;"></p>
-            <div id="heat-map"></div>
+
+            <button class="print_btn printpos" id="btnPrint">Print Heat Map</button>
+            <div>
+
+                <div id="heat-map" class="table-header-design containerPrint" style="overflow: scroll;height: auto;max-height: 500px;"></div>
+            </div>
         </div>
-        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="user_practice_playback_history">
-            <div id="container2" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+        <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="user_practice_history_360">
+            <div style="
+            background-color: #ffff;
+            border-radius: 20px;
+            box-shadow: rgb(0 0 0 / 10%) 2px 10px 20px;
+            padding: 10px;
+        ">
+                <select id="historyPlayback" style="margin-top: 7px;">
+                    <option value="1" selected>User Playback History</option>
+                    <option value="2">User Playback History Last 90 Days</option>
+                </select>
+                <!-- <div id="waiting"></div> -->
+                <div id="container2" style="height: 400px; width: 100%;">
+                </div>
+            </div>
         </div>
 
 
@@ -621,11 +755,30 @@
             <div id="container4" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
         </div>
 
-        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_school_practice_count">
+        <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_school_practice_count">
             <div id="container6" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+        </div> -->
+        <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_user_practice playback_count_360">
+            <div style="background-color: #ffffff;border-radius: 20px; box-shadow: rgb(0 0 0 / 10%) 2px 10px 20px; overflow: hidden;">
+                <div id="container5" style="height: 510pxpx; width: 100%; margin-top: 20px;">
+                </div>
+                <hr />
+                <a href="Weekly_Analytics">
+                    <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
+              float: right;">View PLAYBACK ANALYTICS <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </p>
+                </a>
+                <br />
+            </div>
+
         </div>
-        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_user_practice_count">
-            <div id="container5" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+        <div class="col-md-6" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_user_practice playback_count_360">
+            <div id="container10" style="height: 510pxpx; width: 100%; border-radius: 20px; margin-top: 2px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="container37" style=" margin-top: 2px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+            </div>
         </div>
         <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
       <div id="container7"style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
@@ -634,7 +787,7 @@
       <div id="container8"style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
     </div> -->
         </div>
-        <div id="myModal2" class="modal2" style="z-index: 99 !important;">
+        <div id="myModal2" class="modal2 table-design" style="z-index: 99 !important;">
             <!-- Modal content -->
             <div class="modal2-content">
                 <div id="admin" class="col-md-12">
