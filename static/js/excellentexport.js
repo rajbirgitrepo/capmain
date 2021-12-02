@@ -18,18 +18,21 @@
 
 var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 var fromCharCode = String.fromCharCode;
-var INVALID_CHARACTER_ERR = ( function() {
-        // fabricate a suitable error object
-        try {
-            document.createElement('$');
-        } catch (error) {
-            return error;
-        }
-    }());
+var INVALID_CHARACTER_ERR = (function() {
+    // fabricate a suitable error object
+    try {
+        document.createElement('$');
+    } catch (error) {
+        return error;
+    }
+}());
 
 // encoder
 window.btoa || (window.btoa = function(string) {
-    var a, b, b1, b2, b3, b4, c, i = 0, len = string.length, max = Math.max, result = '';
+    var a, b, b1, b2, b3, b4, c, i = 0,
+        len = string.length,
+        max = Math.max,
+        result = '';
 
     while (i < len) {
         a = string.charCodeAt(i++) || 0;
@@ -58,7 +61,9 @@ window.btoa || (window.btoa = function(string) {
 // decoder
 window.atob || (window.atob = function(string) {
     string = string.replace(/=+$/, '');
-    var a, b, b1, b2, b3, b4, c, i = 0, len = string.length, chars = [];
+    var a, b, b1, b2, b3, b4, c, i = 0,
+        len = string.length,
+        chars = [];
 
     if (len % 4 === 1)
         throw INVALID_CHARACTER_ERR;
@@ -83,8 +88,8 @@ window.atob || (window.atob = function(string) {
 
 ExcellentExport = (function() {
     var version = "1.3";
-    var uri = {excel: 'data:application/vnd.ms-excel;base64,', csv: 'data:application/csv;base64,'};
-    var template = {excel: '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'};
+    var uri = { excel: 'data:application/vnd.ms-excel;base64,', csv: 'data:application/csv;base64,' };
+    var template = { excel: '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>' };
     var base64 = function(s) {
         return window.btoa(unescape(encodeURIComponent(s)));
     };
@@ -103,7 +108,7 @@ ExcellentExport = (function() {
 
     var fixCSVField = function(value) {
         var fixedValue = value;
-		var newf = null;
+        var newf = null;
         var addQuotes = (value.indexOf(',') !== -1) || (value.indexOf('\r') !== -1) || (value.indexOf('\n') !== -1);
         var replaceDoubleQuotes = (value.indexOf('"') !== -1);
 
@@ -113,18 +118,16 @@ ExcellentExport = (function() {
         if (addQuotes || replaceDoubleQuotes) {
             fixedValue = '"' + fixedValue + '"';
         }
-		if(fixedValue.search("@")==-1)
-		{
-		  newf =fixedValue;
-		}
-		else
-		
-		{
-			
-			var newf1 = fixedValue.split('>')[1];
-			 newf = newf1.split('<')[0];
-		}
-	
+        if (fixedValue.search("@") == -1) {
+            newf = fixedValue;
+        } else
+
+        {
+
+            var newf1 = fixedValue.split('>')[1];
+            newf = newf1.split('<')[0];
+        }
+
         return newf;
     };
 
@@ -143,7 +146,7 @@ ExcellentExport = (function() {
         /** @expose */
         excel: function(anchor, table, name) {
             table = get(table);
-            var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML};
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML };
             var hrefvalue = uri.excel + base64(format(template.excel, ctx));
             anchor.href = hrefvalue;
             // Return true to allow the link to work

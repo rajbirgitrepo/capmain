@@ -201,7 +201,7 @@
     .table-design table th,
     table td {
         font-size: 10px;
-        padding: 5px 20px !important;
+        padding: 5px 16px !important;
     }
     
     .close-new-tab {
@@ -873,7 +873,7 @@
                 <div id="admin" class="col-md-12">
                     <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
 
-                        <!-- <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"  download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a> -->
+                        <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a>
                         <div class="table-header">
                             <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
                             <button class="btn close-new-tab btn-logion" onclick="gif2()" style="float: right;background-color: white;"><i class="fa fa-times-circle-o"
@@ -881,8 +881,17 @@
                             </button>
                         </div>
                         <div id="gif"></div>
-                        <div class="custyle" id="next"></div>
-                        <div class="custyle" id="next1"></div>
+                        <table class="table hover multiple-select-row data-table-export nowrap">
+                            <thead id="dataTableHeader">
+
+                            </thead>
+                            <tbody id="next">
+
+                            </tbody>
+                            <tbody id="next1">
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -902,6 +911,23 @@
     <script src="/static/js/insight.js"></script>
 
 
+    <!-- js -->
+    <!-- <script src="/static/js/datatable/core.js"></script> -->
+    <!-- <script src="/static/js/datatable/script.min.js"></script> -->
+    <script src="/static/js/datatable/process.js"></script>
+    <script src="/static/js/datatable/layout-settings.js"></script>
+    <script src="/static/js/datatable/jquery.dataTables.min.js"></script>
+    <script src="/static/js/datatable/dataTables.bootstrap4.min.js"></script>
+    <script src="/static/js/datatable/dataTables.responsive.min.js"></script>
+    <script src="/static/js/datatable/responsive.bootstrap4.min.js"></script>
+    <!-- buttons for Export datatable -->
+    <script src="/static/js/datatable/dataTables.buttons.min.js"></script>
+    <script src="/static/js/datatable/buttons.bootstrap4.min.js"></script>
+    <!-- <script src="/static/js/datatable/buttons.print.min.js"></script> -->
+    <script src="/static/js/datatable/buttons.html5.min.js"></script>
+    <script src="/static/js/datatable/buttons.flash.min.js"></script>
+    <!-- <script src="/static/js/datatable/pdfmake.min.js"></script> -->
+    <script src="/static/js/datatable/vfs_fonts.js"></script>
 
 </body>
 

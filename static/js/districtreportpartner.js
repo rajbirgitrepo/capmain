@@ -12,7 +12,8 @@ $("#finaldate").text(f);
 $("#fromd").text(e);
 $("#tod").text(f);
 
-imgd('skillman');
+//imgd('skillman');
+modal2();
 
 function imgd(a) {
     console.log("iamge", a);
@@ -1584,7 +1585,7 @@ function cards2(URL) {
     $('#btnExport').show();
     createDynamic2(a);
 }
-distselect('123');
+//distselect('123');
 $("#disdetails").text('5f2609807a1c0000950bb477');
 
 function dateSub() {
