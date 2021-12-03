@@ -10871,7 +10871,7 @@ def heat_district(districtid,startdate,enddate):
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
-
+                  {'$sort':{'name':1}}
                       ])))
 
     ids=list(df['_id'])
@@ -11022,7 +11022,7 @@ def heat_district_family_active(districtid,startdate,enddate):
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
-
+                        {'$sort':{'name':1}}
                       ])))
 
     ids=list(df['_id'])
@@ -11124,11 +11124,11 @@ def heat_district_family_active(districtid,startdate,enddate):
 
         data[i] =active_user_count
     data=collections.OrderedDict(sorted(data.items()))
-    data={'meanTemp':data}
-
-    
+    df['_id']=df['_id'].astype(str)
+    schoolid=  df['_id'].tolist()
+    schoolname=  df['name'].tolist()
+    data={'meanTemp':data,'schoolid':dict(zip(schoolname,schoolid))}
     return json.dumps(data)
-
 #---
 @app.route('/teachersdistrictheatmap/<districtid>/<startdate>/<enddate>')
 def heat_district_teachers_active(districtid,startdate,enddate):
@@ -11171,7 +11171,7 @@ def heat_district_teachers_active(districtid,startdate,enddate):
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
-
+                    {'$sort':{'name':1}}
                       ])))
 
     ids=list(df['_id'])
@@ -11273,11 +11273,11 @@ def heat_district_teachers_active(districtid,startdate,enddate):
 
         data[i] =active_user_count
     data=collections.OrderedDict(sorted(data.items()))
-    data={'meanTemp':data}
-
-    
+    df['_id']=df['_id'].astype(str)
+    schoolid=  df['_id'].tolist()
+    schoolname=  df['name'].tolist()
+    data={'meanTemp':data,'schoolid':dict(zip(schoolname,schoolid))}
     return json.dumps(data)
-
 
 
 @app.route('/districtheatmappracteacher/<districtid>/<startdate>/<enddate>')
@@ -11321,6 +11321,7 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
+                         {'$sort':{'name':1}}
 
                       ])))
 
@@ -11423,11 +11424,11 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
 
         data[i] =practice_count
     data=collections.OrderedDict(sorted(data.items()))
-    data={'meanTemp':data}
-
-    
+    df['_id']=df['_id'].astype(str)
+    schoolid=  df['_id'].tolist()
+    schoolname=  df['name'].tolist()
+    data={'meanTemp':data,'schoolid':dict(zip(schoolname,schoolid))}
     return json.dumps(data)
-
 
 @app.route('/districtheatmappracfamily/<districtid>/<startdate>/<enddate>')
 def heat_district_family_prac(districtid,startdate,enddate):
@@ -11470,6 +11471,7 @@ def heat_district_family_prac(districtid,startdate,enddate):
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
+               {'$sort':{'name':1}}
 
                       ])))
 
@@ -11572,11 +11574,11 @@ def heat_district_family_prac(districtid,startdate,enddate):
 
         data[i] =practice_count
     data=collections.OrderedDict(sorted(data.items()))
-    data={'meanTemp':data}
-
-    
+    df['_id']=df['_id'].astype(str)
+    schoolid=  df['_id'].tolist()
+    schoolname=  df['name'].tolist()
+    data={'meanTemp':data,'schoolid':dict(zip(schoolname,schoolid))}
     return json.dumps(data)
-
 
 @app.route('/districtheatmappractice/<districtid>/<startdate>/<enddate>')
 def heatmap_prac_district(districtid,startdate,enddate):   
@@ -11619,6 +11621,7 @@ def heatmap_prac_district(districtid,startdate,enddate):
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
+                      {'$sort':{'name':1}}
 
                       ])))
 
@@ -11721,8 +11724,12 @@ def heatmap_prac_district(districtid,startdate,enddate):
 
         data[i] =practice_count
     data=collections.OrderedDict(sorted(data.items()))
-    data={'meanTemp':data}
+    df['_id']=df['_id'].astype(str)
+    schoolid=  df['_id'].tolist()
+    schoolname=  df['name'].tolist()
+    data={'meanTemp':data,'schoolid':dict(zip(schoolname,schoolid))}
     return json.dumps(data)
+
 
 
 
@@ -15307,6 +15314,50 @@ def district_school_table(districtid,startdate,enddate):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'$USER_ID.schoolId._id','ID':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},'prog':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}}},
                   {'$project':{'_id':1,'Practice_Count':'$ID','program':1,'last_practice_date':'$last_practice_date'}},
+                   ]))).fillna(0)
+    df_ = DataFrame(list(collection1.aggregate([
+    {"$match":
+         {'$and': [
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+
+    # //        
+                 {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'MODIFIED_DATE':{"$gte": csy_first_date()}},
+    #                  
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+            {'$group':{'_id':'$USER_ID.schoolId._id','ID':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},'prog':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}}},
+                  {'$project':{'_id':1,'Practice_Count_csy':'$ID'}},
+                   ]))).fillna(0)
+    df__ = DataFrame(list(collection1.aggregate([
+    {"$match":
+         {'$and': [
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+                 {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+
+    # //        
+                 {'USER_ID.EMAIL_ID':{'$ne':''}},
+             {'MODIFIED_DATE':{"$gte": LSY_Date() ,
+                             }},
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+            {'$group':{'_id':'$USER_ID.schoolId._id','ID':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},'prog':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}}},
+                  {'$project':{'_id':1,'Practice_Count_lsy':'$ID'}},
                    ])))
     df4 = DataFrame(list(collection3.aggregate([
     {"$match":
@@ -15328,14 +15379,18 @@ def district_school_table(districtid,startdate,enddate):
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'$USER_ID.schoolId._id','subsdate':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$SUBSCRIPTION_EXPIRE_DATE'}}}}},
-                  {'$project':{'_id':1,'Practice_Count':'$ID','program':1,'Subscription_expire_date':'$subsdate'}},
+                  {'$project':{'_id':1,'program':1,'Subscription_expire_date':'$subsdate'}},
                    ])))
     
 
     df5=pd.merge(df2,df3, how='left', on='_id')
-    df=pd.merge(df5,df4, how='left', on='_id')
+    dff=pd.merge(df5,df_, how='left', on='_id')
+    dfff=pd.merge(dff,df__, how='left', on='_id')
+    df=pd.merge(dfff,df4, how='left', on='_id')
 #     df=pd.merge(df6,df4, how='left', on='_id')
     df.rename(columns = { '_id': 'schoolid_'}, inplace = True)
+    
+    
 #     df[["schoolid_", "schoolid"]]=df[["schoolid_", "schoolid"]].astype(str) 
 
     # df4.fillna(0)
@@ -15343,7 +15398,11 @@ def district_school_table(districtid,startdate,enddate):
     df['school_name'].fillna("NO INFO", inplace=True)
     df['country'].fillna("NO INFO", inplace=True)
     df.Practice_Count=df.Practice_Count.fillna(0)
+    df.Practice_Count_lsy=df.Practice_Count_lsy.fillna(0)
+    df.Practice_Count_csy=df.Practice_Count_csy.fillna(0)
     df.Practice_Count=df.Practice_Count.astype('int64')
+    df.Practice_Count_csy=df.Practice_Count_csy.astype('int64')
+    df.Practice_Count_lsy=df.Practice_Count_lsy.astype('int64')
     df.usercount=df.usercount.fillna(0)
     df.usercount=df.usercount.astype('int64')   
     df['school_name'].replace("",'NO INFO', inplace=True)
@@ -15359,13 +15418,18 @@ def district_school_table(districtid,startdate,enddate):
     df['Created_date']=df['Created_date'].fillna(0)
     df['last_practice_date']=df['last_practice_date'].fillna('NO PRACTICE')
     df['Subscription_expire_date']=df['Subscription_expire_date'].fillna('No Info')
-
+    df['label'] = np.where(df['Practice_Count_csy']== 0, 'ORANGE', 'GREEN')
+    df.loc[(df['Practice_Count_lsy']==0) & (df['Practice_Count_csy']== 0), 'label']='BLACK'
+#     if df['Practice_Count_lsy'] & df['Practice_Count_csy']== 0:
+#         df['label'] = 'BLACK'
     data=[]
-    for i,j,k,l,m,n,o,p,r,s in zip(df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['usercount'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['Subscription_expire_date'].tolist(),df['schoolid_'].tolist()):
-        data.append([i,j,k,l,m,n,o,p,r,s])
+    for i,j,k,l,m,n,o,p,r,s,q,x,z in zip(df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['Practice_Count_csy'].tolist(),df['Practice_Count_lsy'].tolist(),df['usercount'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['Subscription_expire_date'].tolist(),df['schoolid_'].tolist(),df['label'].tolist()):
+        data.append([i,j,k,l,m,n,o,p,r,s,q,x,z])
     temp={"data":data}
+#     return df
     
     return json.dumps(temp,default=str)
+
 
 
 
@@ -67131,19 +67195,18 @@ def insights():
 
 @app.route('/districtlogoupdates')
 def district_logo_updates():
-    
     googleSheetId = '1RJFZvxFm4Ig5XtQKtqPFy5uYzVafzNU4-NcnOyUI96A'
     # googleSheetId = '1y0nF64mOFuIJ7WUotPVt4IBM7GySaSoXr3UlkuSgQNo'
     worksheetName = 'District_logo_sheet'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
     # print(payment_df2)
-    payment_df2
-
+    payment_df2=payment_df2.sort_values(by='DISTRICT_NAME')
     data1 = payment_df2.to_numpy().tolist()
     data2={"data":data1}
     data2
     return json.dumps(data2)
+
 
 # district_logo_updates()
     

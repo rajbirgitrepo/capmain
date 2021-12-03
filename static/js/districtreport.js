@@ -1565,6 +1565,7 @@ function createDynamicDiv(userList) {
         "<td>" +
         userList[9] +
         "</td>" +
+
         "<td style='font-size: 10px;width: 20%;'>" +
         userList[1] +
         "</td>" +
@@ -1589,7 +1590,7 @@ function createDynamic2(url) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>');
+            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>LABELS</th></tr ></thead ><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
             var resultDiv = createDynamicDiv2(datain);
@@ -1601,7 +1602,7 @@ function createDynamic2(url) {
         dataTab();
 
         $("#next1").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>LABELS</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -1651,6 +1652,15 @@ function createDynamicDiv2(userList) {
         "</td>" +
         "<td>" +
         userList[8] +
+        "</td>" +
+        "<td>" +
+        userList[9] +
+        "</td>" +
+        "<td>" +
+        userList[10] +
+        "</td>" +
+        "<td>" +
+        userList[12] +
         "</td>" +
         "</tr>";
 
