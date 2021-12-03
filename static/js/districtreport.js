@@ -1833,6 +1833,16 @@ $("#btnPrint").on("click", function() {
     printWindow.print();
 });
 
+var heatSchoolId = []
+
+function schoolsearchHeat(a){
+console.log(a in heatSchoolId);
+console.log(heatSchoolId[a])
+window.open(
+'/School_Search?' + heatSchoolId[a],
+'_blank' // <- This is what makes it open in a new window.
+);
+}
 function heatnew(b) {
     console.log(b);
     var min, max, colorScale, temps, tempsArr;
@@ -1845,6 +1855,7 @@ function heatnew(b) {
     var data = d3.json(ur, function(error, data) {
 
         temps = data.meanTemp;
+        heatSchoolId = data.schoolid;
         tempsArr = createTempArr(temps);
         initScale();
         initTable();
@@ -1896,6 +1907,7 @@ function heatnew(b) {
         headCells.on("click", function(d) {
 
             console.log(d)
+            schoolsearchHeat(d);
                 // window.open("/School_Search?" + a);
         });
 
