@@ -1834,14 +1834,17 @@ $("#btnPrint").on("click", function() {
 });
 
 var heatSchoolId = []
-
 function schoolsearchHeat(a){
-console.log(a in heatSchoolId);
-console.log(heatSchoolId[a])
-window.open(
-'/School_Search?' + heatSchoolId[a],
-'_blank' // <- This is what makes it open in a new window.
+    console.log(a in heatSchoolId);
+    if(a in heatSchoolId){
+      window.open(
+  '/School_Search?' + heatSchoolId[a],
+  '_blank' // <- This is what makes it open in a new window.
 );
+    }
+    else{
+      console.log("school id not found")
+    }
 }
 function heatnew(b) {
     console.log(b);
@@ -1907,7 +1910,7 @@ function heatnew(b) {
         headCells.on("click", function(d) {
 
             console.log(d)
-            schoolsearchHeat(d);
+            schoolsearchHeat(d.year);
                 // window.open("/School_Search?" + a);
         });
 
