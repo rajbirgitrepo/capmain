@@ -1497,25 +1497,24 @@ function createDynamic(url) {
             gif.style.display = "none";
         },
     };
-
-    // createDynamic();
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
             var resultDiv = createDynamicDiv(datain);
+
             $("#dataTable").append(resultDiv);
         }
-
+        //$('#dataTable1').append('</tbody></table>');
         $("#dataTable").append("</tbody></table>");
         dataTab();
 
         $("#next1").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -1533,49 +1532,10 @@ function dataTab() {
     });
 }
 
-function createDynamicDivHeader(userList) {
-    var dynamicDiv = "";
-    console.log(userList);
-    dynamicDiv +=
-        "<tr >" +
-        "<th>" +
-        userList[0] +
-        "</th>" +
-        '<th><a style="color: #00a651;cursor:pointer;" onclick="clickableTableSchoolName(\'' + userList[1] + '\')">' + userList[1] +
-        "</th></a>" +
-        "<th>" +
-        userList[2] +
-        "</th>" +
-        "<th>" +
-        userList[3] +
-        "</th>" +
-        "<th>" +
-        userList[4] +
-        "</th>" +
-        "<th>" +
-        userList[5] +
-        "</th>" +
-        "<th>" +
-        userList[6] +
-        "</th>" +
-        "<th>" +
-        userList[7] +
-        "</th>" +
-        "<th>" +
-        userList[8] +
-        "</th>" +
-        "<th>" +
-        userList[9] +
-        "</th>" +
-        "</tr>";
-
-    return dynamicDiv;
-}
-
-
 function createDynamicDiv(userList) {
     var dynamicDiv = "";
     console.log(userList);
+
     dynamicDiv +=
         "<tr >" +
         "<td>" +
