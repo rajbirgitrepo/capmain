@@ -155,7 +155,7 @@ function charts(a, b, c) {
                                     var gif = document.getElementById("gif");
                                     gif.style.display = "block";
                                     $('#btnExport').show();
-                                    createDynamic(URL);
+                                    createDynamic2(URL);
                                 },
                             },
                         },
@@ -274,7 +274,7 @@ function charts(a, b, c) {
                                             var gif = document.getElementById("gif");
                                             gif.style.display = "block";
                                             $('#btnExport').show();
-                                            createDynamic(URL);
+                                            createDynamic2(URL);
                                         },
                                     },
                                 },
@@ -389,7 +389,7 @@ function charts(a, b, c) {
                                             var gif = document.getElementById("gif");
                                             gif.style.display = "block";
                                             $('#btnExport').show();
-                                            createDynamic(URL);
+                                            createDynamic2(URL);
                                         },
                                     },
                                 },
@@ -1501,7 +1501,7 @@ function createDynamic(url) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>USER EMAIL</th><th>LABELS</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -1514,7 +1514,7 @@ function createDynamic(url) {
         dataTab();
 
         $("#next1").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>USER EMAIL</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>USER EMAIL</th><th>LABELS</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -1541,7 +1541,7 @@ function createDynamicDiv(userList) {
         "<td>" +
         userList[0] +
         "</td>" +
-        '<td><a style="color: #00a651;cursor:pointer;" onclick="clickableTableSchoolName(\'' + userList[10] + '\')">' +
+        '<td><a style="color: #00a651;cursor:pointer;" onclick="clickableTableSchoolName(\'' + userList[11] + '\')">' +
         userList[2] +
         "</td>" +
         "<td>" +
@@ -1565,9 +1565,15 @@ function createDynamicDiv(userList) {
         "<td>" +
         userList[9] +
         "</td>" +
+        "<td>" +
+        userList[10] +
+        "</td>" +
 
-        "<td style='font-size: 10px;width: 20%;'>" +
+        "<td style='font-size: 10px;width: 18%;'>" +
         userList[1] +
+        "</td>" +
+        "<td>" +
+        userList[12] +
         "</td>" +
         "</tr>";
 
@@ -1575,7 +1581,7 @@ function createDynamicDiv(userList) {
 }
 
 
-function createDynamic2(url) {
+function createDynamic4(url) {
     var settings = {
         async: true,
         crossDomain: true,
@@ -1590,10 +1596,11 @@ function createDynamic2(url) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>LABELS</th></tr ></thead ><tbody>');
+            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>LABELS</th></tr ></thead ><tbody>'
+        );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
-            var resultDiv = createDynamicDiv2(datain);
+            var resultDiv = createDynamicDiv4(datain);
 
             $("#dataTable").append(resultDiv);
         }
@@ -1607,7 +1614,7 @@ function createDynamic2(url) {
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
 
-            var resultDiv = createDynamicDiv2(datain);
+            var resultDiv = createDynamicDiv4(datain);
             $("#dataTable1").append(resultDiv);
         }
         $("#dataTable1").append("</tbody></table>");
@@ -1620,13 +1627,13 @@ function dataTab() {
     });
 }
 
-function createDynamicDiv2(userList) {
+function createDynamicDiv4(userList) {
     var dynamicDiv = "";
     console.log(userList);
 
     dynamicDiv +=
         "<tr >" +
-        '<td><a style="color: #00a651;cursor:pointer;" onclick="clickableTableSchoolName(\'' + userList[9] + '\')">' +
+        '<td><a style="color: #00a651;cursor:pointer;" onclick="clickableTableSchoolName(\'' + userList[11] + '\')">' +
         userList[0] +
         "</td>" +
         "<td>" +
@@ -1668,6 +1675,90 @@ function createDynamicDiv2(userList) {
 }
 
 
+function createDynamic2(url) {
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: url,
+        method: "GET",
+        success: function() {
+            var gif = document.getElementById("gif");
+            gif.style.display = "none";
+        },
+    };
+    $.ajax(settings).done(function(response) {
+        var data1 = JSON.parse(response);
+
+        $("#next").prepend(
+            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>SIGNUP DATE</th><th>PLAYBACK COUNT</th><th>LAST PLAYBACK DATE</th></tr ></thead ><tbody>');
+        for (var i = 0; i < data1.data.length; i++) {
+            var datain = data1.data[i];
+            var resultDiv = createDynamicDiv2(datain);
+
+            $("#dataTable").append(resultDiv);
+        }
+        //$('#dataTable1').append('</tbody></table>');
+        $("#dataTable").append("</tbody></table>");
+        dataTab();
+
+        $("#next1").prepend(
+            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>SIGNUP DATE</th><th>PLAYBACK COUNT</th><th>LAST PLAYBACK DATE</th></tr ></thead ><tbody>'
+        );
+        for (var i = 0; i < data1.data.length; i++) {
+            var datain = data1.data[i];
+
+            var resultDiv = createDynamicDiv2(datain);
+            $("#dataTable1").append(resultDiv);
+        }
+        $("#dataTable1").append("</tbody></table>");
+    });
+}
+
+function dataTab() {
+    $("#dataTable").DataTable({
+        pageLength: 50,
+    });
+}
+
+function createDynamicDiv2(userList) {
+    var dynamicDiv = "";
+    console.log(userList);
+
+    dynamicDiv +=
+        "<tr >" +
+        "<td>" +
+        userList[0] +
+        "</td>" +
+        "<td>" +
+        userList[1] +
+        "</td>" +
+        '<td><a style="color: #00a651;cursor:pointer;" onclick="clickableTableSchoolName(\'' + userList[9] + '\')">' +
+        userList[2] +
+        "</td>" +
+        "<td>" +
+        userList[3] +
+        "</td>" +
+        "<td>" +
+        userList[4] +
+        "</td>" +
+        "<td>" +
+        userList[5] +
+        "</td>" +
+        "<td>" +
+        userList[6] +
+        "</td>" +
+        "<td>" +
+        userList[7] +
+        "</td>" +
+        "<td>" +
+        userList[8] +
+        "</td>" +
+        "</tr>";
+
+    return dynamicDiv;
+}
+
+
 
 
 
@@ -1691,6 +1782,22 @@ function cards(URL) {
     gif.style.display = "block";
     $('#btnExport').show();
     createDynamic(a);
+}
+
+function cards4(URL) {
+    let textContent = document.getElementById('disdetails').innerText;
+    var c = document.getElementById("stardate").innerText;
+    var b = document.getElementById("finaldate").innerText;
+    var a = URL + textContent + "/" + c + "/" + b;
+    $('#next').empty();
+    console.log(a);
+    var modal2 = document.getElementById("myModal2");
+    modal2.style.display = "block";
+    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    var gif = document.getElementById("gif");
+    gif.style.display = "block";
+    $('#btnExport').show();
+    createDynamic4(a);
 }
 
 function cards2(URL) {
@@ -1834,18 +1941,19 @@ $("#btnPrint").on("click", function() {
 });
 
 var heatSchoolId = []
-function schoolsearchHeat(a){
+
+function schoolsearchHeat(a) {
     console.log(a in heatSchoolId);
-    if(a in heatSchoolId){
-      window.open(
-  '/School_Search?' + heatSchoolId[a],
-  '_blank' // <- This is what makes it open in a new window.
-);
-    }
-    else{
-      console.log("school id not found")
+    if (a in heatSchoolId) {
+        window.open(
+            '/School_Search?' + heatSchoolId[a],
+            '_blank' // <- This is what makes it open in a new window.
+        );
+    } else {
+        console.log("school id not found")
     }
 }
+
 function heatnew(b) {
     console.log(b);
     var min, max, colorScale, temps, tempsArr;
@@ -1911,7 +2019,7 @@ function heatnew(b) {
 
             console.log(d)
             schoolsearchHeat(d.year);
-                // window.open("/School_Search?" + a);
+            // window.open("/School_Search?" + a);
         });
 
         //create a data cell for each monthly tempature
