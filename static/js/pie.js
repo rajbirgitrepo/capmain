@@ -31,7 +31,7 @@ $.ajax(settings).done(function(response) {
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: false,
-            height: 200,
+            height: 230,
             width: 200,
             type: 'pie'
         },

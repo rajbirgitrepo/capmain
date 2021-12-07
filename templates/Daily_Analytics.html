@@ -64,6 +64,17 @@
         margin-top: 4px;
         margin-right: 10px;
     }
+    
+    #ui-datepicker-div {
+        display: none;
+        background-color: #fff;
+        box-shadow: 0 0.125rem 0.5rem rgb(0 0 0 / 10%);
+        margin-top: 0.25rem;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        width: 20% !important;
+        left: 1134px !important;
+    }
 </style>
 
 
@@ -343,13 +354,13 @@
         </div>
 
         <div class="input-Container ui-widget" style="margin-top: 0 !important; padding-top: 25px !important;">
-            <input class="Date" style="    width: 20%;margin-left: 71%;padding: 10px;background-color: #fff;border-radius: 20px 0 0 20px;" type="text" id="datepicker" size="30">
+            <input class="Date" style="    width: 15%;margin-left: 76%;padding: 10px;background-color: #fff;border-radius: 20px 0 0 20px;" type="text" id="datepicker" size="30">
             <p style="display: none;" id="stardate"></p>
             <button class="search_Bt" onclick="sub()">Submit</button>
         </div>
 
         <section class="statistics">
-            <div class="container-fluid">
+            <div class="container-fluid px-0">
                 <!--
                 <div class="col-md-3">
                   <div class="boxExecutive">
@@ -381,7 +392,7 @@
                             <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
                             <p style="font-size: 11px;">New Signups<span style="margin-left: 5px !important;" id="updownsigntotal"></span></p>
                             <p class="boxvalue2" id="usercount1"></p>
-                            <br>
+
                             <hr />
                             <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
                             <p class="boxHeading2">Parent Signups<span style="margin-left: 5px !important;" id="updownsignt"></span></p>
@@ -497,13 +508,15 @@
 
         </section>
         <hr />
-        <div class="col-md-10" style="margin-top: 40px;" title="" id="practice_comparison_by_program_playback">
-            <select name="Trends" id="practice_comparisonChart" class="drop-api mt-1 mb-1">
-        <option value="playback" class="">Playback Comparison by Program(DAILY)</option>
-        <option value="practice">Practice Comparison by Program(DAILY)</option>
-      </select>
-            <div id="container2" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+        <div class="col-md-12" style="margin-top: 20px;" title="" id="practice_comparison_by_program_playback">
+            <div style="padding:10px;box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px; background-color:#fff">
+                <select name="Trends" id="practice_comparisonChart" class="drop-api mt-1 mb-1">
+                    <option value="playback" class="">Playback Comparison by Program(DAILY)</option>
+                    <option value="practice">Practice Comparison by Program(DAILY)</option>
+                  </select>
+                <div id="container2" style="height: 400px; width: 100%; ">
 
+                </div>
             </div>
         </div>
 
@@ -511,12 +524,14 @@
             <div id="container" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); background-color: #fff; border-radius: 20px;"></div>
         </div>
 
-        <div class="col-md-10" style="margin-top: 40px;" title="" id="topdistrict">
-            <select name="Trends" id="practice_topChart" class="drop-api mt-1 mb-1">
+        <div class="col-md-12" style="margin-top: 40px;" title="" id="topdistrict">
+            <div style="padding:10px;box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px; background-color:#fff">
+                <select name="Trends" id="practice_topChart" class="drop-api mt-1 mb-1">
         <option value="playback" class="">Top Districts Playbacks</option>
         <option value="practice">Top Districts Practice</option>
       </select>
-            <div id="container10" style="height: 600px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;background-color: #fff;">
+                <div id="container10" style="height: 600px; width: 100%;">
+                </div>
             </div>
         </div>
         <div class="col-md-10" style="margin-top: 40px;" title="" id="average_audio_completion_daily">
