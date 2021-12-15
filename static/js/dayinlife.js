@@ -240,12 +240,21 @@ function charts(a) {
                 },
 
                 navigator: {
-                    enabled: false
+                    series: {
+                        color: '#00FF00',
+                        animation: {
+                            duration: 0,
+                        }
+                    },
+                    xAxis: {
+                        minRange: 1
+                    },
+
+
                 },
                 rangeSelector: {
-                    inputEnabled: false,
-                    enabled: true,
-                    selected: 1
+                    selected: 0,
+                    inputEnabled: false
                 },
 
                 scrollbar: {
@@ -276,14 +285,20 @@ function charts(a) {
                         "color": "#FF9933",
                         "xAxis": 0,
                         "data": dataa.data.ratings,
-                        "yAxis": 1
+                        "yAxis": 1,
+                        dataGrouping: {
+                            enabled: false,
+                        }
                     }, {
                         "name": "Clever",
                         "type": "column",
                         "xAxis": 0,
                         "color": "#462cee",
                         "data": dataa.data.Clever,
-                        "yAxis": 0
+                        "yAxis": 0,
+                        dataGrouping: {
+                            enabled: false,
+                        }
                     },
                     {
                         "name": "Parents Practices",
@@ -291,7 +306,10 @@ function charts(a) {
                         "xAxis": 0,
                         "color": "#01A451",
                         "data": dataa.data.Parents_practices,
-                        "yAxis": 0
+                        "yAxis": 0,
+                        dataGrouping: {
+                            enabled: false,
+                        }
                     },
                     {
                         "name": "Schoology",
@@ -299,7 +317,10 @@ function charts(a) {
                         "xAxis": 0,
                         "color": "#4f1faf",
                         "data": dataa.data.schoology,
-                        "yAxis": 0
+                        "yAxis": 0,
+                        dataGrouping: {
+                            enabled: false,
+                        }
                     },
                     {
                         "name": "Teachers Practices",
@@ -307,7 +328,10 @@ function charts(a) {
                         "xAxis": 0,
                         "color": "#8AE02B",
                         "data": dataa.data.teachers_practices,
-                        "yAxis": 0
+                        "yAxis": 0,
+                        dataGrouping: {
+                            enabled: false,
+                        }
                     }
                 ]
 
@@ -410,11 +434,21 @@ function charts(a) {
                 },
 
                 navigator: {
-                    enabled: false
+                    series: {
+                        color: '#00FF00',
+                        animation: {
+                            duration: 0,
+                        }
+                    },
+                    xAxis: {
+                        minRange: 1
+                    },
+
+
                 },
                 rangeSelector: {
-                    inputEnabled: false,
-                    enabled: true
+                    selected: 0,
+                    inputEnabled: false
                 },
 
                 scrollbar: {

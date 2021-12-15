@@ -257,6 +257,8 @@ disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
     '6045e4c707ead7744b125839':'Hartford Public Schools',
     '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
     '6045e4ce07ead7744b125845':'Helena Public Schools',
+    '61af3b75870dba387bcd86cd':'Holyoke Public Schools',
+    '61aa08a4afeab44256f54074':'Benton Harbor',
     '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
     '5f2609807a1c0000950bb476':'Hillsborough County',
     '6045e4db07ead7744b12585c':'Hopedale Public Schools',
@@ -14699,6 +14701,7 @@ def district_count_cards(districtid,startdate,enddate):
 #                 {'USER.schoolId._id':{'$ne':None}},
 #     # //               {'IS_ADMIN':'Y'},
                   {"USER._id":{"$in":userid}},
+               { 'RATING':{'$ne':0}}, 
 #     # //             {'USER_ID.IS_PORTAL':'Y'},
 #                  {'USER.EMAIL_ID':{'$ne':''}},
 # #                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
@@ -14962,7 +14965,7 @@ def district_count_cards(districtid,startdate,enddate):
     data={"schoolcount":str(sc[0]),"engd_teacher_lsy":str(engd_teacher_lsy[0]),"engd_teacher_csy":str(engd_teacher_csy[0]),
           "engd_parent_csy":str(engd_parent_csy[0]),"engd_parent_lsy":str(engd_parent_lsy[0]),
           "engaged_school_csy":str(engdschool_csy[0]),"engaged_school_lsy":str(engdschool_lsy[0]),"teachercount":str(tc[0]),"familycount":str(fc[0]),"teacherpracticecount":str(pct[0]),"parentspracticecount":str(pcp[0]),
-          'MINDFUL_MINUTES':str(round(int(mm[0]))),'rating':str(round(rating[0],2)),'state':str(state[0]),'MINDFUL_MINUTES_Teacher':str(round(int(mmt[0]))),'MINDFUL_MINUTES_parent':str(round(int(mmp[0]))),'district':str(dn[0]),"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
+          'MINDFUL_MINUTES':str(round(int(mm[0]))),'rating':str(round(rating[0],1)),'state':str(state[0]),'MINDFUL_MINUTES_Teacher':str(round(int(mmt[0]))),'MINDFUL_MINUTES_parent':str(round(int(mmp[0]))),'district':str(dn[0]),"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
     return json.dumps(data)
 # district_count_cards('5f59e4836451a9089d7d4007','2021-08-01','2021-10-19')
 
@@ -15018,6 +15021,9 @@ def district_user_table_teacher(districtid,startdate,enddate):
             {'$project':{'_id':1,'Created_date':'$date','country':1,'State':1,'user_name':1,'EMAIL':1,'school_name':1,'city':1,'school_id':'$school_id'}},])))
 
 
+    a=df2['_id'].tolist()
+    b=[0]*len(a)
+    c=['No Practice']*len(a)
     
     
     df3=DataFrame(list(collection1.aggregate([
@@ -15045,7 +15051,11 @@ def district_user_table_teacher(districtid,startdate,enddate):
             {'$group':{'_id':'$USER_ID._id','user':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}}}},
                   {'$project':{'_id':1,'user_id':'$user','Practice_Count':'$pc','last_practice_date':1}}])))
 
-
+    if df3.empty is True:
+        df3=pd.DataFrame(list(zip(a, b,c)),
+               columns =['_id', 'Practice_Count','last_practice_date'])
+    else:
+        df3
     df_=DataFrame(list(collection1.aggregate([
      {"$match":
          {'$and': [
@@ -15070,6 +15080,11 @@ def district_user_table_teacher(districtid,startdate,enddate):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'$USER_ID._id','user':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}}}},
                   {'$project':{'_id':1,'Practice_Count_csy':'$pc'}}])))
+    if df_.empty is True:
+        df_=pd.DataFrame(list(zip(a, b)),
+               columns =['_id', 'Practice_Count_csy'])
+    else:
+        df_
 
     df__=DataFrame(list(collection1.aggregate([
      {"$match":
@@ -15095,6 +15110,11 @@ def district_user_table_teacher(districtid,startdate,enddate):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'$USER_ID._id','user':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}}}},
                   {'$project':{'_id':1,'Practice_Count_lsy':'$pc',}}])))
+    if df__.empty is True:
+        df__=pd.DataFrame(list(zip(a, b)),
+               columns =['_id', 'Practice_Count_lsy'])
+    else:
+        df__
 
 
 
@@ -15167,7 +15187,6 @@ def district_user_table_teacher(districtid,startdate,enddate):
     temp={"data":data}
 #     return df
     return json.dumps(temp,default=str)
-
 # district_user_table_teacher('5f2609807a1c0000950bb45d','2021-08-01','2021-11-10')
 
 
@@ -15220,7 +15239,9 @@ def district_user_table_parent(districtid,startdate,enddate):
 
             {'$project':{'_id':1,'Created_date':'$date','country':1,'State':1,'user_name':1,'EMAIL':1,'school_name':1,'city':1,'school_id':'$school_id'}},])))
 
-
+    a=df2['_id'].tolist()
+    b=[0]*len(a)
+    c=['No Practice']*len(a)
     
     
     df3=DataFrame(list(collection1.aggregate([
@@ -15247,7 +15268,11 @@ def district_user_table_parent(districtid,startdate,enddate):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'$USER_ID._id','user':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}}}},
                   {'$project':{'_id':1,'user_id':'$user','Practice_Count':'$pc','last_practice_date':1}}])))
-
+    if df3.empty is True:
+        df3=pd.DataFrame(list(zip(a, b,c)),
+               columns =['_id', 'Practice_Count','last_practice_date'])
+    else:
+        df3
 
     df_=DataFrame(list(collection1.aggregate([
      {"$match":
@@ -15273,6 +15298,11 @@ def district_user_table_parent(districtid,startdate,enddate):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'$USER_ID._id','user':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}}}},
                   {'$project':{'_id':1,'Practice_Count_csy':'$pc'}}])))
+    if df_.empty is True:
+        df_=pd.DataFrame(list(zip(a, b)),
+               columns =['_id', 'Practice_Count_csy'])
+    else:
+        df_
 
     df__=DataFrame(list(collection1.aggregate([
      {"$match":
@@ -15299,6 +15329,11 @@ def district_user_table_parent(districtid,startdate,enddate):
             {'$group':{'_id':'$USER_ID._id','user':{'$addToSet':'$USER_ID._id'},'pc':{'$sum':1},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}}}},
                   {'$project':{'_id':1,'Practice_Count_lsy':'$pc',}}])))
 
+    if df__.empty is True:
+        df__=pd.DataFrame(list(zip(a, b)),
+               columns =['_id', 'Practice_Count_lsy'])
+    else:
+        df__
 
 
 
@@ -44665,7 +44700,7 @@ def Payment_Mode(startdate,enddate):
         {"USER_ID.USER_NAME":{"$not":{ "$regex":"test",'$options':'i'}}},
             {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"1gen",'$options':'i'}}},
             {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
-                    
+                     {'USER_ID':{'$exists':1}}  ,  
             {"LAST_PAYMENT_DATE":{"$gte":myDatetime}},
             {"IS_PAYMENT_SUCCESS" : "Y"},
             {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
@@ -44918,6 +44953,7 @@ def Payment_History(startdate,enddate):
             {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
             {"LAST_PAYMENT_DATE":{"$gte":myDatetime}},
             {"IS_PAYMENT_SUCCESS" : "Y"},
+                        {'USER_ID':{'$exists':1}}  ,  
             {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
     }},
     {"$project":{"_id":0,"USER_NAME":"$USER_ID.USER_NAME","DEVICE_USED":"$USER_ID.DEVICE_USED","SCHOOL":"$USER_ID.schoolId.NAME",
@@ -45142,7 +45178,7 @@ def subtable(month):
             {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"1gen",'$options':'i'}}},
             {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
             {"LAST_PAYMENT_DATE":{"$gt":myDatetime}},
-            
+             {'USER_ID':{'$exists':1}}  ,  
             {"IS_PAYMENT_SUCCESS" : "Y"},
             {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
     }},
@@ -45337,7 +45373,7 @@ def submonth():
             {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"1gen",'$options':'i'}}},
             {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
             {"LAST_PAYMENT_DATE":{"$gt":myDatetime}},
-           
+            {'USER_ID':{'$exists':1}}  ,  
             {"IS_PAYMENT_SUCCESS" : "Y"},
             {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
     }},
@@ -45569,7 +45605,7 @@ def web_history_table(date):
             {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
             {"LAST_PAYMENT_DATE":{"$gt":myDatetime}},
             {"IS_PAYMENT_SUCCESS" : "Y"},
-          
+           {'USER_ID':{'$exists':1}}  ,  
             {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
     }},
     {"$project":{"_id":0,"USER_NAME":"$USER_ID.USER_NAME","DEVICE_USED":"$USER_ID.DEVICE_USED","SCHOOL":"$USER_ID.schoolId.NAME",
@@ -45760,7 +45796,7 @@ def mobile_history_table(date):
             {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
             {"LAST_PAYMENT_DATE":{"$gt":myDatetime}},
             {"IS_PAYMENT_SUCCESS" : "Y"},
-           
+            {'USER_ID':{'$exists':1}}  ,  
             {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
     }},
     {"$project":{"_id":0,"USER_NAME":"$USER_ID.USER_NAME","DEVICE_USED":"$USER_ID.DEVICE_USED","SCHOOL":"$USER_ID.schoolId.NAME",
@@ -47796,6 +47832,7 @@ def school_payment_csy():
                 {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
                 {"LAST_PAYMENT_DATE":{"$gt":myDatetime}},
                 {"IS_PAYMENT_SUCCESS" : "Y"},
+                            {'USER_ID':{'$exists':1}}  ,  
                 {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
         }},
         {"$project":{"_id":0,"USER_NAME":"$USER_ID.USER_NAME","DEVICE_USED":"$USER_ID.DEVICE_USED","SCHOOL":"$USER_ID.schoolId.NAME",
@@ -47895,6 +47932,7 @@ def school_payment_csy_table(date):
                 {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
                 {"LAST_PAYMENT_DATE":{"$gt":myDatetime}},
                 {"IS_PAYMENT_SUCCESS" : "Y"},
+                            {'USER_ID':{'$exists':1}}  ,  
                 {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
         }},
         {"$project":{"_id":0,"USER_NAME":"$USER_ID.USER_NAME","DEVICE_USED":"$USER_ID.DEVICE_USED","SCHOOL":"$USER_ID.schoolId.NAME",
@@ -47985,6 +48023,7 @@ def school_payment_map():
                 {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"1gen",'$options':'i'}}},
                 {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
                 {"LAST_PAYMENT_DATE":{"$gt":myDatetime}},
+                            {'USER_ID':{'$exists':1}}  ,  
                 {"IS_PAYMENT_SUCCESS" : "Y"},
                 {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
         }},
@@ -48079,6 +48118,7 @@ def school_payment_map_table(name):
                 {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
                 {"LAST_PAYMENT_DATE":{"$gt":myDatetime}},
                 {"IS_PAYMENT_SUCCESS" : "Y"},
+                            {'USER_ID':{'$exists':1}}  ,  
                 {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
         }},
         {"$project":{"_id":0,"USER_NAME":"$USER_ID.USER_NAME","DEVICE_USED":"$USER_ID.DEVICE_USED","SCHOOL":"$USER_ID.schoolId.NAME",
@@ -48170,6 +48210,7 @@ def school_payment_weekly():
                 {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
                 {"LAST_PAYMENT_DATE":{"$gt":myDatetime}},
                 {"IS_PAYMENT_SUCCESS" : "Y"},
+                            {'USER_ID':{'$exists':1}}  ,  
                 {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
         }},
         {"$project":{"_id":0,"USER_NAME":"$USER_ID.USER_NAME","DEVICE_USED":"$USER_ID.DEVICE_USED","SCHOOL":"$USER_ID.schoolId.NAME",

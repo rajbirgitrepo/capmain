@@ -243,7 +243,7 @@
                     <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
                 </ul>
             </li>
-            <li style="margin-top: 140px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
+            <li style="position: absolute;bottom: 80px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
             style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
             </li>
             <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
@@ -378,10 +378,10 @@
 
 
         <div class="input-Container ui-widget" style="margin-top: 0 !important; padding-top: 5px !important;">
-            <input class="Date" style=" margin-top: 2%;   width: 13%;margin-left: 75%;padding: 10px;background-color: #fff;border-radius: 20px 0 0 20px;" type="text" id="datepicker" size="30">
+            <input class="Date" style=" margin-top: 2%;   width: 13%;margin-left: 77%;padding: 10px;background-color: #fff;border-radius: 20px 0 0 20px;" type="text" id="datepicker" size="30">
             <p style="display: none;" id="stardate"></p>
-            <button class="search_Bt" style="height: 47px;
-      margin-top: 15px;padding: 5px;" onclick="sub()">Submit</button>
+            <button class="search_Bt" style="height: 45px;
+      margin-top: 16px;padding: 5px;" onclick="sub()">Submit</button>
         </div>
         <section class="statistics">
             <div class="container-fluid">
@@ -551,7 +551,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6">
-                        <div id="chartdiv" style=" border-radius: 20px;background-color: #fff;height: 300px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                        <div id="chartdiv" style=" border-radius: 20px;background-color: #fff;height: 276px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -560,12 +560,15 @@
                 </div>
             </div>
         </section>
-        <div class="col-md-10" style="margin-top: 40px;" title="" id="practice_playback_count_weekly_comparison">
-            <select name="Trends" id="practice_weeklyChart" class="drop-api my-1">
-        <option value="playback" class="">Playback Count Weekly Comparison</option>
-        <option value="practice">Practice Count Weekly Comparison</option>
-      </select>
-            <div id="container" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+        <div class="col-md-12" style="margin-top: 40px;" title="" id="practice_playback_count_weekly_comparison">
+            <div style="box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;background-color:#fff">
+                <select name="Trends" id="practice_weeklyChart" class="drop-api my-1" style="margin: 10px;">
+                    <option value="playback" class="">Playback Count Weekly Comparison</option>
+                    <option value="practice">Practice Count Weekly Comparison</option>
+                  </select>
+                <div id="container" style="height: 400px; width: 100%; "></div>
+            </div>
+
         </div>
 
         <!-- <div class="col-md-10" style="margin-top: 40px;">
@@ -573,12 +576,14 @@
         style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
     </div> -->
 
-        <div class="col-md-10" style="margin-top: 40px;" title="" id="top_20_district_practices_playback">
-            <select name="Trends" id="practice_weeklyTopChart" class="drop-api my-1">
+        <div class="col-md-12" style="margin-top: 40px;" title="" id="top_20_district_practices_playback">
+            <div style="box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;background-color:#fff">
+                <select name="Trends" id="practice_weeklyTopChart" class="drop-api my-1" style="margin: 10px;">
         <option value="playback" class="">Top 20 District Playback</option>
         <option value="practice">Top 20 District Practice</option>
       </select>
-            <div id="container10" style="height: 600px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+                <div id="container10" style="height: 600px; width: 100%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+            </div>
         </div>
 
         <!-- <div class="col-md-10" style="margin-top: 40px;">            

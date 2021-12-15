@@ -31,6 +31,7 @@ SCHOOL,Paula Moujallip,moujallip@unitedwaymiami.org,WEBAPP,SQUARE PAYMENT,2021-0
 SCHOOL,Carla Jensen,cjensen@alpinedistrict.org,WEBAPP,SQUARE PAYMENT,2021-09-23,1000.0
 SCHOOL,Felicia Roggero,froggero@goleta.k12.ca.us,WEBAPP,PROMOCODE,2021-10-01,1000.0
 SCHOOL,Lorena Reyes,lreyes@goleta.k12.ca.us,WEBAPP,PROMOCODE,2021-10-11,1000.0
+SCHOOL,Leah Barry,barryl@kingphilip.org,WEBAPP,SQUARE PAYMENT,2021-12-07,1400.0
 SCHOOL,Deborah Howard,dhoward@nwphs.org,WEBAPP,PAYPAL,2021-09-15,1400.0
 SCHOOL,Melissa Norwood ,mnorwood@mtrsd.org,NO INFO,APPLE,2021-08-13,89.98999786376953
 SCHOOL,Dora Cavallo,dora.cavallo@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30,1000.0
@@ -173,6 +174,7 @@ SCHOOL,Kelley Smith,kelley_smith@upland.k12.ca.us,WEBAPP,INVITED USER,2021-07-28
 SCHOOL,Lisa Harich,lisa_harich@upland.k12.ca.us,WEBAPP,INVITED USER,2021-07-28,1400.0
 SCHOOL,Brooke Ober,Brooke@mindbrighttherapy.com,WEBAPP,SQUARE PAYMENT,2021-10-26,1000.0
 SCHOOL,,,,,2021-10-31,0.0
+SCHOOL,Ally Barson,Ally.barson@jordandistrict.org,WEBAPP,SQUARE PAYMENT,2021-12-14,1400.0
 SCHOOL,Casaundra Hare,Chare@wayman.org,OFFLINE,CHEQUE,2021-07-15,584.0
 SCHOOL,Andy Stotz,andy.stotz@swcsd.us,OFFLINE,CHEQUE,2021-07-15,1400.0
 SCHOOL,Lynn Burt,lynnb@vacavilleusd.org,OFFLINE,CHEQUE,2021-08-10,1000.0
@@ -204,6 +206,9 @@ SCHOOL,Rachael Emery,rachael_emery@upland.k12.ca.us,OFFLINE,CHEQUE,2021-11-04,14
 SCHOOL,Amy Allen,amy.allen@glasgow.kyschools.us,OFFLINE,CHEQUE,2021-11-04,1400.0
 SCHOOL,Lauren Amundson,lamundson@thecapitolschool.com,OFFLINE,CHEQUE,2021-11-08,1400.0
 SCHOOL,Savannah Knott,savannah.knott@elginisd.net,OFFLINE,CHEQUE,2021-11-09,1400.0
+SCHOOL,Andy Garlick,Andy_Garlick@needham.k12.ma.us,OFFLINE,CHEQUE,2021-12-01,1400.0
+SCHOOL,Marina Williams,mawilliams@teaneckschools.org,OFFLINE,CHEQUE,2021-12-01,1400.0
+SCHOOL,Sarah O Connor,sarah_oconnor@nvusd.org,OFFLINE,CHEQUE,2021-12-01,1400.0
 DONATION,JACQUELINE SAMUDA,jacquelinesamuda01@gmail.com,COMPASS,ONLINE,2021-07-31,51.099998474121094
 DONATION,EVELINE JOSEPH,ejoseph5@bostonpublicschools.org,COMPASS,ONLINE,2021-09-01,50.0
 DONATION,MATTHEW MORRISON,matthew.g.morrison@gmail.com,COMPASS,ONLINE,2021-09-23,25.549999237060547
@@ -229,11 +234,16 @@ DONATION,MAUREEN CONDON,maureen@precisionmarketinggroup.com,COMPASS,ONLINE,2021-
 DONATION,STEPHEN DUPLESSIE,steve.duplessie@ESG-global.com,COMPASS,ONLINE,2021-12-01,511.0
 DONATION,KIMBERLIE DUNHAM,kimberlie_dunham@yahoo.com,COMPASS,ONLINE,2021-12-03,50.0
 DONATION,DXDCD EDEDED,aklavyashrma43@gmail.com,COMPASS,ONLINE,2021-12-05,51.099998474121094
+DONATION,DEBRA RINALDI,drinaldi33@gmail.com,COMPASS,ONLINE,2021-12-06,51.099998474121094
+DONATION,ROBERT CARO,rc1155@msn.com,COMPASS,ONLINE,2021-12-06,214.6199951171875
+DONATION,ELLEN HECHT,ellendhecht@gmail.com,COMPASS,ONLINE,2021-12-11,76.6500015258789
+DONATION,LISA CAHILL,lisarcahill@gmail.com,COMPASS,ONLINE,2021-12-14,255.5
 DONATION,Sherita Ceasar,sherita_ceasar@cable.comcast.com,NFG,ONLINE,2021-09-07,2500.0
 DONATION,Samantha Allison,sallison@innerexplorer.org,NFG,ONLINE,2021-09-14,2500.0
 DONATION,Paul Sugar,paulsugar@cox.net,PAYPAL,ONLINE,2021-09-16,127.75
 DONATION,Kristie DeLuca,kristiecotter@me.com,NFG,ONLINE,2021-09-09,1500.0
 DONATION,Kathi Kemper,kathi.kemper.md@gmail.com,PAYPAL,ONLINE,2021-09-29,50.0
 DONATION,Robert Delaive,bdelaive@verizon.net,CHEQUE,ONLINE,2021-10-08,500.0
+DONATION,Iris Park,rexrico@yahoo.com,CHEQUE,ONLINE,2021-12-01,120.0
 MOBILE,Emily Blossom,emilyblossom@berkeley.net,IOS,PAYPAL,2021-10-31,1000.0
 MOBILE,Scott,sbarton@smusd.us,IOS,APPLE,2021-09-22,89.98999786376953

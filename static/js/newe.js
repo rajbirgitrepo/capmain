@@ -33,6 +33,7 @@ function createboxes() {
             var resultDiv = createDynamicDivcards(datain);
             $("#myProducts2").append(resultDiv);
         }
+        modal2();
     })
 }
 
@@ -830,7 +831,7 @@ function cards2(URL) {
     $('#btnExport').show();
     createDynamic2(a);
 }
-distselect('5f2609807a1c0000950bb471');
+//distselect('5f2609807a1c0000950bb471');
 
 function distselect(distid) {
     $("#districtid1").empty();
