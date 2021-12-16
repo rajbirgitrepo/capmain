@@ -79,12 +79,14 @@
     
     .pcard .card [data-background-color="rose1"] {
         background: linear-gradient( 60deg, #66bb6a, #43a047);
-        box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4);
+        box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14) !important;
+        /* box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4); */
     }
     
     .pcard .card [data-background-color="rose"] {
         background: linear-gradient( 60deg, #66bb6a, #43a047);
-        box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4);
+        box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14) !important;
+        /* box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4); */
     }
     
     .pcard .card [data-background-color="green"] {
@@ -216,7 +218,7 @@
 </style>
 
 <body class="body">
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default nav-fixed">
         <div class="">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -264,7 +266,7 @@
     </nav>
     <aside class="side-nav" id="show-side-navigation1">
         <!-- <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i> -->
-        <ul class="categories" style="margin-top:10px;">
+        <ul class="categories" style="margin-top:15px;">
             <li>
                 <i class="fa fa-home" aria-hidden="true"></i>
                 <a href="#">EXECUTIVE SUMMARY</a>
@@ -348,8 +350,8 @@
                     <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
                 </ul>
             </li>
-            <li style="position: absolute;bottom: 80px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
-            style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
+            <li style="margin-top:135px"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
+           style="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">6.0</span></a>
             </li>
             <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
     </aside>
@@ -432,7 +434,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats mt-0">
                                                         <div class="card-header" data-background-color="rose1">
-                                                            <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Total Users</p>
@@ -446,7 +448,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats mt-0">
                                                         <div class="card-header" data-background-color="blue">
-                                                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Average Rating</p>
@@ -458,7 +460,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="rose">
-                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12" style="font-size: 12px;">Playback Count (CSY)</p>
@@ -470,7 +472,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="blue">
-                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Playback Counts Lifetime</p>
@@ -482,7 +484,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="green">
-                                                            <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12"> Mindful Minutes (CSY)</p>
@@ -496,7 +498,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="blue">
-                                                            <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Mindfull Minutes Lifetime</p>
@@ -697,7 +699,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="rose1">
-                                                            <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Last Playback Date(CSY)</p>
@@ -712,7 +714,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="rose">
-                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Playback Count(CSY)</p>
@@ -724,7 +726,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="rose">
-                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Completed Audio(CSY)</p>
@@ -736,7 +738,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="rose">
-                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Unique Audio Played (CSY)</p>
@@ -749,7 +751,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="green">
-                                                            <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12"> Mindful Minutes(CSY)</p>
@@ -766,7 +768,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="blue">
-                                                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Average Rating</p>
@@ -860,7 +862,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="rose1">
-                                                            <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Last Playback Date(CSY)</p>
@@ -875,7 +877,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="rose">
-                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Playback Count(CSY)</p>
@@ -887,7 +889,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="rose">
-                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Completed Audio(CSY)</p>
@@ -899,7 +901,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="rose">
-                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Unique Audio Played (CSY)</p>
@@ -912,7 +914,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="green">
-                                                            <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12"> Mindful Minutes(CSY)</p>
@@ -929,7 +931,7 @@
                                                 <div class="col-md-6 col-sm-6">
                                                     <div class="card card-stats">
                                                         <div class="card-header" data-background-color="blue">
-                                                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
+                                                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 55px;" class="img-responsive">
                                                         </div>
                                                         <div class="card-content">
                                                             <p class="category f-12">Average Rating</p>

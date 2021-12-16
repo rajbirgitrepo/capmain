@@ -91,15 +91,15 @@
     .ui-tooltip,
     .arrow:after {
         background: #fafafa;
-        border: 2px solid white;
+        /* border: 2px solid white; */
     }
     
     .ui-tooltip {
         padding: 10px 20px;
-        color: #4da555;
+        color: black;
         border-radius: 10px;
         font: bold 14px "Helvetica Neue", Sans-Serif;
-        text-transform: uppercase;
+        text-transform: capitalize;
         box-shadow: 0 0 7px #fafafa;
     }
     
@@ -189,7 +189,7 @@
 </script>
 
 <body class="body">
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default nav-fixed">
         <div class="">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -240,7 +240,7 @@
     </nav>
     <aside class="side-nav" id="show-side-navigation1">
         <!-- <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i> -->
-        <ul class="categories" style="margin-top:10px;">
+        <ul class="categories" style="margin-top:15px;">
             <li class="active">
                 <i class="fa fa-home" aria-hidden="true"></i>
                 <a href="#">EXECUTIVE SUMMARY</a>
@@ -325,8 +325,8 @@
                     <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
                 </ul>
             </li>
-            <li style="position: absolute;bottom: 80px;"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
-            style="margin: 0 5px 0 5px !important;" id="version">6.0</span></a>
+            <li style="margin-top:135px"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
+           style="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">6.0</span></a>
             </li>
             <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
     </aside>
@@ -465,7 +465,7 @@
             <div class="modal2-content">
                 <div id="admin" class="col-md-12">
                     <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
-                        <button onclick="gif2()" style="float: right;background-color: white;"><i
+                        <button onclick="gif2()" class="close-btn-design"><i
                                 class="fa fa-times-circle-o" aria-hidden="true"></i>
                         </button>
                         <!-- <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"  download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a> -->

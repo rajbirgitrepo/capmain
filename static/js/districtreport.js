@@ -1949,6 +1949,8 @@ function schoolsearchHeat(a) {
             '/School_Search?' + heatSchoolId[a],
             '_blank' // <- This is what makes it open in a new window.
         );
+        console.log(a)
+        console.log(heatSchoolId[a])
     } else {
         console.log("school id not found")
     }
@@ -1967,6 +1969,7 @@ function heatnew(b) {
 
         temps = data.meanTemp;
         heatSchoolId = data.schoolid;
+        // console.log(data.schoolid[0]);
         tempsArr = createTempArr(temps);
         initScale();
         initTable();
