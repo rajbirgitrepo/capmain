@@ -31,6 +31,7 @@ if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1
     console.log(URL);
     P(URL);
     escore(urlid);
+    inviteLink(urlid);
     schoolIDCharts(urlid)
     historychart(urlid)
     $("#next").empty();
@@ -190,6 +191,8 @@ function createDynamicDiv2(userList) {
     return dynamicDiv;
 }
 
+
+
 function schoolsearch() {
     var a = document.getElementById("searchinputdescription").innerText;
     console.log(a);
@@ -223,6 +226,7 @@ function schoolsearch() {
         P(URL);
         schoolIDCharts(a)
         escore(a);
+        inviteLink(a);
         historychart(a)
         $("#next").empty();
         $("#next1").empty();
@@ -262,6 +266,7 @@ function schoolsearch() {
         console.log(URL);
         P(URL);
         escore(a);
+        inviteLink(a);
         schoolIDCharts(a)
         historychart(a)
         $("#next").empty();
@@ -269,6 +274,8 @@ function schoolsearch() {
         $("#btnExport").show();
         createDynamic(URL);
     }
+
+
 };
 
 
@@ -303,6 +310,11 @@ function escore(a) {
 
 
     });
+
+
+
+
+
 }
 
 
@@ -1024,6 +1036,40 @@ function familysearch() {
         // createDynamic(URL);
     }
 };
+
+function inviteLink(urlid) {
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/schoolsearchid/" + urlid,
+        method: "GET",
+    };
+    console.log(urlid);
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        var settings = {
+            async: true,
+            crossDomain: true,
+            url: "https://i6.innerexplorer.org/compass/getEncryptedLink/" + dataa.actual_admin,
+            method: "GET",
+        };
+        $.ajax(settings).done(function(response) {
+            var dataa1 = JSON.stringify(response);
+            console.log(dataa1);
+            $('#inviteLinkRe').on("click", function() {
+                this.href = dataa1;
+            });
+            // $("#inviteLinkRe").append('<a class="btn-success " style="float:right;padding:2px 15px;border-radius:5px;color:white;" target="_blank" href="' + newURL + '">Invite</a>')
+        });
+
+    });
+}
+
+
+
+
+
+
 
 function AudioUn(a) {
     var settings = {

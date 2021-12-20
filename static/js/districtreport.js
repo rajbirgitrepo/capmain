@@ -1156,6 +1156,7 @@ function charts(a, b, c) {
                     enabled: false,
                 },
             },
+            // categories: dataa.donut.text,
             title: {
                 text: 'Sentiment Percentage'
             },
@@ -1179,22 +1180,57 @@ function charts(a, b, c) {
                         format: '<b>{point.name}</b>: {point.y}'
                     },
                     colors: [
-                        "#02A45A", "#ff9933"
+                        "#02A45A", "#ff9933", '#8AE02B'
                     ]
+                },
+                borderWidth: 2,
+                series: {
+                    point: {
+                        events: {
+                            click: function() {
+                                URL = "/districtsentiment_table/" + a + "/" + this.key1 + "/" + b + "/" + c,
+                                    $('#next').empty();
+                                console.log(URL);
+                                var modal2 = document.getElementById("myModal2");
+                                modal2.style.display = "block";
+                                $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+                                var gif = document.getElementById("gif");
+                                gif.style.display = "block";
+                                $('#btnExport').show();
+                                createDynamicSentiment(URL);
+                            },
+                        },
+                    },
+                },
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: false
+                    }
                 }
+
+
             },
             series: [{
                 name: 'Sentiment CSY',
                 colorByPoint: true,
                 data: [{
-                    name: 'Positive',
-                    y: dataa.donut.pos,
-                    sliced: true,
-                    selected: true
-                }, {
-                    name: 'Negative',
-                    y: dataa.donut.neg,
-                }, ]
+                        name: 'Positive',
+                        y: dataa.donut.pos,
+                        key1: dataa.text[0],
+                        sliced: true,
+                        selected: true
+                    }, {
+                        name: 'Negative',
+                        y: dataa.donut.neg,
+                        key1: dataa.text[1],
+                    },
+                    {
+                        name: 'Neutral',
+                        y: dataa.donut.neu,
+                        key1: dataa.text[2],
+                    },
+                ]
             }]
         });
     });
@@ -1759,6 +1795,77 @@ function createDynamicDiv2(userList) {
 }
 
 
+function createDynamicSentiment(url) {
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: url,
+        method: "GET",
+        success: function() {
+            var gif = document.getElementById("gif");
+            gif.style.display = "none";
+        },
+    };
+    $.ajax(settings).done(function(response) {
+        var data1 = JSON.parse(response);
+
+        $("#next").prepend(
+            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>COMMENT</th><th>RATING</th><th>COMMENT DATE</th></tr ></thead ><tbody>');
+        for (var i = 0; i < data1.table.length; i++) {
+            var datain = data1.table[i];
+            var resultDiv = createDynamicDiv5(datain);
+
+            $("#dataTable").append(resultDiv);
+        }
+        //$('#dataTable1').append('</tbody></table>');
+        $("#dataTable").append("</tbody></table>");
+        dataTab();
+
+        $("#next1").prepend(
+            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>EMAIL</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>SIGNUP DATE</th><th>PLAYBACK COUNT</th><th>LAST PLAYBACK DATE</th></tr ></thead ><tbody>'
+        );
+        for (var i = 0; i < data1.data.length; i++) {
+            var datain = data1.data[i];
+
+            var resultDiv = createDynamicDiv5(datain);
+            $("#dataTable1").append(resultDiv);
+        }
+        $("#dataTable1").append("</tbody></table>");
+    });
+}
+
+function dataTab() {
+    $("#dataTable").DataTable({
+        pageLength: 50,
+    });
+}
+
+function createDynamicDiv5(userList) {
+    var dynamicDiv = "";
+    console.log(userList);
+
+    dynamicDiv +=
+        "<tr >" +
+        "<td>" +
+        userList[0] +
+        "</td>" +
+        "<td>" +
+        userList[1] +
+        "</td>" +
+        "<td>" +
+        userList[2] +
+        "</td>" +
+        "<td>" +
+        userList[3] +
+        "</td>" +
+        "<td>" +
+        userList[4] +
+        "</td>" +
+
+        "</tr>";
+
+    return dynamicDiv;
+}
 
 
 

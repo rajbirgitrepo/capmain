@@ -214,7 +214,7 @@ var settings = {
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-
+    console.log(dataa);
     Highcharts.chart('container37', {
         chart: {
             plotBackgroundColor: null,
@@ -248,7 +248,7 @@ $.ajax(settings).done(function(response) {
                     format: '<b>{point.name}</b>: {point.y}'
                 },
                 colors: [
-                    "#02A45A", "#ff9933"
+                    "#02A45A", "#ff9933", '#8AE02B'
                 ]
             }
         },
@@ -256,14 +256,19 @@ $.ajax(settings).done(function(response) {
             name: 'Sentiment CSY',
             colorByPoint: true,
             data: [{
-                name: 'Positive',
-                y: dataa.donut.pos,
-                sliced: true,
-                selected: true
-            }, {
-                name: 'Negative',
-                y: dataa.donut.neg,
-            }, ]
+                    name: 'Positive',
+                    y: dataa.donut.pos,
+                    sliced: true,
+                    selected: true
+                }, {
+                    name: 'Negative',
+                    y: dataa.donut.neg,
+                },
+                {
+                    name: 'Neutral',
+                    y: dataa.donut.neu,
+                },
+            ]
         }]
     });
 });

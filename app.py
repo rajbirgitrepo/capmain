@@ -14148,8 +14148,6 @@ def dis_schoolrating_csy__(districtid,startdate,enddate):
     return json.dumps(temp)
 
 
-
-
 @app.route('/districtsentimentdonut_csy/<districtid>/<startdate>/<enddate>')
 def dis_sentiment_pie(districtid,startdate,enddate):
     clean_list=[]
@@ -14177,33 +14175,39 @@ def dis_sentiment_pie(districtid,startdate,enddate):
         {"$match":
          {
             '$and':[
-    # // #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"IS_DISABLED":{"$ne":"Y"}},
               {"IS_BLOCKED":{"$ne":"Y"}},
              {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                 {'EMAIL_ID':{'$ne':''}},
                 {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-
-                
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
          { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}
+            ]
 
          }},
         {'$project':{'_id':'$_id','school':'$schoolId._id' }}
         ])))
 
     userid=df1['_id'].tolist() 
-
+    x=['NA','N/A','n.a','.\n',"a\\n","a\n","v\n","v\\n","0-",'na\n','na','Write a feedback (optional)','Na','k,n/l','[pppppppppppsz']
     user=[
     {"$match":{'$and':[ {'USER._id':{'$in':userid}},
-      
-#         {'RATING':{'$ne':0}},
+                    {'COMMENT':{'$exists':1}},
+                       {'COMMENT':{'$ne':''}},
+                       {'COMMENT':{'$ne':None}},
+                        {'COMMENT':{'$nin':x}},
+                       
+                       
+                       
+    #         {'RATING':{'$ne':0}},
          {'MODIFIED_DATE':{"$gte": myDatetime1 ,
-                             "$lte":myDatetime2}},
+                             "$lte":myDatetime2}}
+                         ,
                         ]}},
     { "$project": { "USER_ID": "$USER._id", "USER_NAME": "$USER.USER_NAME","_id":0, "EMAIL": "$USER.EMAIL_ID", "RATING":1,
     "LAST_COMMENT_DATE": "$MODIFIED_DATE", "AUDIO_NAME": "$AUDIO_ID.AUDIO_NAME", "NARRATOR_NAME": "$AUDIO_ID.NARRATEDBY",
@@ -14211,121 +14215,315 @@ def dis_sentiment_pie(districtid,startdate,enddate):
     ]
     update=list(collection.aggregate(user))
     df=pd.DataFrame(update).fillna("no info")
-    list_of_names=df["USER_ID"].to_list()
-    df
-
-    # def Average(lst):
-    #     return sum(lst) / len(lst)
-
-    # # Driver Code
-    # lst =df123["RATING"].to_list()
-    # average = Average(lst)
-    # average
-
-    #     print(df123["COMMENT"],"lola")
-    xx=df[df["COMMENT"]!="no info"]
-    xxc=xx[xx["COMMENT"]!=""]
-
-    comment_list=xxc["COMMENT"].to_list()
-    comment_list
-    newtexttoken=[]
-    for i in comment_list:
-        text_tokens = word_tokenize(i)
-        newtexttoken.append(text_tokens)
-    newlist=[]
-    for i in newtexttoken:
-        for z in i:
-            newlist.append(z.lower())
-    st_word=stopwords.words('english')
-    tokens_without_sw= [word for word in newlist if not word in st_word]
-    token5=[]
-    for sentence in tokens_without_sw:
-    #     print(sentence)
-        text3 = sentence.split('ing')
-    #     print(text3,"text3")
-        for i in text3:
-    #         print(i)
-            token5.append(i)
-    words = [w.replace('liked', 'like') for w in token5]
-    words2 = [w.replace('relaxed', 'relax') for w in words]
-    words3 = [w.replace('relaxing', 'relax') for w in words2]
-    words4 = [w.replace('excitinging', 'excited') for w in words3]
-    #     print(words4)
-    zxc=""
-    name=""
-    count=""
-    try:
-        xcvv=[x for x in words4 if len(x)>3]
-        fdist=FreqDist(xcvv)
-        df_fdist = pd.DataFrame.from_dict(fdist, orient='index')
-    #         print(df_fdist)
-        df_fdist.columns = ['Frequency']
-        df_fdist.index.name = 'Term'
-        xc=df_fdist.sort_values(by='Frequency', ascending=False, na_position='first')
-        #     tt=xc.drop(["i","it","we","made","us","the","feeling","some","students"])
-        cc=xc[0:10]
-        name=cc.index.to_list()
-        count=cc["Frequency"].to_list()
-        zxc=' '.join(word for word in xcvv)
-    except:
-        pass
-    for item in comment_list:
-        # trim
-        item = item.strip()
-        # Removing RT
-        item = item.replace('RT', '')
-        # Removing new line character
-        item = item.replace('\\n', '')
-        # Replace #word with word
-        news_headlines = re.sub(r'#([^\s]+)', r'\1', item)
-        # Convert @username to username
-        news_headlines = re.sub(r'@([^\s]+)', r'\1', item)
-        item = " ".join(re.findall("[a-zA-Z]+", item))
-        tmp_var = re.sub(r'^\S*\s', '', item)
-        clean_list.append(tmp_var)
-    for item in clean_list:
-            #print(item)
-            # create TextBlob object of passed news_headlines text
-            analysis = TextBlob(item)
-            # set sentiment
-            if analysis.sentiment.polarity > 0:
-                # saving sentiment of news_headlines
-                news_headlines_score = 'positive'
-                pnews_headlines = pnews_headlines + 1
-                news_headlines_dict[item] = news_headlines_score
-            elif analysis.sentiment.polarity == 0:
-                # saving sentiment of news_headlines
-                news_headlines_score = 'neutral'
-                nenews_headlines = nenews_headlines + 1
-                news_headlines_dict[item] = news_headlines_score
-            else:
-                # saving sentiment of news_headlines
-                news_headlines_score = 'negative'
-                nnews_headlines = nnews_headlines + 1
-                news_headlines_dict[item] = news_headlines_score
-    # print(clean_list)
-    newssentiment=[]
-    # for k, v in news_headlines_dict.items():
-    #     print(k,':',v)
-    for k, v in news_headlines_dict.items():
-
-        if v == "positive":
-            newssentiment.append({"sentiment":int(1),"text":k})
-        elif v == "negative":
-            newssentiment.append({"sentiment":int(-1),"text":k})
-        else:
-            newssentiment.append({"sentiment":int(0),"text":k})
-
-    #print(newssentiment)
-    newssentiment_dataframe=pd.DataFrame.from_dict(newssentiment)
-    # newssentiment_dataframe.to_csv("news_headlines_sentiment.csv", encoding='utf-8', index=False)
-    neg = 100 * (nnews_headlines) / ((nnews_headlines) + (pnews_headlines))
-    pos = 100 * (pnews_headlines) / ((nnews_headlines) + (pnews_headlines))
-
-    word_chart={"donut":{"pos":round(pos, 2),"neg":round(neg, 2)}}
+    text=df["COMMENT"].to_list()
+    df=df[['COMMENT']]
+    df = df.sample(frac=1.0).reset_index(drop=True)
+    for i in df['COMMENT'].tolist():
+        df = df[df.COMMENT.str.len()!=1] 
     
+    import nltk
+    nltk.download('vader_lexicon')
+
+    from nltk.sentiment.vader import SentimentIntensityAnalyzer
+    sia = SentimentIntensityAnalyzer()
+    df['Positivity'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['pos'])
+    df['Negativity'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['neg'])
+    df['Neutrality'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['neu'])
+    df['Compound'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['compound'])
+    pd.pandas.set_option('display.max_rows',None)  
+    neg=df[df['Compound']<0]
+    pos=df[df['Compound']>0]
+    neu=df[df['Compound']==0]
+    neg_sentiment=round(100*(len(neg)/(len(neu)+len(neg)+len(pos))),2)
+    pos_sentiment=round(100*(len(pos)/(len(neu)+len(neg)+len(pos))),2)
+    neu_sentiment=round(100*(len(neu)/(len(neu)+len(neg)+len(pos))),2)
+    word_chart={'donut':{'pos':pos_sentiment,'neg':neg_sentiment,'neu':neu_sentiment},'text':['pos','neg','neu']}
+
+#     print(df)
+    
+#     word_chart={"donut":{"pos":round(pos, 2),"neg":round(neg, 2)}}
     return json.dumps(word_chart)
-# sentiment_pie('5f2609807a1c0000950bb46d','2021-08-01','2021-10-19')
+
+@app.route('/districtsentiment_table/<districtid>/<table_type>/<startdate>/<enddate>')
+def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
+    clean_list=[]
+    news_headlines_senti = []
+    news_headlines_dict = {}
+    pnews_headlines=0
+    nnews_headlines=0
+    nenews_headlines = 0
+    # date1=startdate
+    # date2=enddate
+    today = date.today()
+    d1 = today.strftime("%Y-%m-%d")
+    # myDatetimestrt = dateutil.parser.parse(date1)
+    # myDatetimeend = dateutil.parser.parse(date2)
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.audio_feedback
+    district=disdic[districtid]
+    myDatetime1 = dateutil.parser.parse(startdate)
+    myDatetime2 = dateutil.parser.parse(enddate)
+
+    df1=DataFrame(list(db.user_master.aggregate([
+        {"$match":
+         {
+            '$and':[
+#                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"IS_DISABLED":{"$ne":"Y"}},
+              {"IS_BLOCKED":{"$ne":"Y"}},
+             {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                {'EMAIL_ID':{'$ne':''}},
+                {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}
+            ]
+
+         }},
+        {'$project':{'_id':'$_id','school':'$schoolId._id' }}
+        ])))
+
+    userid=df1['_id'].tolist() 
+    x=['NA','N/A','n.a','.\n',"a\\n","a\n","v\n","v\\n","0-",'na\n','na','Write a feedback (optional)','Na','k,n/l','[pppppppppppsz']
+    user=[
+    {"$match":{'$and':[ {'USER._id':{'$in':userid}},
+                    {'COMMENT':{'$exists':1}},
+                       {'COMMENT':{'$ne':''}},
+                       {'COMMENT':{'$ne':None}},
+                        {'COMMENT':{'$nin':x}},
+                       
+                       
+                       
+    #         {'RATING':{'$ne':0}},
+         {'MODIFIED_DATE':{"$gte": myDatetime1 ,
+                             "$lte":myDatetime2}}
+                         ,
+                        ]}},
+    { "$project": { "USER_ID": "$USER._id", "USER_NAME": "$USER.USER_NAME","_id":0, "EMAIL": "$USER.EMAIL_ID", "RATING":1,
+    "LAST_COMMENT_DATE":{"$dateToString": { "format": "%Y-%m-%d", "date":"$MODIFIED_DATE"}}, "AUDIO_NAME": "$AUDIO_ID.AUDIO_NAME", "NARRATOR_NAME": "$AUDIO_ID.NARRATEDBY",
+    "COMMENT":1, "PROGRAM_NAME": "$AUDIO_ID.PROGRAM_ID.PROGRAM_NAME"}}
+    ]
+    update=list(collection.aggregate(user))
+    df=pd.DataFrame(update).fillna("no info")
+    text=df["COMMENT"].tolist()
+#     df=df[['COMMENT']]
+    df = df.sample(frac=1.0).reset_index(drop=True)
+    for i in df['COMMENT'].tolist():
+        df = df[df.COMMENT.str.len()!=1] 
+    
+    import nltk
+    nltk.download('vader_lexicon')
+
+    from nltk.sentiment.vader import SentimentIntensityAnalyzer
+    sia = SentimentIntensityAnalyzer()
+    df['Positivity'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['pos'])
+    df['Negativity'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['neg'])
+    df['Neutrality'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['neu'])
+    df['Compound'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['compound'])
+    pd.pandas.set_option('display.max_rows',None)  
+    neg=df[df['Compound']<0]
+    pos=df[df['Compound']>0]
+    neu=df[df['Compound']==0]
+    neg_sentiment=round(100*(len(neg)/(len(neu)+len(neg)+len(pos))),2)
+    pos_sentiment=round(100*(len(pos)/(len(neu)+len(neg)+len(pos))),2)
+    neu_sentiment=round(100*(len(neu)/(len(neu)+len(neg)+len(pos))),2)
+    a={'pos':pos,'neg':neg,'neu':neu}
+    table_name=a[table_type]
+    table=table_name[["USER_NAME","EMAIL","COMMENT","RATING","LAST_COMMENT_DATE"]]
+    temp = {"table":table.to_numpy().tolist()}
+    return json.dumps(temp, default=str)
+#     return df
+# dis_sentiment_pie_table('5f2609807a1c0000950bb45d','neg','2021-08-01','2021-12-17')
+
+
+
+
+
+
+
+
+# @app.route('/districtsentimentdonut_csy/<districtid>/<startdate>/<enddate>')
+# def dis_sentiment_pie(districtid,startdate,enddate):
+#     clean_list=[]
+#     news_headlines_senti = []
+#     news_headlines_dict = {}
+#     pnews_headlines=0
+#     nnews_headlines=0
+#     nenews_headlines = 0
+#     # date1=startdate
+#     # date2=enddate
+#     today = date.today()
+#     d1 = today.strftime("%Y-%m-%d")
+#     # myDatetimestrt = dateutil.parser.parse(date1)
+#     # myDatetimeend = dateutil.parser.parse(date2)
+#     username = urllib.parse.quote_plus('admin')
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+#     db=client.compass
+#     collection = db.audio_feedback
+#     district=disdic[districtid]
+#     myDatetime1 = dateutil.parser.parse(startdate)
+#     myDatetime2 = dateutil.parser.parse(enddate)
+
+#     df1=DataFrame(list(db.user_master.aggregate([
+#         {"$match":
+#          {
+#             '$and':[
+#     # // #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#              {"IS_DISABLED":{"$ne":"Y"}},
+#               {"IS_BLOCKED":{"$ne":"Y"}},
+#              {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+#                 {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+#                 {'EMAIL_ID':{'$ne':''}},
+#                 {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+
+                
+#                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#              { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#          { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+
+#          }},
+#         {'$project':{'_id':'$_id','school':'$schoolId._id' }}
+#         ])))
+
+#     userid=df1['_id'].tolist() 
+
+#     user=[
+#     {"$match":{'$and':[ {'USER._id':{'$in':userid}},
+      
+# #         {'RATING':{'$ne':0}},
+#          {'MODIFIED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
+#                         ]}},
+#     { "$project": { "USER_ID": "$USER._id", "USER_NAME": "$USER.USER_NAME","_id":0, "EMAIL": "$USER.EMAIL_ID", "RATING":1,
+#     "LAST_COMMENT_DATE": "$MODIFIED_DATE", "AUDIO_NAME": "$AUDIO_ID.AUDIO_NAME", "NARRATOR_NAME": "$AUDIO_ID.NARRATEDBY",
+#     "COMMENT":1, "PROGRAM_NAME": "$AUDIO_ID.PROGRAM_ID.PROGRAM_NAME"}}
+#     ]
+#     update=list(collection.aggregate(user))
+#     df=pd.DataFrame(update).fillna("no info")
+#     list_of_names=df["USER_ID"].to_list()
+#     df
+
+#     # def Average(lst):
+#     #     return sum(lst) / len(lst)
+
+#     # # Driver Code
+#     # lst =df123["RATING"].to_list()
+#     # average = Average(lst)
+#     # average
+
+#     #     print(df123["COMMENT"],"lola")
+#     xx=df[df["COMMENT"]!="no info"]
+#     xxc=xx[xx["COMMENT"]!=""]
+
+#     comment_list=xxc["COMMENT"].to_list()
+#     comment_list
+#     newtexttoken=[]
+#     for i in comment_list:
+#         text_tokens = word_tokenize(i)
+#         newtexttoken.append(text_tokens)
+#     newlist=[]
+#     for i in newtexttoken:
+#         for z in i:
+#             newlist.append(z.lower())
+#     st_word=stopwords.words('english')
+#     tokens_without_sw= [word for word in newlist if not word in st_word]
+#     token5=[]
+#     for sentence in tokens_without_sw:
+#     #     print(sentence)
+#         text3 = sentence.split('ing')
+#     #     print(text3,"text3")
+#         for i in text3:
+#     #         print(i)
+#             token5.append(i)
+#     words = [w.replace('liked', 'like') for w in token5]
+#     words2 = [w.replace('relaxed', 'relax') for w in words]
+#     words3 = [w.replace('relaxing', 'relax') for w in words2]
+#     words4 = [w.replace('excitinging', 'excited') for w in words3]
+#     #     print(words4)
+#     zxc=""
+#     name=""
+#     count=""
+#     try:
+#         xcvv=[x for x in words4 if len(x)>3]
+#         fdist=FreqDist(xcvv)
+#         df_fdist = pd.DataFrame.from_dict(fdist, orient='index')
+#     #         print(df_fdist)
+#         df_fdist.columns = ['Frequency']
+#         df_fdist.index.name = 'Term'
+#         xc=df_fdist.sort_values(by='Frequency', ascending=False, na_position='first')
+#         #     tt=xc.drop(["i","it","we","made","us","the","feeling","some","students"])
+#         cc=xc[0:10]
+#         name=cc.index.to_list()
+#         count=cc["Frequency"].to_list()
+#         zxc=' '.join(word for word in xcvv)
+#     except:
+#         pass
+#     for item in comment_list:
+#         # trim
+#         item = item.strip()
+#         # Removing RT
+#         item = item.replace('RT', '')
+#         # Removing new line character
+#         item = item.replace('\\n', '')
+#         # Replace #word with word
+#         news_headlines = re.sub(r'#([^\s]+)', r'\1', item)
+#         # Convert @username to username
+#         news_headlines = re.sub(r'@([^\s]+)', r'\1', item)
+#         item = " ".join(re.findall("[a-zA-Z]+", item))
+#         tmp_var = re.sub(r'^\S*\s', '', item)
+#         clean_list.append(tmp_var)
+#     for item in clean_list:
+#             #print(item)
+#             # create TextBlob object of passed news_headlines text
+#             analysis = TextBlob(item)
+#             # set sentiment
+#             if analysis.sentiment.polarity > 0:
+#                 # saving sentiment of news_headlines
+#                 news_headlines_score = 'positive'
+#                 pnews_headlines = pnews_headlines + 1
+#                 news_headlines_dict[item] = news_headlines_score
+#             elif analysis.sentiment.polarity == 0:
+#                 # saving sentiment of news_headlines
+#                 news_headlines_score = 'neutral'
+#                 nenews_headlines = nenews_headlines + 1
+#                 news_headlines_dict[item] = news_headlines_score
+#             else:
+#                 # saving sentiment of news_headlines
+#                 news_headlines_score = 'negative'
+#                 nnews_headlines = nnews_headlines + 1
+#                 news_headlines_dict[item] = news_headlines_score
+#     # print(clean_list)
+#     newssentiment=[]
+#     # for k, v in news_headlines_dict.items():
+#     #     print(k,':',v)
+#     for k, v in news_headlines_dict.items():
+
+#         if v == "positive":
+#             newssentiment.append({"sentiment":int(1),"text":k})
+#         elif v == "negative":
+#             newssentiment.append({"sentiment":int(-1),"text":k})
+#         else:
+#             newssentiment.append({"sentiment":int(0),"text":k})
+
+#     #print(newssentiment)
+#     newssentiment_dataframe=pd.DataFrame.from_dict(newssentiment)
+#     # newssentiment_dataframe.to_csv("news_headlines_sentiment.csv", encoding='utf-8', index=False)
+#     neg = 100 * (nnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+#     pos = 100 * (pnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+
+#     word_chart={"donut":{"pos":round(pos, 2),"neg":round(neg, 2)}}
+    
+#     return json.dumps(word_chart)
+# # sentiment_pie('5f2609807a1c0000950bb46d','2021-08-01','2021-10-19')
 
 @app.route('/90daystable/<districtid>/<startdate>')
 def district_Date_table(districtid,startdate):
@@ -33131,13 +33329,13 @@ def schoolsearch_em_id(schoolid):
 
              {'IS_ADMIN':'Y'},
         ]}},
-    {"$project":{"ADMIN_EMAIL":"$EMAIL_ID","ADMIN_NAME":"$USER_NAME"}}
+    {"$project":{"ADMIN_EMAIL":"$EMAIL_ID","ADMIN_NAME":"$USER_NAME",'ADMIN_ID':'$_id',}}
     ])))
-    column2 =['ADMIN_NAME',"ADMIN_EMAIL"]
+    column2 =['ADMIN_NAME',"ADMIN_EMAIL",'ADMIN_ID']
 
 
     if df2.empty==True:
-        df2=pd.DataFrame({"ADMIN_EMAIL":['No info'],'ADMIN_NAME':['No info']})
+        df2=pd.DataFrame({"ADMIN_EMAIL":['No info'],'ADMIN_NAME':['No info'],'ADMIN_ID':['No info']})
 
     for i in column2:       
         if i not in df2.columns:
@@ -33145,7 +33343,31 @@ def schoolsearch_em_id(schoolid):
 #        
     ADMIN_NAME=df2['ADMIN_NAME'].tolist()
     ADMIN_EMAIL=df2['ADMIN_EMAIL'].tolist()
+    ADMIN_ID=df2['ADMIN_ID'].tolist()
+    
+    
+    
+    df44=DataFrame(list(db.invite_master.aggregate([
+        {"$match":{'$and':[
+                       {'USER_ID._id':{"$in":ADMIN_ID}},
+#             {'MODIFIED_DATE':{'$gte':csy_first_date()}}
+#             {'COMMENT':{'$ne':None}}
+                          ]}},    
+#         {'$project':{'_id':0,'ADMIN':'$USER_ID._id'}}
 
+        {'$group':{'_id' : '$USER_ID._id' ,'user':{'$sum':1} }}
+
+        ])))
+    
+    
+    
+    if df44.empty == True:
+        actual_admin =ADMIN_ID[0]
+    else:
+        df45=df44.loc[df44['user'] == df44['user'].max()]
+#         print(df44)
+        actual_admin=df45['_id'].tolist()
+        
     
  
     df5=DataFrame(list(db.audio_feedback.aggregate([
@@ -33173,7 +33395,7 @@ def schoolsearch_em_id(schoolid):
 
 
 
-    data={'user_count':str(df00['user_count'][0]),
+    data={'user_count':str(df00['user_count'][0]),'actual_admin':actual_admin[0], 'ADMIN_ID':ADMIN_ID,
         'Star_5_Ratings_Recieved':str(int(round(df5['rating'][0]))),'DISTRICT':df1['district_name'][0],
         'SCHOOL_MINDFUL_MINUTES_csy':str(int(Mindful_Minutes_csy)),
                    'SCHOOL_MINDFUL_MINUTES_overall':str(int(Mindful_Minutes_overall)),
@@ -33184,7 +33406,12 @@ def schoolsearch_em_id(schoolid):
                   }
 
 
-    return json.dumps(data)
+    return json.dumps(data, default=str)
+# schoolsearch_em_id('5f2bcad6ba0be61b0c1e98fa')
+
+
+
+
 # schoolsearch_em_id('5f2bca23ba0be61b0c1cc67c')
 # schoolsearch_em_id('5f2bca32ba0be61b0c1cf643')
 
@@ -41708,35 +41935,46 @@ def sentiment_pie():
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.audio_feedback
+#     district=disdic[districtid]
+#     myDatetime1 = dateutil.parser.parse(startdate)
+#     myDatetime2 = dateutil.parser.parse(enddate)
+
     df1=DataFrame(list(db.user_master.aggregate([
         {"$match":
          {
             '$and':[
-    # // #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"IS_DISABLED":{"$ne":"Y"}},
               {"IS_BLOCKED":{"$ne":"Y"}},
              {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                 {'EMAIL_ID':{'$ne':''}},
-#                 {'schoolId._id':{'$in':school}},
-                
+#                 {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
          { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}
+            ]
 
          }},
         {'$project':{'_id':'$_id','school':'$schoolId._id' }}
         ])))
 
     userid=df1['_id'].tolist() 
-
+    x=['NA','N/A','n.a','.\n',"a\\n","a\n","v\n","v\\n","0-",'na\n','na','Write a feedback (optional)','Na','k,n/l','[pppppppppppsz']
     user=[
     {"$match":{'$and':[ {'USER._id':{'$in':userid}},
-      
-#         {'RATING':{'$ne':0}},
-        {'MODIFIED_DATE':{'$gte':csy_first_date()}}
+                    {'COMMENT':{'$exists':1}},
+                       {'COMMENT':{'$ne':''}},
+                       {'COMMENT':{'$ne':None}},
+                        {'COMMENT':{'$nin':x}},
+                       
+                       
+                       
+    #         {'RATING':{'$ne':0}},
+         {'MODIFIED_DATE':{"$gte":csy_first_date()}}
+                         ,
                         ]}},
     { "$project": { "USER_ID": "$USER._id", "USER_NAME": "$USER.USER_NAME","_id":0, "EMAIL": "$USER.EMAIL_ID", "RATING":1,
     "LAST_COMMENT_DATE": "$MODIFIED_DATE", "AUDIO_NAME": "$AUDIO_ID.AUDIO_NAME", "NARRATOR_NAME": "$AUDIO_ID.NARRATEDBY",
@@ -41744,120 +41982,209 @@ def sentiment_pie():
     ]
     update=list(collection.aggregate(user))
     df=pd.DataFrame(update).fillna("no info")
-    list_of_names=df["USER_ID"].to_list()
-    df
-
-    # def Average(lst):
-    #     return sum(lst) / len(lst)
-
-    # # Driver Code
-    # lst =df123["RATING"].to_list()
-    # average = Average(lst)
-    # average
-
-    #     print(df123["COMMENT"],"lola")
-    xx=df[df["COMMENT"]!="no info"]
-    xxc=xx[xx["COMMENT"]!=""]
-
-    comment_list=xxc["COMMENT"].to_list()
-    comment_list
-    newtexttoken=[]
-    for i in comment_list:
-        text_tokens = word_tokenize(i)
-        newtexttoken.append(text_tokens)
-    newlist=[]
-    for i in newtexttoken:
-        for z in i:
-            newlist.append(z.lower())
-    st_word=stopwords.words('english')
-    tokens_without_sw= [word for word in newlist if not word in st_word]
-    token5=[]
-    for sentence in tokens_without_sw:
-    #     print(sentence)
-        text3 = sentence.split('ing')
-    #     print(text3,"text3")
-        for i in text3:
-    #         print(i)
-            token5.append(i)
-    words = [w.replace('liked', 'like') for w in token5]
-    words2 = [w.replace('relaxed', 'relax') for w in words]
-    words3 = [w.replace('relaxing', 'relax') for w in words2]
-    words4 = [w.replace('excitinging', 'excited') for w in words3]
-    #     print(words4)
-    zxc=""
-    name=""
-    count=""
-    try:
-        xcvv=[x for x in words4 if len(x)>3]
-        fdist=FreqDist(xcvv)
-        df_fdist = pd.DataFrame.from_dict(fdist, orient='index')
-    #         print(df_fdist)
-        df_fdist.columns = ['Frequency']
-        df_fdist.index.name = 'Term'
-        xc=df_fdist.sort_values(by='Frequency', ascending=False, na_position='first')
-        #     tt=xc.drop(["i","it","we","made","us","the","feeling","some","students"])
-        cc=xc[0:10]
-        name=cc.index.to_list()
-        count=cc["Frequency"].to_list()
-        zxc=' '.join(word for word in xcvv)
-    except:
-        pass
-    for item in comment_list:
-        # trim
-        item = item.strip()
-        # Removing RT
-        item = item.replace('RT', '')
-        # Removing new line character
-        item = item.replace('\\n', '')
-        # Replace #word with word
-        news_headlines = re.sub(r'#([^\s]+)', r'\1', item)
-        # Convert @username to username
-        news_headlines = re.sub(r'@([^\s]+)', r'\1', item)
-        item = " ".join(re.findall("[a-zA-Z]+", item))
-        tmp_var = re.sub(r'^\S*\s', '', item)
-        clean_list.append(tmp_var)
-    for item in clean_list:
-            #print(item)
-            # create TextBlob object of passed news_headlines text
-            analysis = TextBlob(item)
-            # set sentiment
-            if analysis.sentiment.polarity > 0:
-                # saving sentiment of news_headlines
-                news_headlines_score = 'positive'
-                pnews_headlines = pnews_headlines + 1
-                news_headlines_dict[item] = news_headlines_score
-            elif analysis.sentiment.polarity == 0:
-                # saving sentiment of news_headlines
-                news_headlines_score = 'neutral'
-                nenews_headlines = nenews_headlines + 1
-                news_headlines_dict[item] = news_headlines_score
-            else:
-                # saving sentiment of news_headlines
-                news_headlines_score = 'negative'
-                nnews_headlines = nnews_headlines + 1
-                news_headlines_dict[item] = news_headlines_score
-    # print(clean_list)
-    newssentiment=[]
-    # for k, v in news_headlines_dict.items():
-    #     print(k,':',v)
-    for k, v in news_headlines_dict.items():
-
-        if v == "positive":
-            newssentiment.append({"sentiment":int(1),"text":k})
-        elif v == "negative":
-            newssentiment.append({"sentiment":int(-1),"text":k})
-        else:
-            newssentiment.append({"sentiment":int(0),"text":k})
-
-    #print(newssentiment)
-    newssentiment_dataframe=pd.DataFrame.from_dict(newssentiment)
-    # newssentiment_dataframe.to_csv("news_headlines_sentiment.csv", encoding='utf-8', index=False)
-    neg = 100 * (nnews_headlines) / ((nnews_headlines) + (pnews_headlines))
-    pos = 100 * (pnews_headlines) / ((nnews_headlines) + (pnews_headlines))
-
-    word_chart={"donut":{"pos":round(pos, 2),"neg":round(neg, 2)}}
+    text=df["COMMENT"].to_list()
+    df=df[['COMMENT']]
+    df = df.sample(frac=1.0).reset_index(drop=True)
+    for i in df['COMMENT'].tolist():
+        df = df[df.COMMENT.str.len()!=1] 
     
+    import nltk
+    nltk.download('vader_lexicon')
+
+    from nltk.sentiment.vader import SentimentIntensityAnalyzer
+    sia = SentimentIntensityAnalyzer()
+    df['Positivity'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['pos'])
+    df['Negativity'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['neg'])
+    df['Neutrality'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['neu'])
+    df['Compound'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['compound'])
+    pd.pandas.set_option('display.max_rows',None)  
+    neg=df[df['Compound']<0]
+    pos=df[df['Compound']>0]
+    neu=df[df['Compound']==0]
+    neg_sentiment=round(100*(len(neg)/(len(neu)+len(neg)+len(pos))),2)
+    pos_sentiment=round(100*(len(pos)/(len(neu)+len(neg)+len(pos))),2)
+    neu_sentiment=round(100*(len(neu)/(len(neu)+len(neg)+len(pos))),2)
+    word_chart={'donut':{'pos':pos_sentiment,'neg':neg_sentiment,'neu':neu_sentiment}}
+
+#     print(df)
+    
+#     word_chart={"donut":{"pos":round(pos, 2),"neg":round(neg, 2)}}
     return json.dumps(word_chart)
+#     return df
+# dis_sentiment_pie('5ffd8176469a86e28635f512','2021-08-01','2021-12-17')
+
+
+
+
+# @app.route('/sentimentdonut_csy')
+# def sentiment_pie():
+#     clean_list=[]
+#     news_headlines_senti = []
+#     news_headlines_dict = {}
+#     pnews_headlines=0
+#     nnews_headlines=0
+#     nenews_headlines = 0
+#     # date1=startdate
+#     # date2=enddate
+#     today = date.today()
+#     d1 = today.strftime("%Y-%m-%d")
+#     # myDatetimestrt = dateutil.parser.parse(date1)
+#     # myDatetimeend = dateutil.parser.parse(date2)
+#     username = urllib.parse.quote_plus('admin')
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+#     db=client.compass
+#     collection = db.audio_feedback
+#     df1=DataFrame(list(db.user_master.aggregate([
+#         {"$match":
+#          {
+#             '$and':[
+#     # // #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#              {"IS_DISABLED":{"$ne":"Y"}},
+#               {"IS_BLOCKED":{"$ne":"Y"}},
+#              {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+#                 {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+#                 {'EMAIL_ID':{'$ne':''}},
+# #                 {'schoolId._id':{'$in':school}},
+                
+#                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#              { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#          { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+
+#          }},
+#         {'$project':{'_id':'$_id','school':'$schoolId._id' }}
+#         ])))
+
+#     userid=df1['_id'].tolist() 
+
+#     user=[
+#     {"$match":{'$and':[ {'USER._id':{'$in':userid}},
+      
+# #         {'RATING':{'$ne':0}},
+#         {'MODIFIED_DATE':{'$gte':csy_first_date()}}
+#                         ]}},
+#     { "$project": { "USER_ID": "$USER._id", "USER_NAME": "$USER.USER_NAME","_id":0, "EMAIL": "$USER.EMAIL_ID", "RATING":1,
+#     "LAST_COMMENT_DATE": "$MODIFIED_DATE", "AUDIO_NAME": "$AUDIO_ID.AUDIO_NAME", "NARRATOR_NAME": "$AUDIO_ID.NARRATEDBY",
+#     "COMMENT":1, "PROGRAM_NAME": "$AUDIO_ID.PROGRAM_ID.PROGRAM_NAME"}}
+#     ]
+#     update=list(collection.aggregate(user))
+#     df=pd.DataFrame(update).fillna("no info")
+#     list_of_names=df["USER_ID"].to_list()
+#     df
+
+#     # def Average(lst):
+#     #     return sum(lst) / len(lst)
+
+#     # # Driver Code
+#     # lst =df123["RATING"].to_list()
+#     # average = Average(lst)
+#     # average
+
+#     #     print(df123["COMMENT"],"lola")
+#     xx=df[df["COMMENT"]!="no info"]
+#     xxc=xx[xx["COMMENT"]!=""]
+
+#     comment_list=xxc["COMMENT"].to_list()
+#     comment_list
+#     newtexttoken=[]
+#     for i in comment_list:
+#         text_tokens = word_tokenize(i)
+#         newtexttoken.append(text_tokens)
+#     newlist=[]
+#     for i in newtexttoken:
+#         for z in i:
+#             newlist.append(z.lower())
+#     st_word=stopwords.words('english')
+#     tokens_without_sw= [word for word in newlist if not word in st_word]
+#     token5=[]
+#     for sentence in tokens_without_sw:
+#     #     print(sentence)
+#         text3 = sentence.split('ing')
+#     #     print(text3,"text3")
+#         for i in text3:
+#     #         print(i)
+#             token5.append(i)
+#     words = [w.replace('liked', 'like') for w in token5]
+#     words2 = [w.replace('relaxed', 'relax') for w in words]
+#     words3 = [w.replace('relaxing', 'relax') for w in words2]
+#     words4 = [w.replace('excitinging', 'excited') for w in words3]
+#     #     print(words4)
+#     zxc=""
+#     name=""
+#     count=""
+#     try:
+#         xcvv=[x for x in words4 if len(x)>3]
+#         fdist=FreqDist(xcvv)
+#         df_fdist = pd.DataFrame.from_dict(fdist, orient='index')
+#     #         print(df_fdist)
+#         df_fdist.columns = ['Frequency']
+#         df_fdist.index.name = 'Term'
+#         xc=df_fdist.sort_values(by='Frequency', ascending=False, na_position='first')
+#         #     tt=xc.drop(["i","it","we","made","us","the","feeling","some","students"])
+#         cc=xc[0:10]
+#         name=cc.index.to_list()
+#         count=cc["Frequency"].to_list()
+#         zxc=' '.join(word for word in xcvv)
+#     except:
+#         pass
+#     for item in comment_list:
+#         # trim
+#         item = item.strip()
+#         # Removing RT
+#         item = item.replace('RT', '')
+#         # Removing new line character
+#         item = item.replace('\\n', '')
+#         # Replace #word with word
+#         news_headlines = re.sub(r'#([^\s]+)', r'\1', item)
+#         # Convert @username to username
+#         news_headlines = re.sub(r'@([^\s]+)', r'\1', item)
+#         item = " ".join(re.findall("[a-zA-Z]+", item))
+#         tmp_var = re.sub(r'^\S*\s', '', item)
+#         clean_list.append(tmp_var)
+#     for item in clean_list:
+#             #print(item)
+#             # create TextBlob object of passed news_headlines text
+#             analysis = TextBlob(item)
+#             # set sentiment
+#             if analysis.sentiment.polarity > 0:
+#                 # saving sentiment of news_headlines
+#                 news_headlines_score = 'positive'
+#                 pnews_headlines = pnews_headlines + 1
+#                 news_headlines_dict[item] = news_headlines_score
+#             elif analysis.sentiment.polarity == 0:
+#                 # saving sentiment of news_headlines
+#                 news_headlines_score = 'neutral'
+#                 nenews_headlines = nenews_headlines + 1
+#                 news_headlines_dict[item] = news_headlines_score
+#             else:
+#                 # saving sentiment of news_headlines
+#                 news_headlines_score = 'negative'
+#                 nnews_headlines = nnews_headlines + 1
+#                 news_headlines_dict[item] = news_headlines_score
+#     # print(clean_list)
+#     newssentiment=[]
+#     # for k, v in news_headlines_dict.items():
+#     #     print(k,':',v)
+#     for k, v in news_headlines_dict.items():
+
+#         if v == "positive":
+#             newssentiment.append({"sentiment":int(1),"text":k})
+#         elif v == "negative":
+#             newssentiment.append({"sentiment":int(-1),"text":k})
+#         else:
+#             newssentiment.append({"sentiment":int(0),"text":k})
+
+#     #print(newssentiment)
+#     newssentiment_dataframe=pd.DataFrame.from_dict(newssentiment)
+#     # newssentiment_dataframe.to_csv("news_headlines_sentiment.csv", encoding='utf-8', index=False)
+#     neg = 100 * (nnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+#     pos = 100 * (pnews_headlines) / ((nnews_headlines) + (pnews_headlines))
+
+#     word_chart={"donut":{"pos":round(pos, 2),"neg":round(neg, 2)}}
+    
+#     return json.dumps(word_chart)
 
 
 
