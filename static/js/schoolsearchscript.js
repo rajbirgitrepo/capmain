@@ -1057,7 +1057,7 @@ function inviteLink(urlid) {
             var dataa1 = JSON.stringify(response);
             console.log(dataa1);
             $('#inviteLinkRe').on("click", function() {
-                this.href = dataa1;
+                this.href = response;
             });
             // $("#inviteLinkRe").append('<a class="btn-success " style="float:right;padding:2px 15px;border-radius:5px;color:white;" target="_blank" href="' + newURL + '">Invite</a>')
         });
