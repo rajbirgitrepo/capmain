@@ -72983,6 +72983,13 @@ def Disctrictfilter():
         
     return render_template('Disctrictfilter.html')
 
+@app.route('/Local_Disctrictfilter')
+def Local_Disctrictfilter():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('Local_Disctrictfilter.html')
+
 @app.route('/district _race')
 def district_race():
     if not g.user:

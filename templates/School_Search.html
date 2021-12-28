@@ -189,6 +189,30 @@
     .f-12 {
         font-size: 12px !important;
     }
+.Qr-output{
+    margin-left: 8% !important;
+    margin-top: 5% !important;
+}
+    .modal2-content2 {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 25%;
+        height: 360px;
+        overflow: scroll;
+    }
+
+    .ui-tooltip,
+    .arrow:after {
+        display: none !important;
+        /* border: 2px solid white; */
+    }
+    
+    .ui-tooltip {
+       display: none !important;
+    }
+    
 </style>
 <style>
     .skin {
@@ -287,7 +311,7 @@
             <li class="active"><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
                 <ul class="side-nav-dropdown">
                     <li class="active2"><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
-                    <li class="active2"><a href="Disctrictfilter">DISTRICT 360</a></li>
+                    <li class="active2"><a href="Disctrictfilter">DP-360</a></li>
                     <!-- <li class="active2"><a href="partner">PARTNER PORTAL</a></li> -->
                     <li class="active2"><a href="Login_analytics">LOGIN ANALYTICS</a></li>
                     <!-- <li class="active2"><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
@@ -368,9 +392,12 @@
 
         <div id="exTab1" class="container" style="padding-top: 30px;">
             <div>
+                <input type="url" id="hideContent" style="display: none;">
+                <button onclick="modal2()" id="sacnQR" class="QR-btn">QR Code</button>
                 <a class="invite-btn" id="inviteLinkRe" target="_blank" href="#">Invite</a>
+                <!-- <a class="invite-btn" onclick="qrlinkCode()"  target="_blank" href="#">Generate</a> -->
             </div>
-
+            
             <ul class="nav nav-pills" style="margin-left: 15px !important;">
                 <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">By School</a></li>
                 <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">By Home</a></li>
@@ -983,6 +1010,19 @@
 
     </section>
     </section>
+
+    <div id="myModal2" class="modal2 table-design">
+        <!-- Modal content -->
+        <div class="modal2-content2">
+            <div class="table-header">
+                <span class="table-title" style="margin: 0 !important;font-size: 25px;font-weight: 500;">Scan Your QR Code</span>
+                <button class="btn close-btn-design btn-logion" onclick="gif2()"><i class="fa fa-times-circle-o"
+                        aria-hidden="true"></i>
+                </button>
+            </div>
+            <div id="output" class="Qr-output"></div>
+            </div>
+            </div>
     <!-- <div id="popup1" class="overlay">
           <div class="popup">
             <h2 style="margin-left: 40px;">CONTACT US</h2>
@@ -1965,6 +2005,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js'></script>
     <script src="{{ url_for('static',filename='js/schoolsearchscript.js') }}"></script>
     <script src="{{ url_for('static',filename='js/excellentexport.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/qrcode.js') }}"></script>
     <script src="/static/js/mail.js"></script>
 
     <!-- partial -->

@@ -1054,12 +1054,15 @@ function inviteLink(urlid) {
             method: "GET",
         };
         $.ajax(settings).done(function(response) {
+            console.log("https://i6.innerexplorer.org/compass/getEncryptedLink/" + dataa.actual_admin)
             var dataa1 = JSON.stringify(response);
             console.log(dataa1);
             $('#inviteLinkRe').on("click", function() {
                 this.href = response;
             });
-            // $("#inviteLinkRe").append('<a class="btn-success " style="float:right;padding:2px 15px;border-radius:5px;color:white;" target="_blank" href="' + newURL + '">Invite</a>')
+                 console.log(dataa1 + "scan QR");
+                 var qrcode = new QRCode("output");
+                 qrcode.makeCode(dataa1);        
         });
 
     });
@@ -1068,7 +1071,10 @@ function inviteLink(urlid) {
 
 
 
-
+function modal2() {
+    var modal = document.getElementById("myModal2");
+    modal.style.display = "block";
+}
 
 
 function AudioUn(a) {

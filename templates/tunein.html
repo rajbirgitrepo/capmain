@@ -76,6 +76,9 @@
         width: 100%;
         max-width: 500px;
     }
+    div#d3plus_tooltip_id_visualization_focus {
+      z-index: 2 !important;
+  }
     
     .highcharts-data-table caption {
         padding: 1em 0;
@@ -194,7 +197,7 @@
             <li><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
                 <ul class="side-nav-dropdown">
                     <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
-                    <li><a href="Disctrictfilter">DISTRICT 360</a></li>
+                    <li><a href="Disctrictfilter">DP-360</a></li>
                     <!-- <li><a href="partner">PARTNER PORTAL</a></li> -->
                     <li><a href="Login_analytics">LOGIN ANALYTICS</a></li>
                     <!-- <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
@@ -465,68 +468,71 @@
                 <div id="container2" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
             </div>
 
-            <div class="col-md-10" style="margin-top: 40px;">
-                <select class="" id="firstName">
-        <option value="5f2609807a1c0000950bb45a">Los Angeles Unified School District</option>
-        <option value="5f2609807a1c0000950bb45b">Westfield Public School District</option>
-        <option value="5f2609807a1c0000950bb45c">Comox Valley School District(sd71)</option>
-        <option value="5f2609807a1c0000950bb45d">Youngstown</option>
-        <option value="5f2609807a1c0000950bb45e">Fairfield-Suisun Unified School District</option>
-        <option value="5f2609807a1c0000950bb45f">Griffin-Spalding County School System</option>
-        <option value="5f2609807a1c0000950bb460">Clarksville-Montgomery County School System</option>
-        <option value="5f2609807a1c0000950bb461">Englewood Public School District</option>
-        <option value="5f2609807a1c0000950bb462">Englewood Cliffs Public Schools</option>
-        <option value="5f2609807a1c0000950bb463">Austin Independent School District</option>
-        <option value="5f2609807a1c0000950bb464">Equity Education</option>
-        <option value="5f2609807a1c0000950bb465">Middleton - Cross Plains Area School District</option>"
-        <option value="5f2609807a1c0000950bb466">Pinellas County Schools</option>
-        <option value="5f2609807a1c0000950bb467">Lincolnshire Schools</option>
-        <option value="5f2609807a1c0000950bb468">Utah Board of Education</option>
-        <option value="5f2609807a1c0000950bb469">LSF - Head Start</option>
-        <option value="5f2609807a1c0000950bb46a">Springfield Public Schools</option>
-        <option value="5f2609807a1c0000950bb46b">FundaciÃ³n La Puerta</option>
-        <option value="5f2609807a1c0000950bb46c">Chico Unified School District</option>
-        <option value="5f2609807a1c0000950bb46d">Broward County Public Schools</option>
-        <option value="5f2609807a1c0000950bb46e">District 25 New York Schools</option>
-        <option value="5f2609807a1c0000950bb46f">Paradise Schools</option>
-        <option value="5f2609807a1c0000950bb470">San Leandro Unified School District</option>
-        <option value="5f2609807a1c0000950bb471">Racine Unified Schools</option>
-        <option value="5f2609807a1c0000950bb472">Oroville City Elementary School District</option>
-        <option value="5f2609807a1c0000950bb473">Skillman Foundation</option>
-        <option value="5f2609807a1c0000950bb474">Greenburgh-North Castle (GNC) Union Free School District</option>
-        <option value="5f2609807a1c0000950bb475">Agawam School district</option>
-        <option value="5f2609807a1c0000950bb476">Hillsborough County</option>
-        <option value="5f2609807a1c0000950bb477">Sarasota County</option>
-        <option value="5f2609807a1c0000950bb478">San Diego Unified School District</option>
-        <option value="5f2609807a1c0000950bb479">Panorama Education</option>
-        <option value="5f2609807a1c0000950bb47a">Alpine School District</option>
-        <option value="5f2609807a1c0000950bb47b">Ann Arbor Public Schools</option>
-        <option value="5f2609807a1c0000950bb47c">Hawaii Public Schools</option>
-        <option value="5f2609807a1c0000950bb47d">Flint Public Schools</option>
-        <option value="5f2609807a1c0000950bb47e">La Joya School District</option>
-        <option value="5f2609807a1c0000950bb47f">Community Consolidated School District 89</option>
-        <option value="5f2609807a1c0000950bb480">Dell Texas</option>
-        <option value="5f2609807a1c0000950bb481">Alameda Unified School District</option>
-        <option value="5f2609807a1c0000950bb482">Massachusetts Institute of Technology</option>
-        <option value="5f2609807a1c0000950bb450">Goleta District</option>
-        <option value="5f2609807a1c0000950bb455">Krum Independent School District</option>
-        <option value="5f2609807a1c0000950bb368">Wichita Falls Independent School District</option>
-        <option value="5f59e4836451a9089d7d4007">Belleville School District</option>
-        <option value="5f698b826451a9089d7d4008">Wayne Metro</option>
-        <option value="5f6994386451a9089d7d4009">Ogden school district</option>
-        <option value="5f6d7cbce6452eb06384db20">Salt Lake City School District</option>
-        <option value="5f7413ef9387fd71ce6387cb">Douglas County School District</option>
-        <option value="5f7c01fa9387fd71ce6387cc">NYC - Queens South</option>
-        <option value="5f895191609e08b76029f641">Early learning Sarasota</option>
-        <option value="5f8fcd33609e08b76029f644">Paradise Unified School District</option>
-      </select>
-                <div id="viz" style="height: 441px;
-      width: 122%;
-      box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
-      border-radius: 20px;
-      padding: 17px;
-      margin-bottom: 20px;
-      background-color: #fff;"></div>
+            <div class="col-md-12" style="margin-top: 40px;">
+              <div style=" width: 100%;
+              box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
+              border-radius: 20px;
+              padding: 17px;
+              margin-bottom: 20px;
+              background-color: #fff;">
+              <select class="drop-api" id="firstName">
+                <option value="5f2609807a1c0000950bb45a">Los Angeles Unified School District</option>
+                <option value="5f2609807a1c0000950bb45b">Westfield Public School District</option>
+                <option value="5f2609807a1c0000950bb45c">Comox Valley School District(sd71)</option>
+                <option value="5f2609807a1c0000950bb45d">Youngstown</option>
+                <option value="5f2609807a1c0000950bb45e">Fairfield-Suisun Unified School District</option>
+                <option value="5f2609807a1c0000950bb45f">Griffin-Spalding County School System</option>
+                <option value="5f2609807a1c0000950bb460">Clarksville-Montgomery County School System</option>
+                <option value="5f2609807a1c0000950bb461">Englewood Public School District</option>
+                <option value="5f2609807a1c0000950bb462">Englewood Cliffs Public Schools</option>
+                <option value="5f2609807a1c0000950bb463">Austin Independent School District</option>
+                <option value="5f2609807a1c0000950bb464">Equity Education</option>
+                <option value="5f2609807a1c0000950bb465">Middleton - Cross Plains Area School District</option>"
+                <option value="5f2609807a1c0000950bb466">Pinellas County Schools</option>
+                <option value="5f2609807a1c0000950bb467">Lincolnshire Schools</option>
+                <option value="5f2609807a1c0000950bb468">Utah Board of Education</option>
+                <option value="5f2609807a1c0000950bb469">LSF - Head Start</option>
+                <option value="5f2609807a1c0000950bb46a">Springfield Public Schools</option>
+                <option value="5f2609807a1c0000950bb46b">FundaciÃ³n La Puerta</option>
+                <option value="5f2609807a1c0000950bb46c">Chico Unified School District</option>
+                <option value="5f2609807a1c0000950bb46d">Broward County Public Schools</option>
+                <option value="5f2609807a1c0000950bb46e">District 25 New York Schools</option>
+                <option value="5f2609807a1c0000950bb46f">Paradise Schools</option>
+                <option value="5f2609807a1c0000950bb470">San Leandro Unified School District</option>
+                <option value="5f2609807a1c0000950bb471">Racine Unified Schools</option>
+                <option value="5f2609807a1c0000950bb472">Oroville City Elementary School District</option>
+                <option value="5f2609807a1c0000950bb473">Skillman Foundation</option>
+                <option value="5f2609807a1c0000950bb474">Greenburgh-North Castle (GNC) Union Free School District</option>
+                <option value="5f2609807a1c0000950bb475">Agawam School district</option>
+                <option value="5f2609807a1c0000950bb476">Hillsborough County</option>
+                <option value="5f2609807a1c0000950bb477">Sarasota County</option>
+                <option value="5f2609807a1c0000950bb478">San Diego Unified School District</option>
+                <option value="5f2609807a1c0000950bb479">Panorama Education</option>
+                <option value="5f2609807a1c0000950bb47a">Alpine School District</option>
+                <option value="5f2609807a1c0000950bb47b">Ann Arbor Public Schools</option>
+                <option value="5f2609807a1c0000950bb47c">Hawaii Public Schools</option>
+                <option value="5f2609807a1c0000950bb47d">Flint Public Schools</option>
+                <option value="5f2609807a1c0000950bb47e">La Joya School District</option>
+                <option value="5f2609807a1c0000950bb47f">Community Consolidated School District 89</option>
+                <option value="5f2609807a1c0000950bb480">Dell Texas</option>
+                <option value="5f2609807a1c0000950bb481">Alameda Unified School District</option>
+                <option value="5f2609807a1c0000950bb482">Massachusetts Institute of Technology</option>
+                <option value="5f2609807a1c0000950bb450">Goleta District</option>
+                <option value="5f2609807a1c0000950bb455">Krum Independent School District</option>
+                <option value="5f2609807a1c0000950bb368">Wichita Falls Independent School District</option>
+                <option value="5f59e4836451a9089d7d4007">Belleville School District</option>
+                <option value="5f698b826451a9089d7d4008">Wayne Metro</option>
+                <option value="5f6994386451a9089d7d4009">Ogden school district</option>
+                <option value="5f6d7cbce6452eb06384db20">Salt Lake City School District</option>
+                <option value="5f7413ef9387fd71ce6387cb">Douglas County School District</option>
+                <option value="5f7c01fa9387fd71ce6387cc">NYC - Queens South</option>
+                <option value="5f895191609e08b76029f641">Early learning Sarasota</option>
+                <option value="5f8fcd33609e08b76029f644">Paradise Unified School District</option>
+              </select>
+                        <div id="viz" style="height: 441px;
+             "></div>
+              </div>
+              
             </div>
 
             <!-- <div class="welcome2" style="margin-top: 100px;" id="scroll">

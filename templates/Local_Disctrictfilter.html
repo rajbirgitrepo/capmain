@@ -9,17 +9,18 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/journeystyle.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/exbarchat.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/exbarchat.css') }}"> -->
     <link rel="stylesheet" href="{{ url_for('static',filename='css/map-table.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/mainpractice.css') }}">
-    <link rel="stylesheet" type="text/css" href="/static/css/search2.css">
-    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css'>
+    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='css/mainpractice.css') }}"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="/static/css/search2.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/datatable_bootstrap.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css'>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <!-- <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css'> -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/reset.min.css') }}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -28,7 +29,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
-
+    <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> -->
 
 
     <!-- <link href="https://innerexplorer.org/css/index.css" rel="stylesheet"> -->
@@ -64,24 +65,6 @@
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
-    <!-- <script>
-  window.onload = function () {
-    document.getElementById("download")
-        .addEventListener("click", () => {
-            const invoice = this.document.getElementById("invoice");
-            console.log(invoice);
-            console.log(window);
-            var opt = {
-                margin: 0.2,
-                filename: 'myfile.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'tabloid', orientation: 'landscape' }
-            };
-            html2pdf().from(invoice).set(opt).save();
-        })
-}
-</script> -->
 </head>
 <script>
 </script>
@@ -155,27 +138,61 @@
         font-weight: bold;
         font-size: 1.1em;
         font-family: "open sans", roboto;
+        margin-bottom: 10px;
     }
+    /* .btn-success {
+        color: #FFF !important;
+        padding: 9px 42px !important;
+        background-color: #00a651 !important;
+        border-color: #00a651 !important;
+        font-size: 16px !important;
+    } */
     
     th {
         background-color: white;
         font-weight: normal;
+    }
+    /*  thead tr:nth-child(1) th {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    } */
+    
+    .printpos {
+        position: absolute;
+        right: 10px;
+        top: 15px;
+    }
+    
+    .print_btn {
+        border-radius: 5px;
+        padding: 4px 5px;
+        background: white;
+        border: 1px solid gray;
+        color: #50a756;
+        outline: none;
     }
     
     tbody th {
         font-size: 10px !important;
         position: sticky;
         left: 0;
-        z-index: 10;
+        z-index: 5;
     }
-    /* thead tr:nth-child(1) th {
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }*/
+    
+    td,
+    th {
+        padding: 0 20px;
+        text-align: left;
+    }
+    /*td {
+        min-width: 20px;
+        width: 20px;
+        max-width: 30px;
+    } */
     
     .table-header-design table th {
-        padding: 5px 20px !important;
+        padding: 5px !important;
         background-color: transparent !important;
         color: black !important;
         border-bottom: none !important;
@@ -183,14 +200,16 @@
     
     .table-design table th,
     table td {
-        font-size: 8px !important;
-        padding: 5px 17px !important;
+        font-size: 10px;
+        padding: 5px 16px !important;
     }
     
-    td {
-        min-width: 20px;
-        width: 20px;
-        max-width: 30px;
+    .close-new-tab {
+        float: right;
+        background-color: white;
+        margin-bottom: 10px;
+        border: 2px solid black;
+        padding: 4px 3px;
     }
     
     .legend {
@@ -198,6 +217,10 @@
         width: 25%;
         font-family: roboto, arial;
         font-size: 0.75em;
+    }
+    
+    .ui-datepicker {
+        width: 26em !important;
     }
     
     .color-square {
@@ -300,26 +323,9 @@
         border-radius: 10px;
         background-color: #50a756;
         color: #fff;
-        margin-top: 25px;
+        margin-top: 7px;
         border: 0;
         box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
-    }
-</style>
-
-<style>
-    .printpos {
-        position: absolute;
-        right: 10px;
-        top: 15px;
-    }
-    
-    .print_btn {
-        border-radius: 5px;
-        padding: 4px 5px;
-        background: white;
-        border: 1px solid gray;
-        color: #50a756;
-        outline: none;
     }
     
     .pul li {
@@ -342,45 +348,119 @@
         padding: 15px;
         border-radius: 20px;
     }
+    
+    .card {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border-radius: 0.25rem;
+        height: 150px;
+    }
+    
+    .bg-dark {
+        background-color: #343a40 !important;
+    }
+    
+    .card_img {
+        padding: 0px 0px !important;
+        height: 115px !important;
+    }
+    
+    .containercards {
+        padding: 10px;
+    }
+    
+    ul#menu li {
+        display: inline;
+    }
+    
+    collapse:not(.show) {
+        display: block !important;
+    }
+    
+    .select_Bt2 {
+        background-color: #fff;
+        border: 0;
+        padding-left: 17px;
+        padding-right: 115;
+        border-radius: 20px;
+        color: #5cb85c;
+        padding-top: 11px;
+    }
+    
+    .statistics .box2 {
+        height: 100px !important;
+    }
+    
+    .drop-ui {
+        border: 1px solid;
+        border-radius: 5px;
+        color: grey;
+        font-size: 13px;
+    }
+    
+    .modal2-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 84%;
+        height: 100%;
+        overflow: scroll;
+    }
+    
+    .nav-fixed {
+        position: fixed !important;
+        width: 100%;
+        z-index: 6;
+        top: 0;
+        height: 95px !important;
+        border-bottom-left-radius: 30px !important;
+        border-bottom-right-radius: 30px !important;
+    }
+    
+    .close-btn-design {
+        color: #fff;
+        background-color: #5cb85c;
+        border-color: #4cae4c;
+        margin-bottom: 10px;
+        float: right;
+    }
 </style>
+
 
 <body class="body">
     <nav class="navbar navbar-default nav-fixed">
-        <div class="">
+        <div class="" style="width: 100%;">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="page_Heading" href="#">PARTNER PORTAL</a>
+
                     <a href="homepage">
                         <img src="/static/images/capwhite.png" alt="" class="logo">
                     </a>
+                    <a class="page_Heading" href="#" style="float: left !important;">MINI DP-360</a>
                 </div>
-                <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <!-- <li style="left: 2px;
-            top: 34px;color: #fff;" title="Page Views" id="myBtn2"><i class="fa fa-eye" aria-hidden="true" style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i>
-                            <p style="float: right;">Views</p>
-                            <p id="count" style="float: right;margin-right: 3px;"></p>
-                        </li>-->
-                        <!--<li style="left: 10px;
-            top: 34px;
-            color: #fff;
-            cursor: pointer;" id="myBtn"><i class="fa fa-lightbulb-o" style="margin-top:2px;"></i><p style="float: right;">Insights</p><p style="float: right;margin-right: 3px; margin-left: 5px;">3</p></li>-->
-                        <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true"
-                  style="margin-top:2px;margin-right: 3px;"></i></a></li>
-                        <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1"
-                  class="fa fa-bars show-side-btn"></i></a></li>
-                        <li style="margin-top: 27px;">
-                            <div class="dropdown">
-                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">A<span id="logid"
-                    style="display: none;">1</span></button>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">Admin</a></li>
-                                    <hr />
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>
-                                </ul>
-                            </div>
-                    </ul>
-                </div>
+                <!-- <div class="navbar-collapse navbar-right" id="bs-example-navbar-collapse-1" style="float: right;margin-top: 31px;">
+          <ul id="menu">
+            <li><a id="share" href="#"><i class="fa fa-share" aria-hidden="true" style="margin-top:2px;margin-right: 3px;"></i></a></li>
+            <li><a href="#"><i data-show="show-side-navigation1" class="fa fa-bars show-side-btn"></i></a></li>
+            <li><i class="fa fa-eye" aria-hidden="true" style="margin-left: 22px;/*! margin-top: 12px; */margin-right: 5px;"></i><p style="float: right;">Views</p><p id="count" style="float: right;margin-right: 3px;"></p></li>
+            <li><div class="dropdown">
+              <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid" style="display: none;">1</span></button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                <li role="presentation" id="usname"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a></li>  
+                <hr />
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>   
+              </ul>
+            </div></li>
+          </ul> 
+        </div> -->
             </div>
     </nav>
     <aside class="side-nav" id="show-side-navigation1">
@@ -400,6 +480,7 @@
                     <li><a href="schoolsummary">SCHOOL SUMMARY</a></li>
                     <li><a href="aws">AWS ANALYTICS</a></li>
                     <!-- <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li> -->
+
 
                 </ul>
             </li>
@@ -470,83 +551,37 @@
                 </ul>
             </li>
             <li style="margin-top:135px"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
-           style="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">6.0</span></a>
+                       style="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">6.0</span></a>
             </li>
             <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
     </aside>
-    <section id="contents" style=" top: -44px !important;">
+    <section id="contents" style=" top: 90px !important;">
         <!-- The Modal -->
         <div id="myModal" class="modal">
 
             <!-- Modal content -->
             <div class="modal-content">
-                <h2 class="text-center mt-0 mb-2">Select District</h2>
-                <button onclick="cose()" style="padding: 5px;background-color: #50a756; color: white; float: right;">Close X</button>
 
-
-
-                <div class="items row">
-                    <div class="container">
-                        <div class="row">
-                            <div class="threebox p0">
-                                <a href="javascript:;" class="ng-share-a" id="shareMessage" data-toggle="tooltip" title="" data-original-title="">
-                                </a>
-                                <div class="col-md-2 portalBox">
-
-
-                                    <div onclick="distselect('123'),imgd('skillman')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()">
-
-                                        <img src="/static/images/skillman.png" class="img-responsive" alt="School">
-                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Skilman</span>
-                                        </p>
-                                    </div>
-
-                                </div>
-                                <div class="col-md-2 portalBox">
-
-
-                                    <div onclick="distselect('789'),imgd('attendance')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()">
-
-                                        <img src="/static/images/attendance.png" class="img-responsive" alt="School">
-                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Attendance Works</span>
-                                        </p>
-                                    </div>
-
-                                </div>
-                                <div class="col-md-2 portalBox">
-
-
-                                    <div onclick="distselect('456'),imgd('uwba')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()">
-
-                                        <img src="/static/images/uwba.png" class="img-responsive" alt="School">
-                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">United Way Bay Area</span>
-                                        </p>
-                                    </div>
-
-                                </div>
-                                <div class="col-md-2 portalBox">
-
-
-                                    <div onclick="distselect('619268dd81f00a4319a65a52'),imgd('access')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()">
-
-                                        <img src="/static/images/access.png" class="img-responsive" alt="School">
-                                        <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">Access Community</span>
-                                        </p>
-                                    </div>
-
-                                </div>
-                            </div>
+                <div class="containercards">
+                    <div class="row">
+                        <h2 class="text-center mt-0 mb-2">Select District</h2>
+                        <div class="col-sm-11 mb-11">
+                            <input type="text" id="myFilter" class="form-control" onkeyup="myFunction()" placeholder="Search any district">
                         </div>
+                        <button onclick="cose()" style="padding: 5px;
+              background-color: #50a756;
+              color: white;
+              float: right;">Close X</button>
+                    </div>
+                    <div class="row" id="myProducts2">
                     </div>
                 </div>
-
-
             </div>
         </div>
 
         <div class="input-Container ui-widget" style="padding-top: 10px;">
             <input class="Date" style="width: 13%;
-      margin-left: 28%;
+      margin-left: 64%;
       padding: 10px;
       background-color: #fff;
       border-radius: 20px 0 0 20px;" type="text" id="datepicker" size="30">
@@ -565,11 +600,14 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="box2" style="height: 125px;margin-top: 0px !important;">
-                            <div class=" col-md-2">
+                            <div class=" col-md-2" style="float: left;">
                                 <button class="select_button" onclick="modal2()">Select District</button>
                             </div>
-                            <div class=" col-md-8">
-                                <p style="font-size: 21px;margin: 28px;" id="districtid"></p>
+                            <div class=" col-md-7">
+                                <p style="font-size: 21px;margin: 25px 15px;" id="districtid"></p>
+                            </div>
+                            <div class=" col-md-3">
+                                <p style="font-size: 21px;margin: 25px 15px;" id="state"></p>
                             </div>
                         </div>
                     </div>
@@ -578,8 +616,6 @@
                 </div>
             </div>
         </section>
-
-
         <section class="statistics">
             <div class="container-fluid">
                 <div class="row">
@@ -588,7 +624,7 @@
                             <div>
                                 <img src="/static/images/Bar_Chartnew.png" class="image">
                                 <p style="font-size: 11px;">School</p>
-                                <p class="boxvalue2" onclick="cards2('/districtschooltable/')" id="school" style="cursor: pointer;"></p>
+                                <p class="boxvalue2" onclick="cards4('/districtschooltable/')" id="school" style="cursor: pointer;"></p>
                                 <hr />
                                 <img src="/static/images/green.png" class="image2">
                                 <p class="boxHeading2">Engaged in CSY</p>
@@ -680,7 +716,7 @@
                                 <p class="boxvalue2" id="avgrating" style="font-size: 25px;"></p>
                             </div>
 
-                            <div id="container38" style="height: 233px;width: 100%;">
+                            <div id="container38" style="height: 238px;width: 100%;">
 
                             </div>
                         </div>
@@ -688,7 +724,78 @@
                 </div>
             </div>
         </section>
+
+        <!-- <section class="statistics">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-2" title="" id="schools_360">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="" onclick="hi()">Schools</p>
+                            <p style="margin: 0 4px; font-size: 21px; cursor: pointer; " onclick="cards2('/districtschooltable/')" id="school"></p>
+                            <div style=" display: inline; float: left;margin-top: 10px; padding-right: 5px;">
+                                <p style="font-size: 9px;" id="">Engaged (LSY)</p>
+                                <p style="margin: 0 4px;font-size: 10px;" id="engaged_school_lsy"></p>
+                            </div>
+                            <div style=" display: inline; float: right; margin-top: 10px; padding-left: 0px; ">
+                                <p style="font-size: 9px;" id="">Engaged (CSY)</p>
+                                <p style="margin: 0px 5px;font-size: 10px;" id="engaged_school_csy"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2" title="" id="teachers_360">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="">Teachers</p>
+                            <p style="margin: 0 4px; font-size: 21px; cursor: pointer; " id="teacher" onclick="cards('/districtusertableteacher/')"></p>
+                            <div style=" display: inline; float: left;margin-top: 10px; padding-right: 5px;">
+                                <p style="font-size: 9px;" id="">Engaged (LSY)</p>
+                                <p style="margin: 0 4px;font-size: 10px;" id="engd_teacher_lsy"></p>
+                            </div>
+                            <div style=" display: inline; float: right; margin-top: 10px; padding-left: 0px; ">
+                                <p style="font-size: 9px;" id="">Engaged (CSY)</p>
+                                <p style="margin: 0px 5px;font-size: 10px;" id="engd_teacher_csy"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2" title="" id="practice_sessions_360">
+                        <div class="box2 ">
+                            <p style="font-size: 9px;" id="">Teacher Playback Counts</p>
+                            <p style="margin: 0 4px; font-size: 21px; cursor: pointer; " onclick="cards('/districtusertable/')" id="practice"></p>
+                            <div style=" display: inline; float: left;margin-top: 10px; padding-right: 5px;">
+                                <p style="font-size: 9px;" id="">Engaged (LSY)</p>
+                                <p style="margin: 0 4px;font-size: 10px;" id="engd_parent_lsy"></p>
+                            </div>
+                            <div style=" display: inline; float: right; margin-top: 10px; padding-left: 0px; ">
+                                <p style="font-size: 9px;" id="">Engaged (CSY)</p>
+                                <p style="margin: 0px 5px;font-size: 10px;" id="engd_parent_csy"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2" title="" id="mindful_minutes_360">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="">Mindful Minutes</p>
+                            <p style="margin: 0 4px; font-size: 21px; " id="MINDFUL_MINUTES"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2" title="" id="family_count_360">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="">Family Count</p>
+                            <p style="margin: 0 4px; font-size: 21px; cursor: pointer; " id="family" onclick="cards('/districtusertableparent/')"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2" title="" id="family_parctice_count_360">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="">Family Playback Count</p>
+                            <p style="margin: 0 4px; font-size: 21px; " id="parentspractice"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> -->
+
+
         <div id="gifload"></div>
+
         <div id="disdetails" style="display: none;">
         </div>
 
@@ -706,8 +813,6 @@
         margin: 20px;
         padding: 10px;"></div> -->
 
-
-
         <div title="" id="sticky-wrapper heat_map_360 chart-container" style="border-radius: 20px;
         margin-top: 20px;
         box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
@@ -715,7 +820,7 @@
         margin: 20px;
         padding: 10px;
         position: relative;">
-            <select id="heat" style="margin-top: 7px;">
+            <select id="heat" style="margin-top: 7px;" class="drop-ui">
                 <option value="4" selected>Overall Playback Heat Map</option>
                 <option value="5">Teacher Wise Playback Heat Map</option>
                 <option value="6">Family Wise Playback Heat Map</option>
@@ -725,7 +830,7 @@
             </select>
             <p id="chartname" style="text-align: center;"></p>
 
-            <button class="print_btn printpos" id="btnPrint">Print Heat Map</button>
+            <button class="print_btn printpos" id="btnPrint"><i class="fa fa-print" aria-hidden="true"></i></button>
             <div>
 
                 <div id="heat-map" class="table-header-design containerPrint" style="overflow: scroll;height: auto;max-height: 500px;"></div>
@@ -738,7 +843,7 @@
             box-shadow: rgb(0 0 0 / 10%) 2px 10px 20px;
             padding: 10px;
         ">
-                <select id="historyPlayback" style="margin-top: 7px;">
+                <select id="historyPlayback" class="drop-ui" style="margin-top: 7px;">
                     <option value="1" selected>User Playback History</option>
                     <option value="2">User Playback History Last 90 Days</option>
                 </select>
@@ -749,16 +854,20 @@
         </div>
 
 
-        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="practice_playback_trend_by_month">
-            <div id="container3" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="practice_trend_by_month_360">
+            <div id="container3" style="height: 400px; width: 120%; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            </div>
         </div>
-        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_school_user_count">
-            <div id="container4" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_school_user_count_360">
+            <div id="container4" style="height: 400px; width: 120%; border-radius: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            </div>
         </div>
 
-        <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_school_practice_count">
-            <div id="container6" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+        <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_school_practice_playback_count_360">
+            <div id="container6" style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+            </div>
         </div> -->
+
         <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;" title="" id="top_20_user_practice playback_count_360">
             <div style="background-color: #ffffff;border-radius: 20px; box-shadow: rgb(0 0 0 / 10%) 2px 10px 20px; overflow: hidden;">
                 <div id="container5" style="height: 510pxpx; width: 100%; margin-top: 20px;">
@@ -781,6 +890,11 @@
             <div id="container37" style=" margin-top: 2px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
             </div>
         </div>
+        <!-- <div class="col-md-6">
+            <div id="container38" style=" margin-top: 20px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+            </div>
+        </div> -->
+
         <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
       <div id="container7"style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
     </div>
@@ -788,16 +902,18 @@
       <div id="container8"style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
     </div> -->
         </div>
-        <div id="myModal2" class="modal2 table-design" style="z-index: 99 !important;">
+        <div id="myModal2" class="modal2 table-design">
             <!-- Modal content -->
             <div class="modal2-content">
                 <div id="admin" class="col-md-12">
                     <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
-                        <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()" style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o" aria-hidden="true"></i></a>
-                        <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a>
 
+                        <!-- <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;"  download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a> -->
                         <div class="table-header">
                             <span class="table-title" style="margin: 0 !important;">SCHOOL DETAILS</span>
+                            <button class="btn close-btn-design btn-logion" onclick="gif2()"><i class="fa fa-times-circle-o"
+                                    aria-hidden="true"></i>
+                            </button>
                         </div>
                         <div id="gif"></div>
                         <div class="custyle" id="next"></div>
@@ -808,10 +924,7 @@
         </div>
     </section>
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script>
-        distselect('123');
-        imgd('skillman');
-    </script>
+
     <script src="/static/js/countapi.js"></script>
     <script src="/static/js/mail.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -819,7 +932,7 @@
 
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
-    <script src="/static/js/districtreportpartner.js"></script>
+    <script src="/static/js/Local_districtreport.js"></script>
     <script src="/static/js/excellentexport.js"></script>
     <script src="/static/js/insight.js"></script>
 

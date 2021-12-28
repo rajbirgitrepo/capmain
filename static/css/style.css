@@ -233,6 +233,24 @@ body {
     text-decoration: none;
     color: white !important;
 }
+.QR-btn {
+    float: right;
+    padding: 5px 10px !important;
+    margin-left: 10px;
+    box-shadow: none;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    background-color: #5cb85c;
+    font-size: 16px;
+}
+
+.QR:hover {
+    background-color: #4cae4c;
+    text-decoration: none;
+    color: white !important;
+}
 
 .side-nav {
     float: left;

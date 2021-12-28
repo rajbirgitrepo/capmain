@@ -15,6 +15,9 @@ $.ajax(settings).done(function (response) {
     title: {
       text: "Home Streaks",
     },
+    credits: {
+      enabled: false,
+  },
     colors: ['#3158D7','#0677BA','#8AE02B','#01A451',],
     xAxis: {
       categories: dataa.streak,
@@ -84,6 +87,9 @@ $.ajax(settings).done(function (response) {
     title: {
       text: "Classroom Streaks",
     },
+    credits: {
+      enabled: false,
+  },
     colors: ['#3158D7','#0677BA','#8AE02B','#01A451',],
     xAxis: {
       categories: dataa.streak,
