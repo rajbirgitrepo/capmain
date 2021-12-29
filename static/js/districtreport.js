@@ -149,6 +149,9 @@ function charts(a, b, c) {
                                     URL = "/90daystable/" + a + "/" + this.category;
                                     $('#next').empty();
                                     console.log(URL);
+                                    var Exportpage = URL +"?export";
+                                    console.log(Exportpage + "90days table");
+                                    $("#exportLink").text(Exportpage);
                                     var modal2 = document.getElementById("myModal2");
                                     modal2.style.display = "block";
                                     $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
@@ -268,6 +271,9 @@ function charts(a, b, c) {
                                             URL = "/90daystable/" + a + "/" + this.category;
                                             $('#next').empty();
                                             console.log(URL);
+                                            var Exportpage = URL +"?export";
+                                            console.log(Exportpage + "90days table");
+                                            $("#exportLink").text(Exportpage);
                                             var modal2 = document.getElementById("myModal2");
                                             modal2.style.display = "block";
                                             $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
@@ -384,6 +390,9 @@ function charts(a, b, c) {
                                             $('#next').empty();
                                             console.log(URL);
                                             var modal2 = document.getElementById("myModal2");
+                                            var Exportpage = URL +"?export";
+                                            console.log(Exportpage + "90days table");                                          
+                                            $("#exportLink").text(Exportpage);
                                             modal2.style.display = "block";
                                             $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
                                             var gif = document.getElementById("gif");
@@ -427,8 +436,16 @@ function charts(a, b, c) {
     $("#historyPlayback").val(1);
 
 
-
-
+    $("#export1" ).click('load', function() {
+var p = document.getElementById("exportLink").innerText;
+console.log(p);
+         exportNew(p)
+     });
+     
+function exportNew(p){
+    window.location.assign(p);
+    console.log(p);
+}
     var settings = {
         async: true,
         crossDomain: true,
@@ -1192,6 +1209,8 @@ function charts(a, b, c) {
                                     $('#next').empty();
                                 console.log(URL);
                                 var modal2 = document.getElementById("myModal2");
+                                var Exportpage = URL +"?export";
+                                console.log(Exportpage + "sentiment table");  
                                 modal2.style.display = "block";
                                 $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
                                 var gif = document.getElementById("gif");
@@ -1880,6 +1899,8 @@ function cards(URL) {
     var c = document.getElementById("stardate").innerText;
     var b = document.getElementById("finaldate").innerText;
     var a = URL + textContent + "/" + c + "/" + b;
+    var Exportpage = URL + textContent + "/" + c + "/" + b + "?export";
+    $("#exportLink").text(Exportpage);
     $('#next').empty();
     console.log(a);
     var modal2 = document.getElementById("myModal2");
@@ -1896,6 +1917,8 @@ function cards4(URL) {
     var c = document.getElementById("stardate").innerText;
     var b = document.getElementById("finaldate").innerText;
     var a = URL + textContent + "/" + c + "/" + b;
+    var Exportpage = URL + textContent + "/" + c + "/" + b + "?export";
+    $("#exportLink").text(Exportpage);
     $('#next').empty();
     console.log(a);
     var modal2 = document.getElementById("myModal2");
@@ -1912,6 +1935,8 @@ function cards2(URL) {
     var c = document.getElementById("stardate").innerText;
     var b = document.getElementById("finaldate").innerText;
     var a = URL + textContent + "/" + c + "/" + b;
+    var Exportpage = URL + textContent + "/" + c + "/" + b + "?export";
+    $("#exportLink").text(Exportpage);
     $('#next').empty();
     console.log(a);
     var modal2 = document.getElementById("myModal2");
@@ -1975,6 +2000,7 @@ function distselect(distid) {
     console.log(distid)
     cardcount(c, a, b);
     charts(c, a, b);
+    // ExportTable2(c, a, b);
     // bubble(c);
     // bubble2(c);
     idtype(c, a, b);
@@ -2028,6 +2054,7 @@ function cardcount(id, a, b) {
         // $("#engd_teacher_lsy").text(dataa.engd_teacher_lsy);
 
     });
+
 }
 
 function dateSub() {
@@ -2238,6 +2265,8 @@ function modal2() {
     var modal = document.getElementById("myModal");
     modal.style.display = "block";
 }
+
+
 
 
 Plotly.d3.csv('https://raw.githubusercontent.com/Ash0077/i3os/master/sarasota_29_jan.csv', function(err, data) {

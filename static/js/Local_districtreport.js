@@ -1,52 +1,52 @@
-function myFunction() {
-    var input, filter, cards, cardContainer, title, i;
-    input = document.getElementById("myFilter");
-    filter = input.value.toUpperCase();
-    cardContainer = document.getElementById("myProducts2");
-    cards = cardContainer.getElementsByClassName("card");
-    for (i = 0; i < cards.length; i++) {
-        title = cards[i].querySelector(".card-title");
-        if (title.innerText.toUpperCase().indexOf(filter) > -1) {
-            cards[i].style.display = "";
-        } else {
-            cards[i].style.display = "none";
-        }
-    }
-}
+// function myFunction() {
+//     var input, filter, cards, cardContainer, title, i;
+//     input = document.getElementById("myFilter");
+//     filter = input.value.toUpperCase();
+//     cardContainer = document.getElementById("myProducts2");
+//     cards = cardContainer.getElementsByClassName("card");
+//     for (i = 0; i < cards.length; i++) {
+//         title = cards[i].querySelector(".card-title");
+//         if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+//             cards[i].style.display = "";
+//         } else {
+//             cards[i].style.display = "none";
+//         }
+//     }
+// }
 
 
 
-createboxes();
+// createboxes();
 
-function createboxes() {
-    var settings = {
-        async: true,
-        crossDomain: true,
-        url: '/districtlogoupdates',
-        method: "GET"
-    };
-    $.ajax(settings).done(function(response) {
-        var data1 = JSON.parse(response);
-        console.log("datain");
-        for (var i = 0; i < data1.data.length; i++) {
-            var datain = data1.data[i];
-            console.log(datain);
-            var resultDiv = createDynamicDivcards(datain);
-            $("#myProducts2").append(resultDiv);
-        }
-        modal2();
-    })
-}
+// function createboxes() {
+//     var settings = {
+//         async: true,
+//         crossDomain: true,
+//         url: '/districtlogoupdates',
+//         method: "GET"
+//     };
+//     $.ajax(settings).done(function(response) {
+//         var data1 = JSON.parse(response);
+//         console.log("datain");
+//         for (var i = 0; i < data1.data.length; i++) {
+//             var datain = data1.data[i];
+//             console.log(datain);
+//             var resultDiv = createDynamicDivcards(datain);
+//             $("#myProducts2").append(resultDiv);
+//         }
+     
+//     })
+// }
 
-function createDynamicDivcards(userList) {
-    var dynamicDiv = '';
-    console.log(userList)
+// function createDynamicDivcards(userList) {
+//     var dynamicDiv = '';
+//     console.log(userList)
 
-    dynamicDiv += '<div class="col-md-2 card " style="border: none !important;"><div class=" portalBox clearfix" ><div class=" d-sm-flex justify-content-sm-between align-items-sm-center"><div class=" card-title text-s"><div onclick="distselect(\'' + userList[0] + '\'),imgd(\'' + userList[3] + '\')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()"><img src="' + userList[3] + '" class="img-responsive card_img"  alt="School"><p class="text-s" style="border-radius: 20px;background-color: #fafafa;">' + userList[1] + '</p></div></div></div></div></div>'
+//     dynamicDiv += '<div class="col-md-2 card " style="border: none !important;"><div class=" portalBox clearfix" ><div class=" d-sm-flex justify-content-sm-between align-items-sm-center"><div class=" card-title text-s"><div onclick="distselect(\'' + userList[0] + '\'),imgd(\'' + userList[3] + '\')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()"><img src="' + userList[3] + '" class="img-responsive card_img"  alt="School"><p class="text-s" style="border-radius: 20px;background-color: #fafafa;">' + userList[1] + '</p></div></div></div></div></div>'
 
 
-    return dynamicDiv;
-}
+//     return dynamicDiv;
+// }
 
 
 
@@ -76,7 +76,7 @@ function charts(a, b, c) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "/90daysuserpractising" + "/" + a + "/" + b + "/" + c,
+        url: "/mini_district_practice_history" + "/" + a + "/" + b + "/" + c,
         method: "GET",
     };
 
@@ -196,7 +196,7 @@ function charts(a, b, c) {
             var settings = {
                 async: true,
                 crossDomain: true,
-                url: "last90daysuserpractising/" + a,
+                url: "/mini_district_last90daysuserpractising/" + a,
                 method: "GET",
             };
             $.ajax(settings).done(function(response) {
@@ -310,7 +310,7 @@ function charts(a, b, c) {
             var settings = {
                 async: true,
                 crossDomain: true,
-                url: "/90daysuserpractising" + "/" + a + "/" + b + "/" + c,
+                url: "/mini_district_practice_history" + "/" + a + "/" + b + "/" + c,
                 method: "GET",
             };
 
@@ -432,7 +432,7 @@ function charts(a, b, c) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "/monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c,
+        url: "/mini_district_monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c,
         method: "GET",
         error: function() {
             zerochart();
@@ -441,7 +441,7 @@ function charts(a, b, c) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
-        console.log("/monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c);
+        console.log("/mini_district_monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c);
         $(function() {
             $("#container3").highcharts({
                 chart: {
@@ -608,13 +608,13 @@ function charts(a, b, c) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "/schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c,
+        url: "/mini_district_schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c,
         method: "GET",
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
-        console.log("/schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c);
+        console.log("/mini_district_schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c);
         $(function() {
             $("#container4").highcharts({
                 chart: {
@@ -715,7 +715,7 @@ function charts(a, b, c) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "/top20userspractisinginfo" + "/" + a + "/" + b + "/" + c,
+        url: "/mini_district_top20userspractisinginfo" + "/" + a + "/" + b + "/" + c,
         method: "GET",
         error: function() {
             zerochart2();
@@ -964,7 +964,7 @@ function charts(a, b, c) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "top20userspractisinginfo/" + a + "/2020-08-01/2021-07-31",
+        url: "mini_district_top20userspractisinginfo/" + a + "/2020-08-01/2021-07-31",
         method: "GET",
     };
     $.ajax(settings).done(function(response) {
@@ -1050,7 +1050,7 @@ function charts(a, b, c) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "/districtfeedbackrating_csy" + "/" + a + "/" + b + "/" + c,
+        url: "/mini_district_districtfeedbackrating_csy" + "/" + a + "/" + b + "/" + c,
         method: "GET",
     }
     $.ajax(settings).done(function(response) {
@@ -1140,7 +1140,7 @@ function charts(a, b, c) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "/districtsentimentdonut_csy" + "/" + a + "/" + b + "/" + c,
+        url: "/mini_district_districtsentimentdonut_csy" + "/" + a + "/" + b + "/" + c,
         method: "GET",
     }
     $.ajax(settings).done(function(response) {
@@ -1922,8 +1922,8 @@ function cards2(URL) {
     $('#btnExport').show();
     createDynamic2(a);
 }
-//distselect('5f2609807a1c0000950bb477');
-$("#disdetails").text('5f2609807a1c0000950bb477');
+distselect('North');
+// $("#disdetails").text('North');
 
 function distselect(distid) {
 
@@ -1985,13 +1985,13 @@ function idtype(a) {
     var c = document.getElementById("stardate").innerText;
     var b = document.getElementById("finaldate").innerText;
 
-    var type = "districtheatmappractice/" + a + "/" + c + "/" + b;
+    var type = "mini_districtheatmappracOverall/" + a + "/" + c + "/" + b;
     heatnew(type);
     $('#chartname').text("Overall District Playback Heat Map")
 }
 
 function cardcount(id, a, b) {
-    URL = "/districtcardsinfo/" + id + "/" + a + "/" + b;
+    URL = "/mini_districtcardsinfo/" + id + "/" + a + "/" + b;
     var settings = {
         async: true,
         crossDomain: true,
@@ -2193,37 +2193,37 @@ $('#heat').change(function() {
     if (this.value == '1') {
         $('#heat-map').empty()
         let textContent = document.getElementById('disdetails').innerText;
-        var type = "districtheatmap/" + textContent + "/" + c + "/" + b;
+        var type = "mini_districtheatmap_overall/" + textContent + "/" + c + "/" + b;
         heatnew(type);
         $('#chartname').text("Overall Active User Count")
     } else if (this.value == '2') {
         $('#heat-map').empty()
         let textContent = document.getElementById('disdetails').innerText;
-        var type = "familydistrictheatmap/" + textContent + "/" + c + "/" + b;
+        var type = "mini_districtheatmap_family/" + textContent + "/" + c + "/" + b;
         heatnew(type);
         $('#chartname').text("Family Active User Count")
     } else if (this.value == '3') {
         $('#heat-map').empty()
         let textContent = document.getElementById('disdetails').innerText;
-        var type = "teachersdistrictheatmap/" + textContent + "/" + c + "/" + b;
+        var type = "mini_districtheatmap_classroom/" + textContent + "/" + c + "/" + b;
         heatnew(type);
         $('#chartname').text("Teachers Active User Count")
     } else if (this.value == '4') {
         $('#heat-map').empty()
         let textContent = document.getElementById('disdetails').innerText;
-        var type = "districtheatmappractice/" + textContent + "/" + c + "/" + b;
+        var type = "/mini_districtheatmappracOverall/" + textContent + "/" + c + "/" + b;
         heatnew(type);
         $('#chartname').text("Overall District Playback Heat Map")
     } else if (this.value == '5') {
         $('#heat-map').empty()
         let textContent = document.getElementById('disdetails').innerText;
-        var type = "districtheatmappracteacher/" + textContent + "/" + c + "/" + b;
+        var type = "mini_districtheatmappracclassroom" + textContent + "/" + c + "/" + b;
         heatnew(type);
         $('#chartname').text("Teacher Wise Playback Heat Map")
     } else if (this.value == '6') {
         $('#heat-map').empty()
         let textContent = document.getElementById('disdetails').innerText;
-        var type = "districtheatmappracfamily/" + textContent + "/" + c + "/" + b;
+        var type = "mini_districtheatmappracfamily/" + textContent + "/" + c + "/" + b;
         heatnew(type);
         $('#chartname').text("Family Wise Playback Heat Map")
     }
