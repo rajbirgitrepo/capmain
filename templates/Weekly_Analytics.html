@@ -39,7 +39,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
 
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -63,7 +65,7 @@
         opacity: 100%;
         margin-top: 15px;
     }
-    
+
     .image2 {
         float: left;
         width: 1%;
@@ -71,13 +73,13 @@
         margin-top: 4px;
         margin-right: 10px;
     }
-    
+
     .tooltipsarthak {
         position: relative;
         display: inline-block;
         border-bottom: 1px dotted black;
     }
-    
+
     .tooltipsarthak .tooltipsarthaktext {
         visibility: hidden;
         width: 120px;
@@ -93,9 +95,19 @@
         left: 50%;
         margin-left: -60px;
     }
-    
+
     .tooltipsarthak:hover .tooltipsarthaktext {
         visibility: visible;
+    }
+
+    .submit-button {
+        background-color: #5cb85c;
+        outline: 0;
+        color: #fff;
+        border: 0;
+        padding-right: 10px;
+        border-radius: 10px;
+        padding: 10px;
     }
 </style>
 
@@ -124,17 +136,20 @@
             color: #fff;
             cursor: pointer;" id="myBtn"><i class="fa fa-lightbulb-o" style="margin-top:2px;"></i><p style="float: right;">Insights</p><p style="float: right;margin-right: 3px; margin-left: 5px;">3</p></li>-->
                         <li style="left:10px;top:18px;"><a id="share" href="#"><i class="fa fa-share" aria-hidden="true"
-                  style="margin-top:2px;margin-right: 3px;"></i></a></li>
+                                    style="margin-top:2px;margin-right: 3px;"></i></a></li>
                         <li style="top:18px;"><a href="#"><i data-show="show-side-navigation1"
-                  class="fa fa-bars show-side-btn"></i></a></li>
+                                    class="fa fa-bars show-side-btn"></i></a></li>
                         <li style="margin-top: 27px;">
                             <div class="dropdown">
-                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span id="logid"
-                    style="display: none;">{{g.user.id}}</span></button>
+                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown"
+                                    style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span
+                                        id="logid" style="display: none;">{{g.user.id}}</span></button>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1"
+                                            href="login">{{g.user.name}}</a></li>
                                     <hr />
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a>
+                                    </li>
                                 </ul>
                             </div>
                     </ul>
@@ -143,7 +158,8 @@
                     <i class="fa fa-search Icon"></i>
                     <div id="iid" class="input-Field">
                     </div>
-                    <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i class="fa fa-search Search_icon"></i></button>
+                    <button class="search_Bt" style="padding-right: 4px !important;" onclick="search()" id="hel"><i
+                            class="fa fa-search Search_icon"></i></button>
                     <p style="display: none;" id="tagdescription"></p>
                     <p style="display: none;" id="tagdescription"></p>
 
@@ -177,11 +193,11 @@
                     <!-- <li class="active2"><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li> -->
                 </ul>
             </li>
-           <li><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
+            <li><i class="fa fa-book "></i><a href="#">ENGAGEMENT DASHBOARDS</a>
                 <ul class="side-nav-dropdown">
                     <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
                     <li><a href="Disctrictfilter">DP-360</a></li>
-                    <li><a href="Local_Disctrictfilter">Local Districts</a></li>
+                     <li><a href="Local_Disctrictfilter">MINI D-360</a></li>
                     <!-- <li><a href="partner">PARTNER PORTAL</a></li> -->
                     <li><a href="Login_analytics">LOGIN ANALYTICS</a></li>
                     <!-- <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
@@ -244,8 +260,8 @@
                     <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
                 </ul>
             </li>
-            <li style="margin-top:135px"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
-           style="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">6.0</span></a>
+            <li style="margin-top:120px"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
+                        style="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">6.0</span></a>
             </li>
             <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
     </aside>
@@ -262,8 +278,9 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header no-border">
-                                        <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil" aria-hidden="true"
-                          style="float: right;cursor: pointer;"></i></a></h4>
+                                        <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil"
+                                                    aria-hidden="true" style="float: right;cursor: pointer;"></i></a>
+                                        </h4>
 
 
                                     </div>
@@ -277,7 +294,7 @@
                                             <p id="state"></p>
                                             <p id="country"></p>
                                             <p style="float: left;margin-right: 9px;"><b>Renewal Date:</b>
-                                                <p id="renewal"></p>
+                                            <p id="renewal"></p>
                                             </p>
                                             </a>
                                             </p>
@@ -300,7 +317,8 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <div class="card card-stats">
                                                     <div class="card-header" data-background-color="rose1">
-                                                        <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
+                                                        <img src="{{ url_for('static',filename='images/capuser.png') }}"
+                                                            style="width: 54px;" class="img-responsive">
                                                     </div>
                                                     <div class="card-content">
                                                         <p class="category">Total Users</p>
@@ -315,7 +333,8 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <div class="card card-stats">
                                                     <div class="card-header" data-background-color="rose">
-                                                        <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                        <img src="{{ url_for('static',filename='images/capminute.png') }}"
+                                                            style="width: 54px;" class="img-responsive">
                                                     </div>
                                                     <div class="card-content">
                                                         <p class="category">Playback Count</p>
@@ -328,7 +347,8 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <div class="card card-stats">
                                                     <div class="card-header" data-background-color="green">
-                                                        <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
+                                                        <img src="{{ url_for('static',filename='images/capstudy.png') }}"
+                                                            style="width: 54px;" class="img-responsive">
                                                     </div>
                                                     <div class="card-content">
                                                         <p class="category"> Mindful Minutes</p>
@@ -345,7 +365,8 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <div class="card card-stats">
                                                     <div class="card-header" data-background-color="blue">
-                                                        <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
+                                                        <img src="{{ url_for('static',filename='images/cappractice.png') }}"
+                                                            style="width: 54px;" class="img-responsive">
                                                     </div>
                                                     <div class="card-content">
                                                         <p class="category">5 Star Ratings</p>
@@ -379,7 +400,9 @@
 
 
         <div class="input-Container ui-widget" style="margin-top: 0 !important; padding-top: 5px !important;">
-            <input class="Date" style=" margin-top: 2%;   width: 13%;margin-left: 77%;padding: 10px;background-color: #fff;border-radius: 20px 0 0 20px;" type="text" id="datepicker" size="30">
+            <input class="Date"
+                style=" margin-top: 2%;   width: 15%;margin-left: 75%;padding: 10px;background-color: #fff;border-radius: 20px 0 0 20px;"
+                type="text" id="datepicker" size="30">
             <p style="display: none;" id="stardate"></p>
             <button class="search_Bt" style="height: 45px;
       margin-top: 16px;padding: 5px;" onclick="sub()">Submit</button>
@@ -390,17 +413,22 @@
                     <div class="boxExecutive">
                         <div>
                             <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
-                            <p style="font-size: 11px;">New Signups<span style="margin-left: 5px !important;" id="updownsigntotal"></span></p>
+                            <p style="font-size: 11px;">New Signups<span style="margin-left: 5px !important;"
+                                    id="updownsigntotal"></span></p>
                             <p class="boxvalue2" id="usercount1"></p>
                             <hr />
                             <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                            <p class="boxHeading2">Parent Signups<span style="margin-left: 5px !important;" id="updownsignteacher"></span></p>
-                            <p class="boxvalue" id="neverlogged1" onclick="cards2('/parents_signup_table_weekly')" style="cursor:pointer;"></p>
+                            <p class="boxHeading2">Parent Signups<span style="margin-left: 5px !important;"
+                                    id="updownsignteacher"></span></p>
+                            <p class="boxvalue" id="neverlogged1" onclick="cards2('/parents_signup_table_weekly')"
+                                style="cursor:pointer;"></p>
                             <br />
                             <hr />
                             <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                            <p class="boxHeading2">Teacher Signups<span style="margin-left: 5px !important;" id="updownsignp"></span></p>
-                            <p class="boxvalue" id="totalstudent1" onclick="cards2('/teacher_signup_table_weekly')" style="cursor:pointer;"></p>
+                            <p class="boxHeading2">Teacher Signups<span style="margin-left: 5px !important;"
+                                    id="updownsignp"></span></p>
+                            <p class="boxvalue" id="totalstudent1" onclick="cards2('/teacher_signup_table_weekly')"
+                                style="cursor:pointer;"></p>
                             <br />
                             <hr />
 
@@ -411,19 +439,24 @@
                     <div class="boxExecutive">
                         <div>
                             <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
-                            <p style="font-size: 11px;">Total Playback<span style="margin-left: 5px !important;" id="updownpractotal"></span></p>
+                            <p style="font-size: 11px;">Total Playback<span style="margin-left: 5px !important;"
+                                    id="updownpractotal"></span></p>
                             <p class="boxvalue2" id="usercount"></p>
                             <hr />
                             <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                            <p class="boxHeading2">Teacher Playback<span style="margin-left: 5px !important;" id="updownpract"></span></p>
-                            <p class="boxvalue" onclick="cards3('/classroom_practice_WEEKLY')" id="neverlogged" style="cursor:pointer;"></p>
+                            <p class="boxHeading2">Teacher Playback<span style="margin-left: 5px !important;"
+                                    id="updownpract"></span></p>
+                            <p class="boxvalue" onclick="cards3('/classroom_practice_WEEKLY')" id="neverlogged"
+                                style="cursor:pointer;"></p>
                             <br />
                             <hr />
                             <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                            <p class="boxHeading2">Parent Playback<span style="margin-left: 5px !important;" id="updownpracp"></span>
+                            <p class="boxHeading2">Parent Playback<span style="margin-left: 5px !important;"
+                                    id="updownpracp"></span>
                             </p>
 
-                            <p class="boxvalue" onclick="cards3('/PARENTS_practice_WEEKLY')" id="totalstudent" style="cursor:pointer;"></p>
+                            <p class="boxvalue" onclick="cards3('/PARENTS_practice_WEEKLY')" id="totalstudent"
+                                style="cursor:pointer;"></p>
                             <br />
                             <hr />
 
@@ -439,17 +472,22 @@
                         <div class="boxExecutive">
                             <div>
                                 <img src="{{ url_for('static',filename='images/Bar_Chartnew.png') }}" class="image">
-                                <p style="font-size: 11px;">Avg. Feedback<span style="margin-left: 5px !important;" id="updownfbtotal"></span></p>
+                                <p style="font-size: 11px;">Avg. Feedback<span style="margin-left: 5px !important;"
+                                        id="updownfbtotal"></span></p>
                                 <p class="boxvalue2" id="avgfb"></p>
                                 <hr />
                                 <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                                <p class="boxHeading2" style="font-size: 9px !important;">No. of Parent Feedbacks<span style="margin-left: 5px !important;" id="updownfbcomment"></span></p>
-                                <p class="boxvalue" id="comments" onclick="cards('/feedback_table_weekly_PARENTS')" style="cursor:pointer;"></p>
+                                <p class="boxHeading2" style="font-size: 9px !important;">No. of Parent Feedbacks<span
+                                        style="margin-left: 5px !important;" id="updownfbcomment"></span></p>
+                                <p class="boxvalue" id="comments" onclick="cards('/feedback_table_weekly_PARENTS')"
+                                    style="cursor:pointer;"></p>
                                 <br />
                                 <hr />
                                 <img src="{{ url_for('static',filename='images/green.png') }}" class="image2">
-                                <p class="boxHeading2" style="font-size: 9px !important;">No. of Teacher Feedbacks<span style="margin-left: 5px !important;" id="updownfbper"></span></p>
-                                <p class="boxvalue" id="comments2" onclick="cards('/feedback_table_weekly_TEACHERS')" style="cursor:pointer;"></p>
+                                <p class="boxHeading2" style="font-size: 9px !important;">No. of Teacher Feedbacks<span
+                                        style="margin-left: 5px !important;" id="updownfbper"></span></p>
+                                <p class="boxvalue" id="comments2" onclick="cards('/feedback_table_weekly_TEACHERS')"
+                                    style="cursor:pointer;"></p>
                                 <br />
                                 <hr />
                             </div>
@@ -489,10 +527,10 @@
         <section class="statistics">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         <div class="box2" style="height: 70px;">
-                            <div class="" style="display: flex;">
-                                <SELECT id="program" class="Date" style="margin: 0px 5px; ">
+                            <div class="" style="display: flex;margin-left: 10px;">
+                                <SELECT id="program" class="Date" style="margin: 0px 17px; ">
                                     <option value="">Select Program</option>
                                     <OPTION VALUE="all">All</OPTION>
                                     <OPTION VALUE="Cloud">Cloud</OPTION>
@@ -501,7 +539,7 @@
                                     <OPTION VALUE="IE Home App">IE Home App</option>
                                     <OPTION VALUE="IE School App">IE School App</option>
                                 </SELECT>
-                                <SELECT id="rating" class="Date">
+                                <SELECT id="rating" class="Date mr-2" style="margin-right: 17px;">
                                     <option value="">Select Rating</option>
                                     <OPTION VALUE="all">all</OPTION>
                                     <OPTION VALUE="0">0</OPTION>
@@ -511,33 +549,28 @@
                                     <OPTION VALUE="4">4</option>
                                     <OPTION VALUE="5">5</option>
                                 </SELECT>
-                                <input class="Date" type="text" id="datepicker2" size="30">
+                                <input class="Date mr-2" type="text" id="datepicker2" size="30">
                                 <p style="display: none;" id="p1"></p>
                                 <p style="display: none;" id="r1"></p>
                                 <p style="display: none;" id="stardate1"></p>
-                                <button class="" style="background-color: #5cb85c;
-                  outline: 0;
-                  color: #fff;
-                  border: 0;
-                  padding-right: 10px;
-                  border-radius: 10px;
-                  padding: 10px;
-                  margin-left: 10px;" onclick="sub1()">Submit</button>
+                                <button class="submit-button" onclick="sub1()">Submit</button>
+                                <div class="ml-2" onclick="" style="cursor:pointer;" id="tableshowbuttonWeekly">
+                                    <div class="">
+                                        <button class="" style="background-color: #fff;
+                                    outline: 0;
+                                    color: #5cb85c;
+                                    border-radius: 10px;
+                                    padding: 9px;
+                                    margin-left: 6px;
+                                    border: 1px solid;
+                                    box-shadow: -10px -10px 15px rgb(237, 239, 245), 10px 10px 15px rgba(0, 0, 0, 0.12);"
+                                            onclick="showTabTable()">Sentiment User Data</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2" onclick="" style="cursor:pointer;" id="tableshowbuttonWeekly">
-                        <div class="" style=" margin-top: 38px;">
-                            <button class="" style="background-color: #fff;
-                        outline: 0;
-                        color: #5cb85c;
-                        border-radius: 10px;
-                        padding: 8px;
-                        margin-left: 6px;
-                        border: 1px solid;
-                        box-shadow: -10px -10px 15px rgb(237, 239, 245), 10px 10px 15px rgba(0, 0, 0, 0.12);" onclick="showTabTable()">Sentiment User Data</button>
-                        </div>
-                    </div>
+                   
 
                 </div>
             </div>
@@ -552,11 +585,13 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6">
-                        <div id="chartdiv" style=" border-radius: 20px;background-color: #fff;height: 276px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                        <div id="chartdiv"
+                            style=" border-radius: 20px;background-color: #fff;height: 263px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <canvas id="horizontalBarChartCanvas" style=" border-radius: 20px; background-color: #fff;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></canvas>
+                        <canvas id="horizontalBarChartCanvas"
+                            style=" border-radius: 20px; background-color: #fff;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></canvas>
                     </div>
                 </div>
             </div>
@@ -566,7 +601,7 @@
                 <select name="Trends" id="practice_weeklyChart" class="drop-api my-1" style="margin: 10px;">
                     <option value="playback" class="">Playback Count Weekly Comparison</option>
                     <option value="practice">Practice Count Weekly Comparison</option>
-                  </select>
+                </select>
                 <div id="container" style="height: 400px; width: 100%; "></div>
             </div>
 
@@ -580,10 +615,12 @@
         <div class="col-md-12" style="margin-top: 40px;" title="" id="top_20_district_practices_playback">
             <div style="box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;background-color:#fff">
                 <select name="Trends" id="practice_weeklyTopChart" class="drop-api my-1" style="margin: 10px;">
-        <option value="playback" class="">Top 20 District Playback</option>
-        <option value="practice">Top 20 District Practice</option>
-      </select>
-                <div id="container10" style="height: 600px; width: 100%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+                    <option value="playback" class="">Top 20 District Playback</option>
+                    <option value="practice">Top 20 District Practice</option>
+                </select>
+                <div id="container10"
+                    style="height: 600px; width: 100%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                </div>
             </div>
         </div>
 
@@ -591,11 +628,15 @@
             <div id="container4" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div></div>
           -->
         <div class="col-md-10" style="margin-top: 40px;" title="" id="average_audio_completion_weekly">
-            <div id="container5" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+            <div id="container5"
+                style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+            </div>
         </div>
 
         <div class="col-md-10" style="margin-top: 40px; margin-bottom: 30px;" title="" id="streaks_by_wekkly_user">
-            <div id="container7" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+            <div id="container7"
+                style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+            </div>
         </div>
 
         <!-- <div class="col-md-10" style="margin-top: 40px; margin-bottom: 30px;">            
@@ -613,8 +654,9 @@
             <div class="modal2-content">
                 <div id="admin" class="col-md-12">
                     <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
-                        <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()" style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o"
-                aria-hidden="true"></i></a>
+                        <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()"
+                            style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o"
+                                aria-hidden="true"></i></a>
                         <!-- <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a> -->
 
                         <div class="table-header">
@@ -627,8 +669,9 @@
                 </div>
 
                 <div id="exTab1" class="" style="margin-top: 30px;">
-                    <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()" style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o"
-                        aria-hidden="true"></i></a>
+                    <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()"
+                        style=" float: right;margin: 5px 15px;" href="#"><i class="fa fa-times-circle-o"
+                            aria-hidden="true"></i></a>
                     <ul class="nav nav-pills" style="margin-left: 10px;">
                         <li class="active">
                             <a href="#1a" data-toggle="tab">POSITIVE</a>
@@ -644,14 +687,21 @@
                             <section>
                                 <div class="welcome2">
                                     <div class="container-fluid">
-                                        <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
+                                        <div class="col-md-12"
+                                            style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
                                             <div class="row">
                                                 <div id="admin1" class="col-md-12">
                                                     <div class="card material-table">
-                                                        <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable2');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
+                                                        <a class="btn btn-success btn-logion"
+                                                            style="display:none; float: right;margin-bottom: 10px;"
+                                                            download="Capdataprogramwise.csv" id="btnExport"
+                                                            onclick="return ExcellentExport.csv(this, 'dataTable2');"
+                                                            style=" float: right;margin: 5px 15px;" href=""><i
+                                                                class="fa fa-download" aria-hidden="true"></i>
                                                         </a>
                                                         <div class="table-header">
-                                                            <span class="table-title" style="margin: 0 !important;">SCHOOL
+                                                            <span class="table-title"
+                                                                style="margin: 0 !important;">SCHOOL
                                                                 DETAILS</span>
                                                         </div>
                                                         <div class="custyle" id="next">
@@ -669,14 +719,21 @@
                             <section>
                                 <div class="welcome2">
                                     <div class="container-fluid">
-                                        <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
+                                        <div class="col-md-12"
+                                            style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
                                             <div class="row">
                                                 <div id="admin1" class="col-md-12">
                                                     <div class="card material-table">
-                                                        <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable2');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
+                                                        <a class="btn btn-success btn-logion"
+                                                            style="display:none; float: right;margin-bottom: 10px;"
+                                                            download="Capdataprogramwise.csv" id="btnExport"
+                                                            onclick="return ExcellentExport.csv(this, 'dataTable2');"
+                                                            style=" float: right;margin: 5px 15px;" href=""><i
+                                                                class="fa fa-download" aria-hidden="true"></i>
                                                         </a>
                                                         <div class="table-header">
-                                                            <span class="table-title" style="margin: 0 !important;">SCHOOL
+                                                            <span class="table-title"
+                                                                style="margin: 0 !important;">SCHOOL
                                                                 DETAILS</span>
                                                         </div>
                                                         <div class="custyle" id="next1"></div>
@@ -692,14 +749,21 @@
                             <section>
                                 <div class="welcome2">
                                     <div class="container-fluid">
-                                        <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
+                                        <div class="col-md-12"
+                                            style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
                                             <div class="row">
                                                 <div id="admin1" class="col-md-12">
                                                     <div class="card material-table">
-                                                        <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="Capdataprogramwise.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable2');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i>
+                                                        <a class="btn btn-success btn-logion"
+                                                            style="display:none; float: right;margin-bottom: 10px;"
+                                                            download="Capdataprogramwise.csv" id="btnExport"
+                                                            onclick="return ExcellentExport.csv(this, 'dataTable2');"
+                                                            style=" float: right;margin: 5px 15px;" href=""><i
+                                                                class="fa fa-download" aria-hidden="true"></i>
                                                         </a>
                                                         <div class="table-header">
-                                                            <span class="table-title" style="margin: 0 !important;">SCHOOL
+                                                            <span class="table-title"
+                                                                style="margin: 0 !important;">SCHOOL
                                                                 DETAILS</span>
                                                         </div>
                                                         <div class="custyle" id="next2">

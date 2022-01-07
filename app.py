@@ -197,7 +197,8 @@ practice_cond_dictonary_list=[{'$project':{
 
 
 
-disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
+disdic={
+    '6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
     '616d2865c35ee7525fb145d9':'Addison Northwest School District',
     '6167fe41282c502e1077c12f':'Anchorage',
     '6045e4d707ead7744b125854':'Adams County School District 14',
@@ -5867,7 +5868,9 @@ def averagecompletion():
 
 @app.route('/bubble/<disid>/csv')
 def schdistrictghgh(disid):  
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={
+    '60a7b03831afdba383052726' : "United Way Of Santa Barbara",    
+    '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
     '5f2609807a1c0000950bb475':'Agawam School district',
     '5f2609807a1c0000950bb481':'Alameda Unified School District',
     '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -14310,6 +14313,7 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
     text=df["COMMENT"].tolist()
 #     df=df[['COMMENT']]
     df = df.sample(frac=1.0).reset_index(drop=True)
+    df['RATING']=df['RATING'].replace({0:'NO RATING'})
     for i in df['COMMENT'].tolist():
         df = df[df.COMMENT.str.len()!=1] 
     
@@ -14332,8 +14336,20 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
     a={'pos':pos,'neg':neg,'neu':neu}
     table_name=a[table_type]
     table=table_name[["USER_NAME","EMAIL","COMMENT","RATING","LAST_COMMENT_DATE"]]
-    temp = {"table":table.to_numpy().tolist()}
-    return json.dumps(temp, default=str)
+    if "export" in request.args:
+        try:
+            csv = df.to_csv(index=False)
+            return Response(
+                csv,
+                mimetype="text/csv",
+                headers={"Content-disposition":
+                        "attachment; filename=Comments.csv"})
+        except:
+            return jsonify("Unauthorized Access")    
+    else:
+
+        temp = {"table":table.to_numpy().tolist()}
+        return json.dumps(temp, default=str)
 #     return df
 # dis_sentiment_pie_table('5f2609807a1c0000950bb45d','neg','2021-08-01','2021-12-17')
 
@@ -14659,12 +14675,17 @@ def district_Date_table(districtid,startdate):
         df['Subscription_expire_date']=df['Subscription_expire_date'].fillna('No Info')
         if "export" in request.args:
             try:
-                id=session["user_id"]
-                file_name = ''+str(id)+'.xlsx'
-                df.to_excel((os.path.join('/var/www/html/test-2.0/static/files', file_name)))
-                return send_file((os.path.join('/var/www/html/test-2.0/static/files', file_name)), as_attachment=True)
+                df1=df[['user_name','EMAIL','school_name','country','State','city',
+                         'Created_date','Practice_Count','last_practice_date']]
+                 
+                csv = df.to_csv(index=False)
+                return Response(
+                    csv,
+                    mimetype="text/csv",
+                    headers={"Content-disposition":
+                            "attachment; filename=Data.csv"})
             except:
-                return jsonify("Unauthorized Access")   
+                return jsonify("Unauthorized Access")    
         else:
 
             data=[]
@@ -15382,12 +15403,17 @@ def district_user_table_teacher(districtid,startdate,enddate):
 #     df['Subscription_expire_date']=df['Subscription_expire_date'].fillna('No Info')
     if "export" in request.args:
         try:
-            id=session["user_id"]
-            file_name = ''+str(id)+'.xlsx'
-            df.to_excel((os.path.join('/var/www/html/test-2.0/static/files', file_name)))
-            return send_file((os.path.join('/var/www/html/test-2.0/static/files', file_name)), as_attachment=True)
+            df1=df[['user_name','EMAIL','school_name','country','State','city','Practice_Count',
+                    'Practice_Count_csy','Practice_Count_lsy',
+                    'Created_date','last_practice_date','label']]
+            csv = df1.to_csv(index=False)
+            return Response(
+                csv,
+                mimetype="text/csv",
+                headers={"Content-disposition":
+                        "attachment; filename=TeacherData.csv"})
         except:
-            return jsonify("Unauthorized Access")   
+            return jsonify("Unauthorized Access")  
     else:
 
         data=[]
@@ -15610,12 +15636,17 @@ def district_user_table_parent(districtid,startdate,enddate):
 
     if "export" in request.args:
         try:
-            id=session["user_id"]
-            file_name = ''+str(id)+'.xlsx'
-            df.to_excel((os.path.join('/var/www/html/test-2.0/static/files', file_name)))
-            return send_file((os.path.join('/var/www/html/test-2.0/static/files', file_name)), as_attachment=True)
+            df1=df[['user_name','EMAIL','school_name','country','State','city','Practice_Count',
+                    'Practice_Count_csy','Practice_Count_lsy',
+                    'Created_date','last_practice_date','label']]
+            csv = df1.to_csv(index=False)
+            return Response(
+                csv,
+                mimetype="text/csv",
+                headers={"Content-disposition":
+                        "attachment; filename=ParentData.csv"})
         except:
-            return jsonify("Unauthorized Access")   
+            return jsonify("Unauthorized Access")    
     else:
         data=[]
         for i,j,k,l,m,n,o,p,r,q,s,x,z in zip(df['user_name'].tolist(),df['EMAIL'].tolist(),df['school_name'].tolist(),df['country'].tolist(),
@@ -15640,7 +15671,7 @@ def district_school_table(districtid,startdate,enddate):
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass 
-
+    from flask import request
     collection2=db.school_master
     collection=db.user_master
     collection1=db.audio_track_master
@@ -15683,6 +15714,8 @@ def district_school_table(districtid,startdate,enddate):
   
                                             ])))
 
+    ids=df2['_id'].tolist()
+
 
     df3 = DataFrame(list(collection1.aggregate([
     {"$match":
@@ -15707,6 +15740,16 @@ def district_school_table(districtid,startdate,enddate):
             {'$group':{'_id':'$USER_ID.schoolId._id','ID':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},'prog':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}}},
                   {'$project':{'_id':1,'Practice_Count':'$ID','program':1,'last_practice_date':'$last_practice_date'}},
                    ]))).fillna(0)
+    if df3.empty==True:
+        df3=pd.DataFrame({'_id':ids})
+        df3['last_practice_date'] = pd.Series(['NO PRACTICE' for x in range(len(df3.index))])
+        df3['Practice_Count'] = pd.Series([0 for x in range(len(df3.index))])
+#         df3['Mindful_Minutes_overall'] = pd.Series([0 for x in range(len(df0.index))])
+    column3 =['_id','last_practice_date']
+    for i in column3:
+        df3=df3.fillna('')
+        if i not in df3.columns:
+            df3[i] = 'No info' 
     df_ = DataFrame(list(collection1.aggregate([
     {"$match":
          {'$and': [
@@ -15729,6 +15772,16 @@ def district_school_table(districtid,startdate,enddate):
             {'$group':{'_id':'$USER_ID.schoolId._id','ID':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},'prog':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}}},
                   {'$project':{'_id':1,'Practice_Count_csy':'$ID'}},
                    ]))).fillna(0)
+    if df_.empty==True:
+        df_=pd.DataFrame({'_id':ids})
+#         df_['last_practice_date'] = pd.Series(['NO PRACTICE' for x in range(len(df_.index))])
+        df_['Practice_Count_csy'] = pd.Series([0 for x in range(len(df_.index))])
+#         df3['Mindful_Minutes_overall'] = pd.Series([0 for x in range(len(df0.index))])
+#     column_ =['_id','Practice_Count_csy']
+#     for i in column_:
+#         df_=df_.fillna('')
+#         if i not in df_.columns:
+#             df_[i] = 'No info' 
     df__ = DataFrame(list(collection1.aggregate([
     {"$match":
          {'$and': [
@@ -15751,6 +15804,16 @@ def district_school_table(districtid,startdate,enddate):
             {'$group':{'_id':'$USER_ID.schoolId._id','ID':{'$sum':1},'NAME':{'$first':'$USER_ID.schoolId.NAME'},'last_practice_date':{'$max':{"$dateToString": { "format": "%Y-%m-%d", "date":'$MODIFIED_DATE'}}},'prog':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}}},
                   {'$project':{'_id':1,'Practice_Count_lsy':'$ID'}},
                    ])))
+    if df__.empty==True:
+        df__=pd.DataFrame({'_id':ids})
+#         df_['last_practice_date'] = pd.Series(['NO PRACTICE' for x in range(len(df_.index))])
+        df__['Practice_Count_lsy'] = pd.Series([0 for x in range(len(df__.index))])
+#         df3['Mindful_Minutes_overall'] = pd.Series([0 for x in range(len(df0.index))])
+#     column__ =['_id','Practice_Count_lsy']
+#     for i in column_:
+#         df__=df__.fillna('')
+#         if i not in df__.columns:
+#             df__[i] = 'No info' 
     df4 = DataFrame(list(collection3.aggregate([
     {"$match":
          {'$and': [
@@ -15812,14 +15875,17 @@ def district_school_table(districtid,startdate,enddate):
     df['Subscription_expire_date']=df['Subscription_expire_date'].fillna('No Info')
     df['label'] = np.where(df['Practice_Count_csy']!= 0, 'ENGAGED IN CSY', 'ENGAGED IN LSY')
     df.loc[(df['Practice_Count_lsy']==0) & (df['Practice_Count_csy']== 0), 'label']='INACTIVE'
-#     if df['Practice_Count_lsy'] & df['Practice_Count_csy']== 0:
-#         df['label'] = 'BLACK'
     if "export" in request.args:
         try:
-            id=session["user_id"]
-            file_name = ''+str(id)+'.xlsx'
-            df.to_excel((os.path.join('/var/www/html/test-2.0/static/files', file_name)))
-            return send_file((os.path.join('/var/www/html/test-2.0/static/files', file_name)), as_attachment=True)
+            df1=df[['school_name','country','State','city','Practice_Count',
+                    'Practice_Count_csy','Practice_Count_lsy','usercount',
+                    'Created_date','last_practice_date','Subscription_expire_date','label']]
+            csv = df1.to_csv(index=False)
+            return Response(
+                csv,
+                mimetype="text/csv",
+                headers={"Content-disposition":
+                        "attachment; filename=SchoolData.csv"})
         except:
             return jsonify("Unauthorized Access")   
     else:
@@ -15832,7 +15898,7 @@ def district_school_table(districtid,startdate,enddate):
         return json.dumps(temp,default=str)
 
 
-
+    
 # district_school_table('619268dd81f00a4319a65a52','2021-08-01','2021-11-10')
 
 
@@ -33427,7 +33493,7 @@ def schoolsearch_em_id(schoolid):
 
 
 
-    data={'user_count':str(df00['user_count'][0]),'actual_admin':actual_admin[0], 'ADMIN_ID':ADMIN_ID,
+    data={'user_count':str(df00['user_count'][0]),'actual_admin':actual_admin, 'ADMIN_ID':ADMIN_ID,
         'Star_5_Ratings_Recieved':str(int(round(df5['rating'][0]))),'DISTRICT':df1['district_name'][0],
         'SCHOOL_MINDFUL_MINUTES_csy':str(int(Mindful_Minutes_csy)),
                    'SCHOOL_MINDFUL_MINUTES_overall':str(int(Mindful_Minutes_overall)),
@@ -55193,7 +55259,8 @@ def billmelateranalysis():
 @app.route('/districtddtcard/<districtid>')
 def ddt_card(districtid):
     
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+            '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
             '5f2609807a1c0000950bb475':'Agawam School district',
             '5f2609807a1c0000950bb481':'Alameda Unified School District',
             '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -55535,7 +55602,8 @@ def ddt_card(districtid):
 
 @app.route('/districtddtchart/<districtid>')
 def ddt_chart(districtid):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
         '5f2609807a1c0000950bb475':'Agawam School district',
         '5f2609807a1c0000950bb481':'Alameda Unified School District',
         '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -55904,7 +55972,8 @@ def ddt_chart(districtid):
 
 def ddt_overall_table(districtid,practype):    
     practice=str(practype).lower()    
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
         '5f2609807a1c0000950bb475':'Agawam School district',
         '5f2609807a1c0000950bb481':'Alameda Unified School District',
         '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -56450,7 +56519,8 @@ def MONGO_CLE_SCH_CARD():
 @app.route('/districtddtCSYtable/<districtid>/<practype>')
 def ddt_CSY_table(districtid,practype):    
     practice=str(practype).lower()    
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
         '5f2609807a1c0000950bb475':'Agawam School district',
         '5f2609807a1c0000950bb481':'Alameda Unified School District',
         '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -59736,7 +59806,8 @@ def new2(name,name1):
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
         
-        disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+        disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
         '5f2609807a1c0000950bb475':'Agawam School district',
         '5f2609807a1c0000950bb481':'Alameda Unified School District',
         '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -59978,7 +60049,8 @@ def new2(name,name1):
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
         
-        disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+        disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
         '5f2609807a1c0000950bb475':'Agawam School district',
         '5f2609807a1c0000950bb481':'Alameda Unified School District',
         '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -60150,7 +60222,8 @@ def new2(name,name1):
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
 
-        disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+        disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
         '5f2609807a1c0000950bb475':'Agawam School district',
         '5f2609807a1c0000950bb481':'Alameda Unified School District',
         '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -60388,7 +60461,8 @@ def new2(name,name1):
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
         
-        disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+        disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
         '5f2609807a1c0000950bb475':'Agawam School district',
         '5f2609807a1c0000950bb481':'Alameda Unified School District',
         '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -63440,7 +63514,8 @@ def dailyyy_feedback_table_PARENTS__(datestr):
 @app.route('/districtddtcard/<datestr>/<districtid>')
 def feedback_district_chart__(datestr,districtid):
     
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+            '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
             '5f2609807a1c0000950bb475':'Agawam School district',
             '5f2609807a1c0000950bb481':'Alameda Unified School District',
             '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -65737,7 +65812,8 @@ def relic_weekly_response():
 
 @app.route('/districtescore/<disid>')
 def districtescore(disid):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
         '5f2609807a1c0000950bb475':'Agawam School district',
         '5f2609807a1c0000950bb481':'Alameda Unified School District',
         '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -68309,7 +68385,8 @@ def old_escores():
 
 @app.route('/escoreinsites/<disid>')
 def escore_insites(disid):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
         '5f2609807a1c0000950bb475':'Agawam School district',
         '5f2609807a1c0000950bb481':'Alameda Unified School District',
         '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -68396,7 +68473,8 @@ def escore_insites(disid):
 
 @app.route('/escorepolar/<disid>')
 def escore_polar(disid):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
         '5f2609807a1c0000950bb475':'Agawam School district',
         '5f2609807a1c0000950bb481':'Alameda Unified School District',
         '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -68478,7 +68556,8 @@ def escore_polar(disid):
 
 @app.route('/escorestack/<disid>')
 def escore_stack(disid):
-    disdic={'5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
+    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
+        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
         '5f2609807a1c0000950bb475':'Agawam School district',
         '5f2609807a1c0000950bb481':'Alameda Unified School District',
         '5f2609807a1c0000950bb47a':'Alpine School District',
@@ -72952,7 +73031,7 @@ def practice_per_min_program(charttype):
 # cards
 
 @app.route('/mini_districtcardsinfo/<LOCAl_DISTRICT>/<startdate>/<enddate>')
-def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
+def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
     
     from datetime import datetime
     from datetime import timedelta
@@ -72984,13 +73063,18 @@ def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
     {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
     {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
     {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-    {'$group':{'_id':'$_id','ID':{'$addToSet':'$schoolId._id'},'dn':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
+     {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'},        'user_id':{'$first':'$_id'}}},
+                      {'$project':{'_id':1,'name':'$ID', 'user_id':'$user_id'}},
+
+                  {'$sort':{'name':1}}   
+        
+#     {'$group':{'_id':'$_id','ID':{'$addToSet':'$schoolId._id'},'dn':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
 
               ])))
 
     
-    schoolid=df1_1['ID'].tolist()
-    userid=df1_1['_id'].tolist()
+    schoolid=df1_1['_id'].tolist()
+    userid=df1_1['user_id'].tolist()
 
     
     
@@ -73084,10 +73168,10 @@ def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
 
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
 
-                          {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+                        #   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
+            #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
 
-
+{'USER_ID.schoolId._id':{'$in':schoolid}},
 
                  {'MODIFIED_DATE':{'$gte':csy_first_date()}},
              
@@ -73111,8 +73195,9 @@ def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
 
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
 
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+                #   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
+            #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+{'USER_ID.schoolId._id':{'$in':schoolid}},
 
                  {'MODIFIED_DATE':{'$gte':LSY_Date()}},
              
@@ -73135,8 +73220,11 @@ def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
 
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
-                   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+            #        {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
+            #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+{'USER_ID.schoolId._id':{'$in':schoolid}},
+
+
                  {'MODIFIED_DATE':{'$gte':csy_first_date()}},
 
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -73157,9 +73245,10 @@ def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
+        {'USER_ID.schoolId._id':{'$in':schoolid}},
 
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+                #   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
+            #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
 
                  {'MODIFIED_DATE':{'$gte':LSY_Date()}},
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -73192,9 +73281,10 @@ def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
+{'USER_ID.schoolId._id':{'$in':schoolid}},
 
-              {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+            #   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
+            #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
              {'MODIFIED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -73215,9 +73305,10 @@ def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
 
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
+{'USER_ID.schoolId._id':{'$in':schoolid}},
 
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+                #   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
+            #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
              {'MODIFIED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
 
@@ -73239,9 +73330,10 @@ def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
 
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
+{'USER_ID.schoolId._id':{'$in':schoolid}},
 
-                    {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+                    # {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
+            #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
 
 
              {'MODIFIED_DATE':{"$gte": myDatetime1 ,
@@ -73268,9 +73360,10 @@ def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
 
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
+{'USER_ID.schoolId._id':{'$in':schoolid}},
 
-                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+                #   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
+            #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
                  {'MODIFIED_DATE':{'$gte':csy_first_date()}},
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
@@ -73290,8 +73383,10 @@ def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
 
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
-                {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+                 {'USER_ID.schoolId._id':{'$in':schoolid}},
+
+                # {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
+            #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
                  {'MODIFIED_DATE':{'$gte':LSY_Date()}},
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
@@ -73423,11 +73518,20 @@ def mini_district_count_cards(LOCAl_DISTRICT,startdate,enddate):
         state=df10['STATE']
     except:
         state=[0]
+        
+    ld=[0]
+    try:
+        ld=df10['LOCAl_DISTRICT']
+    except:
+        ld=[0]
+        
     data={"schoolcount":str(sc[0]),"engd_teacher_lsy":str(engd_teacher_lsy[0]),"engd_teacher_csy":str(engd_teacher_csy[0]),
-          "engd_parent_csy":str(engd_parent_csy[0]),"engd_parent_lsy":str(engd_parent_lsy[0]),
-          "engaged_school_csy":str(engdschool_csy[0]),"engaged_school_lsy":str(engdschool_lsy[0]),"teachercount":str(tc[0]),"familycount":str(fc[0]),"teacherpracticecount":str(pct[0]),"parentspracticecount":str(pcp[0]),
-          'MINDFUL_MINUTES':str(round(int(mm[0]))),'rating':str(round(rating[0],1)),'state':str(state[0]),'MINDFUL_MINUTES_Teacher':str(round(int(mmt[0]))),'MINDFUL_MINUTES_parent':str(round(int(mmp[0]))),'district':str(dn[0]),"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
+    "engd_parent_csy":str(engd_parent_csy[0]),"engd_parent_lsy":str(engd_parent_lsy[0]), "engaged_school_csy":str(engdschool_csy[0]),"engaged_school_lsy":str(engdschool_lsy[0]),"teachercount":str(tc[0]),"familycount":str(fc[0]),"teacherpracticecount":str(pct[0]),"parentspracticecount":str(pcp[0]),
+    'MINDFUL_MINUTES':str(round(int(mm[0]))),'rating':str(round(rating[0],1)),'state':str(state[0]),'MINDFUL_MINUTES_Teacher':str(round(int(mmt[0]))),'MINDFUL_MINUTES_parent':str(round(int(mmp[0]))),'district':str(ld[0]),"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
     return json.dumps(data)
+
+
+
 
 # Overall Heatmap
 
@@ -73797,7 +73901,7 @@ def mini_districtuser_practice_90days(LOCAl_DISTRICT,startdate,enddate):
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
     
-    df_user=DataFrame(list(collection.aggregate([{"$match":
+    df_user=DataFrame(list(db.user_master.aggregate([{"$match":
              {'$and': [            
                     {"IS_DISABLED":{"$ne":"Y"}},
                       {"IS_BLOCKED":{"$ne":"Y"}},
@@ -73949,12 +74053,14 @@ def mini_districtuser_practice_90days(LOCAl_DISTRICT,startdate,enddate):
             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
               {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+
+
              {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
             { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {'USER_ID.schoolId._id':{'$ne':None}},
              {'USER_ID.EMAIL_ID':{'$ne':''}},
-#                   {"USER_ID.schoolId._id":{"$in":ids}},
+                  {"USER_ID.schoolId._id":{"$in":ids}},
          {'MODIFIED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
 
@@ -74188,6 +74294,9 @@ def mini_districtmonthwisepc(LOCAl_DISTRICT,startdate,enddate):
         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.schoolId._id':{'$ne':None}},
+                 {"USER_ID.schoolId._id":{"$in":ids}},
+
+
          {'USER_ID.EMAIL_ID':{'$ne':''}},
         {'MODIFIED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}},
@@ -74863,6 +74972,8 @@ def mini_district_last_practice_90days_(LOCAl_DISTRICT):
             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
               {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+               {"USER_ID.schoolId._id":{"$in":ids}},  
+      
              {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
             { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -75350,13 +75461,6 @@ def Disctrictfilter():
         
     return render_template('Disctrictfilter.html')
 
-@app.route('/Local_Disctrictfilter')
-def Local_Disctrictfilter():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('Local_Disctrictfilter.html')
-
 @app.route('/district _race')
 def district_race():
     if not g.user:
@@ -75491,6 +75595,13 @@ def Day_In_Life():
     if not g.user:
         return redirect(url_for('login'))
     return render_template('dayinlife.html')
+
+@app.route('/Local_Disctrictfilter')
+def Local_Disctrictfilter():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('Local_Disctrictfilter.html')
+    
 
 if __name__ == '__main__':
    app.run(debug=True)

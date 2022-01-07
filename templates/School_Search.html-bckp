@@ -299,7 +299,7 @@ opacity: 20%;
             <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
           </ul>
         </li>
-        <li style="margin-top:135px"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<spanstyle="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">5.7.2</span></a>
+        <li style="margin-top:120px"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">5.7.2</span></a>
       </li>
 <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
 </aside>
