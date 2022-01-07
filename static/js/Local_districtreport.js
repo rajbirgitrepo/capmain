@@ -976,7 +976,7 @@ function charts(a, b, c) {
             $("#container10").highcharts({
                 chart: {
                     // zoomType: "xy",
-                    type: "bar"
+                    type: "column"
                 },
                 title: {
                     text: "Top 20 Champions in LSY",
@@ -1043,7 +1043,35 @@ function charts(a, b, c) {
                     type: "bar",
                     data: dataa.practicecount,
                 }],
+
+                
             });
+
+            document.getElementById('inverted').addEventListener('click', () => {
+                console.log('click')
+                chart.update({
+                  chart: {
+                    inverted: true,
+                    polar: false
+                  },
+                  subtitle: {
+                    text: 'Inverted'
+                  }
+                });
+              });
+              document.getElementById('plain').addEventListener('click', () => {
+                console.log('click plain')
+                chart.update({
+                  chart: {
+                    inverted: false,
+                    polar: false
+                  },
+                  subtitle: {
+                    text: 'Plain'
+                  }
+                });
+              })
+              
         });
     });
 
