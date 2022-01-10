@@ -1047,31 +1047,6 @@ function charts(a, b, c) {
                 
             });
 
-            document.getElementById('inverted').addEventListener('click', () => {
-                console.log('click')
-                chart.update({
-                  chart: {
-                    inverted: true,
-                    polar: false
-                  },
-                  subtitle: {
-                    text: 'Inverted'
-                  }
-                });
-              });
-              document.getElementById('plain').addEventListener('click', () => {
-                console.log('click plain')
-                chart.update({
-                  chart: {
-                    inverted: false,
-                    polar: false
-                  },
-                  subtitle: {
-                    text: 'Plain'
-                  }
-                });
-              })
-              
         });
     });
 

@@ -28,6 +28,7 @@ if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1
     $("#signup").empty();
     $("#renewal").empty();
     $("#status").empty();
+    $("#output").empty();
     console.log(URL);
     P(URL);
     escore(urlid);
@@ -222,6 +223,7 @@ function schoolsearch() {
         $("#signup").empty();
         $("#renewal").empty();
         $("#status").empty();
+        $("#output").empty();
         console.log(URL);
         P(URL);
         schoolIDCharts(a)
@@ -263,6 +265,7 @@ function schoolsearch() {
         $("#signup").empty();
         $("#renewal").empty();
         $("#status").empty();
+        $("#output").empty();
         console.log(URL);
         P(URL);
         escore(a);

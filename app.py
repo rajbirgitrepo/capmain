@@ -73531,11 +73531,8 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
     return json.dumps(data)
 
 
-<<<<<<< Updated upstream
 
 
-=======
->>>>>>> Stashed changes
 # Overall Heatmap
 
 @app.route('/mini_districtheatmap_overall/<districtid>/<startdate>/<enddate>')
