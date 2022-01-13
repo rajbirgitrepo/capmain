@@ -107,7 +107,7 @@ users.append(User(id=17,username='lcahill@innerexplorer.org',password='capxp2020
 users.append(User(id=18,username='ccassisa@innerexplorer.org',password='capxp2020',name='Christy',nameinitial='C'))
 users.append(User(id=19,username='arice@innerexplorer.org',password='capxp2020',name='Anitra',nameinitial='A'))
 users.append(User(id=20,username='vgonzalez@innerexplorer.org',password='capxp2020',name='Victoria',nameinitial='V'))
-
+users.append(User(id=21,username='nina@innerexplorer.org',password='capxp2020',name='Nina',nameinitial='N'))
 
 app = Flask(__name__)
 app.secret_key = 'cap4g2020version10date8272020'
@@ -73524,10 +73524,17 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
         ld=df10['LOCAl_DISTRICT']
     except:
         ld=[0]
-        
+    X=str(ld[0])
+    if str(ld[0])=="NW":
+        X="North West"
+    elif str(ld[0])=="NE":
+        X="North East"
+    else:
+        pass
+
     data={"schoolcount":str(sc[0]),"engd_teacher_lsy":str(engd_teacher_lsy[0]),"engd_teacher_csy":str(engd_teacher_csy[0]),
     "engd_parent_csy":str(engd_parent_csy[0]),"engd_parent_lsy":str(engd_parent_lsy[0]), "engaged_school_csy":str(engdschool_csy[0]),"engaged_school_lsy":str(engdschool_lsy[0]),"teachercount":str(tc[0]),"familycount":str(fc[0]),"teacherpracticecount":str(pct[0]),"parentspracticecount":str(pcp[0]),
-    'MINDFUL_MINUTES':str(round(int(mm[0]))),'rating':str(round(rating[0],1)),'state':str(state[0]),'MINDFUL_MINUTES_Teacher':str(round(int(mmt[0]))),'MINDFUL_MINUTES_parent':str(round(int(mmp[0]))),'district':str(ld[0]),"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
+    'MINDFUL_MINUTES':str(round(int(mm[0]))),'rating':str(round(rating[0],1)),'state':str(state[0]),'MINDFUL_MINUTES_Teacher':str(round(int(mmt[0]))),'MINDFUL_MINUTES_parent':str(round(int(mmp[0]))),'district':X,"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
     return json.dumps(data)
 
 

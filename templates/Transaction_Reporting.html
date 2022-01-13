@@ -16,7 +16,8 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='css/map-table.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/mainpractice.css') }}">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
@@ -26,7 +27,8 @@
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
 
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css'>
+    <link rel='stylesheet'
+        href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css'>
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/reset.min.css') }}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -39,7 +41,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -63,20 +67,20 @@
         max-height: 600px;
         overflow: scroll;
     }
-    
+
     .loading {
         margin-top: 10em;
         text-align: center;
         color: gray;
     }
-    
+
     .highcharts-figure,
     .highcharts-data-table table {
         min-width: 320px;
         max-width: 800px;
         margin: 1em auto;
     }
-    
+
     .highcharts-data-table table {
         font-family: Verdana, sans-serif;
         border-collapse: collapse;
@@ -86,31 +90,42 @@
         width: 100%;
         max-width: 500px;
     }
-    
+
     .highcharts-data-table caption {
         padding: 1em 0;
         font-size: 1.2em;
         color: #555;
     }
-    
+
     .highcharts-data-table th {
         font-weight: 600;
         padding: 0.5em;
     }
-    
+
     .highcharts-data-table td,
     .highcharts-data-table th,
     .highcharts-data-table caption {
         padding: 0.5em;
     }
-    
+
     .highcharts-data-table thead tr,
     .highcharts-data-table tr:nth-child(even) {
         background: #f8f8f8;
     }
-    
+
     .highcharts-data-table tr:hover {
         background: #f1f7ff;
+    }
+
+    .margint-40 {
+        margin-top: 40px;
+    }
+
+    .Table-scroll {
+        height: auto;
+        max-height: 300px;
+        overflow-x: hidden;
+        overflow-y: scroll;
     }
 </style>
 
@@ -141,10 +156,12 @@
                                     class="fa fa-bars show-side-btn"></i></a></li>
                         <li style="margin-top: 27px;">
                             <div class="dropdown">
-                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown" style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span
+                                <button class="btn btn-primary " id="menu1" type="button" data-toggle="dropdown"
+                                    style="border: 0;font-size: 16px; border-radius: 50%;">{{g.user.nameinitial}}<span
                                         id="logid" style="display: none;">{{g.user.id}}</span></button>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="login">{{g.user.name}}</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1"
+                                            href="login">{{g.user.name}}</a></li>
                                     <hr />
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="login">LOGOUT</a>
                                     </li>
@@ -189,15 +206,11 @@
                     <!-- <li><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li> -->
                 </ul>
             </li>
-             <li><i class="fa fa-book "></i><a href="#">DISTRICT DASHBOARDS</a>
+            <li><i class="fa fa-book "></i><a href="#">DISTRICT DASHBOARDS</a>
                 <ul class="side-nav-dropdown">
                     <li><a href="NameEScore">DISTRICT ENGAGEMENT</a></li>
                     <li><a href="Disctrictfilter">DP-360</a></li>
-<<<<<<< Updated upstream
-                     <li><a href="Local_Disctrictfilter">MINI D-360</a></li>
-=======
                     <li><a href="Local_Disctrictfilter">MINI D-360</a></li>
->>>>>>> Stashed changes
                     <!-- <li><a href="partner">PARTNER PORTAL</a></li> -->
                     <li><a href="Login_analytics">LOGIN ANALYTICS</a></li>
                     <!-- <li><a href="schoolengagement">SCHOOL ENGAGEMENT</a></li> -->
@@ -260,12 +273,8 @@
                     <li><a href="IOS_Analytics">IOS ANALYTICS</a></li>
                 </ul>
             </li>
-<<<<<<< Updated upstream
             <li style="margin-top:120px"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
-=======
-            <li style="margin-top:100px"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span
->>>>>>> Stashed changes
-                       style="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">6.0</span></a>
+                        style="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">6.0</span></a>
             </li>
             <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
     </aside>
@@ -298,7 +307,7 @@
                                             <p id="state"></p>
                                             <p id="country"></p>
                                             <p style="float: left;margin-right: 9px;"><b>Renewal Date:</b>
-                                                <p id="renewal"></p>
+                                            <p id="renewal"></p>
                                             </p>
                                             </a>
                                             </p>
@@ -321,7 +330,8 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <div class="card card-stats">
                                                     <div class="card-header" data-background-color="rose1">
-                                                        <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
+                                                        <img src="{{ url_for('static',filename='images/capuser.png') }}"
+                                                            style="width: 54px;" class="img-responsive">
                                                     </div>
                                                     <div class="card-content">
                                                         <p class="category">Total Users</p>
@@ -336,7 +346,8 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <div class="card card-stats">
                                                     <div class="card-header" data-background-color="rose">
-                                                        <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
+                                                        <img src="{{ url_for('static',filename='images/capminute.png') }}"
+                                                            style="width: 54px;" class="img-responsive">
                                                     </div>
                                                     <div class="card-content">
                                                         <p class="category">Playback Count</p>
@@ -350,7 +361,8 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <div class="card card-stats">
                                                     <div class="card-header" data-background-color="green">
-                                                        <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
+                                                        <img src="{{ url_for('static',filename='images/capstudy.png') }}"
+                                                            style="width: 54px;" class="img-responsive">
                                                     </div>
                                                     <div class="card-content">
                                                         <p class="category"> Mindful Minutes</p>
@@ -367,7 +379,8 @@
                                             <div class="col-md-6 col-sm-6">
                                                 <div class="card card-stats">
                                                     <div class="card-header" data-background-color="blue">
-                                                        <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
+                                                        <img src="{{ url_for('static',filename='images/cappractice.png') }}"
+                                                            style="width: 54px;" class="img-responsive">
                                                     </div>
                                                     <div class="card-content">
                                                         <p class="category">5 Star Ratings</p>
@@ -400,12 +413,12 @@
         </div>
 
         <div class="input-Container ui-widget" style="margin-top: 0 !important; padding-top: 25px !important;">
-            <input class="Date" style="width: 20%;
-      margin-left: 52%;
+            <input class="Date" style="width: 15%;
+      margin-left: 60%;
       padding: 10px;
       background-color: #fff;
       border-radius: 20px 0 0 20px;" type="text" id="datepicker" size="30">
-            <input class="Date" style="width: 21%;
+            <input class="Date" style="width: 16%;
       padding: 10px;
       background-color: #fff;
       border-radius: 0px;" type="text" id="datepicker2" size="30">
@@ -418,96 +431,88 @@
                 <div class="row">
                     <div id="gifcards"></div>
                     <div class="col-md-2" onclick="cards('/revenauetable/revenaue')" style="cursor:pointer;">
-
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="">TOTAL REVENUE</p>
                             <p style="margin: 0 4px; font-size: 21px; " id="Total_amount"></p>
-
-
-
-
                         </div>
                     </div>
                     <div class="col-md-2" onclick="cards('/revenauetable/district')" style="cursor:pointer;">
-
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="t1"></p>
                             <p style="margin: 0 4px; font-size: 21px; " id="PAYLATER"></p>
-
-
-
-
                         </div>
                     </div>
-                    <div class="col-md-2" onclick="cards('/revenauetable/foundation')" style="cursor:pointer;">
 
+                    <div class="col-md-2" onclick="cards('/revenauetable/foundation')" style="cursor:pointer;">
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="t2"></p>
                             <p style="margin: 0 4px; font-size: 21px; " id="PROMOCODE"></p>
-
                         </div>
                     </div>
-                    <div class="col-md-2" onclick="cards('/revenauetable/school')" style="cursor:pointer;">
 
+                    <div class="col-md-2" onclick="cards('/revenauetable/school')" style="cursor:pointer;">
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="t3"></p>
                             <p style="margin: 0 4px; font-size: 21px; " id="SQUARE_PAYMENT"></p>
-
                         </div>
                     </div>
 
-
                     <div class="col-md-2" onclick="cards('/revenauetable/donation')" style="cursor:pointer;">
-
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="t4"></p>
                             <p style="margin: 0 4px; font-size: 21px; " id="PAYPAL"></p>
-
-
-
-
                         </div>
                     </div>
+
                     <div class="col-md-2" onclick="cards('/revenauetable/mobile')" style="cursor:pointer;">
 
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="t5"></p>
                             <p style="margin: 0 4px; font-size: 21px;" id="GRANT"></p>
-
-
-
-
                         </div>
                     </div>
-
-
-
-
-
-
-
-
-
                 </div>
 
             </div>
 
+            <!-- </div> -->
+        </section>
+        <section>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="admin2" class="col-md-12 margint-40 px-0">
+                            <div class="card material-table"
+                                style="padding: 15px;border: 0 !important; box-shadow: none !important;">
+                                <div class="table-header mb-1">
+                                    <span class="table-title" style="margin: 0 !important;">TOTAL REVENUE</span>
+                                </div>
+                                <div id="gif"></div>
+                                <div class="custyle Table-scroll" id="nextD"></div>
+                                <div class="custyle" id="nextD1"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         <section>
             <hr />
             <div class="col-md-10">
-                <div id="container" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+                <div id="container"
+                    style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
                 </div>
             </div>
-            <div class="col-md-10" style="margin-top: 40px;">
-                <div id="container2" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+            <div class="col-md-10" style="margin-top: 25px;">
+                <div id="container2"
+                    style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
                 </div>
             </div>
-            <div class="col-md-10" style="margin-top: 40px;">
+            <div class="col-md-10" style="margin-top: 25px;">
 
-               
-                <div id="container5" style="height: 400px; width: 120%; border-radius: 20px;float: left;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+
+                <div id="container5"
+                    style="height: 400px; width: 120%; border-radius: 20px;float: left;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
                 </div>
             </div>
 
@@ -518,9 +523,15 @@
                     <div class="modal2-content">
                         <div id="admin" class="col-md-12">
                             <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
-                                <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" onclick="gif2()" style=" float: right;margin: 5px 15px;" href="#"><i
+                                <a class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;"
+                                    onclick="gif2()" style=" float: right;margin: 5px 15px;" href="#"><i
                                         class="fa fa-times-circle-o" aria-hidden="true"></i></a>
-                                <a class="btn btn-success btn-logion" style="display:none; float: right;margin-bottom: 10px;" download="CapdataExecutivedashboard.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download" aria-hidden="true"></i></a>
+                                <a class="btn btn-success btn-logion"
+                                    style="display:none; float: right;margin-bottom: 10px;"
+                                    download="CapdataExecutivedashboard.csv" id="btnExport"
+                                    onclick="return ExcellentExport.csv(this, 'dataTable1');"
+                                    style=" float: right;margin: 5px 15px;" href=""><i class="fa fa-download"
+                                        aria-hidden="true"></i></a>
 
                                 <div class="table-header">
                                     <span class="table-title" style="margin: 0 !important;"></span>

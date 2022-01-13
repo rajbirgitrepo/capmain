@@ -1,90 +1,93 @@
 // create the chart
 
 var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url":             "/presentios",
-    "method": "GET"
-   }
-    $.ajax(settings).done(function (response) {
-    var dataa=JSON.parse(response); 
-    console.log(dataa,"hello frnd");
-
-
-
-
-var chart = Highcharts.stockChart('container', {
-chart: {
-type: 'column'
-},
-
-title: {
-text: 'Impressions'
-},
-xAxis: {
-    minRange: 1
-},
-plotOptions: {
-  series: {point: {
-            
-        }}
-},
-
-navigator: {
-series:{color:'#00FF00',
-                animation: {
-                    duration: 0,
-                }    
-},
-xAxis: {
-    minRange: 1
-},
-
-legend: {
-  enabled: true,
-  itemStyle: {
-      fontSize: '10px',
-      fontWeight: '200',
-  }
-},
-},yAxis: [ {
-    lineWidth: 1,
-    opposite: false,
-    title: {
-        text: 'IMPRESSION COUNT'
-    }
-},
-{
-  lineWidth: 1,
-  opposite: true,
-  title: {
-      text: 'Cumcumulative Count'
-  }
+  "async": true,
+  "crossDomain": true,
+  "url": "/presentios",
+  "method": "GET"
 }
-],
+$.ajax(settings).done(function (response) {
+  var dataa = JSON.parse(response);
+  console.log(dataa, "hello frnd");
 
-series: [{
-type:'column',
-  color: '#01a451',
-name: 'User Count',
-data: dataa.Impressionsnew, //Fri, 14 Jul 2017 00:00:00 GMT
-dataGrouping: {
-  enabled: false,
-},
 
-},
-      {
-type:'line',
-  color: '#FF9933',
-name: 'Total ',
-data: dataa.cumImpressionsgraph, //Fri, 14 Jul 2017 00:00:00 GMT
-yAxis:1,
-dataGrouping: {
-  enabled: false,
-},
 
-}]
 
-});
+  var chart = Highcharts.stockChart('container', {
+    chart: {
+      type: 'column'
+    },
+
+    title: {
+      text: 'Impressions'
+    },
+    xAxis: {
+      minRange: 1
+    },
+    plotOptions: {
+      series: {
+        point: {
+
+        }
+      }
+    },
+
+    navigator: {
+      series: {
+        color: '#00FF00',
+        animation: {
+          duration: 0,
+        }
+      },
+      xAxis: {
+        minRange: 1
+      },
+
+      legend: {
+        enabled: true,
+        itemStyle: {
+          fontSize: '10px',
+          fontWeight: '200',
+        }
+      },
+    }, yAxis: [{
+      lineWidth: 1,
+      opposite: false,
+      title: {
+        text: 'IMPRESSION COUNT'
+      }
+    },
+    {
+      lineWidth: 1,
+      opposite: true,
+      title: {
+        text: 'Cumcumulative Count'
+      }
+    }
+    ],
+
+    series: [{
+      type: 'column',
+      color: '#01a451',
+      name: 'User Count',
+      data: dataa.Impressionsnew, //Fri, 14 Jul 2017 00:00:00 GMT
+      dataGrouping: {
+        enabled: false,
+      },
+
+    },
+    {
+      type: 'line',
+      color: '#FF9933',
+      name: 'Total ',
+      data: dataa.cumImpressionsgraph, //Fri, 14 Jul 2017 00:00:00 GMT
+      yAxis: 1,
+      dataGrouping: {
+        enabled: false,
+      },
+
+    }]
+
+  });
 
 });

@@ -14,7 +14,18 @@ function cards(URL) {
     $('#btnExport').show();
     createDynamic(URL);
 }
-
+function cards2(URL) {
+    $('#next').empty();
+    console.log(URL);
+    var modal2 = document.getElementById("admin2");
+    modal2.style.display = "block";
+   // $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+   // var gif = document.getElementById("gif");
+   // gif.style.display = "block";
+    $('#btnExport').show();
+    createDynamic2(URL);
+}
+cards2('/revenauetable/revenaue');
 $(function() {
     $("#datepicker").datepicker(
 
@@ -428,6 +439,90 @@ function dataTab() {
 }
 
 function createDynamicDiv(userList) {
+    var dynamicDiv = '';
+    console.log(userList)
+
+
+
+
+
+    dynamicDiv += '<tr >' +
+        '<td class="">' +
+        userList[0] +
+        "</td>" +
+        '<td>' + userList[1] + '</td>' +
+        '<td>' + userList[2] + '</td>' +
+        '<td>' + userList[3] + '</td>' +
+        '<td class="">' +
+        userList[4] +
+        "</td>" +
+        '<td>' + userList[5] + '</td>' +
+        '<td>' + userList[6] + '</td>' +
+
+        '</tr>'
+    return dynamicDiv;
+
+}
+
+
+function createDynamic2(url) {
+
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "GET",
+        // success: function() {
+        //     var gif = document.getElementById("gif");
+        //     gif.style.display = "none";
+        // },
+    }
+    $.ajax(settings).done(function(response) {
+        var data1 = JSON.parse(response);
+
+        $('#nextD').prepend('<table class="table table-striped custab table-fixed" id = "dataTableDefault" ><thead ><tr><th>TYPE OF PAYMENT</th><th>USER NAME</th><th>EMAIL ID</th><th>DEVICE USED</th><th>MODE OF PAYMENT</th><th>PAYMENT DATE</th><th>AMOUNT</th></tr ></thead ><tbody></tbody>');
+
+        for (var i = 0; i < data1.data.length; i++) {
+
+
+            var datain = data1.data[i];
+            var resultDiv = createDynamicDiv2(datain);
+
+            $("#dataTableDefault").append(resultDiv);
+
+
+
+
+        }
+        //$('#dataTable1').append('</tbody></table>');
+        $('#dataTableDefault').append('</tbody></table>');
+        dataTab2();
+
+
+
+        $('#nextD1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTableDefault1" ><thead ><tr><th>TYPE OF PAYMENT</th><th>USER NAME</th><th>EMAIL ID</th><th>DEVICE USED</th><th>MODE OF PAYMENT</th><th>PAYMENT DATE</th><th>AMOUNT</th></tr ></thead ><tbody></tbody>');
+        for (var i = 0; i < data1.data.length; i++) {
+
+
+            var datain = data1.data[i];
+
+            var resultDiv = createDynamicDiv2(datain);
+            $("#dataTable").append(resultDiv);
+
+        }
+        $('#dataTable').append('</tbody></table>');
+    })
+}
+
+function dataTab2() {
+
+    $("#dataTableDefault").DataTable({
+        "pageLength": 50
+    });
+
+}
+
+function createDynamicDiv2(userList) {
     var dynamicDiv = '';
     console.log(userList)
 

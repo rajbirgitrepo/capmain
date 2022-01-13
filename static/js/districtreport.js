@@ -460,7 +460,8 @@ function exportNew(p){
         console.log(dataa);
         console.log("/monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c);
         $(function() {
-            $("#container3").highcharts({
+            const chart1 = 
+            Highcharts.chart('container3', {
                 chart: {
                     zoomType: "xy",
                     type: "column"
@@ -554,13 +555,42 @@ function exportNew(p){
                     },
                 ],
             });
+
+                        
+document.getElementById('plain1').addEventListener('click', () => {
+    chart1.update({
+      chart: {
+        inverted: false,
+        polar: false
+      }
+    });
+  });
+  
+  document.getElementById('inverted1').addEventListener('click', () => {
+    chart1.update({
+      chart: {
+        inverted: true,
+        polar: false
+      }
+    });
+  });
+  document.getElementById('polar1').addEventListener('click', () => {
+    chart1.update({
+      chart: {
+        inverted: false,
+        polar: true
+      }
+    });
+  });
+  
         });
     });
 
 
     function zerochart() {
         $(function() {
-            $("#container3").highcharts({
+            const chart1 = 
+            Highcharts.chart('container3', {
                 chart: {
                     zoomType: "xy",
                     type: "column"
@@ -569,8 +599,12 @@ function exportNew(p){
                 title: {
                     text: "Playback Trend By Month",
                 },
+                credits: {
+                    enabled: false,
+                },
+                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                 xAxis: [{
-                    categories: [],
+                    categories: dataa.monthname,
                 }, ],
                 yAxis: [{
                         //Primary yAxis
@@ -608,125 +642,81 @@ function exportNew(p){
                 tooltip: {
                     shared: true,
                 },
-                plotOptions: { borderWidth: 2, series: { point: {} } },
-                series: [{
-                    name: "Playback Count",
-                    showInLegend: false,
-                    color: "#01a451",
-                    type: "column",
-                    data: [],
-                }, ],
-            });
-        });
-    }
-
-
-
-    var settings = {
-        async: true,
-        crossDomain: true,
-        url: "/schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c,
-        method: "GET",
-    };
-    $.ajax(settings).done(function(response) {
-        var dataa = JSON.parse(response);
-        console.log(dataa);
-        console.log("/schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c);
-        $(function() {
-            $("#container4").highcharts({
-                chart: {
-                    zoomType: "xy",
-                    type: "column"
-                },
-                title: {
-                    text: "Top 20 School User Count",
-                },
-                credits: {
-                    enabled: false,
-                },
-                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
-                xAxis: [{
-                    categories: dataa.schname,
-                    labels: {
-                        style: {
-                            fontSize: "8px",
-                            rotation: 90,
-                        },
-                    }
-                }, ],
-                yAxis: [{
-                        //Primary yAxis
-                        lineWidth: 1,
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#000",
-                            },
-                        },
-                        title: {
-                            text: "User Count",
-                            style: {
-                                color: "#000",
-                            },
-                        },
-                    },
-                    {
-                        //Secondary yAxis
-                        title: {
-                            text: "",
-                            style: {
-                                color: "#4572A7",
-                            },
-                        },
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#4572A7",
-                            },
-                        },
-                        opposite: false,
-                    },
-                ],
-                tooltip: {
-                    shared: true,
-                },
                 plotOptions: {
+                    borderWidth: 2,
                     series: {
+                        point: {
+
+                        }
+                    },
+                    column: {
                         stacking: 'normal',
+                        dataLabels: {
+                            enabled: false
+                        }
                     }
                 },
                 series: [{
                         name: 'Clever',
                         data: dataa.Clever,
-                        stack: 0
+                        stack: 'male'
                     },
                     {
                         name: 'Schoology',
                         data: dataa.Scoology,
-                        stack: 0
+                        stack: 'male'
                     }, {
                         name: 'Family',
                         fontSize: '8px',
                         data: dataa.Parents,
-                        stack: 0
+                        stack: 'male'
 
                     }, {
                         name: 'Teacher',
                         data: dataa.Teachers,
-                        stack: 0
-                    },
-                    {
-                        name: 'Engaged Users',
+                        stack: 'male'
+
+                    }, {
+                        name: 'LSY',
+                        data: dataa.lsy,
                         color: '#FF9933',
-                        type: 'line',
-                        data: dataa.active,
-                        yAxis: 0,
-                        //stack: 0
-                    }
+                        stack: 'female'
+                    },
                 ],
             });
-        });
+
+                        
+document.getElementById('plain1').addEventListener('click', () => {
+    chart1.update({
+      chart: {
+        inverted: false,
+        polar: false
+      }
     });
+  });
+  
+  document.getElementById('inverted1').addEventListener('click', () => {
+    chart1.update({
+      chart: {
+        inverted: true,
+        polar: false
+      }
+    });
+  });
+  document.getElementById('polar1').addEventListener('click', () => {
+    chart1.update({
+      chart: {
+        inverted: false,
+        polar: true
+      }
+    });
+  });
+  
+        });
+    }
+
+
+
 
 
     var settings = {
@@ -1211,6 +1201,7 @@ function exportNew(p){
                                 var modal2 = document.getElementById("myModal2");
                                 var Exportpage = URL +"?export";
                                 console.log(Exportpage + "sentiment table");  
+                                $("#exportLink").text(Exportpage);
                                 modal2.style.display = "block";
                                 $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
                                 var gif = document.getElementById("gif");
@@ -1532,6 +1523,140 @@ function exportNew(p){
     //   });
 
 
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c,
+        method: "GET",
+    };
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa);
+        console.log("/schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c);
+        $(function() {
+            const chart = 
+            Highcharts.chart('container4', {
+                chart: {
+                   // zoomType: "xy",
+                    type: "column"
+                },
+                title: {
+                    text: "Top 20 School User Count",
+                },
+                credits: {
+                    enabled: false,
+                },
+                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+                xAxis: [{
+                    categories: dataa.schname,
+                    labels: {
+                        style: {
+                            fontSize: "8px",
+                            rotation: 90,
+                        },
+                    }
+                }, ],
+                yAxis: [{
+                        //Primary yAxis
+                        lineWidth: 1,
+                        labels: {
+                            format: "{value}",
+                            style: {
+                                color: "#000",
+                            },
+                        },
+                        title: {
+                            text: "User Count",
+                            style: {
+                                color: "#000",
+                            },
+                        },
+                    },
+                    {
+                        //Secondary yAxis
+                        title: {
+                            text: "",
+                            style: {
+                                color: "#4572A7",
+                            },
+                        },
+                        labels: {
+                            format: "{value}",
+                            style: {
+                                color: "#4572A7",
+                            },
+                        },
+                        opposite: false,
+                    },
+                ],
+                tooltip: {
+                    shared: true,
+                },
+                plotOptions: {
+                    series: {
+                        stacking: 'normal',
+                    }
+                },
+                series: [{
+                        name: 'Clever',
+                        data: dataa.Clever,
+                        stack: 0
+                    },
+                    {
+                        name: 'Schoology',
+                        data: dataa.Scoology,
+                        stack: 0
+                    }, {
+                        name: 'Family',
+                        fontSize: '8px',
+                        data: dataa.Parents,
+                        stack: 0
+
+                    }, {
+                        name: 'Teacher',
+                        data: dataa.Teachers,
+                        stack: 0
+                    },
+                    {
+                        name: 'Engaged Users',
+                        color: '#FF9933',
+                        type: 'line',
+                        data: dataa.active,
+                        yAxis: 0,
+                        //stack: 0
+                    }
+                ],
+            });
+
+            
+document.getElementById('plain').addEventListener('click', () => {
+    chart.update({
+      chart: {
+        inverted: false,
+        polar: false
+      }
+    });
+  });
+  
+  document.getElementById('inverted').addEventListener('click', () => {
+    chart.update({
+      chart: {
+        inverted: true,
+        polar: false
+      }
+    });
+  });
+  document.getElementById('polar').addEventListener('click', () => {
+    chart.update({
+      chart: {
+        inverted: false,
+        polar: true
+      }
+    });
+  });
+  
+        });
+    });
 
 }
 
@@ -1556,7 +1681,7 @@ function createDynamic(url) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>USER EMAIL</th><th>LABELS</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT(DATE FILTER)</th><th>USER EMAIL</th><th>LABELS</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -1569,7 +1694,7 @@ function createDynamic(url) {
         dataTab();
 
         $("#next1").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>USER EMAIL</th><th>LABELS</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>USER NAME</th><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT(DATE FILTER)</th><th>USER EMAIL</th><th>LABELS</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -1609,9 +1734,6 @@ function createDynamicDiv(userList) {
         userList[5] +
         "</td>" +
         "<td>" +
-        userList[6] +
-        "</td>" +
-        "<td>" +
         userList[7] +
         "</td>" +
         "<td>" +
@@ -1623,7 +1745,9 @@ function createDynamicDiv(userList) {
         "<td>" +
         userList[10] +
         "</td>" +
-
+        "<td>" +
+        userList[6] +
+        "</td>" +
         "<td style='font-size: 10px;width: 18%;'>" +
         userList[1] +
         "</td>" +
@@ -1651,7 +1775,7 @@ function createDynamic4(url) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>LABELS</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT(DATE FILTER)</th><th>SUBSCRIPTION EXPIRY</th><th>LABELS</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -1664,7 +1788,7 @@ function createDynamic4(url) {
         dataTab();
 
         $("#next1").prepend(
-            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>SUBSCRIPTION EXPIRY</th><th>LABELS</th></tr ></thead ><tbody>'
+            '<table class="table table-striped custab table-fixed" id = "dataTable1" style="display:none" ><thead ><tr><th>SCHOOL NAME</th><th>COUNRTY</th><th>STATE</th><th>CITY</th><th>PLAYBACK COUNT(CSY)</th><th>PLAYBACK COUNT(LSY)</th><th>USER COUNT</th><th>CREATED DATE</th><th>LAST PLAYBACK DATE</th><th>PLAYBACK COUNT(DATE FILTER)</th><th>SUBSCRIPTION EXPIRY</th><th>LABELS</th></tr ></thead ><tbody>'
         );
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
@@ -1701,9 +1825,6 @@ function createDynamicDiv4(userList) {
         userList[3] +
         "</td>" +
         "<td>" +
-        userList[4] +
-        "</td>" +
-        "<td>" +
         userList[5] +
         "</td>" +
         "<td>" +
@@ -1717,6 +1838,9 @@ function createDynamicDiv4(userList) {
         "</td>" +
         "<td>" +
         userList[9] +
+        "</td>" +
+        "<td>" +
+        userList[4] +
         "</td>" +
         "<td>" +
         userList[10] +

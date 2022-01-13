@@ -5,6 +5,7 @@ document.getElementById('searchinput').value = '';
 if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1:5000/School_Search#" || urlid == "https://testcapxp.innerexplorer.org/School_Search" || urlid == "https://testcapxp.innerexplorer.org/School_Search#" || urlid == "https://cap.innerexplorer.org/School_Search" || urlid == "https://cap.innerexplorer.org/School_Search#") {
     console.log("noID")
 } else if (urlid !== '') {
+
     URL = "/schoolsearchid/" + urlid
     $("#schoolname").empty();
     $("#practice").empty();
@@ -198,6 +199,7 @@ function schoolsearch() {
     var a = document.getElementById("searchinputdescription").innerText;
     console.log(a);
     if (a !== '') {
+        
         URL = "/schoolsearchid/" + a
         $("#schoolname").empty();
         $("#practice").empty();
@@ -223,7 +225,7 @@ function schoolsearch() {
         $("#signup").empty();
         $("#renewal").empty();
         $("#status").empty();
-        $("#output").empty();
+         $("#output").empty();
         console.log(URL);
         P(URL);
         schoolIDCharts(a)
@@ -1063,9 +1065,9 @@ function inviteLink(urlid) {
             $('#inviteLinkRe').on("click", function() {
                 this.href = response;
             });
-                 console.log(dataa1 + "scan QR");
+                 console.log(response + "scan QR");
                  var qrcode = new QRCode("output");
-                 qrcode.makeCode(dataa1);        
+                 qrcode.makeCode(response);        
         });
 
     });
