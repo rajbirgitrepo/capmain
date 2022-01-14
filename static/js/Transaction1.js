@@ -72,6 +72,7 @@ function sub() {
     $("#GRANT").empty();
     $("#container").empty();
     $("#container2").empty();
+    $("#container4").empty();
     // $("#container5").empty();
     $("#Total_amount").empty();
     var gif = document.getElementById("gifcards");
@@ -379,7 +380,123 @@ function charts(a, b) {
             ],
         });
     });
+
+
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/revenaueyearly",
+        method: "GET",
+    };
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa);
+        $(function() {
+            $("#container4").highcharts({
+                chart: {
+                    // zoomType: "xy",
+                     type: "column"
+                 },
+                 title: {
+                     text: "Revenue by Year",
+                 },
+                 credits: {
+                     enabled: false,
+                 },
+                 colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+                 xAxis: [{
+                     categories: dataa.data.year,
+                     labels: {
+                         style: {
+                             fontSize: "8px",
+                             rotation: 90,
+                         },
+                     }
+                 }, ],
+                 yAxis: [{
+                         //Primary yAxis
+                         lineWidth: 1,
+                         labels: {
+                             format: "{value}",
+                             style: {
+                                 color: "#000",
+                             },
+                         },
+                         title: {
+                             text: "Revenue",
+                             style: {
+                                 color: "#000",
+                             },
+                         },
+                     },
+                     {
+                         //Secondary yAxis
+                         title: {
+                             text: "",
+                             style: {
+                                 color: "#4572A7",
+                             },
+                         },
+                         labels: {
+                             format: "{value}",
+                             style: {
+                                 color: "#4572A7",
+                             },
+                         },
+                         opposite: false,
+                     },
+                 ],
+                 tooltip: {
+                     shared: true,
+                 },
+                 plotOptions: {
+                     series: {
+                         stacking: 'normal',
+                     }
+                 },
+                series: [
+                    {
+                    name: "District",
+                    showInLegend: false,
+                    color: "#01a451",
+                   // type: "bar",
+                    data: dataa.data.district,
+                }, 
+                    {
+                    name: "Donation",
+                    showInLegend: false,
+                    color: "#8AE02B",
+                   // type: "bar",
+                    data: dataa.data.donation,
+                }, 
+                    {
+                    name: "Foundation",
+                    showInLegend: false,
+                    color: "#462CEE",
+                   // type: "bar",
+                    data: dataa.data.foundation,
+                }, 
+                    {
+                    name: "Mobile",
+                    showInLegend: false,
+                    color: "#05D36C",
+                   // type: "bar",
+                    data: dataa.data.mobile,
+                }, 
+                    {
+                    name: "School",
+                    showInLegend: false,
+                    color: "#FFFF00",
+                   // type: "bar",
+                    data: dataa.data.school,
+                }, 
+            
+            ],
+            });
+        });
+    });
 }
+
 
 function createDynamic(url) {
 

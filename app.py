@@ -11918,8 +11918,10 @@ def schwiseucc(districtid,startdate,enddate):
     {"$match":
          {'$and': [
              {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"_id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                          {'UTM_MEDIUM':{'$not':{'$regex':'clever','$options':'i'}}},
+                    {'UTM_MEDIUM':{'$not':{'$regex':'schoology','$options':'i'}}},
+#             {"_id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id",)}}},
+#             {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
 #              {'CREATED_DATE':{"$gte": myDatetime1 ,
 #                              "$lte":myDatetime2}},
                 {"IS_DISABLED":{"$ne":"Y"}},
@@ -11978,9 +11980,11 @@ def schwiseucc(districtid,startdate,enddate):
     df4 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
-             {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"_id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"_id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+#              {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#             {"_id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#             {"_id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+              {'UTM_MEDIUM':{'$regex':'clever','$options':'i'}},
+                    {'UTM_MEDIUM':{'$not':{'$regex':'schoology','$options':'i'}}},
                 {"IS_DISABLED":{"$ne":"Y"}},
              
                   {"IS_BLOCKED":{"$ne":"Y"}},
@@ -12010,9 +12014,11 @@ def schwiseucc(districtid,startdate,enddate):
     df5 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
-             {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"_id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+#              {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+              {'UTM_MEDIUM':{'$not':{'$regex':'clever','$options':'i'}}},
+                    {'UTM_MEDIUM':{'$regex':'schoology','$options':'i'}},
+#             {"_id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+#             {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                 {"IS_DISABLED":{"$ne":"Y"}},
                   {"IS_BLOCKED":{"$ne":"Y"}},
 #               {'CREATED_DATE':{"$gte": myDatetime1 ,
@@ -13203,8 +13209,11 @@ def monthwisepc(districtid,startdate,enddate):
     {"$match":
     {'$and': [
       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+#          
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -13270,9 +13279,11 @@ def monthwisepc(districtid,startdate,enddate):
     df4 = DataFrame(list(collection.aggregate([
     {"$match":
     {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+#       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#             {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -13303,8 +13314,11 @@ def monthwisepc(districtid,startdate,enddate):
     df5 = DataFrame(list(collection.aggregate([
     {"$match":
     {'$and': [
-      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+#       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+            {"USER_ID._id":{"$in":db.schoology_master.distinct("USER_ID._id")}},
+        
             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
@@ -13439,8 +13453,10 @@ def user_practice_90days(districtid,startdate,enddate):
     {"$match":
      {'$and': [
     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
               {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
              {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -13510,9 +13526,11 @@ def user_practice_90days(districtid,startdate,enddate):
     df4 = DataFrame(list(collection.aggregate([
     {"$match":
      {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+#     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#             {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
               {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
              {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -13547,9 +13565,11 @@ def user_practice_90days(districtid,startdate,enddate):
     df5 = DataFrame(list(collection.aggregate([
     {"$match":
      {'$and': [
-    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+#     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
               {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
              {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -14773,7 +14793,7 @@ def district_count_cards(districtid,startdate,enddate):
     
     
     df10 = DataFrame(list(collection4.aggregate([ {"$match":{"CATEGORY":{'$regex':district, '$options':'i'}}},
-                            {'$project':{'_id':0,'CATEGORY':1,'PARTNER_CATEGORY':1,'STATE':1}} ])))                  
+                           {'$group':{'_id':'$CATEGORY','CATEGORY':{'$max':'$CATEGORY'},'PARTNER_CATEGORY':{'$max':'$PARTNER_CATEGORY'},'STATE':{'$max':'$STATE'}}}])))                  
     df1['district']=df1['district'].fillna(df10['CATEGORY'])                        
     
     
@@ -15325,7 +15345,8 @@ def district_user_table_teacher(districtid,startdate,enddate):
                                {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
     #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
 #                  {'MODIFIED_DATE':{'$gte':datetime(2020,8,1)}},
-             {'MODIFIED_DATE':{"$gte": LSY_Date() ,
+            {'MODIFIED_DATE':{"$gte": LSY_Date() ,
+                               "$lte": csy_first_date()
                              }},
     # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -15558,6 +15579,7 @@ def district_user_table_parent(districtid,startdate,enddate):
     #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
 #                  {'MODIFIED_DATE':{'$gte':datetime(2020,8,1)}},
              {'MODIFIED_DATE':{"$gte": LSY_Date() ,
+                               "$lte": csy_first_date()
                              }},
     # //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -15763,7 +15785,8 @@ def district_school_table(districtid,startdate,enddate):
 
     # //        
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'MODIFIED_DATE':{"$gte": csy_first_date()}},
+             {'MODIFIED_DATE':{"$gte": csy_first_date(),
+                              }},
     #                  
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
@@ -15796,6 +15819,7 @@ def district_school_table(districtid,startdate,enddate):
     # //        
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
              {'MODIFIED_DATE':{"$gte": LSY_Date() ,
+                               "$lte": csy_first_date()
                              }},
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
@@ -26132,8 +26156,10 @@ def practice_trendnew_(charttype):
         df2 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
@@ -26167,8 +26193,10 @@ def practice_trendnew_(charttype):
             {"$match":{
          '$and':[
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#                 {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+#                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
@@ -26202,8 +26230,10 @@ def practice_trendnew_(charttype):
             {"$match":{
          '$and':[
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+#                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+             {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
@@ -26234,8 +26264,10 @@ def practice_trendnew_(charttype):
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-               {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -26335,8 +26367,10 @@ def practice_trendnew_(charttype):
         df2 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
@@ -26367,8 +26401,10 @@ def practice_trendnew_(charttype):
             {"$match":{
          '$and':[
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#                 {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+#                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
@@ -26399,8 +26435,10 @@ def practice_trendnew_(charttype):
             {"$match":{
          '$and':[
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+             {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -26428,8 +26466,10 @@ def practice_trendnew_(charttype):
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-               {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+#                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -45242,8 +45282,75 @@ def Payment_Mode(startdate,enddate):
 @app.route('/revenauetable/<type>')
 def revenue_table(type):
     df=pd.read_csv(""+type+".csv")
-    temp={"data":df.values.tolist()}
+    df.sort_values(by=['Last_Payment_Date'], inplace=True, ascending=False)
+    if "export" in request.args:
+        try:
+            df1=df[['school_name','country','State','city','Practice_Count',
+                    'Practice_Count_csy','Practice_Count_lsy','usercount',
+                    'Created_date','last_practice_date','Subscription_expire_date','label']]
+            csv = df1.to_csv(index=False)
+            return Response(
+                csv,
+                mimetype="text/csv",
+                headers={"Content-disposition":
+                        "attachment; filename=SchoolData.csv"})
+        except:
+            return jsonify("Unauthorized Access")   
+    else:
+        temp={"data":df.values.tolist()}
     return json.dumps(temp)
+
+
+
+@app.route('/revenaueyearly')
+def revenue_yearly():
+    from datetime import date
+
+    today = date.today()
+
+# dd/mm/YY
+    d1 = today.strftime("%Y-%m-%d")
+    print("d1 =", d1)
+
+    Payment_Mode('2017-07-01',d1)
+    df=pd.read_csv("revenaue.csv")
+#     df = df[df.TYPE_OF_PAYMENT != 'MOBILE']
+    df['Last_Payment_Date'] = pd.to_datetime(df['Last_Payment_Date'])
+    df['Payment_Amount'] = (df['Payment_Amount']).round()
+
+
+    df['label'] = np.where(df['Last_Payment_Date']>= '2021-07-01', '2021-2022', '2020-2021')
+    df.loc[(df['Last_Payment_Date']>='2019-07-01') & (df['Last_Payment_Date']< '2020-07-01'), 'label']='2019-2020'
+    df.loc[(df['Last_Payment_Date']>='2018-07-01') & (df['Last_Payment_Date']< '2019-07-01'), 'label']='2018-2019'
+    df.loc[(df['Last_Payment_Date']>='2017-07-01') & (df['Last_Payment_Date']< '2018-07-01'), 'label']='2017-2018'
+
+    df2=df.groupby(['label',"TYPE_OF_PAYMENT"])['Payment_Amount'].sum().reset_index()
+    # df2=df1.groupby(["TYPE_OF_PAYMENT"])['Payment_Amount','label'].sum().reset_index()
+    donation=df2.loc[(df2["TYPE_OF_PAYMENT"]=='DONATION')]
+    donation.columns=['label','TYPE_OF_PAYMENT_do','donation_amount']
+    mobile=df2.loc[(df2["TYPE_OF_PAYMENT"]=='MOBILE')]
+    mobile.columns=['label','TYPE_OF_PAYMENT_do','mobile_amount']
+    foundation = df2.loc[(df2["TYPE_OF_PAYMENT"]=='FOUNDATION')] 
+    foundation.columns=['label','TYPE_OF_PAYMENT_fo','foundation_amount']
+    school =df2.loc[(df2["TYPE_OF_PAYMENT"]=='SCHOOL')] 
+    school.columns=['label','TYPE_OF_PAYMENT_sc','school_amount']
+    district=df2.loc[(df2["TYPE_OF_PAYMENT"]=='DISTRICT')]
+    district.columns=['label','TYPE_OF_PAYMENT_di','district_amount']
+    df1=pd.merge(donation,foundation, on='label', how='outer')
+    dff=pd.merge(df1,school, on='label', how='outer')
+    dfff=pd.merge(dff,district, on='label', how='outer')
+    dfff=pd.merge(dfff,mobile, on='label', how='outer')
+    df11=dfff[['label','donation_amount','foundation_amount','school_amount','district_amount','mobile_amount']]
+    df11=df11.fillna(0)
+    label=df11.label.tolist()
+    donation=df11.donation_amount.tolist()
+    foundation=df11.foundation_amount.tolist()
+    school=df11.school_amount.tolist()
+    mobile=df11.mobile_amount.tolist()
+    district=df11.district_amount.tolist()
+    data={'year':label,'donation':donation,'school':school,'district':district,'foundation':foundation,'mobile':mobile}
+    return json.dumps({'data': data})
+
 
 @app.route('/hpayment/<startdate>/<enddate>')
 def Payment_History(startdate,enddate):
