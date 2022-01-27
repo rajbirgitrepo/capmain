@@ -15,6 +15,24 @@ function myFunction() {
 }
 
 
+function myFunctionserachchool() {
+    var input, filter, cards, cardContainer, title, i;
+    input = document.getElementById("searchschoolidchart");
+    filter = input.value.toUpperCase();
+    cardContainer = document.getElementById("printscoolname");
+    cards = cardContainer.getElementsByClassName("schoolnamenew");
+    for (i = 0; i < cards.length; i++) {
+        title = cards[i].querySelector(".school-title");
+        if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+            cards[i].style.display = "";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+
+
+
 
 createboxes();
 
@@ -72,212 +90,227 @@ function imgd(a) {
     $("#imgdis").append('<img src=' + a + '  class="img-responsive" alt="School" style="color: #797979; width: 100%;">');
 }
 
-var settings1 = {
-    async: true,
-    crossDomain: true,
-    url: "http://127.0.0.1:5000/active-teacher_d360/5f2609807a1c0000950bb45e/5f2bca2aba0be61b0c1cd8ff/2021-8-1/2022-1-20",
-    method: "GET",
-};
+var iddate = []
+function selectschoolforchart(d){
+    console.log(d)
+
+    console.log(d in heatSchoolId);
+    if(d in heatSchoolId){
+$('#container41').empty();
+var a = iddate[0];
+var b = iddate[1];
+var c = iddate[2];
+newchartactiveteacher(a,b,c,heatSchoolId[d])
+    }
+    else{}
+}
+
+function newchartactiveteacher(a,b,c,d){
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url":             "/active-teacher_d360/" + a + "/"+ d +'/' + b + "/" + c,
+    "method": "GET"
+   }
+    $.ajax(settings).done(function (response) {
+    var data=JSON.parse(response);
+      var dataa = data.data
+      var schoolonlyname = data.schools;
+        console.log(schoolonlyname);
+        let textschool = "";
+        $('#printscoolname').empty()
+        for (var i = 0; i < data.schools.length; i++) {
+              $('#printscoolname').append( '<div class="schoolnamenew"><p class="school-title" onclick="selectschoolforchart(\'' + data.schools[i] + '\')">'+data.schools[i]+"</p></div> ");
+            }
+anychart.onDocumentReady(function () {
+
+var data = preprocessData(dataa);
+
+var chart = anychart.column();
 
 
-$.ajax(settings1).done(function (response) {
-    var dataa = JSON.parse(response);
-    console.log(dataa);
 
-    anychart.onDocumentReady(function () {
-
-        var data1 = preprocessData(dataa.data);
-
-        var chart = anychart.column();
+// title text
+chart.title("Weekly Chart");
 
 
 
-        // title text
-        chart.title("Weekly Chart");
+// enable legend
+var legend = chart.legend();
+legend.enabled(true);
 
-
-
-        // enable legend
-        var legend = chart.legend();
-        legend.enabled(true);
-
-        chart.palette(['#006400', '#00A651', '#32CD32', '#8ae02b'
+chart.palette(['#8ae02b',
+           '#32CD32','#00a651','#006400'
         ]);
-        // configure global settings for series labels
-        chart.labels({ position: 'center', fontColor: '#000' });
-        // add subcategory names to the meta of one of the series
-        chart.column(data1.mapAs({ 'value': 2, 'sub-category': 1 }));
-        chart.column(data1.mapAs({ 'value': 3 }));
-        chart.column(data1.mapAs({ 'value': 4 }));
-        chart.column(data1.mapAs({ 'value': 5 }));
+// configure global settings for series labels
+chart.labels({position:'center', fontColor:'#000'});
+// add subcategory names to the meta of one of the series
+chart.column(data.mapAs({'value': 2, 'sub-category': 1}));
+chart.column(data.mapAs({'value': 3}));
+chart.column(data.mapAs({'value': 4}));
+chart.column(data.mapAs({'value': 5}));
 
-        // turn on stacking
-        chart.yScale().stackMode('value');
-        chart.yScale().maximum(60);
-        chart.yScale().minimum(0);
+// turn on stacking
+chart.yScale().stackMode('value');
+chart.yScale().maximum(60);
+chart.yScale().minimum(0);
 
-        // use subcategory names as names of X-axis ticks
-        chart.xScale().names('sub-category');
+// use subcategory names as names of X-axis ticks
+chart.xScale().names('sub-category');
 
-        // set a container and draw the chart
-        chart.container('container41');
-        chart.draw();
+// set a container and draw the chart
+chart.container('container41');
+chart.draw();
 
-        // calculate extra axes
-        createTwoLevelAxis(chart, data1, 0.1);
-
-    });
-
-    function preprocessData(data1) {
-        // to make beautiful spacing between categories, add
-        // several empty lines with the same category names to the data
-        if (data1.length > 0) {
-            // add one to the beginning of the array
-            data1.unshift([data1[0][0]]);
-            // add one more to the end of the data
-            data1.push([data1[data1.length - 1][0]]);
-            // add two empty items every time the category name changes,
-            // to each category
-            for (var i = 2; i < data1.length - 2; i++) {
-                var previous = data1[i - 1][0];
-                var current = data1[i][0];
-                if (current != previous) {
-                    data.splice(i, 0, [previous], [current]);
-                    i = i + 2;
-                }
-            }
-        }
-        return anychart.data1.set(data1);
-
-    }
-
-    function createTwoLevelAxis(chart, data1, padding) {
-        // subcategory names
-        var names = [];
-        // ticks for axes based on on main categories
-        var ticks = [];
-        // weights of ticks (to make spacing between categories by using
-        // the empty lines created in preprocessData)
-        var weights = [];
-        // the iterator feature allows us to go over data, so
-        // create an iterator for the new breakdown
-        var iter = data1.mapAs({ 'category': 0, 'sub-category': 1 }).getIterator();
-        while (iter.advance()) {
-            var name = iter.get('category');
-            var value = iter.get('sub-category');
-            // store category names
-            names.push(name);
-            // when the border between categories is identified, create a tick
-            if (name && names[names.length - 1] != names[names.length - 2]) {
-                ticks.push(iter.getIndex());
-            }
-            // assign weight to the tick
-            weights.push(value ? 1 : padding);
-        }
-
-        // create a custom scale
-        var customScale = anychart.scales.ordinal();
-        // supply values from the chart to the scale
-        customScale.values(chart.xScale().values());
-        // names of main categories only
-        customScale.names(names);
-        // weights for new ticks
-        customScale.weights(weights);
-        // synchronize weights with the chart scale
-        chart.xScale().weights(weights);
-        customScale.ticks(ticks);
-
-        // disable ticks along the main axis
-        chart.xAxis(0).ticks(true);
-
-        // create an extra chart axis and hide its ticks and the axis line, leaving only labels displayed
-        chart.xAxis(1)
-            .scale(customScale)
-            .stroke('none')
-            .ticks(false);
-        // draw one more extra axis without the axis line and labels, leaving only big ticks
-        var additionalXaxis = chart.xAxis(2);
-        additionalXaxis.scale(customScale);
-        additionalXaxis.labels(false);
-        additionalXaxis.stroke('none');
-        additionalXaxis.ticks()
-            .length(46)
-            .position('inside');
-
-        var labels = chart.xAxis().labels();
-        labels.fontFamily("Courier");
-        labels.fontSize(10);
-        labels.fontColor("#125393");
-        labels.fontWeight("bold");
-        labels.useHtml(false);
-        labels.position('left-top')
-        labels.offsetY(5)
-
-        // background settings
-        var xLabelsBackground = chart.xAxis().labels().background();
-        xLabelsBackground.enabled(true);
-        xLabelsBackground.stroke("#cecece");
-        xLabelsBackground.cornerType("round");
-        xLabelsBackground.corners(5);
-
-        var xAxisLabels = chart.xAxis().labels();
-        xAxisLabels.rotation(90)
-
-        // tooltip settings
-        var tooltip = chart.tooltip();
-        tooltip.title(false);
-        tooltip.separator(false);
-        tooltip.format(function () {
-            if (this.seriesName === "Series 0") {
-                this.seriesName = 'Daily'
-            }
-            else if (this.seriesName === "Series 1") {
-                this.seriesName = '1Day/Weekly'
-            }
-            else if (this.seriesName === "Series 2") {
-                this.seriesName = '2-4Days Week'
-            }
-            else { this.seriesName = 'Not Used' }
-            return this.seriesName + " :" + this.value;
-        });
-
-        var legend = chart.legend();
-
-        // adjust legend items
-        legend.itemsFormatter(function (items) {
-            console.log(items[2].text)
-            if (items[0].text === "Series 0") {
-                items[0].text = 'Daily'
-            }
-            if (items[1].text === "Series 1") {
-                items[1].text = '1Day/Weekly'
-            }
-            if (items[2].text === "Series 2") {
-                items[2].text = '2-4Days Week'
-            }
-            if (items[3].text === "Series 2") {
-                items[3].text = '2-4Days Week'
-            }
-            else { items[3].text = 'Not Used' }
-            return items;
-        });
-
-        // turn on chart animation
-        chart.animation(false);
-
-
-        chart.yAxis().title('Practice Count');
-
-        chart.bounds(0, 0, "100%", "100%");
-        // set the maximum width of points
-        chart.maxPointWidth("10%");
-
-        // function, if listener triggers
-
-    }
+// calculate extra axes
+createTwoLevelAxis(chart, data, 0.1);
 
 });
 
+function preprocessData(data){
+// to make beautiful spacing between categories, add
+// several empty lines with the same category names to the data
+if (data.length > 0) {
+    // add one to the beginning of the array
+    data.unshift([data[0][0]]);
+    // add one more to the end of the data
+    data.push([data[data.length - 1][0]]);
+    // add two empty items every time the category name changes,
+    // to each category
+    for (var i = 2; i < data.length - 2; i++) {
+        var previous = data[i-1][0];
+        var current = data[i][0];
+        if (current!=previous)
+        {
+            data.splice(i, 0, [previous], [current]);
+            i = i+2;
+        }
+    }
+}
+return anychart.data.set(data);
+
+}
+
+function createTwoLevelAxis(chart, data, padding){
+// subcategory names
+var names = [];
+// ticks for axes based on on main categories
+var ticks = [];
+// weights of ticks (to make spacing between categories by using
+// the empty lines created in preprocessData)
+var weights = [];
+// the iterator feature allows us to go over data, so
+// create an iterator for the new breakdown
+var iter = data.mapAs({'category': 0, 'sub-category': 1}).getIterator();
+while(iter.advance()) {
+    var name = iter.get('category');
+    var value = iter.get('sub-category');
+    // store category names
+    names.push(name);
+    // when the border between categories is identified, create a tick
+    if (name && names[names.length - 1] != names[names.length - 2]) 					{
+        ticks.push(iter.getIndex());
+    }
+    // assign weight to the tick
+    weights.push(value?1:padding);
+}
+
+// create a custom scale
+var customScale = anychart.scales.ordinal();
+// supply values from the chart to the scale
+customScale.values(chart.xScale().values());
+// names of main categories only
+customScale.names(names);
+// weights for new ticks
+customScale.weights(weights);
+// synchronize weights with the chart scale
+chart.xScale().weights(weights);
+customScale.ticks(ticks);
+
+// disable ticks along the main axis
+chart.xAxis(0).ticks(true);
+
+// create an extra chart axis and hide its ticks and the axis line, leaving only labels displayed
+chart.xAxis(1)
+        .scale(customScale)
+        .stroke('none')
+        .ticks(false);
+// draw one more extra axis without the axis line and labels, leaving only big ticks
+var additionalXaxis = chart.xAxis(2);
+additionalXaxis.scale(customScale);
+additionalXaxis.labels(false);
+additionalXaxis.stroke('none');
+additionalXaxis.ticks()
+        .length(46)
+        .position('inside');
+
+var labels = chart.xAxis().labels();
+labels.fontFamily("Courier");
+labels.fontSize(10);
+labels.fontColor("#125393");
+labels.fontWeight("bold");
+labels.useHtml(false);
+labels.position('left-top')
+labels.offsetY(5)
+
+// background settings
+var xLabelsBackground = chart.xAxis().labels().background();
+xLabelsBackground.enabled(true);
+xLabelsBackground.stroke("#cecece");
+xLabelsBackground.cornerType("round");
+xLabelsBackground.corners(5);
+
+var xAxisLabels = chart.xAxis().labels();
+xAxisLabels.rotation(90)
+
+// tooltip settings
+var tooltip = chart.tooltip();
+tooltip.title(false);
+tooltip.separator(false);
+tooltip.format(function() {
+if (this.seriesName === "Series 0"){
+ this.seriesName ='Daily'}
+else if (this.seriesName === "Series 1"){
+ this.seriesName ='1Day/Weekly'}
+else if (this.seriesName === "Series 2"){
+ this.seriesName ='2-4Days Week'}
+else{this.seriesName ='Not Used'}
+return this.seriesName+" :"+this.value;
+});
+
+var legend = chart.legend();
+
+// adjust legend items
+legend.itemsFormatter(function(items){
+console.log(items[2].text)
+if (items[0].text === "Series 0"){      items[0].text='Daily'
+}
+if (items[1].text === "Series 1"){
+ items[1].text ='1Day/Weekly'}
+if (items[2].text === "Series 2"){
+ items[2].text ='2-4Days Week'}
+if (items[3].text === "Series 2"){
+ items[3].text ='2-4Days Week'}
+else{items[3].text ='Not Used'}
+ return items;
+});
+
+// turn on chart animation
+chart.animation(false);
+
+
+chart.yAxis().title('Practice Count');
+
+chart.bounds(0, 0, "100%", "100%");
+// set the maximum width of points
+chart.maxPointWidth("10%");
+
+// function, if listener triggers
+
+}
+      
+});
+}
 
 
 function charts(a, b, c) {
@@ -2437,9 +2470,7 @@ function schoolsearchchart(a) {
         console.log("school id not found")
     }
 }
-
 function OnlyschoolId(a, b, c) {
-
     var settings = {
         "async": true,
         "crossDomain": true,
@@ -2447,28 +2478,14 @@ function OnlyschoolId(a, b, c) {
         "method": "GET"
     }
     $.ajax(settings).done(function (response) {
-        var dataa1 = JSON.parse(response);
-        console.log(dataa1.schoolid)
-
-        var p = dataa1.schoolid;
-        var schoolonlyname = Object.keys(p);
-        console.log(schoolonlyname);
-        let textschool = "";
-        for (const x in schoolonlyname) {
-            "<p>"
-            textschool += schoolonlyname[x] + "</p> ";
-        }
-        document.getElementById("printscoolname").innerHTML = textschool;
-
         
-        schoolonlyname.on("click", function (d) {
-
-            console.log(d)
-            schoolsearchHeat(d);
-            // window.open("/School_Search?" + a);
-        });
+        var dataa1 = JSON.parse(response);
+        console.log(Object.keys(dataa1.schoolid)[0])
+        iddate.push(a);
+        iddate.push(b);
+        iddate.push(c)
+        selectschoolforchart(Object.keys(dataa1.schoolid)[0])
     });
-
 }
 
 function heatnew(b) {
