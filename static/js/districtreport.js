@@ -25,7 +25,7 @@ function createboxes() {
         url: '/districtlogoupdates',
         method: "GET"
     };
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var data1 = JSON.parse(response);
         console.log("datain");
         for (var i = 0; i < data1.data.length; i++) {
@@ -72,7 +72,217 @@ function imgd(a) {
     $("#imgdis").append('<img src=' + a + '  class="img-responsive" alt="School" style="color: #797979; width: 100%;">');
 }
 
+var settings1 = {
+    async: true,
+    crossDomain: true,
+    url: "http://127.0.0.1:5000/active-teacher_d360/5f2609807a1c0000950bb45e/5f2bca2aba0be61b0c1cd8ff/2021-8-1/2022-1-20",
+    method: "GET",
+};
+
+
+$.ajax(settings1).done(function (response) {
+    var dataa = JSON.parse(response);
+    console.log(dataa);
+
+    anychart.onDocumentReady(function () {
+
+        var data1 = preprocessData(dataa.data);
+
+        var chart = anychart.column();
+
+
+
+        // title text
+        chart.title("Weekly Chart");
+
+
+
+        // enable legend
+        var legend = chart.legend();
+        legend.enabled(true);
+
+        chart.palette(['#006400', '#00A651', '#32CD32', '#8ae02b'
+        ]);
+        // configure global settings for series labels
+        chart.labels({ position: 'center', fontColor: '#000' });
+        // add subcategory names to the meta of one of the series
+        chart.column(data1.mapAs({ 'value': 2, 'sub-category': 1 }));
+        chart.column(data1.mapAs({ 'value': 3 }));
+        chart.column(data1.mapAs({ 'value': 4 }));
+        chart.column(data1.mapAs({ 'value': 5 }));
+
+        // turn on stacking
+        chart.yScale().stackMode('value');
+        chart.yScale().maximum(60);
+        chart.yScale().minimum(0);
+
+        // use subcategory names as names of X-axis ticks
+        chart.xScale().names('sub-category');
+
+        // set a container and draw the chart
+        chart.container('container41');
+        chart.draw();
+
+        // calculate extra axes
+        createTwoLevelAxis(chart, data1, 0.1);
+
+    });
+
+    function preprocessData(data1) {
+        // to make beautiful spacing between categories, add
+        // several empty lines with the same category names to the data
+        if (data1.length > 0) {
+            // add one to the beginning of the array
+            data1.unshift([data1[0][0]]);
+            // add one more to the end of the data
+            data1.push([data1[data1.length - 1][0]]);
+            // add two empty items every time the category name changes,
+            // to each category
+            for (var i = 2; i < data1.length - 2; i++) {
+                var previous = data1[i - 1][0];
+                var current = data1[i][0];
+                if (current != previous) {
+                    data.splice(i, 0, [previous], [current]);
+                    i = i + 2;
+                }
+            }
+        }
+        return anychart.data1.set(data1);
+
+    }
+
+    function createTwoLevelAxis(chart, data1, padding) {
+        // subcategory names
+        var names = [];
+        // ticks for axes based on on main categories
+        var ticks = [];
+        // weights of ticks (to make spacing between categories by using
+        // the empty lines created in preprocessData)
+        var weights = [];
+        // the iterator feature allows us to go over data, so
+        // create an iterator for the new breakdown
+        var iter = data1.mapAs({ 'category': 0, 'sub-category': 1 }).getIterator();
+        while (iter.advance()) {
+            var name = iter.get('category');
+            var value = iter.get('sub-category');
+            // store category names
+            names.push(name);
+            // when the border between categories is identified, create a tick
+            if (name && names[names.length - 1] != names[names.length - 2]) {
+                ticks.push(iter.getIndex());
+            }
+            // assign weight to the tick
+            weights.push(value ? 1 : padding);
+        }
+
+        // create a custom scale
+        var customScale = anychart.scales.ordinal();
+        // supply values from the chart to the scale
+        customScale.values(chart.xScale().values());
+        // names of main categories only
+        customScale.names(names);
+        // weights for new ticks
+        customScale.weights(weights);
+        // synchronize weights with the chart scale
+        chart.xScale().weights(weights);
+        customScale.ticks(ticks);
+
+        // disable ticks along the main axis
+        chart.xAxis(0).ticks(true);
+
+        // create an extra chart axis and hide its ticks and the axis line, leaving only labels displayed
+        chart.xAxis(1)
+            .scale(customScale)
+            .stroke('none')
+            .ticks(false);
+        // draw one more extra axis without the axis line and labels, leaving only big ticks
+        var additionalXaxis = chart.xAxis(2);
+        additionalXaxis.scale(customScale);
+        additionalXaxis.labels(false);
+        additionalXaxis.stroke('none');
+        additionalXaxis.ticks()
+            .length(46)
+            .position('inside');
+
+        var labels = chart.xAxis().labels();
+        labels.fontFamily("Courier");
+        labels.fontSize(10);
+        labels.fontColor("#125393");
+        labels.fontWeight("bold");
+        labels.useHtml(false);
+        labels.position('left-top')
+        labels.offsetY(5)
+
+        // background settings
+        var xLabelsBackground = chart.xAxis().labels().background();
+        xLabelsBackground.enabled(true);
+        xLabelsBackground.stroke("#cecece");
+        xLabelsBackground.cornerType("round");
+        xLabelsBackground.corners(5);
+
+        var xAxisLabels = chart.xAxis().labels();
+        xAxisLabels.rotation(90)
+
+        // tooltip settings
+        var tooltip = chart.tooltip();
+        tooltip.title(false);
+        tooltip.separator(false);
+        tooltip.format(function () {
+            if (this.seriesName === "Series 0") {
+                this.seriesName = 'Daily'
+            }
+            else if (this.seriesName === "Series 1") {
+                this.seriesName = '1Day/Weekly'
+            }
+            else if (this.seriesName === "Series 2") {
+                this.seriesName = '2-4Days Week'
+            }
+            else { this.seriesName = 'Not Used' }
+            return this.seriesName + " :" + this.value;
+        });
+
+        var legend = chart.legend();
+
+        // adjust legend items
+        legend.itemsFormatter(function (items) {
+            console.log(items[2].text)
+            if (items[0].text === "Series 0") {
+                items[0].text = 'Daily'
+            }
+            if (items[1].text === "Series 1") {
+                items[1].text = '1Day/Weekly'
+            }
+            if (items[2].text === "Series 2") {
+                items[2].text = '2-4Days Week'
+            }
+            if (items[3].text === "Series 2") {
+                items[3].text = '2-4Days Week'
+            }
+            else { items[3].text = 'Not Used' }
+            return items;
+        });
+
+        // turn on chart animation
+        chart.animation(false);
+
+
+        chart.yAxis().title('Practice Count');
+
+        chart.bounds(0, 0, "100%", "100%");
+        // set the maximum width of points
+        chart.maxPointWidth("10%");
+
+        // function, if listener triggers
+
+    }
+
+});
+
+
+
 function charts(a, b, c) {
+
+
     var settings = {
         async: true,
         crossDomain: true,
@@ -80,10 +290,10 @@ function charts(a, b, c) {
         method: "GET",
     };
 
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
-        $(function() {
+        $(function () {
             $("#container2").highcharts({
                 chart: {
                     zoomType: "xy",
@@ -97,45 +307,45 @@ function charts(a, b, c) {
                 },
                 colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                 xAxis: [{
-                        categories: dataa.Date,
-                        labels: {
-                            rotation: 90,
-                        }
-                    },
+                    categories: dataa.Date,
+                    labels: {
+                        rotation: 90,
+                    }
+                },
 
                 ],
                 yAxis: [{
-                        //Primary yAxis
-                        lineWidth: 1,
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#000",
-                            },
-                        },
-                        title: {
-                            text: "Playback Count",
-                            style: {
-                                color: "#000",
-                            },
+                    //Primary yAxis
+                    lineWidth: 1,
+                    labels: {
+                        format: "{value}",
+                        style: {
+                            color: "#000",
                         },
                     },
-                    {
-                        //Secondary yAxis
-                        title: {
-                            text: "",
-                            style: {
-                                color: "#4572A7",
-                            },
+                    title: {
+                        text: "Playback Count",
+                        style: {
+                            color: "#000",
                         },
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#4572A7",
-                            },
-                        },
-                        opposite: false,
                     },
+                },
+                {
+                    //Secondary yAxis
+                    title: {
+                        text: "",
+                        style: {
+                            color: "#4572A7",
+                        },
+                    },
+                    labels: {
+                        format: "{value}",
+                        style: {
+                            color: "#4572A7",
+                        },
+                    },
+                    opposite: false,
+                },
                 ],
                 tooltip: {
                     shared: true,
@@ -145,11 +355,11 @@ function charts(a, b, c) {
                     series: {
                         point: {
                             events: {
-                                click: function() {
+                                click: function () {
                                     URL = "/90daystable/" + a + "/" + this.category;
                                     $('#next').empty();
                                     console.log(URL);
-                                    var Exportpage = URL +"?export";
+                                    var Exportpage = URL + "?export";
                                     console.log(Exportpage + "90days table");
                                     $("#exportLink").text(Exportpage);
                                     var modal2 = document.getElementById("myModal2");
@@ -171,27 +381,27 @@ function charts(a, b, c) {
                     }
                 },
                 series: [{
-                        name: 'Clever',
-                        data: dataa.Clever
-                    },
-                    {
-                        name: 'Schoology',
-                        data: dataa.Scoology
-                    }, {
-                        name: 'Family',
-                        fontSize: '8px',
-                        data: dataa.Parents
+                    name: 'Clever',
+                    data: dataa.Clever
+                },
+                {
+                    name: 'Schoology',
+                    data: dataa.Scoology
+                }, {
+                    name: 'Family',
+                    fontSize: '8px',
+                    data: dataa.Parents
 
-                    }, {
-                        name: 'Teacher',
-                        data: dataa.Teachers
-                    },
+                }, {
+                    name: 'Teacher',
+                    data: dataa.Teachers
+                },
                 ],
             });
         });
     });
 
-    $(document).on('change', '#historyPlayback', function() {
+    $(document).on('change', '#historyPlayback', function () {
         $('#container2').empty();
         // $("#waiting").append("<p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p>");
         console.log(this.value)
@@ -202,10 +412,10 @@ function charts(a, b, c) {
                 url: "last90daysuserpractising/" + a,
                 method: "GET",
             };
-            $.ajax(settings).done(function(response) {
+            $.ajax(settings).done(function (response) {
                 var dataa = JSON.parse(response);
                 console.log(dataa);
-                $(function() {
+                $(function () {
                     $("#container2").highcharts({
                         chart: {
                             zoomType: "xy",
@@ -219,45 +429,45 @@ function charts(a, b, c) {
                         },
                         colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                         xAxis: [{
-                                categories: dataa.Date,
-                                labels: {
-                                    rotation: 90,
-                                }
-                            },
+                            categories: dataa.Date,
+                            labels: {
+                                rotation: 90,
+                            }
+                        },
 
                         ],
                         yAxis: [{
-                                //Primary yAxis
-                                lineWidth: 1,
-                                labels: {
-                                    format: "{value}",
-                                    style: {
-                                        color: "#000",
-                                    },
-                                },
-                                title: {
-                                    text: "Playback Count",
-                                    style: {
-                                        color: "#000",
-                                    },
+                            //Primary yAxis
+                            lineWidth: 1,
+                            labels: {
+                                format: "{value}",
+                                style: {
+                                    color: "#000",
                                 },
                             },
-                            {
-                                //Secondary yAxis
-                                title: {
-                                    text: "",
-                                    style: {
-                                        color: "#4572A7",
-                                    },
+                            title: {
+                                text: "Playback Count",
+                                style: {
+                                    color: "#000",
                                 },
-                                labels: {
-                                    format: "{value}",
-                                    style: {
-                                        color: "#4572A7",
-                                    },
-                                },
-                                opposite: false,
                             },
+                        },
+                        {
+                            //Secondary yAxis
+                            title: {
+                                text: "",
+                                style: {
+                                    color: "#4572A7",
+                                },
+                            },
+                            labels: {
+                                format: "{value}",
+                                style: {
+                                    color: "#4572A7",
+                                },
+                            },
+                            opposite: false,
+                        },
                         ],
                         tooltip: {
                             shared: true,
@@ -267,11 +477,11 @@ function charts(a, b, c) {
                             series: {
                                 point: {
                                     events: {
-                                        click: function() {
+                                        click: function () {
                                             URL = "/90daystable/" + a + "/" + this.category;
                                             $('#next').empty();
                                             console.log(URL);
-                                            var Exportpage = URL +"?export";
+                                            var Exportpage = URL + "?export";
                                             console.log(Exportpage + "90days table");
                                             $("#exportLink").text(Exportpage);
                                             var modal2 = document.getElementById("myModal2");
@@ -293,21 +503,21 @@ function charts(a, b, c) {
                             }
                         },
                         series: [{
-                                name: 'Clever',
-                                data: dataa.Clever
-                            },
-                            {
-                                name: 'Schoology',
-                                data: dataa.Scoology
-                            }, {
-                                name: 'Family',
-                                fontSize: '8px',
-                                data: dataa.Parents
+                            name: 'Clever',
+                            data: dataa.Clever
+                        },
+                        {
+                            name: 'Schoology',
+                            data: dataa.Scoology
+                        }, {
+                            name: 'Family',
+                            fontSize: '8px',
+                            data: dataa.Parents
 
-                            }, {
-                                name: 'Teacher',
-                                data: dataa.Teachers
-                            },
+                        }, {
+                            name: 'Teacher',
+                            data: dataa.Teachers
+                        },
                         ],
                     });
                 });
@@ -320,10 +530,10 @@ function charts(a, b, c) {
                 method: "GET",
             };
 
-            $.ajax(settings).done(function(response) {
+            $.ajax(settings).done(function (response) {
                 var dataa = JSON.parse(response);
                 console.log(dataa);
-                $(function() {
+                $(function () {
                     $("#container2").highcharts({
                         chart: {
                             zoomType: "xy",
@@ -337,45 +547,45 @@ function charts(a, b, c) {
                         },
                         colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                         xAxis: [{
-                                categories: dataa.Date,
-                                labels: {
-                                    rotation: 90,
-                                }
-                            },
+                            categories: dataa.Date,
+                            labels: {
+                                rotation: 90,
+                            }
+                        },
 
                         ],
                         yAxis: [{
-                                //Primary yAxis
-                                lineWidth: 1,
-                                labels: {
-                                    format: "{value}",
-                                    style: {
-                                        color: "#000",
-                                    },
-                                },
-                                title: {
-                                    text: "Playback Count",
-                                    style: {
-                                        color: "#000",
-                                    },
+                            //Primary yAxis
+                            lineWidth: 1,
+                            labels: {
+                                format: "{value}",
+                                style: {
+                                    color: "#000",
                                 },
                             },
-                            {
-                                //Secondary yAxis
-                                title: {
-                                    text: "",
-                                    style: {
-                                        color: "#4572A7",
-                                    },
+                            title: {
+                                text: "Playback Count",
+                                style: {
+                                    color: "#000",
                                 },
-                                labels: {
-                                    format: "{value}",
-                                    style: {
-                                        color: "#4572A7",
-                                    },
-                                },
-                                opposite: false,
                             },
+                        },
+                        {
+                            //Secondary yAxis
+                            title: {
+                                text: "",
+                                style: {
+                                    color: "#4572A7",
+                                },
+                            },
+                            labels: {
+                                format: "{value}",
+                                style: {
+                                    color: "#4572A7",
+                                },
+                            },
+                            opposite: false,
+                        },
                         ],
                         tooltip: {
                             shared: true,
@@ -385,13 +595,13 @@ function charts(a, b, c) {
                             series: {
                                 point: {
                                     events: {
-                                        click: function() {
+                                        click: function () {
                                             URL = "/90daystable/" + a + "/" + this.category;
                                             $('#next').empty();
                                             console.log(URL);
                                             var modal2 = document.getElementById("myModal2");
-                                            var Exportpage = URL +"?export";
-                                            console.log(Exportpage + "90days table");                                          
+                                            var Exportpage = URL + "?export";
+                                            console.log(Exportpage + "90days table");
                                             $("#exportLink").text(Exportpage);
                                             modal2.style.display = "block";
                                             $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
@@ -411,21 +621,21 @@ function charts(a, b, c) {
                             }
                         },
                         series: [{
-                                name: 'Clever',
-                                data: dataa.Clever
-                            },
-                            {
-                                name: 'Schoology',
-                                data: dataa.Scoology
-                            }, {
-                                name: 'Family',
-                                fontSize: '8px',
-                                data: dataa.Parents
+                            name: 'Clever',
+                            data: dataa.Clever
+                        },
+                        {
+                            name: 'Schoology',
+                            data: dataa.Scoology
+                        }, {
+                            name: 'Family',
+                            fontSize: '8px',
+                            data: dataa.Parents
 
-                            }, {
-                                name: 'Teacher',
-                                data: dataa.Teachers
-                            },
+                        }, {
+                            name: 'Teacher',
+                            data: dataa.Teachers
+                        },
                         ],
                     });
                 });
@@ -436,48 +646,48 @@ function charts(a, b, c) {
     $("#historyPlayback").val(1);
 
 
-    $("#export1" ).click('load', function() {
-var p = document.getElementById("exportLink").innerText;
-console.log(p);
-         exportNew(p)
-     });
-     
-function exportNew(p){
-    window.location.assign(p);
-    console.log(p);
-}
+    $("#export1").click('load', function () {
+        var p = document.getElementById("exportLink").innerText;
+        console.log(p);
+        exportNew(p)
+    });
+
+    function exportNew(p) {
+        window.location.assign(p);
+        console.log(p);
+    }
     var settings = {
         async: true,
         crossDomain: true,
         url: "/monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c,
         method: "GET",
-        error: function() {
+        error: function () {
             zerochart();
         }
     };
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
         console.log("/monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c);
-        $(function() {
-            const chart1 = 
-            Highcharts.chart('container3', {
-                chart: {
-                    zoomType: "xy",
-                    type: "column"
+        $(function () {
+            const chart1 =
+                Highcharts.chart('container3', {
+                    chart: {
+                        zoomType: "xy",
+                        type: "column"
 
-                },
-                title: {
-                    text: "Playback Trend By Month",
-                },
-                credits: {
-                    enabled: false,
-                },
-                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
-                xAxis: [{
-                    categories: dataa.monthname,
-                }, ],
-                yAxis: [{
+                    },
+                    title: {
+                        text: "Playback Trend By Month",
+                    },
+                    credits: {
+                        enabled: false,
+                    },
+                    colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+                    xAxis: [{
+                        categories: dataa.monthname,
+                    },],
+                    yAxis: [{
                         //Primary yAxis
                         lineWidth: 1,
                         labels: {
@@ -509,25 +719,25 @@ function exportNew(p){
                         },
                         opposite: false,
                     },
-                ],
-                tooltip: {
-                    shared: true,
-                },
-                plotOptions: {
-                    borderWidth: 2,
-                    series: {
-                        point: {
+                    ],
+                    tooltip: {
+                        shared: true,
+                    },
+                    plotOptions: {
+                        borderWidth: 2,
+                        series: {
+                            point: {
 
+                            }
+                        },
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: false
+                            }
                         }
                     },
-                    column: {
-                        stacking: 'normal',
-                        dataLabels: {
-                            enabled: false
-                        }
-                    }
-                },
-                series: [{
+                    series: [{
                         name: 'Clever',
                         data: dataa.Clever,
                         stack: 'male'
@@ -553,60 +763,60 @@ function exportNew(p){
                         color: '#FF9933',
                         stack: 'female'
                     },
-                ],
+                    ],
+                });
+
+
+            document.getElementById('plain1').addEventListener('click', () => {
+                chart1.update({
+                    chart: {
+                        inverted: false,
+                        polar: false
+                    }
+                });
             });
 
-                        
-document.getElementById('plain1').addEventListener('click', () => {
-    chart1.update({
-      chart: {
-        inverted: false,
-        polar: false
-      }
-    });
-  });
-  
-  document.getElementById('inverted1').addEventListener('click', () => {
-    chart1.update({
-      chart: {
-        inverted: true,
-        polar: false
-      }
-    });
-  });
-  document.getElementById('polar1').addEventListener('click', () => {
-    chart1.update({
-      chart: {
-        inverted: false,
-        polar: true
-      }
-    });
-  });
-  
+            document.getElementById('inverted1').addEventListener('click', () => {
+                chart1.update({
+                    chart: {
+                        inverted: true,
+                        polar: false
+                    }
+                });
+            });
+            document.getElementById('polar1').addEventListener('click', () => {
+                chart1.update({
+                    chart: {
+                        inverted: false,
+                        polar: true
+                    }
+                });
+            });
+
         });
     });
 
 
     function zerochart() {
-        $(function() {
-            const chart1 = 
-            Highcharts.chart('container3', {
-                chart: {
-                    zoomType: "xy",
-                    type: "column"
+        $(function () {
+            const chart1 =
+                Highcharts.chart('container3', {
+                    chart: {
+                        zoomType: "xy",
+                        type: "column"
 
-                },
-                title: {
-                    text: "Playback Trend By Month",
-                },
-                credits: {
-                    enabled: false,
-                },
-                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
-                xAxis: [{
-                    categories: dataa.monthname,
-                }, ],
-                yAxis: [{
+                    },
+                    title: {
+                        text: "Playback Trend By Month",
+                    },
+                    credits: {
+                        enabled: false,
+                    },
+                    colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+                    xAxis: [{
+                        categories: dataa.monthname,
+                    },],
+                    yAxis: [{
                         //Primary yAxis
                         lineWidth: 1,
                         labels: {
@@ -638,25 +848,25 @@ document.getElementById('plain1').addEventListener('click', () => {
                         },
                         opposite: false,
                     },
-                ],
-                tooltip: {
-                    shared: true,
-                },
-                plotOptions: {
-                    borderWidth: 2,
-                    series: {
-                        point: {
+                    ],
+                    tooltip: {
+                        shared: true,
+                    },
+                    plotOptions: {
+                        borderWidth: 2,
+                        series: {
+                            point: {
 
+                            }
+                        },
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: false
+                            }
                         }
                     },
-                    column: {
-                        stacking: 'normal',
-                        dataLabels: {
-                            enabled: false
-                        }
-                    }
-                },
-                series: [{
+                    series: [{
                         name: 'Clever',
                         data: dataa.Clever,
                         stack: 'male'
@@ -682,36 +892,36 @@ document.getElementById('plain1').addEventListener('click', () => {
                         color: '#FF9933',
                         stack: 'female'
                     },
-                ],
+                    ],
+                });
+
+
+            document.getElementById('plain1').addEventListener('click', () => {
+                chart1.update({
+                    chart: {
+                        inverted: false,
+                        polar: false
+                    }
+                });
             });
 
-                        
-document.getElementById('plain1').addEventListener('click', () => {
-    chart1.update({
-      chart: {
-        inverted: false,
-        polar: false
-      }
-    });
-  });
-  
-  document.getElementById('inverted1').addEventListener('click', () => {
-    chart1.update({
-      chart: {
-        inverted: true,
-        polar: false
-      }
-    });
-  });
-  document.getElementById('polar1').addEventListener('click', () => {
-    chart1.update({
-      chart: {
-        inverted: false,
-        polar: true
-      }
-    });
-  });
-  
+            document.getElementById('inverted1').addEventListener('click', () => {
+                chart1.update({
+                    chart: {
+                        inverted: true,
+                        polar: false
+                    }
+                });
+            });
+            document.getElementById('polar1').addEventListener('click', () => {
+                chart1.update({
+                    chart: {
+                        inverted: false,
+                        polar: true
+                    }
+                });
+            });
+
         });
     }
 
@@ -724,14 +934,14 @@ document.getElementById('plain1').addEventListener('click', () => {
         crossDomain: true,
         url: "/top20userspractisinginfo" + "/" + a + "/" + b + "/" + c,
         method: "GET",
-        error: function() {
+        error: function () {
             zerochart2();
         }
     };
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
-        $(function() {
+        $(function () {
             $("#container5").highcharts({
                 chart: {
                     // zoomType: "xy",
@@ -752,39 +962,39 @@ document.getElementById('plain1').addEventListener('click', () => {
                             rotation: 90,
                         },
                     }
-                }, ],
+                },],
                 yAxis: [{
-                        //Primary yAxis
-                        lineWidth: 1,
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#000",
-                            },
-                        },
-                        title: {
-                            text: "Playback Count",
-                            style: {
-                                color: "#000",
-                            },
+                    //Primary yAxis
+                    lineWidth: 1,
+                    labels: {
+                        format: "{value}",
+                        style: {
+                            color: "#000",
                         },
                     },
-                    {
-                        //Secondary yAxis
-                        title: {
-                            text: "",
-                            style: {
-                                color: "#4572A7",
-                            },
+                    title: {
+                        text: "Playback Count",
+                        style: {
+                            color: "#000",
                         },
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#4572A7",
-                            },
-                        },
-                        opposite: false,
                     },
+                },
+                {
+                    //Secondary yAxis
+                    title: {
+                        text: "",
+                        style: {
+                            color: "#4572A7",
+                        },
+                    },
+                    labels: {
+                        format: "{value}",
+                        style: {
+                            color: "#4572A7",
+                        },
+                    },
+                    opposite: false,
+                },
                 ],
                 tooltip: {
                     shared: true,
@@ -796,13 +1006,13 @@ document.getElementById('plain1').addEventListener('click', () => {
                     color: "#01a451",
                     type: "bar",
                     data: dataa.practicecount,
-                }, ],
+                },],
             });
         });
     });
 
     function zerochart2() {
-        $(function() {
+        $(function () {
             $("#container5").highcharts({
                 chart: {
                     //zoomType: "xy",
@@ -819,39 +1029,39 @@ document.getElementById('plain1').addEventListener('click', () => {
                             rotation: 90,
                         },
                     }
-                }, ],
+                },],
                 yAxis: [{
-                        //Primary yAxis
-                        lineWidth: 1,
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#000",
-                            },
-                        },
-                        title: {
-                            text: "Playback Count",
-                            style: {
-                                color: "#000",
-                            },
+                    //Primary yAxis
+                    lineWidth: 1,
+                    labels: {
+                        format: "{value}",
+                        style: {
+                            color: "#000",
                         },
                     },
-                    {
-                        //Secondary yAxis
-                        title: {
-                            text: "",
-                            style: {
-                                color: "#4572A7",
-                            },
+                    title: {
+                        text: "Playback Count",
+                        style: {
+                            color: "#000",
                         },
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#4572A7",
-                            },
-                        },
-                        opposite: false,
                     },
+                },
+                {
+                    //Secondary yAxis
+                    title: {
+                        text: "",
+                        style: {
+                            color: "#4572A7",
+                        },
+                    },
+                    labels: {
+                        format: "{value}",
+                        style: {
+                            color: "#4572A7",
+                        },
+                    },
+                    opposite: false,
+                },
                 ],
                 tooltip: {
                     shared: true,
@@ -863,7 +1073,7 @@ document.getElementById('plain1').addEventListener('click', () => {
                     color: "#01a451",
                     type: "bar",
                     data: [],
-                }, ],
+                },],
             });
         });
     }
@@ -874,11 +1084,11 @@ document.getElementById('plain1').addEventListener('click', () => {
         url: "/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c,
         method: "GET",
     };
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
         //console.log("/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c);
-        $(function() {
+        $(function () {
             $("#container6").highcharts({
                 chart: {
                     // zoomType: "xy",
@@ -899,39 +1109,39 @@ document.getElementById('plain1').addEventListener('click', () => {
                             rotation: 90,
                         },
                     }
-                }, ],
+                },],
                 yAxis: [{
-                        //Primary yAxis
-                        lineWidth: 1,
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#000",
-                            },
-                        },
-                        title: {
-                            text: "Playback Count",
-                            style: {
-                                color: "#000",
-                            },
+                    //Primary yAxis
+                    lineWidth: 1,
+                    labels: {
+                        format: "{value}",
+                        style: {
+                            color: "#000",
                         },
                     },
-                    {
-                        //Secondary yAxis
-                        title: {
-                            text: "",
-                            style: {
-                                color: "#4572A7",
-                            },
+                    title: {
+                        text: "Playback Count",
+                        style: {
+                            color: "#000",
                         },
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#4572A7",
-                            },
-                        },
-                        opposite: false,
                     },
+                },
+                {
+                    //Secondary yAxis
+                    title: {
+                        text: "",
+                        style: {
+                            color: "#4572A7",
+                        },
+                    },
+                    labels: {
+                        format: "{value}",
+                        style: {
+                            color: "#4572A7",
+                        },
+                    },
+                    opposite: false,
+                },
                 ],
                 tooltip: {
                     shared: true,
@@ -943,25 +1153,25 @@ document.getElementById('plain1').addEventListener('click', () => {
                     }
                 },
                 series: [{
-                        name: 'Clever',
-                        data: dataa.Clever,
-                        stack: 0
-                    },
-                    {
-                        name: 'Schoology',
-                        data: dataa.Scoology,
-                        stack: 0
-                    }, {
-                        name: 'Family',
-                        fontSize: '8px',
-                        data: dataa.Parents,
-                        stack: 0
+                    name: 'Clever',
+                    data: dataa.Clever,
+                    stack: 0
+                },
+                {
+                    name: 'Schoology',
+                    data: dataa.Scoology,
+                    stack: 0
+                }, {
+                    name: 'Family',
+                    fontSize: '8px',
+                    data: dataa.Parents,
+                    stack: 0
 
-                    }, {
-                        name: 'Teacher',
-                        data: dataa.Teachers,
-                        stack: 0
-                    },
+                }, {
+                    name: 'Teacher',
+                    data: dataa.Teachers,
+                    stack: 0
+                },
                 ],
             });
         });
@@ -974,12 +1184,12 @@ document.getElementById('plain1').addEventListener('click', () => {
         url: "top20userspractisinginfo/" + a + "/2020-08-01/2021-07-31",
         method: "GET",
     };
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
         console.log(url);
         //console.log("/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c);
-        $(function() {
+        $(function () {
             $("#container10").highcharts({
                 chart: {
                     // zoomType: "xy",
@@ -1000,39 +1210,39 @@ document.getElementById('plain1').addEventListener('click', () => {
                             rotation: 90,
                         },
                     }
-                }, ],
+                },],
                 yAxis: [{
-                        //Primary yAxis
-                        lineWidth: 1,
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#000",
-                            },
-                        },
-                        title: {
-                            text: "Playback Count",
-                            style: {
-                                color: "#000",
-                            },
+                    //Primary yAxis
+                    lineWidth: 1,
+                    labels: {
+                        format: "{value}",
+                        style: {
+                            color: "#000",
                         },
                     },
-                    {
-                        //Secondary yAxis
-                        title: {
-                            text: "",
-                            style: {
-                                color: "#4572A7",
-                            },
+                    title: {
+                        text: "Playback Count",
+                        style: {
+                            color: "#000",
                         },
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#4572A7",
-                            },
-                        },
-                        opposite: false,
                     },
+                },
+                {
+                    //Secondary yAxis
+                    title: {
+                        text: "",
+                        style: {
+                            color: "#4572A7",
+                        },
+                    },
+                    labels: {
+                        format: "{value}",
+                        style: {
+                            color: "#4572A7",
+                        },
+                    },
+                    opposite: false,
+                },
                 ],
                 tooltip: {
                     shared: true,
@@ -1060,7 +1270,7 @@ document.getElementById('plain1').addEventListener('click', () => {
         url: "/districtfeedbackrating_csy" + "/" + a + "/" + b + "/" + c,
         method: "GET",
     }
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
         console.log(dataa)
         Highcharts.chart('container38', {
@@ -1112,32 +1322,32 @@ document.getElementById('plain1').addEventListener('click', () => {
                 name: 'Ratings',
                 colorByPoint: true,
                 data: [{
-                        name: '1 Star',
-                        y: dataa.donut.one,
-                        // sliced: true,
-                        // selected: true,
-                        color: '#FF0000'
-                    },
-                    {
-                        name: '2 Star',
-                        y: dataa.donut.two,
-                        color: '#DC143C'
-                    },
-                    {
-                        name: '3 Star',
-                        y: dataa.donut.three,
-                        color: '#FF9933'
-                    },
-                    {
-                        name: '4 Star',
-                        y: dataa.donut.four,
-                        color: '#05D36C'
-                    },
-                    {
-                        name: '5 Star',
-                        y: dataa.donut.five,
-                        color: '#02A45A'
-                    },
+                    name: '1 Star',
+                    y: dataa.donut.one,
+                    // sliced: true,
+                    // selected: true,
+                    color: '#FF0000'
+                },
+                {
+                    name: '2 Star',
+                    y: dataa.donut.two,
+                    color: '#DC143C'
+                },
+                {
+                    name: '3 Star',
+                    y: dataa.donut.three,
+                    color: '#FF9933'
+                },
+                {
+                    name: '4 Star',
+                    y: dataa.donut.four,
+                    color: '#05D36C'
+                },
+                {
+                    name: '5 Star',
+                    y: dataa.donut.five,
+                    color: '#02A45A'
+                },
                 ]
             }]
         });
@@ -1150,7 +1360,7 @@ document.getElementById('plain1').addEventListener('click', () => {
         url: "/districtsentimentdonut_csy" + "/" + a + "/" + b + "/" + c,
         method: "GET",
     }
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
 
         Highcharts.chart('container37', {
@@ -1194,13 +1404,13 @@ document.getElementById('plain1').addEventListener('click', () => {
                 series: {
                     point: {
                         events: {
-                            click: function() {
+                            click: function () {
                                 URL = "/districtsentiment_table/" + a + "/" + this.key1 + "/" + b + "/" + c,
                                     $('#next').empty();
                                 console.log(URL);
                                 var modal2 = document.getElementById("myModal2");
-                                var Exportpage = URL +"?export";
-                                console.log(Exportpage + "sentiment table");  
+                                var Exportpage = URL + "?export";
+                                console.log(Exportpage + "sentiment table");
                                 $("#exportLink").text(Exportpage);
                                 modal2.style.display = "block";
                                 $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
@@ -1225,21 +1435,21 @@ document.getElementById('plain1').addEventListener('click', () => {
                 name: 'Sentiment CSY',
                 colorByPoint: true,
                 data: [{
-                        name: 'Positive',
-                        y: dataa.donut.pos,
-                        key1: dataa.text[0],
-                        sliced: true,
-                        selected: true
-                    }, {
-                        name: 'Negative',
-                        y: dataa.donut.neg,
-                        key1: dataa.text[1],
-                    },
-                    {
-                        name: 'Neutral',
-                        y: dataa.donut.neu,
-                        key1: dataa.text[2],
-                    },
+                    name: 'Positive',
+                    y: dataa.donut.pos,
+                    key1: dataa.text[0],
+                    sliced: true,
+                    selected: true
+                }, {
+                    name: 'Negative',
+                    y: dataa.donut.neg,
+                    key1: dataa.text[1],
+                },
+                {
+                    name: 'Neutral',
+                    y: dataa.donut.neu,
+                    key1: dataa.text[2],
+                },
                 ]
             }]
         });
@@ -1529,34 +1739,34 @@ document.getElementById('plain1').addEventListener('click', () => {
         url: "/schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c,
         method: "GET",
     };
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
         console.log("/schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c);
-        $(function() {
-            const chart = 
-            Highcharts.chart('container4', {
-                chart: {
-                   // zoomType: "xy",
-                    type: "column"
-                },
-                title: {
-                    text: "Top 20 School User Count",
-                },
-                credits: {
-                    enabled: false,
-                },
-                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
-                xAxis: [{
-                    categories: dataa.schname,
-                    labels: {
-                        style: {
-                            fontSize: "8px",
-                            rotation: 90,
-                        },
-                    }
-                }, ],
-                yAxis: [{
+        $(function () {
+            const chart =
+                Highcharts.chart('container4', {
+                    chart: {
+                        // zoomType: "xy",
+                        type: "column"
+                    },
+                    title: {
+                        text: "Top 20 School User Count",
+                    },
+                    credits: {
+                        enabled: false,
+                    },
+                    colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+                    xAxis: [{
+                        categories: dataa.schname,
+                        labels: {
+                            style: {
+                                fontSize: "8px",
+                                rotation: 90,
+                            },
+                        }
+                    },],
+                    yAxis: [{
                         //Primary yAxis
                         lineWidth: 1,
                         labels: {
@@ -1588,16 +1798,16 @@ document.getElementById('plain1').addEventListener('click', () => {
                         },
                         opposite: false,
                     },
-                ],
-                tooltip: {
-                    shared: true,
-                },
-                plotOptions: {
-                    series: {
-                        stacking: 'normal',
-                    }
-                },
-                series: [{
+                    ],
+                    tooltip: {
+                        shared: true,
+                    },
+                    plotOptions: {
+                        series: {
+                            stacking: 'normal',
+                        }
+                    },
+                    series: [{
                         name: 'Clever',
                         data: dataa.Clever,
                         stack: 0
@@ -1625,36 +1835,36 @@ document.getElementById('plain1').addEventListener('click', () => {
                         yAxis: 0,
                         //stack: 0
                     }
-                ],
+                    ],
+                });
+
+
+            document.getElementById('plain').addEventListener('click', () => {
+                chart.update({
+                    chart: {
+                        inverted: false,
+                        polar: false
+                    }
+                });
             });
 
-            
-document.getElementById('plain').addEventListener('click', () => {
-    chart.update({
-      chart: {
-        inverted: false,
-        polar: false
-      }
-    });
-  });
-  
-  document.getElementById('inverted').addEventListener('click', () => {
-    chart.update({
-      chart: {
-        inverted: true,
-        polar: false
-      }
-    });
-  });
-  document.getElementById('polar').addEventListener('click', () => {
-    chart.update({
-      chart: {
-        inverted: false,
-        polar: true
-      }
-    });
-  });
-  
+            document.getElementById('inverted').addEventListener('click', () => {
+                chart.update({
+                    chart: {
+                        inverted: true,
+                        polar: false
+                    }
+                });
+            });
+            document.getElementById('polar').addEventListener('click', () => {
+                chart.update({
+                    chart: {
+                        inverted: false,
+                        polar: true
+                    }
+                });
+            });
+
         });
     });
 
@@ -1672,12 +1882,12 @@ function createDynamic(url) {
         crossDomain: true,
         url: url,
         method: "GET",
-        success: function() {
+        success: function () {
             var gif = document.getElementById("gif");
             gif.style.display = "none";
         },
     };
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
@@ -1766,12 +1976,12 @@ function createDynamic4(url) {
         crossDomain: true,
         url: url,
         method: "GET",
-        success: function() {
+        success: function () {
             var gif = document.getElementById("gif");
             gif.style.display = "none";
         },
     };
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
@@ -1860,12 +2070,12 @@ function createDynamic2(url) {
         crossDomain: true,
         url: url,
         method: "GET",
-        success: function() {
+        success: function () {
             var gif = document.getElementById("gif");
             gif.style.display = "none";
         },
     };
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
@@ -1944,12 +2154,12 @@ function createDynamicSentiment(url) {
         crossDomain: true,
         url: url,
         method: "GET",
-        success: function() {
+        success: function () {
             var gif = document.getElementById("gif");
             gif.style.display = "none";
         },
     };
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var data1 = JSON.parse(response);
 
         $("#next").prepend(
@@ -2124,6 +2334,7 @@ function distselect(distid) {
     console.log(distid)
     cardcount(c, a, b);
     charts(c, a, b);
+    OnlyschoolId(c, a, b);
     // ExportTable2(c, a, b);
     // bubble(c);
     // bubble2(c);
@@ -2149,7 +2360,7 @@ function cardcount(id, a, b) {
         method: "GET",
     };
     // console.log(url + "ankit");
-    $.ajax(settings).done(function(response) {
+    $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
         console.log("counts are fnctioning");
         console.log(URL);
@@ -2187,7 +2398,7 @@ function dateSub() {
 }
 
 //CODE FOR PDF EXTRACT 
-$("#btnPrint").on("click", function() {
+$("#btnPrint").on("click", function () {
     var divContents = $(".containerPrint").html();
     var printWindow = window.open('', '', 'height=400,width=800');
     printWindow.document.write('<html><head><title>DIV Contents</title>');
@@ -2214,6 +2425,52 @@ function schoolsearchHeat(a) {
     }
 }
 
+
+var chartSchoolId = []
+function schoolsearchchart(a) {
+    console.log(a in chartSchoolId);
+    if (a in chartSchoolId) {
+       
+        console.log(a)
+        console.log(chartSchoolId[a])
+    } else {
+        console.log("school id not found")
+    }
+}
+
+function OnlyschoolId(a, b, c) {
+
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": '/districtheatmappractice/' + a + '/' + b + '/' + c,
+        "method": "GET"
+    }
+    $.ajax(settings).done(function (response) {
+        var dataa1 = JSON.parse(response);
+        console.log(dataa1.schoolid)
+
+        var p = dataa1.schoolid;
+        var schoolonlyname = Object.keys(p);
+        console.log(schoolonlyname);
+        let textschool = "";
+        for (const x in schoolonlyname) {
+            "<p>"
+            textschool += schoolonlyname[x] + "</p> ";
+        }
+        document.getElementById("printscoolname").innerHTML = textschool;
+
+        
+        schoolonlyname.on("click", function (d) {
+
+            console.log(d)
+            schoolsearchHeat(d);
+            // window.open("/School_Search?" + a);
+        });
+    });
+
+}
+
 function heatnew(b) {
     console.log(b);
     var min, max, colorScale, temps, tempsArr;
@@ -2223,11 +2480,10 @@ function heatnew(b) {
     var ur = "/" + b;
     console.log(ur);
 
-    var data = d3.json(ur, function(error, data) {
+    var data = d3.json(ur, function (error, data) {
 
         temps = data.meanTemp;
         heatSchoolId = data.schoolid;
-        // console.log(data.schoolid[0]);
         tempsArr = createTempArr(temps);
         initScale();
         initTable();
@@ -2247,8 +2503,8 @@ function heatnew(b) {
     }
 
     function initScale() {
-        min = d3.min(d3.values(temps), function(d) { return d3.min(d); });
-        max = d3.max(d3.values(temps), function(d) { return d3.max(d); });
+        min = d3.min(d3.values(temps), function (d) { return d3.min(d); });
+        max = d3.max(d3.values(temps), function (d) { return d3.max(d); });
         colorScale = d3.scaleQuantile()
             .domain([min, max])
             .range(colors);
@@ -2261,7 +2517,7 @@ function heatnew(b) {
             .data(months)
             .enter()
             .append("th")
-            .text(function(d) { return d; });
+            .text(function (d) { return d; });
     }
 
     function addRows() {
@@ -2274,9 +2530,9 @@ function heatnew(b) {
         // create vertical heading (first col of each row)
         // var a = document.getElementById("disid").textContent;
         headCells = rows.append('th')
-            .text(function(d) { return d.year; });
+            .text(function (d) { return d.year; });
 
-        headCells.on("click", function(d) {
+        headCells.on("click", function (d) {
 
             console.log(d)
             schoolsearchHeat(d.year);
@@ -2285,12 +2541,12 @@ function heatnew(b) {
 
         //create a data cell for each monthly tempature
         cells = rows.selectAll('td')
-            .data(function(row, i) {
+            .data(function (row, i) {
                 return row.temps;
             })
             .enter()
             .append('td')
-            .text(function(d) { return d; })
+            .text(function (d) { return d; })
             .style("background-color", colors[0]);
     }
 
@@ -2307,7 +2563,7 @@ function heatnew(b) {
     function setColorTransition() {
         cells.transition()
             .duration(1000)
-            .style("background-color", function(d) { return colorScale(d); });
+            .style("background-color", function (d) { return colorScale(d); });
     }
 
     function addLegend() {
@@ -2323,7 +2579,7 @@ function heatnew(b) {
             .data(rangeValues).enter()
             .append("div")
             .attr("class", "color-square")
-            .style("background-color", function(d, i) { return colors[i]; });
+            .style("background-color", function (d, i) { return colors[i]; });
         //.text(function(d) { return "≥ " + Math.round(d); }); //add range
 
         var labels = legend.append("div");
@@ -2338,7 +2594,7 @@ function heatnew(b) {
     }
 }
 
-$('#heat').change(function() {
+$('#heat').change(function () {
     var c = document.getElementById("stardate").innerText;
     var b = document.getElementById("finaldate").innerText;
     if (this.value == '1') {
@@ -2393,7 +2649,7 @@ function modal2() {
 
 
 
-Plotly.d3.csv('https://raw.githubusercontent.com/Ash0077/i3os/master/sarasota_29_jan.csv', function(err, data) {
+Plotly.d3.csv('https://raw.githubusercontent.com/Ash0077/i3os/master/sarasota_29_jan.csv', function (err, data) {
     // Create a lookup table to sort and regroup the columns of data,
 
     // first by MONTH, then by USER_COUNT:
@@ -2401,7 +2657,8 @@ Plotly.d3.csv('https://raw.githubusercontent.com/Ash0077/i3os/master/sarasota_29
 
     function getData(MONTH, USER_COUNT) {
         var byMONTH, trace;
-        if (!(byMONTH = lookup[MONTH])) {;
+        if (!(byMONTH = lookup[MONTH])) {
+            ;
             byMONTH = lookup[MONTH] = {};
         }
         // If a container for this MONTH + USER_COUNT doesn't exist yet,
@@ -2510,7 +2767,7 @@ Plotly.d3.csv('https://raw.githubusercontent.com/Ash0077/i3os/master/sarasota_29
     for (i = 0; i < MONTHs.length; i++) {
         frames.push({
             name: MONTHs[i],
-            data: USER_COUNTs.map(function(USER_COUNT) {
+            data: USER_COUNTs.map(function (USER_COUNT) {
                 return getData(MONTHs[i], USER_COUNT);
             })
         })
@@ -2610,7 +2867,7 @@ Plotly.d3.csv('https://raw.githubusercontent.com/Ash0077/i3os/master/sarasota_29
 
 
 
-$(function() {
+$(function () {
     $("#datepicker").datepicker(
 
         {
@@ -2618,22 +2875,22 @@ $(function() {
             changeYear: true,
             yearRange: "2015:2021",
             dateFormat: "yy-mm-dd",
-            onSelect: function(dateText, inst) {
+            onSelect: function (dateText, inst) {
                 $("#stardate").text(dateText);
             }
         });
     $("#datepicker").datepicker("setDate",
-        new Date(2021, 07, 01), )
+        new Date(2021, 07, 01))
 });
 
-$(function() {
+$(function () {
     $("#datepicker2").datepicker({
         changeMonth: true,
         changeYear: true,
         yearRange: "2015:2021",
         dateFormat: "yy-mm-dd",
         maxDate: new Date(),
-        onSelect: function(dateText, inst) {
+        onSelect: function (dateText, inst) {
             $("#finaldate").text(dateText);
         }
     });

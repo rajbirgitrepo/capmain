@@ -1,38 +1,16 @@
 TYPE_OF_PAYMENT,USER_NAME,EMAIL_ID,DEVICE_USED,MODE_OF_PAYMENT,Last_Payment_Date,Payment_Amount
-SCHOOL,Delna Bliss,delna.bliss@millardk12.org,WEBAPP,SQUARE PAYMENT,2021-01-25,1400.0
-SCHOOL,SUPER ADMIN,lbakosh@innerexplorer.org,WEBAPP,SQUARE PAYMENT,2020-10-23,1400.0
-SCHOOL,Sarah Castro,scastro@bridge-rayn.org,WEBAPP,SIGNUP,2021-01-12,1000.0
 SCHOOL,Tracy Schenk,tschenk@pagosa.k12.co.us,WEBAPP,SQUARE PAYMENT,2021-09-23,1000.0
-SCHOOL,MARLENE RAMIREZ,MER0800@LAUSD.NET,WEBAPP,,2020-10-28,1000.0
-SCHOOL,Jen McDonald,j_mcdonald@ludlowps.org,WEBAPP,PAYPAL,2020-11-02,1000.0
-SCHOOL,Ricardo Tamayo,ricardo.tamayo@vistamiddle.net,WEBAPP,SIGNUP,2020-08-31,990.0
 SCHOOL,Kim Aman,KIm.F.Aman@k12.sd.us,WEBAPP,SQUARE PAYMENT,2021-08-12,1000.0
-SCHOOL,Jill DeVane,Jill.DeVane@hhchealth.org,WEBAPP,SIGNUP,2020-08-28,210.0
 SCHOOL,Gracie MacDonald,gracie.macdonald@sd71.bc.ca,WEBAPP,NO INFO,2021-07-31,450.0
-SCHOOL,Judy,jxiong@canyon.k12.ca.us,WEBAPP,SIGNUP,2020-08-30,1000.0
 SCHOOL,Paula Moujallip,moujallip@unitedwaymiami.org,WEBAPP,SQUARE PAYMENT,2021-08-25,1000.0
-SCHOOL,MarciTaylor,mtaylor3@graniteschools.org,WEBAPP,SQUARE PAYMENT,2020-11-09,1000.02001953125
-SCHOOL,Weston Taylor,wtaylor@richschool.org,WEBAPP,SQUARE PAYMENT,2021-01-05,1000.0
 SCHOOL,Carla Jensen,cjensen@alpinedistrict.org,WEBAPP,SQUARE PAYMENT,2021-09-23,1000.0
-SCHOOL,Griffin Snider,jensnider530@gmail.com,WEBAPP,SQUARE PAYMENT,2020-07-02,2100.0
-SCHOOL,Benjamin Suro,bsuro@epsd.org,WEBAPP,PROMOCODE,2021-06-30,1000.0
 SCHOOL,Felicia Roggero,froggero@goleta.k12.ca.us,WEBAPP,PROMOCODE,2021-10-01,1000.0
-SCHOOL,Tamara,griffint@freelandschools.net,WEBAPP,SQUARE PAYMENT,2021-01-04,1000.0
 SCHOOL,Lorena Reyes,lreyes@goleta.k12.ca.us,WEBAPP,PROMOCODE,2021-10-11,1000.0
 SCHOOL,Leah Barry,barryl@kingphilip.org,WEBAPP,SQUARE PAYMENT,2021-12-07,1400.0
-SCHOOL,Michelle Palladini,palladinim@kingphilip.org,WEBAPP,INVITED USER,2021-03-31,1400.0
-SCHOOL,Jennilee Spinelli,spinellij@kingphilip.org,WEBAPP,INVITED USER,2021-03-31,1400.0
-SCHOOL,Artrice Shine,artrice.shine@browardschools.com,WEBAPP,SIGNUP,2020-08-21,1400.0
-SCHOOL,Joshua Nichols,jnichols@amboy.net,WEBAPP,SQUARE PAYMENT,2021-01-27,1400.0
-SCHOOL,Rollin Dubois,rdubois@englewoodcliffs.org,NO INFO,APPLE,2021-03-18,59.9900016784668
-SCHOOL,L,henleykindergarten@icloud.com,NO INFO,APPLE,2021-01-26,59.9900016784668
-SCHOOL,amela backes,nicolehigel@hotmail.com,WEBAPP,PAYPAL,2020-08-31,2079.0
+SCHOOL,Mike,mike.pepperman@gmail.com,NO INFO,GOOGLE,2022-01-24,89.98999786376953
 SCHOOL,Luz Quintero,lquintero@riversideunified.org,NO INFO,APPLE,2022-01-12,8.989999771118164
 SCHOOL,Deborah Howard,dhoward@nwphs.org,WEBAPP,PAYPAL,2021-09-15,1400.0
-SCHOOL,Jeffrey R Schommer,jschommer@nwphs.org,WEBAPP,INVITED USER,2020-09-03,1400.0
 SCHOOL,Melissa Norwood ,mnorwood@mtrsd.org,NO INFO,APPLE,2021-08-13,89.98999786376953
-SCHOOL,Shannon New,shannonnew@mays.k12.in.us,WEBAPP,SQUARE PAYMENT,2020-07-28,2100.0
-SCHOOL,alex,alexvann@gmail.com,WEBAPP,SIGNUP,2020-07-18,1000.0
 SCHOOL,Dora Cavallo,dora.cavallo@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30,1000.0
 SCHOOL,Vanessa Marullo,vanessa.marullo@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30,1000.0
 SCHOOL,Laura Dispenzere,laura.dispenzere@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30,1000.0
@@ -47,7 +25,6 @@ SCHOOL,Ashley Fontanez,ashley.fontanez@bellevilleschools.org,WEBAPP,CTO,2021-09-
 SCHOOL,Jayne Ostrowsky,jayne.ostrowsky@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Nicole Shanklin,nicole.shanklin@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Aimee Gere,aimee.gere@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
-SCHOOL,Diane Richards,drichard@hamadyhawks.net,WEBAPP,SIGNUP,2020-09-15,1000.0
 SCHOOL,Melissa Maucione,melissa.maucione@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Cara Robertello,cara.robertello@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Victoria Lago,victoria.lago@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
@@ -140,43 +117,22 @@ SCHOOL,Cheryl Cleary,cheryl.cleary@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1
 SCHOOL,Melissa Florczak,melissa.florczak@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,David Muller,david.muller@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Lauren Grossel,lauren.grossel@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
+SCHOOL,Valeria Puca,vpuca@mmsny.org,,APPLE,2022-01-24,8.989999771118164
 SCHOOL,Linda Nicodemi ,linda.nicodemi@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Robert Lessard,robert.lessard@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Robert,lessard0208@aol.com,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,nikki hudak,nikki.hudak@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
-SCHOOL,Gabriel Carbajal,s148893@fsusd.org,WEBAPP,SIGNUP,2020-10-21,1000.0
 SCHOOL,AnnMarie,annmarie.albanese@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Erin Lewis,erin.lewis@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
-SCHOOL,Rita Bergquist,rita_bergquist@bismarckschools.org,WEBAPP,SQUARE PAYMENT,2020-10-27,1000.0
-SCHOOL,Jenny Gempeler,jgempeler@ssummit.org,WEBAPP,SQUARE PAYMENT,2020-10-29,1400.0
 SCHOOL,Stephanie Cheff,stephanie.cheff@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,David Ackerman,david.ackerman@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Nina Lambrugo,nina.lambrugo@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Antonella Fasolino,antonella.fasolino@bellevilleschool.org,WEBAPP,CTO,2021-09-30,1000.0
-SCHOOL,Heidi,Heidi_Meagher@needham.k12.ma.us,WEBAPP,SIGNUP,2021-06-30,1400.0
-SCHOOL,Roberta,roberta_redpath@needham.k12.ma.us,WEBAPP,SIGNUP,2021-06-30,1400.0
-SCHOOL,Liv,liv_nash@needham.k12.ma.us,WEBAPP,SIGNUP,2021-06-30,1400.0
 SCHOOL,Nicole Auriemma,nicole.auriemma@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
-SCHOOL,,,,GOOGLE,2020-12-23,5.989999771118164
-SCHOOL,Heather Young,heatheryoung@alpinedistrict.org,WEBAPP,SQUARE PAYMENT,2021-01-20,1000.0
 SCHOOL,Emily Kafrouni,emily.kafrouni@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Victoria Matturro,victoria.matturro@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
-SCHOOL,LaShonda Tillmon ,ltillmon@psusd.us,WEBAPP,SQUARE PAYMENT,2021-03-31,1400.0
-SCHOOL,Heather McCarthy,heather_king_mccarthy@needham.k12.ma.us,WEBAPP,,2021-06-30,1400.0
-SCHOOL,Jacqui Murphy,jacqueline_murphy@needham.k12.ma.us,WEBAPP,,2021-06-30,1400.0
-SCHOOL,Deborah Seri,deborah_seri@needham.k12.ma.us,WEBAPP,,2021-06-30,1400.0
-SCHOOL,Northwood,dixonbs@fultonschools.org,WEBAPP,SQUARE PAYMENT,2021-04-19,1400.0
-SCHOOL,Marissa Brockman,marissa_brockman@needham.k12.ma.us,WEBAPP,,2021-06-30,1400.0
-SCHOOL,Jennifer Sullivan,jennifer_kiely-sullivan@needham.k12.ma.us,WEBAPP,,2021-06-30,1400.0
-SCHOOL,Lisa LaForte,lisa_laforte@needham.k12.ma.us,WEBAPP,,2021-06-30,1400.0
-SCHOOL,Denise Shugarts,dshugarts@tiu11.org,WEBAPP,SQUARE PAYMENT,2021-05-26,1000.0
-SCHOOL,Monique Vulllo,monique_vullo@needham.k12.ma.us,WEBAPP,,2021-06-30,1400.0
-SCHOOL,Ashley Mackoff,ashley_mackoff@needham.k12.ma.us,WEBAPP,,2021-06-30,1400.0
-SCHOOL,Denise Shugarts,denise.shugarts@gmail.com,WEBAPP,SQUARE PAYMENT,2021-05-26,1000.0
 SCHOOL,Taryn,taryn.omara@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
-SCHOOL,Phillip Olson,polson@bighorn1.com,WEBAPP,SQUARE PAYMENT,2021-06-16,1000.0
 SCHOOL,Cara Steinwandtner,Cara.Steinwandtner@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
-SCHOOL,Megan Westphalen,megan_westphalen@needham.k12.ma.us,WEBAPP,,2021-06-30,1400.0
 SCHOOL,Caryn,caryn_sanchez@upland.k12.ca.us,WEBAPP,SIGNUP,2021-07-28,1400.0
 SCHOOL,Marissa Bradley,mbradley@thesummitprep.org,WEBAPP,SQUARE PAYMENT,2021-09-01,1400.0
 SCHOOL,Rachael Salazar,rsalazar@bcbucks.org,WEBAPP,SIGNUP,2021-09-06,1400.0
@@ -197,174 +153,6 @@ SCHOOL,Lisa Harich,lisa_harich@upland.k12.ca.us,WEBAPP,INVITED USER,2021-07-28,1
 SCHOOL,Brooke Ober,Brooke@mindbrighttherapy.com,WEBAPP,SQUARE PAYMENT,2021-10-26,1000.0
 SCHOOL,Karen McCarthy,kmccarthy2@bostonpublicschools.org,WEBAPP,SIGNUP,2021-12-30,1400.0
 SCHOOL,Ally Barson,Ally.barson@jordandistrict.org,WEBAPP,SQUARE PAYMENT,2021-12-14,1400.0
-SCHOOL,Amanda Suraci,asuraci@pleasantonusd.net,OFFLINE,CHEQUE,2020-08-01,1000.0
-SCHOOL,Staci Anderson,stacianderson@mtsd.us,OFFLINE,CHEQUE,2020-07-24,1000.0
-SCHOOL,Carla Peterson,cpeterson@rvschools.org,OFFLINE,CHEQUE,2021-03-01,1000.0
-SCHOOL,Jennifer,jenn.andes@alturaprep.org,OFFLINE,CHEQUE,2020-08-25,1000.0
-SCHOOL,Denise Fenton,dfenton@psusd.us,OFFLINE,CHEQUE,2020-07-01,1000.0
-SCHOOL,Heidi Thompson,hthompson@melissaisd.org,OFFLINE,CHEQUE,2020-08-06,1000.0
-SCHOOL,Kaitlin ODonnell,kodonnell@mtsd.us,OFFLINE,CHEQUE,2020-08-18,1000.0
-SCHOOL,Nadalee Daves,nadalee.daves@krumisd.net,OFFLINE,CHEQUE,2020-08-19,1400.0
-SCHOOL,Jacquelyn Cunningham,Jacquelyn.cunningham@stockdaleisd.org,OFFLINE,CHEQUE,2020-08-24,1000.0
-SCHOOL,North Star Counseling Center,edservices@inyocoe.org,OFFLINE,CHEQUE,2020-07-19,1000.0
-SCHOOL,Stacey B Ward,sward@psusd.us,OFFLINE,CHEQUE,2020-08-21,1000.0
-SCHOOL,Teresa Patterson,pattersont@pcsb.org,OFFLINE,CHEQUE,2020-09-01,2800.0
-SCHOOL,Andy Stotz,andy.stotz@swcsd.us,OFFLINE,CHEQUE,2020-08-23,1000.0
-SCHOOL,Dr Cathy Cervantes,cathy_cervantes@cjusd.net,OFFLINE,CHEQUE,2020-10-17,1000.0
-SCHOOL,Cynthia Orr,cynthia.orr@cvesd.org,OFFLINE,CHEQUE,2020-09-14,1000.0
-SCHOOL,Kelsey Schatte,kelsey.schatte@elginisd.net,OFFLINE,CHEQUE,2020-09-25,1400.0
-SCHOOL,Wanda Vinson,wanda.vinson@sdhc.k12.fl.us,OFFLINE,CHEQUE,2020-09-25,1000.0
-SCHOOL,Sonja Davidson,davidsons@ogdensd.org,OFFLINE,CHEQUE,2020-09-30,1400.0
-SCHOOL,Alyson Reid,alyson.reid@schoolsofwestfield.org,OFFLINE,CHEQUE,2020-09-30,1000.0
-SCHOOL,iamoneTruTH.org,iamoneTruTH.org,OFFLINE,CHEQUE,2020-10-01,500.0
-SCHOOL,Angelica Torres,cni@besd.org,OFFLINE,CHEQUE,2020-08-25,1400.0
-SCHOOL,Jenna Miller,jenna.miller@canyonsdistrict.org,OFFLINE,CHEQUE,2020-10-06,999.0
-SCHOOL,Diane Brown,browndi@springfieldpublicschools.com,OFFLINE,CHEQUE,2020-10-23,1000.0
-SCHOOL,Dr Barbara Rountree,brountree@thecapitolschool.com,OFFLINE,CHEQUE,2020-10-14,1000.0
-SCHOOL,Brian,blewy@cocsd.k12.az.us,OFFLINE,CHEQUE,2020-10-22,1000.0
-SCHOOL,Andrew Sanchez,andrew.sanchez@rpcsaz.org,OFFLINE,CHEQUE,2020-10-15,1000.0
-SCHOOL,Rebecca Quisenberry,rebecca.quisenberry@nisd.net,OFFLINE,CHEQUE,2020-10-21,1400.0
-SCHOOL,Pamela Horton,phorton@psusd.us,OFFLINE,CHEQUE,2020-10-27,1000.0
-SCHOOL,Pamela Horton,phorton@psusd.us,OFFLINE,CHEQUE,2020-06-19,1000.0
-SCHOOL,Nina Odatalia,nodatalla@teaneckschools.org,OFFLINE,CHEQUE,2020-10-26,1400.0
-SCHOOL,Maria,maria.fajardocorrea@students.teaneckschools.org,OFFLINE,CHEQUE,2020-10-26,1400.0
-SCHOOL,Greg Moffitt,gmoffitt@vacavilleusd.org,OFFLINE,CHEQUE,2020-10-16,1000.0
-SCHOOL,Misti Warner,warnermi@tcapsstudent.net,OFFLINE,CHEQUE,2020-09-30,210.0
-SCHOOL,Margarita Belmares,margaritabelmares@gisd.org,OFFLINE,CHEQUE,2020-11-18,1400.0
-SCHOOL,Sabrina Hendrickson,sabrina.hendrickson@krumisd.net,OFFLINE,CHEQUE,2020-11-01,1000.0
-SCHOOL,Attention Lorraine Tallman,lorraine@amandahope.org,OFFLINE,CHEQUE,2020-12-15,1400.0
-SCHOOL,Eileen,belastocke@nausetschools.org,OFFLINE,CHEQUE,2021-01-01,1000.0
-SCHOOL,Andrew Peterson,apeterson@tooeleschools.org,OFFLINE,CHEQUE,2021-01-01,1000.0
-SCHOOL,Nancy Sirski,nancy_sirski@mtbaldy.k12.ca.us,OFFLINE,CHEQUE,2021-01-04,1000.0
-SCHOOL,Zach Eagar,zeagar@alpinedistrict.org,OFFLINE,CHEQUE,2021-01-15,1000.0
-SCHOOL,Stacia Lemond,slemondflaherty@bostonpublicschools.org,OFFLINE,CHEQUE,2021-03-26,1000.0
-SCHOOL,Upland Unified SD for Cabrillo Elementary,NO INFO.,OFFLINE,CHEQUE,2019-09-05,1000.0
-SCHOOL,Chula Vista Elementary SD for McMillin Elementary,NO INFO.,OFFLINE,CHEQUE,2019-07-24,1000.0
-SCHOOL,Altura Preparatory School,NO INFO.,OFFLINE,CHEQUE,2019-07-26,1000.0
-SCHOOL,Wilmington Public Schools for Wilmington Early Childhood Center,NO INFO.,OFFLINE,CHEQUE,2019-08-12,1000.0
-SCHOOL,Somerset Academy of the Arts,NO INFO.,OFFLINE,CHEQUE,2019-08-20,600.0
-SCHOOL,Oakland Unified School District for Reach Academy,NO INFO.,OFFLINE,CHEQUE,2019-08-01,1000.0
-SCHOOL,Brawley Elementary School District for District Office,NO INFO.,OFFLINE,CHEQUE,2019-08-15,1000.0
-SCHOOL,Shakerag Elementary School,NO INFO.,OFFLINE,CHEQUE,2019-07-12,1000.0
-SCHOOL,Community High School District 99 for Downers Grove HS,NO INFO.,OFFLINE,CHEQUE,2019-08-15,1000.0
-SCHOOL,Rose Springs Elementary,NO INFO.,OFFLINE,CHEQUE,2019-08-07,1000.0
-SCHOOL,Winthrop Charter School,NO INFO.,OFFLINE,CHEQUE,2019-08-14,1000.0
-SCHOOL,TUSD for Sierra AVenue School,NO INFO.,OFFLINE,CHEQUE,2019-08-27,1000.0
-SCHOOL,SWCS for Franklin Woods Intermediate,NO INFO.,OFFLINE,CHEQUE,2019-09-01,450.0
-SCHOOL,Fairview Elementary School,NO INFO.,OFFLINE,CHEQUE,2019-11-05,600.0
-SCHOOL,N. Ridgeville City Schools for Liberty Elementary,NO INFO.,OFFLINE,CHEQUE,2019-09-11,1000.0
-SCHOOL,Westford Public Schools for Abbot School,NO INFO.,OFFLINE,CHEQUE,2019-08-29,1000.0
-SCHOOL,Ann Arbor Public Schools for Dicken Elementary School,NO INFO.,OFFLINE,CHEQUE,2019-08-27,1000.0
-SCHOOL,Lancaster City Schools for Thomas Ewing Junior HIgh School,NO INFO.,OFFLINE,CHEQUE,2019-09-02,1000.0
-SCHOOL,Bonneville Elementary,NO INFO.,OFFLINE,CHEQUE,2019-09-17,1000.0
-SCHOOL,San Francisco Public Montessori,NO INFO.,OFFLINE,CHEQUE,2019-09-06,1000.0
-SCHOOL,PSUSD for Desert Hot Springs High School,NO INFO.,OFFLINE,CHEQUE,2019-08-20,1000.0
-SCHOOL,Meridith-Dunbar Early Childhood Academy,NO INFO.,OFFLINE,CHEQUE,2019-08-08,1000.0
-SCHOOL,Simmons Elementary-10,NO INFO.,OFFLINE,CHEQUE,2019-08-15,1000.0
-SCHOOL,Arboretum Elementary School,NO INFO.,OFFLINE,CHEQUE,2019-08-27,1000.0
-SCHOOL,RUSD for Castle View Elementary,NO INFO.,OFFLINE,CHEQUE,2019-10-15,1000.0
-SCHOOL,Wayman Academy for the Arts,NO INFO.,OFFLINE,CHEQUE,2019-08-19,1000.0
-SCHOOL,Wredling Middle School,NO INFO.,OFFLINE,CHEQUE,2019-09-13,1000.0
-SCHOOL,Salt Lake City SD for Emerson Elementary,NO INFO.,OFFLINE,CHEQUE,2019-09-15,1000.0
-SCHOOL,Salt Lake City DS for Franklin Elementary,NO INFO.,OFFLINE,CHEQUE,2019-09-01,1000.0
-SCHOOL,PSUSD for Landau Elementary,NO INFO.,OFFLINE,CHEQUE,2019-09-16,1000.0
-SCHOOL,Alameda Unified SD for Ruby Bridges Elementary,NO INFO.,OFFLINE,CHEQUE,2019-09-15,1000.0
-SCHOOL,Riverside USD for Benjamin Franklin Elementary,NO INFO.,OFFLINE,CHEQUE,2019-10-02,1000.0
-SCHOOL,BPS for West Zone Learning Center,NO INFO.,OFFLINE,CHEQUE,2019-09-25,1000.0
-SCHOOL,Rogue River Elementary School,NO INFO.,OFFLINE,CHEQUE,2019-09-24,1000.0
-SCHOOL,Kellogg School - Goleta Union School District,NO INFO.,OFFLINE,CHEQUE,2019-10-01,1000.0
-SCHOOL,Foothill School - Goleta Union School Distrct,NO INFO.,OFFLINE,CHEQUE,2019-10-01,1000.0
-SCHOOL,Dr. Daniel Bright Elementary School,NO INFO.,OFFLINE,CHEQUE,2019-10-22,1000.0
-SCHOOL,SDMC for Bayshore Elem Schl,NO INFO.,OFFLINE,CHEQUE,2019-07-31,1000.0
-SCHOOL,Agawam SD for Roberta G. Doering School,NO INFO.,OFFLINE,CHEQUE,2019-10-30,1000.0
-SCHOOL,Sudbury PS for Pete Noyes School,NO INFO.,OFFLINE,CHEQUE,2019-09-27,1000.0
-SCHOOL,Brandon School,NO INFO.,OFFLINE,CHEQUE,2019-10-11,1000.0
-SCHOOL,Isla Vista School,NO INFO.,OFFLINE,CHEQUE,2019-10-11,1000.0
-SCHOOL,Mary B. Lewis School,NO INFO.,OFFLINE,CHEQUE,2019-10-17,1000.0
-SCHOOL,C.O.P.E. Center North,NO INFO.,OFFLINE,CHEQUE,2019-10-31,1000.0
-SCHOOL,Mary M. Walsh Elementary,NO INFO.,OFFLINE,CHEQUE,2019-10-22,1000.0
-SCHOOL,Norton Creek Elementary School,NO INFO.,OFFLINE,CHEQUE,2019-10-17,1000.0
-SCHOOL,Springfield Public Day Elementary,NO INFO.,OFFLINE,CHEQUE,2019-12-14,1000.0
-SCHOOL,Albion Middle School,NO INFO.,OFFLINE,CHEQUE,2019-11-04,1000.0
-SCHOOL,Snyder Middle School,NO INFO.,OFFLINE,CHEQUE,2019-11-05,450.0
-SCHOOL,Thomas Jefferson Middle School - Teaneck NJ,NO INFO.,OFFLINE,CHEQUE,2019-10-16,1000.0
-SCHOOL,Benjamin Franklin Middle School - Teaneck NJ,NO INFO.,OFFLINE,CHEQUE,2019-10-31,1000.0
-SCHOOL,Daniel B. Brunton Elementary,NO INFO.,OFFLINE,CHEQUE,2019-11-15,1000.0
-SCHOOL,River Valley Elementary,NO INFO.,OFFLINE,CHEQUE,2019-11-14,1000.0
-SCHOOL,Barnwell Elementary School,NO INFO.,OFFLINE,CHEQUE,2019-11-19,1000.0
-SCHOOL,Lakefield College School,NO INFO.,OFFLINE,CHEQUE,2019-10-28,1000.0
-SCHOOL,PSUSD for Della S. Lindley Elementary School,NO INFO.,OFFLINE,CHEQUE,2019-11-21,1000.0
-SCHOOL,Buckeye Central Local,NO INFO.,OFFLINE,CHEQUE,2019-11-13,1000.0
-SCHOOL,PS99 Kew Gardens,NO INFO.,OFFLINE,CHEQUE,2019-11-19,500.0
-SCHOOL,PS99 Kew Gardens,NO INFO.,OFFLINE,CHEQUE,2020-05-19,500.0
-SCHOOL,Dan Peterson School - Alpine School District,NO INFO.,OFFLINE,CHEQUE,2020-01-15,999.0
-SCHOOL,Thunder Ridge Elementary- Alpine School District,NO INFO.,OFFLINE,CHEQUE,2020-01-15,999.0
-SCHOOL,Liberty Hills Elementary- Alpine School District,NO INFO.,OFFLINE,CHEQUE,2020-01-15,999.0
-SCHOOL,Traverse Mountain Elementary- Alpine School District,NO INFO.,OFFLINE,CHEQUE,2020-01-15,999.0
-SCHOOL,Lehi Elementary- Alpine School District,NO INFO.,OFFLINE,CHEQUE,2020-01-15,999.0
-SCHOOL,Valley View- Alpine School District,NO INFO.,OFFLINE,CHEQUE,2020-01-15,999.0
-SCHOOL,Fortis Academy,NO INFO.,OFFLINE,CHEQUE,2019-11-08,1000.0
-SCHOOL,Perdew Elementary,NO INFO.,OFFLINE,CHEQUE,2019-12-02,1000.0
-SCHOOL,Georges P. Vanier Secondary School,NO INFO.,OFFLINE,CHEQUE,2020-01-01,1000.0
-SCHOOL,Gill-Montague Community School Partnership,NO INFO.,OFFLINE,CHEQUE,2020-01-09,1000.0
-SCHOOL,Central Elementary School,NO INFO.,OFFLINE,CHEQUE,2020-01-22,1400.0
-SCHOOL,Ridgeline Elementary- Alpine School District,NO INFO.,OFFLINE,CHEQUE,2020-02-06,999.0
-SCHOOL,Cedar Ridge Elementary- Alpine School District,NO INFO.,OFFLINE,CHEQUE,2020-02-13,999.0
-SCHOOL,SD School for the Blind and Visually Impaired,NO INFO.,OFFLINE,CHEQUE,2020-02-13,1000.0
-SCHOOL,Rio Vista Elementary- Palm Springs Unified School District,NO INFO.,OFFLINE,CHEQUE,2020-05-05,1000.0
-SCHOOL,Highland Junior High School,NO INFO.,OFFLINE,CHEQUE,2020-05-05,1000.0
-SCHOOL,West Kingston Elementary,NO INFO.,OFFLINE,CHEQUE,2020-02-22,1000.0
-SCHOOL,Jackson Elementary,NO INFO.,OFFLINE,CHEQUE,2020-02-26,1000.0
-SCHOOL,Cathedral City Elementary,NO INFO.,OFFLINE,CHEQUE,2020-01-24,1000.0
-SCHOOL,Churchill Jr High School,NO INFO.,OFFLINE,CHEQUE,2020-03-13,1000.0
-SCHOOL,Browns Valley Elementary,NO INFO.,OFFLINE,CHEQUE,2020-06-01,1000.0
-SCHOOL,Matchfire,NO INFO.,OFFLINE,CHEQUE,2020-04-23,25000.0
-SCHOOL,Esperanza Academy,NO INFO.,OFFLINE,CHEQUE,2020-06-01,1000.0
-SCHOOL,Aberdeen School District- Mike Miller Elementary,NO INFO.,OFFLINE,CHEQUE,2020-06-01,1000.0
-SCHOOL,"John Paul II Academy (Racine, WI)",NO INFO.,OFFLINE,CHEQUE,2020-05-01,1400.0
-SCHOOL,Daniel B. Brunton Elementary,NO INFO.,OFFLINE,CHEQUE,2020-06-15,1000.0
-SCHOOL,Albion Middle School (Canyon School District),NO INFO.,OFFLINE,CHEQUE,2020-06-04,999.0
-SCHOOL,Northwest Passage High School,NO INFO.,OFFLINE,CHEQUE,2020-06-15,1000.0
-SCHOOL,Nardin Academy Elementary School,NO INFO.,OFFLINE,CHEQUE,2020-06-01,1000.0
-SCHOOL,Angela Krampitz,akrampitz@graceschool.org,OFFLINE,CHEQUE,2021-01-26,1000.0
-SCHOOL,Denise Martell,martelld@sfusd.edu,OFFLINE,CHEQUE,2021-01-21,1400.0
-SCHOOL,Delna Bliss,delna.bliss@millardk12.org,OFFLINE,CHEQUE,2021-01-22,1400.0
-SCHOOL,Dina Winterton,dwinterton@sandi.net,OFFLINE,CHEQUE,2021-01-26,1250.0
-SCHOOL,Ilene Strong,istrong@alpinedistrict.org,OFFLINE,CHEQUE,2021-01-20,1000.0
-SCHOOL,Lisa Buley,lbuley@lacrossesd.org,OFFLINE,CHEQUE,2021-02-02,2000.0
-SCHOOL,Steve Elizondo,selizondo@sandi.net,OFFLINE,CHEQUE,2021-02-11,1200.0
-SCHOOL,Oscar Zenteno Romero,novato1979@gmail.com,OFFLINE,CHEQUE,2021-02-12,1000.0
-SCHOOL,Sue,Sue_Audibert@needham.k12.ma.us,OFFLINE,CHEQUE,2021-03-01,1400.0
-SCHOOL,Joann Akrawi,akrawi@gesd.us,OFFLINE,CHEQUE,2021-03-15,1400.0
-SCHOOL,Pam Thatcher,pthatcher@alpinedistrict.org,OFFLINE,CHEQUE,2021-03-03,999.0
-SCHOOL,Joshua Nichols,jnichols@amboy.net,OFFLINE,CHEQUE,2021-03-05,1000.0
-SCHOOL,Jennifer,jenn.andes@alturaprep.org,OFFLINE,CHEQUE,2021-06-30,1400.0
-SCHOOL,Chris Platamone,cplatamone@psusd.us,OFFLINE,CHEQUE,2021-03-25,1400.0
-SCHOOL,Debbie Lerner,dlerner@thermalito.org,OFFLINE,CHEQUE,2021-04-01,1400.0
-SCHOOL,Aaron Tarzian,atarzian@psusd.us,OFFLINE,CHEQUE,2021-04-06,1400.0
-SCHOOL,Jamie Wright,jamie.wright@rogueriver.k12.or.us,OFFLINE,CHEQUE,2021-04-08,1400.0
-SCHOOL,Jocie Zaja,jzaja@lacrossesd.org,OFFLINE,CHEQUE,2021-04-14,1000.0
-SCHOOL,Tanya Vaughn,tvaughn@lacrossesd.org,OFFLINE,CHEQUE,2021-04-14,1000.0
-SCHOOL,Nadia Tovar,ntovar@psusd.us,OFFLINE,CHEQUE,2021-04-15,1400.0
-SCHOOL,Ross,lross@psusd.us,OFFLINE,CHEQUE,2021-04-19,1400.0
-SCHOOL,LaShonda Tillmon,ltillmon@psusd.us,OFFLINE,CHEQUE,2021-04-19,1400.0
-SCHOOL,Adam Hoover,adhoover@colonialsd.org,OFFLINE,CHEQUE,2021-04-19,1000.0
-SCHOOL,Lisa D Roberts,LRoberts13@schools.nyc.gov,OFFLINE,CHEQUE,2021-04-21,1754.0
-SCHOOL,Kimberly Starks,Kimberly_Starks@mcpsmd.org,OFFLINE,CHEQUE,2021-04-27,1400.0
-SCHOOL,liz,ebarric@schools.nyc.gov,OFFLINE,CHEQUE,2021-04-30,1400.0
-SCHOOL,Angela Stornaiuolo,ps102uft@gmail.com,OFFLINE,CHEQUE,2021-05-03,1400.0
-SCHOOL,Felicia Ivie,fivie@polahs.net,OFFLINE,CHEQUE,2021-05-05,1400.0
-SCHOOL,Nicole Schutter,nicole.schutter@k12.sd.us,OFFLINE,CHEQUE,2021-04-26,1000.0
-SCHOOL,Casaundra Hare,Chare@wayman.org,OFFLINE,CHEQUE,2021-05-13,1000.0
-SCHOOL,Weston Taylor,wtaylor@richschool.org,OFFLINE,CHEQUE,2021-05-25,1000.0
-SCHOOL,Alicia Yarbrough,alicia.yarbrough@tylerisd.org,OFFLINE,CHEQUE,2021-05-04,1000.0
-SCHOOL,Extened Learning (ALC),NO INFO.,OFFLINE,CHEQUE,2021-06-14,1400.0
-SCHOOL,Janel Ludwig,ludwigj@sdsbvi.northern.edu,OFFLINE,CHEQUE,2021-06-15,1000.0
-SCHOOL,Michael Borrero,mborrero@fssahs.org,OFFLINE,CHEQUE,2021-06-15,3000.0
-SCHOOL,Lori Webster,l.webster@mountainmahogany.org,OFFLINE,CHEQUE,2021-06-21,1400.0
-SCHOOL,Erin Montgomery,montgomerye@hicksvilleschools.org,OFFLINE,CHEQUE,2021-06-24,1000.0
-SCHOOL,Lauren Amundson,lamundson@thecapitolschool.com,OFFLINE,CHEQUE,2021-06-28,562.5
-SCHOOL,Dana Walsh,walsh@tri-county.us,OFFLINE,CHEQUE,2021-06-30,1400.0
 SCHOOL,Casaundra Hare,Chare@wayman.org,OFFLINE,CHEQUE,2021-07-15,584.0
 SCHOOL,Andy Stotz,andy.stotz@swcsd.us,OFFLINE,CHEQUE,2021-07-15,1400.0
 SCHOOL,Lynn Burt,lynnb@vacavilleusd.org,OFFLINE,CHEQUE,2021-08-10,1000.0
@@ -403,5 +191,5 @@ SCHOOL,Susan Hoeppner,projecthoeppner@gmail.com,OFFLINE,CHEQUE,2021-12-06,8400.0
 SCHOOL,Nina Odatalia,nodatalla@teaneckschools.org,OFFLINE,CHEQUE,2021-12-09,1400.0
 SCHOOL,Jenny Gempeler,jgempeler@ssummit.org,OFFLINE,CHEQUE,2021-12-16,1000.0
 SCHOOL,Diane Brown,browndi@springfieldpublicschools.com,OFFLINE,CHEQUE,2022-01-07,1400.0
-SCHOOL,Deborah Oler,0,OFFLINE,CHEQUE,2022-01-07,1000.0
+SCHOOL,Deborah Oler,doler@riversideunified.org,OFFLINE,CHEQUE,2022-01-07,1000.0
 SCHOOL,Ben Suro,bsuro@wood-ridgeschools.org,OFFLINE,CHEQUE,2022-01-12,3600.0

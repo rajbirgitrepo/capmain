@@ -257,8 +257,16 @@
         color: #F06E1D;
     }
 
+    .newID {
+        display: list-item;
+    }
+
     .hot {
         color: #E61717;
+    }
+
+    .anychart-credits {
+        display: none;
     }
 
     .box-outer-nw {
@@ -450,6 +458,15 @@
         margin-bottom: 10px;
         float: right;
     }
+
+    .schooldesign {
+        font-size: 12px;
+        padding: 5px 15px;
+        cursor: pointer;
+        height: 400px;
+        max-height: 400px;
+        overflow: scroll;
+    }
 </style>
 
 
@@ -514,7 +531,7 @@
                     <li class="active2"><a href="School_Search">SCHOOL SEARCH</a></li>
                     <li class="active2"><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
                     <li class="active2"><a href="leadGeneration">LEAD GENERATION</a></li>
-                    <!-- <li><a href="21daystreak">21 Day Streak</a></li> -->
+                    <li><a href="21daystreak">21 Day Streak</a></li>
                 </ul>
             </li>
             <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
@@ -821,6 +838,8 @@
 
         <div id="disdetails" style="display: none;">
         </div>
+        <div id="schoolDetail" style="display: none;">
+        </div>
 
         <!-- <div id="myDiv2" style="border-radius: 20px;
         margin-top: 20px;
@@ -887,11 +906,10 @@
                     <button id="inverted1" class="chart-btn">Inverted</button>
                     <button id="polar1" class="chart-btn">Polar</button>
                 </div>
-                <div id="container3"
-                style="height: 400px; width: 100%;">
+                <div id="container3" style="height: 400px; width: 100%;">
+                </div>
             </div>
-            </div>
-           
+
         </div>
         <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;" title=""
             id="top_20_school_user_count_360">
@@ -929,6 +947,25 @@
             </div>
 
         </div>
+        <div class="col-md-12">
+            <div style="margin-bottom:30px;">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="search" name="" id="searchschoolid" class="ui-autocomplete-input"
+                            placeholder="Try To Search School">
+                        <div id="printscoolname" class="schooldesign">
+
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div id="container41" style="height: 400px;"></div>
+                    </div>
+                </div>
+               
+
+            </div>
+
+        </div>
         <div class="col-md-6" style="margin-bottom: 30px;  border-radius: 20px;" title=""
             id="top_20_user_practice playback_count_360">
             <div id="container10"
@@ -940,6 +977,7 @@
                 style=" margin-top: 2px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
             </div>
         </div>
+
         <!-- <div class="col-md-6">
             <div id="container38" style=" margin-top: 20px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
             </div>
@@ -977,7 +1015,7 @@
             </div>
         </div>
     </section>
-   
+
 
     <script src="/static/js/countapi.js"></script>
     <script src="/static/js/mail.js"></script>
@@ -989,6 +1027,8 @@
     <script src="/static/js/districtreport.js"></script>
     <script src="/static/js/excellentexport.js"></script>
     <script src="/static/js/insight.js"></script>
+    <script src="//cdn.anychart.com/releases/8.0.1/js/anychart-base.min.js"></script>
+    <script src="//cdn.anychart.com/releases/8.0.1/js/anychart-polar.min.js"></script>
 
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/highcharts-more.js"></script>

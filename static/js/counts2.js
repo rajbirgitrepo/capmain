@@ -37,9 +37,10 @@ $.ajax(settings).done(function (response) {
   console.log("counts are fnctioning");
   console.log(dataa.total_school)
   $("#schoolcount77").text(dataa.total_school);
-  $("#trial").text(dataa.D1 + 1061);
+  $("#trial").text(dataa.D1);
   $("#lsy").text(dataa.D2);
   $("#next6").text(dataa.D3);
+  $("#c1").text(dataa.D3);
   // $("#after6").text(dataa.active_r3 + dataa.district_r3);
   // $("#power").text(dataa.r4_count);
   $("#active").text(dataa.Lifetime);
@@ -50,7 +51,7 @@ $.ajax(settings).done(function (response) {
   // $("#mindful").text(dataa.mindful_minutes);
   // $("#neverlogged").text(dataa.never_logged_in);
   // $("#activeschools").text(dataa.active_school);
-  $("#dormant").text(dataa.other - 1061);
+  $("#dormant").text(dataa.other);
 });
 
 var settings = {
@@ -62,7 +63,7 @@ var settings = {
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
 
-  $("#c1").text(dataa.totalschool);
+  // $("#c1").text(dataa.totalschool);
   $("#c2").text(dataa.clound);
   $("#c3").text(dataa.community);
   $("#c4").text(dataa.explorer);

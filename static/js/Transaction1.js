@@ -648,18 +648,14 @@ function createDynamicDiv2(userList) {
 
 
     dynamicDiv += '<tr >' +
-        '<td class="">' +
-        userList[0] +
-        "</td>" +
+        '<td class="">' + userList[0] + "</td>" +
         '<td>' + userList[1] + '</td>' +
         '<td>' + userList[2] + '</td>' +
         '<td>' + userList[3] + '</td>' +
-        '<td class="">' +
-        userList[4] +
+        '<td class="">' + userList[4] +
         "</td>" +
         '<td>' + userList[5] + '</td>' +
         '<td>' + userList[6] + '</td>' +
-
         '</tr>'
     return dynamicDiv;
 
