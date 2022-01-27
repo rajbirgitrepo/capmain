@@ -75559,6 +75559,7 @@ def weekly_active_teacherss_(districtid,idd,startdate,enddate):
 
     district=disdic[districtid]
     school=idd
+#     school='5f2bca28ba0be61b0c1cd54f'
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -75721,6 +75722,12 @@ def weekly_active_teacherss_(districtid,idd,startdate,enddate):
             str(zeros)
             df15['Teachers'][j].extend(zeros)
 
+    df15['new_legend']=np.zeros(len(df15), dtype=int)
+    for w in range(len(df15)):
+        not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
+        df15['new_legend'][w]=not_none
+
+
 
     legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
 
@@ -75728,15 +75735,14 @@ def weekly_active_teacherss_(districtid,idd,startdate,enddate):
     df15['empty_list'] = np.empty((len(df15), 0)).tolist()
 
     for i in range(len(df15)):
-        dictionary=dict(zip(df15['legend'][i], df15['Teachers'][i]))
+        dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
         from collections import OrderedDict
         dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
         x=list(dictionary22.values())
         df15['empty_list'][i]=x
 
     for j in range(len(df15)):
-
-        given_list=df15['legend'][j]
+        given_list=df15['new_legend'][j]
         given_list.sort(key=d.get)
 
     df15['weeks_']= np.zeros(len(df15), dtype=int)
@@ -75754,9 +75760,9 @@ def weekly_active_teacherss_(districtid,idd,startdate,enddate):
 
     df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
 
-    df15['legend']=df15['legend'].str.join(",")
+    df15['new_legend']=df15['new_legend'].str.join(",")
 
-    df16=df15[['school','weeks_','legend','empty_list']]
+    df16=df15[['school','weeks_','new_legend','empty_list']]
     df16['weeks_']='Week '+ df16['weeks_'].astype(str)
 
     df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
@@ -75775,8 +75781,10 @@ def weekly_active_teacherss_(districtid,idd,startdate,enddate):
 
 
     temp={'data':list1, 'schools':user_master['Schoolname'].tolist()}
-    
+
     return json.dumps(temp)
+
+
 
 
 @app.route('/Family_SURVEY')
