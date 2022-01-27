@@ -118,7 +118,7 @@ function newchartactiveteacher(a, b, c, d) {
         var dataa = data.data
         var schoolonlyname = data.schools;
         console.log(schoolonlyname);
-        let textschool = "";
+      //  let textschool = "";
         $('#printscoolname').empty()
         for (var i = 0; i < data.schools.length; i++) {
             $('#printscoolname').append('<div class="schoolnamenew"><p class="school-title" onclick="selectschoolforchart(\'' + data.schools[i] + '\')">' + data.schools[i] + "</p></div> ");
@@ -128,8 +128,6 @@ function newchartactiveteacher(a, b, c, d) {
             var data = preprocessData(dataa);
 
             var chart = anychart.column();
-
-
 
             // title text
             chart.title("Weekly Chart");
@@ -2487,11 +2485,12 @@ function OnlyschoolId(a, b, c) {
     $.ajax(settings).done(function (response) {
 
         var dataa1 = JSON.parse(response);
-        console.log(Object.keys(dataa1.schoolid)[0])
+        console.log(Object.keys(dataa1.schoolid)[0]);
         iddate.push(a);
         iddate.push(b);
-        iddate.push(c)
-        selectschoolforchart(Object.keys(dataa1.schoolid)[0])
+        iddate.push(c);
+        selectschoolforchart(Object.keys(dataa1.schoolid)[0]);
+        console.log( selectschoolforchart(Object.keys(dataa1.schoolid))[0]);
     });
 }
 
