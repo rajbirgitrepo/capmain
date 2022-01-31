@@ -1235,118 +1235,105 @@ def questusercounts():
 
 @app.route('/executive_count_productwise_lelo')
 def executive_count_productwise_d3():
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
-    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
-    db=client.compass
-    collection = db.user_master
-    df33=pd.read_csv("d325feb.csv")
-    xx3=list(df33["_id"])
-    lifetimelist=[]
-    from bson import ObjectId
-    for i in xx3:
-        lifetimelist.append(ObjectId(i))
-    from bson.objectid import ObjectId
-    qr=[
-    {"$match":{"$and":[{'USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
-    {'IS_DISABLED':{"$ne":'Y'}},
-    {'IS_BLOCKED':{"$ne":'Y'}},
-    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-    {'EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
-    {'EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
-    {'EMAIL_ID':{"$ne":""}}, {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}},
-#     {"EMAIL_ID" :{"$regex":'@','$options':'i'}},
-    {'schoolId.NAME':{'$not':{"$regex":'test','$options':'i'}}},
-    {'schoolId._id':{'$in':lifetimelist}},
-    {'schoolId.NAME':{'$not':{"$regex":'TEST','$options':'i'}}},
-    {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-    {'schoolId._id':{'$exists':1}},
-    {'schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]
-    }},
-
-    {"$project":{"_id":0,
-    'UMUSER_ID':'$_id',
-    "UMEMAIL":'$EMAIL_ID',        
-    "UMSCHOOL":'$schoolId._id',
-    }},]
-    merge1=list(collection.aggregate(qr))
-    overallum=pd.DataFrame(merge1)
-    umem=list(overallum["UMUSER_ID"])
-
-    ################################sub_master################################
-
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
-    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
-    db=client.compass
-    # db.subscription_master.ensureIndex("USER_ID._id", 1) 
-    collection = db.subscription_master
-    qr=[
-    {"$match":{"$and":[{'USER_ID._id':{"$in":umem}},]
-    }},
-    {"$project":{"_id":0,
-    'SMUSER_ID':'$USER_ID._id',
-    "SMEMAIL":'$USER_ID.EMAIL_ID',        
-    "SMSCHOOL":'$USER_ID.schoolId._id',
-    "PLANID":"$PLAN_ID.PLAN_NAME",
-     "comment":"$COMMENT_BY_DS_TEAM",
-    }},
-    ]
-    merge=list(collection.aggregate(qr))
-    overall=pd.DataFrame(merge)
-#     mergeddf=pd.merge(overall, overallum, how='left', left_on='SMEMAIL', right_on='UMEMAIL')
-    mergeddf=pd.merge(overallum, overall, how='left', left_on='UMUSER_ID', right_on='SMUSER_ID')
-    mergeddf.to_csv("checkpoint.csv")
-    cloud=mergeddf[mergeddf["PLANID"]=="Cloud"]
-    cloud1=list(set(list(cloud["UMSCHOOL"])))
-    lifetime=cloud[cloud["comment"]=="CONVERTED TO ACTUAL LIFETIME ON 30TH OCT CLEANUP"]
-    lifetime1=list(set(list(lifetime["UMSCHOOL"])))
-    final_lifetime_count=len(lifetime1)               #lifetime count
-    final_cloud = np.setdiff1d(cloud1,lifetime1)
-    final_cloud_count=len(final_cloud)                   #cloud count
-    com=mergeddf[mergeddf["PLANID"]=="Community"]
-    com1=list(set(list(com["UMSCHOOL"])))
-    final_com = np.setdiff1d(com1,cloud1)
-    final_com_count=len(final_com)                       #community count
-    exp=mergeddf[mergeddf["PLANID"]=="Explorer"]
-    exp1=list(set(list(exp["UMSCHOOL"])))
-    final_exp1 = np.setdiff1d(exp1,cloud1)
-    final_exp2 = np.setdiff1d(final_exp1,final_com)
-    final_exp_count=len(final_exp2)+5                      #explorer count
-    #IE School App
-    sch=mergeddf[mergeddf["PLANID"]=="IE School App"]
-    sch1=list(set(list(sch["UMSCHOOL"])))
-    final_sch1 = np.setdiff1d(sch1,cloud1)
-    final_sch2 = np.setdiff1d(final_sch1,final_com)
-    final_sch3 = np.setdiff1d(final_sch2,final_exp2)
-    final_sch_count=len(final_sch3)                      #school app count
-    #IE Home App
-    home=mergeddf[mergeddf["PLANID"]=="IE Home App"]
-    home1=list(set(list(home["UMSCHOOL"])))
-    final_home1 = np.setdiff1d(home1,cloud1)
-    final_home2 = np.setdiff1d(final_home1,final_com)
-    final_home3 = np.setdiff1d(final_home2,final_exp2)
-    final_home4 = np.setdiff1d(final_home3,final_sch3)
-    final_home_count=len(final_home4)                     #home app count
-    tot_sch=set(list(mergeddf["UMSCHOOL"]))
-    tot_sch2=final_home_count+final_sch_count+final_exp_count+final_com_count+final_cloud_count+final_lifetime_count
-    execount={"totalschool":str(tot_sch2),"clound":str(final_cloud_count),"lifetime":str(final_lifetime_count),"community":str(final_com_count),"explorer":str(final_exp_count),
-    "schoolapp":str(final_sch_count),"homeapp":str(final_home_count)}
-
     
-    #################. FOR TABLE PURPOSE ########################
-    DFL=pd.DataFrame(lifetime1)
-    DFL.to_csv("lifetime_exec22.csv")
-    DFC=pd.DataFrame(final_cloud)
-    DFC.to_csv("cloud_exec22.csv")
-    DFE=pd.DataFrame(final_exp2)
-    DFE.to_csv("exp_exec22.csv")
-    DFcco=pd.DataFrame(final_com)
-    DFcco.to_csv("com_exec22.csv")
-    DFsch=pd.DataFrame(final_sch3)
-    DFsch.to_csv("sch_exec22.csv")
-    DFhom=pd.DataFrame(final_home4)
-    DFhom.to_csv("hom_exec22.csv")
+    client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
+    db_live=client_live.compass
+
+    d3_users=pd.DataFrame(list(db_live.user_master.aggregate([
+        {"$match":{
+             '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'IS_DISABLED':{"$ne":'Y'}},
+              {'IS_BLOCKED':{"$ne":'Y'}},
+              {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                    {'schoolId._id':{'$in':
+                                    db_live.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
+
+                                    }}
+
+                    ]}},
+        {'$project':{'_id':0,
+
+            'userid':'$_id',
+                     'email':'$EMAIL_ID',
+                     'schoolid':'$schoolId._id'
+
+        }}
+
+
+    ])))
+
+    user_masterd3=pd.DataFrame({'schoolid':list(set(d3_users['schoolid'])),
+                               'status':1
+
+                               })
+
+    d3_user_sub_master=pd.DataFrame(list(db_live.subscription_master.aggregate([{'$match':{'$and':[
+        {'USER_ID._id':{'$in':list(d3_users['userid'])}}
+
+
+    ]}},                                  {'$project':{'_id':0,
+                                           'userid':'$USER_ID._id',
+                                           'PLAN_ID':'$PLAN_ID.PLAN_ID'
+
+                                          }}
+
+                                          ])))
+
+    d3_plan_ids=d3_users.merge(d3_user_sub_master,how='left',on='userid')
+
+    x=d3_plan_ids.groupby(['schoolid','PLAN_ID'])['userid'].count().reset_index()
+
+    xx=x.groupby(['schoolid']).agg(School_Count=('schoolid','count'),
+                             max_plan=('PLAN_ID','max')
+
+                             ).reset_index()
+
+    xx['PLAN_NAME']=''
+
+    for i in range(len(xx)):
+        if (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==18):
+            xx['PLAN_NAME'][i]='Explorer'
+        elif (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==19):
+            xx['PLAN_NAME'][i]='Community'
+        elif (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==20):
+            xx['PLAN_NAME'][i]='Cloud'
+        elif (xx['School_Count'][i]>1) &(xx['max_plan'][i]==17):
+            xx['PLAN_NAME'][i]='Schoolapp'
+
+
+    if len(xx[(xx['School_Count']>1) & (xx['max_plan']==17)])>1:
+        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==17)]['schoolid'])}},
+                                         {'$set':{
+                                             'DASH_CATEGORY':'Schoolapp'
+
+
+                                         }}
+
+                                         )
+
+    elif len(xx[(xx['School_Count']==1) & (xx['max_plan']==17)])>1:
+        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
+                                         {'$set':{
+                                             'DASH_CATEGORY':'Homaapp'
+
+
+                                         }}
+
+                                         )
+    else:
+        pass
+
+    final_cloud_count=len(xx[xx['PLAN_NAME']=='Cloud'])
+    final_com_count=len(xx[xx['PLAN_NAME']=='Community'])
+    final_exp_count=len(xx[xx['PLAN_NAME']=='Explorer'])
+
+
+    execount={"clound":str(final_cloud_count),"community":str(final_com_count),"explorer":str(final_exp_count)}
+    
     
     return json.dumps(execount)
 
@@ -6352,19 +6339,38 @@ def executive_count_productwise():
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
-    collection = db["school_master"]
-    query = {}
-    query["CATEGORY"] = Regex(u".*LAUSD.*", "i")
-    query["_id"]={"$in":db.user_master.distinct('schoolId._id')}
-    projection = {}
-    projection["_id"] = 1.0
-    cursor = collection.find(query, projection = projection)
-    dfum=(list(cursor))
-    dfum1=pd.DataFrame(dfum)
-    comadd=1299-len(dfum1)
+#     collection = db["school_master"]
+#     query = {}
+#     query["CATEGORY"] = Regex(u".*LAUSD.*", "i")
+#     query["_id"]={"$in":db.user_master.distinct('schoolId._id')}
+#     projection = {}
+#     projection["_id"] = 1.0
+#     cursor = collection.find(query, projection = projection)
+#     dfum=(list(cursor))
+#     dfum1=pd.DataFrame(dfum)
+#     comadd=1299-len(dfum1)
+    collection1 = db.school_master
+    qr=[
+    {"$match":{"$and":[
+    {'CATEGORY':{"$regex":'LAUSD','$options':'i'}},
+     {'_id':{'$in':db.user_master.distinct('schoolId._id',{'schoolId._id':{'$exists':1}})}
+                    }]}},
+    {"$project":{"_id":1}},]
+    merge1=list(collection1.aggregate(qr))
+    dfum1=pd.DataFrame(merge1)
+    
+    qr2=[
+    {"$match":{"$and":[
+    {'CATEGORY':{"$regex":'LAUSD','$options':'i'}},
+     ]}},
+    {"$project":{"_id":1}},]
+    merge11=list(collection1.aggregate(qr2))
+    lausd=pd.DataFrame(merge11)
+    comadd=len(lausd)-len(dfum1)
+    print(comadd)
     
     
-    collection = db.user_master
+    collection2 = db.user_master
     qr=[
     {"$match":{"$and":[{'USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
     {'IS_DISABLED':{"$ne":'Y'}},
@@ -6386,16 +6392,13 @@ def executive_count_productwise():
     "UMEMAIL":'$EMAIL_ID',        
     "UMSCHOOL":'$schoolId._id',
     }},]
-    merge1=list(collection.aggregate(qr))
+    merge1=list(collection2.aggregate(qr))
     overallum=pd.DataFrame(merge1)
     umem=list(overallum["UMUSER_ID"])
 
     ################################sub_master################################
 
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
-    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
-    db=client.compass
+    
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
     qr=[
@@ -6424,6 +6427,7 @@ def executive_count_productwise():
     com=mergeddf[mergeddf["PLANID"]=="Community"]
     com1=list(set(list(com["UMSCHOOL"])))
     final_com = np.setdiff1d(com1,cloud1)
+#     final_comm=pd.concat(final_com,)
     final_com_count=len(final_com)+comadd                #community count
     exp=mergeddf[mergeddf["PLANID"]=="Explorer"]
     exp1=list(set(list(exp["UMSCHOOL"])))
@@ -6453,19 +6457,20 @@ def executive_count_productwise():
     
     #################. FOR TABLE PURPOSE ########################
     DFL=pd.DataFrame(lifetime1)
-    DFL.to_csv("lifetime_exec.csv")
+    DFL.to_csv("lifetime_exec1.csv")
     DFC=pd.DataFrame(final_cloud)
-    DFC.to_csv("cloud_exec.csv")
+    DFC.to_csv("cloud_exec1.csv")
     DFE=pd.DataFrame(final_exp2)
-    DFE.to_csv("exp_exec.csv")
+    DFE.to_csv("exp_exec1.csv")
     DFcco=pd.DataFrame(final_com)
-    DFcco.to_csv("com_exec.csv")
+    DFcco.to_csv("com_exec1.csv")
     DFsch=pd.DataFrame(final_sch3)
-    DFsch.to_csv("sch_exec.csv")
+    DFsch.to_csv("sch_exec1.csv")
     DFhom=pd.DataFrame(final_home4)
-    DFhom.to_csv("hom_exec.csv")
+    DFhom.to_csv("hom_exec1.csv")
     
     return json.dumps(execount)
+# executive_count_productwise()
     
 
 @app.route('/executive_lifetime')
@@ -6699,13 +6704,25 @@ def communityexectable():
 
 @app.route('/executive_explorer')
 def explorerexectable():
-    dflife=pd.read_csv("exp_exec.csv")
-    lifelist=list(dflife["0"])
-    lifetimelist=[]
-    from bson import ObjectId
-    for i in lifelist:
-        lifetimelist.append(ObjectId(i))
-    from bson.objectid import ObjectId
+    client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
+    db_live=client_live.compass
+    schools=pd.DataFrame(list(db_live.school_master.aggregate([{'$match':{'$and':[
+            {'DASH_CATEGORY':{'$exists':1}},
+        {'BLOCKED_BY_CAP':{'$exists':0}},
+        {'NAME':{'$not':{'$regex':'test','$options':'i'}}},
+        {'DASH_CATEGORY':'D3'}
+        ]}},
+        {'$project':{
+            '_id':0,
+            'schoolid':'$_id',
+            'schoolname':'$NAME',
+            'DASH_CATEGORY':'$DASH_CATEGORY'
+        }}])))    
+    
+    lifelist=list(schools["schoolid"])
+    
+    lifetimelist=lifelist
+    
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -6726,7 +6743,9 @@ def explorerexectable():
     #   {'DEVICE_USED':{"$regex":'webapp','$options':'i'}},
     #   {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
     {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-    {'IS_ADMIN':'Y'}
+    {'IS_ADMIN':'Y'},
+    {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'schoolId.NAME':{'$not':{"$regex":'TEST','$options':'i'}}}    
 
     ]
     }},
@@ -6745,20 +6764,20 @@ def explorerexectable():
     merge1=list(collection.aggregate(query))
     overallum=pd.DataFrame(merge1)
     overallum["CREATED_DATE"]=overallum["CREATED_DATE"].dt.strftime('%d %b %Y')
-#     overallum.to_csv("expcheck.csv")
+#     overallum.to_csv("comcheck12.csv")
     email=list(overallum["UMUSER_ID"])
     schoolid=list(overallum["UMSCHOOLID"])
     ################################sub_master################################
 
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
-    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
     db=client.compass
     # db.subscription_master.ensureIndex("USER_ID._id", 1) 
     collection = db.subscription_master
     qr=[
     {"$match":{"$and":[{'USER_ID._id':{"$in":email}},
-    {'PLAN_ID.PLAN_NAME':"Explorer"}
+    {'PLAN_ID.PLAN_NAME':"Community"}
     ]}},
     {"$project":{"_id":0,
     'SMUSER_ID':'$USER_ID._id',
@@ -6795,10 +6814,18 @@ def explorerexectable():
     finalmerge['atdLastpractice'].fillna("NO PRACTICE", inplace=True)
     finalmerge['atdPracticecount'].fillna(0, inplace=True)
     finalmerge.fillna("NO INFO AVAILABLE", inplace=True)
+    finalmerge.drop_duplicates(subset=['UMSCHOOLID'], keep='last',inplace=True)
+    finalmerge.reset_index(drop=True,inplace=True)
     finaldata=finalmerge[["UMSCHOOLNAME","STATE","CITY","USER_NAME","UMEMAIL","CREATED_DATE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
-    print(len(lifetimelist),len(finaldata))
+    
+    
+    
+#     print(len(lifetimelist),len(finaldata))
+#     return finalmerge
+    
+    
     return json.dumps({"data":finaldata.values.tolist()})
 
 
@@ -45224,8 +45251,15 @@ def Payment_Mode(startdate,enddate):
     ,{"$unwind":"$Last_Payment_Date"}
     ])
     payment_df1= DataFrame(list(mydoc))
+#     payment_df1= payment_df1.fillna('NO INFO')
     payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
-    payment_df1= payment_df1.fillna('')
+    payment_df1['DEVICE_USED']= payment_df1['DEVICE_USED'].fillna('NO INFO')
+    payment_df1['MODE_OF_PAYMENT']= payment_df1['MODE_OF_PAYMENT'].fillna('NO INFO')
+    payment_df1['SCHOOL']= payment_df1['SCHOOL'].fillna('NO INFO')
+    payment_df1['USER_NAME']= payment_df1['USER_NAME'].fillna('NO INFO')
+    payment_df1['EMAIL_ID']= payment_df1['EMAIL_ID'].fillna('NO INFO')
+#     payment_df1= payment_df1.fillna('NO INFO')
+#     payment_df1= payment_df1.fillna('')
     payment_df1.replace(to_replace="NULL",value="NO INFO",inplace=True)
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
         'MONTGOMERY UPPER MIDDLE SCHOOL',
@@ -45319,6 +45353,8 @@ def Payment_Mode(startdate,enddate):
     Payment_Mode_User=df3web['Payment_Amount'].values.tolist()
     temp={"amount":{"Payment_Mode":Payment_Mode_amount,"Payment_Mode_Amount":Payment_Mode_Amount},"user": {"Payment_Mode":Payment_Mode_user,"Payment_Mode_User":Payment_Mode_User}}
     return (json.dumps(temp))
+
+
 
 
 
@@ -75549,19 +75585,255 @@ def mini_district_heat_district_Overall_prac(LOCAl_DISTRICT,startdate,enddate):
     return json.dumps(data)
 
 
-@app.route('/active-teacher_d360/<districtid>/<idd>/<startdate>/<enddate>')
-def weekly_active_teacherss_(districtid,idd,startdate,enddate):
+# @app.route('/active-teacher_d360/<districtid>/<idd>/<startdate>/<enddate>')
+# def weekly_active_teacherss_(districtid,idd,startdate,enddate):
+#     username = urllib.parse.quote_plus('admin')
+#     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+#     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+#     db=client.compass
+#     collection= db.audio_track_master
+
+#     district=disdic[districtid]
+#     school=idd
+# #     school='5f2bca28ba0be61b0c1cd54f'
+#     myDatetime1 = dateutil.parser.parse(startdate)
+#     myDatetime2 = dateutil.parser.parse(enddate)
+
+
+#     user_master=DataFrame(list(db.user_master.aggregate([{"$match":
+#     {'$and': [
+#     {"IS_DISABLED":{"$ne":"Y"}},
+#       {"IS_BLOCKED":{"$ne":"Y"}},
+#      {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+#     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+
+#     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+#     # {'schoolId._id':ObjectId(idd)},    
+#     {'schoolId._id':{'$ne':None}},
+#      {'EMAIL_ID':{'$ne':''}},
+#      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#     {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+#                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+#     {'$group':{'_id':'$schoolId._id','Schoolname':{'$first':'$schoolId.NAME'}}}
+
+#       ])))
+
+
+
+#     df55 = DataFrame(list(collection.aggregate([
+#     {"$match":
+#     {'$and': [
+#     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+#     {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+#     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+#     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#     { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#     {'USER_ID.schoolId._id':{'$ne':None}},
+#     {'USER_ID.EMAIL_ID':{'$ne':''}},
+#      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+#     {'USER_ID.schoolId._id':ObjectId(school)},     
+#     {'MODIFIED_DATE':{"$gte": csy_first_date()
+#     #              "$lte":myDatetime2
+#                      }},
+
+#     {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+#        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+
+#     {'$project':{'_id':'$USER_ID._id', 'practice_date':{"$dateToString":{"format": "%Y-%m-%d", "date": "$MODIFIED_DATE" }},
+#                  'week': {'$week': "$MODIFIED_DATE" },
+#                 'school':'$USER_ID.schoolId._id', 'schoolname':'$USER_ID.schoolId.NAME',
+#     'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+#                     ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}}   ,          
+
+
+#     {"$match":{'Completion_Percentage':{"$gte":.5}}},
+
+#     {'$group':{'_id':'$school', 'active_users':{'$addToSet':'$_id'}}},
+#     {'$project':{'_id':1, 'active_users':{'$size':'$active_users'}}}    
+
+#     ])))   
+
+
+
+#     df5 = DataFrame(list(collection.aggregate([
+#     {"$match":
+#     {'$and': [
+#     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+#     {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+#     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+#     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#     { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#     {'USER_ID.schoolId._id':{'$ne':None}},
+#     {'USER_ID.EMAIL_ID':{'$ne':''}},
+#      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+#         {'USER_ID.schoolId._id':ObjectId(school)},  
+#     {'MODIFIED_DATE':{"$gte": csy_first_date()
+#     #              "$lte":myDatetime2
+#                      }},
+
+#     {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+#     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+#        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+#          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+
+#     {'$project':{'_id':'$USER_ID._id', 'practice_date':{"$dateToString":{"format": "%Y-%m-%d", "date": "$MODIFIED_DATE" }},
+#                  'week': {'$week': "$MODIFIED_DATE" },
+#                 'school':'$USER_ID.schoolId._id', 'schoolname':'$USER_ID.schoolId.NAME',
+#     'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+#                     ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}}   ,          
+
+
+#     {"$match":{'Completion_Percentage':{"$gte":.5}}},
+
+
+#     { '$sort' : { '_id' : 1} }
+
+#     ])))
+
+#     df6=df5.groupby(['_id','practice_date','week','school','schoolname'], as_index=False).sum()
+
+#     df7=df6.sort_values(by=['school','week'], ascending=False)
+
+#     df8=df7.groupby(['school','_id','week'], as_index=False).agg({'practice_date':'count'}).sort_values(['school','week'], ascending=False)
+
+
+#     def legend(row):
+#         if row['practice_date']==1:
+#             return '1 x/week'
+#         elif (row['practice_date']>=2) & (row['practice_date']<=4):
+#             return '2-4 x/week'
+#         else:
+#             return 'Daily'
+
+
+#     df8['legend']= df8.apply(legend, axis=1)
+
+#     df9=df8.groupby(['school','week','legend'], as_index=False).agg({'_id':'count'})
+
+#     df10=pd.merge(df9,df55, left_on='school', right_on='_id', how='left')
+
+#     df11=df10.groupby(['school','week'], as_index=False).agg({'_id_x':'sum'})
+
+#     df12=pd.merge(df11, df55, left_on='school', right_on='_id', how='left')
+#     df12['diffrenece']=df12['active_users']-df12['_id_x']
+
+#     def legend(row):
+#         if row['diffrenece']!=0:
+#             return ('Not Used')
+
+#     df12['legend']=df12.apply(legend, axis=1)
+
+#     df13=pd.concat([df10,df12]).sort_values(['school','week'])
+#     df13=df13[['school','week','legend','_id_x','active_users','diffrenece']]
+
+#     df13['diffrenece'].fillna(df13['_id_x'], inplace=True)
+
+
+#     df13=df13.rename(columns={'diffrenece':'Teachers'})
+
+#     df14=df13[['school', 'week', 'legend','Teachers']]
+#     df14['Teachers']=df14['Teachers'].astype(int)
+#     # df14=df13[df13['school']==ObjectId('5f2bca46ba0be61b0c1d37c4')]
+
+#     df15=df14.groupby(['school', 'week'], as_index=False).agg(list)
+
+#     legenddd=['Daily', '2-4 x/week', '1 x/week','Not Used']
+
+#     for i in range(len(df15)):
+#         if legenddd != df15['legend'][i]:
+#             missing=set(legenddd)-set(df15['legend'][i])
+#             df15['legend'][i].extend(missing)
+
+#     for j in range(len(df15)):
+#         if len(df15['legend'][j]) != len(df15['Teachers'][j]):
+#             diff=len(df15['legend'][j])- len(df15['Teachers'][j])
+#             zeros=[0.0]*diff
+#             str(zeros)
+#             df15['Teachers'][j].extend(zeros)
+
+#     df15['new_legend']=np.zeros(len(df15), dtype=int)
+#     for w in range(len(df15)):
+#         not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
+#         df15['new_legend'][w]=not_none
+
+
+
+#     legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
+
+#     d={k:v for v,k in enumerate(legend_list)}
+#     df15['empty_list'] = np.empty((len(df15), 0)).tolist()
+
+#     for i in range(len(df15)):
+#         dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
+#         from collections import OrderedDict
+#         dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
+#         x=list(dictionary22.values())
+#         df15['empty_list'][i]=x
+
+#     for j in range(len(df15)):
+#         given_list=df15['new_legend'][j]
+#         given_list.sort(key=d.get)
+
+#     df15['weeks_']= np.zeros(len(df15), dtype=int)
+
+#     for k in range(len(df15)):
+#         if (1<=df15['week'][k]<=30):
+#             xx=22+df15['week'][k]
+#             df15['weeks_'][k]=xx
+#         elif(31<=df15['week'][k]<=52):
+#             xy=30-df15['week'][k]
+#             df15['weeks_'][k]=xy
+
+#     df15['weeks_']=abs(df15['weeks_'])   
+#     df15=df15.sort_values(by=['weeks_'], ascending=True)
+
+#     df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
+
+#     df15['new_legend']=df15['new_legend'].str.join(",")
+
+#     df16=df15[['school','weeks_','new_legend','empty_list']]
+#     df16['weeks_']='Week '+ df16['weeks_'].astype(str)
+
+#     df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
+
+#     dataa=[]
+#     for l in range(len(df17)):
+#         data=[df17['Schoolname'][l], df17['weeks_'][l], df17['empty_list'][l]]
+#         dataa.append(data)
+
+#     list1=[]
+#     for ll in range(len(dataa)):
+#         dataa[ll][2]=dataa[ll][2].split(',')
+#         qq=[int(float(x)) for x in dataa[ll][2]]
+#         m=dataa[ll][0:2]+qq
+#         list1.append(m)
+
+
+#     temp={'data':list1, 'schools':user_master['Schoolname'].tolist()}
+
+#     return json.dumps(temp)
+
+
+@app.route('/active_teachersSchoolSearch/<idd>')
+def active_teachers_schoolsearch(idd):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection= db.audio_track_master
 
-    district=disdic[districtid]
+#     district=disdic[districtid]
     school=idd
 #     school='5f2bca28ba0be61b0c1cd54f'
-    myDatetime1 = dateutil.parser.parse(startdate)
-    myDatetime2 = dateutil.parser.parse(enddate)
+#     myDatetime1 = dateutil.parser.parse(startdate)
+#     myDatetime2 = dateutil.parser.parse(enddate)
 
 
     user_master=DataFrame(list(db.user_master.aggregate([{"$match":
@@ -75572,8 +75844,9 @@ def weekly_active_teacherss_(districtid,idd,startdate,enddate):
     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
 
-    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
-    # {'schoolId._id':ObjectId(idd)},    
+#     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" })}},
+#         "CATEGORY":{'$regex':district, '$options':'i'}})}},
+    {'schoolId._id':ObjectId(idd)},    
     {'schoolId._id':{'$ne':None}},
      {'EMAIL_ID':{'$ne':''}},
      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -75597,7 +75870,8 @@ def weekly_active_teacherss_(districtid,idd,startdate,enddate):
     { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
     {'USER_ID.schoolId._id':{'$ne':None}},
     {'USER_ID.EMAIL_ID':{'$ne':''}},
-     {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+#      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y"})}} ,
+#         "CATEGORY":{'$regex':district, '$options':'i'}})}},
     {'USER_ID.schoolId._id':ObjectId(school)},     
     {'MODIFIED_DATE':{"$gte": csy_first_date()
     #              "$lte":myDatetime2
@@ -75635,7 +75909,7 @@ def weekly_active_teacherss_(districtid,idd,startdate,enddate):
     { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
     {'USER_ID.schoolId._id':{'$ne':None}},
     {'USER_ID.EMAIL_ID':{'$ne':''}},
-     {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+#      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
         {'USER_ID.schoolId._id':ObjectId(school)},  
     {'MODIFIED_DATE':{"$gte": csy_first_date()
     #              "$lte":myDatetime2
@@ -75748,11 +76022,11 @@ def weekly_active_teacherss_(districtid,idd,startdate,enddate):
     df15['weeks_']= np.zeros(len(df15), dtype=int)
 
     for k in range(len(df15)):
-        if (1<=df15['week'][k]<=31):
-            xx=21+df15['week'][k]
+        if (1<=df15['week'][k]<=30):
+            xx=22+df15['week'][k]
             df15['weeks_'][k]=xx
-        elif(32<=df15['week'][k]<=52):
-            xy=31-df15['week'][k]
+        elif(31<=df15['week'][k]<=52):
+            xy=30-df15['week'][k]
             df15['weeks_'][k]=xy
 
     df15['weeks_']=abs(df15['weeks_'])   
@@ -75779,10 +76053,484 @@ def weekly_active_teacherss_(districtid,idd,startdate,enddate):
         m=dataa[ll][0:2]+qq
         list1.append(m)
 
+    
+    each_list=list1[0][2:]
+    total_teachers=sum(each_list)    
+    
+    yscale=(total_teachers)+2    
 
-    temp={'data':list1, 'schools':user_master['Schoolname'].tolist()}
+    temp={'data':list1, 'yscale':int(yscale)}
 
     return json.dumps(temp)
+    
+@app.route('/active_teachers_on_SchoolSearch/<idd>/<chart_type>')
+def active_teachers_school_search(idd,chart_type):
+
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection= db.audio_track_master
+
+    #     district=disdic[districtid]
+    # school=idd
+    school='5f2bca28ba0be61b0c1cd54f'
+    #     myDatetime1 = dateutil.parser.parse(startdate)
+    #     myDatetime2 = dateutil.parser.parse(enddate)
+
+#     chart_type='Absolute_count'
+#     chart_type=str(chart_type).title()
+    
+    if chart_type=='Absolute_count': 
+        
+        user_master=DataFrame(list(db.user_master.aggregate([{"$match":
+        {'$and': [
+        {"IS_DISABLED":{"$ne":"Y"}},
+          {"IS_BLOCKED":{"$ne":"Y"}},
+         {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+        { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+
+        #     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" })}},
+        #         "CATEGORY":{'$regex':district, '$options':'i'}})}},
+        {'schoolId._id':ObjectId(idd)},    
+        {'schoolId._id':{'$ne':None}},
+         {'EMAIL_ID':{'$ne':''}},
+         {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                   {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+        {'$group':{'_id':'$schoolId._id','Schoolname':{'$first':'$schoolId.NAME'}}}
+
+          ])))
+
+        df55 = DataFrame(list(collection.aggregate([
+        {"$match":
+        {'$and': [
+        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+        {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+        {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.schoolId._id':{'$ne':None}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},
+        #      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y"})}} ,
+        #         "CATEGORY":{'$regex':district, '$options':'i'}})}},
+        {'USER_ID.schoolId._id':ObjectId(school)},     
+        {'MODIFIED_DATE':{"$gte": csy_first_date()
+        #              "$lte":myDatetime2
+                         }},
+
+        {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+
+        {'$project':{'_id':'$USER_ID._id', 'practice_date':{"$dateToString":{"format": "%Y-%m-%d", "date": "$MODIFIED_DATE" }},
+                     'week': {'$week': "$MODIFIED_DATE" },
+                    'school':'$USER_ID.schoolId._id', 'schoolname':'$USER_ID.schoolId.NAME',
+        'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+                        ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}}   ,          
+
+
+        {"$match":{'Completion_Percentage':{"$gte":.5}}},
+
+        {'$group':{'_id':'$school', 'active_users':{'$addToSet':'$_id'}}},
+        {'$project':{'_id':1, 'active_users':{'$size':'$active_users'}}}    
+
+        ])))   
+
+        df5 = DataFrame(list(collection.aggregate([
+        {"$match":
+        {'$and': [
+        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+        {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+        {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.schoolId._id':{'$ne':None}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},
+        #      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+            {'USER_ID.schoolId._id':ObjectId(school)},  
+        {'MODIFIED_DATE':{"$gte": csy_first_date()
+        #              "$lte":myDatetime2
+                         }},
+
+        {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+
+        {'$project':{'_id':'$USER_ID._id', 'practice_date':{"$dateToString":{"format": "%Y-%m-%d", "date": "$MODIFIED_DATE" }},
+                     'week': {'$week': "$MODIFIED_DATE" },
+                    'school':'$USER_ID.schoolId._id', 'schoolname':'$USER_ID.schoolId.NAME',
+        'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+                        ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}}   ,          
+
+
+        {"$match":{'Completion_Percentage':{"$gte":.5}}},
+
+
+        { '$sort' : { '_id' : 1} }
+
+        ])))
+
+        df6=df5.groupby(['_id','practice_date','week','school','schoolname'], as_index=False).sum()
+
+        df7=df6.sort_values(by=['school','week'], ascending=False)
+
+        df8=df7.groupby(['school','_id','week'], as_index=False).agg({'practice_date':'count'}).sort_values(['school','week'], ascending=False)
+
+
+        def legend(row):
+            if row['practice_date']==1:
+                return '1 x/week'
+            elif (row['practice_date']>=2) & (row['practice_date']<=4):
+                return '2-4 x/week'
+            else:
+                return 'Daily'
+
+
+        df8['legend']= df8.apply(legend, axis=1)
+
+        df9=df8.groupby(['school','week','legend'], as_index=False).agg({'_id':'count'})
+
+        df10=pd.merge(df9,df55, left_on='school', right_on='_id', how='left')
+
+        df11=df10.groupby(['school','week'], as_index=False).agg({'_id_x':'sum'})
+
+        df12=pd.merge(df11, df55, left_on='school', right_on='_id', how='left')
+        df12['diffrenece']=df12['active_users']-df12['_id_x']
+
+        def legend(row):
+            if row['diffrenece']!=0:
+                return ('Not Used')
+
+        df12['legend']=df12.apply(legend, axis=1)
+
+        df13=pd.concat([df10,df12]).sort_values(['school','week'])
+        df13=df13[['school','week','legend','_id_x','active_users','diffrenece']]
+
+        df13['diffrenece'].fillna(df13['_id_x'], inplace=True)
+
+
+        df13=df13.rename(columns={'diffrenece':'Teachers'})
+
+        df14=df13[['school', 'week', 'legend','Teachers']]
+        df14['Teachers']=df14['Teachers'].astype(int)
+
+        df15=df14.groupby(['school', 'week'], as_index=False).agg(list)
+
+        legenddd=['Daily', '2-4 x/week', '1 x/week','Not Used']
+
+        for i in range(len(df15)):
+            if legenddd != df15['legend'][i]:
+                missing=set(legenddd)-set(df15['legend'][i])
+                df15['legend'][i].extend(missing)
+
+        for j in range(len(df15)):
+            if len(df15['legend'][j]) != len(df15['Teachers'][j]):
+                diff=len(df15['legend'][j])- len(df15['Teachers'][j])
+                zeros=[0.0]*diff
+                str(zeros)
+                df15['Teachers'][j].extend(zeros)
+
+        df15['new_legend']=np.zeros(len(df15), dtype=int)
+        for w in range(len(df15)):
+            not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
+            df15['new_legend'][w]=not_none
+
+
+        legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
+
+        d={k:v for v,k in enumerate(legend_list)}
+        df15['empty_list'] = np.empty((len(df15), 0)).tolist()
+
+        for i in range(len(df15)):
+            dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
+            from collections import OrderedDict
+            dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
+            x=list(dictionary22.values())
+            df15['empty_list'][i]=x
+
+        for j in range(len(df15)):
+            given_list=df15['new_legend'][j]
+            given_list.sort(key=d.get)
+
+        df15['weeks_']= np.zeros(len(df15), dtype=int)
+
+        for k in range(len(df15)):
+            if (1<=df15['week'][k]<=30):
+                xx=22+df15['week'][k]
+                df15['weeks_'][k]=xx
+            elif(31<=df15['week'][k]<=52):
+                xy=30-df15['week'][k]
+                df15['weeks_'][k]=xy
+
+        df15['weeks_']=abs(df15['weeks_'])   
+        df15=df15.sort_values(by=['weeks_'], ascending=True)
+
+        df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
+
+        df15['new_legend']=df15['new_legend'].str.join(",")
+
+        df16=df15[['school','weeks_','new_legend','empty_list']]
+        df16['weeks_']='Week '+ df16['weeks_'].astype(str)
+
+        df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
+
+        dataa=[]
+        for l in range(len(df17)):
+            data=[df17['Schoolname'][l], df17['weeks_'][l], df17['empty_list'][l]]
+            dataa.append(data)
+
+        list1=[]
+        for ll in range(len(dataa)):
+            dataa[ll][2]=dataa[ll][2].split(',')
+            qq=[int(float(x)) for x in dataa[ll][2]]
+            m=dataa[ll][0:2]+qq
+            list1.append(m)
+
+            each_list=list1[0][2:]
+            total_teachers=sum(each_list)    
+
+            yscale=(total_teachers)+5    
+
+        temp={'data':list1, 'yscale':int(yscale)}
+#         print(temp)
+        return json.dumps(temp)
+    
+
+    else:
+        
+        user_master=DataFrame(list(db.user_master.aggregate([{"$match":
+        {'$and': [
+        {"IS_DISABLED":{"$ne":"Y"}},
+          {"IS_BLOCKED":{"$ne":"Y"}},
+         {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+        { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+
+        #     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" })}},
+        #         "CATEGORY":{'$regex':district, '$options':'i'}})}},
+        {'schoolId._id':ObjectId(idd)},    
+        {'schoolId._id':{'$ne':None}},
+         {'EMAIL_ID':{'$ne':''}},
+         {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                   {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+        {'$group':{'_id':'$schoolId._id','Schoolname':{'$first':'$schoolId.NAME'}}}
+
+          ])))
+
+
+        df55 = DataFrame(list(collection.aggregate([
+        {"$match":
+        {'$and': [
+        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+        {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+        {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.schoolId._id':{'$ne':None}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},
+        #      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y"})}} ,
+        #         "CATEGORY":{'$regex':district, '$options':'i'}})}},
+        {'USER_ID.schoolId._id':ObjectId(school)},     
+        {'MODIFIED_DATE':{"$gte": csy_first_date()
+        #              "$lte":myDatetime2
+                         }},
+
+        {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+
+        {'$project':{'_id':'$USER_ID._id', 'practice_date':{"$dateToString":{"format": "%Y-%m-%d", "date": "$MODIFIED_DATE" }},
+                     'week': {'$week': "$MODIFIED_DATE" },
+                    'school':'$USER_ID.schoolId._id', 'schoolname':'$USER_ID.schoolId.NAME',
+        'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+                        ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}}   ,          
+
+
+        {"$match":{'Completion_Percentage':{"$gte":.5}}},
+
+        {'$group':{'_id':'$school', 'active_users':{'$addToSet':'$_id'}}},
+        {'$project':{'_id':1, 'active_users':{'$size':'$active_users'}}}    
+
+        ])))   
+
+        df5 = DataFrame(list(collection.aggregate([
+        {"$match":
+        {'$and': [
+        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+        {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+        {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.schoolId._id':{'$ne':None}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},
+        #      {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+            {'USER_ID.schoolId._id':ObjectId(school)},  
+        {'MODIFIED_DATE':{"$gte": csy_first_date()
+        #              "$lte":myDatetime2
+                         }},
+
+        {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+
+        {'$project':{'_id':'$USER_ID._id', 'practice_date':{"$dateToString":{"format": "%Y-%m-%d", "date": "$MODIFIED_DATE" }},
+                     'week': {'$week': "$MODIFIED_DATE" },
+                    'school':'$USER_ID.schoolId._id', 'schoolname':'$USER_ID.schoolId.NAME',
+        'Completion_Percentage':{"$round":[{"$divide":[{"$subtract":
+                        ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}}   ,          
+
+
+        {"$match":{'Completion_Percentage':{"$gte":.5}}},
+
+
+        { '$sort' : { '_id' : 1} }
+
+        ])))
+
+        df6=df5.groupby(['_id','practice_date','week','school','schoolname'], as_index=False).sum()
+
+        df7=df6.sort_values(by=['school','week'], ascending=False)
+
+        df8=df7.groupby(['school','_id','week'], as_index=False).agg({'practice_date':'count'}).sort_values(['school','week'], ascending=False)
+
+
+        def legend(row):
+            if row['practice_date']==1:
+                return '1 x/week'
+            elif (row['practice_date']>=2) & (row['practice_date']<=4):
+                return '2-4 x/week'
+            else:
+                return 'Daily'
+
+
+        df8['legend']= df8.apply(legend, axis=1)
+
+        df9=df8.groupby(['school','week','legend'], as_index=False).agg({'_id':'count'})
+
+        df10=pd.merge(df9,df55, left_on='school', right_on='_id', how='left')
+
+        df11=df10.groupby(['school','week'], as_index=False).agg({'_id_x':'sum'})
+
+        df12=pd.merge(df11, df55, left_on='school', right_on='_id', how='left')
+        df12['diffrenece']=df12['active_users']-df12['_id_x']
+
+        def legend(row):
+            if row['diffrenece']!=0:
+                return ('Not Used')
+
+        df12['legend']=df12.apply(legend, axis=1)
+
+        df13=pd.concat([df10,df12]).sort_values(['school','week'])
+        df13=df13[['school','week','legend','_id_x','active_users','diffrenece']]
+
+        df13['diffrenece'].fillna(df13['_id_x'], inplace=True)
+
+
+        df13=df13.rename(columns={'diffrenece':'Teachers'})
+
+        df14=df13[['school', 'week', 'legend','Teachers']]
+        df14['Teachers']=df14['Teachers'].astype(int)
+
+        df15=df14.groupby(['school', 'week'], as_index=False).agg(list)
+
+        legenddd=['Daily', '2-4 x/week', '1 x/week','Not Used']
+
+        for i in range(len(df15)):
+            if legenddd != df15['legend'][i]:
+                missing=set(legenddd)-set(df15['legend'][i])
+                df15['legend'][i].extend(missing)
+
+        for j in range(len(df15)):
+            if len(df15['legend'][j]) != len(df15['Teachers'][j]):
+                diff=len(df15['legend'][j])- len(df15['Teachers'][j])
+                zeros=[0.0]*diff
+                str(zeros)
+                df15['Teachers'][j].extend(zeros)
+
+        df15['new_legend']=np.zeros(len(df15), dtype=int)
+        for w in range(len(df15)):
+            not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
+            df15['new_legend'][w]=not_none
+
+
+
+        legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
+
+        d={k:v for v,k in enumerate(legend_list)}
+        df15['empty_list'] = np.empty((len(df15), 0)).tolist()
+
+        for i in range(len(df15)):
+            dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
+            from collections import OrderedDict
+            dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
+            x=list(dictionary22.values())
+            df15['empty_list'][i]=x
+
+        for j in range(len(df15)):
+            given_list=df15['new_legend'][j]
+            given_list.sort(key=d.get)
+
+        df15['weeks_']= np.zeros(len(df15), dtype=int)
+
+        for k in range(len(df15)):
+            if (1<=df15['week'][k]<=30):
+                xx=22+df15['week'][k]
+                df15['weeks_'][k]=xx
+            elif(31<=df15['week'][k]<=52):
+                xy=30-df15['week'][k]
+                df15['weeks_'][k]=xy
+
+        df15['weeks_']=abs(df15['weeks_'])   
+        df15=df15.sort_values(by=['weeks_'], ascending=True)
+
+        df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
+
+        df15['new_legend']=df15['new_legend'].str.join(",")
+
+        df16=df15[['school','weeks_','new_legend','empty_list']]
+        df16['weeks_']='Week '+ df16['weeks_'].astype(str)
+
+        df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
+
+        dataa=[]
+        for l in range(len(df17)):
+            data=[df17['Schoolname'][l], df17['weeks_'][l], df17['empty_list'][l]]
+            dataa.append(data)
+
+        list1=[]
+        for ll in range(len(dataa)):
+            dataa[ll][2]=dataa[ll][2].split(',')
+            qq=[int(float(x)) for x in dataa[ll][2]]
+            m=dataa[ll][0:2]+qq
+            list1.append(m)
+
+        each_list=list1[0][2:]
+        total_teachers=sum(each_list)    
+
+        yscale=(total_teachers)+5    
+
+        for i in range(len(list1)):
+            each_list=list1[i][2:]
+            total_teachers=sum(each_list)
+            list1[i][2:]=[round((x/total_teachers)*100) for x in each_list]
+
+        temp={'data':list1, 'yscale':int(yscale)}
+        return json.dumps(temp)
 
 
 

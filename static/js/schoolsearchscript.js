@@ -9,6 +9,7 @@ if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1
     URL = "/schoolsearchid/" + urlid
     $("#schoolname").empty();
     $("#practice").empty();
+    $("#container43").empty();
     $("#state").empty();
     $("#usercountse").empty();
     $("#adress").empty();
@@ -36,6 +37,7 @@ if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1
     inviteLink(urlid);
     schoolIDCharts(urlid)
     historychart(urlid)
+    schoolWeeklyChart(urlid)
     $("#next").empty();
     $("#next1").empty();
     $("#btnExport").show();
@@ -206,6 +208,7 @@ function schoolsearch() {
         $("#state").empty();
         $("#schoolDistrict").empty();
         $("#usercountse").empty();
+        $("#container43").empty();
         $("#adress").empty();
         $("#email").empty();
         $("#country").empty();
@@ -232,6 +235,7 @@ function schoolsearch() {
         escore(a);
         inviteLink(a);
         historychart(a)
+        schoolWeeklyChart(a)
         $("#next").empty();
         $("#next1").empty();
         $("#btnExport").show();
@@ -249,6 +253,7 @@ function schoolsearch() {
         $("#practice").empty();
         $("#state").empty();
         $("#schoolDistrict").empty();
+        $("#container43").empty();
         $("#usercountse").empty();
         $("#adress").empty();
         $("#email").empty();
@@ -274,6 +279,7 @@ function schoolsearch() {
         inviteLink(a);
         schoolIDCharts(a)
         historychart(a)
+        schoolWeeklyChart(a)
         $("#next").empty();
         $("#next1").empty();
         $("#btnExport").show();
@@ -330,6 +336,7 @@ function schoolsearch2() {
     $("#schoolname").empty();
     $("#practice").empty();
     $("#state").empty();
+    $("#container43").empty();
     $("#schoolDistrict").empty();
     $("#usercountse").empty();
     $("#adress").empty();
@@ -363,6 +370,7 @@ function schoolsearch2() {
     createDynamic2(URL2);
     jou2(URL);
     historychart(a)
+    schoolWeeklyChart(a)
 };
 
 function P(URL) {
