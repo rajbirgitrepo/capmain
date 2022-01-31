@@ -656,7 +656,7 @@
             <div style="background-color: #ffff;border-radius: 20px; box-shadow: rgb(0 0 0 / 10%) 2px 10px 20px;padding: 10px;">
                 <select id="percentageCountNew" class="drop-ui" style="margin-top: 7px;">
                     <option value="1" selected>Absolute Count</option>
-                    <option value="2">Percenntage</option>
+                    <option value="2">Percentage</option>
                 </select>
                 <!-- <div id="waiting"></div> -->
                 <div id="container43" style="height: 400px; width: 100%;">
@@ -2105,8 +2105,8 @@
         
                     // turn on stacking
                     chart.yScale().stackMode('value');
-                    chart.yScale().maximum(scaleValueGet);
-                    chart.yScale().minimum(0);
+                    chart.yScale().maximum(60);
+                    chart.yScale().minimum(scaleValueGet);
         
                     // use subcategory names as names of X-axis ticks
                     chart.xScale().names('sub-category');
@@ -2230,7 +2230,7 @@
                             this.seriesName = '1Day/Week'
                         }
                         else { this.seriesName = 'Not Used' }
-                        return this.seriesName + " :" + this.value;
+                        return this.seriesName + " :" + this.value +"%";
                     });
         
                     var legend = chart.legend();
