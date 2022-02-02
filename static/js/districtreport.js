@@ -2372,7 +2372,7 @@ function distselect(distid) {
     console.log(distid)
     cardcount(c, a, b);
     charts(c, a, b);
-    OnlyschoolId(c, a, b);
+    // OnlyschoolId(c, a, b);
     // ExportTable2(c, a, b);
     // bubble(c);
     // bubble2(c);
@@ -2475,32 +2475,31 @@ function schoolsearchHeat(a) {
 //         console.log("school id not found")
 //     }
 // }
-function OnlyschoolId(a, b, c) {
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": '/districtheatmappractice/' + a + '/' + b + '/' + c,
-        "method": "GET"
-    }
-    $.ajax(settings).done(function (response) {
+// function OnlyschoolId(a, b, c) {
+//     var settings = {
+//         "async": true,
+//         "crossDomain": true,
+//         "url": '/districtheatmappractice/' + a + '/' + b + '/' + c,
+//         "method": "GET"
+//     }
+//     $.ajax(settings).done(function (response) {
 
-        var dataa1 = JSON.parse(response);
-        console.log(Object.keys(dataa1.schoolid)[0]);
-        iddate.push(a);
-        iddate.push(b);
-        iddate.push(c);
-        var acp = dataa1.schoolid;
-        var schoolName = Object.keys(acp)[0];
-        document.getElementById("schoolDetail").innerHTML = schoolName;
-        var getschool =  document.getElementById("schoolDetail").innerHTML;
-        console.log(getschool);
-        selectschoolforchart(getschool);
+//         var dataa1 = JSON.parse(response);
+//         console.log(Object.keys(dataa1.schoolid)[0]);
+//         iddate.push(a);
+//         iddate.push(b);
+//         iddate.push(c);
+//         var acp = dataa1.schoolid;
+//         var schoolName = Object.keys(acp)[0];
+//         document.getElementById("schoolDetail").innerHTML = schoolName;
+//         var getschool =  document.getElementById("schoolDetail").innerHTML;
+//         console.log(getschool);
+//         selectschoolforchart(getschool);
 
-    });
-}
+//     });
+// }
 
 function heatnew(b) {
-    heatSchoolId = data.schoolid;
     console.log(b);
     var min, max, colorScale, temps, tempsArr;
     var colors = ["#EFF7F2", "#DBEEE1", "#B3DFC1", "#8ECAA0", "#76C28D", "#65B87E", "#52AB6D", "#42A862", "#329B52", "#278845"]

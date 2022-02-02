@@ -146,7 +146,7 @@ $.ajax(settings).done(function(response) {
             lineWidth: 1,
             min: 0,
             title: {
-                text: "Average User Count"
+                text: "Playback Count"
             },
             stackLabels: {
                 enabled: false,
