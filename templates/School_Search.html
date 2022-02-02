@@ -1881,7 +1881,7 @@
             chart.palette(['#006400', '#00A651', '#32CD32', '#8ae02b'
             ]);
             // configure global settings for series labels
-            chart.labels({ position: 'center', fontColor: '#000' });
+            chart.labels(false);
             // add subcategory names to the meta of one of the series
             chart.column(data.mapAs({ 'value': 2, 'sub-category': 1 }));
             chart.column(data.mapAs({ 'value': 3 }));
@@ -2096,7 +2096,7 @@
                     chart.palette(['#006400', '#00A651', '#32CD32', '#8ae02b'
                     ]);
                     // configure global settings for series labels
-                    chart.labels({ position: 'center', fontColor: '#000' });
+                    chart.labels(false);
                     // add subcategory names to the meta of one of the series
                     chart.column(data.mapAs({ 'value': 2, 'sub-category': 1 }));
                     chart.column(data.mapAs({ 'value': 3 }));
@@ -2308,7 +2308,7 @@
                     chart.palette(['#006400', '#00A651', '#32CD32', '#8ae02b'
                     ]);
                     // configure global settings for series labels
-                    chart.labels({ position: 'center', fontColor: '#000' });
+                    chart.labels(false);
                     // add subcategory names to the meta of one of the series
                     chart.column(data.mapAs({ 'value': 2, 'sub-category': 1 }));
                     chart.column(data.mapAs({ 'value': 3 }));
