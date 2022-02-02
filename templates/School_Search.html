@@ -1870,7 +1870,7 @@
             var chart = anychart.column();
 
             // title text
-            chart.title("Weekly Chart");
+            chart.title("Weekly Usage (CSY)");
 
 
 
@@ -2009,7 +2009,7 @@
                     this.seriesName = 'Daily'
                 }
                 else if (this.seriesName === "Series 1") {
-                    this.seriesName = '2-4Days Week'
+                    this.seriesName = '2-4 Days/Week'
                 }
                 else if (this.seriesName === "Series 2") {
                     this.seriesName = '1Day/Weekly'
@@ -2027,13 +2027,13 @@
                     items[0].text = 'Daily'
                 }
                 if (items[1].text === "Series 1") {
-                    items[1].text = '2-4Days Week'
+                    items[1].text = '2-4 Days/Week'
                 }
                 if (items[2].text === "Series 2") {
                     items[2].text = '1Day/Weekly'
                 }
                 if (items[3].text === "Series 2") {
-                    items[3].text = '2-4Days Week'
+                    items[3].text = '2-4 Days/Week'
                 }
                 else { items[3].text = 'Not Used' }
                 return items;
@@ -2069,7 +2069,7 @@
             $.ajax(settings).done(function (response) {
                 var data = JSON.parse(response);
                 var dataa = data.data
-                var scaleValueGet = data.yscale;
+                var scaleValueGet = 0;
                 console.log(scaleValueGet);
                 //   var schoolonlyname = data.schools;
                 //  console.log(schoolonlyname);
@@ -2105,7 +2105,7 @@
         
                     // turn on stacking
                     chart.yScale().stackMode('value');
-                    chart.yScale().maximum(60);
+                    chart.yScale().maximum(100);
                     chart.yScale().minimum(scaleValueGet);
         
                     // use subcategory names as names of X-axis ticks
@@ -2297,7 +2297,7 @@
                     var chart = anychart.column();
         
                     // title text
-                    chart.title("Weekly Chart");
+                    chart.title("Weekly Usage (CSY)");
         
         
         
@@ -2436,7 +2436,7 @@
                             this.seriesName = 'Daily'
                         }
                         else if (this.seriesName === "Series 1") {
-                            this.seriesName = '2-4Days Week'
+                            this.seriesName = '2-4 Days/Week'
                         }
                         else if (this.seriesName === "Series 2") {
                             this.seriesName = '1Day/Weekly'
@@ -2454,13 +2454,13 @@
                             items[0].text = 'Daily'
                         }
                         if (items[1].text === "Series 1") {
-                            items[1].text = '2-4Days Week'
+                            items[1].text = '2-4 Days/Week'
                         }
                         if (items[2].text === "Series 2") {
                             items[2].text = '1Day/Weekly'
                         }
                         if (items[3].text === "Series 2") {
-                            items[3].text = '2-4Days Week'
+                            items[3].text = '2-4 Days/Week'
                         }
                         else { items[3].text = 'Not Used' }
                         return items;
