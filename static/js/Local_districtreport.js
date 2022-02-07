@@ -1925,7 +1925,7 @@ function cards2(URL) {
     $('#btnExport').show();
     createDynamic2(a);
 }
-distselect('North');
+distselect('East');
 // $("#disdetails").text('North');
 
 function distselect(distid) {

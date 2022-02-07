@@ -76277,7 +76277,7 @@ def active_teachers_school_search(idd,chart_type):
             each_list=list1[0][2:]
             total_teachers=sum(each_list)    
 
-            yscale=(total_teachers)+5    
+            yscale=(total_teachers)+2    
 
         temp={'data':list1, 'yscale':int(yscale)}
 #         print(temp)
@@ -76502,14 +76502,14 @@ def active_teachers_school_search(idd,chart_type):
         each_list=list1[0][2:]
         total_teachers=sum(each_list)    
 
-        yscale=(total_teachers)+5    
+        yscale=(total_teachers)+2    
 
         for i in range(len(list1)):
             each_list=list1[i][2:]
             total_teachers=sum(each_list)
             list1[i][2:]=[round((x/total_teachers)*100) for x in each_list]
 
-        temp={'data':list1, 'yscale':int(yscale)}
+        temp={'data':list1, 'yscale':100}
         return json.dumps(temp)
 
 
