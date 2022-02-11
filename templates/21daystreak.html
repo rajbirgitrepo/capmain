@@ -6,7 +6,7 @@
     <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>CAPi6 UPCOMING RENEWAL</title>
+    <title>21 Day Streak</title>
 
     <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
     <title>CAPi6 FAMILY MAP VIEW</title>
@@ -62,7 +62,13 @@
         text-align: center;
         color: gray;
     }
-    
+    .drop-ui {
+        border: 1px solid;
+        border-radius: 5px;
+        color: grey;
+        font-size: 13px;
+        margin: 11px 1px;
+    }
     .highcharts-figure,
     .highcharts-data-table table {
         min-width: 320px;
@@ -104,6 +110,63 @@
     
     .highcharts-data-table tr:hover {
         background: #f1f7ff;
+    }
+    .align-left {
+        float: left;
+    }
+    
+    .align-right {
+        float: right;
+    }
+    .color-square {
+        float: left;
+        width: 9%;
+        margin-right: 1%;
+        height: 1.5em;
+    }
+    .legend {
+        margin: 0 auto;
+        width: 25%;
+        font-family: roboto, arial;
+        font-size: 0.75em;
+    }
+    table th, table td {
+        font-size: 9px !important;
+    }
+    table th, table td {
+        font-size: 9px !important;
+       
+    }
+    tbody th {
+        font-size: 10px !important;
+        position: sticky;
+        left: 0;
+        z-index: 5;
+    }
+    .new-design table th {
+        padding: 10px 10px;
+        background-color: #00a65100;
+        position: relative;
+        color: black;
+        border-bottom: none;
+    }
+    .new-design table th, table td {
+        padding: 8px 10px;
+       
+    }
+    caption {
+        caption-side: top;
+        font-weight: bold;
+        font-size: 1.1em;
+        font-family: "open sans", roboto;
+    }
+    .heatmap-design{
+        border-radius: 20px;
+        margin-top: 20px;
+        box-shadow: 2px 10px 20px rgb(0 0 0 / 10%);
+        background-color: #fff;
+        margin-bottom: 20px;
+        padding: 10px;
     }
 </style>
 
@@ -378,50 +441,70 @@
         <section class="statistics">
 
 
+          
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-2" onclick="cards('')" style="cursor:pointer;">
-
+                    <div class="col-md-2">
                         <div class="box2 ">
-                            <p style="font-size: 10px;" id="">Total Users</p>
+                            <p style="font-size: 10px;" id="">Total Users Activated</p>
                             <p style="margin: 0 4px; font-size: 21px; " id="c1"></p>
-
-
-
-
-                        </div>
-                    </div>
-                    <div class="col-md-2" onclick="cards('')" style="cursor:pointer;">
-
-                        <div class="box2 ">
-                            <p style="font-size: 10px;" id="">Streak Count</p>
-                            <p style="margin: 0 4px; font-size: 21px; " id="c2"></p>
-
-
-
-
                         </div>
                     </div>
                     <div class="col-md-2">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="t2">Users Practiced</p>
+                            <p style="margin: 0 4px; font-size: 21px; " id="c4"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="t2">Mindful Minutes</p>
+                            <p style="margin: 0 4px; font-size: 21px; " id="c5"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="t2">Practice Sessions</p>
+                            <p style="margin: 0 4px; font-size: 21px; " id="c6"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="t2">Total Users Completed</p>
+                            <p style="margin: 0 4px; font-size: 21px; " id="c7"></p>
+                        </div>
+                    </div>
 
+                    <!-- <div class="col-md-2">
+                        <div class="box2 ">
+                            <p style="font-size: 10px;" id="">Streak Count</p>
+                            <p style="margin: 0 4px; font-size: 21px; " id="c2"></p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
                         <div class="box2 ">
                             <p style="font-size: 10px;" id="t2">Active Streak</p>
                             <p style="margin: 0 4px; font-size: 21px; " id="c3"></p>
-
-
-
-
                         </div>
                     </div>
+                    -->
+                    
+                   
+                  
 
                 </div>
 
             </div>
-
-            </div>
+           
         </section>
         <section>
             <hr/>
+            <div class="col-md-12">
+                <div id="sticky-wrapper" class="heatmap-design">
+            <p id="chartname" style="text-align: center;margin-right: 7%;font-size: 16px;"></p>
+            <div id="heat-map" class="new-design"></div>
+        </div>
+            </div>
             <div class="col-md-10">
                 <div id="container" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
             </div>
@@ -429,20 +512,20 @@
                 <div id="container1" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
             </div>
 
-            <div class="col-md-10" style="margin-top: 40px;">
-                <div id="container2" style="height: 400px; width: 120%; border-radius: 20px;float: left;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+             <div class="col-md-10" style="margin-top: 40px;">
+                <div id="container10" style="height: 400px; width: 120%; border-radius: 20px;float: left;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
             </div>
 
-            <div class="col-md-10" style="margin-top: 40px;">
+            <!-- <div class="col-md-10" style="margin-top: 40px;">
                 <div id="container3" style="height: 400px; width: 120%; border-radius: 20px;float: left;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
-            </div>
+            </div> -->
 
 
             <div class="welcome2" style="margin-top: 100px;">
 
                 <div class="container-fluid">
                     <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
-                        <select class="" id="firstnametable">
+                        <select class="drop-ui" id="firstnametable">
             <option value="5f2609807a1c0000950bb45a">Los Angeles Unified School District</option>
             <option value="5f2609807a1c0000950bb45b">Westfield Public School District</option>
             <option value="5f2609807a1c0000950bb45c">Comox Valley School District(sd71)</option>
@@ -498,8 +581,8 @@
           </select>
                         <div id="gif"></div>
                         <div class="row">
-                            <div id="admin" class="col-md-12">
-                                <div class="card material-table">
+                            <div id="admin" class="col-md-12 p-0">
+                                <div class="card material-table p-2" style="border: none;">
                                     <div class="table-header">
                                         <span class="table-title" id="tablename"></span>
                                     </div>
@@ -652,7 +735,8 @@
     </div>
   </div> -->
     <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
-    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js'></script>
+    <!-- <script src="{{ url_for('static',filename='js/insight.js') }}"></script> -->
     <script src="{{ url_for('static',filename='js/script.js') }}"></script>
     <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
     <script src="{{ url_for('static',filename='js/search.js') }}"></script>
@@ -666,6 +750,8 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script src="{{ url_for('static',filename='js/21daystreak.js') }}"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
     <!-- partial -->
 
 </body>

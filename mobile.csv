@@ -1,3 +1,6 @@
 TYPE_OF_PAYMENT,USER_NAME,EMAIL_ID,DEVICE_USED,MODE_OF_PAYMENT,Last_Payment_Date,Payment_Amount
-MOBILE,Emily Blossom,emilyblossom@berkeley.net,IOS,PAYPAL,2021-10-31,1000.0
+MOBILE,Mike,mike.pepperman@gmail.com,ANDROID,GOOGLE,2022-01-24,89.98999786376953
+MOBILE,Luz Quintero,lquintero@riversideunified.org,IOS,APPLE,2022-01-12,8.989999771118164
+MOBILE,Melissa Norwood ,mnorwood@mtrsd.org,IOS,APPLE,2021-08-13,89.98999786376953
+MOBILE,Valeria Puca,vpuca@mmsny.org,IOS,APPLE,2022-01-24,8.989999771118164
 MOBILE,Scott,sbarton@smusd.us,IOS,APPLE,2021-09-22,89.98999786376953

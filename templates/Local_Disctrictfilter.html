@@ -459,6 +459,21 @@
         border-radius: 20px;
         cursor: pointer;
     }
+    @media (min-width: 992px) {
+        .seven-cols .col-md-1,
+        .seven-cols .col-sm-1,
+        .seven-cols .col-lg-1 {
+          width: 14.285714285714285714285714285714%;
+        }
+      }
+      
+      @media (min-width: 1200px) {
+        .seven-cols .col-md-1,
+        .seven-cols .col-sm-1,
+        .seven-cols .col-lg-1 {
+          width: 14.285714285714285714285714285714%;
+        }
+      }
 </style>
 
 
@@ -599,7 +614,7 @@
                         </div>
                         <button onclick="cose()" class="close-btn-select">X</button>
                     </div>
-                    <div class="row" id="">
+                    <div class="row seven-cols" id="">
 
                         <!-- <div class="col-md-2">
                             <div class=" card-title text-s">
@@ -607,50 +622,50 @@
                                     <p class="text-s d-text">North</p>
                                 </div>
                             </div> -->
-                        </div>
-                        <div class="col-md-2">
+                        
+                        <div class="col-md-1">
                             <div class=" card-title text-s">
                                 <div onclick="distselect('NW')" class="box-outer-nw d-box-design">
                                     <p class="text-s d-text">NorthWest</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div class=" card-title text-s">
                                 <div onclick="distselect('NE')" class="box-outer-nw d-box-design">
                                     <p class="text-s d-text">NorthEast</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div class=" card-title text-s">
                                 <div onclick="distselect('South')" class="box-outer-nw d-box-design">
                                     <p class="text-s d-text" >South</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div class=" card-title text-s">
                                 <div onclick="distselect('West')" class="box-outer-nw d-box-design">
                                     <p class="text-s d-text">West</p>
                                 </div>
                             </div>
                         </div>
-                       <div class="col-md-2">
+                       <div class="col-md-1">
                              <div class=" card-title text-s">
                                 <div onclick="distselect('East')" class="box-outer-nw d-box-design">
                                     <p class="text-s d-text">East</p>
                                 </div>
                             </div>
                         </div>
-                       <div class="col-md-2">
+                       <div class="col-md-1">
                              <div class=" card-title text-s">
                                 <div onclick="distselect('Central')" class="box-outer-nw d-box-design">
                                     <p class="text-s d-text">Central</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div class=" card-title text-s">
                                 <div onclick="distselect('Option')" class="box-outer-nw d-box-design">
                                     <p class="text-s d-text">Other</p>
@@ -1033,7 +1048,7 @@
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
     <script src="/static/js/Local_districtreport.js"></script>
     <script src="/static/js/excellentexport.js"></script>
-    <script src="/static/js/insight.js"></script>
+    <!-- <script src="/static/js/insight.js"></script> -->
 
 
 

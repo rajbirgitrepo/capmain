@@ -610,7 +610,7 @@ function jou(url1) {
 
 
 function schoolIDCharts(url1) {
-    var t = "playback";
+    var t = "Playback";
     var settings = {
         async: true,
         crossDomain: true,

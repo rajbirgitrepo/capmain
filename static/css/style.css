@@ -947,6 +947,7 @@ body {
     border-radius: 0 0 0 0;
     border: 0;
     background-color: #fff;
+    border: none !important;
 }
 
 Input::placeholder {

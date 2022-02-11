@@ -2345,7 +2345,6 @@ function distselect(distid) {
     $("#districtid").empty();
     $("#state").empty();
     $("#avgrating").empty();
-    $("#school").empty();
     $("#teacher").empty();
     $("#practice").empty();
     $("#family").empty();
@@ -2506,7 +2505,7 @@ function heatnew(b) {
     var months = ["", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];
     var table, thead, tbody, rows, headCells, cells;
     var ur = "/" + b;
-    console.log(ur);
+    console.log( "/" + b);
 
     var data = d3.json(ur, function (error, data) {
 
@@ -2901,7 +2900,7 @@ $(function () {
         {
             changeMonth: true,
             changeYear: true,
-            yearRange: "2015:2021",
+            yearRange: "2015:2022",
             dateFormat: "yy-mm-dd",
             onSelect: function (dateText, inst) {
                 $("#stardate").text(dateText);
@@ -2915,7 +2914,7 @@ $(function () {
     $("#datepicker2").datepicker({
         changeMonth: true,
         changeYear: true,
-        yearRange: "2015:2021",
+        yearRange: "2015:2022",
         dateFormat: "yy-mm-dd",
         maxDate: new Date(),
         onSelect: function (dateText, inst) {

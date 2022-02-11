@@ -390,6 +390,7 @@ def questtimeseries():
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'QUEST_OBTAINED_DATE':{'$gte':datetime.datetime(2021,8,1)}},
     {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
     {"$match":
     {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
@@ -1043,8 +1044,65 @@ def spanish_narrator_usage_detail():
         
     return json.dumps(dict_narrator)
 
+@app.route('/quest_activation_by_district')
+def activation_district():
+
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass 
+    collection = db.audio_track_master
+    collection2=db.user_master
+
+    df_user= DataFrame(list(db.user_master.aggregate([
+    {"$match":{'$and':[
+    {"USER_NAME": { "$not": { "$regex": "test",'$options':'i'}}},
+    {"USER_NAME":{ "$ne": ""}},{"EMAIL_ID":{ "$not": { "$regex": "test",'$options':'i'}}},
+    {"EMAIL_ID":{ "$not": { "$regex": "1gen",'$options':'i'}}},
+    {"EMAIL_ID":{ "$ne": ""}},{'IS_BLOCKED':{"$ne":'Y'}},
+    {'IS_DISABLED':{"$ne":'Y'}},{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'schoolId._id':{'$in':db.school_master.distinct('_id',{'CATEGORY':{'$exists':1}})}},
+    {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+        {'IS_QUEST_OBTAINED':'Y'},
+    {'QUEST_OBTAINED_DATE':{'$gte':datetime.datetime(2021,8,1)}}
+
+    ]}},
+
+    {'$group':{'_id':'$schoolId._id', 'district_name':{'$first':'$DISTRICT_ID.DISTRICT_NAME'},
+              'user_count':{'$sum':1}
+              }}
+
+    ])))
+    schoolids=df_user['_id'].tolist()
+
+    df_school= DataFrame(list(db.school_master.aggregate([
+        {"$match":
+            {"$and":[
+        {'IS_PORTAL':'Y'},
+        {'CATEGORY':{"$exists":1}}]}},
+        {"$group":{"_id":"$_id","school_name":{'$first':"$NAME"},"district_name":{'$first':"$CATEGORY"}}}
+    ])))
+
+    merge1=pd.merge(df_user,df_school, on='_id', how='left')
+
+    merge1.fillna(0,inplace=True)
+
+    merge2=merge1.loc[merge1['district_name_x']!=0]
+
+
+    merge3=merge2.groupby(['district_name_x'],as_index=False).sum()
+    merge4=merge3.nlargest(20,['user_count'])
+
+
+    temp={'district':merge4['district_name_x'].tolist(), 'users':merge4['user_count'].tolist()}
+    return json.dumps(temp)
+
+
+
 @app.route('/queststreak')
-def queststreak():
+def queststreakss():
     mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
     client = pymongo.MongoClient(mongo_uri)
     db = client.compass
@@ -1054,6 +1112,7 @@ def queststreak():
            {"IS_QUEST_OBTAINED":"Y"},
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
+    {'QUEST_OBTAINED_DATE':{'$gte':datetime.datetime(2021,8,1)}},
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
     {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
     {"$match":
@@ -1065,6 +1124,7 @@ def queststreak():
     ])
     df= DataFrame(list(collection)).fillna(0)
     user_list=df["USER_ID"].tolist()
+
     collection1 =db.audio_track_master.aggregate([
         {"$match":{"USER_ID._id":{
                             "$in":user_list
@@ -1075,10 +1135,10 @@ def queststreak():
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
         {'MODIFIED_DATE':{"$gt":datetime.datetime(2021,1,14)}},
-        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
-        {"$match":
-        {"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
-        {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
+        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
+        {'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}
+    ]}}
         ,
         {"$group":{"_id":{"USER_ID":"$USER_ID._id",'MODIFIED_DATE':'$MODIFIED_DATE'},
                 "NEW":{"$addToSet":"$USER_ID._id"},
@@ -1087,24 +1147,168 @@ def queststreak():
                 }},
             {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","MODIFIED_DATE":{ "$dateToString": { "format": "%Y-%m-%d", "date":"$_id.MODIFIED_DATE"}},"practice_count12":"$count"}}
         ])
+
     df1= DataFrame(list(collection1)).fillna(0)
     df3=pd.merge(df, df1, on='USER_ID',how='right').fillna(0)
+
+
     df3.loc[(df3['MODIFIED_DATE'] >= df3['QUEST_OBTAINED_DATE']) & (df3['USER_ID'] == df3['USER_ID']), 'hex'] = '#00a651'  #ACTIVE
+
     df3.drop(df3[df3['hex'] != "#00a651"].index, inplace = True) 
     df4=df3.groupby(["USER_ID","MODIFIED_DATE"])["practice_count12"].count().reset_index()
     df4['Dates'] = pd.to_datetime(df4["MODIFIED_DATE"]).dt.day
     df4['MODIFIED_DATE'] = pd.to_datetime(df4["MODIFIED_DATE"])
-    s = df4.groupby('USER_ID').MODIFIED_DATE.diff().dt.days.ne(1).cumsum()
-    df5=df4.groupby(['USER_ID', s]).size().reset_index(level=1, drop=True)
+
+    min_practice=df4.groupby(['USER_ID'])['MODIFIED_DATE'].min().reset_index()
+
+    min_practice['30_days_ahead']= min_practice['MODIFIED_DATE'] +datetime.timedelta(days=30)
+    min_practice['30_days_ahead'] = pd.to_datetime(min_practice["30_days_ahead"])
+
+    dfff=pd.merge(df4,min_practice, on='USER_ID', how='left')
+
+
+    dfff1=dfff.loc[dfff['30_days_ahead'] >= dfff['MODIFIED_DATE_x']]
+
+
+    s = dfff1.groupby(['USER_ID'])['MODIFIED_DATE_x'].diff().dt.days.ne(1).cumsum()
+    df5=dfff1.groupby(['USER_ID', s]).size().reset_index(level=1, drop=True)
     streak=df5.reset_index()
     streak.columns=["USER_ID","STREAK"]
-    user_streak=streak.groupby(["USER_ID"])["STREAK"].max().reset_index()
+    user_streak=streak.groupby(["USER_ID"])["STREAK"].sum().reset_index()
     user_streak1=user_streak.groupby(["STREAK"]).count().reset_index()
     created_date= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21]
     df2static = pd.DataFrame(created_date,columns =['STREAK'])
     finalstreak = pd.merge(df2static, user_streak1, on="STREAK", how='left').fillna(0)
     temp={"STREAK":finalstreak["USER_ID"].tolist(),"streak_count":int(finalstreak["USER_ID"].sum())}
     return json.dumps(temp)
+
+
+
+@app.route('/quest_cards')
+def card_questtt():
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    df= DataFrame(list(db.user_master.aggregate([
+    {"$match":{'$and':[
+    {"USER_NAME": { "$not": { "$regex": "test",'$options':'i'}}},
+    {"USER_NAME":{ "$ne": ""}},{"EMAIL_ID":{ "$not": { "$regex": "test",'$options':'i'}}},
+    {"EMAIL_ID":{ "$not": { "$regex": "1gen",'$options':'i'}}},
+    {"EMAIL_ID":{ "$ne": ""}},{'IS_BLOCKED':{"$ne":'Y'}},
+    {'IS_DISABLED':{"$ne":'Y'}},{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_QUEST_OBTAINED':'Y'},
+
+#     {'QUEST_OBTAINED_DATE':{'$gte':datetime.datetime(2022,1,17), '$lte':datetime.datetime(2022,2,10)}}
+
+    ]}},
+    { "$group": {'_id':'$_id', 'email':{'$first':'$EMAIL_ID'}, 'username':{'$first':'$USER_NAME'},
+                 'quest_obtained':{'$first':'$QUEST_OBTAINED_DATE'},
+    'school':{'$first':'$schoolId.NAME'}, 'schoolid':{'$first':'$schoolId._id'},
+    'district':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}                                    
+                                       }}
+     ])))
+    schoolidss=df['schoolid'].tolist()
+    userids=df['_id'].tolist()
+    dfschool=DataFrame(list(db.school_master.aggregate([
+        {'$match':{'$and':[
+         {'_id':{'$in':schoolidss}}
+    ]}},
+    {'$group':{'_id': '$_id', 'category':{'$first':'$CATEGORY'}  
+              }}                                                  
+
+         ]                                                )))
+    merge1=pd.merge(df, dfschool, left_on='schoolid', right_on='_id', how='left')
+    practice = DataFrame(list(db.audio_track_master.aggregate([
+    {"$match":{
+    '$and':[
+    { "USER_ID._id":{"$in":userids}},
+    {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+    {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+    {'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+    { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    ]}},
+
+    # {'$group':{'_id':'$USER_ID._id', 'pc':{'$sum':1}}}
+
+    {'$project':{'_id':'$USER_ID._id', 'modified_date':'$MODIFIED_DATE',
+                'mindful_minutes':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}}
+                }}
+
+
+    ]))    )       
+    merge2=pd.merge(merge1,practice, left_on='_id_x', right_on='_id', how='left')
+    merge2=merge2[merge2['modified_date']>= merge2['quest_obtained']]
+    merge3=merge2[['_id_x','email','quest_obtained','school','schoolid','category','modified_date', 'mindful_minutes']]
+    merge3['quest_obtained']=merge3['quest_obtained'].dt.strftime("%Y-%m-%d")
+    merge3['modified_date']=merge3['modified_date'].dt.strftime("%Y-%m-%d")
+    merge5= merge3.groupby(['_id_x','email','modified_date'], as_index=False).size()
+    merge44=pd.merge(merge5, merge1, on='_id_x', how='left')
+    merge44=merge44.drop_duplicates(subset=['email_x'])
+    merge44=merge44.rename(columns={'email_x':'EMAIL ID', 'username':'USER NAME', 'quest_obtained':'QUEST OBTAINED ON', 'school':'SCHOOL NAME',
+    'category':'DISTRICT'                       
+                           })
+    merge55=merge44[['SCHOOL NAME', 'EMAIL ID', 'USER NAME', 'QUEST OBTAINED ON', 'DISTRICT']]
+    merge55['DISTRICT']=merge55['DISTRICT'].replace({'NULL':'NOT FOUND'})
+    merge55['QUEST OBTAINED ON']=merge55['QUEST OBTAINED ON'].dt.strftime("%Y-%m-%d")
+
+
+    pc=merge3.groupby(['_id_x'], as_index=False).count()
+    pc['modified_date'].sum()
+
+
+    users_activated=len(df)
+    users_practiced= len(merge44)
+
+    practice_sessions= len(merge3)
+    mindful_minutes=round(merge3['mindful_minutes'].sum())
+    
+    
+    
+    collection__ = db.user_quest_history.aggregate([{"$match":
+    {"$and":[ {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},{'IS_QUEST_COMPLETED':'Y'},
+    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
+    {"$match":{"$and":[{'USER_ID.USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}},
+    
+    {'$group':{'_id':"$USER_ID._id",'Practice_Sessions':{'$sum':1}}}    
+                                                 ])
+
+    df__= DataFrame(list(collection__)).fillna(0)
+    idss=df__['_id'].tolist()
+
+    collection1__ = db.user_master.aggregate([
+    {"$match":
+    {"$and":[ 
+    {"IS_QUEST_OBTAINED":"Y"},{'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}}, {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},{'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},{'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}},
+    {'_id':{'$in':idss}}    
+    ]}},
+    {'$group':{'_id':'$_id','Practice_Sessions':{'$sum':1}
+    }},
+    # {"$project":{"_id":0,"USER_ID":"$_id.USER_ID","COUNT":"$Practice_Sessions"}}
+
+
+    ])
+    df1__= DataFrame(list(collection1__)).fillna(0)
+    completed= len(df1__)
+    
+    temp={'total_users_activated':int(users_activated), 'users_practiced':int(users_practiced), 'Practice_sessions':int(practice_sessions),'Mindful_minutes':int(mindful_minutes),
+    'Total_users_completed':   int(completed)  
+         }
+    return json.dumps(temp) 
+
 
 @app.route('/questactivestreak')
 def questactivestreak():
@@ -1339,19 +1543,101 @@ def executive_count_productwise_d3():
 
 @app.route('/communitytabled3')
 def communityexectable_D3():
-    dflife=pd.read_csv("com_exec22.csv")
-    lifelist=list(dflife["0"])
-    lifetimelist=[]
-    from bson import ObjectId
-    for i in lifelist:
-        lifetimelist.append(ObjectId(i))
+    client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
+    db_live=client_live.compass
+    d3_users=pd.DataFrame(list(db_live.user_master.aggregate([
+        {"$match":{
+             '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'IS_DISABLED':{"$ne":'Y'}},
+              {'IS_BLOCKED':{"$ne":'Y'}},
+              {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                    {'schoolId._id':{'$in':
+                                    db_live.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
+                                    }}
+                    ]}},
+        {'$project':{'_id':0,
+            'userid':'$_id',
+                     'USER NAME':'$USER_NAME',
+                     'email':'$EMAIL_ID',
+                     'SIGN UP':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},
+                     'schoolid':'$schoolId._id',
+                     'STATE':'$schoolId.STATE',
+                     'CITY':'$schoolId.CITY'
+        }}
+    ])))
+    user_masterd3=pd.DataFrame({'schoolid':list(set(d3_users['schoolid'])),
+                               'status':1
+                               })
+    d3_user_sub_master=pd.DataFrame(list(db_live.subscription_master.aggregate([{'$match':{'$and':[
+        {'USER_ID._id':{'$in':list(d3_users['userid'])}}
+    ]}},                                  {'$project':{'_id':0,
+                                           'userid':'$USER_ID._id',
+                                           'RENEWAL DATE':{"$dateToString": { "format": "%Y-%m-%d", "date":'$SUBSCRIPTION_EXPIRE_DATE'}},
+                                           'PLAN_ID':'$PLAN_ID.PLAN_ID'
+                                          }}
+                                          ])))
+    d3_plan_ids=d3_users.merge(d3_user_sub_master,how='left',on='userid')
+    # print(d3_plan_ids.columns)
+    x=d3_plan_ids.groupby(['schoolid','PLAN_ID'])['userid','USER NAME', 'email', 'SIGN UP', 'STATE', 'CITY',
+           'RENEWAL DATE'].count().reset_index()
+    # print(x)
+    xx=x.groupby(['schoolid']).agg(School_Count=('schoolid','count'),
+                             max_plan=('PLAN_ID','max')
+                             ).reset_index()
+    # print(xx)
+
+    xx['PLAN_NAME']=''
+    for i in range(len(xx)):
+        if (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==18):
+            xx['PLAN_NAME'][i]='Explorer'
+        elif (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==19):
+            xx['PLAN_NAME'][i]='Community'
+        elif (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==20):
+            xx['PLAN_NAME'][i]='Cloud'
+        elif (xx['School_Count'][i]>1) &(xx['max_plan'][i]==17):
+            xx['PLAN_NAME'][i]='Schoolapp'
+    if len(xx[(xx['School_Count']>1) & (xx['max_plan']==17)])>1:
+        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==17)]['schoolid'])}},
+                                         {'$set':{
+                                             'DASH_CATEGORY':'Schoolapp'
+                                         }}
+                                         )
+    elif len(xx[(xx['School_Count']==1) & (xx['max_plan']==17)])>1:
+        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
+                                         {'$set':{
+                                             'DASH_CATEGORY':'Homaapp'
+                                         }}
+                                         )
+    else:
+        pass
+    final_cloud_count=xx[xx['PLAN_NAME']=='Cloud']
+    final_com_count=xx[xx['PLAN_NAME']=='Community']
+    final_exp_count=xx[xx['PLAN_NAME']=='Explorer']
+    execount={"clound":str(final_cloud_count),"community":str(final_com_count),"explorer":str(final_exp_count)}
+
+
+
+
+
+
+    dflife=final_com_count
+    # lifelist=list(dflife["0"])
+    lifetimelist=final_com_count["schoolid"].to_list()
+    # from bson import ObjectId
+    # for i in lifelist:
+    #     lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
-    query=[{'$match':{'$and':[{
+
+    overallum=pd.DataFrame(list(collection.aggregate([{'$match':{'$and':[{
     "schoolId._id": {
     "$in":lifetimelist
     }   
@@ -1381,115 +1667,9 @@ def communityexectable_D3():
                  "STATE":'$schoolId.STATE',
                  "COUNTRY":'$schoolId.COUNTRY',
                 }},
-    ]
-    merge1=list(collection.aggregate(query))
-    overallum=pd.DataFrame(merge1)
+    ])))
     overallum["CREATED_DATE"]=overallum["CREATED_DATE"].dt.strftime('%d %b %Y')
-#     overallum.to_csv("comcheck12.csv")
-    email=list(overallum["UMUSER_ID"])
-    schoolid=list(overallum["UMSCHOOLID"])
-    ################################sub_master################################
-
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
-    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username,password))
-    db=client.compass
-    # db.subscription_master.ensureIndex("USER_ID._id", 1) 
-    collection = db.subscription_master
-    qr=[
-    {"$match":{"$and":[{'USER_ID._id':{"$in":email}},
-    {'PLAN_ID.PLAN_NAME':"Community"}
-    ]}},
-    {"$project":{"_id":0,
-    'SMUSER_ID':'$USER_ID._id',
-    "SMEMAIL":'$USER_ID.EMAIL_ID',
-    "PLANID":"$PLAN_ID.PLAN_NAME",
-    "comment":"$COMMENT_BY_DS_TEAM",
-    "RENEWAL_DATE":"$SUBSCRIPTION_EXPIRE_DATE",
-    }},]
-    merge=list(collection.aggregate(qr))
-    overall=pd.DataFrame(merge)
-    overall["RENEWAL_DATE"]=overall["RENEWAL_DATE"].dt.strftime('%d %b %Y')
-#     mergeddf=pd.merge(overallum, overall, how='left', left_on='UMEMAIL', right_on='SMEMAIL')
-    mergeddf=pd.merge(overallum, overall, how='left', left_on='UMUSER_ID', right_on='SMUSER_ID')
-    db=client.compass
-    collection = db.audio_track_master
-    qra=[
-    {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
-    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
-    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-    {'USER_ID.schoolId._id':{'$in':schoolid}},
-    ]}},
-    {'$group':{'_id':'$USER_ID.schoolId._id', 
-    'atdLastpractice':{'$max':'$MODIFIED_DATE'},
-    'atdPracticecount':{'$sum':1},
-    'atdTotal_Mindful_Minutes':{"$sum":{"$round":[{"$divide":[{"$subtract":['$CURSOR_END','$cursorStart']}, 60]},2]}}}}]
-    merge11=list(collection.aggregate(qra))
-    atd=pd.DataFrame(merge11)
-    atd["atdLastpractice"]=atd["atdLastpractice"].dt.strftime('%d %b %Y')
-    finalmerge=pd.merge(mergeddf, atd, how='left', left_on='UMSCHOOLID', right_on='_id')
-    finalmerge['atdLastpractice'].fillna("NO PRACTICE", inplace=True)
-    finalmerge['atdPracticecount'].fillna(0, inplace=True)
-    finalmerge.fillna("NO INFO AVAILABLE", inplace=True)
-    finaldata=finalmerge[["UMSCHOOLNAME","STATE","CITY","USER_NAME","UMEMAIL","CREATED_DATE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
-    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
-    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
-    print(len(lifetimelist),len(finaldata))
-    return json.dumps({"data":finaldata.values.tolist()})
-
-@app.route('/explorertabled3')
-def explorerexectable_D3():
-    dflife=pd.read_csv("exp_exec22.csv")
-    lifelist=list(dflife["0"])
-    lifetimelist=[]
-    from bson import ObjectId
-    for i in lifelist:
-        lifetimelist.append(ObjectId(i))
-    from bson.objectid import ObjectId
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
-    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
-    db=client.compass
-    collection = db.user_master
-    query=[{'$match':{'$and':[{
-    "schoolId._id": {
-    "$in":lifetimelist
-    }   
-    },
-    { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-    {'IS_DISABLED':{"$ne":'Y'}},
-    {'IS_BLOCKED':{"$ne":'Y'}},
-    #   {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-    #   {'DEVICE_USED':{"$regex":'webapp','$options':'i'}},
-    #   {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
-    {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-    {'IS_ADMIN':'Y'}
-
-    ]
-    }},
-
-    {"$project":{"_id":0,
-    'UMUSER_ID':'$_id',"USER_NAME":'$USER_NAME',
-    "UMEMAIL":'$EMAIL_ID',  
-    "CREATED_DATE":'$CREATED_DATE',
-    "UMSCHOOLID":'$schoolId._id',
-                 "UMSCHOOLNAME":'$schoolId.NAME',
-                 "CITY":'$schoolId.CITY',
-                 "STATE":'$schoolId.STATE',
-                 "COUNTRY":'$schoolId.COUNTRY',
-                }},
-    ]
-    merge1=list(collection.aggregate(query))
-    overallum=pd.DataFrame(merge1)
-    overallum["CREATED_DATE"]=overallum["CREATED_DATE"].dt.strftime('%d %b %Y')
-#     overallum.to_csv("expcheck.csv")
+    #     overallum.to_csv("expcheck.csv")
     email=list(overallum["UMUSER_ID"])
     schoolid=list(overallum["UMSCHOOLID"])
     ################################sub_master################################
@@ -1514,7 +1694,7 @@ def explorerexectable_D3():
     merge=list(collection.aggregate(qr))
     overall=pd.DataFrame(merge)
     overall["RENEWAL_DATE"]=overall["RENEWAL_DATE"].dt.strftime('%d %b %Y')
-#     mergeddf=pd.merge(overallum, overall, how='left', left_on='UMEMAIL', right_on='SMEMAIL')
+    #     mergeddf=pd.merge(overallum, overall, how='left', left_on='UMEMAIL', right_on='SMEMAIL')
     mergeddf=pd.merge(overallum, overall, how='left', left_on='UMUSER_ID', right_on='SMUSER_ID')
     db=client.compass
     collection = db.audio_track_master
@@ -1545,22 +1725,108 @@ def explorerexectable_D3():
     print(len(lifetimelist),len(finaldata))
     return json.dumps({"data":finaldata.values.tolist()})
 
+# return json.dumps(execount)
 
-@app.route('/cloudtabled3')
-def cloud_table_d3():
-    dflife=pd.read_csv("cloud_exec22.csv")
-    lifelist=list(dflife["0"])
-    lifetimelist=[]
-    from bson import ObjectId
-    for i in lifelist:
-        lifetimelist.append(ObjectId(i))
+
+
+
+@app.route('/explorertabled3')
+def explorerexectable_D3():
+    client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
+    db_live=client_live.compass
+    d3_users=pd.DataFrame(list(db_live.user_master.aggregate([
+        {"$match":{
+             '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'IS_DISABLED':{"$ne":'Y'}},
+              {'IS_BLOCKED':{"$ne":'Y'}},
+              {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                    {'schoolId._id':{'$in':
+                                    db_live.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
+                                    }}
+                    ]}},
+        {'$project':{'_id':0,
+            'userid':'$_id',
+                     'USER NAME':'$USER_NAME',
+                     'email':'$EMAIL_ID',
+                     'SIGN UP':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},
+                     'schoolid':'$schoolId._id',
+                     'STATE':'$schoolId.STATE',
+                     'CITY':'$schoolId.CITY'
+        }}
+    ])))
+    user_masterd3=pd.DataFrame({'schoolid':list(set(d3_users['schoolid'])),
+                               'status':1
+                               })
+    d3_user_sub_master=pd.DataFrame(list(db_live.subscription_master.aggregate([{'$match':{'$and':[
+        {'USER_ID._id':{'$in':list(d3_users['userid'])}}
+    ]}},                                  {'$project':{'_id':0,
+                                           'userid':'$USER_ID._id',
+                                           'RENEWAL DATE':{"$dateToString": { "format": "%Y-%m-%d", "date":'$SUBSCRIPTION_EXPIRE_DATE'}},
+                                           'PLAN_ID':'$PLAN_ID.PLAN_ID'
+                                          }}
+                                          ])))
+    d3_plan_ids=d3_users.merge(d3_user_sub_master,how='left',on='userid')
+    # print(d3_plan_ids.columns)
+    x=d3_plan_ids.groupby(['schoolid','PLAN_ID'])['userid','USER NAME', 'email', 'SIGN UP', 'STATE', 'CITY',
+           'RENEWAL DATE'].count().reset_index()
+    # print(x)
+    xx=x.groupby(['schoolid']).agg(School_Count=('schoolid','count'),
+                             max_plan=('PLAN_ID','max')
+                             ).reset_index()
+    # print(xx)
+
+    xx['PLAN_NAME']=''
+    for i in range(len(xx)):
+        if (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==18):
+            xx['PLAN_NAME'][i]='Explorer'
+        elif (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==19):
+            xx['PLAN_NAME'][i]='Community'
+        elif (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==20):
+            xx['PLAN_NAME'][i]='Cloud'
+        elif (xx['School_Count'][i]>1) &(xx['max_plan'][i]==17):
+            xx['PLAN_NAME'][i]='Schoolapp'
+    if len(xx[(xx['School_Count']>1) & (xx['max_plan']==17)])>1:
+        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==17)]['schoolid'])}},
+                                         {'$set':{
+                                             'DASH_CATEGORY':'Schoolapp'
+                                         }}
+                                         )
+    elif len(xx[(xx['School_Count']==1) & (xx['max_plan']==17)])>1:
+        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
+                                         {'$set':{
+                                             'DASH_CATEGORY':'Homaapp'
+                                         }}
+                                         )
+    else:
+        pass
+    final_cloud_count=xx[xx['PLAN_NAME']=='Cloud']
+    final_com_count=xx[xx['PLAN_NAME']=='Community']
+    final_exp_count=xx[xx['PLAN_NAME']=='Explorer']
+    execount={"clound":str(final_cloud_count),"community":str(final_com_count),"explorer":str(final_exp_count)}
+
+
+
+
+
+
+    dflife=final_exp_count
+    # lifelist=list(dflife["0"])
+    lifetimelist=final_exp_count["schoolid"].to_list()
+    # from bson import ObjectId
+    # for i in lifelist:
+    #     lifetimelist.append(ObjectId(i))
     from bson.objectid import ObjectId
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
     db=client.compass
     collection = db.user_master
-    query=[{'$match':{'$and':[{
+
+    overallum=pd.DataFrame(list(collection.aggregate([{'$match':{'$and':[{
     "schoolId._id": {
     "$in":lifetimelist
     }   
@@ -1590,17 +1856,13 @@ def cloud_table_d3():
                  "STATE":'$schoolId.STATE',
                  "COUNTRY":'$schoolId.COUNTRY',
                 }},
-    ]
-    merge1=list(collection.aggregate(query))
-    overallum=pd.DataFrame(merge1)
-#     
+    ])))
     overallum["CREATED_DATE"]=overallum["CREATED_DATE"].dt.strftime('%d %b %Y')
+    #     overallum.to_csv("expcheck.csv")
     email=list(overallum["UMUSER_ID"])
     schoolid=list(overallum["UMSCHOOLID"])
-#     overallum.to_csv("lifetimecheck.csv")
-    
     ################################sub_master################################
-    
+
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -1609,7 +1871,7 @@ def cloud_table_d3():
     collection = db.subscription_master
     qr=[
     {"$match":{"$and":[{'USER_ID._id':{"$in":email}},
-    {'PLAN_ID.PLAN_NAME':"Cloud"}
+    {'PLAN_ID.PLAN_NAME':"Explorer"}
     ]}},
     {"$project":{"_id":0,
     'SMUSER_ID':'$USER_ID._id',
@@ -1621,6 +1883,7 @@ def cloud_table_d3():
     merge=list(collection.aggregate(qr))
     overall=pd.DataFrame(merge)
     overall["RENEWAL_DATE"]=overall["RENEWAL_DATE"].dt.strftime('%d %b %Y')
+    #     mergeddf=pd.merge(overallum, overall, how='left', left_on='UMEMAIL', right_on='SMEMAIL')
     mergeddf=pd.merge(overallum, overall, how='left', left_on='UMUSER_ID', right_on='SMUSER_ID')
     db=client.compass
     collection = db.audio_track_master
@@ -1650,6 +1913,197 @@ def cloud_table_d3():
     finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
     print(len(lifetimelist),len(finaldata))
     return json.dumps({"data":finaldata.values.tolist()})
+
+# return json.dumps(execount)
+
+
+
+
+@app.route('/cloudtabled3')
+def cloud_table_d3():
+    client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
+    db_live=client_live.compass
+    d3_users=pd.DataFrame(list(db_live.user_master.aggregate([
+        {"$match":{
+             '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'IS_DISABLED':{"$ne":'Y'}},
+              {'IS_BLOCKED':{"$ne":'Y'}},
+              {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                    {'schoolId._id':{'$in':
+                                    db_live.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
+                                    }}
+                    ]}},
+        {'$project':{'_id':0,
+            'userid':'$_id',
+                     'USER NAME':'$USER_NAME',
+                     'email':'$EMAIL_ID',
+                     'SIGN UP':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},
+                     'schoolid':'$schoolId._id',
+                     'STATE':'$schoolId.STATE',
+                     'CITY':'$schoolId.CITY'
+        }}
+    ])))
+    user_masterd3=pd.DataFrame({'schoolid':list(set(d3_users['schoolid'])),
+                               'status':1
+                               })
+    d3_user_sub_master=pd.DataFrame(list(db_live.subscription_master.aggregate([{'$match':{'$and':[
+        {'USER_ID._id':{'$in':list(d3_users['userid'])}}
+    ]}},                                  {'$project':{'_id':0,
+                                           'userid':'$USER_ID._id',
+                                           'RENEWAL DATE':{"$dateToString": { "format": "%Y-%m-%d", "date":'$SUBSCRIPTION_EXPIRE_DATE'}},
+                                           'PLAN_ID':'$PLAN_ID.PLAN_ID'
+                                          }}
+                                          ])))
+    d3_plan_ids=d3_users.merge(d3_user_sub_master,how='left',on='userid')
+    # print(d3_plan_ids.columns)
+    x=d3_plan_ids.groupby(['schoolid','PLAN_ID'])['userid','USER NAME', 'email', 'SIGN UP', 'STATE', 'CITY',
+           'RENEWAL DATE'].count().reset_index()
+    # print(x)
+    xx=x.groupby(['schoolid']).agg(School_Count=('schoolid','count'),
+                             max_plan=('PLAN_ID','max')
+                             ).reset_index()
+    # print(xx)
+
+    xx['PLAN_NAME']=''
+    for i in range(len(xx)):
+        if (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==18):
+            xx['PLAN_NAME'][i]='Explorer'
+        elif (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==19):
+            xx['PLAN_NAME'][i]='Community'
+        elif (xx['School_Count'][i]>=1) &(xx['max_plan'][i]==20):
+            xx['PLAN_NAME'][i]='Cloud'
+        elif (xx['School_Count'][i]>1) &(xx['max_plan'][i]==17):
+            xx['PLAN_NAME'][i]='Schoolapp'
+    if len(xx[(xx['School_Count']>1) & (xx['max_plan']==17)])>1:
+        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==17)]['schoolid'])}},
+                                         {'$set':{
+                                             'DASH_CATEGORY':'Schoolapp'
+                                         }}
+                                         )
+    elif len(xx[(xx['School_Count']==1) & (xx['max_plan']==17)])>1:
+        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
+                                         {'$set':{
+                                             'DASH_CATEGORY':'Homaapp'
+                                         }}
+                                         )
+    else:
+        pass
+    final_cloud_count=xx[xx['PLAN_NAME']=='Cloud']
+    final_com_count=xx[xx['PLAN_NAME']=='Community']
+    final_exp_count=xx[xx['PLAN_NAME']=='Explorer']
+    execount={"clound":str(final_cloud_count),"community":str(final_com_count),"explorer":str(final_exp_count)}
+
+
+
+
+
+
+    dflife=final_cloud_count
+    # lifelist=list(dflife["0"])
+    lifetimelist=final_cloud_count["schoolid"].to_list()
+    # from bson import ObjectId
+    # for i in lifelist:
+    #     lifetimelist.append(ObjectId(i))
+    from bson.objectid import ObjectId
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    collection = db.user_master
+
+    overallum=pd.DataFrame(list(collection.aggregate([{'$match':{'$and':[{
+    "schoolId._id": {
+    "$in":lifetimelist
+    }   
+    },
+    { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'IS_DISABLED':{"$ne":'Y'}},
+    {'IS_BLOCKED':{"$ne":'Y'}},
+    #   {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    #   {'DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+    #   {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+    {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+    {'IS_ADMIN':'Y'}
+
+    ]
+    }},
+
+    {"$project":{"_id":0,
+    'UMUSER_ID':'$_id',"USER_NAME":'$USER_NAME',
+    "UMEMAIL":'$EMAIL_ID',  
+    "CREATED_DATE":'$CREATED_DATE',
+    "UMSCHOOLID":'$schoolId._id',
+                 "UMSCHOOLNAME":'$schoolId.NAME',
+                 "CITY":'$schoolId.CITY',
+                 "STATE":'$schoolId.STATE',
+                 "COUNTRY":'$schoolId.COUNTRY',
+                }},
+    ])))
+    overallum["CREATED_DATE"]=overallum["CREATED_DATE"].dt.strftime('%d %b %Y')
+    #     overallum.to_csv("expcheck.csv")
+    email=list(overallum["UMUSER_ID"])
+    schoolid=list(overallum["UMSCHOOLID"])
+    ################################sub_master################################
+
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass
+    # db.subscription_master.ensureIndex("USER_ID._id", 1) 
+    collection = db.subscription_master
+    qr=[
+    {"$match":{"$and":[{'USER_ID._id':{"$in":email}},
+    {'PLAN_ID.PLAN_NAME':"Explorer"}
+    ]}},
+    {"$project":{"_id":0,
+    'SMUSER_ID':'$USER_ID._id',
+    "SMEMAIL":'$USER_ID.EMAIL_ID',
+    "PLANID":"$PLAN_ID.PLAN_NAME",
+    "comment":"$COMMENT_BY_DS_TEAM",
+    "RENEWAL_DATE":"$SUBSCRIPTION_EXPIRE_DATE",
+    }},]
+    merge=list(collection.aggregate(qr))
+    overall=pd.DataFrame(merge)
+    overall["RENEWAL_DATE"]=overall["RENEWAL_DATE"].dt.strftime('%d %b %Y')
+    #     mergeddf=pd.merge(overallum, overall, how='left', left_on='UMEMAIL', right_on='SMEMAIL')
+    mergeddf=pd.merge(overallum, overall, how='left', left_on='UMUSER_ID', right_on='SMUSER_ID')
+    db=client.compass
+    collection = db.audio_track_master
+    qra=[
+    {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+    {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'USER_ID.schoolId._id':{'$in':schoolid}},
+    ]}},
+    {'$group':{'_id':'$USER_ID.schoolId._id', 
+    'atdLastpractice':{'$max':'$MODIFIED_DATE'},
+    'atdPracticecount':{'$sum':1},
+    'atdTotal_Mindful_Minutes':{"$sum":{"$round":[{"$divide":[{"$subtract":['$CURSOR_END','$cursorStart']}, 60]},2]}}}}]
+    merge11=list(collection.aggregate(qra))
+    atd=pd.DataFrame(merge11)
+    atd["atdLastpractice"]=atd["atdLastpractice"].dt.strftime('%d %b %Y')
+    finalmerge=pd.merge(mergeddf, atd, how='left', left_on='UMSCHOOLID', right_on='_id')
+    finalmerge['atdLastpractice'].fillna("NO PRACTICE", inplace=True)
+    finalmerge['atdPracticecount'].fillna(0, inplace=True)
+    finalmerge.fillna("NO INFO AVAILABLE", inplace=True)
+    finaldata=finalmerge[["UMSCHOOLNAME","STATE","CITY","USER_NAME","UMEMAIL","CREATED_DATE","atdLastpractice","RENEWAL_DATE","atdPracticecount"]]
+    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('int')
+    finaldata["atdPracticecount"] = finaldata['atdPracticecount'].astype('str')
+    print(len(lifetimelist),len(finaldata))
+    return json.dumps({"data":finaldata.values.tolist()})
+
+# return json.dumps(execount)
 
 
 
@@ -14937,7 +15391,7 @@ def district_count_cards(districtid,startdate,enddate):
 #                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
                                {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
     #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
-                 {'MODIFIED_DATE':{'$gte':LSY_Date()}},
+                 {'MODIFIED_DATE':{'$gte':LSY_Date(),'$lt':csy_first_date()}},
 #             
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
@@ -14981,7 +15435,7 @@ def district_count_cards(districtid,startdate,enddate):
 #                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
                                {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
     #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
-                 {'MODIFIED_DATE':{'$gte':LSY_Date()}},
+                {'MODIFIED_DATE':{'$gte':LSY_Date(),'$lt':csy_first_date()}},
 #             
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
@@ -15133,7 +15587,7 @@ def district_count_cards(districtid,startdate,enddate):
 #                  {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
                                {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
     #              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Sarasota County'},
-                 {'MODIFIED_DATE':{'$gte':LSY_Date()}},
+                {'MODIFIED_DATE':{'$gte':LSY_Date(),'$lt':csy_first_date()}},
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -57089,6 +57543,7 @@ def questtimeseriestable():
         {'IS_DISABLED':{"$ne":'Y'}},
     {'IS_BLOCKED':{"$ne":'Y'}}, 
     {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+    {'QUEST_OBTAINED_DATE':{'$gte':datetime.datetime(2021,8,1)}},
     {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
     {"$match":
     {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
@@ -57265,6 +57720,129 @@ def questtimeseriestable():
         data.append([Z,T,k,l,m,o,p])
     temp={"data":data}
     return json.dumps(temp)
+
+@app.route('/heatmap_activation_streak')
+def quest_activation_heatmap():
+
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
+    db=client.compass 
+    collection = db.audio_track_master
+    collection2=db.user_master
+
+    df= DataFrame(list(db.user_master.aggregate([
+    {"$match":{'$and':[
+    {"USER_NAME": { "$not": { "$regex": "test",'$options':'i'}}},
+    {"USER_NAME":{ "$ne": ""}},{"EMAIL_ID":{ "$not": { "$regex": "test",'$options':'i'}}},
+    {"EMAIL_ID":{ "$not": { "$regex": "1gen",'$options':'i'}}},
+    {"EMAIL_ID":{ "$ne": ""}},{'IS_BLOCKED':{"$ne":'Y'}},
+    {'IS_DISABLED':{"$ne":'Y'}},{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_QUEST_OBTAINED':'Y'},
+    {'QUEST_OBTAINED_DATE':{'$gte':datetime.datetime(2021,8,1)}}
+
+    ]}},
+    {'$group':{'_id':{'month':{'$month':'$QUEST_OBTAINED_DATE'},'day':{'$dayOfWeek':'$QUEST_OBTAINED_DATE'}},
+    'ID':{'$sum':1},
+              }},
+    #            'dn':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'},
+    #            'distrcit':{'$first':'$USER_ID.DISTRICT_ID._id'}}},
+    {'$project':{'DM':'$_id.day','_id':0,'month':'$_id.month','pc':'$ID'}},
+    {'$sort' :  {'DM':1,'month'  :1}}
+    ])))
+
+    dislist=list(set(df["DM"]))
+    # #   
+    df1=df[["DM","month","pc"]]
+    # # print(df2)
+    overall=pd.DataFrame(columns=["DM","month","pc"])
+    # overall
+    result=[]
+    for k in dislist:
+    #     print(k)
+        df45=df[df["DM"]==k]
+        df45.reset_index()
+    #     print(df45)
+
+        for i in range(1,13):
+            if i in list(df45["month"]):
+                pass
+            else:
+                a=max(list(df45.index))
+                df45.loc[a+i] = [k] +[i]+[0]
+    #         print(df45)
+
+
+        sorted_df =df45.sort_values(by=['month'], ascending=True)
+    #     sorted_df1=sorted_df.reset_index()
+        result.append(sorted_df)
+        df2 = pd.concat(result)
+    #     print(df2)
+
+    #     finaldf=finaldf.sort_values(by=['name'])
+
+
+    SUN= df2[(df2.DM == 1)].reset_index(drop = True)
+    SUN = SUN['pc'].tolist()
+    MON= df2[(df2.DM == 2)].reset_index(drop = True)
+    MON = MON['pc'].tolist()
+    TUE= df2[(df2.DM == 3)].reset_index(drop = True)
+    TUE = TUE['pc'].tolist()
+    WED= df2[(df2.DM == 4)].reset_index(drop = True)
+    WED = WED['pc'].tolist()
+    THU= df2[(df2.DM == 5)].reset_index(drop = True)
+    THU = THU['pc'].tolist()
+    FRI= df2[(df2.DM == 6)].reset_index(drop = True)
+    FRI = FRI['pc'].tolist()
+    SAT= df2[(df2.DM == 7)].reset_index(drop = True)
+    SAT = SAT['pc'].tolist()
+
+
+
+    data = {
+               'SUNDAY':SUN,'MONDAY':MON,
+               'TUESDAY':TUE,'WEDNESDAY':WED,
+               'THURSDAY':THU,'FRIDAY':FRI,
+               'SATURDAY':SAT}
+    # #     print(data)
+
+
+    dataframe=pd.DataFrame.from_dict(data,orient='index')
+    #     print(dataframe)
+
+    DF=list(dataframe.sum(axis=0))
+
+    DF = pd.Series(DF, index = dataframe.columns)
+    DF = dataframe.append(DF, ignore_index=True)
+    # df=dataframe.append(DF,orient='index')
+    DF.columns =['JAN', 'FEB', 'MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'] 
+    DF.index=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','TOTAL']
+    DF=DF.T
+    for label, row in DF.iterrows():
+        DF.loc[label,'SUN'] = row['SUNDAY']/row['TOTAL'] * 100
+        DF.loc[label,'MON'] = row['MONDAY']/row['TOTAL'] * 100
+        DF.loc[label,'TUE'] = row['TUESDAY']/row['TOTAL'] * 100
+        DF.loc[label,'WED'] = row['WEDNESDAY']/row['TOTAL'] * 100
+        DF.loc[label,'THU'] = row['THURSDAY']/row['TOTAL'] * 100
+        DF.loc[label,'FRI'] = row['FRIDAY']/row['TOTAL'] * 100
+        DF.loc[label,'SAT'] = row['SATURDAY']/row['TOTAL'] * 100
+
+    DF = DF.drop(['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','TOTAL'], axis=1)
+    DF=DF.T
+    DF=DF.round()
+    DF=DF.fillna(0)
+
+
+    day=DF.values.tolist()
+
+    key=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY']
+
+
+
+    data={'meanTemp':{key[0]:day[0],key[1]:day[1],key[2]:day[2],key[3]:day[3],key[4]:day[4],key[5]:day[5],key[6]:day[6]}}
+    return json.dumps(data)
 
 
 @app.route('/queststreaktable/<num>')
@@ -67979,7 +68557,7 @@ def insights():
 
 @app.route('/districtlogoupdates')
 def district_logo_updates():
-    googleSheetId = '1RJFZvxFm4Ig5XtQKtqPFy5uYzVafzNU4-NcnOyUI96A'
+    googleSheetId = '1rS2iEjlfRyljeZI7U7wKo0VLwnGaL9L4Ebapq3QY76w'
     # googleSheetId = '1y0nF64mOFuIJ7WUotPVt4IBM7GySaSoXr3UlkuSgQNo'
     worksheetName = 'District_logo_sheet'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)

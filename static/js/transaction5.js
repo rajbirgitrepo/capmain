@@ -113,7 +113,7 @@ $.ajax(settings).done(function (response) {
           name: "PROJECTION(2021) ",
           zoneAxis: 'x',
         zones: [{
-            value: 10
+            value: 6
         }, 
         {
             dashStyle: 'dot'

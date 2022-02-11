@@ -47,7 +47,7 @@
 
 //     return dynamicDiv;
 // }
-
+modal2();
 
 
 var d = new Date();
@@ -861,104 +861,104 @@ function charts(a, b, c) {
         });
     }
 
-    var settings = {
-        async: true,
-        crossDomain: true,
-        url: "/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c,
-        method: "GET",
-    };
-    $.ajax(settings).done(function(response) {
-        var dataa = JSON.parse(response);
-        console.log(dataa);
-        //console.log("/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c);
-        $(function() {
-            $("#container6").highcharts({
-                chart: {
-                    // zoomType: "xy",
-                    type: "column"
-                },
-                title: {
-                    text: "Top 20 School Playback Count",
-                },
-                credits: {
-                    enabled: false,
-                },
-                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
-                xAxis: [{
-                    categories: dataa.schname,
-                    labels: {
-                        style: {
-                            fontSize: "8px",
-                            rotation: 90,
-                        },
-                    }
-                }, ],
-                yAxis: [{
-                        //Primary yAxis
-                        lineWidth: 1,
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#000",
-                            },
-                        },
-                        title: {
-                            text: "Playback Count",
-                            style: {
-                                color: "#000",
-                            },
-                        },
-                    },
-                    {
-                        //Secondary yAxis
-                        title: {
-                            text: "",
-                            style: {
-                                color: "#4572A7",
-                            },
-                        },
-                        labels: {
-                            format: "{value}",
-                            style: {
-                                color: "#4572A7",
-                            },
-                        },
-                        opposite: false,
-                    },
-                ],
-                tooltip: {
-                    shared: true,
-                },
-                plotOptions: {
-                    series: {
-                        stacking: 'normal',
-                        //  pointWidth: 5
-                    }
-                },
-                series: [{
-                        name: 'Clever',
-                        data: dataa.Clever,
-                        stack: 0
-                    },
-                    {
-                        name: 'Schoology',
-                        data: dataa.Scoology,
-                        stack: 0
-                    }, {
-                        name: 'Family',
-                        fontSize: '8px',
-                        data: dataa.Parents,
-                        stack: 0
+    // var settings = {
+    //     async: true,
+    //     crossDomain: true,
+    //     url: "/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c,
+    //     method: "GET",
+    // };
+    // $.ajax(settings).done(function(response) {
+    //     var dataa = JSON.parse(response);
+    //     console.log(dataa);
+    //     //console.log("/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c);
+    //     $(function() {
+    //         $("#container6").highcharts({
+    //             chart: {
+    //                 // zoomType: "xy",
+    //                 type: "column"
+    //             },
+    //             title: {
+    //                 text: "Top 20 School Playback Count",
+    //             },
+    //             credits: {
+    //                 enabled: false,
+    //             },
+    //             colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+    //             xAxis: [{
+    //                 categories: dataa.schname,
+    //                 labels: {
+    //                     style: {
+    //                         fontSize: "8px",
+    //                         rotation: 90,
+    //                     },
+    //                 }
+    //             }, ],
+    //             yAxis: [{
+    //                     //Primary yAxis
+    //                     lineWidth: 1,
+    //                     labels: {
+    //                         format: "{value}",
+    //                         style: {
+    //                             color: "#000",
+    //                         },
+    //                     },
+    //                     title: {
+    //                         text: "Playback Count",
+    //                         style: {
+    //                             color: "#000",
+    //                         },
+    //                     },
+    //                 },
+    //                 {
+    //                     //Secondary yAxis
+    //                     title: {
+    //                         text: "",
+    //                         style: {
+    //                             color: "#4572A7",
+    //                         },
+    //                     },
+    //                     labels: {
+    //                         format: "{value}",
+    //                         style: {
+    //                             color: "#4572A7",
+    //                         },
+    //                     },
+    //                     opposite: false,
+    //                 },
+    //             ],
+    //             tooltip: {
+    //                 shared: true,
+    //             },
+    //             plotOptions: {
+    //                 series: {
+    //                     stacking: 'normal',
+    //                     //  pointWidth: 5
+    //                 }
+    //             },
+    //             series: [{
+    //                     name: 'Clever',
+    //                     data: dataa.Clever,
+    //                     stack: 0
+    //                 },
+    //                 {
+    //                     name: 'Schoology',
+    //                     data: dataa.Scoology,
+    //                     stack: 0
+    //                 }, {
+    //                     name: 'Family',
+    //                     fontSize: '8px',
+    //                     data: dataa.Parents,
+    //                     stack: 0
 
-                    }, {
-                        name: 'Teacher',
-                        data: dataa.Teachers,
-                        stack: 0
-                    },
-                ],
-            });
-        });
-    });
+    //                 }, {
+    //                     name: 'Teacher',
+    //                     data: dataa.Teachers,
+    //                     stack: 0
+    //                 },
+    //             ],
+    //         });
+    //     });
+    // });
 
 
     var settings = {
@@ -1925,7 +1925,7 @@ function cards2(URL) {
     $('#btnExport').show();
     createDynamic2(a);
 }
-distselect('East');
+// distselect('East');
 // $("#disdetails").text('North');
 
 function distselect(distid) {
@@ -2220,7 +2220,7 @@ $('#heat').change(function() {
     } else if (this.value == '5') {
         $('#heat-map').empty()
         let textContent = document.getElementById('disdetails').innerText;
-        var type = "mini_districtheatmappracclassroom" + textContent + "/" + c + "/" + b;
+        var type = "mini_districtheatmappracclassroom/" + textContent + "/" + c + "/" + b;
         heatnew(type);
         $('#chartname').text("Teacher Wise Playback Heat Map")
     } else if (this.value == '6') {
@@ -2466,7 +2466,7 @@ $(function() {
         {
             changeMonth: true,
             changeYear: true,
-            yearRange: "2015:2021",
+            yearRange: "2015:2022",
             dateFormat: "yy-mm-dd",
             onSelect: function(dateText, inst) {
                 $("#stardate").text(dateText);
@@ -2480,7 +2480,7 @@ $(function() {
     $("#datepicker2").datepicker({
         changeMonth: true,
         changeYear: true,
-        yearRange: "2015:2021",
+        yearRange: "2015:2022",
         dateFormat: "yy-mm-dd",
         maxDate: new Date(),
         onSelect: function(dateText, inst) {
