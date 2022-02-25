@@ -864,6 +864,7 @@ function cardcount(id, a, b) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
+        console.log(url);
         console.log("counts are fnctioning");
         $("#school").empty()
         $("#teacher").empty()
