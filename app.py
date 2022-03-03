@@ -68,8 +68,6 @@ import collections
 import os
 
 
-# github check
-
 app = Flask(__name__)
 CORS(app)
 
