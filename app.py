@@ -74505,12 +74505,8 @@ def mini_district_school_table(LOCAl_DISTRICT,startdate,enddate):
             return jsonify("Unauthorized Access")   
     else:
         data=[]
-<<<<<<< Updated upstream
-        for i,j,k,l,m,n,o,p,r,s,q,x in zip(df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count_csy'].tolist(),df['Practice_Count_lsy'].tolist(),df['usercount'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['Practice_Count'].tolist(),df['Subscription_expire_date'].tolist(),df['label'].tolist()):
-=======
-        for i,j,k,l,m,n,o,p,r,s,q,x in zip(df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['Practice_Count_csy'].tolist(),df['Practice_Count_lsy'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['usercount'].tolist(),df['Subscription_expire_date'].tolist(),df['label'].tolist()):
->>>>>>> Stashed changes
-            data.append([i,j,k,l,m,n,o,p,r,s,q,x])
+        for i,j,k,l,m,n,o,p,r,s,q,x,z in zip(df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['Practice_Count_csy'].tolist(),df['Practice_Count_lsy'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['usercount'].tolist(),df['Subscription_expire_date'].tolist(),df['label'].tolist(),df['schoolid_'].tolist()):
+            data.append([i,j,k,l,m,n,o,p,r,s,q,x,z])
         temp={"data":data}
         #     return df
 
@@ -74741,17 +74737,11 @@ def mini_district_table_parent(LOCAl_DISTRICT,startdate,enddate):
             return jsonify("Unauthorized Access")    
     else:
         data=[]
-<<<<<<< Updated upstream
-        for i,j,k,l,m,n,o,p,r,q,s,x in zip(df['user_name'].tolist(),df['EMAIL'].tolist(),df['school_name'].tolist(),df['country'].tolist(),
-                                             df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['Practice_Count_csy'].tolist(),
-                                             df['Practice_Count_lsy'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),
-=======
-        for i,j,k,l,m,n,o,p,r,q,s,x in zip(df['user_name'].tolist(),df['school_name'].tolist(),df['country'].tolist(),
+        for i,j,k,l,m,n,o,p,r,q,s,x,z in zip(df['user_name'].tolist(),df['school_name'].tolist(),df['country'].tolist(),
                                              df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),df['Practice_Count_csy'].tolist(),
                                              df['Practice_Count_lsy'].tolist(),df['Created_date'].tolist(),df['last_practice_date'].tolist(),df['EMAIL'].tolist(),
->>>>>>> Stashed changes
-                                             df['label'].tolist()):
-            data.append([i,j,k,l,m,n,o,p,r,q,s,x])
+                                             df['label'].tolist(),df['school_id'].tolist()):
+            data.append([i,j,k,l,m,n,o,p,r,q,s,x,z])
         temp={"data":data}
     #     return df
         return json.dumps(temp,default=str)
@@ -74957,17 +74947,11 @@ def mini_district_user_table_teacher(LOCAl_DISTRICT,startdate,enddate):
     else:
 
         data=[]
-<<<<<<< Updated upstream
-        for i,j,k,l,m,n,o,p,r,q,s,x in zip(df['user_name'].tolist(),df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),
-                                             df['Practice_Count_csy'].tolist(),df['Practice_Count_lsy'].tolist(),df['Created_date'].tolist(),
-                                             df['last_practice_date'].tolist(),df['Practice_Count'].tolist(),df['EMAIL'].tolist(),
-=======
-        for i,j,k,l,m,n,o,p,r,q,s,x in zip(df['user_name'].tolist(),df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),
+        for i,j,k,l,m,n,o,p,r,q,s,x,z in zip(df['user_name'].tolist(),df['school_name'].tolist(),df['country'].tolist(),df['State'].tolist(),df['city'].tolist(),df['Practice_Count'].tolist(),
                                              df['Practice_Count_csy'].tolist(),df['Practice_Count_lsy'].tolist(),df['Created_date'].tolist(),
                                              df['last_practice_date'].tolist(),df['EMAIL'].tolist(),
->>>>>>> Stashed changes
-                                             df['label'].tolist()):
-            data.append([i,j,k,l,m,n,o,p,r,q,s,x])
+                                             df['label'].tolist(),df['school_id'].tolist()):
+            data.append([i,j,k,l,m,n,o,p,r,q,s,x,z])
         temp={"data":data}
     #     return df
         return json.dumps(temp,default=str)

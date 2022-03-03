@@ -1563,6 +1563,17 @@ function charts(a, b, c) {
   //   });
 }
 
+
+$("#export1").click('load', function () {
+  var p = document.getElementById("exportLink").innerText;
+  console.log(p);
+  exportNew(p)
+});
+
+function exportNew(p) {
+  window.location.assign(p);
+  console.log(p);
+}
 var modal = document.getElementById("myModal");
 
 function cose() {
@@ -1625,7 +1636,7 @@ function createDynamicDiv(userList) {
     userList[0] +
     "</td>" +
     '<td><a style="color: #00a651;cursor:pointer;" onclick="clickableTableSchoolName(\'' +
-    userList[1] +
+    userList[12] +
     "')\">" +
     userList[1] +
     "</td>" +
@@ -1717,7 +1728,7 @@ function createDynamicDiv4(userList) {
   dynamicDiv +=
     "<tr >" +
     '<td><a style="color: #00a651;cursor:pointer;" onclick="clickableTableSchoolName(\'' +
-    userList[11] +
+    userList[12] +
     "')\">" +
     userList[0] +
     "</td>" +
@@ -1926,6 +1937,9 @@ function cards(URL) {
   var c = document.getElementById("stardate").innerText;
   var b = document.getElementById("finaldate").innerText;
   var a = URL + textContent + "/" + c + "/" + b;
+  var Exportpage = URL + textContent + "/" + c + "/" + b + "?export";
+  console.log(Exportpage+ "Local_district");
+  $("#exportLink").text(Exportpage);
   $("#next").empty();
   console.log(a);
   var modal2 = document.getElementById("myModal2");
@@ -1944,6 +1958,9 @@ function cards4(URL) {
   var c = document.getElementById("stardate").innerText;
   var b = document.getElementById("finaldate").innerText;
   var a = URL + textContent + "/" + c + "/" + b;
+  var Exportpage = URL + textContent + "/" + c + "/" + b + "?export";
+  console.log(Exportpage+ "Local_district");
+  $("#exportLink").text(Exportpage);
   $("#next").empty();
   console.log(a);
   var modal2 = document.getElementById("myModal2");
@@ -1962,6 +1979,9 @@ function cards2(URL) {
   var c = document.getElementById("stardate").innerText;
   var b = document.getElementById("finaldate").innerText;
   var a = URL + textContent + "/" + c + "/" + b;
+  var Exportpage = URL + textContent + "/" + c + "/" + b + "?export";
+  console.log(Exportpage+ "Local_district");
+  $("#exportLink").text(Exportpage);
   $("#next").empty();
   console.log(a);
   var modal2 = document.getElementById("myModal2");

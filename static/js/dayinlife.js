@@ -663,7 +663,7 @@ function charts(a) {
                         }
                     },
                     title: {
-                        text: 'Playback Count',
+                        text: 'Feedback Count',
                         style: {
                             color: '#000'
                         }

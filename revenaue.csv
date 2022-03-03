@@ -40,6 +40,8 @@ SCHOOL,Felicia Roggero,froggero@goleta.k12.ca.us,WEBAPP,PROMOCODE,2021-10-01,100
 SCHOOL,Lorena Reyes,lreyes@goleta.k12.ca.us,WEBAPP,PROMOCODE,2021-10-11,1000.0
 SCHOOL,Emily Blossom,emilyblossom@berkeley.net,WEBAPP,PAYPAL,2021-10-31,1000.0
 SCHOOL,Leah Barry,barryl@kingphilip.org,WEBAPP,SQUARE PAYMENT,2021-12-07,1400.0
+SCHOOL,Amanda Martinez,amartinez@goleta.k12.ca.us,WEBAPP,INVITED USER,2022-02-14,1000.0
+SCHOOL,Joanna Lauer,jlauer@goleta.k12.ca.us,WEBAPP,INVITED USER,2022-02-14,1000.0
 SCHOOL,Joshua Nichols,jnichols@amboy.net,WEBAPP,SQUARE PAYMENT,2022-02-09,1400.0
 SCHOOL,Deborah Howard,dhoward@nwphs.org,WEBAPP,PAYPAL,2021-09-15,1400.0
 SCHOOL,Dora Cavallo,dora.cavallo@bellevilleschools.org,WEBAPP,SIGNUP,2021-09-30,1000.0
@@ -265,6 +267,7 @@ DONATION,NANCY GROSSMAN-SAMUEL,nancyeve2@gmail.com,COMPASS,ONLINE,2021-12-31,511
 DONATION,LAURA BAKOSH,lbakosh@innerexplorer.org,COMPASS,ONLINE,2021-12-31,511.0
 DONATION,LARA MENDEL,Lara@mosaicproject.org,COMPASS,ONLINE,2022-01-01,255.5
 DONATION,LISA THOMPSON,lthompson@sturbridgegrowthpartners.com,COMPASS,ONLINE,2022-01-03,102.19999694824219
+DONATION,MARY SPENCE,mspence1111@gmail.com,COMPASS,ONLINE,2022-02-11,51.099998474121094
 DONATION,Sherita Ceasar,sherita_ceasar@cable.comcast.com,NFG,ONLINE,2021-09-07,2500.0
 DONATION,Samantha Allison,sallison@innerexplorer.org,CHEQUE,ONLINE,2021-09-14,2500.0
 DONATION,Paul Sugar,paulsugar@cox.net,PAYPAL,ONLINE,2021-09-16,127.75
@@ -289,7 +292,5 @@ DONATION,Judy Levin and Barry Epstein,NO EMAIL,CHEQUE,ONLINE,2022-01-05,500.0
 DONATION,Network for Good,NO EMAIL,CHEQUE,ONLINE,2022-01-18,160.0
 DONATION,Terance & Bertha Reilly,NO EMAIL,CHEQUE,ONLINE,2022-01-12,200.0
 MOBILE,Mike,mike.pepperman@gmail.com,ANDROID,GOOGLE,2022-01-24,89.98999786376953
-MOBILE,Luz Quintero,lquintero@riversideunified.org,IOS,APPLE,2022-01-12,8.989999771118164
 MOBILE,Melissa Norwood ,mnorwood@mtrsd.org,IOS,APPLE,2021-08-13,89.98999786376953
-MOBILE,Valeria Puca,vpuca@mmsny.org,IOS,APPLE,2022-01-24,8.989999771118164
 MOBILE,Scott,sbarton@smusd.us,IOS,APPLE,2021-09-22,89.98999786376953
