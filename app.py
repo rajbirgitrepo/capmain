@@ -70099,12 +70099,12 @@ def escore_overall(trackid):
         score_output={
             'SCHOOL_ID':trackid,
             'SCHOOL_NAME':school_name,        
-            'ACTIVE_USER_SCORE_SCHOOL':ACTIVE_USER_SCORE_SCHOOL,
-                     'USAGE_SCORE_SCHOOL':USAGE_SCORE_SCHOOL,
-                      'CWP_SCORE_SCHOOL':CWP_SCORE_SCHOOL,
-                      'RE_SCORE_SCHOOL':RE_SCORE_SCHOOL,
-                      'E_SCORE_SCHOOL':E_SCORE_SCHOOL,
-                      'ACTIVE_SCHOOL':ACTIVE_SCHOOL  
+            'ACTIVE_USER_SCORE_SCHOOL':ACTIVE_USER_SCORE_SCHOOL*10,
+                     'USAGE_SCORE_SCHOOL':USAGE_SCORE_SCHOOL*10,
+                      'CWP_SCORE_SCHOOL':CWP_SCORE_SCHOOL*10,
+                      'RE_SCORE_SCHOOL':RE_SCORE_SCHOOL*10,
+                      'E_SCORE_SCHOOL':E_SCORE_SCHOOL*10,
+                      'ACTIVE_SCHOOL':ACTIVE_SCHOOL*10  
 
 
                      }
@@ -70143,14 +70143,14 @@ def escore_overall(trackid):
         schools_df['SCORE_TYPE']=''
 
         for i in range(len(schools_df)):
-            if schools_df['E_SCORE_SCHOOL'][i]<=25:
-                schools_df['SCORE_TYPE'][i]='0-25'
-            elif schools_df['E_SCORE_SCHOOL'][i]<=50:
-                schools_df['SCORE_TYPE'][i]='26-50'
-            elif schools_df['E_SCORE_SCHOOL'][i]<=75:
-                schools_df['SCORE_TYPE'][i]='51-75'
+            if schools_df['E_SCORE_SCHOOL'][i]<=250:
+                schools_df['SCORE_TYPE'][i]='0-250'
+            elif schools_df['E_SCORE_SCHOOL'][i]<=500:
+                schools_df['SCORE_TYPE'][i]='251-500'
+            elif schools_df['E_SCORE_SCHOOL'][i]<=750:
+                schools_df['SCORE_TYPE'][i]='501-750'
             else:
-                schools_df['SCORE_TYPE'][i]='76-100'
+                schools_df['SCORE_TYPE'][i]='751-1000'
                 
                 
         
@@ -70167,7 +70167,7 @@ def escore_overall(trackid):
         new_schools_df=schools_df.groupby('SCORE_TYPE')['SCHOOL_ID'].count().reset_index().rename(columns={'SCHOOL_ID':'School_Count'})
 
         score_type=pd.DataFrame({'SCORE_TYPE':[
-            '0-25','26-50','51-75','76-100'
+            '0-250','251-500','501-750','751-1000'
         ]})
         
         
@@ -70256,7 +70256,7 @@ def dis_escore(trackid):
     new_df_table=df_table.groupby('SCORE_TYPE')['SCHOOL_ID'].count().reset_index().rename(columns={'SCHOOL_ID':'School_Count'})
 
     score_type=pd.DataFrame({'SCORE_TYPE':[
-        '0-25','26-50','51-75','76-100'
+        '0-250','201-500','501-750','751-1000'
     ]})
     new_df1=score_type.merge(new_df_table,how='left',on='SCORE_TYPE').fillna(0)    
     p=df1.to_dict('records')[0]    
