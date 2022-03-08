@@ -4,7 +4,7 @@ FOUNDATION,LG Electronics USA,NO EMAIL,OFFLINE,CHEQUE,2021-11-01,342000.0
 FOUNDATION,Shah Family Foundation,NO EMAIL,OFFLINE,CHEQUE,2021-11-23,4200.0
 FOUNDATION,Bright Horizon Family Solutions,NO EMAIL,OFFLINE,CHEQUE,2021-11-23,3583.0
 FOUNDATION,The Shah Family Foundation,NO EMAIL,OFFLINE,CHEQUE,2021-12-06,1400.0
-FOUNDATION,Academy for Business and Technology,NO EMAIL,OFFLINE,CHEQUE,2022-01-11,250.0
+FOUNDATION,Shah Family Foundation,NO EMAIL,OFFLINE,CHEQUE,2022-02-11,1400.0
 DISTRICT,Palms Springs Unified School District,NO EMAIL,OFFLINE,CHEQUE,2021-07-02,4200.0
 DISTRICT,Chula Vista Elementary School District,NO EMAIL,OFFLINE,CHEQUE,2021-07-13,135700.0
 DISTRICT,Needham Public Schools,NO EMAIL,OFFLINE,CHEQUE,2021-07-15,2800.0
@@ -31,6 +31,8 @@ DISTRICT,LaJoya ISD,NO EMAIL,OFFLINE,CHEQUE,2021-12-15,58800.0
 DISTRICT,Southfield Public Schools,NO EMAIL,OFFLINE,CHEQUE,2021-12-20,13200.0
 DISTRICT,Pinellas County Schools,NO EMAIL,OFFLINE,CHEQUE,2021-12-22,24000.0
 DISTRICT,LAUSD,NO EMAIL,OFFLINE,CHEQUE,2021-12-22,900000.0
+DISTRICT,San Bernardino County School,NO EMAIL,OFFLINE,CHEQUE,2022-02-11,49000.0
+DISTRICT,Durham Public School,NO EMAIL,OFFLINE,CHEQUE,2022-02-17,9800.0
 SCHOOL,Tracy Schenk,tschenk@pagosa.k12.co.us,WEBAPP,SQUARE PAYMENT,2021-09-23,1000.0
 SCHOOL,Kim Aman,KIm.F.Aman@k12.sd.us,WEBAPP,SQUARE PAYMENT,2021-08-12,1000.0
 SCHOOL,Gracie MacDonald,gracie.macdonald@sd71.bc.ca,WEBAPP,NO INFO,2021-07-31,450.0
@@ -154,6 +156,7 @@ SCHOOL,Linda Nicodemi ,linda.nicodemi@bellevilleschools.org,WEBAPP,CTO,2021-09-3
 SCHOOL,Robert Lessard,robert.lessard@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Robert,lessard0208@aol.com,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,nikki hudak,nikki.hudak@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
+SCHOOL,Mary Jane Moore,maryjane.moore@slcschools.org,WEBAPP,SQUARE PAYMENT,2022-02-25,1000.0
 SCHOOL,AnnMarie,annmarie.albanese@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Erin Lewis,erin.lewis@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
 SCHOOL,Stephanie Cheff,stephanie.cheff@bellevilleschools.org,WEBAPP,CTO,2021-09-30,1000.0
@@ -223,11 +226,14 @@ SCHOOL,Nina Odatalia,nodatalla@teaneckschools.org,OFFLINE,CHEQUE,2021-12-09,1400
 SCHOOL,Jenny Gempeler,jgempeler@ssummit.org,OFFLINE,CHEQUE,2021-12-16,1000.0
 SCHOOL,Diane Brown,browndi@springfieldpublicschools.com,OFFLINE,CHEQUE,2022-01-07,1400.0
 SCHOOL,Deborah Oler,doler@riversideunified.org,OFFLINE,CHEQUE,2022-01-07,1000.0
+SCHOOL,Academy for Business and Technology,NO EMAIL,OFFLINE,CHEQUE,2022-01-11,250.0
 SCHOOL,Ben Suro,bsuro@wood-ridgeschools.org,OFFLINE,CHEQUE,2022-01-12,3600.0
 SCHOOL,Zach Eagar,zeagar@alpinedistrict.org,OFFLINE,CHEQUE,2022-01-20,1000.0
 SCHOOL,Tanner Williford,hughey@toast.net,OFFLINE,CHEQUE,2022-01-21,2262.0
 SCHOOL,Lisa Ruzzi,ruzzil@lmsd.org,OFFLINE,CHEQUE,2022-01-22,1000.0
 SCHOOL,Andrew Peterson,apeterson@tooeleschools.org,OFFLINE,CHEQUE,2022-01-26,1000.0
+SCHOOL,Dina Winterton,dwinterton@sandi.net,OFFLINE,CHEQUE,2022-02-10,1400.0
+SCHOOL,Stephanie Avery,savery@centraldetroitchristian.org,OFFLINE,CHEQUE,2022-02-10,250.0
 DONATION,JACQUELINE SAMUDA,jacquelinesamuda01@gmail.com,COMPASS,ONLINE,2021-07-31,51.099998474121094
 DONATION,EVELINE JOSEPH,ejoseph5@bostonpublicschools.org,COMPASS,ONLINE,2021-09-01,50.0
 DONATION,MATTHEW MORRISON,matthew.g.morrison@gmail.com,COMPASS,ONLINE,2021-09-23,25.549999237060547
@@ -291,6 +297,7 @@ DONATION,TIsbest,donationreceipts@tisbest.org,CHEQUE,ONLINE,2022-01-07,250.0
 DONATION,Judy Levin and Barry Epstein,NO EMAIL,CHEQUE,ONLINE,2022-01-05,500.0
 DONATION,Network for Good,NO EMAIL,CHEQUE,ONLINE,2022-01-18,160.0
 DONATION,Terance & Bertha Reilly,NO EMAIL,CHEQUE,ONLINE,2022-01-12,200.0
+DONATION,Sherita Ceasar,sherita_ceasar@cable.comcast.com,CHEQUE,ONLINE,2022-01-28,1000.0
 MOBILE,Mike,mike.pepperman@gmail.com,ANDROID,GOOGLE,2022-01-24,89.98999786376953
 MOBILE,Melissa Norwood ,mnorwood@mtrsd.org,IOS,APPLE,2021-08-13,89.98999786376953
 MOBILE,Scott,sbarton@smusd.us,IOS,APPLE,2021-09-22,89.98999786376953

@@ -1,3 +1,19 @@
+//Date functionality start
+var d = new Date();
+var currMonth = d.getMonth() + 1;
+var currYear = d.getFullYear();
+var currDate = d.getDate();
+
+var startDate = new Date(currYear, currMonth, currDate);
+console.log(startDate);
+var e = "2021-08-01";
+var f = currYear + "-" + currMonth + "-" + currDate;
+$("#stardate").text(e);
+$("#finaldate").text(f);
+$("#fromd").text(e);
+$("#tod").text(f);
+
+
 var settings = {
   async: true,
   crossDomain: true,
@@ -696,3 +712,40 @@ $('#heat').change(function () {
     $('#chartname').text("Weekly Quest Activation")
   }
 })
+
+
+$(function () {
+  $("#datepicker").datepicker(
+
+      {
+          changeMonth: true,
+          changeYear: true,
+          yearRange: "2015:2022",
+          dateFormat: "yy-mm-dd",
+          onSelect: function (dateText, inst) {
+              $("#stardate").text(dateText);
+          }
+      });
+  $("#datepicker").datepicker("setDate",
+      new Date(2021, 07, 01))
+});
+
+$(function () {
+  $("#datepicker2").datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "2015:2022",
+      dateFormat: "yy-mm-dd",
+      maxDate: new Date(),
+      onSelect: function (dateText, inst) {
+          $("#finaldate").text(dateText);
+      }
+  });
+  var d = new Date();
+  var currMonth = d.getMonth();
+  var currYear = d.getFullYear();
+  var currDate = d.getDate();
+  var startDate = new Date(currYear, currMonth, currDate);
+  $("#datepicker2").datepicker("setDate", startDate);
+});
+

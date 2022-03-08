@@ -33,11 +33,11 @@ $(function () {
       $(this).toggleClass("opend").siblings().removeClass("opend");
 
       if ($(this).hasClass("opend")) {
-        $(this).find(".side-nav-dropdown").slideToggle("fast");
+        $(this).find(".side-nav-dropdown").slideToggle(500);
 
-        $(this).siblings().find(".side-nav-dropdown").slideUp("fast");
+        $(this).siblings().find(".side-nav-dropdown").slideUp(500);
       } else {
-        $(this).find(".side-nav-dropdown").slideUp("fast");
+        $(this).find(".side-nav-dropdown").slideUp(500);
       }
     });
 

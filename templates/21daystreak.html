@@ -7,10 +7,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>21 Day Streak</title>
-
+    <link rel='stylesheet'
+    href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css'>
     <link rel="icon" href="{{ url_for('static',filename='images/favicon.ico') }}" type="image/gif" sizes="16x16">
     <title>CAPi6 FAMILY MAP VIEW</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/search2.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/map-table.css') }}">
@@ -29,6 +31,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 
 
 
@@ -167,6 +171,11 @@
         background-color: #fff;
         margin-bottom: 20px;
         padding: 10px;
+    }
+
+    .ui-datepicker {
+        width: 26em !important;
+        z-index: 6 !important;
     }
 </style>
 
@@ -439,6 +448,26 @@
 
         </div>
         <section class="statistics">
+            <div class="container">
+                <div class="row">
+                    <div class="input-Container ui-widget" style="margin-top: 3px;">
+                        <input class="Date" style="width: 15%;
+                  margin-left: 61%;
+                  padding: 10px;
+                  background-color: #fff;
+                  border-radius: 20px 0 0 20px;" type="text" id="datepicker" size="30">
+                        <input class="Date" style="width: 15%;margin-left: 0px !important;
+                  padding: 10px;
+                  background-color: #fff;
+                  border-radius: 0;" type="text" id="datepicker2" size="30">
+                        <p style="display: none;" id="stardate"></p>
+                        <p style="display: none;" id="finaldate"></p>
+                        <button class="search_Bt" onclick="dateSub()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="statistics">
 
 
           
@@ -586,7 +615,7 @@
                                     <div class="table-header">
                                         <span class="table-title" id="tablename"></span>
                                     </div>
-                                    <a class="btn btn-success btn-logion" style="display:none;float:right;" download="Capdatatransactions.csv" id="btnExport" onclick ="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href="">Export</a>
+                                    <a class="btn btn-success btn-logion" style="display:none;float:right;" download="Capdatatransactions.csv" id="btnExport"  style=" float: right;margin: 5px 15px;" href="">Export</a>
                                     <div class="custyle" id="next"></div>
                                 </div>
                             </div>
