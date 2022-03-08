@@ -69484,37 +69484,37 @@ def jira_type(datestr):
 @app.route('/Dashboard_Insights/<dashtype>')
 def dashboard_insights(dashtype):
 
-    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    googleSheetId = '18Z4L6-1p4DUyFDQ8PoIA5rYc0_Xk7OnU7pbPCfVvzV4'
     worksheetName = 'Executive_Summary'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df1=pd.read_csv(URL)
 
-    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    googleSheetId = '18Z4L6-1p4DUyFDQ8PoIA5rYc0_Xk7OnU7pbPCfVvzV4'
     worksheetName = 'Engagement_Dashboard'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df2=pd.read_csv(URL)
 
-    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    googleSheetId = '18Z4L6-1p4DUyFDQ8PoIA5rYc0_Xk7OnU7pbPCfVvzV4'
     worksheetName = 'Playback_Analytics'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df3=pd.read_csv(URL)
 
-    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    googleSheetId = '18Z4L6-1p4DUyFDQ8PoIA5rYc0_Xk7OnU7pbPCfVvzV4'
     worksheetName = 'Revenue_Dashboards'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df4=pd.read_csv(URL)
 
-    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    googleSheetId = '18Z4L6-1p4DUyFDQ8PoIA5rYc0_Xk7OnU7pbPCfVvzV4'
     worksheetName = 'Feedback_Survey'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df5=pd.read_csv(URL)
 
-    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    googleSheetId = '18Z4L6-1p4DUyFDQ8PoIA5rYc0_Xk7OnU7pbPCfVvzV4'
     worksheetName = 'Subscription_Dashboard'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df6=pd.read_csv(URL)
 
-    googleSheetId = '1VJqCFodrtqaMMTdtARf-OY_v36ppZIUt-oBOj6NZG4I'
+    googleSheetId = '18Z4L6-1p4DUyFDQ8PoIA5rYc0_Xk7OnU7pbPCfVvzV4'
     worksheetName = 'App_Analytics'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
     payment_df7=pd.read_csv(URL)
@@ -69529,6 +69529,7 @@ def dashboard_insights(dashtype):
         b1.append([dict(zip(data1.Chart_Card_Name, data1.Insights))]) 
         dash_desc1.append(b1[0])
     data1 = dict(zip(dash_name1, dash_desc1))
+    print(data1)
 
     payment_df2=payment_df2[['Name_of_the_dashboard','Chart_Card_Name','Insights']]
     dash_name2=payment_df2['Name_of_the_dashboard'].unique()
