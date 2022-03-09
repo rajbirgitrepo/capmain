@@ -69619,53 +69619,53 @@ def dashboard_insights(dashtype):
 
 # dashboard_insights('Executive_Summary')
 
-@app.route('/Lead_Generation')
-def lead_generation():
+# @app.route('/Lead_Generation')
+# def lead_generation():
 
-    googleSheetId = '1PqiSqaWA4Gj8e8rTnMHq_WnKlOakdEps_RIKpdSrtHk'
-    worksheetName = 'Lead_Requests'
-    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
-    payment=pd.read_csv(URL)
+#     googleSheetId = '1PqiSqaWA4Gj8e8rTnMHq_WnKlOakdEps_RIKpdSrtHk'
+#     worksheetName = 'Lead_Requests'
+#     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+#     payment=pd.read_csv(URL)
 
-    payment=payment[['S_No','Sub_title','Description','Date','Lead_Type','Conversion','Renewal_Date','Last_Payment_Amount']]
-    payment.fillna(0)
+#     payment=payment[['S_No','Sub_title','Description','Date','Lead_Type','Conversion','Renewal_Date','Last_Payment_Amount']]
+#     payment.fillna(0)
 
-    Total_lead_count=payment['Lead_Type'].count()
-    Total_conversion_count=payment['Conversion'].count()
-    Total_conversion_all_count=payment['Sub_title'].count()
-    Total_conversion_remaining_count=Total_conversion_all_count-Total_conversion_count
+#     Total_lead_count=payment['Lead_Type'].count()
+#     Total_conversion_count=payment['Conversion'].count()
+#     Total_conversion_all_count=payment['Sub_title'].count()
+#     Total_conversion_remaining_count=Total_conversion_all_count-Total_conversion_count
 
-    payment_lead=payment.groupby(['Lead_Type'])["S_No"].count().reset_index()
-    payment_date=payment.groupby(['Date'])["S_No"].count().reset_index()
+#     payment_lead=payment.groupby(['Lead_Type'])["S_No"].count().reset_index()
+#     payment_date=payment.groupby(['Date'])["S_No"].count().reset_index()
 
-    Lead_Type_name=payment_lead['Lead_Type'].tolist()
-    Lead_Type_count=payment_lead['S_No'].tolist()
+#     Lead_Type_name=payment_lead['Lead_Type'].tolist()
+#     Lead_Type_count=payment_lead['S_No'].tolist()
 
-    payment_date_date=payment_date['Date'].tolist()
-    payment_date_count=payment_date['S_No'].tolist()
+#     payment_date_date=payment_date['Date'].tolist()
+#     payment_date_count=payment_date['S_No'].tolist()
 
-    data={'Total_lead_count':str(Total_lead_count),'Total_conversion_count':str(Total_conversion_count),
-          'Total_conversion_remaining_count':str(Total_conversion_remaining_count),
-          'Lead_Type_name':Lead_Type_name,'Lead_Type_count':Lead_Type_count,
-          'payment_date_date':payment_date_date,'payment_date_count':payment_date_count
-         }
-    return json.dumps(data)
+#     data={'Total_lead_count':str(Total_lead_count),'Total_conversion_count':str(Total_conversion_count),
+#           'Total_conversion_remaining_count':str(Total_conversion_remaining_count),
+#           'Lead_Type_name':Lead_Type_name,'Lead_Type_count':Lead_Type_count,
+#           'payment_date_date':payment_date_date,'payment_date_count':payment_date_count
+#          }
+#     return json.dumps(data)
 # lead_generation()
 
-@app.route('/Lead_Generation_Table')
-def lead_generation_table():
+# @app.route('/Lead_Generation_Table')
+# def lead_generation_table():
     
-    googleSheetId = '1PqiSqaWA4Gj8e8rTnMHq_WnKlOakdEps_RIKpdSrtHk'
-    worksheetName = 'Lead_Requests'
-    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
-    payment=pd.read_csv(URL)
+#     googleSheetId = '1PqiSqaWA4Gj8e8rTnMHq_WnKlOakdEps_RIKpdSrtHk'
+#     worksheetName = 'Lead_Requests'
+#     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+#     payment=pd.read_csv(URL)
 
-    payment=payment[['Sub_title','Description','Date','Lead_Type','Conversion','Renewal_Date','Last_Payment_Amount']]
-    payment=payment.fillna(0)
+    # payment=payment[['Sub_title','Description','Date','Lead_Type','Conversion','Renewal_Date','Last_Payment_Amount']]
+    # payment=payment.fillna(0)
 
-    temp={'data':payment.values.tolist()}
+    # temp={'data':payment.values.tolist()}
     
-    return json.dumps(temp)
+    # return json.dumps(temp)
 # lead_generation_table()
 
 
