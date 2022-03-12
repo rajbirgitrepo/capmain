@@ -876,6 +876,7 @@ function cardcount(id, a, b) {
         $("#family").text(dataa.CWP_SCORE);
         $("#districtid1").text(dataa.DISTRICT_NAME);
         $("#Districtid").text(dataa.E_SCORE);
+        $("#ACTIVE_SCHOOL_SCORE").text(dataa.ACTIVE_SCHOOL_SCORE);
 
     });
 }
