@@ -136,7 +136,7 @@ function charts(a) {
     var settings = {
         async: true,
         crossDomain: true,
-        url: "/escores/" + a,
+        url: "/escoresnew/" + a,
         method: "GET",
     };
     $.ajax(settings).done(function(response) {
@@ -189,7 +189,7 @@ function charts(a) {
                         point: {
                             events: {
                                 click: function() {
-                                    URL = "/escores/" + a + "/" + this.category;
+                                    URL = "/escoresnew/" + a + "/" + this.category;
                                     $('#next').empty();
                                     console.log(URL);
                                     var modal2 = document.getElementById("myModal2");
