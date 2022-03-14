@@ -70256,7 +70256,7 @@ def dis_escore(trackid):
     new_df_table=df_table.groupby('SCORE_TYPE')['SCHOOL_ID'].count().reset_index().rename(columns={'SCHOOL_ID':'School_Count'})
 
     score_type=pd.DataFrame({'SCORE_TYPE':[
-        '0-250','201-500','501-750','751-1000'
+        '0-250','251-500','501-750','751-1000'
     ]})
     new_df1=score_type.merge(new_df_table,how='left',on='SCORE_TYPE').fillna(0)    
     p=df1.to_dict('records')[0]    
