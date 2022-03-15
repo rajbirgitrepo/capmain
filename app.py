@@ -66,6 +66,10 @@ from sklearn.preprocessing import StandardScaler
 import collections
 import os
 
+client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
+db_live=client_live.compass
+
+
 
 app = Flask(__name__)
 CORS(app)
@@ -70280,6 +70284,72 @@ def dis_escore(trackid):
 
     return json.dumps(p)
 
+# E-Score Heatmap api:
+
+@app.route('/escoreheatmap/<trackid>')
+
+def escore_heatmap(trackid):
+    school_level=pd.read_csv(trackid+'_school_e_scores.csv')
+    school_level=school_level.drop(columns=['SCHOOL_NAME'],axis=1)
+    if len(list(db_live.district_master.find({'_id':ObjectId(str(trackid))})))>0:
+        district_id=trackid
+        districtinfo={
+            '5f2609807a1c0000950bb45a':'LAUSD',
+            '5f2609807a1c0000950bb45c':'Comox Valley School District'
+        }
+
+        if district_id in list(districtinfo):
+            district_name=districtinfo[district_id]
+
+#         if district_id=='5f2609807a1c0000950bb45a':
+#             district_name='LAUSD'
+        else:
+            districtname=list(db_live.district_master.find({'_id':ObjectId(district_id)}))
+            district_name=districtname[0].get('DISTRICT_NAME')
+
+#         districtname=list(db_live.district_master.find({'_id':ObjectId(district_id)}))
+
+        all_schools=pd.DataFrame(list(db_live.school_master.aggregate([{'$match':{'$and':[
+                                        {'CATEGORY':{'$regex':district_name,'$options':'i'}},
+            {'IS_PORTAL':'Y'}]}},
+                                {'$project':{
+                                        '_id':0,
+                                        'SCHOOL_ID':'$_id',
+                                        'SCHOOL_NAME':'$NAME'
+                                    }}
+                                    ])))
+    
+
+
+    all_schools['SCHOOL_ID']=all_schools['SCHOOL_ID'].astype('str')
+
+    final_df=all_schools.merge(school_level,how='left',on='SCHOOL_ID')
+
+    final_df[[ 'ACTIVE_USER_SCORE_SCHOOL',
+           'USAGE_SCORE_SCHOOL', 'CWP_SCORE_SCHOOL', 'RE_SCORE_SCHOOL',
+           'E_SCORE_SCHOOL', 'ACTIVE_SCHOOL']]=final_df[[ 'ACTIVE_USER_SCORE_SCHOOL',
+           'USAGE_SCORE_SCHOOL', 'CWP_SCORE_SCHOOL', 'RE_SCORE_SCHOOL',
+           'E_SCORE_SCHOOL', 'ACTIVE_SCHOOL']].fillna(0)
+
+    final_df['SCORE_TYPE']=final_df['SCORE_TYPE'].fillna('0-250')
+
+    final_df=final_df.sort_values(by='E_SCORE_SCHOOL',ascending=False).reset_index(drop=True)
+
+    temp={}
+    for i in range(len(final_df)):
+        x={str(final_df['SCHOOL_NAME'][i]):final_df[['ACTIVE_USER_SCORE_SCHOOL',
+           'USAGE_SCORE_SCHOOL', 'CWP_SCORE_SCHOOL', 'RE_SCORE_SCHOOL',
+           'E_SCORE_SCHOOL']].values.tolist()[i]}
+        temp.update(x)
+
+
+    final_temp={'heatmap':temp,
+               'fieldnames':['Active User Score',
+           'Usage Score', 'CWP Score', 'RE Score',
+           'E Score']
+
+               }
+    return json.dumps(final_temp)
 
 
 # DAILD
