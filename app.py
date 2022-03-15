@@ -70287,7 +70287,6 @@ def dis_escore(trackid):
 # E-Score Heatmap api:
 
 @app.route('/escoreheatmap/<trackid>')
-
 def escore_heatmap(trackid):
     school_level=pd.read_csv(trackid+'_school_e_scores.csv')
     school_level=school_level.drop(columns=['SCHOOL_NAME'],axis=1)
