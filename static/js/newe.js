@@ -142,6 +142,17 @@ function charts(a) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
+        $("#school").empty()
+        $("#teacher").empty()
+        $("#login").empty()
+        $("#practice").empty()
+        $("#school").text(dataa.ACTIVE_USER_SCORE);
+        $("#teacher").text(dataa.USAGE_SCORE);
+        $("#practice").text(dataa.RE_SCORE);
+        $("#family").text(dataa.CWP_SCORE);
+        $("#districtid1").text(dataa.DISTRICT_NAME);
+        $("#Districtid").text(dataa.E_SCORE);
+        $("#ACTIVE_SCHOOL_SCORE").text(dataa.ACTIVE_SCHOOL_SCORE);
         $(function() {
             $("#container21").highcharts({
                 chart: {
@@ -345,200 +356,200 @@ function charts(a) {
 
     });
 
-    anychart.onDocumentReady(function() {
-        // The data used in this sample can be obtained from the CDN
-        // https://cdn.anychart.com/samples/heat-map-charts/heat-map-with-scroll/data.json
-        anychart.data.loadJsonFile('/districtescore/' + a,
-            function(data) {
-                // Creates Heat Map
-                var chart = anychart.heatMap(data.chart2);
-                // var labels = chart.xAxis().labels();
-                // labels.enabled(false);
-                chart.xAxis().labels().width(80);
-                chart.xAxis().labels().height(90);
-                chart.tooltip().format("{%y}: {%heat}");
-                var colorScale = anychart.scales.ordinalColor();
-                colorScale.colors(['#FF8C00', '#d6ff6e', '#8ae02b', '#00a651']);
-                colorScale.ranges([
-                    { from: 0, to: 25 },
-                    { from: 25, to: 50 },
-                    { from: 50, to: 75 },
-                    { from: 75, to: 100 }
-                ]);
+    // anychart.onDocumentReady(function() {
+    //     // The data used in this sample can be obtained from the CDN
+    //     // https://cdn.anychart.com/samples/heat-map-charts/heat-map-with-scroll/data.json
+    //     anychart.data.loadJsonFile('/districtescore/' + a,
+    //         function(data) {
+    //             // Creates Heat Map
+    //             var chart = anychart.heatMap(data.chart2);
+    //             // var labels = chart.xAxis().labels();
+    //             // labels.enabled(false);
+    //             chart.xAxis().labels().width(80);
+    //             chart.xAxis().labels().height(90);
+    //             chart.tooltip().format("{%y}: {%heat}");
+    //             var colorScale = anychart.scales.ordinalColor();
+    //             colorScale.colors(['#FF8C00', '#d6ff6e', '#8ae02b', '#00a651']);
+    //             colorScale.ranges([
+    //                 { from: 0, to: 25 },
+    //                 { from: 25, to: 50 },
+    //                 { from: 50, to: 75 },
+    //                 { from: 75, to: 100 }
+    //             ]);
 
-                chart.colorScale(colorScale);
-                // Sets colorScale
-
-
-                // Sets chart title
-                chart
-                    .title()
-                    .enabled(true)
-                    .text('E-SCORE')
-                    .padding([0, 0, 20, 0]);
-
-                // Sets chart labels
-                chart.labels().enabled(true).format('{%Heat}');
-
-                // Sets Scrolls for Axes
-                chart.xScroller(true);
-                chart.yScroller(true);
+    //             chart.colorScale(colorScale);
+    //             // Sets colorScale
 
 
-                // Sets starting zoom for Axes
-                chart.xZoom().setToPointsCount(8);
-                chart.yZoom().setToPointsCount(6);
+    //             // Sets chart title
+    //             chart
+    //                 .title()
+    //                 .enabled(true)
+    //                 .text('E-SCORE')
+    //                 .padding([0, 0, 20, 0]);
 
-                // Sets chart and hover chart settings
-                chart.stroke('#fff');
-                chart
-                    .hovered()
-                    .stroke('2 #fff')
-                    .fill('#545f69')
-                    .labels({ fontColor: '#fff' });
+    //             // Sets chart labels
+    //             chart.labels().enabled(true).format('{%Heat}');
 
-                // Sets legend
-                chart
-                    .legend()
-                    .enabled(true)
-                    .align('center')
-                    .position('center-bottom')
-                    .itemsLayout('horizontal')
-                    .padding([20, 0, 0, 0]);
-
-                // set container id for the chart
-                chart.container('container1');
-                // initiate chart drawing
-                chart.draw();
-            }
-        );
-    });
+    //             // Sets Scrolls for Axes
+    //             chart.xScroller(true);
+    //             chart.yScroller(true);
 
 
+    //             // Sets starting zoom for Axes
+    //             chart.xZoom().setToPointsCount(8);
+    //             chart.yZoom().setToPointsCount(6);
 
+    //             // Sets chart and hover chart settings
+    //             chart.stroke('#fff');
+    //             chart
+    //                 .hovered()
+    //                 .stroke('2 #fff')
+    //                 .fill('#545f69')
+    //                 .labels({ fontColor: '#fff' });
 
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "/escoreinsites/" + a,
-        "method": "GET"
-    }
-    $.ajax(settings).done(function(response) {
-        var data = JSON.parse(response);
-        var chart = anychart.heatMap(data);
-        // var labels = chart.xAxis().labels();
-        // labels.enabled(false);
-        chart.xAxis().labels().width(80);
-        chart.xAxis().labels().height(90);
-        chart.tooltip().format("{%y}: {%heat}");
-        var colorScale = anychart.scales.ordinalColor();
-        colorScale.colors(['#FF8C00', '#d6ff6e', '#8ae02b', '#00a651']);
-        colorScale.ranges([
-            { from: 0, to: 25 },
-            { from: 25, to: 50 },
-            { from: 50, to: 75 },
-            { from: 75, to: 100 }
-        ]);
+    //             // Sets legend
+    //             chart
+    //                 .legend()
+    //                 .enabled(true)
+    //                 .align('center')
+    //                 .position('center-bottom')
+    //                 .itemsLayout('horizontal')
+    //                 .padding([20, 0, 0, 0]);
 
-        chart.colorScale(colorScale);
-        // Sets colorScale
-
-
-        // Sets chart title
-        chart
-            .title()
-            .enabled(true)
-            .text('E-SCORE LAUSD')
-            .padding([0, 0, 20, 0]);
-
-        // Sets chart labels
-        chart.labels().enabled(true).format('{%Heat}');
-
-        // Sets Scrolls for Axes
-        chart.xScroller(true);
-        chart.yScroller(true);
-
-
-        // Sets starting zoom for Axes
-        chart.xZoom().setToPointsCount(8);
-        chart.yZoom().setToPointsCount(6);
-
-        // Sets chart and hover chart settings
-        chart.stroke('#fff');
-        chart
-            .hovered()
-            .stroke('2 #fff')
-            .fill('#545f69')
-            .labels({ fontColor: '#fff' });
-
-        // Sets legend
-        chart
-            .legend()
-            .enabled(true)
-            .align('center')
-            .position('center-bottom')
-            .itemsLayout('horizontal')
-            .padding([20, 0, 0, 0]);
-
-        // set container id for the chart
-        chart.container('container2');
-        // initiate chart drawing
-        chart.draw();
-
-    });
+    //             // set container id for the chart
+    //             chart.container('container1');
+    //             // initiate chart drawing
+    //             chart.draw();
+    //         }
+    //     );
+    // });
 
 
 
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "/escorepolar/" + a,
-        "method": "GET"
-    }
-    $.ajax(settings).done(function(response) {
-        var data = JSON.parse(response);
-        anychart.onDocumentReady(function() {
-            palette = ['#FF8C00', '#d6ff6e', '#8ae02b', '#00a651']
-                // create polar chart
-            var chart = anychart.polar();
 
-            // create data set on our data
-            var chartData = {
-                title: '',
-                header: ['#', 'Active Users', 'Active Usage', 'Recent Engagement', 'Consistent Weekly Practice'],
-                rows: data.data
-            };
-            chart.palette(palette);
-            // sort data by X
-            chart
-                .sortPointsByX(true)
-                // set series type
-                .defaultSeriesType('column')
-                // disable y-axis
-                .yAxis(false)
-                // set x-scale
-                .xScale('ordinal');
+    // var settings = {
+    //     "async": true,
+    //     "crossDomain": true,
+    //     "url": "/escoreinsites/" + a,
+    //     "method": "GET"
+    // }
+    // $.ajax(settings).done(function(response) {
+    //     var data = JSON.parse(response);
+    //     var chart = anychart.heatMap(data);
+    //     // var labels = chart.xAxis().labels();
+    //     // labels.enabled(false);
+    //     chart.xAxis().labels().width(80);
+    //     chart.xAxis().labels().height(90);
+    //     chart.tooltip().format("{%y}: {%heat}");
+    //     var colorScale = anychart.scales.ordinalColor();
+    //     colorScale.colors(['#FF8C00', '#d6ff6e', '#8ae02b', '#00a651']);
+    //     colorScale.ranges([
+    //         { from: 0, to: 25 },
+    //         { from: 25, to: 50 },
+    //         { from: 50, to: 75 },
+    //         { from: 75, to: 100 }
+    //     ]);
 
-            // set chart data
-            chart.data(chartData);
+    //     chart.colorScale(colorScale);
+    //     // Sets colorScale
 
-            // set legend settings
-            chart.legend().enabled(true).position('center-bottom');
-            // set title margin
-            chart.title().margin().bottom(20);
 
-            // set stack mod
-            chart.yScale().stackMode('value');
+    //     // Sets chart title
+    //     chart
+    //         .title()
+    //         .enabled(true)
+    //         .text('E-SCORE LAUSD')
+    //         .padding([0, 0, 20, 0]);
 
-            // set tooltip settings
-            chart.tooltip().valuePostfix('%');
+    //     // Sets chart labels
+    //     chart.labels().enabled(true).format('{%Heat}');
 
-            // set chart container id
-            chart.container('container3');
-            // initiate chart drawing
-            chart.draw();
-        });
-    });
+    //     // Sets Scrolls for Axes
+    //     chart.xScroller(true);
+    //     chart.yScroller(true);
+
+
+    //     // Sets starting zoom for Axes
+    //     chart.xZoom().setToPointsCount(8);
+    //     chart.yZoom().setToPointsCount(6);
+
+    //     // Sets chart and hover chart settings
+    //     chart.stroke('#fff');
+    //     chart
+    //         .hovered()
+    //         .stroke('2 #fff')
+    //         .fill('#545f69')
+    //         .labels({ fontColor: '#fff' });
+
+    //     // Sets legend
+    //     chart
+    //         .legend()
+    //         .enabled(true)
+    //         .align('center')
+    //         .position('center-bottom')
+    //         .itemsLayout('horizontal')
+    //         .padding([20, 0, 0, 0]);
+
+    //     // set container id for the chart
+    //     chart.container('container2');
+    //     // initiate chart drawing
+    //     chart.draw();
+
+    // });
+
+
+
+    // var settings = {
+    //     "async": true,
+    //     "crossDomain": true,
+    //     "url": "/escorepolar/" + a,
+    //     "method": "GET"
+    // }
+    // $.ajax(settings).done(function(response) {
+    //     var data = JSON.parse(response);
+    //     anychart.onDocumentReady(function() {
+    //         palette = ['#FF8C00', '#d6ff6e', '#8ae02b', '#00a651']
+    //             // create polar chart
+    //         var chart = anychart.polar();
+
+    //         // create data set on our data
+    //         var chartData = {
+    //             title: '',
+    //             header: ['#', 'Active Users', 'Active Usage', 'Recent Engagement', 'Consistent Weekly Practice'],
+    //             rows: data.data
+    //         };
+    //         chart.palette(palette);
+    //         // sort data by X
+    //         chart
+    //             .sortPointsByX(true)
+    //             // set series type
+    //             .defaultSeriesType('column')
+    //             // disable y-axis
+    //             .yAxis(false)
+    //             // set x-scale
+    //             .xScale('ordinal');
+
+    //         // set chart data
+    //         chart.data(chartData);
+
+    //         // set legend settings
+    //         chart.legend().enabled(true).position('center-bottom');
+    //         // set title margin
+    //         chart.title().margin().bottom(20);
+
+    //         // set stack mod
+    //         chart.yScale().stackMode('value');
+
+    //         // set tooltip settings
+    //         chart.tooltip().valuePostfix('%');
+
+    //         // set chart container id
+    //         chart.container('container3');
+    //         // initiate chart drawing
+    //         chart.draw();
+    //     });
+    // });
 
 
 
@@ -843,40 +854,188 @@ function distselect(distid) {
     $("#myDiv").empty();
     $("#myDiv2").empty();
     $("#Districtid").empty();
+    $("#heat-map").empty();
+    $("#chartname").empty();
     $("#disdetails").text(distid);
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
     console.log(distid)
-    cardcount(distid);
+    // cardcount(distid);
     charts(distid);
+   idtype(distid);
     // bubble(distid);
     // bubble2(distid);
     // idtype(distid,a,b);
 }
 
-function cardcount(id, a, b) {
-    URL = "/escoresnew/" + id;
-    var settings = {
-        async: true,
-        crossDomain: true,
-        url: URL,
-        method: "GET",
-    };
-    $.ajax(settings).done(function(response) {
-        var dataa = JSON.parse(response);
-        console.log(url);
-        console.log("counts are fnctioning");
-        $("#school").empty()
-        $("#teacher").empty()
-        $("#login").empty()
-        $("#practice").empty()
-        $("#school").text(dataa.ACTIVE_USER_SCORE);
-        $("#teacher").text(dataa.USAGE_SCORE);
-        $("#practice").text(dataa.RE_SCORE);
-        $("#family").text(dataa.CWP_SCORE);
-        $("#districtid1").text(dataa.DISTRICT_NAME);
-        $("#Districtid").text(dataa.E_SCORE);
-        $("#ACTIVE_SCHOOL_SCORE").text(dataa.ACTIVE_SCHOOL_SCORE);
+// function cardcount(id, a, b) {
+//     URL = "/escoresnew/" + id;
+//     var settings = {
+//         async: true,
+//         crossDomain: true,
+//         url: URL,
+//         method: "GET",
+//     };
+//     $.ajax(settings).done(function(response) {
+//         var dataa = JSON.parse(response);
+//         console.log("/escoresnew/" + id);
+//         console.log("counts are fnctioning");
+//         $("#school").empty()
+//         $("#teacher").empty()
+//         $("#login").empty()
+//         $("#practice").empty()
+//         $("#school").text(dataa.ACTIVE_USER_SCORE);
+//         $("#teacher").text(dataa.USAGE_SCORE);
+//         $("#practice").text(dataa.RE_SCORE);
+//         $("#family").text(dataa.CWP_SCORE);
+//         $("#districtid1").text(dataa.DISTRICT_NAME);
+//         $("#Districtid").text(dataa.E_SCORE);
+//         $("#ACTIVE_SCHOOL_SCORE").text(dataa.ACTIVE_SCHOOL_SCORE);
 
+//     });
+
+    
+// }
+
+function heatnew(b) {
+    console.log(b);
+    var min, max, colorScale, temps, tempsArr;
+    var colors = ["#EFF7F2", "#DBEEE1", "#B3DFC1", "#8ECAA0", "#76C28D", "#65B87E", "#52AB6D", "#42A862", "#329B52", "#278845"]
+    var months = ["","Active User Score", "Usage Score", "CWP Score", "RE Score", "E Score"];
+    var table, thead, tbody, rows, headCells, cells;
+    var ur = "/" + b;
+    var data = d3.json(ur, function (error, data) {
+  
+      temps = data.heatmap;
+      tempsArr = createTempArr(temps);
+      initScale();
+      initTable();
+      addTopHeader();
+      addRows();
+      setColorTransition();
+  
+      addLegend();
     });
+  
+    function initTable() {
+      table = d3.select('#heat-map').append('table');
+      table.append("caption")
+        .html("");
+      thead = table.append('thead');
+      tbody = table.append('tbody');
+    }
+  
+    function initScale() {
+      min = d3.min(d3.values(temps), function (d) {
+        return d3.min(d);
+      });
+      max = d3.max(d3.values(temps), function (d) {
+        return d3.max(d);
+      });
+      colorScale = d3.scaleQuantile()
+        .domain([min, max])
+        .range(colors);
+    }
+  
+    function addTopHeader() {
+      //make top heading
+      thead.append('tr')
+        .selectAll('th')
+        .data(months)
+        .enter()
+        .append("th")
+        .text(function (d) {
+          return d;
+        });
+    }
+  
+    function addRows() {
+      // create a row for each object in the data
+      rows = tbody.selectAll('tr')
+        .data(tempsArr).enter()
+        .append('tr');
+  
+      // create vertical heading (first col of each row)
+      headCells = rows.append('th')
+        .text(function (d) {
+          return d.year;
+        });
+  
+      //create a data cell for each monthly tempature
+      cells = rows.selectAll('td')
+        .data(function (row, i) {
+          return row.temps;
+        })
+        .enter()
+        .append('td')
+        .text(function (d) {
+          return d;
+        })
+        .style("background-color", colors[0]);
+    }
+  
+    function createTempArr() {
+      var tempsArr = [];
+      for (var k in temps) {
+        if (temps.hasOwnProperty(k)) {
+          tempsArr.push({
+            year: k,
+            temps: temps[k]
+          });
+        }
+      }
+      return tempsArr;
+    }
+  
+    function setColorTransition() {
+      cells.transition()
+        .duration(1000)
+        .style("background-color", function (d) {
+          return colorScale(d);
+        });
+    }
+  
+    function addLegend() {
+      var rangeValues = [min];
+      rangeValues = rangeValues.concat(colorScale.quantiles());
+  
+      var legend = d3.select('caption').append('div');
+      legend.attr("class", "legend");
+  
+      var colorSq = legend.append("div");
+  
+      colorSq.selectAll("div")
+        .data(rangeValues).enter()
+        .append("div")
+        .attr("class", "color-square")
+        .style("background-color", function (d, i) {
+          return colors[i];
+        });
+      //.text(function(d) { return "≥ " + Math.round(d); }); //add range
+  
+      var labels = legend.append("div");
+      labels.append("div")
+        .attr("class", "align-left")
+        .text("");
+  
+      labels.append("div")
+        .attr("class", "align-right")
+        .text("");
+  
+    }
+  }
+  
+//   let textContent = document.getElementById('disdetails').innerText;
+//   console.log(textContent)
+//   $('#heat-map').empty()
+//   var type = "escoreheatmap/"+ textContent;
+//   heatnew(type);
+//   $('#chartname').text("E-score Heatmap")
+  
+  function idtype(a) {
+    let textContent = document.getElementById('disdetails').innerText;
+    var type = "escoreheatmap/" + textContent;
+    console.log(type);
+    heatnew(type);
+    $('#chartname').text("E-score Heatmap")
 }

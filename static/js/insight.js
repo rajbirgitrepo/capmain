@@ -11,13 +11,13 @@ var settings = {
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
     if (params == "Executive_Dashboard") {
-        document.getElementById("school_count").title = dataa.Executive_Summary.CAP_SUMMARY[0].School_Count;
-        document.getElementById("total_students").title = dataa.Executive_Summary.CAP_SUMMARY[0].Total_Students;
-        document.getElementById("total_usercount").title = dataa.Executive_Summary.CAP_SUMMARY[0].Tota_Usercount;
+        document.getElementById("school_count").title = dataa.Executive_Summary.CAP_SUMMARY[0].school_count;
+        document.getElementById("total_students").title = dataa.Executive_Summary.CAP_SUMMARY[0].total_students;
+        document.getElementById("total_usercount").title = dataa.Executive_Summary.CAP_SUMMARY[0].total_usercount;
         document.getElementById("total_revenue_CSY").title = dataa.Executive_Summary.CAP_SUMMARY[0].Total_Revenue_CSY;
-        document.getElementById("Practice_trend_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].Active_Practice_Trend;
-        document.getElementById("active_user_trend_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].Active_Playback_Trend;
-        document.getElementById("practice_history_CSY_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].Practice_History_CSY;
+        document.getElementById("Practice_trend_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].Practice_trend_playback;
+        document.getElementById("active_user_trend_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].active_user_trend_playback;
+        document.getElementById("practice_history_CSY_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].practice_history_CSY_playback;
         document.getElementById("realtime_playback_sessions_USA").title = dataa.Executive_Summary.CAP_SUMMARY[0].realtime_playback_sessions_USA;
         document.getElementById("container35").title = dataa.Executive_Summary.CAP_SUMMARY[0].Average_Playback_Trend;
         document.getElementById("container36").title = dataa.Executive_Summary.CAP_SUMMARY[0].Top_District_Playback;

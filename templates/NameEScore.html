@@ -83,7 +83,13 @@
         margin-top: 20px;
         float: left;
     }
-    
+    .table-header-design table th {
+        padding: 5px !important;
+        background-color: transparent !important;
+        color: black !important;
+        border-bottom: none !important;
+        cursor: default;
+    }
     .mr1 {
         margin-left: 0 !important;
         width: 37% !important;
@@ -125,6 +131,7 @@
         font-weight: bold;
         font-size: 1.1em;
         font-family: "open sans", roboto;
+        padding-bottom: 20px;
     }
     
     th {
@@ -135,8 +142,8 @@
     thead tr:nth-child(1) th {
         /*position: sticky;
         top: 0;*/
-        z-index: 10;
-        width: 153px !IMPORTANT;
+        z-index: 5;
+        width: 43px !IMPORTANT;
     }
     
     tbody th {
@@ -350,6 +357,31 @@
         float: right;
         margin-right: 10px;
     }
+    .table-design table th, table td {
+        font-size: 10px;
+        padding: 5px 16px !important;
+    }
+    tbody th {
+        font-size: 10px !important;
+        position: sticky;
+        left: 0;
+        z-index: 5;
+    }
+    .heatmap-design{
+        border-radius: 20px;
+        margin-top: 20px;
+        box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        margin-top: 30px;
+        padding: 10px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+    .heat-map-scroll{
+        overflow: scroll;
+        height: auto;
+        max-height: 500px;
+    }
 </style>
 
 <body class="body">
@@ -515,19 +547,20 @@
                             <div class=" col-md-2" style="float: left;">
                                 <button class="select_button" onclick="modal2()">Select District</button>
                             </div>
-                            <div class=" col-md-8">
+                            <div class=" col-md-7">
                                 <p style="font-size: 21px;margin: 25px 15px;" id="districtid1"></p>
+                            </div>
+                            <div class=" col-md-3" id="imgdis">
                             </div>
                         </div>
                     </div>
-                    <div class=" col-md-3" style="margin-left: 5%;" id="imgdis">
-                    </div>
+                   
                 </div>
             </div>
         </section>
 
 
-        <section class="statistics">
+        <section class="statistics" style="padding-top: 10px;padding-bottom: 8px;">
             <div class="container-fluid">
                 <div class="row">
                     <div class=" col-md-2" title="" id="district_engagement_score">
@@ -538,25 +571,25 @@
                     </div>
                     <div class="col-md-2" title="" id="active_users_percentage">
                         <div class="box2 ">
-                            <p style="font-size: 10px;" id="" onclick="hi()">Active Users</p>
+                            <p style="font-size: 10px;" id="" onclick="hi()">Active Users Score</p>
                             <p style="margin: 0 4px; font-size: 21px; " id="school"></p>
                         </div>
                     </div>
                     <div class="col-md-2" title="" id="active_usage">
                         <div class="box2 ">
-                            <p style="font-size: 10px;" id="">Active Usage</p>
+                            <p style="font-size: 10px;" id="">Active Usage Score</p>
                             <p style="margin: 0 4px; font-size: 21px;  " id="teacher"></p>
                         </div>
                     </div>
                     <div class="col-md-2" title="" id="recent_engagement">
                         <div class="box2 ">
-                            <p style="font-size: 9px;" id="">Recent Engagement</p>
+                            <p style="font-size: 9px;" id="">Recent Engagement Score</p>
                             <p style="margin: 0 4px; font-size: 21px;  " id="practice"></p>
                         </div>
                     </div>
                     <div class="col-md-2" title="" id="consistently_weekly_practices">
                         <div class="box2 ">
-                            <p style="font-size: 10px;" id="">Consistent Weekly Playback</p>
+                            <p style="font-size: 10px;" id="">Consistent Weekly Practice Score</p>
                             <p style="margin: 0 4px; font-size: 21px; " id="family"></p>
                         </div>
                     </div>
@@ -571,7 +604,13 @@
         </section>
         <div id="disdetails" style="display: none;">
         </div>
-        <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;" title="">
+        <div class="col-md-12">
+            <div id="sticky-wrapper" class="heatmap-design">
+        <p id="chartname" style="text-align: center;margin-right: 7%;font-size: 16px;"></p>
+        <div id="heat-map" class="table-header-design new-design heat-map-scroll"></div>
+    </div>
+        </div>
+        <div class="col-md-10" style="margin-bottom: 20px;  border-radius: 20px;" title="">
             <div id="container21" style="height:400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
             </div>
         </div>
@@ -629,6 +668,7 @@
             </div>
         </div>
     </section>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js'></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
 
     <script src="/static/js/mail.js"></script>
@@ -640,6 +680,7 @@
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
     <script src="/static/js/newe.js"></script>
     <script src="/static/js/excellentexport.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
 </body>
 
 </html>
