@@ -91,6 +91,7 @@ var settings = {
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
+    console.log(dataa)
     if (params == "NameEScore") {
         document.getElementById("district_engagement_score").title = dataa.Engagement_Dashboard.DISTRICT_ENGAGEMENT[0].District_Engagement_Score;
         document.getElementById("active_users_percentage").title = dataa.Engagement_Dashboard.DISTRICT_ENGAGEMENT[0].Active_Users;
@@ -101,30 +102,30 @@ $.ajax(settings).done(function(response) {
         document.getElementById("e_score_chart").title = dataa.Engagement_Dashboard.DISTRICT_ENGAGEMENT[0].e_score_chart;
        
     } else if (params == "Disctrictfilter") {
-        document.getElementById("schools_360").title = dataa.Engagement_Dashboard.DISTRICT_360[0].schools_360;
-        document.getElementById("teachers_360").title = dataa.Engagement_Dashboard.DISTRICT_360[0].teachers_360;
-        document.getElementById("practice_sessions_360").title = dataa.Engagement_Dashboard.DISTRICT_360[0].practice_sessions_360;
-        document.getElementById("family_count_360").title = dataa.Engagement_Dashboard.DISTRICT_360[0].family_count_360;
-        document.getElementById("mindful_minutes_360").title = dataa.Engagement_Dashboard.DISTRICT_360[0].mindful_minutes_360;
-        document.getElementById("family_parctice_count_360").title = dataa.Engagement_Dashboard.DISTRICT_360[0].family_parctice_count_360;
-        document.getElementById("user_practice_history_360").title = dataa.Engagement_Dashboard.DP_360[0].User_Playback_History;
-        document.getElementById("practice_trend_by_month_360").title = dataa.Engagement_Dashboard.DP_360[0].Playback_Trend_By_Month;
-        document.getElementById("top_20_school_user_count_360").title = dataa.Engagement_Dashboard.DP_360[0].Top_20_School_User_Count_;
-        document.getElementById("top_20_school_practice_playback_count_360").title = dataa.Engagement_Dashboard.DISTRICT_360[0].top_20_school_practice_playback_count_360;
-        document.getElementById("top_20_user_practice").title = dataa.Engagement_Dashboard.DISTRICT_360[0].top_20_user_practice;
-        document.getElementById("playback_count_3600").title = dataa.Engagement_Dashboard.DISTRICT_360[0].playback_count_360;
+        // document.getElementById("teachers_360").title = dataa.Engagement_Dashboard.DP_360[0].teachers_360;
+        // document.getElementById("practice_sessions_360").title = dataa.Engagement_Dashboard.DP_360[0].practice_sessions_360;
+        // document.getElementById("family_count_360").title = dataa.Engagement_Dashboard.DP_360[0].family_count_360;
+        // document.getElementById("mindful_minutes_360").title = dataa.Engagement_Dashboard.DP_360[0].mindful_minutes_360;
+        // document.getElementById("family_parctice_count_360").title = dataa.Engagement_Dashboard.DP_360[0].family_parctice_count_360;
+        // document.getElementById("user_practice_history_360").title = dataa.Engagement_Dashboard.DP_360[0].User_Playback_History;
+        // document.getElementById("practice_trend_by_month_360").title = dataa.Engagement_Dashboard.DP_360[0].Playback_Trend_By_Month;
+        // document.getElementById("top_20_school_user_count_360").title = dataa.Engagement_Dashboard.DP_360[0].Top_20_School_User_Count_;
+        //document.getElementById("top_20_school_practice_playback_count_360").title = dataa.Engagement_Dashboard.DP_360[0].top_20_school_practice_playback_count_360;
+        //document.getElementById("top_20_user_practice").title = dataa.Engagement_Dashboard.DP_360[0].top_20_user_practice;
+        document.getElementById("playback_count_360").title = dataa.Engagement_Dashboard.DP_360[0].playback_count_360;
         document.getElementById("heat_map_360").title = dataa.Engagement_Dashboard.DP_360[0].Overall_Playback_Heat_Map;
         document.getElementById("schoolCard").title = dataa.Engagement_Dashboard.DP_360[0].School;
-        document.getElementById("teacherCard").title = dataa.Engagement_Dashboard.DP_360[0].Teacher;    
+         document.getElementById("teacherCard").title = dataa.Engagement_Dashboard.DP_360[0].Teacher;    
         document.getElementById("familyCard").title = dataa.Engagement_Dashboard.DP_360[0].Family;
         document.getElementById("averageRatingCard").title = dataa.Engagement_Dashboard.DP_360[0].Average_Rating;
         document.getElementById("Top_20_Champion_in_CSY").title = dataa.Engagement_Dashboard.DP_360[0].Top_20_Champion_in_CSY;
         document.getElementById("Sentiment_Percentage").title = dataa.Engagement_Dashboard.DP_360[0].Sentiment_Percentage;
         document.getElementById("Top_20_Champion_in_LSY").title = dataa.Engagement_Dashboard.DP_360[0].Top_20_Champion_in_LSY;
-        // document.getElementById("User_Playback_History_360").title = dataa.Engagement_Dashboard.DP_360[0].User_Playback_History;
-        // document.getElementById("Playback_Trend_By_Month_360").title = dataa.Engagement_Dashboard.DP_360[0].Playback_Trend_By_Month;
-
-       
+        document.getElementById("User_Playback_History_360").title = dataa.Engagement_Dashboard.DP_360[0].User_Playback_History;
+        document.getElementById("Playback_Trend_By_Month_360").title = dataa.Engagement_Dashboard.DP_360[0].Playback_Trend_By_Month;
+    
+        
+        
     } 
     // else if (params == "partner") {
     //     document.getElementById("schools").title = dataa.Engagement_Dashboard.PARTNER_PORTAL[0].schools;
