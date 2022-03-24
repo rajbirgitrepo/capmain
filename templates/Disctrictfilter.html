@@ -450,6 +450,20 @@
         border-bottom-left-radius: 30px !important;
         border-bottom-right-radius: 30px !important;
     }
+    .ui-tooltip,
+    .arrow:after {
+        background: #fafafa;
+        /* border: 2px solid white; */
+    }
+    
+    .ui-tooltip {
+        padding: 10px 20px;
+        color: black;
+        border-radius: 10px;
+        font: bold 14px "Helvetica Neue", Sans-Serif;
+        text-transform: capitalize;
+        box-shadow: 0 0 7px #fafafa;
+    }
 
     .close-btn-design {
         color: #fff;
@@ -760,8 +774,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="boxExecutive" id="averageRatingCard" title="">
+                    <div class="col-md-3" id="averageRatingCard" title="">
+                        <div class="boxExecutive" >
                             <div>
                                 <p style="font-size: 11px;">Average Rating</p>
                                 <p class="boxvalue2" id="avgrating" style="font-size: 30px;"></p>
@@ -865,39 +879,35 @@
         background-color: #fff;
         margin: 20px;
         padding: 10px;"></div> -->
+<div title="" id="heat_map_360">
+    <div title="" id="sticky-wrapper chart-container" style="border-radius: 20px;
+    margin-top: 20px;
+    box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    margin: 20px;
+    padding: 10px;
+    position: relative;">
+        <select id="heat" style="margin-top: 7px;" class="drop-ui">
+            <option value="4" selected>Overall Playback Heat Map</option>
+            <option value="5">Teacher Wise Playback Heat Map</option>
+            <option value="6">Family Wise Playback Heat Map</option>
+            <option value="1">Overall Active User Count</option>
+            <option value="2">Family Active User Count</option>
+            <option value="3">Teachers Active User Count</option>
+        </select>
+        <p id="chartname" style="text-align: center;"></p>
 
-        <div title="" id="sticky-wrapper heat_map_360 chart-container" style="border-radius: 20px;
-        margin-top: 20px;
-        box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-        margin: 20px;
-        padding: 10px;
-        position: relative;">
-            <select id="heat" style="margin-top: 7px;" class="drop-ui">
-                <option value="4" selected>Overall Playback Heat Map</option>
-                <option value="5">Teacher Wise Playback Heat Map</option>
-                <option value="6">Family Wise Playback Heat Map</option>
-                <option value="1">Overall Active User Count</option>
-                <option value="2">Family Active User Count</option>
-                <option value="3">Teachers Active User Count</option>
-            </select>
-            <p id="chartname" style="text-align: center;"></p>
+        <button class="print_btn printpos" id="btnPrint"><i class="fa fa-print" aria-hidden="true"></i></button>
+        <div>
 
-            <button class="print_btn printpos" id="btnPrint"><i class="fa fa-print" aria-hidden="true"></i></button>
-            <div>
-
-                <div id="heat-map" class="table-header-design containerPrint"
-                    style="overflow: scroll;height: auto;max-height: 500px;"></div>
-            </div>
+            <div id="heat-map" class="table-header-design containerPrint"
+                style="overflow: scroll;height: auto;max-height: 500px;"></div>
         </div>
-        <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;" title=""
-            id="user_practice_history_360 User_Playback_History_360">
-            <div style="
-            background-color: #ffff;
-            border-radius: 20px;
-            box-shadow: rgb(0 0 0 / 10%) 2px 10px 20px;
-            padding: 10px;
-        ">
+    </div>
+</div>
+      
+        <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;"  id="User_Playback_History_360" title="">
+            <div style="background-color: #ffff;border-radius: 20px;box-shadow: rgb(0 0 0 / 10%) 2px 10px 20px;padding: 10px;">
                 <select id="historyPlayback" class="drop-ui" style="margin-top: 7px;">
                     <option value="1" selected>User Playback History</option>
                     <option value="2">User Playback History Last 90 Days</option>
@@ -910,7 +920,7 @@
 
 
         <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;" title=""
-            id="practice_trend_by_month_360">
+            id="Playback_Trend_By_Month_360">
             <div style=" border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);background:white;">
                 <div style="margin: 10px;">
                     <button id="plain1" class="chart-btn">Plain</button>
@@ -923,7 +933,7 @@
 
         </div>
         <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;" title=""
-            id="top_20_school_user_count_360">
+            id="Top_20_School_User_Count_">
             <div style="border-radius: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); background:white;">
                 <div style="margin: 10px;">
                     <button id="plain" class="chart-btn">Plain</button>
@@ -943,7 +953,7 @@
         </div> -->
 
         <div class="col-md-12" style="margin-bottom: 30px;  border-radius: 20px;" title=""
-            id="top_20_user_practice playback_count_360">
+            id="Top_20_Champion_in_CSY">
             <div
                 style="background-color: #ffffff;border-radius: 20px; box-shadow: rgb(0 0 0 / 10%) 2px 10px 20px; overflow: hidden;">
                 <div id="container5" style="height: 510pxpx; width: 100%; margin-top: 20px;">
@@ -969,7 +979,7 @@
         </div> -->
 
         <div class="col-md-6" style="margin-bottom: 30px;  border-radius: 20px;" title=""
-            id="Top_20_Champion_in_LSY playback_count_360 Top_20_Champion_in_CSY">
+            id="Top_20_Champion_LSY">
             <div id="container10"
                 style="height: 510pxpx; width: 100%; border-radius: 20px; margin-top: 2px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
             </div>
@@ -1024,8 +1034,8 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="/static/js/script.js"></script>
 
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <!-- <script src="https://code.highcharts.com/modules/accessibility.js"></script> -->
+    <!-- <script src="https://code.highcharts.com/stock/modules/exporting.js"></script> -->
     <script src="/static/js/districtreport.js"></script>
     <script src="/static/js/excellentexport.js"></script>
     <script src="/static/js/insight.js"></script>

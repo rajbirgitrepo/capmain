@@ -215,15 +215,57 @@
         height: 360px;
         overflow: scroll;
     }
-
+  
     .ui-tooltip,
     .arrow:after {
-        display: none !important;
+        background: #fafafa;
         /* border: 2px solid white; */
     }
-
+    
     .ui-tooltip {
-        display: none !important;
+        padding: 10px 20px;
+        color: black;
+        border-radius: 10px;
+        font: bold 14px "Helvetica Neue", Sans-Serif;
+        text-transform: capitalize;
+        box-shadow: 0 0 7px #fafafa;
+    }
+    
+    .arrow {
+        width: 70px;
+        height: 16px;
+        overflow: hidden;
+        position: absolute;
+        left: 50%;
+        margin-left: -35px;
+        bottom: -16px;
+    }
+    
+    .arrow.top {
+        top: -16px;
+        bottom: auto;
+    }
+    
+    .arrow.left {
+        left: 20%;
+    }
+    
+    .arrow:after {
+        content: "";
+        position: absolute;
+        left: 20px;
+        top: -20px;
+        width: 25px;
+        height: 25px;
+        box-shadow: 6px 5px 9px -9px black;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+    
+    .arrow.top:after {
+        bottom: -20px;
+        top: auto;
     }
 </style>
 <style>
@@ -585,32 +627,32 @@
                     <section class="statistics card-design">
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-2" title="" id="Activeuserscore">
+                                <div class="col-md-2"  id="Activeuserscore" title="">
                                     <div class="box2 ">
                                         <p style="font-size: 10px;" id="">Active User Score</p>
                                         <p style="margin: 0 4px; font-size: 21px; " id="ACTIVE_USER_SCORE"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-2" title="" id="CWPScore">
+                                <div class="col-md-2"  id="CWPScore" title="">
                                     <div class="box2 ">
                                         <p style="font-size: 10px;" id="">CWP Score</p>
                                         <p style="margin: 0 4px; font-size: 21px;" id="CWP_SCORE"></p>
                                     </div>
                                 </div>
 
-                                <div class="col-md-2" title="" id="ReScore">
+                                <div class="col-md-2"  id="ReScore" title="">
                                     <div class="box2 ">
                                         <p style="font-size: 10px;" id="">Re Score</p>
                                         <p style="margin: 0 4px; font-size: 21px; " id="RE_SCORE"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-2" title="" id="Usage1">
+                                <div class="col-md-2"  id="Usage1" title="">
                                     <div class="box2 ">
                                         <p style="font-size: 10px;" id="">Usage Score</p>
                                         <p style="margin: 0 4px; font-size: 21px; " id="USAGE_SCORE"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-2" title="" id="EScore">
+                                <div class="col-md-2"  id="EScore" title="">
                                     <div class="box2 ">
                                         <p style="font-size: 9px;" id="">E-Score</p>
                                         <p style="margin: 0 4px; font-size: 21px;" id="E_SCORE"></p>
@@ -656,7 +698,7 @@
                     <!-- <div class="col-md-12">
                         <div id="container43" style="height: 400px;margin-bottom:20px;"></div>
                     </div> -->
-                    <div class="col-md-12" id="Weekly_Usage_CSY_Absolute_count Weekly_Usage_CSY_Percentage" title="" style="margin-bottom: 20px;  border-radius: 20px;">
+                    <div class="col-md-12" id="Weekly_Usage_CSY_Absolute_count" title="" style="margin-bottom: 20px;  border-radius: 20px;">
             <div style="background-color: #ffff;border-radius: 20px; box-shadow: rgb(0 0 0 / 10%) 2px 10px 20px;padding: 10px;">
                 <select id="percentageCountNew" class="drop-ui" style="margin-top: 7px;">
                     <option value="1" selected>Absolute Count</option>
@@ -682,7 +724,7 @@
                             style="height: 400px;margin-top:20px; width: 100%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;">
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="" title="">
                         <div id="chartdiv"
                             style=" border-radius: 20px;margin-top:20px;background-color: #fff;height: 400px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
                         </div>
@@ -694,7 +736,7 @@
                     </div>
                     <div class="welcome2">
                         <div class="container-fluid">
-                            <div id="School_Details" title="" class="col-md-12"
+                            <div class="col-md-12"
                                 style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
                                 <div class="row">
                                     <div id="admin" class="col-md-12 p-0">

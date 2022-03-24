@@ -23,7 +23,6 @@ $.ajax(settings).done(function(response) {
         document.getElementById("container36").title = dataa.Executive_Summary.CAP_SUMMARY[0].Top_District_Playback;
         document.getElementById("container37").title = dataa.Executive_Summary.CAP_SUMMARY[0].Sentiment_Percentage_CSY;
         document.getElementById("container38").title = dataa.Executive_Summary.CAP_SUMMARY[0].Feedback_Rating_CSY;
-        
     } else if (params == "Daily_Analytics") {
         document.getElementById("new_signups_daily").title = dataa.Executive_Summary.DAILY_ANALYTICS[0].New_Signups;
         document.getElementById("total_practice_daily").title = dataa.Executive_Summary.DAILY_ANALYTICS[0].Total_Playback;
@@ -102,27 +101,18 @@ $.ajax(settings).done(function(response) {
         document.getElementById("e_score_chart").title = dataa.Engagement_Dashboard.DISTRICT_ENGAGEMENT[0].e_score_chart;
        
     } else if (params == "Disctrictfilter") {
-        // document.getElementById("teachers_360").title = dataa.Engagement_Dashboard.DP_360[0].teachers_360;
-        // document.getElementById("practice_sessions_360").title = dataa.Engagement_Dashboard.DP_360[0].practice_sessions_360;
-        // document.getElementById("family_count_360").title = dataa.Engagement_Dashboard.DP_360[0].family_count_360;
-        // document.getElementById("mindful_minutes_360").title = dataa.Engagement_Dashboard.DP_360[0].mindful_minutes_360;
-        // document.getElementById("family_parctice_count_360").title = dataa.Engagement_Dashboard.DP_360[0].family_parctice_count_360;
-        // document.getElementById("user_practice_history_360").title = dataa.Engagement_Dashboard.DP_360[0].User_Playback_History;
-        // document.getElementById("practice_trend_by_month_360").title = dataa.Engagement_Dashboard.DP_360[0].Playback_Trend_By_Month;
-        // document.getElementById("top_20_school_user_count_360").title = dataa.Engagement_Dashboard.DP_360[0].Top_20_School_User_Count_;
-        //document.getElementById("top_20_school_practice_playback_count_360").title = dataa.Engagement_Dashboard.DP_360[0].top_20_school_practice_playback_count_360;
-        //document.getElementById("top_20_user_practice").title = dataa.Engagement_Dashboard.DP_360[0].top_20_user_practice;
-        document.getElementById("playback_count_360").title = dataa.Engagement_Dashboard.DP_360[0].playback_count_360;
+        // document.getElementById("playback_count_360").title = dataa.Engagement_Dashboard.DP_360[0].playback_count_360;
         document.getElementById("heat_map_360").title = dataa.Engagement_Dashboard.DP_360[0].Overall_Playback_Heat_Map;
         document.getElementById("schoolCard").title = dataa.Engagement_Dashboard.DP_360[0].School;
          document.getElementById("teacherCard").title = dataa.Engagement_Dashboard.DP_360[0].Teacher;    
         document.getElementById("familyCard").title = dataa.Engagement_Dashboard.DP_360[0].Family;
         document.getElementById("averageRatingCard").title = dataa.Engagement_Dashboard.DP_360[0].Average_Rating;
         document.getElementById("Top_20_Champion_in_CSY").title = dataa.Engagement_Dashboard.DP_360[0].Top_20_Champion_in_CSY;
+        document.getElementById("Top_20_School_User_Count_").title = dataa.Engagement_Dashboard.DP_360[0].Top_20_School_User_Count_;
         document.getElementById("Sentiment_Percentage").title = dataa.Engagement_Dashboard.DP_360[0].Sentiment_Percentage;
-        document.getElementById("Top_20_Champion_in_LSY").title = dataa.Engagement_Dashboard.DP_360[0].Top_20_Champion_in_LSY;
-        document.getElementById("User_Playback_History_360").title = dataa.Engagement_Dashboard.DP_360[0].User_Playback_History;
         document.getElementById("Playback_Trend_By_Month_360").title = dataa.Engagement_Dashboard.DP_360[0].Playback_Trend_By_Month;
+        document.getElementById("Top_20_Champion_LSY").title = dataa.Engagement_Dashboard.DP_360[0].Top_20_Champion_in_LSY;
+        document.getElementById("User_Playback_History_360").title = dataa.Engagement_Dashboard.DP_360[0].User_Playback_History;
     
         
         
@@ -150,26 +140,26 @@ $.ajax(settings).done(function(response) {
         document.getElementById("New_passcode_email_count").title = dataa.Engagement_Dashboard.LOGIN_ANALYTICS[0].NEW_PASSCODE_EMAIL_COUNT;
 
     } else if (params == "School_Search") {
-        document.getElementById("by_home").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].by_home;
-        document.getElementById("by_school").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].by_school;
-        document.getElementById("by_teacher").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].by_teacher;
+       
+       // document.getElementById("by_school").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].by_school;
+        // document.getElementById("by_teacher").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].by_teacher;
         document.getElementById("Activeuserscore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Active_User_Score_By_School;
         document.getElementById("CWPScore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].CWP_Score_By_School;
         document.getElementById("ReScore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Re_Score_By_School;
-        document.getElementById("EScore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Usage_Score_By_School //E_Score
+        document.getElementById("EScore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].E_Score_By_School //E_Score
         document.getElementById("Usage1").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Usage_Score_By_School_;
         document.getElementById("Playback_Trend_By_School").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Playback_Trend_By_School;
         document.getElementById("Active_User_Trend_By_School").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Active_User_Trend_By_School;
-        document.getElementById("Weekly_Usage_CSY_Absolute_count").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Weekly_Usage_CSY_Absolute_count;
-        document.getElementById("Weekly_Usage_CSY_Absolute_count").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Weekly_Usage_CSY_Percentage;
+         document.getElementById("Weekly_Usage_CSY_Absolute_count").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Weekly_Usage_CSY_Absolute_count;
+        // document.getElementById("Weekly_Usage_CSY_Absolute_count").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Weekly_Usage_CSY_Percentage;
         document.getElementById("Playback_History_BY_SCHOOL").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Playback_History_CSY;
         document.getElementById("Active_User_Count_by_Progrmams").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Active_User_Count_by_Progrmams;
         document.getElementById("Playback_Count_by_Programs").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Playback_Count_by_Programs;
         document.getElementById("Average_Audio_Completion_CSY").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Average_Audio_Completion_CSY;
-        document.getElementById("School_Details").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].SCHOOL_DETAILS;   
+        // document.getElementById("School_Details").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].SCHOOL_DETAILS;   
         document.getElementById("Total_Users_By_School").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Total_Users_By_School;   
         document.getElementById("Average_Rating_By_School").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Average_Rating_By_School;  
-        document.getElementById("Playback_Count_By_School").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Playback_Count_By_School;   
+        document.getElementById("Playback_Count_By_School").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Playback_Count_CSY_By_School;   
         document.getElementById("Playback_Counts_Lifetime").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Playback_Counts_Lifetime_CSY_By_School;   
         document.getElementById("Mindful_Minutes_CSY_By_School").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Mindful_Minutes_CSY_By_School;   
         document.getElementById("Mindful_Minuted_Lifetime").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Mindful_Minuted_Lifetime_By_School;   
@@ -191,7 +181,7 @@ $.ajax(settings).done(function(response) {
         document.getElementById("User_Playback_History_By_Teacher").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].User_Playback_History_By_Teacher;   
         document.getElementById("Average_Audio_Completion_CSY_By_Teacher").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Average_Audio_Completion_CSY_By_Teacher;   
         document.getElementById("Unique_Audio_Completion_CSY_By_Teacher").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Unique_Audio_Completion_CSY_By_Teacher;   
-
+        // document.getElementById("by_home").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].by_home;
 
     } else if (params == "School_Search_comparison") {
         document.getElementById("by_school_compare").title = dataa.Engagement_Dashboard.ENGAGEMENT_COMPARISON[0].by_school_compare;
