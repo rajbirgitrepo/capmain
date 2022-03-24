@@ -13,8 +13,6 @@ $.ajax(settings).done(function(response) {
     $('#totalsuccesslogins').text(dataa.totalsuccesslogins);
     $('#uniqueusertemp').text(dataa.unique_user_temp);
 
-
-
 });
 
 
