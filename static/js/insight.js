@@ -72,6 +72,10 @@ $.ajax(settings).done(function(response) {
         document.getElementById("Dayinlife_Avg_Feedback").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Avg._Feedback;
         document.getElementById("Dayinlife_Playback_Per_Min").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Playback_Per_Min;
         document.getElementById("Dayinlife_Playback_Per_Min_By_Program").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Playback_Per_Min_By_Program;
+        document.getElementById("Dayinlife_Playback_Per_Hour").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Playback_Per_Hour;
+        document.getElementById("Dayinlife_Feedback_Per_Hour").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Feedback_Per_Hour;
+        document.getElementById("Dayinlife_Realtime_Playback_Sessions_USA").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Realtime_Playback_Sessions_USA;
+        document.getElementById("Dayinlife_Sentiment_Percentage").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Sentiment_Percentage;
 
      }
     else {}
