@@ -141,8 +141,9 @@ $.ajax(settings).done(function(response) {
 
     } else if (params == "School_Search") {
        
-       // document.getElementById("by_school").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].by_school;
-        // document.getElementById("by_teacher").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].by_teacher;
+        document.getElementById("by_home").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Information_By_Home;
+        document.getElementById("by_school").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Information_By_School;
+        document.getElementById("by_teacher").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Information_By_Teacher;
         document.getElementById("Activeuserscore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Active_User_Score_By_School;
         document.getElementById("CWPScore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].CWP_Score_By_School;
         document.getElementById("ReScore").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Re_Score_By_School;
