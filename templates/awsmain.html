@@ -46,6 +46,64 @@
 
 
 <style>
+  .ui-tooltip,
+  .arrow:after {
+      background: #fafafa;
+      /* border: 2px solid white; */
+  }
+  
+  .ui-tooltip {
+      padding: 10px 20px;
+      color: black;
+      border-radius: 10px;
+      font: bold 14px "Helvetica Neue", Sans-Serif;
+      text-transform: capitalize;
+      box-shadow: 0 0 7px #fafafa;
+  }
+  
+  .arrow {
+      width: 70px;
+      height: 16px;
+      overflow: hidden;
+      position: absolute;
+      left: 50%;
+      margin-left: -35px;
+      bottom: -16px;
+  }
+  
+  .arrow.top {
+      top: -16px;
+      bottom: auto;
+  }
+  
+  .arrow.left {
+      left: 20%;
+  }
+  
+  .arrow:after {
+      content: "";
+      position: absolute;
+      left: 20px;
+      top: -20px;
+      width: 25px;
+      height: 25px;
+      box-shadow: 6px 5px 9px -9px black;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+  }
+  
+  .arrow.top:after {
+      bottom: -20px;
+      top: auto;
+  }
+  
+  
+  .popover,
+  .tooltip:hover {
+      color: #000 !important;
+      text-transform: capitalize !important;
+  }
     .section-2 {
         width: 100%;
         float: left;
@@ -336,11 +394,11 @@
 
 
 
-        <div class="col-md-10" style="margin-top: 10px;" title="" id="aws_vs_playback">
+        <div class="col-md-10" style="margin-top: 10px;"  id="aws_vs_playback" title="">
             <div id="container99" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
         </div>
 
-        <div class="col-md-10" style="margin-top: 40px;" title="" id="aws_cost_vs_user_growth">
+        <div class="col-md-10" style="margin-top: 40px;"  id="aws_cost_vs_user_growth" title="">
             <div id="container4" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
         </div>
         <!-- <div class="col-md-10" style="margin-top: 40px;">            
@@ -482,15 +540,15 @@
   </div> -->
     <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
     <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
-    <script src="{{ url_for('static',filename='js/search.js') }}"></script>
+    <!-- <script src="{{ url_for('static',filename='js/search.js') }}"></script> -->
     <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
     <script src='https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js'></script>
     <script src="{{ url_for('static',filename='js/aws1.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
     <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
     <!-- partial -->
 
 
