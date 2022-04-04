@@ -75054,16 +75054,22 @@ def mini_heat_district(LOCAl_DISTRICT,startdate,enddate):
                      {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
-                        {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-    "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
-
                     {'schoolId._id':{'$ne':None}},
                      {'EMAIL_ID':{'$ne':''}},
                      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                  {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+                                             
+                  {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                                                                
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
@@ -75169,16 +75175,21 @@ def mini_heat_district_family(LOCAl_DISTRICT,startdate,enddate):
                      {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
-                        {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-    "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
-
                     {'schoolId._id':{'$ne':None}},
                      {'EMAIL_ID':{'$ne':''}},
                      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                  {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+                  {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                                                                                                                   
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
@@ -75408,15 +75419,23 @@ def mini_districtuser_practice_90days(LOCAl_DISTRICT,startdate,enddate):
                      {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-    "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
-
                     {'schoolId._id':{'$ne':None}},
                      {'EMAIL_ID':{'$ne':''}},
                      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                  {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+                                                     
+              {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                       
+                                                           
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
@@ -75629,15 +75648,22 @@ def mini_districtmonthwisepc(LOCAl_DISTRICT,startdate,enddate):
                      {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-    "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
-
                     {'schoolId._id':{'$ne':None}},
                      {'EMAIL_ID':{'$ne':''}},
                      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                  {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+                  {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                                         
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
@@ -75874,13 +75900,22 @@ def mini_districtschwiseucc(LOCAl_DISTRICT,startdate,enddate):
                 {'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 {'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
                  {'EMAIL_ID':{'$ne':''}},
-                {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
-               'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}
-               })}},
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+    
+          {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                       
+                  
+    
             {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$_id'},'NAME':{'$first':'$schoolId.NAME'},'district':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
                   {'$project':{'_id':1,'user_count':{'$size':'$ID'},'name':'$NAME','district':'$district'}},
                    { '$sort' : { 'user_count' : -1}},
@@ -76074,15 +76109,23 @@ def mini_district_topusers_practice(LOCAl_DISTRICT,startdate,enddate):
                      {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-    "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
-
                     {'schoolId._id':{'$ne':None}},
                      {'EMAIL_ID':{'$ne':''}},
                      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                  {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+                                                  
+                  {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                       
+                                                    
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
@@ -76188,9 +76231,6 @@ def mini_district_dis_sentiment_pie(LOCAl_DISTRICT,startdate,enddate):
              {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                 {'EMAIL_ID':{'$ne':''}},
-                {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
-                                                                         'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}
-                                                                         })}},
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
          { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -76199,6 +76239,17 @@ def mini_district_dis_sentiment_pie(LOCAl_DISTRICT,startdate,enddate):
             ]
 
          }},
+        
+          {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                       
+                  
         {'$project':{'_id':'$_id','school':'$schoolId._id' }}
         ])))
 
@@ -76548,17 +76599,23 @@ def mini_district_heat_district_family_prac(LOCAl_DISTRICT,startdate,enddate):
                       {"IS_BLOCKED":{"$ne":"Y"}},
                      {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                    { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
-                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
-                                                                             'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}
-                                                                             })}},
+                    { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},                  
                     {'schoolId._id':{'$ne':None}},
                      {'EMAIL_ID':{'$ne':''}},
                      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                  {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+               {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                       
+                                                  
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
@@ -76673,16 +76730,23 @@ def mini_district_heat_district_classroom_prac(LOCAl_DISTRICT,startdate,enddate)
                      {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
-                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
-                                                                             'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}
-                                                                             })}},
                     {'schoolId._id':{'$ne':None}},
                      {'EMAIL_ID':{'$ne':''}},
                      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                  {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+                                             
+                     {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                       
+                                            
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
@@ -76796,16 +76860,23 @@ def mini_district_heat_district_Overall_prac(LOCAl_DISTRICT,startdate,enddate):
                      {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
-                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
-                                                                             'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}
-                                                                             })}},
                     {'schoolId._id':{'$ne':None}},
                      {'EMAIL_ID':{'$ne':''}},
                      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                  {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+                                             
+                 {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                       
+                                                
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
