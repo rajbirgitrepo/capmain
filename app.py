@@ -18759,8 +18759,6 @@ def feeddailycardsdayofweek():
         #     print(temp)
     return json.dumps(temp)
 
-    # just checking 
-
 
 
 
@@ -75287,16 +75285,21 @@ def mini_heat_district_classroom(LOCAl_DISTRICT,startdate,enddate):
                      {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
-                        {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-    "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
-
                     {'schoolId._id':{'$ne':None}},
                      {'EMAIL_ID':{'$ne':''}},
                      {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                  {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                                  {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+                  {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                                                                      
 
                 {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'}}},
                       {'$project':{'_id':1,'name':'$ID'}},
@@ -76156,6 +76159,7 @@ def mini_district_topusers_practice(LOCAl_DISTRICT,startdate,enddate):
     return json.dumps(data)
 
 # Sentiment analysis
+
 @app.route('/mini_district_districtsentimentdonut_csy/<LOCAl_DISTRICT>/<startdate>/<enddate>')
 def mini_district_dis_sentiment_pie(LOCAl_DISTRICT,startdate,enddate):
     clean_list=[]
