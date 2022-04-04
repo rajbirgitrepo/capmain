@@ -23081,7 +23081,8 @@ def practice___history___new___latest(charttype):
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
 
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
                 {"MODIFIED_DATE":{"$gte": myDatetime2
         #                                      ,"$lte" : myDatetime4
                                     }},
@@ -23113,7 +23114,8 @@ def practice___history___new___latest(charttype):
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
 
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
                 {"MODIFIED_DATE":{"$gte": myDatetime2
         #                                      ,"$lte" : myDatetime4
                                     }},
@@ -23146,6 +23148,7 @@ def practice___history___new___latest(charttype):
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
                              { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                        {"USER_ID._id":{"$nin":db.canvas_user_master.distinct( "USER_ID._id")}},
                             {"MODIFIED_DATE":{"$gte": myDatetime2
             #                                      ,"$lte" : myDatetime4
                                             }},
@@ -23178,6 +23181,7 @@ def practice___history___new___latest(charttype):
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
                              { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
                            {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                        {"USER_ID._id":{"$nin":db.canvas_user_master.distinct( "USER_ID._id")}},
                             {"MODIFIED_DATE":{"$gte": myDatetime2
             #                                      ,"$lte" : myDatetime4
                                             }},
@@ -23198,6 +23202,41 @@ def practice___history___new___latest(charttype):
             {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
                         'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
             {"$sort":{'Practice_date':1}}])))
+        
+        
+        
+        
+        canvas = DataFrame(list(collection2.aggregate([{"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                        { "USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},
+                           { "USER_ID._id":{"$nin":db.clever_master.distinct( "USER_ID._id")}},
+                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                            {"MODIFIED_DATE":{"$gte": myDatetime2
+            #                                      ,"$lte" : myDatetime4
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+                ]}},
+        practice_cond_dictonary_list[0],
+                    practice_cond_dictonary_list[1],
+                     threshcond[0],
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+        
+        
+        
 
         df3 = DataFrame(list(collection2.aggregate([{"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
                             {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -23269,6 +23308,19 @@ def practice___history___new___latest(charttype):
             clever=pd.DataFrame(dates,columns = ["Practice_date"])
             clever['Parents_Practice_CSY'] = 0
             df6c=clever.sort_values(by='Practice_date')
+            
+            
+        #canvas csy
+        if 'Practice_date' in list(canvas.columns):
+
+            canvas['Practice_date'] = pd.to_datetime(canvas['Practice_date'])
+            df6can=canvas.sort_values(by='Practice_date')
+        else:
+
+            dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+            canvas=pd.DataFrame(dates,columns = ["Practice_date"])
+            canvas['Parents_Practice_CSY'] = 0
+            df6can=canvas.sort_values(by='Practice_date')
 
 
 
@@ -23306,8 +23358,13 @@ def practice___history___new___latest(charttype):
 
         ccsy1['Practice_date']=ccsy1['Practice_date'].astype(np.int64)/int(1e6)
         ccsy=ccsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+        
+        ####canvas
+        cancsy1= df6can.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
 
 
+        cancsy1['Practice_date']=cancsy1['Practice_date'].astype(np.int64)/int(1e6)
+        cancsy=cancsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
 
 
         ####schoology
@@ -23335,12 +23392,14 @@ def practice___history___new___latest(charttype):
         plcy_lsy=plcy111[["Practice_date","Total_Practice_LSY"]].values.tolist()
 
 
-        temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'lsy_to_lsy':plcy_lsy,'clever':ccsy,'schoology':scsy}}
+        temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'lsy_to_lsy':plcy_lsy,'clever':ccsy,'schoology':scsy, 'canvas': cancsy}}
         return json.dumps(temp)
 
     else:
-            ######################  USER PRACTICE 2019-2020(LSY) ############################################
-        df1 = DataFrame(list(collection2.aggregate([{"$match":
+                        ######################  USER PRACTICE 2019-2020(LSY) ############################################
+        
+        df1 = DataFrame(list(collection2.aggregate([
+            {"$match":
             {"$and" :[
                 {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
@@ -23348,9 +23407,10 @@ def practice___history___new___latest(charttype):
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
 
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
                 {"MODIFIED_DATE":{"$gte": myDatetime2
-    #                                      ,"$lte" : myDatetime4
+        #                                      ,"$lte" : myDatetime4
                                     }},
                 {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
 
@@ -23360,14 +23420,18 @@ def practice___history___new___latest(charttype):
                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
                     {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
-                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
-                                'month':{'$month':'$MODIFIED_DATE'}},
-                        'date':{'$first':'$MODIFIED_DATE'}, 
-                        'Users_Practice_CSY':{'$sum':1}}},
-                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
-                            'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
-                {"$sort":{'Practice_date':1}}])))
-        ##################### PARENTS ##########################################
+#         practice_cond_dictonary_list[0],
+#                     practice_cond_dictonary_list[1],
+#                      threshcond[0],
+
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Users_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+
         df2 = DataFrame(list(collection2.aggregate([{"$match":
             {"$and" :[
                 {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
@@ -23376,9 +23440,10 @@ def practice___history___new___latest(charttype):
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
 
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
                 {"MODIFIED_DATE":{"$gte": myDatetime2
-    #                                      ,"$lte" : myDatetime4
+        #                                      ,"$lte" : myDatetime4
                                     }},
                 {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
 
@@ -23389,20 +23454,20 @@ def practice___history___new___latest(charttype):
                     {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
                     {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}},                
             ]}},
+#                                                 practice_cond_dictonary_list[0],
+#                             practice_cond_dictonary_list[1],
+#                              threshcond[0],
+
                 {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
-                                'month':{'$month':'$MODIFIED_DATE'}},
-                        'date':{'$first':'$MODIFIED_DATE'}, 
-                        'Parents_Practice_CSY':{'$sum':1}}},
-                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
-                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
-                {"$sort":{'Practice_date':1}}])))
+                                    'month':{'$month':'$MODIFIED_DATE'}},
+                            'date':{'$first':'$MODIFIED_DATE'}, 
+                            'Parents_Practice_CSY':{'$sum':1}}},
+                    {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                                'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                    {"$sort":{'Practice_date':1}}])))
 
-
-
-
-        ########schoology################################
-
-        schoology = DataFrame(list(collection2.aggregate([{"$match":
+        schoology = DataFrame(list(collection2.aggregate([
+                    {"$match":
                     {"$and" :[
                         {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
@@ -23419,15 +23484,21 @@ def practice___history___new___latest(charttype):
                             {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
 
                 ]}},
-                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
-                                'month':{'$month':'$MODIFIED_DATE'}},
-                        'date':{'$first':'$MODIFIED_DATE'}, 
-                        'Parents_Practice_CSY':{'$sum':1}}},
-                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
-                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
-                {"$sort":{'Practice_date':1}}])))
-        #     print(schoology,"schoology")
-        ########clever################################
+
+#         practice_cond_dictonary_list[0],
+#                             practice_cond_dictonary_list[1],
+#                              threshcond[0],
+
+                    {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                    'month':{'$month':'$MODIFIED_DATE'}},
+                            'date':{'$first':'$MODIFIED_DATE'}, 
+                            'Parents_Practice_CSY':{'$sum':1}}},
+                    {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                                'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                    {"$sort":{'Practice_date':1}}])))
+            #     print(schoology,"schoology")
+                                      ########clever################################
+
         clever = DataFrame(list(collection2.aggregate([{"$match":
                     {"$and" :[
                         {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
@@ -23445,29 +23516,72 @@ def practice___history___new___latest(charttype):
                             {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
 
                 ]}},
-                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
-                                'month':{'$month':'$MODIFIED_DATE'}},
-                        'date':{'$first':'$MODIFIED_DATE'}, 
-                        'Parents_Practice_CSY':{'$sum':1}}},
-                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
-                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
-                {"$sort":{'Practice_date':1}}])))
+#         practice_cond_dictonary_list[0],
+#                     practice_cond_dictonary_list[1],
+#                      threshcond[0],
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+        
+        
+        
+        
+        canvas = DataFrame(list(collection2.aggregate([{"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                        { "USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},
+                           { "USER_ID._id":{"$nin":db.clever_master.distinct( "USER_ID._id")}},
+                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                            {"MODIFIED_DATE":{"$gte": myDatetime2
+            #                                      ,"$lte" : myDatetime4
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
 
+                ]}},
+#         practice_cond_dictonary_list[0],
+#                     practice_cond_dictonary_list[1],
+#                      threshcond[0],
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+        
+        
+        
 
-        ###################### TOTAL LSY ##############################
         df3 = DataFrame(list(collection2.aggregate([{"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
-                        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
-                       {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
-                        {'MODIFIED_DATE':{"$gte":myDatetime,"$lt": myDatetime1}}]}},
-                {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
-                                'month':{'$month':'$MODIFIED_DATE'}},
-                            'date':{'$first':'$MODIFIED_DATE'}, 
-                            'Total_Practice_CSY':{'$sum':1}}},
-                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
-                            'Total_Practice_LSY':'$Total_Practice_CSY'}}, 
-                {"$sort":{'Practice_date':1}}])))
+                            {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'MODIFIED_DATE':{"$gte":myDatetime,"$lt": myDatetime1}}]}},
+#                         practice_cond_dictonary_list[0],
+#                             practice_cond_dictonary_list[1],
+#                              threshcond[0],
+                    {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                                    'month':{'$month':'$MODIFIED_DATE'}},
+                                'date':{'$first':'$MODIFIED_DATE'}, 
+                                'Total_Practice_CSY':{'$sum':1}}},
+                    {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                                'Total_Practice_LSY':'$Total_Practice_CSY'}}, 
+                    {"$sort":{'Practice_date':1}}])))
+
+
+
+
 
 
         df_last_to_lsy = DataFrame(list(collection2.aggregate([{"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
@@ -23476,7 +23590,9 @@ def practice___history___new___latest(charttype):
                             {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
                               {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                             {'MODIFIED_DATE':{"$gte":myDatetime-relativedelta(years=1),"$lt": myDatetime}}]}},
-
+#                         practice_cond_dictonary_list[0],
+#                             practice_cond_dictonary_list[1],
+#                              threshcond[0],
                     {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
                                     'month':{'$month':'$MODIFIED_DATE'}},
                                 'date':{'$first':'$MODIFIED_DATE'}, 
@@ -23484,6 +23600,10 @@ def practice___history___new___latest(charttype):
                     {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
                                 'Total_Practice_LSY':'$Total_Practice_CSY'}}, 
                     {"$sort":{'Practice_date':1}}])))
+
+
+
+
 
 
         #user_CSY
@@ -23503,22 +23623,39 @@ def practice___history___new___latest(charttype):
 
         #clever csy
         if 'Practice_date' in list(clever.columns):
+
             clever['Practice_date'] = pd.to_datetime(clever['Practice_date'])
             df6c=clever.sort_values(by='Practice_date')
         else:
+
             dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
             clever=pd.DataFrame(dates,columns = ["Practice_date"])
             clever['Parents_Practice_CSY'] = 0
             df6c=clever.sort_values(by='Practice_date')
+            
+            
+        #canvas csy
+        if 'Practice_date' in list(canvas.columns):
+
+            canvas['Practice_date'] = pd.to_datetime(canvas['Practice_date'])
+            df6can=canvas.sort_values(by='Practice_date')
+        else:
+
+            dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+            canvas=pd.DataFrame(dates,columns = ["Practice_date"])
+            canvas['Parents_Practice_CSY'] = 0
+            df6can=canvas.sort_values(by='Practice_date')
 
 
 
         #schoology csy
 
         if 'Practice_date' in list(schoology.columns):
+
             schoology['Practice_date'] = pd.to_datetime(schoology['Practice_date'])
             df6s=schoology.sort_values(by='Practice_date')
         else:
+
             dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
             schoology=pd.DataFrame(dates,columns = ["Practice_date"])
             schoology['Parents_Practice_CSY'] = 0
@@ -23545,8 +23682,13 @@ def practice___history___new___latest(charttype):
 
         ccsy1['Practice_date']=ccsy1['Practice_date'].astype(np.int64)/int(1e6)
         ccsy=ccsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+        
+        ####canvas
+        cancsy1= df6can.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
 
 
+        cancsy1['Practice_date']=cancsy1['Practice_date'].astype(np.int64)/int(1e6)
+        cancsy=cancsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
 
 
         ####schoology
@@ -23564,7 +23706,6 @@ def practice___history___new___latest(charttype):
         plcy=plcy1[["Practice_date","Total_Practice_LSY"]].values.tolist()
 
         #practice_Lsy_to_Lsy
-
         df_last_to_lsy['Practice_date'] = pd.to_datetime(df_last_to_lsy['Practice_date'])
         df44=df_last_to_lsy.sort_values(by='Practice_date')
         dfk=pd.date_range(start=str(myDatetime-relativedelta(years=1)), end=str(myDatetime-relativedelta(days=1)))
@@ -23574,8 +23715,8 @@ def practice___history___new___latest(charttype):
         plcy111['Practice_date']=plcy111['Practice_date'].astype(np.int64)/int(1e6)
         plcy_lsy=plcy111[["Practice_date","Total_Practice_LSY"]].values.tolist()
 
-        temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'lsy_to_lsy':plcy_lsy,'clever':ccsy,'schoology':scsy}}
 
+        temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'lsy_to_lsy':plcy_lsy,'clever':ccsy,'schoology':scsy, 'canvas': cancsy}}
         return json.dumps(temp)
 
 
@@ -26598,7 +26739,6 @@ def practice_trendnew():
 #<<<<<----------------PRACTICE AND PLAYBACK BIFURCATION API------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 @app.route('/practicetrendnew/<charttype>')
-# def practice_percentage_trend(threshold):
 def practice_trendnew_(charttype):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -26638,6 +26778,7 @@ def practice_trendnew_(charttype):
            {'$project':{'_id':1,'TOTAL_LSYTOLSY':'$pc'}}])))
         df0.rename(columns = { '_id': 'Month'}, inplace = True)
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        print(df0)
         df0['Month'] = df0['Month'].map(d)
 
 
@@ -26672,6 +26813,9 @@ def practice_trendnew_(charttype):
          '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+
 #                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
 #                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -26774,12 +26918,50 @@ def practice_trendnew_(charttype):
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
         dfclever['Month'] = dfclever['Month'].map(d)
         dfclever=dfclever.fillna(0)
+        
+        dfcanvas = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+               { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+            practice_cond_dictonary_list[0],
+            practice_cond_dictonary_list[1],
+             threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'canvas_CSY':'$pc'}}])))
+        if dfcanvas.empty == True:
+            dfcanvas=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'canvas_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfcanvas
+        dfcanvas.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfcanvas['Month'] = dfcanvas['Month'].map(d)
+        dfcanvas=dfcanvas.fillna(0)
 
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
 #                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
 #                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -26813,6 +26995,7 @@ def practice_trendnew_(charttype):
         practice_LSY= pd.merge(practice_LSY_lsy, df2,on='Month', how='left')
         practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfcanvas, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
         mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
@@ -26827,7 +27010,8 @@ def practice_trendnew_(charttype):
         parents_CSY=data['parents_CSY'].tolist()
         schoology_CSY=data['schoology_CSY'].tolist()
         clever_CSY=data['clever_CSY'].tolist()
-        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+        canvas_CSY=data['canvas_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY}]
 
         return json.dumps(temp)
     
@@ -26844,17 +27028,22 @@ def practice_trendnew_(charttype):
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": LSYTOLSY_Date(),
                                             "$lt":LSY_Date()}}]}},
+#             practice_cond_dictonary_list[0],
+#             practice_cond_dictonary_list[1],
+#             threshcond[0],      
+
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
            {'$project':{'_id':1,'TOTAL_LSYTOLSY':'$pc'}}])))
         df0.rename(columns = { '_id': 'Month'}, inplace = True)
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        print(df0)
         df0['Month'] = df0['Month'].map(d)
-        
+
+
         df1 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[
@@ -26867,11 +27056,14 @@ def practice_trendnew_(charttype):
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": LSY_Date(),
                                             "$lt":csy_first_date()}}]}},
+#             practice_cond_dictonary_list[0],
+#             practice_cond_dictonary_list[1],
+#              threshcond[0],      
+
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
            {'$project':{'_id':1,'TOTAL_LSY':'$pc'}}])))
         df1.rename(columns = { '_id': 'Month'}, inplace = True)
@@ -26882,14 +27074,17 @@ def practice_trendnew_(charttype):
             {"$match":{
          '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
-         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+
 #                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
 #                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                           { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -26898,6 +27093,9 @@ def practice_trendnew_(charttype):
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
     #                                         "$lt":datetime.datetime(2021,8,1)
                              }}]}},
+#             practice_cond_dictonary_list[0],
+#             practice_cond_dictonary_list[1],
+#              threshcond[0],
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
            {'$project':{'_id':1,'teacher_CSY':'$pc'}}])))
         if df2.empty == True:
@@ -26915,15 +27113,15 @@ def practice_trendnew_(charttype):
             {"$match":{
          '$and':[
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
-         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
 #                 {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
 #                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                              { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -26932,6 +27130,9 @@ def practice_trendnew_(charttype):
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
     #                                         "$lt":datetime.datetime(2021,8,1)
                              }}]}},
+#             practice_cond_dictonary_list[0],
+#             practice_cond_dictonary_list[1],
+#              threshcond[0],
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
            {'$project':{'_id':1,'schoology_CSY':'$pc'}}])))
 
@@ -26949,23 +27150,26 @@ def practice_trendnew_(charttype):
             {"$match":{
          '$and':[
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
-         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
 #                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
 #                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+             {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+               { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
     #                                         "$lt":datetime.datetime(2021,8,1)
                              }}]}},
+#             practice_cond_dictonary_list[0],
+#             practice_cond_dictonary_list[1],
+#              threshcond[0],
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
            {'$project':{'_id':1,'clever_CSY':'$pc'}}])))
         if dfclever.empty == True:
@@ -26976,28 +27180,69 @@ def practice_trendnew_(charttype):
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
         dfclever['Month'] = dfclever['Month'].map(d)
         dfclever=dfclever.fillna(0)
+        
+        dfcanvas = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+#                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+               { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+#             practice_cond_dictonary_list[0],
+#             practice_cond_dictonary_list[1],
+#              threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'canvas_CSY':'$pc'}}])))
+        if dfcanvas.empty == True:
+            dfcanvas=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'canvas_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfcanvas
+        dfcanvas.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfcanvas['Month'] = dfcanvas['Month'].map(d)
+        dfcanvas=dfcanvas.fillna(0)
 
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
 #                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
 #                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                              { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
-                 {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
                   {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                   {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
                   {"USER_ID.CREATED_DATE":{"$gte": datetime(2020,3,17)}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
     #                                         "$lt":datetime.datetime(2021,8,1)
                              }}]}},
+#             practice_cond_dictonary_list[0],
+#             practice_cond_dictonary_list[1],
+#              threshcond[0],
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
            {'$project':{'_id':1,'parents_CSY':'$pc'}}])))
         if df4.empty == True:
@@ -27012,6 +27257,7 @@ def practice_trendnew_(charttype):
         practice_LSY= pd.merge(practice_LSY_lsy, df2,on='Month', how='left')
         practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfcanvas, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
         mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
@@ -27020,15 +27266,18 @@ def practice_trendnew_(charttype):
 
         data=pd.merge(mon,practice_CSY,on='Month',how='left')
         Month=data['Month'].tolist()
-        TOTAL_LSY=data['TOTAL_LSY'].tolist()
         TOTAL_LSYTOLSY=data['TOTAL_LSYTOLSY'].tolist()
+        TOTAL_LSY=data['TOTAL_LSY'].tolist()
         teacher_CSY=data['teacher_CSY'].tolist()
         parents_CSY=data['parents_CSY'].tolist()
         schoology_CSY=data['schoology_CSY'].tolist()
         clever_CSY=data['clever_CSY'].tolist()
-        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+        canvas_CSY=data['canvas_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY}]
 
         return json.dumps(temp)
+       
+#<<<<<<<<<<<<<<<<--------------API Ending here--------------------------->>>>>>>>>>>>>>>>>>
 #<<<<<<<<<<<<<<<<--------------API Ending here--------------------------->>>>>>>>>>>>>>>>>>
 
 
@@ -27322,6 +27571,8 @@ def active_trend_new_(charttype):
              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
@@ -27360,6 +27611,8 @@ def active_trend_new_(charttype):
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
@@ -27396,6 +27649,7 @@ def active_trend_new_(charttype):
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
@@ -27423,12 +27677,50 @@ def active_trend_new_(charttype):
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
         dfclever['Month'] = dfclever['Month'].map(d)
         dfclever=dfclever.fillna(0)
+        
+        
+        dfcanvas = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$in":db.canvas_user_master.distinct("USER_ID._id")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+#                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$project':{'_id':1,'canvas_CSY':{'$size':'$auc'}}}])))
+        if dfcanvas.empty == True:
+            dfcanvas=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'canvas_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfcanvas
+        dfcanvas.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfcanvas['Month'] = dfcanvas['Month'].map(d)
+        dfcanvas=dfcanvas.fillna(0)
+        
 
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-               {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -27460,6 +27752,7 @@ def active_trend_new_(charttype):
         practice_LSY= pd.merge(practice_LSY_lsy, df2,on='Month', how='left')
         practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfcanvas, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
         mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
@@ -27474,12 +27767,12 @@ def active_trend_new_(charttype):
         parents_CSY=data['parents_CSY'].tolist()
         schoology_CSY=data['schoology_CSY'].tolist()
         clever_CSY=data['clever_CSY'].tolist()
-        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+        canvas_CSY=data['canvas_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY}]
 
         return json.dumps(temp)
     
     else:
-       
         df0 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[
@@ -27488,17 +27781,25 @@ def active_trend_new_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+              { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+#                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-            {"MODIFIED_DATE":{"$gte": LSYTOLSY_Date(),
+             {"MODIFIED_DATE":{"$gte": LSYTOLSY_Date(),
                                             "$lt":LSY_Date()}}]}},
+#             practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
            {'$project':{'_id':1,'TOTAL_LSYTOLSY':{'$size':'$auc'}}}])))
+#         print(df0)
         df0.rename(columns = { '_id': 'Month'}, inplace = True)
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
-        df0['Month'] = df0['Month'].map(d) 
-        
-        
+        df0['Month'] = df0['Month'].map(d)
+         
         df1 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[
@@ -27507,10 +27808,18 @@ def active_trend_new_(charttype):
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
          { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+              { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+#                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": LSY_Date(),
                                             "$lt":csy_first_date()}}]}},
+#             practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
            {'$project':{'_id':1,'TOTAL_LSY':{'$size':'$auc'}}}])))
         df1.rename(columns = { '_id': 'Month'}, inplace = True)
@@ -27521,9 +27830,12 @@ def active_trend_new_(charttype):
         # print(df1)
         df2 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':[
+             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
@@ -27538,6 +27850,9 @@ def active_trend_new_(charttype):
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
     #                                         "$lt":datetime.datetime(2021,8,1)
                              }}]}},
+#             practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
            {'$project':{'_id':1,'teacher_CSY':{'$size':'$auc'}}}])))
         if df2.empty == True:
@@ -27559,6 +27874,8 @@ def active_trend_new_(charttype):
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
@@ -27573,7 +27890,10 @@ def active_trend_new_(charttype):
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
     #                                         "$lt":datetime.datetime(2021,8,1)
                              }}]}},
-           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+#             practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
            {'$project':{'_id':1,'schoology_CSY':{'$size':'$auc'}}}])))
 
         if dfschoology.empty == True:
@@ -27592,20 +27912,24 @@ def active_trend_new_(charttype):
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
          {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},    
-         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
                   { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
               {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
 #                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
     #                                         "$lt":datetime.datetime(2021,8,1)
                              }}]}},
+#             practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
            {'$project':{'_id':1,'clever_CSY':{'$size':'$auc'}}}])))
         if dfclever.empty == True:
@@ -27616,12 +27940,50 @@ def active_trend_new_(charttype):
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
         dfclever['Month'] = dfclever['Month'].map(d)
         dfclever=dfclever.fillna(0)
+        
+        
+        dfcanvas = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$in":db.canvas_user_master.distinct("USER_ID._id")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}}, 
+                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+#                  {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"MODIFIED_DATE":{"$gte": csy_first_date(),
+    #                                         "$lt":datetime.datetime(2021,8,1)
+                             }}]}},
+#             practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$project':{'_id':1,'canvas_CSY':{'$size':'$auc'}}}])))
+        if dfcanvas.empty == True:
+            dfcanvas=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'canvas_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfcanvas
+        dfcanvas.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfcanvas['Month'] = dfcanvas['Month'].map(d)
+        dfcanvas=dfcanvas.fillna(0)
+        
 
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-               {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
                  { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -27636,6 +27998,9 @@ def active_trend_new_(charttype):
             {"MODIFIED_DATE":{"$gte": csy_first_date(),
     #                                         "$lt":datetime.datetime(2021,8,1)
                              }}]}},
+#             practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
            {'$project':{'_id':1,'parents_CSY':{'$size':'$auc'}}}])))
         if df4.empty == True:
@@ -27650,6 +28015,7 @@ def active_trend_new_(charttype):
         practice_LSY= pd.merge(practice_LSY_lsy, df2,on='Month', how='left')
         practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfcanvas, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
         mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
@@ -27664,10 +28030,10 @@ def active_trend_new_(charttype):
         parents_CSY=data['parents_CSY'].tolist()
         schoology_CSY=data['schoology_CSY'].tolist()
         clever_CSY=data['clever_CSY'].tolist()
-        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+        canvas_CSY=data['canvas_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY}]
 
         return json.dumps(temp)
-
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>END
     
 
@@ -63270,6 +63636,7 @@ def weekly__compare__chart__(datestr,charttype):
                 {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
 
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -63302,7 +63669,8 @@ def weekly__compare__chart__(datestr,charttype):
     #         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
                    {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},        
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},  
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -63327,7 +63695,8 @@ def weekly__compare__chart__(datestr,charttype):
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}}, 
+        {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -63353,7 +63722,8 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},       
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},  
+             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -63381,7 +63751,8 @@ def weekly__compare__chart__(datestr,charttype):
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
 #         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
          {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-         {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+         {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -63407,7 +63778,8 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
 #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}}, 
+             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -63433,7 +63805,8 @@ def weekly__compare__chart__(datestr,charttype):
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
 #         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
          {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-         {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},      
+         {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},  
+        {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -63448,7 +63821,7 @@ def weekly__compare__chart__(datestr,charttype):
          ]
         list7= list(collection1.aggregate(qr7))
         df_atm7= DataFrame(list7)
-        df_atm7
+        print(df_atm7)
         LAST_WEEK_PRACTICE_clever=df_atm7[['_id','LAST_WEEK_PRACTICE_clever']]
         qr8=[{"$match":{
             '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -63459,7 +63832,8 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
 #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},         
+             {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}}, 
+             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -63475,6 +63849,76 @@ def weekly__compare__chart__(datestr,charttype):
         df_atm8= DataFrame(list8)
         LAST_TO_LAST_WEEK_PRACTICE_clever=df_atm8[['_id','LAST_TO_LAST_WEEK_PRACTICE_clever']]
         join_final4= pd.merge(LAST_WEEK_PRACTICE_clever, LAST_TO_LAST_WEEK_PRACTICE_clever, on='_id', how='left') 
+        
+        
+        
+        
+        
+        # ========================================= CANVAS
+        qr77=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+#         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+         {"USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},  
+        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_canvas':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list77= list(collection1.aggregate(qr77))
+        df_atm77= DataFrame(list77)
+        if df_atm77.empty == True:
+            df_atm77 = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_WEEK_PRACTICE_canvas':0})
+            
+        LAST_WEEK_PRACTICE_canvas=df_atm77[['_id','LAST_WEEK_PRACTICE_canvas']]
+        
+        qr88=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+#             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}, 
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_canvas':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list88= list(collection1.aggregate(qr88))
+        df_atm88= DataFrame(list88)
+        if df_atm88.empty == True:
+            df_atm88 = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_TO_LAST_WEEK_PRACTICE_canvas':0})
+        LAST_TO_LAST_WEEK_PRACTICE_canvas=df_atm88[['_id','LAST_TO_LAST_WEEK_PRACTICE_canvas']]
+        join_final44= pd.merge(LAST_WEEK_PRACTICE_canvas, LAST_TO_LAST_WEEK_PRACTICE_canvas, on='_id', how='left') 
+        
+        
+        
+        
+    
+        
+        
 
         days=pd.DataFrame({'_id':[1,2,3,4,5,6,7],'day':['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']})
 
@@ -63482,6 +63926,7 @@ def weekly__compare__chart__(datestr,charttype):
         df2=pd.merge(df1,join_final2, on='_id',how='left')
         df3=pd.merge(df2,join_final3, on='_id',how='left')
         df4=pd.merge(df3,join_final4, on='_id',how='left').fillna(0)
+        df4=pd.merge(df4,join_final44, on='_id',how='left').fillna(0)
         df4=df4.astype(int, errors='ignore')
         df4.columns
         lists=[]
@@ -63498,7 +63943,9 @@ def weekly__compare__chart__(datestr,charttype):
         'count_last_week_schoology':lists[6],
         'count_last_to_last_week_schoology':lists[7],
         'count_last_week_clever':lists[8],
-        'count_last_to_last_week_clever':lists[9]}
+        'count_last_to_last_week_clever':lists[9],
+        'count_last_week_canvas':lists[10],
+        'count_last_to_last_week_canvas':lists[11]}
         temp={'weekdata':weekdata}
         return json.dumps(temp)
     else:
@@ -63508,6 +63955,7 @@ def weekly__compare__chart__(datestr,charttype):
                 {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
 
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -63519,6 +63967,9 @@ def weekly__compare__chart__(datestr,charttype):
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
         }},
         ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_parents':{'$sum':1}
         }}, {'$sort':{'_id':1}}
@@ -63528,7 +63979,8 @@ def weekly__compare__chart__(datestr,charttype):
         df_atm
         LAST_WEEK_PRACTICE_parents=df_atm[['_id','LAST_WEEK_PRACTICE_parents']]
         qr2=[{"$match":{
-            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            '$and':[
+                {'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
             {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
@@ -63536,11 +63988,15 @@ def weekly__compare__chart__(datestr,charttype):
     #         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
                    {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},        
+                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},  
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
             ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_parents':{'$sum':1}
         }}, {'$sort':{'_id':1}}
@@ -63558,12 +64014,16 @@ def weekly__compare__chart__(datestr,charttype):
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}}, 
+        {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
         }},
         ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_TEACHERS':{'$sum':1}
         }}, {'$sort':{'_id':1}}
@@ -63581,11 +64041,15 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},       
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},  
+             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
             ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_teachers':{'$sum':1}
         }}, {'$sort':{'_id':1}}
@@ -63606,12 +64070,16 @@ def weekly__compare__chart__(datestr,charttype):
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
 #         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
          {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-         {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+         {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+         {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
         }},
         ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_schoology':{'$sum':1}
         }}, {'$sort':{'_id':1}}
@@ -63629,11 +64097,15 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
 #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},      
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}}, 
+             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
             ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_schoology':{'$sum':1}
         }}, {'$sort':{'_id':1}}
@@ -63652,19 +64124,23 @@ def weekly__compare__chart__(datestr,charttype):
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
 #         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
          {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-         {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},      
+         {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},  
+        {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
         }},
         ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_clever':{'$sum':1}
         }}, {'$sort':{'_id':1}}
          ]
         list7= list(collection1.aggregate(qr7))
         df_atm7= DataFrame(list7)
-        df_atm7
+
         LAST_WEEK_PRACTICE_clever=df_atm7[['_id','LAST_WEEK_PRACTICE_clever']]
         qr8=[{"$match":{
             '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -63675,11 +64151,15 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
 #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},         
+             {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}}, 
+             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
             ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_clever':{'$sum':1}
         }}, {'$sort':{'_id':1}}
@@ -63688,6 +64168,76 @@ def weekly__compare__chart__(datestr,charttype):
         df_atm8= DataFrame(list8)
         LAST_TO_LAST_WEEK_PRACTICE_clever=df_atm8[['_id','LAST_TO_LAST_WEEK_PRACTICE_clever']]
         join_final4= pd.merge(LAST_WEEK_PRACTICE_clever, LAST_TO_LAST_WEEK_PRACTICE_clever, on='_id', how='left') 
+        
+        
+        
+        
+        
+        # ========================================= CANVAS
+        qr77=[{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+#         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+         {"USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},  
+        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_canvas':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list77= list(collection1.aggregate(qr77))
+        df_atm77= DataFrame(list77)
+        if df_atm77.empty == True:
+            df_atm77 = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_WEEK_PRACTICE_canvas':0})
+            
+        LAST_WEEK_PRACTICE_canvas=df_atm77[['_id','LAST_WEEK_PRACTICE_canvas']]
+        
+        qr88=[{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+#             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+             {"USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}, 
+             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_canvas':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ]
+        list88= list(collection1.aggregate(qr88))
+        df_atm88= DataFrame(list88)
+        if df_atm88.empty == True:
+            df_atm88 = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_TO_LAST_WEEK_PRACTICE_canvas':0})
+        LAST_TO_LAST_WEEK_PRACTICE_canvas=df_atm88[['_id','LAST_TO_LAST_WEEK_PRACTICE_canvas']]
+        join_final44= pd.merge(LAST_WEEK_PRACTICE_canvas, LAST_TO_LAST_WEEK_PRACTICE_canvas, on='_id', how='left') 
+        
+        
+        
+        
+    
+        
+        
 
         days=pd.DataFrame({'_id':[1,2,3,4,5,6,7],'day':['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']})
 
@@ -63695,7 +64245,9 @@ def weekly__compare__chart__(datestr,charttype):
         df2=pd.merge(df1,join_final2, on='_id',how='left')
         df3=pd.merge(df2,join_final3, on='_id',how='left')
         df4=pd.merge(df3,join_final4, on='_id',how='left').fillna(0)
+        df4=pd.merge(df4,join_final44, on='_id',how='left').fillna(0)
         df4=df4.astype(int, errors='ignore')
+#         print("df4 \n",df4)
         df4.columns
         lists=[]
 
@@ -63703,6 +64255,7 @@ def weekly__compare__chart__(datestr,charttype):
 
             i=df4[i].tolist()
             lists.append(i)  
+#         print(lists)
         weekdata={"day":lists[1],
          "count_last_week_parents":lists[2],
         'count_last_to_lastweek_parents':lists[3],
@@ -63711,10 +64264,11 @@ def weekly__compare__chart__(datestr,charttype):
         'count_last_week_schoology':lists[6],
         'count_last_to_last_week_schoology':lists[7],
         'count_last_week_clever':lists[8],
-        'count_last_to_last_week_clever':lists[9]}
+        'count_last_to_last_week_clever':lists[9],
+        'count_last_week_canvas':lists[10],
+        'count_last_to_last_week_canvas':lists[11]}
         temp={'weekdata':weekdata}
         return json.dumps(temp)
-
 
 
 
@@ -72391,6 +72945,7 @@ def practice_per_minn_(charttype):
 
 
         threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        
         ######################  USER PRACTICE 2019-2020(LSY) ############################################
         df1 = DataFrame(list(collection2.aggregate([
             {"$match":
@@ -72401,7 +72956,9 @@ def practice_per_minn_(charttype):
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
 
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                
                 {"MODIFIED_DATE":{"$gte": today_min
                                              ,"$lte" : today_max
                                     }},
@@ -72432,7 +72989,9 @@ def practice_per_minn_(charttype):
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
 
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                
                 {"MODIFIED_DATE":{"$gte": today_min
                                              ,"$lte" : today_max
                                     }},
@@ -72462,8 +73021,9 @@ def practice_per_minn_(charttype):
                         {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
-                             { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                           {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                            { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                            { "USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                             {"MODIFIED_DATE":{"$gte": today_min
                                                  ,"$lte" : today_max
                                             }},
@@ -72495,6 +73055,37 @@ def practice_per_minn_(charttype):
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
                              { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
                            {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                           {"USER_ID._id":{"$nin":db.canvas_user_master.distinct( "USER_ID._id")}},
+                            {"MODIFIED_DATE":{"$gte": today_min
+                                                 ,"$lte" : today_max
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+                ]}},
+        practice_cond_dictonary_list[0],
+                    practice_cond_dictonary_list[1],
+                     threshcond[0],
+           {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+        
+        
+        
+        canvas = DataFrame(list(collection2.aggregate([{"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                             { "USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},
+                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                           {"USER_ID._id":{"$nin":db.clever_master.distinct( "USER_ID._id")}},
                             {"MODIFIED_DATE":{"$gte": today_min
                                                  ,"$lte" : today_max
                                             }},
@@ -72618,6 +73209,30 @@ def practice_per_minn_(charttype):
             clever=pd.DataFrame(time_range, columns=['Practice_date'])
             clever['Parents_Practice_CSY'] = 0
             clever_sort=clever.sort_values(by='Practice_date')
+            
+            
+            
+        # Canvas
+
+        if 'Practice_date' in list(canvas.columns):
+            canvas['Practice_date']=pd.to_datetime(canvas['Practice_date'], format='%Y-%m-%d %H:%M')
+            canvas['Practice_date']=canvas['Practice_date']-timedelta(hours=4)
+            canvas_sort=canvas.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            canvas=pd.DataFrame(time_range, columns=['Practice_date'])
+            canvas['Parents_Practice_CSY'] = 0
+            canvas_sort=canvas.sort_values(by='Practice_date')
 
         # Schoology
 
@@ -72676,6 +73291,16 @@ def practice_per_minn_(charttype):
 
         clever_csy1['Practice_date']=clever_csy1['Practice_date'].astype(np.int64)/int(1e6)
         clever_parents_users=clever_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+        
+        
+        # canvas
+        canvas_sort['Practice_date']=pd.to_datetime(canvas_sort['Practice_date'])
+        canvas_csy1= pd.merge(canvas_sort,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        canvas_csy1['Practice_date']=canvas_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        canvas_parents_users=canvas_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+
 
 
         # schoologyyy
@@ -72688,97 +73313,172 @@ def practice_per_minn_(charttype):
 
 
 
-        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Clever':clever_parents_users, 'schoology':schoology_parents_users, 'ratings':ratings}}
+        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Canvas':canvas_parents_users,'Clever':clever_parents_users, 'schoology':schoology_parents_users, 'ratings':ratings}}
 
         return json.dumps(temp)
 
 
     else:
+        
         ######################  USER PRACTICE 2019-2020(LSY) ############################################
-        df1 = DataFrame(list(collection2.aggregate([{
-                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}}, {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
-                {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+        df1 = DataFrame(list(collection2.aggregate([
+            {"$match":
+            {"$and" :[
+                {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'USER_ID.EMAIL_ID':{'$ne':""}},
+
+                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {'USER_ID.EMAIL_ID':{'$ne':""}},{"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},
-                        {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                
+                {"MODIFIED_DATE":{"$gte": today_min
+                                             ,"$lte" : today_max
+                                    }},
+                {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
 
-                {"$match":{"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
-                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
-                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
-                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
 
-                {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
-                        'date':{'$first':'$MODIFIED_DATE'},'Users_Practice_CSY':{'$sum':1}}},
-                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
-                            'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
-                {"$sort":{'Practice_date':1}}])))
-
-        ##################### PARENTS ##########################################
-        df2 = DataFrame(list(collection2.aggregate([{
-                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}},
-                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-                       {'USER_ID.EMAIL_ID':{'$ne':""}},
-                          {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                           {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                 {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
-                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
-                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
-                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}},                  
-                        {"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},                    
-                        {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}
-                                  ]}},
-                {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
-                        'date':{'$first':'$MODIFIED_DATE'},  'Parents_Practice_CSY':{'$sum':1}}},
-                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}},
-                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
-                {"$sort":{'Practice_date':1}}])))
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+#         practice_cond_dictonary_list[0],
+#                     practice_cond_dictonary_list[1],
+#                      threshcond[0],
 
-        ########schoology################################
-        schoology = DataFrame(list(collection2.aggregate([{
-                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}},
-                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-                        {'USER_ID.EMAIL_ID':{'$ne':""}},
-                          {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                       {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-                       {"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},
-        #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
-                                 ]}},
-                {"$match":
-                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
-                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
-                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
-                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
+            {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                    'Users_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                        'Users_Practice_CSY':'$Users_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
 
-             {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
-                        'date':{'$first':'$MODIFIED_DATE'},  'Parents_Practice_CSY':{'$sum':1}}},
-                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}},
-                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
-                {"$sort":{'Practice_date':1}}])))
+        df2 = DataFrame(list(collection2.aggregate([{"$match":
+            {"$and" :[
+                {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                    {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                    {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'USER_ID.EMAIL_ID':{'$ne':""}},
 
-        ########clever################################
-        clever = DataFrame(list(collection2.aggregate([{
-                '$match':{'$and':[{'USER_ID.IS_DISABLED':{'$ne':'Y'}},
-                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
-                        {'USER_ID.EMAIL_ID':{'$ne':""}},
-                          {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                       {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                       {"MODIFIED_DATE":{"$gte": today_min ,"$lte" : today_max}},
+                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                
+                {"MODIFIED_DATE":{"$gte": today_min
+                                             ,"$lte" : today_max
+                                    }},
+                {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
 
-        #                     'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}
-                                   ]}},
-                {"$match":
-                {"$and" :[{'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
-                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
-                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
-                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]}},
-                 {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
-                        'date':{'$first':'$MODIFIED_DATE'},  'Parents_Practice_CSY':{'$sum':1}}},
-                {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}},
-                            'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
-                {"$sort":{'Practice_date':1}}])))
 
-        df1['Practice_date']=pd.to_datetime(df1['Practice_date'], format="%Y-%m-%d %H:%M")
+                {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                    {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}},                
+            ]}},
+#                                                 practice_cond_dictonary_list[0],
+#                             practice_cond_dictonary_list[1],
+#                              threshcond[0],
 
+              {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                            'Parents_Practice_CSY':{'$sum':1}}},
+                    {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                                'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                    {"$sort":{'Practice_date':1}}])))
+
+        schoology = DataFrame(list(collection2.aggregate([
+                    {"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                            { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                            { "USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                            {"MODIFIED_DATE":{"$gte": today_min
+                                                 ,"$lte" : today_max
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+                ]}},
+
+#         practice_cond_dictonary_list[0],
+#                             practice_cond_dictonary_list[1],
+#                              threshcond[0],
+
+                  {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                            'Parents_Practice_CSY':{'$sum':1}}},
+                    {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                                'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+                    {"$sort":{'Practice_date':1}}])))
+            #     print(schoology,"schoology")
+                                      ########clever################################
+
+        clever = DataFrame(list(collection2.aggregate([{"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                             { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                           {"USER_ID._id":{"$nin":db.canvas_user_master.distinct( "USER_ID._id")}},
+                            {"MODIFIED_DATE":{"$gte": today_min
+                                                 ,"$lte" : today_max
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+                ]}},
+#         practice_cond_dictonary_list[0],
+#                     practice_cond_dictonary_list[1],
+#                      threshcond[0],
+           {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+        
+        
+        
+        canvas = DataFrame(list(collection2.aggregate([{"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                             { "USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},
+                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                           {"USER_ID._id":{"$nin":db.clever_master.distinct( "USER_ID._id")}},
+                            {"MODIFIED_DATE":{"$gte": today_min
+                                                 ,"$lte" : today_max
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+                ]}},
+#         practice_cond_dictonary_list[0],
+#                     practice_cond_dictonary_list[1],
+#                      threshcond[0],
+           {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
 
         ########Ratingss################################
         collection4= db.audio_feedback
@@ -72800,16 +73500,18 @@ def practice_per_minn_(charttype):
                                      '$lte':today_max
                                      }},
                     ]}},
+#               practice_cond_dictonary_list[0],
+#                     practice_cond_dictonary_list[1],
+        #              threshcond[0],
            {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
                                 'date':{'$first':'$MODIFIED_DATE'},
                       'ratings':{'$sum':1}}},
                         {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
-            'ratings':'$ratings'
-                                    }}, 
+            'ratings':'$ratings'}}, 
                         {"$sort":{'Practice_date':1}}])))
 
 
-        df1['Practice_date']=pd.to_datetime(df1['Practice_date'], format="%Y-%m-%d %H:%M")        
+        df1['Practice_date']=pd.to_datetime(df1['Practice_date'], format="%Y-%m-%d %H:%M")
         df1['Practice_date']=df1['Practice_date']-timedelta(hours=4)
         df5=df1.sort_values(by='Practice_date')
         time_range=[]
@@ -72835,8 +73537,6 @@ def practice_per_minn_(charttype):
 
 
         # ratings
-        start_today=today_min.strftime('%Y-%m-%d %H:%M:%S')
-        end_today=today_max.strftime('%Y-%m-%d %H:%M:%S')
         ratings['Practice_date']=pd.to_datetime(ratings['Practice_date'], format="%Y-%m-%d %H:%M")
         ratings['Practice_date']=ratings['Practice_date']-timedelta(hours=4)
         df5ratings=ratings.sort_values(by='Practice_date')
@@ -72883,11 +73583,35 @@ def practice_per_minn_(charttype):
             clever=pd.DataFrame(time_range, columns=['Practice_date'])
             clever['Parents_Practice_CSY'] = 0
             clever_sort=clever.sort_values(by='Practice_date')
+            
+            
+            
+        # Canvas
+
+        if 'Practice_date' in list(canvas.columns):
+            canvas['Practice_date']=pd.to_datetime(canvas['Practice_date'], format='%Y-%m-%d %H:%M')
+            canvas['Practice_date']=canvas['Practice_date']-timedelta(hours=4)
+            canvas_sort=canvas.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            canvas=pd.DataFrame(time_range, columns=['Practice_date'])
+            canvas['Parents_Practice_CSY'] = 0
+            canvas_sort=canvas.sort_values(by='Practice_date')
 
         # Schoology
 
         if 'Practice_date' in list(schoology.columns):
-            schoology['Practice_date']=pd.to_datetime(schoology['Practice_date'])
+            schoology['Practice_date']=pd.to_datetime(schoology['Practice_date'], format='%Y-%m-%d %H:%M')
             schoology['Practice_date']=schoology['Practice_date']-timedelta(hours=4)
             schoology_sort=schoology.sort_values(by='Practice_date')
         else:
@@ -72905,6 +73629,8 @@ def practice_per_minn_(charttype):
             schoology=pd.DataFrame(time_range, columns=['Practice_date'])
             schoology['Parents_Practice_CSY'] = 0
             schoology_sort=schoology.sort_values(by='Practice_date')
+
+
 
         # Parents 
         df2['Practice_date'] = pd.to_datetime(df2['Practice_date'])
@@ -72939,6 +73665,16 @@ def practice_per_minn_(charttype):
 
         clever_csy1['Practice_date']=clever_csy1['Practice_date'].astype(np.int64)/int(1e6)
         clever_parents_users=clever_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+        
+        
+        # canvas
+        canvas_sort['Practice_date']=pd.to_datetime(canvas_sort['Practice_date'])
+        canvas_csy1= pd.merge(canvas_sort,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        canvas_csy1['Practice_date']=canvas_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        canvas_parents_users=canvas_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+
 
 
         # schoologyyy
@@ -72949,10 +73685,12 @@ def practice_per_minn_(charttype):
         schoology_csy1['Practice_date']=schoology_csy1['Practice_date'].astype(np.int64)/int(1e6)
         schoology_parents_users=schoology_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
 
-    
-        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Clever':clever_parents_users, 'schoology':schoology_parents_users,'ratings':ratings}}
+
+
+        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Canvas':canvas_parents_users,'Clever':clever_parents_users, 'schoology':schoology_parents_users, 'ratings':ratings}}
 
         return json.dumps(temp)
+
 
 
 @app.route('/Program_wise_per_minute_DAILD_updated/<charttype>')
