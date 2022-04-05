@@ -4,9 +4,10 @@ $(document).on('change', '#practice_trendChart', function() {
     $('#container1').empty();
     console.log(this.value)
     if (this.value == 'practice') {
-        // document.getElementById('practinsight').title = 'your new title';
+        document.getElementById('Practice_trend_playback_trend').title = 'The bar graph compares the current school year\u0027s practice count of Clever, Schoology, Family, and User to the previous school year\u0027s practice trend, represented by an orange line graph, as well as last to last year\u0027s practice trend, represented by a yellow line graph.';
         playbackTrendChart2(this.value, 'Practice')
     } else {
+        document.getElementById('Practice_trend_playback_trend').title = 'The bar graph compares the current school year\u0027s playback count of Clever, Schoology, Family, and User to the previous school year\u0027s playback trend, represented by an orange line graph, as well as last to last year\u0027s playback trend, represented by a yellow line graph.';
         playbackTrendChart2(this.value, 'Playback')
     }
 });

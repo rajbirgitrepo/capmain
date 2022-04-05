@@ -325,9 +325,10 @@ function charts(a) {
         $('#container10').empty();
         console.log(this.value)
         if (this.value == 'practice') {
-            //  document.getElementById('weeklytop').title = 'your new title';
+            document.getElementById('top_20_district_practices_playback').title = 'The bar graph compares the practice count of the top twenty districts for the present week.';
             playbackTrendChart(this.value, 'Practice')
         } else {
+            document.getElementById('top_20_district_practices_playback').title = 'The bar graph compares the playback count of the top twenty districts for the present week.';
             playbackTrendChart(this.value, 'Playback')
         }
     });
@@ -422,9 +423,10 @@ function charts(a) {
         $('#container').empty();
         console.log(this.value)
         if (this.value == 'practice') {
-            //  document.getElementById('weeklyCount').title = 'your new title';
+            document.getElementById('practice_playback_count_weekly_comparison').title = 'Represents the contrast between the practice count of last-to-last week and last week by Teacher, Clever, Schoology and Parent.';
             playbackTrendChart2(this.value, 'Practice')
         } else {
+            document.getElementById('practice_playback_count_weekly_comparison').title = 'Represents the contrast between the playback count of last-to-last week and last week by Teacher, Clever, Schoology and Parent.';
             playbackTrendChart2(this.value, 'Playback')
         }
     });

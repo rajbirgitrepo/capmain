@@ -15,9 +15,9 @@ $.ajax(settings).done(function(response) {
         document.getElementById("total_students").title = dataa.Executive_Summary.CAP_SUMMARY[0].Total_Students;
         document.getElementById("total_usercount").title = dataa.Executive_Summary.CAP_SUMMARY[0].Tota_Usercount;
         document.getElementById("total_revenue_CSY").title = dataa.Executive_Summary.CAP_SUMMARY[0].Total_Revenue_CSY;
-        document.getElementById("Practice_trend_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].Active_Practice_Trend;
-        document.getElementById("active_user_trend_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].Active_Playback_Trend;
-        document.getElementById("practice_history_CSY_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].Playback_History_CSY;
+        // document.getElementById("Practice_trend_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].Active_Practice_Trend;
+        // document.getElementById("active_user_trend_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].Active_Playback_Trend;
+        // document.getElementById("practice_history_CSY_playback").title = dataa.Executive_Summary.CAP_SUMMARY[0].Playback_History_CSY;
         // document.getElementById("realtime_playback_sessions_USA").title = dataa.Executive_Summary.CAP_SUMMARY[0].realtime_playback_sessions_USA;
         document.getElementById("container35").title = dataa.Executive_Summary.CAP_SUMMARY[0].Average_Playback_Trend;
         document.getElementById("container36").title = dataa.Executive_Summary.CAP_SUMMARY[0].Top_District_Playback;
@@ -41,12 +41,12 @@ $.ajax(settings).done(function(response) {
         document.getElementById("new_signups_weekly").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].New_Signups;
         document.getElementById("total_practice_weekly").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].Total_Playback;
         document.getElementById("average_feedback_weekly").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].Avg_Feedback;
-        document.getElementById("practice_playback_count_weekly_comparison").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].Playback_Count_Weekly_Comparison;
-        document.getElementById("top_20_district_practices_playback").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].Top_20_District_Playback;
-        // document.getElementById("top_20_district_practices_practice").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].Top_20_District_Practice;
+        // document.getElementById("practice_playback_count_weekly_comparison").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].Playback_Count_Weekly_Comparison;
+        // document.getElementById("top_20_district_practices_playback").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].Top_20_District_Playback;
         document.getElementById("average_audio_completion_weekly").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].Average_Audio_Completion_Weekly;
         document.getElementById("streaks_by_wekkly_user").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].Streaks_by_Weely_User;
-        // document.getElementById("word_cloud").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].word_cloud;
+        document.getElementById("Sentiment_Word_Cloud").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].Sentiment_Word_Cloud;
+        document.getElementById("Top_10_Word_Count").title = dataa.Executive_Summary.WEEKLY_ANALYTICS[0].Top_10_Word_Count;
     } 
     else if (params == "aws_releases") {
         document.getElementById("feature_releases").title = dataa.Executive_Summary.COMPASS_RELEASES[0].Feature_Release;
@@ -75,8 +75,8 @@ $.ajax(settings).done(function(response) {
         document.getElementById("Dayinlife_Daily_Active_Users").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Daily_Active_Users;
         document.getElementById("Dayinlife_Total_Playback").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Total_Playback;
         document.getElementById("Dayinlife_Avg_Feedback").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Avg_Feedback;
-        document.getElementById("Dayinlife_Playback_Per_Min").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Playback_Per_Min;
-        document.getElementById("Dayinlife_Playback_Per_Min_By_Program").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Playback_Per_Min_By_Program;
+        // document.getElementById("Dayinlife_Playback_Per_Min").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Playback_Per_Min;
+        // document.getElementById("Dayinlife_Playback_Per_Min_By_Program").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Playback_Per_Min_By_Program;
         document.getElementById("Dayinlife_Playback_Per_Hour").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Playback_Per_Hour;
         document.getElementById("Dayinlife_Feedback_Per_Hour").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Feedback_Per_Hour;
         document.getElementById("Dayinlife_Realtime_Playback_Sessions_USA").title = dataa.Executive_Summary.DAY_IN_LIFE[0].Realtime_Playback_Sessions_USA;

@@ -4,9 +4,10 @@ $(document).on('change', '#practice_activeChart', function() {
     $('#container33').empty();
     console.log(this.value)
     if (this.value == 'practice') {
-        //document.getElementById('activeInsight').title = 'your new title';
+        document.getElementById('active_playback_practice_trend').title = 'Bar-graph displays the active user\u0027s practice count for the current school year of clever, schoology, Family, and User in comparison to the practice trend for the previous school year represented by an orange line graph, as well as the last to last year represented by a yellow line graph.';
         playbackTrendChart(this.value, 'Practice')
     } else {
+        document.getElementById('active_playback_practice_trend').title = 'Bar-graph displays the active user\u0027s playback count for the current school year of clever, schoology, Family, and User in comparison to the playback trend for the previous school year represented by an orange line graph, as well as the last to last year represented by a yellow line graph.';
         playbackTrendChart(this.value, 'Playback')
     }
 });
@@ -578,9 +579,10 @@ $(document).on('change', '#practice_historyChart', function() {
     $('#containerhistory2').empty();
     console.log(this.value)
     if (this.value == 'practice') {
-        // document.getElementById('historyInsight').title = 'your new title';
+        document.getElementById('practice_history_CSY_playback').title = 'The graph compares the current school year\u0027s practice count by family, school, smart, and schoology users to the last school year\u0027s yellow line graph. The statistics are displayed for the chosen time period (1m:one month ,3m:three months, 6m:six months, YTD:year to date, All:trend for all months of csy).';
         playbackTrendChart3(this.value, 'Practice')
     } else {
+        document.getElementById('practice_history_CSY_playback').title = 'The graph compares the current school year\u0027s playback count by family, school, smart, and schoology users to the last school year\u0027s yellow line graph. The statistics are displayed for the chosen time period (1m:one month ,3m:three months, 6m:six months, YTD:year to date, All:trend for all months of csy).';
         playbackTrendChart3(this.value, 'Playback')
     }
 });

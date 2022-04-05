@@ -155,9 +155,10 @@ function charts(a) {
         $('#container2').empty();
         console.log(this.value)
         if (this.value == 'practice') {
-            // document.getElementById('historyInsight').title = 'your new title';
+            document.getElementById('Dayinlife_Playback_Practice_Per_Min').title = 'The graph shows the practice count per minute for clever, schoology, teachers and parents as well it shows the rating per minute.';
             playbackTrendChart3(this.value, 'Practice')
         } else {
+            document.getElementById('Dayinlife_Playback_Practice_Per_Min').title = 'The graph shows the playback count per minute for clever, schoology, teachers and parents as well it shows the rating per minute.';
             playbackTrendChart3(this.value, 'Playback')
         }
     });
@@ -348,9 +349,10 @@ function charts(a) {
         $('#container12').empty();
         console.log(this.value)
         if (this.value == 'practice') {
-            // document.getElementById('historyInsight').title = 'your new title';
+            document.getElementById('Dayinlife_Playback_Practice_Per_Min_By_Program').title = 'The graph illustrates the number of practices per minute per program - Elementary, Middle, High, Early Learning and Wellness.';
             playbackTrendChart4(this.value, 'Practice')
         } else {
+            document.getElementById('Dayinlife_Playback_Practice_Per_Min_By_Program').title = 'The graph  illustrates the number of playbacks per minute per program - Elementary, Middle, High, Early Learning and Wellness.';
             playbackTrendChart4(this.value, 'Playback')
         }
     });
