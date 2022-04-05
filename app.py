@@ -3155,6 +3155,7 @@ def date_wise_login():
                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{'$not':{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
            {"USER_ID._id":{"$nin":db.subscription_master.distinct( "USER_ID._id", { "PLAN_ID.PLAN_ID":{'$in':[16,17]}})}},   
              {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
              {"USER_ID.DEVICE_USED" : {'$regex':"webApp",'$options':'i'}},
@@ -3193,6 +3194,7 @@ def date_wise_login():
     #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{'$not':{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
            {"USER_ID._id":{"$in":db.subscription_master.distinct( "USER_ID._id", { "PLAN_ID.PLAN_ID":16})}},   
              {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
     #          {"USER_ID.DEVICE_USED" : "webApp"},
@@ -3230,6 +3232,7 @@ def date_wise_login():
                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                {"USER_ID._id":{'$not':{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
     #        {"USER_ID._id":{"$nin":db.subscription_master.distinct( "USER_ID._id", { "PLAN_ID.PLAN_ID":{'$in':[16,17]}})}},   
              {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
     #          {"USER_ID.DEVICE_USED" : "webApp"},
@@ -3267,6 +3270,7 @@ def date_wise_login():
                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                 {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{'$not':{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
     #        {"USER_ID._id":{"$nin":db.subscription_master.distinct( "USER_ID._id", { "PLAN_ID.PLAN_ID":{'$in':[16,17]}})}},   
              {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
     #          {"USER_ID.DEVICE_USED" : "webApp"},
@@ -3297,6 +3301,45 @@ def date_wise_login():
     #     pd.to_dateime['_id']
     else:
         d4
+        
+        
+    d6=DataFrame(list(db.login_tracking.aggregate([
+        {"$match":
+         {
+            '$and':[
+                {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},
+                {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+    #        {"USER_ID._id":{"$nin":db.subscription_master.distinct( "USER_ID._id", { "PLAN_ID.PLAN_ID":{'$in':[16,17]}})}},   
+             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+    #          {"USER_ID.DEVICE_USED" : "webApp"},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                {'USER_ID.EMAIL_ID':{'$ne':''}},
+    #             {  "IS_SUCCESS" : "N"},
+                  {'CREATED_DATE':{'$gte':datetime(2021,8,16,11,0,0,0)}},
+                 {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+                                            'north1high@gmail.com',
+                                            'north3ele@gmail.com',
+                                            'north4prek@gmail.com',
+                                            'north2middle@gmail.com']}},
+
+                 {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+         { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}},'pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'}}},
+        {'$project':{'_id':1, 'login_count':'$pc','login_user_canvas':{'$size':'$uc'}}},
+        {'$sort':{'_id':1}}])))
+    
+#     print(d6)    
+        
+        
+        
+        
     d5=DataFrame(list(db.login_tracking.aggregate([
         {"$match":
          {
@@ -3304,6 +3347,7 @@ def date_wise_login():
     #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                 {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"USER_ID._id":{'$not':{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
            {"USER_ID._id":{"$in":db.subscription_master.distinct( "USER_ID._id", { "PLAN_ID.PLAN_ID":17})}},   
              {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
     #          {"USER_ID.DEVICE_USED" : "webApp"},
@@ -3334,16 +3378,17 @@ def date_wise_login():
 
     a=pd.merge(d1,d2 , on='_id', how='outer')
     b=pd.merge(a,d3 , on='_id', how='outer')
-    c=pd.merge(b,d4 , on='_id', how='outer')
+    c1=pd.merge(b,d4 , on='_id', how='outer')
+    c=pd.merge(c1,d6 , on='_id', how='outer')
     d=pd.merge(c,d5 , on='_id', how='outer')
+    
+#     print(d)
 
-
-  
 
     d=d.fillna(0)
 
     d.sort_values(by="_id")
-    final_df=d[['_id','login_user_webapp','login_user_classroom','login_user_clever','login_user_schoology','login_user_homeapp']]
+    final_df=d[['_id','login_user_webapp','login_user_classroom','login_user_clever','login_user_schoology','login_user_canvas','login_user_homeapp']]
     final_df
 
 
@@ -3353,10 +3398,11 @@ def date_wise_login():
     homeapp_success_login=final_df['login_user_homeapp'].tolist()
     clever_success_login=final_df['login_user_clever'].tolist()
     schoology_success_login=final_df['login_user_schoology'].tolist()
+    canvas_success_login=final_df['login_user_canvas'].tolist()
 
     data={'date':date,'webapp_success_login':webapp_success_login,'classroom_success_login':classroom_success_login,
          'homeapp_success_login':homeapp_success_login,'clever_success_login':clever_success_login,'schoology_success_login':
-         schoology_success_login}
+         schoology_success_login,'canvas_success_login':canvas_success_login}
     return json.dumps(data)
 
 
