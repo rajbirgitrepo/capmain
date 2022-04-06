@@ -131,7 +131,7 @@ $.ajax(settings).done(function(response) {
             title: {
                 text: "Successful Login History",
             },
-            colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451', '#33FFD1'],
+            colors: ['#6495ED', '#4F1FAF', '#462CEE', '#8AE02B', '#01A451', '#33FFD1'],
             xAxis: [{
                     categories: dataa.date,
                     labels: {
@@ -191,6 +191,10 @@ $.ajax(settings).done(function(response) {
                 }
             },
             series: [{
+                    name: 'Canvas',
+                    data: dataa.canvas_success_login
+                },
+                {
                     name: 'Clever',
                     data: dataa.clever_success_login
                 },

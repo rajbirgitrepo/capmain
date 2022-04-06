@@ -333,6 +333,17 @@ function charts(a) {
                         dataGrouping: {
                             enabled: false,
                         }
+                    },
+                    {
+                        "name": "Canvas",
+                        "type": "column",
+                        "xAxis": 0,
+                        "color": "#6495ED",
+                        "data": dataa.data.Canvas,
+                        "yAxis": 0,
+                        dataGrouping: {
+                            enabled: false,
+                        }
                     }
                 ]
 

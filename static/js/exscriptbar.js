@@ -34,7 +34,7 @@ function playbackTrendChart2(selectValue2, t) {
             title: {
                 text: t + " Trend",
             },
-            colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+            colors: [ '#6495ED', '#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
             xAxis: {
                 categories: [
                     "Aug",
@@ -90,6 +90,10 @@ function playbackTrendChart2(selectValue2, t) {
                 },
             },
             series: [{
+                    name: "Canvas",
+                    data: dataa[4].barcan,
+                },
+                {
                     name: "Clever",
                     data: dataa[3].barc,
                 },

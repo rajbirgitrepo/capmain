@@ -1580,6 +1580,17 @@ function cose() {
   modal.style.display = "none";
 }
 
+
+// var modal4 = document.getElementById("myModal4");
+// function close2() {
+//   modal4.style.display = "none";
+// }
+
+// var modal5 = document.getElementById("myModal5");
+// function close3() {
+//   modal5.style.display = "none";
+// }
+
 function createDynamic(url) {
   var settings = {
     async: true,

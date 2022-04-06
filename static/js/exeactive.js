@@ -38,7 +38,7 @@ function playbackTrendChart(selectValue, t) {
                 text: t + " Active User Trend"
 
             },
-            colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+            colors: ['#6495ED', '#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
             xAxis: {
                 categories: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
             },
@@ -84,8 +84,8 @@ function playbackTrendChart(selectValue, t) {
                 }
             },
             series: [{
-                    name: 'Clever',
-                    data: dataa[3].barc
+                    name: "Canvas",
+                    data: dataa[4].barcan,
                 },
                 {
                     name: 'Schoology',
@@ -722,6 +722,13 @@ function playbackTrendChart3(selectValue3, tx) {
                     "xAxis": 1,
                     "color": "#462cee",
                     "data": dataa.data.schoology
+                },
+                {
+                    "name": "Canvas",
+                    "type": "column",
+                    "xAxis": 1,
+                    "color": "#6495ED",
+                    "data": dataa.data.canvas
                 }
             ]
         });

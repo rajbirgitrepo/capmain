@@ -71,7 +71,13 @@
 </head>
 <script>
 </script>
-<style>
+<style>  
+    .back-btn{
+        float: right;
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #000;
+    }
     .image {
         float: right;
         width: 90px;
@@ -286,10 +292,13 @@
         width: 100%;
         margin: 0;
         text-align: center;
-        font-size: 14px;
+        font-size: 8px;
         text-transform: uppercase;
         padding: 20px 0;
         font-weight: 600;
+    }
+    .text-ss{
+        font-size: 12px;
     }
 
     .threebox .col-md-4 a {
@@ -341,8 +350,8 @@
     }
 
     .card img {
-        padding: 0px 10px;
-        height: 135px;
+        padding: 4px 10px !important;
+        height: 90px !important;
     }
 
     .modal-content {
@@ -619,7 +628,8 @@
                         </div>
                         <button onclick="cose()" class="close-btn-select">X</button>
                     </div>
-                    <div class="row seven-cols" id="">
+                </div>
+                    <!-- <div class="row seven-cols" id=""> -->
 
                         <!-- <div class="col-md-2">
                             <div class=" card-title text-s">
@@ -628,6 +638,7 @@
                                 </div>
                             </div> -->
 
+<!--                     
                         <div class="col-md-1">
                             <div class=" card-title text-s">
                                 <div onclick="distselect('NW')" class="box-outer-nw d-box-design">
@@ -676,9 +687,152 @@
                                     <p class="text-s d-text">Other</p>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
+                    <!-- </div> -->
+                    <div class="row" id="selectDistrict">
+                        <div class="col-md-2 card" onclick="LausdDist()" style="border: none !important;">
+                            <div class=" card-title text-s">
+                                <div class="box-outer-nw" style="color: #797979;border-radius: 20px;">
+                                    <img src="https://innerexplorer.org/images/portals/lausd_portal.png" class="img-responsive card_img" alt="School">
+                                    <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">LAUSD</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 card" onclick="sanberdinoDist()" style="border: none !important;" style="border: none !important;">
+                            <div class=" card-title text-s">
+                                <div class="box-outer-nw" style="color: #797979;border-radius: 20px;">
+                                    <img src="https://i6.innerexplorer.org/compass/styles/images/San.jpg" class="img-responsive card_img" alt="School">
+                                    <p class="text-s" style="border-radius: 20px;background-color: #fafafa;">San Bernardino County Superintendent of Schools</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <div id="lausdDistrict" style="display: none;"> 
+                        <div class="containercards">
+                            <div class="row seven-cols" id="">
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('NW')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">NorthWest</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('NE')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">NorthEast</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('South')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">South</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('West')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">West</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('East')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">East</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('Central')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">Central</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('Option')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">Other</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button onclick="back1()" class="back-btn">Go Back</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="sanBerdinoDistrict" style="display: none;">
+                        <div class="containercards">
+                            <div class="row seven-cols" id="">
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('Chino Valley Unified School District')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">Chino Valley Unified School District</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('Cucamonga School District')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">Cucamonga School District</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('Hesperia Unified School District')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">Hesperia Unified School District</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('Lucerne Valley School District')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">Lucerne Valley School District</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('Mountain View School District')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">Mountain View School District</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('Redlands Unified School District')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">Redlands Unified School District</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('Rialto Unified School District')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">Rialto Unified School District</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" card-title text-s">
+                                        <div onclick="distselect('Yucaipa Calimesa Joint Unified School District')" class="box-outer-nw d-box-design">
+                                            <p class="text-s text-ss d-text">Yucaipa Calimesa Joint Unified School District</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div> -->
+                                <button onclick="back2()" class="back-btn">Go Back</button>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>
@@ -1046,6 +1200,67 @@
             </div>
         </div>
     </section>
+
+
+
+<!-- Modal -->
+<!-- <div id="myModal4" class="modal">
+    <div class="modal-content">
+
+        <div class="containercards">
+            <div class="row">
+                <h2 class="text-center mt-0 mb-2">Select Local District</h2>
+                <div class="col-sm-11 mb-11">
+                    <input type="text" id="myFilter" class="form-control" onkeyup="myFunction()"
+                        placeholder="Search any district">
+                </div>
+                <button onclick="close2()" class="close-btn-select">X</button>
+            </div>
+            <div class="row seven-cols" id="">
+                <div class="col-md-1">
+                    <div class=" card-title text-s">
+                        <div onclick="distselect('Option')" class="box-outer-nw d-box-design">
+                            <p class="text-s d-text">Other</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- <div id="myModal5" class="modal">
+    <div class="modal-content">
+        <div class="containercards">
+            <div class="row">
+                <h2 class="text-center mt-0 mb-2">Select Local District</h2>
+                <div class="col-sm-11 mb-11">
+                    <input type="text" id="myFilter" class="form-control" onkeyup="myFunction()"
+                        placeholder="Search any district">
+                </div>
+                <button onclick="close3()" class="close-btn-select">X</button>
+            </div>
+            <div class="row seven-cols" id="">
+                <div class="col-md-1">
+                    <div class=" card-title text-s">
+                        <div onclick="distselect('NW')" class="box-outer-nw d-box-design">
+                            <p class="text-s d-text">NorthWest</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class=" card-title text-s">
+                        <div onclick="distselect('NE')" class="box-outer-nw d-box-design">
+                            <p class="text-s d-text">NorthEast</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
     <script src="https://code.highcharts.com/highcharts.js"></script>
 
     <script src="/static/js/countapi.js"></script>
@@ -1060,7 +1275,26 @@
     <script src="/static/js/excellentexport.js"></script>
     <!-- <script src="/static/js/insight.js"></script> -->
 
-
+<script>
+    function LausdDist(){
+        document.getElementById("sanBerdinoDistrict").style.display="none";
+        document.getElementById("lausdDistrict").style.display="block";
+        document.getElementById("selectDistrict").style.display="none";
+    }
+    function sanberdinoDist(){
+        document.getElementById("lausdDistrict").style.display="none";
+        document.getElementById("sanBerdinoDistrict").style.display="block";
+        document.getElementById("selectDistrict").style.display="none";
+    }
+    function back1(){
+      document.getElementById("lausdDistrict").style.display="none";
+      document.getElementById("selectDistrict").style.display="block";
+    }
+    function back2(){
+      document.getElementById("sanBerdinoDistrict").style.display="none";
+      document.getElementById("selectDistrict").style.display="block";  
+    }
+</script>
 
 </body>
 
