@@ -381,46 +381,49 @@ def LSYTOLSY_Date():
 
 @app.route('/questtimeseries')
 def questtimeseries():
-    # live server credentials
+# live server credentials
+        
+
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
     db_live=client_live.compass
+
     QUEST_OBTAINED_USER=pd.DataFrame(list(db_live.user_master.aggregate([{"$match":{
-         '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                   {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-          {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-          {'IS_DISABLED':{"$ne":'Y'}},
-          {'IS_BLOCKED':{"$ne":'Y'}},
-          {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
-          {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-          {'IS_QUEST_OBTAINED':'Y'}
-          ]}},
-          
-          {'$project':{
-              '_id':0,
-              'USER_ID':'$_id',
-              'QUEST_OBTAIN_DATE':'$QUEST_OBTAINED_DATE',
-              
-              }}
-          
-          ])))
+            '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                        {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+            {'IS_DISABLED':{"$ne":'Y'}},
+            {'IS_BLOCKED':{"$ne":'Y'}},
+            {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+            {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+            {'IS_QUEST_OBTAINED':'Y'}
+            ]}},
+
+            {'$project':{
+                '_id':0,
+                'USER_ID':'$_id',
+                'QUEST_OBTAIN_DATE':'$QUEST_OBTAINED_DATE',
+
+                }}
+
+            ])))
     QUEST_OBTAINED_USER=QUEST_OBTAINED_USER[QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].notnull()].reset_index(drop=True)
     quest_history=pd.DataFrame(list(db_live.user_quest_history.aggregate([{"$match":{
-         '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-          {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-          {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
-          {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
-          {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
-          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}}]}},
-                                     {'$project':{
-                                         '_id':0,
-                                         'USER_ID':'$USER_ID._id',                                         
-                                         'QUEST_OBTAIN_DATE':'$QUEST_OBT_IN_DATE'
-                                                                              }}
-                                     ])))
-    
+            '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+            {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+            {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}}]}},
+                                        {'$project':{
+                                            '_id':0,
+                                            'USER_ID':'$USER_ID._id',                                         
+                                            'QUEST_OBTAIN_DATE':'$QUEST_OBT_IN_DATE'
+                                                                                }}
+                                        ])))
+
     def date_to_string(dates):
         date_=dates.strftime('%Y-%m-%d')
         return date_
@@ -435,7 +438,21 @@ def questtimeseries():
     quest_history['QUEST_FINISH_DAY']=quest_history['QUEST_OBTAIN_DATE'].apply(quest_last_day)    
     qh_no_entry=list(set(QUEST_OBTAINED_USER['USER_ID'])-set(quest_history['USER_ID']))
     quest_data=pd.concat([QUEST_OBTAINED_USER,quest_history],ignore_index=True)
-    quest_data_final=quest_data.drop_duplicates(subset=['USER_ID','QUEST_START_DAY'],keep='first').reset_index(drop=True)  
+    quest_data_final=quest_data.drop_duplicates(subset=['USER_ID','QUEST_START_DAY'],keep='first').reset_index(drop=True)
+    qh_um=pd.DataFrame(list(db_live.user_master.aggregate([{'$match':{'$and':[
+        {'_id':{'$in':list(quest_data_final['USER_ID'])}}
+        ]}},{'$project':{'_id':0,
+                        'USER_ID':'$_id',
+                        'USER_NAME':'$USER_NAME',
+                        'EMAIL_ID':'$EMAIL_ID',
+                        'SCHOOL_ID':'$schoolId._id',
+                        'SCHOOL_NAME':'$schoolId.NAME',
+                        'CHANNEL':'$UTM_MEDIUM',
+                        'SIGNUP':'$CREATED_DATE'
+                        }}])))
+
+
+    quest_history_data_new_final=quest_data_final.merge(qh_um,how='left',on='USER_ID')
     df=quest_history_data_new_final.copy()
 
     df['QUEST_START_DAY'] = pd.to_datetime(df['QUEST_START_DAY'])
