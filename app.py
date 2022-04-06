@@ -381,12 +381,8 @@ def LSYTOLSY_Date():
 
 @app.route('/questtimeseries')
 def questtimeseries():
-# live server credentials
-        
-
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
     db_live=client_live.compass
-
     QUEST_OBTAINED_USER=pd.DataFrame(list(db_live.user_master.aggregate([{"$match":{
             '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -402,10 +398,8 @@ def questtimeseries():
             {'$project':{
                 '_id':0,
                 'USER_ID':'$_id',
-                'QUEST_OBTAIN_DATE':'$QUEST_OBTAINED_DATE',
-
+                'QUEST_OBTAIN_DATE':'$QUEST_OBTAINED_DATE'
                 }}
-
             ])))
     QUEST_OBTAINED_USER=QUEST_OBTAINED_USER[QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].notnull()].reset_index(drop=True)
     quest_history=pd.DataFrame(list(db_live.user_quest_history.aggregate([{"$match":{
@@ -423,15 +417,12 @@ def questtimeseries():
                                             'QUEST_OBTAIN_DATE':'$QUEST_OBT_IN_DATE'
                                                                                 }}
                                         ])))
-
     def date_to_string(dates):
         date_=dates.strftime('%Y-%m-%d')
         return date_
-
     def quest_last_day(dates):
         last_date=(dates+relativedelta(days=41)).strftime("%Y-%m-%d")
         return last_date
-
     QUEST_OBTAINED_USER['QUEST_START_DAY']=QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].apply(date_to_string)
     QUEST_OBTAINED_USER['QUEST_FINISH_DAY']=QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].apply(quest_last_day)
     quest_history['QUEST_START_DAY']=quest_history['QUEST_OBTAIN_DATE'].apply(date_to_string)
@@ -450,8 +441,6 @@ def questtimeseries():
                         'CHANNEL':'$UTM_MEDIUM',
                         'SIGNUP':'$CREATED_DATE'
                         }}])))
-
-
     quest_history_data_new_final=quest_data_final.merge(qh_um,how='left',on='USER_ID')
     df=quest_history_data_new_final.copy()
 
