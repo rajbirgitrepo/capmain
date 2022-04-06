@@ -381,35 +381,72 @@ def LSYTOLSY_Date():
 
 @app.route('/questtimeseries')
 def questtimeseries():
-    mongo_uri = "mongodb://admin:" + urllib.parse.quote("F5tMazRj47cYqm33e") + "@52.41.36.115:27017/"
-    client = pymongo.MongoClient(mongo_uri)
-    db = client.compass
-    collection = db.user_master.aggregate([
-    {"$match":
-        {"$and":[ 
-           {"IS_QUEST_OBTAINED":"Y"},
-        {'IS_DISABLED':{"$ne":'Y'}},
-    {'IS_BLOCKED':{"$ne":'Y'}}, 
-    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
-    {'QUEST_OBTAINED_DATE':{'$gte':datetime.datetime(2021,8,1)}},
-    {'schoolId.NAME':{"$not":{"$regex":'Blocked', '$options':'i'}}}]}},
-    {"$match":
-    {"$and":[{'USER_NAME':{"$not":{"$regex":"Test",'$options':'i'}}},
-    {'USER_NAME':{"$not":{"$regex":'1gen','$options':'i'}}}]}}
-    ,
-    {"$project":{"_id":0,"USER_ID":"$_id","ID":"$schoolId._id","school_name":"$schoolId.NAME","USER_NAME":1,"CREATED_DATE":{"$dateToString": { "format": "%Y-%m-%d", "date":"$CREATED_DATE"}},
-                "email_id":"$EMAIL_ID"}}
-    ])
-    df= DataFrame(list(collection)).fillna(0)
-    df['CREATED_DATE'] = pd.to_datetime(df['CREATED_DATE'])
-    df1= df.groupby(df['CREATED_DATE'].dt.date)['USER_ID'].count().reset_index()
-    df1['CREATED_DATE'] = pd.to_datetime(df1['CREATED_DATE'])
-    df1['CREATED_DATE'] = df1['CREATED_DATE'].astype(np.int64) / int(1e6)
+    # live server credentials
+    client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
+    db_live=client_live.compass
+    QUEST_OBTAINED_USER=pd.DataFrame(list(db_live.user_master.aggregate([{"$match":{
+         '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+          {'IS_DISABLED':{"$ne":'Y'}},
+          {'IS_BLOCKED':{"$ne":'Y'}},
+          {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+          {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+          {'IS_QUEST_OBTAINED':'Y'}
+          ]}},
+          
+          {'$project':{
+              '_id':0,
+              'USER_ID':'$_id',
+              'QUEST_OBTAIN_DATE':'$QUEST_OBTAINED_DATE',
+              
+              }}
+          
+          ])))
+    QUEST_OBTAINED_USER=QUEST_OBTAINED_USER[QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].notnull()].reset_index(drop=True)
+    quest_history=pd.DataFrame(list(db_live.user_quest_history.aggregate([{"$match":{
+         '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+          {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+          {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+          {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}}]}},
+                                     {'$project':{
+                                         '_id':0,
+                                         'USER_ID':'$USER_ID._id',                                         
+                                         'QUEST_OBTAIN_DATE':'$QUEST_OBT_IN_DATE'
+                                                                              }}
+                                     ])))
+    
+    def date_to_string(dates):
+        date_=dates.strftime('%Y-%m-%d')
+        return date_
+
+    def quest_last_day(dates):
+        last_date=(dates+relativedelta(days=41)).strftime("%Y-%m-%d")
+        return last_date
+
+    QUEST_OBTAINED_USER['QUEST_START_DAY']=QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].apply(date_to_string)
+    QUEST_OBTAINED_USER['QUEST_FINISH_DAY']=QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].apply(quest_last_day)
+    quest_history['QUEST_START_DAY']=quest_history['QUEST_OBTAIN_DATE'].apply(date_to_string)
+    quest_history['QUEST_FINISH_DAY']=quest_history['QUEST_OBTAIN_DATE'].apply(quest_last_day)    
+    qh_no_entry=list(set(QUEST_OBTAINED_USER['USER_ID'])-set(quest_history['USER_ID']))
+    quest_data=pd.concat([QUEST_OBTAINED_USER,quest_history],ignore_index=True)
+    quest_data_final=quest_data.drop_duplicates(subset=['USER_ID','QUEST_START_DAY'],keep='first').reset_index(drop=True)  
+    df=quest_history_data_new_final.copy()
+
+    df['QUEST_START_DAY'] = pd.to_datetime(df['QUEST_START_DAY'])
+    df1= df.groupby(df['QUEST_START_DAY'].dt.date)['USER_ID'].count().reset_index()
+    df1['QUEST_START_DAY'] = pd.to_datetime(df1['QUEST_START_DAY'])
+    df1['QUEST_START_DAY'] = df1['QUEST_START_DAY'].astype(np.int64) / int(1e6)
     df1['Cumulative_user'] = df1['USER_ID'].cumsum()
     total=df1['USER_ID'].sum()
-    df2=df1[['CREATED_DATE','USER_ID']]
+    df2=df1[['QUEST_START_DAY','USER_ID']]
     user=df2.values.tolist()
-    df3=df1[['CREATED_DATE','Cumulative_user']]
+    df3=df1[['QUEST_START_DAY','Cumulative_user']]
     Cumuser=df3.values.tolist()
     temp={"user":user,"Cumuser":Cumuser,"total":int(total)}
     return json.dumps(temp)
