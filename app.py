@@ -67117,8 +67117,63 @@ def query_comparison():
     return json.dumps({'data':temp})
 
     
+# @app.route('/awschart')
+# def AWS():
+#     googleSheetId1 = '1Syk9Xqvvz07phGrC52Xsy7JlyBEfkBIAUonQwgkMDh8'
+#     worksheetName1 = 'aws_relaeses1'
+#     URL1 = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(
+#     googleSheetId1,
+#     worksheetName1
+#     )
+#     df = pd.read_csv(URL1)
+
+#     #Cost vs User growth
+#     googleSheetId3 = '1Syk9Xqvvz07phGrC52Xsy7JlyBEfkBIAUonQwgkMDh8'
+#     worksheetName3= 'Cost_vs_User_Growth'
+#     URL3= 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(
+#     googleSheetId3,
+#     worksheetName3
+#     )
+#     df1= pd.read_csv(URL3)
+
+#     #Cost_vs_Playbacks
+#     googleSheetId4 = '1Syk9Xqvvz07phGrC52Xsy7JlyBEfkBIAUonQwgkMDh8'
+#     worksheetName4= 'Cost_vs_Playbacks'
+#     URL4 = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(
+#     googleSheetId4,
+#     worksheetName4
+#     )
+#     df2 = pd.read_csv(URL4)
+#     df['date'] = pd.to_datetime(df['date'])
+#     df['date'] = df['date'].astype(np.int64) / int(1e6)
+#     df4=df[['date','count of AWS features']].fillna(0)  
+#     AWS_FeaTures = df4.values.tolist()
+#     df1['Date'] = pd.to_datetime(df1['Date'])
+#     df1['Date'] = df1['Date'].astype(np.int64) / int(1e6)
+#     df5=df1[['Date','School Users']].fillna(0) 
+#     df6=df1[['Date','Family Users']].fillna(0) 
+#     df7=df1[['Date','Cost($)']].fillna(0)  
+#     School_Users = df5.values.tolist()
+#     Family_Users = df6.values.tolist()
+#     Cost = df7.values.tolist()
+#     df2['Date'] = pd.to_datetime(df2['Date'])
+#     df2[(df2.Date>= '2017-01-01')]
+#     df2['Date'] = df2['Date'].astype(np.int64) / int(1e6)
+#     df8=df2[['Date','Users Playback']].fillna(0)
+#     df9=df2[['Date','Family Playback']].fillna(0) 
+#     df10=df2[['Date','Cost per Playback(Cents)']].fillna(0)    
+#     Users_Playback = df8.values.tolist()
+#     Family_Playback = df9.values.tolist()
+#     cost_per_playback = df10.values.tolist()
+#     temp={"releases":{"AWS_FEATURES":AWS_FeaTures},"growth":{"School_Users":School_Users,"Family_Users":Family_Users,"Cost":Cost},"playback":{"Users_Playback":Users_Playback,"Family_Playback":Family_Playback,"cost_per_playback":cost_per_playback}}
+
+
+#     return(json.dumps(temp))
+
+
 @app.route('/awschart')
 def AWS():
+    
     googleSheetId1 = '1Syk9Xqvvz07phGrC52Xsy7JlyBEfkBIAUonQwgkMDh8'
     worksheetName1 = 'aws_relaeses1'
     URL1 = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(
@@ -67126,7 +67181,6 @@ def AWS():
     worksheetName1
     )
     df = pd.read_csv(URL1)
-
     #Cost vs User growth
     googleSheetId3 = '1Syk9Xqvvz07phGrC52Xsy7JlyBEfkBIAUonQwgkMDh8'
     worksheetName3= 'Cost_vs_User_Growth'
@@ -67135,7 +67189,6 @@ def AWS():
     worksheetName3
     )
     df1= pd.read_csv(URL3)
-
     #Cost_vs_Playbacks
     googleSheetId4 = '1Syk9Xqvvz07phGrC52Xsy7JlyBEfkBIAUonQwgkMDh8'
     worksheetName4= 'Cost_vs_Playbacks'
@@ -67146,29 +67199,49 @@ def AWS():
     df2 = pd.read_csv(URL4)
     df['date'] = pd.to_datetime(df['date'])
     df['date'] = df['date'].astype(np.int64) / int(1e6)
-    df4=df[['date','count of AWS features']].fillna(0)  
+    df4=df[['date','count of AWS features']].fillna(0)
     AWS_FeaTures = df4.values.tolist()
     df1['Date'] = pd.to_datetime(df1['Date'])
     df1['Date'] = df1['Date'].astype(np.int64) / int(1e6)
-    df5=df1[['Date','School Users']].fillna(0) 
-    df6=df1[['Date','Family Users']].fillna(0) 
-    df7=df1[['Date','Cost($)']].fillna(0)  
+    df5=df1[['Date','Classroom']].fillna(0)
+    df6=df1[['Date','Home']].fillna(0)
+    df7=df1[['Date','Cost($)']].fillna(0)
+    df77=df1[['Date','Clever']].fillna(0)
+    df88=df1[['Date','Schoology']].fillna(0)
+    df99=df1[['Date','Canvas']].fillna(0)
     School_Users = df5.values.tolist()
     Family_Users = df6.values.tolist()
+    Clever_users=df77.values.tolist()
+    Schoology_users=df88.values.tolist()
+    Canvas_users=df99.values.tolist()
     Cost = df7.values.tolist()
     df2['Date'] = pd.to_datetime(df2['Date'])
     df2[(df2.Date>= '2017-01-01')]
     df2['Date'] = df2['Date'].astype(np.int64) / int(1e6)
-    df8=df2[['Date','Users Playback']].fillna(0)
-    df9=df2[['Date','Family Playback']].fillna(0) 
-    df10=df2[['Date','Cost per Playback(Cents)']].fillna(0)    
+    df8=df2[['Date','Classroom']].fillna(0)
+    df9=df2[['Date','Home']].fillna(0)
+    df10=df2[['Date','Cost per Playback(Cents)']].fillna(0)
+    df777=df1[['Date','Clever']].fillna(0)
+    df888=df1[['Date','Schoology']].fillna(0)
+    df999=df1[['Date','Canvas']].fillna(0)
     Users_Playback = df8.values.tolist()
     Family_Playback = df9.values.tolist()
-    cost_per_playback = df10.values.tolist()
-    temp={"releases":{"AWS_FEATURES":AWS_FeaTures},"growth":{"School_Users":School_Users,"Family_Users":Family_Users,"Cost":Cost},"playback":{"Users_Playback":Users_Playback,"Family_Playback":Family_Playback,"cost_per_playback":cost_per_playback}}
-
-
+    Clever_Playback=df777.values.tolist()
+    Schoology_Playback=df888.values.tolist()
+    Canvas_Playback=df999.values.tolist()
+    cost_per_Playback = df10.values.tolist()
+    temp={"releases":{"AWS_FEATURES":AWS_FeaTures},"growth":{"School_Users":School_Users,"Family_Users":Family_Users,"Cost":Cost,
+                       "Clever_users":Clever_users,'Schoology_users':Schoology_users,'Canvas_users':Canvas_users},
+          "playback":{"Users_Playback":Users_Playback,"Family_Playback":Family_Playback,"cost_per_playback":cost_per_Playback,
+            "Clever_Playback":Clever_Playback,'Schoology_Playback':Schoology_Playback,'Canvas_Playback':Canvas_Playback
+                     }}
     return(json.dumps(temp))
+
+
+
+
+
+
 
 @app.route('/AWSTABLE/<date>')
 def AWS_TABLE(date):
