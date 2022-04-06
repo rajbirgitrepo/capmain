@@ -1484,11 +1484,9 @@ def questusercounts():
     return json.dumps(temp)
 
 @app.route('/executive_count_productwise_lelo')
-def executive_count_productwise_d3():
-    
+def executive_count_productwise_d3():    
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
     db_live=client_live.compass
-
     d3_users=pd.DataFrame(list(db_live.user_master.aggregate([
         {"$match":{
              '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -1555,8 +1553,8 @@ def executive_count_productwise_d3():
             xx['PLAN_NAME'][i]='Schoolapp'
 
 
-    if len(xx[(xx['School_Count']>1) & (xx['max_plan']==17)])>1:
-        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==17)]['schoolid'])}},
+    if len(xx[(xx['School_Count']>=1) & (xx['max_plan']==16)])>1:
+        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==16)]['schoolid'])}},
                                          {'$set':{
                                              'DASH_CATEGORY':'Schoolapp'
 
@@ -1568,8 +1566,7 @@ def executive_count_productwise_d3():
     elif len(xx[(xx['School_Count']==1) & (xx['max_plan']==17)])>1:
         db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
                                          {'$set':{
-                                             'DASH_CATEGORY':'Homaapp'
-
+                                             'DASH_CATEGORY':'Homeapp'
 
                                          }}
 
