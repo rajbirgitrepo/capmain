@@ -58297,12 +58297,15 @@ def quest_activation_heatmap():
     SAT= df2[(df2.DM == 7)].reset_index(drop = True)
     SAT = SAT['pc'].tolist()
 
+
+
     data = {
                'SUNDAY':SUN,'MONDAY':MON,
                'TUESDAY':TUE,'WEDNESDAY':WED,
                'THURSDAY':THU,'FRIDAY':FRI,
                'SATURDAY':SAT}
     # #     print(data)
+
 
     dataframe=pd.DataFrame.from_dict(data,orient='index')
     #     print(dataframe)
@@ -58323,12 +58326,17 @@ def quest_activation_heatmap():
         DF.loc[label,'THU'] = row['THURSDAY']/row['TOTAL'] * 100
         DF.loc[label,'FRI'] = row['FRIDAY']/row['TOTAL'] * 100
         DF.loc[label,'SAT'] = row['SATURDAY']/row['TOTAL'] * 100
+
     DF = DF.drop(['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','TOTAL'], axis=1)
     DF=DF.T
     DF=DF.round()
     DF=DF.fillna(0)
+
+
     day=DF.values.tolist()
+
     key=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY']
+
     data={'meanTemp':{key[0]:day[0],key[1]:day[1],key[2]:day[2],key[3]:day[3],key[4]:day[4],key[5]:day[5],key[6]:day[6]}}
     return json.dumps(data,sort_keys=False)
 
