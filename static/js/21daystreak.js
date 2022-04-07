@@ -119,7 +119,7 @@ $.ajax(settings).done(function (response) {
         type: "column",
       },
       title: {
-        text: "Quest Incomplete Trend User Practiced",
+        text: "Quest Incomplete Trend Streak",
       },
       credits: {
         enabled: false,
@@ -180,7 +180,7 @@ $.ajax(settings).done(function (response) {
       },
       series: [
         {
-          name: "Count",
+          name: "Days (in Quest Incomplete Trend User Practiced)",
           data: dataa.Incomplete_Trend.y_axis,
           stack: 0,
         },

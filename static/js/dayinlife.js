@@ -278,6 +278,13 @@ function charts(a) {
                         }
                     }
                 },
+                legend: {
+                    enabled: true,
+                    itemStyle: {
+                        fontSize: '8px',
+                        fontWeight: '200'
+                    }
+                },
 
                 series: [{
                         "name": "Rating",

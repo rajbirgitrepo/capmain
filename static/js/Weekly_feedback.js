@@ -575,6 +575,11 @@ function charts(a) {
                             data: dataa.weekdata.count_last_week_schoology,
                             stack: 'Last week'
                         },
+                        {
+                            name: 'Canvas ' + t + ' Count Last Week',
+                            data: dataa.weekdata.count_last_to_last_week_canvas,
+                            stack: 'Last week'
+                        },
                     ]
                 });
             }
@@ -582,80 +587,83 @@ function charts(a) {
 
         );
     }
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "/comparison1/" + a,
-        "method": "GET"
-    }
-    $.ajax(settings).done(function(response) {
-            var dataa = JSON.parse(response);
-            console.log(dataa, "hello frnd")
+    // var settings = {
+    //     "async": true,
+    //     "crossDomain": true,
+    //     "url": "/comparison1/" + a,
+    //     "method": "GET"
+    // }
+    // $.ajax(settings).done(function(response) {
+    //         var dataa = JSON.parse(response);
+    //         console.log(dataa, "hello frnd")
 
 
-            Highcharts.chart('container2', {
-                chart: {
-                    type: 'column'
-                },
-                colors: [
+    //         Highcharts.chart('container2', {
+    //             chart: {
+    //                 type: 'column'
+    //             },
+    //             colors: [
 
-                    '#CACACA', '#00a651', '#8ae02b',
-
-
-                ],
-                title: {
-                    text: 'Playback Count Weekly Comparison  (Home)'
-                },
-                xAxis: {
-                    categories: dataa.weekdata.day,
-                    crosshair: false
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Prcatice Count'
-                    }
-                },
-                tooltip: {
-                    headerFormat: '<span>{point.x}</span><br>',
-                    pointFormat: '<span>{series.name}</span><span{point.name}></span>: <b>{point.y}'
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
-                    },
-                    series: {
-                        point: {
-                            events: {
-                                click: function() {
-
-                                    $('#next4').empty();
-                                    $('#next41').empty();
-
-                                    URL = '/parents_practice_tablee_weekly/' + this.category;
-                                    $('#btnExport').show();
-                                    console.log(URL);
-                                    createDynamic(URL)
+    //                 '#CACACA', '#00a651', '#8ae02b',
 
 
-                                }
-                            }
-                        }
-                    }
-                },
-                series: [{
-                    name: 'Count Last to Last Week homes',
-                    data: dataa.weekdata.count_last_to_lastweek_parents
-                }, {
-                    name: 'Count Last Week homes',
-                    data: dataa.weekdata.count_last_week_parents
-                }]
-            });
-        }
+    //             ],
+    //             title: {
+    //                 text: 'Playback Count Weekly Comparison  (Home)'
+    //             },
+    //             xAxis: {
+    //                 categories: dataa.weekdata.day,
+    //                 crosshair: false
+    //             },
+    //             yAxis: {
+    //                 min: 0,
+    //                 title: {
+    //                     text: 'Prcatice Count'
+    //                 }
+    //             },
+    //             tooltip: {
+    //                 headerFormat: '<span>{point.x}</span><br>',
+    //                 pointFormat: '<span>{series.name}</span><span{point.name}></span>: <b>{point.y}'
+    //             },
+    //             plotOptions: {
+    //                 column: {
+    //                     pointPadding: 0.2,
+    //                     borderWidth: 0
+    //                 },
+    //                 series: {
+    //                     point: {
+    //                         events: {
+    //                             click: function() {
+
+    //                                 $('#next4').empty();
+    //                                 $('#next41').empty();
+
+    //                                 URL = '/parents_practice_tablee_weekly/' + this.category;
+    //                                 $('#btnExport').show();
+    //                                 console.log(URL);
+    //                                 createDynamic(URL)
 
 
-    );
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             },
+    //             series: [{
+    //                 name: 'Count Last to Last Week homes',
+    //                 data: dataa.weekdata.count_last_to_lastweek_parents
+    //             }, 
+    //             {
+    //                 name: 'Count Last Week homes',
+    //                 data: dataa.weekdata.count_last_week_parents
+    //             }
+                
+    //         ]
+    //         });
+    //     }
+
+
+    // );
 
 
     var settings = {

@@ -659,7 +659,7 @@ function playbackTrendChart3(selectValue3, tx) {
             legend: {
                 enabled: true,
                 itemStyle: {
-                    fontSize: '7px',
+                    fontSize: '8px',
                     fontWeight: '200'
                 }
             },
