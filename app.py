@@ -74804,13 +74804,23 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
              {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
             { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
     {'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    {'EMAIL_ID':{'$ne':''}},
-    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-    "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
+    {'EMAIL_ID':{'$ne':''}},         
+         
     {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
     {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
     {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
     {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        
+         {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                       
+        
      {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'},        'user_id':{'$first':'$_id'}}},
                       {'$project':{'_id':1,'name':'$ID', 'user_id':'$user_id'}},
 
@@ -74837,13 +74847,20 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
 
                  {'EMAIL_ID':{'$ne':''}},
 
-             {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
-
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        
+         {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                       
             {'$group':{'_id':'','ID':{'$addToSet':'$schoolId._id'},'dn':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
                   {'$project':{'_id':1,'school_count':{'$size':'$ID'},'district':'$dn'}}
                   ])))
@@ -74865,13 +74882,20 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
 
                  {'EMAIL_ID':{'$ne':''}},
-             {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
-
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+                                                
+      {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                                                                  
             {'$group':{'_id':'','ID':{'$addToSet':'$_id'}}},
                   {'$project':{'_id':1,'teacher_count':{'$size':'$ID'}}}
                   ])))
@@ -74886,16 +74910,21 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                  {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
-             {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
-             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
-
-
                  {'EMAIL_ID':{'$ne':''}},
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+                                                
+         {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                                                               
             {'$group':{'_id':'','ID':{'$addToSet':'$_id'}}},
                   {'$project':{'_id':1,'family_count':{'$size':'$ID'}}}
                   ])))
@@ -75108,7 +75137,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
 
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
-{'USER_ID.schoolId._id':{'$in':schoolid}},
+        {'USER_ID.schoolId._id':{'$in':schoolid}},
 
                 #   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
             #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
@@ -75284,7 +75313,8 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
     "engd_parent_csy":str(engd_parent_csy[0]),"engd_parent_lsy":str(engd_parent_lsy[0]), "engaged_school_csy":str(engdschool_csy[0]),"engaged_school_lsy":str(engdschool_lsy[0]),"teachercount":str(tc[0]),"familycount":str(fc[0]),"teacherpracticecount":str(pct[0]),"parentspracticecount":str(pcp[0]),
     'MINDFUL_MINUTES':str(round(int(mm[0]))),'rating':str(round(rating[0],1)),'state':str(state[0]),'MINDFUL_MINUTES_Teacher':str(round(int(mmt[0]))),'MINDFUL_MINUTES_parent':str(round(int(mmp[0]))),'district':X,"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
     return json.dumps(data)
-# mini_district_school_table
+
+
 
 @app.route('/minidistrictschooltable/<LOCAl_DISTRICT>/<startdate>/<enddate>')
 def mini_district_school_table(LOCAl_DISTRICT,startdate,enddate):
