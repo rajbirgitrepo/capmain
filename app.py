@@ -78810,6 +78810,225 @@ def active_teachers_school_search(idd,chart_type):
 
 
 
+@app.route('/questcardschart')
+def _21dayquest():
+    QUEST_OBTAINED_USER=pd.DataFrame(list(db_live.user_master.aggregate([{"$match":{
+             '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'IS_DISABLED':{"$ne":'Y'}},
+              {'IS_BLOCKED':{"$ne":'Y'}},
+              {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+              {'IS_QUEST_OBTAINED':'Y'}
+              ]}},
+
+              {'$project':{
+                  '_id':0,
+                  'USER_ID':'$_id',
+                  'QUEST_OBTAIN_DATE':'$QUEST_OBTAINED_DATE',
+
+                  }}
+
+              ])))
+
+    QUEST_OBTAINED_USER=QUEST_OBTAINED_USER[QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].notnull()].reset_index(drop=True)
+
+    quest_history=pd.DataFrame(list(db_live.user_quest_history.aggregate([{"$match":{
+             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+              {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+              {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}}]}},
+                                         {'$project':{
+                                             '_id':0,
+                                             'USER_ID':'$USER_ID._id',                                         
+                                             'QUEST_OBTAIN_DATE':'$QUEST_OBT_IN_DATE'
+                                                                                  }}
+                                         ])))
+
+    def date_to_string(dates):
+        date_=dates.strftime('%Y-%m-%d')
+        return date_
+    def quest_last_day(dates):
+        last_date=(dates+relativedelta(days=41)).strftime("%Y-%m-%d")
+        return last_date
+
+    QUEST_OBTAINED_USER['QUEST_START_DAY']=QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].apply(date_to_string)
+    QUEST_OBTAINED_USER['QUEST_FINISH_DAY']=QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].apply(quest_last_day)
+    quest_history['QUEST_START_DAY']=quest_history['QUEST_OBTAIN_DATE'].apply(date_to_string)
+    quest_history['QUEST_FINISH_DAY']=quest_history['QUEST_OBTAIN_DATE'].apply(quest_last_day)
+
+
+    qh_no_entry=list(set(QUEST_OBTAINED_USER['USER_ID'])-set(quest_history['USER_ID']))
+
+    quest_data=pd.concat([QUEST_OBTAINED_USER,quest_history],ignore_index=True)
+
+    quest_data_final=quest_data.drop_duplicates(subset=['USER_ID','QUEST_START_DAY'],keep='first').reset_index(drop=True)
+
+    def all_practice_dates(startdate,enddate):
+        dates=list(pd.date_range(startdate,enddate).strftime("%Y-%m-%d"))
+        return dates
+
+    quest_data_final['POSSIBLE_PRACTICE_DAYS']=''
+    for i in range(len(quest_data_final)):
+        quest_data_final['POSSIBLE_PRACTICE_DAYS'][i]=all_practice_dates(quest_data_final['QUEST_START_DAY'][i],quest_data_final['QUEST_FINISH_DAY'][i])
+
+
+    practice_info=pd.DataFrame(list(db_live.audio_track_master.aggregate([{"$match":{
+             '$and':[
+             {'USER_ID._id':{'$in':list(quest_data_final['USER_ID'])}}
+
+
+             ]}},
+
+      {'$group':{
+          '_id':'$USER_ID._id',
+          'practice_dates':{'$addToSet':{ '$dateToString': { 'format': "%Y-%m-%d", 'date': "$MODIFIED_DATE" } }}
+
+
+
+      }}])))
+
+    practice_info['practice_dates']=[sorted(i) for i in practice_info['practice_dates']]
+
+    practice_info=practice_info.rename(columns={'_id':'USER_ID'})
+
+    quest_data_final_1=quest_data_final.merge(practice_info,how='left',on='USER_ID')
+
+    quest_data_final_1['practice_dates']=quest_data_final_1['practice_dates'].fillna("").apply(list)
+
+    _21_day_practice_dates=[]
+    for i in range(len(quest_data_final_1)):
+        all_dates=list(set(quest_data_final_1['POSSIBLE_PRACTICE_DAYS'][i]).intersection(quest_data_final_1['practice_dates'][i]))
+        _21_day_practice_dates.append(all_dates)
+
+    quest_data_final_1['_21_day_practice_dates']=_21_day_practice_dates
+
+    quest_data_final_1['total_days_practiced_21Q']=[len(i) for i in quest_data_final_1['_21_day_practice_dates']]
+
+    quest_completed_status=[]
+    for i in range(len(quest_data_final_1)):
+        if (quest_data_final_1['QUEST_FINISH_DAY'][i]<=datetime.datetime.now().strftime("%Y-%m-%d")) &(quest_data_final_1['total_days_practiced_21Q'][i]<21):
+            quest_completed_status.append('No')
+        elif (quest_data_final_1['QUEST_FINISH_DAY'][i]<=datetime.datetime.now().strftime("%Y-%m-%d")) &(quest_data_final_1['total_days_practiced_21Q'][i]>=21):
+            quest_completed_status.append('Yes')
+        elif (quest_data_final_1['QUEST_FINISH_DAY'][i]>=datetime.datetime.now().strftime("%Y-%m-%d")) &(quest_data_final_1['total_days_practiced_21Q'][i]>=21):
+            quest_completed_status.append('Yes')
+
+        else:
+            quest_completed_status.append('Ongoing')
+
+
+
+
+
+    quest_data_final_1['QUEST_COMPLETED_STATUS']=quest_completed_status
+
+    quest_count=quest_data_final_1.groupby('USER_ID')['QUEST_START_DAY'].apply(list).reset_index()
+
+    quest_count['TOTAL_QUEST']=quest_count['QUEST_START_DAY'].apply(len)
+
+    overall_pair=[]
+    for i in range(len(quest_count)):
+        all_pair=[(quest_count['QUEST_START_DAY'][i][p1], quest_count['QUEST_START_DAY'][i][p2]) for p1 in range(len(quest_count['QUEST_START_DAY'][i])) for p2 in range(p1+1,len(quest_count['QUEST_START_DAY'][i]))]
+        overall_pair.append(all_pair)
+
+    no_completion_data=[]
+    for i in range(len(overall_pair)):
+        for j in range(len(overall_pair[i])):
+            if abs((pd.to_datetime(overall_pair[i][j][1])-pd.to_datetime(overall_pair[i][j][0])).days)<21:
+                try:
+                    rejected_date=min(overall_pair[i][j])
+                    df_dict={'USER_ID':quest_count['USER_ID'][i],'rejected_date':rejected_date}
+                    no_completion_data.append(df_dict)
+                except:
+                    pass
+                else:
+                    pass
+
+
+
+
+
+
+    for i in range(len(no_completion_data)):
+        quest_data_final_1.loc[(quest_data_final_1['USER_ID']==no_completion_data[i].get('USER_ID'))&(quest_data_final_1['QUEST_START_DAY']==no_completion_data[i].get('rejected_date')),'NEW_QUEST_STATUS']='No'
+
+    quest_data_final_1.loc[quest_data_final_1['NEW_QUEST_STATUS'].isnull(),'NEW_QUEST_STATUS']=quest_data_final_1['QUEST_COMPLETED_STATUS']
+
+
+    qh_um=pd.DataFrame(list(db_live.user_master.aggregate([{'$match':{'$and':[
+        {'_id':{'$in':list(quest_data_final_1['USER_ID'])}}
+
+
+    ]}},
+
+                                                          {'$project':{'_id':0,
+                                                                      'USER_ID':'$_id',
+                                                                       'USER_NAME':'$USER_NAME',
+                                                                       'EMAIL_ID':'$EMAIL_ID',
+                                                                       'SCHOOL_ID':'$schoolId._id',
+                                                                       'SCHOOL_NAME':'$schoolId.NAME',
+                                                                       'CHANNEL':'$UTM_MEDIUM',
+                                                                       'SIGNUP':'$CREATED_DATE'
+
+                                                                      }}
+                                                          ])))
+
+    quest_history_data_new_final=quest_data_final_1.merge(qh_um,how='left',on='USER_ID')
+
+    quest_history_data_new_final.rename(columns={'NEW_QUEST_STATUS':'QUEST_STATUS'},inplace=True)
+
+    quest_history_data_new_final.loc[(quest_history_data_new_final['QUEST_STATUS']=='No')&(quest_history_data_new_final['total_days_practiced_21Q']>=21),'QUEST_STATUS']='Yes'
+
+    columns_required=['USER_ID','USER_NAME', 'EMAIL_ID', 'SCHOOL_ID', 'SCHOOL_NAME', 'SIGNUP',
+            'CHANNEL', 'QUEST_START_DAY', 'QUEST_FINISH_DAY',
+            'POSSIBLE_PRACTICE_DAYS', 'practice_dates', '_21_day_practice_dates',
+            'total_days_practiced_21Q', 'QUEST_STATUS'
+            ]
+
+    quest_history_data_new_final=quest_history_data_new_final[columns_required]
+
+    quest_history_data_new_final=quest_history_data_new_final[quest_history_data_new_final['SIGNUP'].notnull()].reset_index(drop=True)
+
+    quest_history_data_new_final['CHANNEL']=quest_history_data_new_final['CHANNEL'].fillna('Other')
+    quest_history_data_new_final['CHANNEL']=quest_history_data_new_final['CHANNEL'].replace(['NULL','null',None,'Null'],'Other')
+
+    quest_history_data_new_final['CHANNEL']=quest_history_data_new_final['CHANNEL'].str.lower().str.title()
+
+    channel_data=quest_history_data_new_final['CHANNEL'].value_counts().reset_index().rename(columns={'index':'Channel',
+                                                                                                     'CHANNEL':'Count'
+                                                                                                     })
+
+    incomplete_trend=quest_history_data_new_final[quest_history_data_new_final['QUEST_STATUS']=='No']['total_days_practiced_21Q'].value_counts().reset_index().rename(columns={'index':'Days',
+                                                                                                     'total_days_practiced_21Q':'Count'
+                                                                                                     })
+
+    quest_days=pd.DataFrame({'Days':list(range(0,21))})
+
+    incomplete_trend_new=quest_days.merge(incomplete_trend,how='left',on='Days').fillna(0)
+
+    temp={'TOTAL_QUEST':len(quest_history_data_new_final),
+         'QUEST_COMPLETED':len(quest_history_data_new_final[quest_history_data_new_final['QUEST_STATUS']=='Yes']),
+          'USER_ACTIVATED':len(set(quest_history_data_new_final['USER_ID'])),
+          'USER_COMPLETED':len(set(quest_history_data_new_final[quest_history_data_new_final['QUEST_STATUS']=='Yes']['USER_ID'])),
+          'USER_PRACTICED':len(set(quest_history_data_new_final[quest_history_data_new_final['total_days_practiced_21Q']!=0]['USER_ID'])),
+         'Channel_Chart':{'x_axis':channel_data['Channel'].tolist(),'y_axis':channel_data['Count'].tolist()},
+          'Incomplete_Trend':{'x_axis':list(incomplete_trend_new['Days']),
+                             'y_axis':list(incomplete_trend_new['Count'])
+                             }
+         }
+
+    return json.dumps(temp)
+
+
+
+
 @app.route('/Family_SURVEY')
 def Family_SURVEY():
     if not g.user:
