@@ -442,6 +442,7 @@ def questtimeseries():
                         'SIGNUP':'$CREATED_DATE'
                         }}])))
     quest_history_data_new_final=quest_data_final.merge(qh_um,how='left',on='USER_ID')
+    quest_history_data_new_final=quest_history_data_new_final[quest_history_data_new_final['SIGNUP'].notnull()].reset_index(drop=True)
     df=quest_history_data_new_final.copy()
 
     df['QUEST_START_DAY'] = pd.to_datetime(df['QUEST_START_DAY'])
@@ -67173,7 +67174,7 @@ def query_comparison():
 
 @app.route('/awschart')
 def AWS():
-    
+
     googleSheetId1 = '1Syk9Xqvvz07phGrC52Xsy7JlyBEfkBIAUonQwgkMDh8'
     worksheetName1 = 'aws_relaeses1'
     URL1 = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(
