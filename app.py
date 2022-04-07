@@ -77290,10 +77290,6 @@ def mini_district_dis_schoolrating_csy__(LOCAl_DISTRICT,startdate,enddate):
              {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                 {'EMAIL_ID':{'$ne':''}},
-    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
-                                                             "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}
-                                                             })}},
-
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
          { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -77301,15 +77297,26 @@ def mini_district_dis_schoolrating_csy__(LOCAl_DISTRICT,startdate,enddate):
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
 
          }},
+        {'$match':{'$or':[
+                    {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
+                    'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
+
+                    {"schoolId._id":{"$in":db.school_master.distinct("_id", {"IS_PORTAL": "Y",
+                    'CATEGORY':{'$regex':'San Bernardino County', '$options':'i'},
+                    'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
+
+                    ]}},                                                                                                                       
+        
+        
         {'$project':{'_id':'$_id','school':'$schoolId._id' }}
         ])))
-
+    
+  
     user=df1['_id'].tolist() 
 
 
     df = DataFrame(list(collection.aggregate([
      {"$match":{'$and':[
-
            {'USER._id':{'$in':user}},
 
         {'RATING':{'$ne':0}},
@@ -77323,15 +77330,23 @@ def mini_district_dis_schoolrating_csy__(LOCAl_DISTRICT,startdate,enddate):
 
     ])))
 
-    df['_id']=df['_id'].replace({5:'five', 4:'four',3:'three',2:'two',1:'one'})
+    if df.empty is True:
+        temp={"donut":0}
 
-    dff=df.set_index("_id")["count"].to_dict()
+        return json.dumps(temp)
+    
+    else:
+        
+        df['_id']=df['_id'].replace({5:'five', 4:'four',3:'three',2:'two',1:'one'})
 
-    dff={str(k):int(v) for k,v in dff.items()}
+        dff=df.set_index("_id")["count"].to_dict()
 
-    temp={"donut":dff}
-   
-    return json.dumps(temp)
+        dff={str(k):int(v) for k,v in dff.items()}
+
+        temp={"donut":dff}
+
+        return json.dumps(temp)
+
 
 # last 90 days practice history
 @app.route('/mini_district_last90daysuserpractising/<LOCAl_DISTRICT>')
