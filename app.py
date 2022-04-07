@@ -58241,12 +58241,20 @@ def quest_activation_heatmap():
                         }}])))
     quest_history_data_new_final=quest_data_final.merge(qh_um,how='left',on='USER_ID')
     quest_history_data_new_final=quest_history_data_new_final[quest_history_data_new_final['SIGNUP'].notnull()].reset_index(drop=True)
+    quest_history_data_new_final=quest_history_data_new_final[pd.to_datetime(quest_history_data_new_final['QUEST_START_DAY'])>pd.to_datetime(csy_first_date())].reset_index(drop=True)
     df=quest_history_data_new_final.copy()
-#     to make python and mongodb 
-
+#     to make python and mongodb week of the day same
     df['DM']=[pd.to_datetime(i).weekday()+2 for i in df['QUEST_START_DAY']]
     df.loc[df['DM']==8,'DM']=1
-    df['month']=[pd.to_datetime(i).month for i in df['QUEST_START_DAY']]
+    df['month_']=[pd.to_datetime(i).month for i in df['QUEST_START_DAY']]
+# logic for current school year data
+    month=[]
+    for i in range(len(df)):        
+        if df['month_'][i]>7:            
+            month.append(df['month_'][i]-7)
+        else:
+            month.append(df['month_'][i]+5)
+    df['month']=month
 
     df=df.groupby(['DM','month'])['USER_ID'].count().reset_index().rename(columns={'USER_ID':'pc'})
     df=df.sort_values(by=['DM','month']).reset_index(drop=True)
@@ -58271,8 +58279,6 @@ def quest_activation_heatmap():
                 a=max(list(df45.index))
                 df45.loc[a+i] = [k] +[i]+[0]
     #         print(df45)
-
-
         sorted_df =df45.sort_values(by=['month'], ascending=True)
     #     sorted_df1=sorted_df.reset_index()
         result.append(sorted_df)
@@ -58280,8 +58286,6 @@ def quest_activation_heatmap():
     #     print(df2)
 
     #     finaldf=finaldf.sort_values(by=['name'])
-
-
     SUN= df2[(df2.DM == 1)].reset_index(drop = True)
     SUN = SUN['pc'].tolist()
     MON= df2[(df2.DM == 2)].reset_index(drop = True)
@@ -58296,26 +58300,21 @@ def quest_activation_heatmap():
     FRI = FRI['pc'].tolist()
     SAT= df2[(df2.DM == 7)].reset_index(drop = True)
     SAT = SAT['pc'].tolist()
-
-
-
     data = {
                'SUNDAY':SUN,'MONDAY':MON,
                'TUESDAY':TUE,'WEDNESDAY':WED,
                'THURSDAY':THU,'FRIDAY':FRI,
                'SATURDAY':SAT}
     # #     print(data)
-
-
     dataframe=pd.DataFrame.from_dict(data,orient='index')
     #     print(dataframe)
-
     DF=list(dataframe.sum(axis=0))
 
     DF = pd.Series(DF, index = dataframe.columns)
     DF = dataframe.append(DF, ignore_index=True)
     # df=dataframe.append(DF,orient='index')
-    DF.columns =['JAN', 'FEB', 'MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'] 
+#     DF.columns =['JAN', 'FEB', 'MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']
+    DF.columns =['AUG','SEP','OCT','NOV','DEC','JAN', 'FEB', 'MAR','APR','MAY','JUN','JUL']
     DF.index=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','TOTAL']
     DF=DF.T
     for label, row in DF.iterrows():
@@ -58331,12 +58330,8 @@ def quest_activation_heatmap():
     DF=DF.T
     DF=DF.round()
     DF=DF.fillna(0)
-
-
     day=DF.values.tolist()
-
     key=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY']
-
     data={'meanTemp':{key[0]:day[0],key[1]:day[1],key[2]:day[2],key[3]:day[3],key[4]:day[4],key[5]:day[5],key[6]:day[6]}}
     return json.dumps(data,sort_keys=False)
 
