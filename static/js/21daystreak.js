@@ -13,6 +13,185 @@
 // $("#fromd").text(e);
 // $("#tod").text(f);
 
+var settings = {
+  async: true,
+  crossDomain: true,
+  url:"/questcardschart",
+  method: "GET",
+};
+$.ajax(settings).done(function (response) {
+  var dataa = JSON.parse(response);
+  console.log(dataa);
+ 
+  $(function () {
+    $("#container4").highcharts({
+      chart: {
+        zoomType: "xy",
+        type: "column",
+      },
+      title: {
+        text: "Quest Channel Wide",
+      },
+      credits: {
+        enabled: false,
+      },
+      colors: ["#01A451"],
+      xAxis: [
+        {
+          categories: dataa.Channel_Chart.x_axis,
+          labels: {
+            style: {
+              fontSize: "8px",
+              rotation: 90,
+            },
+          },
+        },
+      ],
+      yAxis: [
+        {
+          //Primary yAxis
+          lineWidth: 1,
+          labels: {
+            format: "{value}",
+            style: {
+              color: "#000",
+            },
+          },
+          title: {
+            text: "User Count",
+            style: {
+              color: "#000",
+            },
+          },
+        },
+        {
+          //Secondary yAxis
+          title: {
+            text: "",
+            style: {
+              color: "#4572A7",
+            },
+          },
+          labels: {
+            format: "{value}",
+            style: {
+              color: "#4572A7",
+            },
+          },
+          opposite: false,
+        },
+      ],
+      tooltip: {
+        shared: true,
+      },
+      plotOptions: {
+        series: {
+          stacking: "normal",
+        },
+      },
+      series: [
+        {
+          name: "Channel",
+          data: dataa.Channel_Chart.y_axis,
+          stack: 0,
+        },
+       
+      ],
+    });
+  });
+});
+
+
+var settings = {
+  async: true,
+  crossDomain: true,
+  url:"/questcardschart",
+  method: "GET",
+};
+$.ajax(settings).done(function (response) {
+  var dataa = JSON.parse(response);
+  console.log(dataa);
+  
+  $(function () {
+    $("#container5").highcharts({
+      chart: {
+        zoomType: "xy",
+        type: "column",
+      },
+      title: {
+        text: "Quest Incomplete Trend User Practiced",
+      },
+      credits: {
+        enabled: false,
+      },
+      colors: ["#01A451"],
+      xAxis: [
+        {
+          categories: dataa.Incomplete_Trend.x_axis,
+          labels: {
+            style: {
+              fontSize: "8px",
+              rotation: 90,
+            },
+          },
+        },
+      ],
+      yAxis: [
+        {
+          //Primary yAxis
+          lineWidth: 1,
+          labels: {
+            format: "{value}",
+            style: {
+              color: "#000",
+            },
+          },
+          title: {
+            text: "User Count",
+            style: {
+              color: "#000",
+            },
+          },
+        },
+        {
+          //Secondary yAxis
+          title: {
+            text: "",
+            style: {
+              color: "#4572A7",
+            },
+          },
+          labels: {
+            format: "{value}",
+            style: {
+              color: "#4572A7",
+            },
+          },
+          opposite: false,
+        },
+      ],
+      tooltip: {
+        shared: true,
+      },
+      plotOptions: {
+        series: {
+          stacking: "normal",
+        },
+      },
+      series: [
+        {
+          name: "Count",
+          data: dataa.Incomplete_Trend.y_axis,
+          stack: 0,
+        },
+     
+      ],
+    });
+  });
+});
+
+
+
 
 var settings = {
   async: true,
@@ -166,17 +345,17 @@ function zerochart2() {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url": '/quest_cards',
+  "url": '/questcardschart',
   "method": "GET"
 }
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
-
-  $('#c1').text(dataa.total_users_activated);
-  $('#c4').text(dataa.users_practiced);
-  $('#c5').text(dataa.Mindful_minutes);
-  $('#c6').text(dataa.Practice_sessions);
-  $('#c7').text(dataa.Total_users_completed);
+console.log(dataa)
+  $('#c1').text(dataa.TOTAL_QUEST);
+  $('#c4').text(dataa.QUEST_COMPLETED);
+  $('#c5').text(dataa.USER_ACTIVATED);
+  $('#c6').text(dataa.USER_COMPLETED);
+  $('#c7').text(dataa.USER_PRACTICED);
 
 });
 var settings = {
@@ -251,7 +430,7 @@ $.ajax(settings).done(function (response) {
     {
       type: 'line',
       color: '#FF9933',
-      name: 'Total Signup Count',
+      name: 'Total Quest Obtain',
       data: dataa.Cumuser, yAxis: 1, //Fri, 14 Jul 2017 00:00:00 GMT
       dataGrouping: {
         enabled: false,
@@ -264,71 +443,71 @@ $.ajax(settings).done(function (response) {
 });
 
 
-var settings = {
-  "async": true,
-  "crossDomain": true,
-  "url": "/queststreak",
-  "method": "GET"
-}
-$.ajax(settings).done(function (response) {
-  var dataa = JSON.parse(response);
+// var settings = {
+//   "async": true,
+//   "crossDomain": true,
+//   "url": "/queststreak",
+//   "method": "GET"
+// }
+// $.ajax(settings).done(function (response) {
+//   var dataa = JSON.parse(response);
 
-  $("#c2").text(dataa.streak_count
-  );
-  Highcharts.chart('container1', {
-    chart: {
-      type: 'column'
-    },
-    colors: [
-      '#00774d',
-      '#FF4500'
+//   $("#c2").text(dataa.streak_count
+//   );
+//   Highcharts.chart('container1', {
+//     chart: {
+//       type: 'column'
+//     },
+//     colors: [
+//       '#00774d',
+//       '#FF4500'
 
 
-    ],
-    title: {
-      text: '21 DAY QUEST STREAK'
-    },
-    xAxis: {
-      type: 'category', min: 1, max: 21,
-      crosshair: false
-    },
-    yAxis: {
-      lineWidth: 1,
-      min: 0,
-      title: {
-        text: ' User Count'
-      }
-    },
-    tooltip: {
-      headerFormat: '<span>{point.x}:2020</span><br>',
-      pointFormat: '<span>{series.name}</span><span{point.name}></span>: <b>{point.y}<b>{series.data2}'
-    },
-    plotOptions: {
-      column: {
-        pointPadding: 0.2,
-        borderWidth: 0
-      },
-      series: {
-        point: {
-          events: {
-            click: function () {
-              // console.log("hellooooo",this.category);
+//     ],
+//     title: {
+//       text: '21 DAY QUEST STREAK'
+//     },
+//     xAxis: {
+//       type: 'category', min: 1, max: 21,
+//       crosshair: false
+//     },
+//     yAxis: {
+//       lineWidth: 1,
+//       min: 0,
+//       title: {
+//         text: ' User Count'
+//       }
+//     },
+//     tooltip: {
+//       headerFormat: '<span>{point.x}:2020</span><br>',
+//       pointFormat: '<span>{series.name}</span><span{point.name}></span>: <b>{point.y}<b>{series.data2}'
+//     },
+//     plotOptions: {
+//       column: {
+//         pointPadding: 0.2,
+//         borderWidth: 0
+//       },
+//       series: {
+//         point: {
+//           events: {
+//             click: function () {
+//               // console.log("hellooooo",this.category);
 
-              URL = '/queststreaktable/' + this.category;
+//               URL = '/queststreaktable/' + this.category;
 
-              console.log(URL);
-              Table2()
-            }
-          }
-        }
-      }
-    },
-    series: [{
-      name: 'USER STREAK',
-      data: dataa.STREAK
-    }]
-  });
-});
+//               console.log(URL);
+//               Table2()
+//             }
+//           }
+//         }
+//       }
+//     },
+//     series: [{
+//       name: 'USER STREAK',
+//       data: dataa.STREAK
+//     }]
+//   });
+// });
 
 
 // var settings = {

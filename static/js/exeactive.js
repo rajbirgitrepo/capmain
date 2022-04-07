@@ -659,7 +659,7 @@ function playbackTrendChart3(selectValue3, tx) {
             legend: {
                 enabled: true,
                 itemStyle: {
-                    fontSize: '10px',
+                    fontSize: '7px',
                     fontWeight: '200'
                 }
             },
@@ -694,41 +694,59 @@ function playbackTrendChart3(selectValue3, tx) {
                     "type": "line",
                     "color": "#FF9933",
                     "xAxis": 0,
-                    "data": dataa.data.lsy
+                    "data": dataa.data.lsy,
+                    dataGrouping: {
+                        enabled: false,
+                    }
                 },
                 {
                     "name": "Family",
                     "type": "column",
                     "color": "#8AE02B",
                     "xAxis": 1,
-                    "data": dataa.data.pcsy
+                    "data": dataa.data.pcsy,
+                    dataGrouping: {
+                        enabled: false,
+                    }
                 }, {
                     "name": "School",
                     "type": "column",
                     "xAxis": 1,
                     "color": "#01A451",
-                    "data": dataa.data.csy
+                    "data": dataa.data.csy,
+                    dataGrouping: {
+                        enabled: false,
+                    }
                 },
                 {
                     "name": "Clever",
                     "type": "column",
                     "xAxis": 1,
                     "color": "#4f1faf",
-                    "data": dataa.data.clever
+                    "data": dataa.data.clever,
+                    dataGrouping: {
+                        enabled: false,
+                    }
                 },
                 {
                     "name": "Scoology",
                     "type": "column",
                     "xAxis": 1,
                     "color": "#462cee",
-                    "data": dataa.data.schoology
+                    "data": dataa.data.schoology,
+                    dataGrouping: {
+                        enabled: false,
+                    }
                 },
                 {
                     "name": "Canvas",
                     "type": "column",
                     "xAxis": 1,
                     "color": "#6495ED",
-                    "data": dataa.data.canvas
+                    "data": dataa.data.canvas,
+                     dataGrouping: {
+                            enabled: false,
+                        }
                 }
             ]
         });
