@@ -58179,35 +58179,77 @@ def questtimeseriestable():
 
 @app.route('/heatmap_activation_streak')
 def quest_activation_heatmap():
+    from collections import OrderedDict
+    QUEST_OBTAINED_USER=pd.DataFrame(list(db_live.user_master.aggregate([{"$match":{
+        '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+        {'IS_DISABLED':{"$ne":'Y'}},
+        {'IS_BLOCKED':{"$ne":'Y'}},
+        {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+        {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+        {'IS_QUEST_OBTAINED':'Y'}
+        ]}},
 
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
-    client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
-    db=client.compass 
-    collection = db.audio_track_master
-    collection2=db.user_master
+        {'$project':{
+            '_id':0,
+            'USER_ID':'$_id',
+            'QUEST_OBTAIN_DATE':'$QUEST_OBTAINED_DATE'
+            }}
+        ])))
 
-    df= DataFrame(list(db.user_master.aggregate([
-    {"$match":{'$and':[
-    {"USER_NAME": { "$not": { "$regex": "test",'$options':'i'}}},
-    {"USER_NAME":{ "$ne": ""}},{"EMAIL_ID":{ "$not": { "$regex": "test",'$options':'i'}}},
-    {"EMAIL_ID":{ "$not": { "$regex": "1gen",'$options':'i'}}},
-    {"EMAIL_ID":{ "$ne": ""}},{'IS_BLOCKED':{"$ne":'Y'}},
-    {'IS_DISABLED':{"$ne":'Y'}},{'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-    {'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    {'schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
-    {'INCOMPLETE_SIGNUP':{"$ne":'Y'}}, {'IS_QUEST_OBTAINED':'Y'},
-    {'QUEST_OBTAINED_DATE':{'$gte':datetime.datetime(2021,8,1)}}
+    QUEST_OBTAINED_USER=QUEST_OBTAINED_USER[QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].notnull()].reset_index(drop=True)
+    quest_history=pd.DataFrame(list(db_live.user_quest_history.aggregate([{"$match":{
+            '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+            {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+            {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}}]}},
+                                        {'$project':{
+                                            '_id':0,
+                                            'USER_ID':'$USER_ID._id',                                         
+                                            'QUEST_OBTAIN_DATE':'$QUEST_OBT_IN_DATE'
+                                                                                }}
+                                        ])))
+    def date_to_string(dates):
+        date_=dates.strftime('%Y-%m-%d')
+        return date_
+    def quest_last_day(dates):
+        last_date=(dates+relativedelta(days=41)).strftime("%Y-%m-%d")
+        return last_date
+    QUEST_OBTAINED_USER['QUEST_START_DAY']=QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].apply(date_to_string)
+    QUEST_OBTAINED_USER['QUEST_FINISH_DAY']=QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].apply(quest_last_day)
+    quest_history['QUEST_START_DAY']=quest_history['QUEST_OBTAIN_DATE'].apply(date_to_string)
+    quest_history['QUEST_FINISH_DAY']=quest_history['QUEST_OBTAIN_DATE'].apply(quest_last_day)    
+    qh_no_entry=list(set(QUEST_OBTAINED_USER['USER_ID'])-set(quest_history['USER_ID']))
+    quest_data=pd.concat([QUEST_OBTAINED_USER,quest_history],ignore_index=True)
+    quest_data_final=quest_data.drop_duplicates(subset=['USER_ID','QUEST_START_DAY'],keep='first').reset_index(drop=True)
+    qh_um=pd.DataFrame(list(db_live.user_master.aggregate([{'$match':{'$and':[
+        {'_id':{'$in':list(quest_data_final['USER_ID'])}}
+        ]}},{'$project':{'_id':0,
+                        'USER_ID':'$_id',
+                        'USER_NAME':'$USER_NAME',
+                        'EMAIL_ID':'$EMAIL_ID',
+                        'SCHOOL_ID':'$schoolId._id',
+                        'SCHOOL_NAME':'$schoolId.NAME',
+                        'CHANNEL':'$UTM_MEDIUM',
+                        'SIGNUP':'$CREATED_DATE'
+                        }}])))
+    quest_history_data_new_final=quest_data_final.merge(qh_um,how='left',on='USER_ID')
+    quest_history_data_new_final=quest_history_data_new_final[quest_history_data_new_final['SIGNUP'].notnull()].reset_index(drop=True)
+    df=quest_history_data_new_final.copy()
+#     to make python and mongodb 
 
-    ]}},
-    {'$group':{'_id':{'month':{'$month':'$QUEST_OBTAINED_DATE'},'day':{'$dayOfWeek':'$QUEST_OBTAINED_DATE'}},
-    'ID':{'$sum':1},
-              }},
-    #            'dn':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'},
-    #            'distrcit':{'$first':'$USER_ID.DISTRICT_ID._id'}}},
-    {'$project':{'DM':'$_id.day','_id':0,'month':'$_id.month','pc':'$ID'}},
-    {'$sort' :  {'DM':1,'month'  :1}}
-    ])))
+    df['DM']=[pd.to_datetime(i).weekday()+2 for i in df['QUEST_START_DAY']]
+    df.loc[df['DM']==8,'DM']=1
+    df['month']=[pd.to_datetime(i).month for i in df['QUEST_START_DAY']]
+
+    df=df.groupby(['DM','month'])['USER_ID'].count().reset_index().rename(columns={'USER_ID':'pc'})
+    df=df.sort_values(by=['DM','month']).reset_index(drop=True)
 
     dislist=list(set(df["DM"]))
     # #   
@@ -58255,15 +58297,12 @@ def quest_activation_heatmap():
     SAT= df2[(df2.DM == 7)].reset_index(drop = True)
     SAT = SAT['pc'].tolist()
 
-
-
     data = {
                'SUNDAY':SUN,'MONDAY':MON,
                'TUESDAY':TUE,'WEDNESDAY':WED,
                'THURSDAY':THU,'FRIDAY':FRI,
                'SATURDAY':SAT}
     # #     print(data)
-
 
     dataframe=pd.DataFrame.from_dict(data,orient='index')
     #     print(dataframe)
@@ -58284,21 +58323,14 @@ def quest_activation_heatmap():
         DF.loc[label,'THU'] = row['THURSDAY']/row['TOTAL'] * 100
         DF.loc[label,'FRI'] = row['FRIDAY']/row['TOTAL'] * 100
         DF.loc[label,'SAT'] = row['SATURDAY']/row['TOTAL'] * 100
-
     DF = DF.drop(['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','TOTAL'], axis=1)
     DF=DF.T
     DF=DF.round()
     DF=DF.fillna(0)
-
-
     day=DF.values.tolist()
-
     key=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY']
-
-
-
     data={'meanTemp':{key[0]:day[0],key[1]:day[1],key[2]:day[2],key[3]:day[3],key[4]:day[4],key[5]:day[5],key[6]:day[6]}}
-    return json.dumps(data)
+    return json.dumps(data,sort_keys=False)
 
 
 @app.route('/queststreaktable/<num>')
