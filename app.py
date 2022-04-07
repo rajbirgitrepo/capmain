@@ -77160,6 +77160,7 @@ def mini_district_dis_sentiment_pie(LOCAl_DISTRICT,startdate,enddate):
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
+
     df1=DataFrame(list(db.user_master.aggregate([
         {"$match":
          {
@@ -77177,7 +77178,7 @@ def mini_district_dis_sentiment_pie(LOCAl_DISTRICT,startdate,enddate):
             ]
 
          }},
-        
+
           {'$match':{'$or':[
                     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
                     'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
@@ -77187,9 +77188,10 @@ def mini_district_dis_sentiment_pie(LOCAl_DISTRICT,startdate,enddate):
                     'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
 
                     ]}},                                                                                                                       
-                  
+
         {'$project':{'_id':'$_id','school':'$schoolId._id' }}
         ])))
+
 
     userid=df1['_id'].tolist() 
     x=['NA','N/A','n.a','.\n',"a\\n","a\n","v\n","v\\n","0-",'na\n','na','Write a feedback (optional)','Na','k,n/l','[pppppppppppsz']
@@ -77210,30 +77212,37 @@ def mini_district_dis_sentiment_pie(LOCAl_DISTRICT,startdate,enddate):
     ]
     update=list(collection.aggregate(user))
     df=pd.DataFrame(update).fillna("no info")
-    text=df["COMMENT"].to_list()
-    df=df[['COMMENT']]
-    df = df.sample(frac=1.0).reset_index(drop=True)
-    for i in df['COMMENT'].tolist():
-        df = df[df.COMMENT.str.len()!=1] 
-    
-    import nltk
-    nltk.download('vader_lexicon')
 
-    from nltk.sentiment.vader import SentimentIntensityAnalyzer
-    sia = SentimentIntensityAnalyzer()
-    df['Positivity'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['pos'])
-    df['Negativity'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['neg'])
-    df['Neutrality'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['neu'])
-    df['Compound'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['compound'])
-    pd.pandas.set_option('display.max_rows',None)  
-    neg=df[df['Compound']<0]
-    pos=df[df['Compound']>0]
-    neu=df[df['Compound']==0]
-    neg_sentiment=round(100*(len(neg)/(len(neu)+len(neg)+len(pos))),2)
-    pos_sentiment=round(100*(len(pos)/(len(neu)+len(neg)+len(pos))),2)
-    neu_sentiment=round(100*(len(neu)/(len(neu)+len(neg)+len(pos))),2)
-    word_chart={'donut':{'pos':pos_sentiment,'neg':neg_sentiment,'neu':neu_sentiment},'text':['pos','neg','neu']}
-    return json.dumps(word_chart)
+    if df.empty is True:
+        word_chart={'donut':{'pos':0,'neg':0,'neu':0},'text':['pos','neg','neu']}
+        return json.dumps(word_chart)
+    else:
+
+        text=df["COMMENT"].to_list()
+        df=df[['COMMENT']]
+        df = df.sample(frac=1.0).reset_index(drop=True)
+        for i in df['COMMENT'].tolist():
+            df = df[df.COMMENT.str.len()!=1] 
+
+        import nltk
+        nltk.download('vader_lexicon')
+
+        from nltk.sentiment.vader import SentimentIntensityAnalyzer
+        sia = SentimentIntensityAnalyzer()
+        df['Positivity'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['pos'])
+        df['Negativity'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['neg'])
+        df['Neutrality'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['neu'])
+        df['Compound'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['compound'])
+        pd.pandas.set_option('display.max_rows',None)  
+        neg=df[df['Compound']<0]
+        pos=df[df['Compound']>0]
+        neu=df[df['Compound']==0]
+        neg_sentiment=round(100*(len(neg)/(len(neu)+len(neg)+len(pos))),2)
+        pos_sentiment=round(100*(len(pos)/(len(neu)+len(neg)+len(pos))),2)
+        neu_sentiment=round(100*(len(neu)/(len(neu)+len(neg)+len(pos))),2)
+        word_chart={'donut':{'pos':pos_sentiment,'neg':neg_sentiment,'neu':neu_sentiment},'text':['pos','neg','neu']}
+        return json.dumps(word_chart)
+
 
 @app.route('/mini_district_districtfeedbackrating_csy/<LOCAl_DISTRICT>/<startdate>/<enddate>')
 def mini_district_dis_schoolrating_csy__(LOCAl_DISTRICT,startdate,enddate):
