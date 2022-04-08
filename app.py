@@ -74780,10 +74780,6 @@ def practice_per_min_program(charttype):
 
 @app.route('/mini_districtcardsinfo/<LOCAl_DISTRICT>/<startdate>/<enddate>')
 def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
-    
-    from datetime import datetime
-    from datetime import timedelta
-    
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@52.41.36.115:27017/" % (username, password))
@@ -74792,10 +74788,15 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
     collection2=db.audio_track_master
     collection3=db.login_logs
     collection4=db.school_master
-    
+
+
+#     startdate='2022-01-01'
+#     enddate='2022-03-04'
+
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
-    
+#     LOCAl_DISTRICT='Cucamonga'
+
     df1_1 = DataFrame(list(collection1.aggregate([
     {"$match":
      {'$and': [
@@ -74805,12 +74806,12 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
             { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
     {'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
     {'EMAIL_ID':{'$ne':''}},         
-         
+
     {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
     {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
     {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
     {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        
+
          {'$match':{'$or':[
                     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
                     'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
@@ -74820,22 +74821,22 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                     'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}}           
 
                     ]}},                                                                                                                       
-        
+
      {'$group':{'_id':'$schoolId._id','ID':{'$first':'$schoolId.NAME'},        'user_id':{'$first':'$_id'}}},
                       {'$project':{'_id':1,'name':'$ID', 'user_id':'$user_id'}},
 
                   {'$sort':{'name':1}}   
-        
-#     {'$group':{'_id':'$_id','ID':{'$addToSet':'$schoolId._id'},'dn':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
+
+    #     {'$group':{'_id':'$_id','ID':{'$addToSet':'$schoolId._id'},'dn':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
 
               ])))
 
-    
+
     schoolid=df1_1['_id'].tolist()
     userid=df1_1['user_id'].tolist()
 
-    
-    
+
+
     df1 = DataFrame(list(collection1.aggregate([
      {"$match":
          {'$and': [
@@ -74851,7 +74852,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-        
+
          {'$match':{'$or':[
                     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
                     'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
@@ -74864,14 +74865,25 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
             {'$group':{'_id':'','ID':{'$addToSet':'$schoolId._id'},'dn':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
                   {'$project':{'_id':1,'school_count':{'$size':'$ID'},'district':'$dn'}}
                   ])))
-    
-    
-    df10 = DataFrame(list(collection4.aggregate([ {"$match":{"LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}}},
-    {'$project':{'_id':0,'CATEGORY':1,'LOCAl_DISTRICT':1,'PARTNER_CATEGORY':1,'STATE':1}} ])))                  
-#     df1['district']=df1['district'].fillna(df10['CATEGORY'])                        
-    
-    
-#     Teachers
+
+
+    df10 = DataFrame(list(collection4.aggregate([
+    {"$match":{'$or':[{"LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}},
+
+       {'SUB_CATEGORY':{'$regex':LOCAl_DISTRICT, '$options':'i'}}              
+                     ]}},
+
+    {'$project':{'_id':0,'CATEGORY':1,'LOCAl_DISTRICT':1,'PARTNER_CATEGORY':1,'STATE':1, 'SUB_CATEGORY':1}} ])))                  
+
+
+    if 'LOCAl_DISTRICT' not in df10:
+        df10['LOCAl_DISTRICT']=0
+
+    elif 'SUB_CATEGORY' not in df10:
+        df10['SUB_CATEGORY']=0
+
+
+    #     Teachers
     df2 = DataFrame(list(collection1.aggregate([ {"$match":
          {'$and': [
               {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
@@ -74886,7 +74898,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-                                                
+
       {'$match':{'$or':[
                     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
                     'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
@@ -74899,12 +74911,12 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
             {'$group':{'_id':'','ID':{'$addToSet':'$_id'}}},
                   {'$project':{'_id':1,'teacher_count':{'$size':'$ID'}}}
                   ])))
-    
-#     Parents
+
+    #     Parents
     df5 = DataFrame(list(collection1.aggregate([ {"$match":
          {'$and': [
               {'ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-             
+
                 {"IS_DISABLED":{"$ne":"Y"}},
                   {"IS_BLOCKED":{"$ne":"Y"}},
                  {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -74915,7 +74927,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
-                                                
+
          {'$match':{'$or':[
                     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'},
                     'LOCAl_DISTRICT':{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},   
@@ -74928,11 +74940,12 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
             {'$group':{'_id':'','ID':{'$addToSet':'$_id'}}},
                   {'$project':{'_id':1,'family_count':{'$size':'$ID'}}}
                   ])))
-    today1= datetime.utcnow()
+    today1= datetime.datetime.utcnow()
+
     tod1= today1+ timedelta(hours=4)
     start1= tod1-timedelta(days=30)
-    
-#     CSY Teachers
+
+    #     CSY Teachers
     df3=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
@@ -74948,18 +74961,18 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                         #   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
             #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
 
-{'USER_ID.schoolId._id':{'$in':schoolid}},
+    {'USER_ID.schoolId._id':{'$in':schoolid}},
 
                  {'MODIFIED_DATE':{'$gte':csy_first_date()}},
-             
+
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID._id'}}},
                   {'$project':{'_id':1,'engd_teacher_csy':{'$size':'$pc'}}}])))
-    
-#     LSY teachers
+
+    #     LSY teachers
     df33=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
@@ -74974,18 +74987,18 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
 
                 #   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
             #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
-{'USER_ID.schoolId._id':{'$in':schoolid}},
+    {'USER_ID.schoolId._id':{'$in':schoolid}},
 
                  {'MODIFIED_DATE':{'$gte':LSY_Date()}},
-             
+
                  {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID._id'}}},
                   {'$project':{'_id':1,'engd_teacher_lsy':{'$size':'$pc'}}}])))
-    
-#     CSY Parents
+
+    #     CSY Parents
     df333=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
@@ -74999,7 +75012,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
             #        {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
             #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
-{'USER_ID.schoolId._id':{'$in':schoolid}},
+    {'USER_ID.schoolId._id':{'$in':schoolid}},
 
 
                  {'MODIFIED_DATE':{'$gte':csy_first_date()}},
@@ -75010,8 +75023,8 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID._id'}}},
                   {'$project':{'_id':1,'engd_parent_csy':{'$size':'$pc'}}}])))
-    
-#     LSY Parents
+
+    #     LSY Parents
     df3333=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
@@ -75034,9 +75047,9 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID._id'}}},
                   {'$project':{'_id':1,'engd_parent_lsy':{'$size':'$pc'}}}])))
-   
-   
-# Ratings
+
+
+    # Ratings
     df4=DataFrame(list(db.audio_feedback.aggregate([{"$match":
          {'$and': [
                   {"USER._id":{"$in":userid}},
@@ -75046,8 +75059,8 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
          ]}},
             {'$group':{'_id':'','rating':{'$avg':'$RATING'}}},
                   {'$project':{'_id':1,'rating':'$rating'}}])))
-    
-    
+
+
     df6=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
@@ -75058,7 +75071,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
-{'USER_ID.schoolId._id':{'$in':schoolid}},
+    {'USER_ID.schoolId._id':{'$in':schoolid}},
 
             #   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
             #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
@@ -75070,7 +75083,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'','pc':{'$sum':1},'MINDFUL_MINUTES':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}}}},
                   {'$project':{'_id':1,'practice_sessions_t':'$pc','MINDFUL_MINUTES_t':'$MINDFUL_MINUTES'}}])))
-   
+
     df7=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
@@ -75082,7 +75095,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
 
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
-{'USER_ID.schoolId._id':{'$in':schoolid}},
+    {'USER_ID.schoolId._id':{'$in':schoolid}},
 
                 #   {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
             #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
@@ -75095,7 +75108,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'','pc':{'$sum':1},'MINDFUL_MINUTES':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}}}},
                   {'$project':{'_id':1,'practice_sessions_p':'$pc','MINDFUL_MINUTES_p':'$MINDFUL_MINUTES'}}])))
-    
+
     df77=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
@@ -75107,7 +75120,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                 { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
 
                  {'USER_ID.EMAIL_ID':{'$ne':''}},
-{'USER_ID.schoolId._id':{'$in':schoolid}},
+    {'USER_ID.schoolId._id':{'$in':schoolid}},
 
                     # {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':'lausd', '$options':'i'}, 
             #  "LOCAl_DISTRICT":{'$regex':LOCAl_DISTRICT, '$options':'i'}})}},
@@ -75122,10 +75135,10 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'','pc':{'$sum':1},'MINDFUL_MINUTES':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}}}},
                   {'$project':{'_id':1,'practice_sessions':'$pc','MINDFUL_MINUTES':'$MINDFUL_MINUTES'}}])))
-    
-    
-    
-    
+
+
+
+
     df0=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
@@ -75148,8 +75161,8 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
                              {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
             {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID.schoolId._id'}}},
                   {'$project':{'_id':1,'engdschool_csy':{'$size':'$pc'}}}])))
-    
-    
+
+
     df00=DataFrame(list(collection2.aggregate([
      {"$match":
          {'$and': [
@@ -75172,7 +75185,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
             {'$group':{'_id':'','pc':{'$addToSet':'$USER_ID.schoolId._id'}}},
                   {'$project':{'_id':1,'engdschool_lsy':{'$size':'$pc'}}}])))
 
-    
+
     engd_parent_lsy=[0]
     try:
         engd_parent_lsy=df3333['engd_parent_lsy']
@@ -75183,7 +75196,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
         engd_parent_csy=df333['engd_parent_csy']
     except:
         engd_parent_csy=[0]
-        
+
     engd_teacher_csy=[0]
     try:
         engd_teacher_csy=df3['engd_teacher_csy']
@@ -75194,10 +75207,10 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
         engd_teacher_lsy=df33['engd_teacher_lsy']
     except:
         engd_teacher_lsy=[0]
-        
-    
-    
-    
+
+
+
+
     engdschool_lsy=[0]
     try:
         engdschool_lsy=df00['engdschool_lsy']
@@ -75208,7 +75221,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
         rating=df4['rating']
     except:
         rating=[0]
-        
+
     engdschool_csy=[0]
     try:
         engdschool_csy=df0['engdschool_csy']
@@ -75219,13 +75232,13 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
         sc=df1['school_count']
     except:
         sc=[0]
-        
+
     tc=[0]
     try:
         tc=df2['teacher_count']
     except:
         tc=[0]
-    
+
     pct=[0]
     try:
         pct=df6['practice_sessions_t']
@@ -75236,7 +75249,7 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
         pcp=df7['practice_sessions_p']
     except:
         pcp=[0]
-        
+
     mmt=[0]
     try:
         mmt=df6['MINDFUL_MINUTES_t']
@@ -75247,8 +75260,8 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
         mmp=df7['MINDFUL_MINUTES_p']
     except:
         mmp=[0]     
-            
-        
+
+
     mm=[0]
     try:
         mm=df77['MINDFUL_MINUTES']
@@ -75259,13 +75272,13 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
         pc=df77['practice_sessions']
     except:
         pc=[0]
-    
+
     lc=[0]
     try:
         lc=df4['logins']
     except:
         lc=[0]
-        
+
     fc=[0]
     try:
         fc=df5['family_count']
@@ -75277,14 +75290,14 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
         dn=df1['district']
     except:
         dn=[0]
-    
-    
+
+
     ca=[0]
     try:
         ca=df10['CATEGORY']
     except:
         ca=[0]
-    
+
     Pa=[0]
     try:
         Pa=df10['PARTNER_CATEGORY']
@@ -75295,12 +75308,13 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
         state=df10['STATE']
     except:
         state=[0]
-        
+
     ld=[0]
     try:
         ld=df10['LOCAl_DISTRICT']
     except:
         ld=[0]
+
     X=str(ld[0])
     if str(ld[0])=="NW":
         X="North West"
@@ -75313,6 +75327,8 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
     "engd_parent_csy":str(engd_parent_csy[0]),"engd_parent_lsy":str(engd_parent_lsy[0]), "engaged_school_csy":str(engdschool_csy[0]),"engaged_school_lsy":str(engdschool_lsy[0]),"teachercount":str(tc[0]),"familycount":str(fc[0]),"teacherpracticecount":str(pct[0]),"parentspracticecount":str(pcp[0]),
     'MINDFUL_MINUTES':str(round(int(mm[0]))),'rating':str(round(rating[0],1)),'state':str(state[0]),'MINDFUL_MINUTES_Teacher':str(round(int(mmt[0]))),'MINDFUL_MINUTES_parent':str(round(int(mmp[0]))),'district':X,"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
     return json.dumps(data)
+
+
 
 
 
