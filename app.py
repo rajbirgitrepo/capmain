@@ -74789,13 +74789,8 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
     collection3=db.login_logs
     collection4=db.school_master
 
-
-#     startdate='2022-01-01'
-#     enddate='2022-03-04'
-
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
-#     LOCAl_DISTRICT='Cucamonga'
 
     df1_1 = DataFrame(list(collection1.aggregate([
     {"$match":
@@ -75309,24 +75304,26 @@ def mini_district_count_cards_(LOCAl_DISTRICT,startdate,enddate):
     except:
         state=[0]
 
-    ld=[0]
-    try:
-        ld=df10['LOCAl_DISTRICT']
-    except:
-        ld=[0]
 
-    X=str(ld[0])
-    if str(ld[0])=="NW":
-        X="North West"
-    elif str(ld[0])=="NE":
-        X="North East"
-    else:
-        pass
+    if df10['LOCAl_DISTRICT'][0]==0:
+        ld= df10['SUB_CATEGORY']
+        X=str(ld[0])
+
+    elif df10['LOCAl_DISTRICT'][0]!=0:
+        ld= df10['LOCAl_DISTRICT']
+        X=str(ld[0])
+        if str(ld[0])=="NW":
+            X="North West"
+        elif str(ld[0])=="NE":
+            X="North East"
+        else:
+            pass
 
     data={"schoolcount":str(sc[0]),"engd_teacher_lsy":str(engd_teacher_lsy[0]),"engd_teacher_csy":str(engd_teacher_csy[0]),
     "engd_parent_csy":str(engd_parent_csy[0]),"engd_parent_lsy":str(engd_parent_lsy[0]), "engaged_school_csy":str(engdschool_csy[0]),"engaged_school_lsy":str(engdschool_lsy[0]),"teachercount":str(tc[0]),"familycount":str(fc[0]),"teacherpracticecount":str(pct[0]),"parentspracticecount":str(pcp[0]),
     'MINDFUL_MINUTES':str(round(int(mm[0]))),'rating':str(round(rating[0],1)),'state':str(state[0]),'MINDFUL_MINUTES_Teacher':str(round(int(mmt[0]))),'MINDFUL_MINUTES_parent':str(round(int(mmp[0]))),'district':X,"practicecount":str(pc[0]),'category':str(ca[0]),'partnercategory':str(Pa[0])}
     return json.dumps(data)
+
 
 
 
