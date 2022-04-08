@@ -78970,7 +78970,8 @@ def _21dayquest():
 
     practice_info=pd.DataFrame(list(db_live.audio_track_master.aggregate([{"$match":{
              '$and':[
-             {'USER_ID._id':{'$in':list(quest_data_final['USER_ID'])}}
+             {'USER_ID._id':{'$in':list(quest_data_final['USER_ID'])}},
+             {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,1,1)}}
 
 
              ]}},
