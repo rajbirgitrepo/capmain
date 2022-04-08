@@ -180,7 +180,7 @@ $.ajax(settings).done(function (response) {
       },
       series: [
         {
-          name: "Days (in Quest Incomplete Trend User Practiced)",
+          name: "Days",
           data: dataa.Incomplete_Trend.y_axis,
           stack: 0,
         },
@@ -753,7 +753,7 @@ function heatnew(b) {
   console.log(b);
   var min, max, colorScale, temps, tempsArr;
   var colors = ["#AF7AC5", "#7FB3D5 ", "#7DCEA0", "#F4D03F", "#F5B041", "#EB984E", "#DC7633"];
-  var months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var months = ["", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",];
   var table, thead, tbody, rows, headCells, cells;
   var data = d3.json("/" + b, function (error, data) {
 
