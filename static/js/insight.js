@@ -235,8 +235,8 @@ $.ajax(settings).done(function(response) {
         document.getElementById("Mini_D_360_Teacher").title = dataa.Engagement_Dashboard.MINI_D_360[0].Teacher;
         document.getElementById("Mini_D_360_Family").title = dataa.Engagement_Dashboard.MINI_D_360[0].Family;
         document.getElementById("Mini_D_360_Average_Rating").title = dataa.Engagement_Dashboard.MINI_D_360[0].Average_Rating;
-        document.getElementById("chart-container").title = dataa.Engagement_Dashboard.MINI_D_360[0].Overall_Playback_Heat_Map;
-        document.getElementById("User_mini_district_playback_history").title = dataa.Engagement_Dashboard.MINI_D_360[0].User_Playback_History;
+        // document.getElementById("chart-container").title = dataa.Engagement_Dashboard.MINI_D_360[0].Overall_Playback_Heat_Map;
+        // document.getElementById("mini_district_user_playback_history").title = dataa.Engagement_Dashboard.MINI_D_360[0].User_Playback_History;
         document.getElementById("mini_district_playback_trend_by_month").title = dataa.Engagement_Dashboard.MINI_D_360[0].Playback_Trend_By_Month;
         document.getElementById("mini_district_top_20_school_user_count").title = dataa.Engagement_Dashboard.MINI_D_360[0].Top_20_School_User_Count;
         document.getElementById("mini_district_top_20_champion_in_CSY").title = dataa.Engagement_Dashboard.MINI_D_360[0].Top_20_Champion_in_CSY;

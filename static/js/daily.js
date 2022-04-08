@@ -168,9 +168,10 @@ function charts(a) {
         // $('#container2').empty();
         console.log(this.value)
         if (this.value == 'practice') {
-            // document.getElementById('dailyInsight').title = 'your new title';
+            document.getElementById('practice_comparison_by_program_playback').title = 'Represents the contrast between last week and present day\u0027s playback count of teachers and parents on the basis of various programs offered.';
             playbackTrendChart(this.value, 'Practice')
         } else {
+            document.getElementById('practice_comparison_by_program_playback').title = 'Represents the contrast between last week and present day\u0027s practice count of teachers and parents on the basis of various programs offered.';
             playbackTrendChart(this.value, 'Playback')
         }
     });

@@ -195,9 +195,12 @@ function charts(a, b, c) {
 
   $(document).on("change", "#historyPlayback", function () {
     $("#container2").empty();
+
     // $("#waiting").append("<p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p>");
     console.log(this.value);
     if (this.value == "2") {
+      document.getElementById('mini_district_user_playback_history').title = 'Bar-graph displays the  playback count of Clever, Schoology, Family and Teacher for last 90 days of CSY.';
+     
       var settings = {
         async: true,
         crossDomain: true,
@@ -317,6 +320,8 @@ function charts(a, b, c) {
         });
       });
     } else {
+      document.getElementById('mini_district_user_playback_history').title = 'Bar-graph displays the date-wise playback count of Clever, Schoology, Family and Teacher  for CSY.';
+      
       var settings = {
         async: true,
         crossDomain: true,
@@ -2310,12 +2315,15 @@ $("#heat").change(function () {
       "mini_districtheatmap_overall/" + textContent + "/" + c + "/" + b;
     heatnew(type);
     $("#chartname").text("Overall Active User Count");
+    document.getElementById('chart-container').title = 'Heat-map displays the count of Overall Active User\u0027s of every school present in the Local District for CSY. the color-code varies from lightest to darkest green, lighter shades represent less frequency , similarly darker shades represent more frequency.';
+
   } else if (this.value == "2") {
     $("#heat-map").empty();
     let textContent = document.getElementById("disdetails").innerText;
     var type = "mini_districtheatmap_family/" + textContent + "/" + c + "/" + b;
     heatnew(type);
     $("#chartname").text("Family Active User Count");
+    document.getElementById('chart-container').title = 'Heat-map displays the count of Active Family User\u0027s of every school present in the Local District for CSY. the color-code varies from lightest to darkest green, lighter shades represent less frequency , similarly darker shades represent more frequency.';
   } else if (this.value == "3") {
     $("#heat-map").empty();
     let textContent = document.getElementById("disdetails").innerText;
@@ -2323,6 +2331,8 @@ $("#heat").change(function () {
       "mini_districtheatmap_classroom/" + textContent + "/" + c + "/" + b;
     heatnew(type);
     $("#chartname").text("Teachers Active User Count");
+    document.getElementById('chart-container').title = 'Heat-map displays the count of  Active Teacher User\u0027s of every school present in the Local District for CSY. the color-code varies from lightest to darkest green, lighter shades represent less frequency , similarly darker shades represent more frequency.';
+
   } else if (this.value == "4") {
     $("#heat-map").empty();
     let textContent = document.getElementById("disdetails").innerText;
@@ -2330,6 +2340,8 @@ $("#heat").change(function () {
       "/mini_districtheatmappracOverall/" + textContent + "/" + c + "/" + b;
     heatnew(type);
     $("#chartname").text("Overall District Playback Heat Map");
+    document.getElementById('chart-container').title = 'Heat-map displays the frequency of playback of every school present in the Local District for CSY. the color-code varies from lightest to darkest green, lighter shades represent less frequency , similarly darker shades represent more frequency.';
+
   } else if (this.value == "5") {
     $("#heat-map").empty();
     let textContent = document.getElementById("disdetails").innerText;
@@ -2337,6 +2349,8 @@ $("#heat").change(function () {
       "mini_districtheatmappracclassroom/" + textContent + "/" + c + "/" + b;
     heatnew(type);
     $("#chartname").text("Teacher Wise Playback Heat Map");
+    document.getElementById('chart-container').title = 'Heat-map displays the frequency of Teacher-wise playback of every school present in the Local District for CSY. the color-code varies from lightest to darkest green, lighter shades represent less frequency , similarly darker shades represent more frequency.';
+
   } else if (this.value == "6") {
     $("#heat-map").empty();
     let textContent = document.getElementById("disdetails").innerText;
@@ -2344,6 +2358,8 @@ $("#heat").change(function () {
       "mini_districtheatmappracfamily/" + textContent + "/" + c + "/" + b;
     heatnew(type);
     $("#chartname").text("Family Wise Playback Heat Map");
+    document.getElementById('chart-container').title = 'Heat-map displays the frequency of Family-wise playback of every school present in the Local District for CSY. the color-code varies from lightest to darkest green, lighter shades represent less frequency , similarly darker shades represent more frequency.';
+
   }
 });
 
