@@ -2105,6 +2105,8 @@
         $('#container43').empty();
         console.log(this.value)
         if (this.value == '2') {
+            document.getElementById("Weekly_Usage_CSY_Absolute_count").title = 'The graph shows the percentage of weekly usage for CSY.';
+            
             var settings = {
                 "async": true,
                 "crossDomain": true,
@@ -2317,6 +2319,8 @@
         
             });
         } else {
+            document.getElementById("Weekly_Usage_CSY_Absolute_count").title = 'The graph shows the absolute count of weekly usage for CSY.';
+
             var settings = {
                 "async": true,
                 "crossDomain": true,

@@ -155,7 +155,7 @@ $.ajax(settings).done(function(response) {
         document.getElementById("Usage1").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Usage_Score_By_School_;
         document.getElementById("Playback_Trend_By_School").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Playback_Trend_By_School;
         document.getElementById("Active_User_Trend_By_School").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Active_User_Trend_By_School;
-         document.getElementById("Weekly_Usage_CSY_Absolute_count").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Weekly_Usage_CSY_Absolute_count;
+        //  document.getElementById("Weekly_Usage_CSY_Absolute_count").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Weekly_Usage_CSY_Absolute_count;
         // document.getElementById("Weekly_Usage_CSY_Absolute_count").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Weekly_Usage_CSY_Percentage;
         document.getElementById("Playback_History_BY_SCHOOL").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Playback_History_CSY;
         document.getElementById("Active_User_Count_by_Progrmams").title = dataa.Engagement_Dashboard.SCHOOL_SEARCH[0].Active_User_Count_by_Progrmams;
