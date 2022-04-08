@@ -632,7 +632,7 @@
 
                 <div class="containercards">
                     <div class="row">
-                        <h2 class="text-center mt-0 mb-2">Select Local District</h2>
+                        <h2 class="text-center mt-0 mb-2" id="selectDistText">Select District</h2>
                         <div class="col-sm-11 mb-11">
                             <input type="text" id="myFilter" class="form-control" onkeyup="myFunction()"
                                 placeholder="Search any district">
@@ -1309,19 +1309,23 @@
             document.getElementById("sanBerdinoDistrict").style.display = "none";
             document.getElementById("lausdDistrict").style.display = "block";
             document.getElementById("selectDistrict").style.display = "none";
+            $("#selectDistText").text('Select Local District');
         }
         function sanberdinoDist() {
             document.getElementById("lausdDistrict").style.display = "none";
             document.getElementById("sanBerdinoDistrict").style.display = "block";
             document.getElementById("selectDistrict").style.display = "none";
+            $("#selectDistText").text('Select Sub District');
         }
         function back1() {
             document.getElementById("lausdDistrict").style.display = "none";
             document.getElementById("selectDistrict").style.display = "block";
+            $("#selectDistText").text('Select District');
         }
         function back2() {
             document.getElementById("sanBerdinoDistrict").style.display = "none";
             document.getElementById("selectDistrict").style.display = "block";
+            $("#selectDistText").text('Select District');
         }
     </script>
 
