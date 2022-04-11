@@ -448,7 +448,7 @@ function charts(a) {
                     chart: {
                         type: 'column'
                     },
-                    colors: ['#a6acaf', '#909497', '#797d7f', '#cacfd2', '#01A451', '#4F1FAF', '#8AE02B', '#462CEE'
+                    colors: ['#a6acaf', '#909497', '#797d7f', '#cacfd2', '#01A451', '#4F1FAF', '#8AE02B', '#462CEE', '#6495ed'
 
 
                     ],
@@ -532,53 +532,68 @@ function charts(a) {
                     series: [{
                             name: 'Teacher ' + t + ' Count Last to Last week',
                             data: dataa.weekdata.count_last_to_last_week_teachers,
-                            stack: 'Last to Last week'
+                            stack: 'Last to Last week',
+                            color: '#909497'
                         },
 
 
-
+                        {
+                            name: 'Teacher ' + t + ' Count Last Week',
+                            data: dataa.weekdata.count_last_week_teachers,
+                            stack: 'Last week',
+                            color: '#cacfd2'
+                        },
                         {
                             name: 'Clever ' + t + ' Count Last to Last week',
                             data: dataa.weekdata.count_last_to_last_week_clever,
-                            stack: 'Last to Last week'
+                            stack: 'Last to Last week',
+                            color: '#4f1faf'
                         },
-
+ 
+                        {
+                            name: 'Clever ' + t + ' Count Last Week',
+                            data: dataa.weekdata.ount_last_week_clever,
+                            stack: 'Last week',
+                            color: 'rgb(88 56 151);'
+                        },
                         {
                             name: 'Schoology ' + t + ' Count Last to Last week',
                             data: dataa.weekdata.count_last_to_last_week_schoology,
-                            stack: 'Last to Last week'
+                            stack: 'Last to Last week',
+                            color: '#462cee'
+                        },
+                        {
+                            name: 'Schoology ' + t + ' Count Last Week',
+                            data: dataa.weekdata.count_last_week_schoology,
+                            stack: 'Last week',
+                            color: '#6252c9'
                         },
 
                         {
                             name: 'Parents ' + t + ' Count Last to Last week',
                             data: dataa.weekdata.count_last_to_lastweek_parents,
-                            stack: 'Last to Last week'
+                            stack: 'Last to Last week',
+                            color : '#01a451'
                         },
 
                         {
-                            name: 'Teacher ' + t + ' Count Last Week',
-                            data: dataa.weekdata.count_last_week_teachers,
-                            stack: 'Last week'
-                        },
-                        {
-                            name: 'Clever ' + t + ' Count Last Week',
-                            data: dataa.weekdata.ount_last_week_clever,
-                            stack: 'Last week'
-                        },
-                        {
                             name: 'Parent ' + t + ' Count Last Week',
                             data: dataa.weekdata.count_last_week_parents,
-                            stack: 'Last week'
+                            stack: 'Last week',
+                            color : '#8ae02b'
                         },
-                        {
-                            name: 'Schoology ' + t + ' Count Last Week',
-                            data: dataa.weekdata.count_last_week_schoology,
-                            stack: 'Last week'
-                        },
+                       
                         {
                             name: 'Canvas ' + t + ' Count Last Week',
+                            data: dataa.weekdata.count_last_week_canvas,
+                            stack: 'Last week',
+                            color: '#6495ed'
+                        },
+                        {
+                            name: 'Canvas ' + t + ' Count Last to Last Week',
                             data: dataa.weekdata.count_last_to_last_week_canvas,
-                            stack: 'Last week'
+                            stack: 'Last week',
+                            color: '#40a9f4'
                         },
                     ]
                 });

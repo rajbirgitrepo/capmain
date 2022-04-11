@@ -102,11 +102,11 @@ function playbackTrendChart2(selectValue2, t) {
                     data: dataa[2].bars,
                 },
                 {
-                    name: "Family" + t + " Count(CSY2021-2022)",
+                    name: "Family " + t + " Count(CSY2021-2022)",
                     data: dataa[1].bar2,
                 },
                 {
-                    name: "User" + t + "Count(CSY2021-2022)",
+                    name: "User " + t + " Count(CSY2021-2022)",
                     data: dataa[0].bar,
                 },
 

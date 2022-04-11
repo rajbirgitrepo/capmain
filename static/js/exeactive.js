@@ -21,7 +21,7 @@ function playbackTrendChart(selectValue, t) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(dataa[0].bar, "data")
+        console.log(dataa[0], "data")
 
 
 
