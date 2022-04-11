@@ -88,6 +88,10 @@ function playbackTrendChart(selectValue, t) {
                     data: dataa[4].barcan,
                 },
                 {
+                    name: "Clever",
+                    data: dataa[3].barc,
+                },
+                {
                     name: 'Schoology',
                     data: dataa[2].bars
                 }, {
@@ -729,7 +733,7 @@ function playbackTrendChart3(selectValue3, tx) {
                     }
                 },
                 {
-                    "name": "Scoology",
+                    "name": "Schoology",
                     "type": "column",
                     "xAxis": 1,
                     "color": "#462cee",
