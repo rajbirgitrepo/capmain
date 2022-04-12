@@ -38,7 +38,7 @@ function playbackTrendChart(selectValue, t) {
                 text: t + " Active User Trend"
 
             },
-            colors: ['#6495ED', '#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+            colors: ['#6495ED', '#4F1FAF', '#462CEE', '#8AE02B', '#d3373b'],
             xAxis: {
                 categories: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
             },
@@ -746,7 +746,7 @@ function playbackTrendChart3(selectValue3, tx) {
                     "name": "Canvas",
                     "type": "column",
                     "xAxis": 1,
-                    "color": "#6495ED",
+                    "color": "#d3373b",
                     "data": dataa.data.canvas,
                      dataGrouping: {
                             enabled: false,

@@ -587,13 +587,13 @@ function charts(a) {
                             name: 'Canvas ' + t + ' Count Last Week',
                             data: dataa.weekdata.count_last_week_canvas,
                             stack: 'Last week',
-                            color: '#6495ed'
+                            color: '#d3373b'
                         },
                         {
                             name: 'Canvas ' + t + ' Count Last to Last Week',
                             data: dataa.weekdata.count_last_to_last_week_canvas,
                             stack: 'Last week',
-                            color: '#40a9f4'
+                            color: '#c2494c'
                         },
                     ]
                 });
