@@ -92,22 +92,27 @@ function playbackTrendChart2(selectValue2, t) {
             series: [{
                     name: "Canvas",
                     data: dataa[4].barcan,
+                    color: '#d3373b'
                 },
                 {
                     name: "Clever",
                     data: dataa[3].barc,
+                    color: '#462CEE'
                 },
                 {
                     name: "Schoology",
                     data: dataa[2].bars,
+                    color: '#4F1FAF'
                 },
                 {
                     name: "Family " + t + " Count(CSY2021-2022)",
                     data: dataa[1].bar2,
+                    color: '#8AE02B'
                 },
                 {
                     name: "User " + t + " Count(CSY2021-2022)",
                     data: dataa[0].bar,
+                    color : '#01A451'
                 },
 
                 {
