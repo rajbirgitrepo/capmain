@@ -24,7 +24,7 @@ import pandas as pd
 import pycountry
 import collections
 # import mysql.connector
-import numpy as np
+import numpy as practiceprogress
 from pandas import Timestamp
 from flask_cors import CORS
 from geolite2 import geolite2
@@ -55564,9 +55564,9 @@ def tune_in_csy_lsy():
                       }
                       }]
     tune_in_CSY=list(collection1.aggregate(query1))
-    print(tune_in_CSY)
+#     print(tune_in_CSY)
     tune_in_CSY_df=pd.DataFrame(tune_in_CSY)
-    print(tune_in_CSY_df)
+#     print(tune_in_CSY_df)
 
     if "month" not in tune_in_CSY_df.columns:
         tune_in_CSY_df["month"] = "NO INFO"
@@ -55684,6 +55684,17 @@ def tune_in_csy_lsy():
     tune_in_Final_LSY=month_df.merge(tune_in_data_LSY[['month','TuneIn_Send', 'Opt_Out', 'Opt_In', 'practicing_parent']],
                                how='left',on='month').fillna(0)
 
+    mon=pd.DataFrame({'month_name':[8,9,10,11,12,1,2,3,4,5,6,7]})
+    d = dict(enumerate(calendar.month_abbr))
+    mon['month_name'] = mon['month_name'].map(d)
+#     print(mon)
+    tune_in_Final_CSY = pd.merge(mon,tune_in_Final_CSY, how="left",on = "month_name")
+    tune_in_Final_LSY = pd.merge(mon,tune_in_Final_LSY, how="left",on = "month_name")
+
+    
+#     print(tune_in_Final_CSY)
+#     print("tune_in_Final_LSY \n",tune_in_Final_LSY)
+#     print("data",data)
     temp={'CSY':{
             'monthname':tune_in_Final_CSY.month_name.tolist(),
             'Tune_In_Send':tune_in_Final_CSY.TuneIn_Send.tolist(),
@@ -79127,22 +79138,6 @@ def _21dayquest():
                              }
          }
 
-    return json.dumps(temp)
-
-
-@app.route("/insightcorner")
-def insights__():
-    googleSheetId = '1OMpKtOM5RIN0Mjs9BcVYqRFLpyDa1CygxLEKloNa1I8'
-    worksheetName = 'Sheet1'
-    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
-    dff=pd.read_csv(URL)
-
-    df1=dff.groupby(['Insights','Page'])['Observation'].apply(list).reset_index()
-
-    temp=[]
-    for i in range(len(df1)):
-        dict_={'Insights':df1['Insights'][i],'Observations':df1['Observation'][i]}
-        temp.append(dict_)
     return json.dumps(temp)
 
 
