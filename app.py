@@ -79130,6 +79130,22 @@ def _21dayquest():
     return json.dumps(temp)
 
 
+@app.route("/insightcorner")
+def insights():
+    googleSheetId = '1OMpKtOM5RIN0Mjs9BcVYqRFLpyDa1CygxLEKloNa1I8'
+    worksheetName = 'Sheet1'
+    URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
+    dff=pd.read_csv(URL)
+
+    df1=dff.groupby(['Insights','Page'])['Observation'].apply(list).reset_index()
+
+    temp=[]
+    for i in range(len(df1)):
+        dict_={'Insights':df1['Insights'][i],'Observations':df1['Observation'][i]}
+        temp.append(dict_)
+    return json.dumps(temp)
+
+
 
 
 @app.route('/Family_SURVEY')
