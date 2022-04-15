@@ -1911,3 +1911,41 @@ span.avtr figure {
     text-transform: uppercase;
     font-weight: 600;
 }
+
+
+/* Menka Kumari */
+.dropdown-insights{
+    width: 38rem; 
+    border-radius: 10px !important; 
+    left: -136px !important; 
+    top: 60% !important;
+}
+.scroll-insights{
+    height: 505px; 
+    overflow: hidden; 
+    overflow-y: scroll;
+}
+.borderBottom{
+    border-bottom: 1px solid #eee !important;
+}
+.insight-headings{
+    color: #000 !important;
+    font-size: 18px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    cursor: pointer;
+}
+.insight-text{
+    font-size: 14px;
+    color: #000;
+}
+
+.scroll-insights::-webkit-scrollbar {
+    width: 5px !important;
+    scroll-behavior: smooth !important;
+  }
+
+.scroll-insights::-webkit-scrollbar-thumb {
+    background: linear-gradient(#d8d8d8, #5c7291) !important;
+    border-radius: 3px !important;
+}

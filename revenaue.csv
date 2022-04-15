@@ -33,6 +33,7 @@ DISTRICT,Pinellas County Schools,NO EMAIL,OFFLINE,CHEQUE,2021-12-22,24000.0
 DISTRICT,LAUSD,NO EMAIL,OFFLINE,CHEQUE,2021-12-22,900000.0
 DISTRICT,San Bernardino County School,NO EMAIL,OFFLINE,CHEQUE,2022-02-11,49000.0
 DISTRICT,Durham Public School,NO EMAIL,OFFLINE,CHEQUE,2022-02-17,9800.0
+DISTRICT,United Way of Santa Barbara,NO EMAIL,OFFLINE,CHEQUE,2022-04-08,1000.0
 SCHOOL,Tracy Schenk,tschenk@pagosa.k12.co.us,WEBAPP,SQUARE PAYMENT,2021-09-23,1000.0
 SCHOOL,Kim Aman,KIm.F.Aman@k12.sd.us,WEBAPP,SQUARE PAYMENT,2021-08-12,1000.0
 SCHOOL,Gracie MacDonald,gracie.macdonald@sd71.bc.ca,WEBAPP,NO INFO,2021-07-31,450.0
@@ -242,6 +243,7 @@ SCHOOL,Andrew Peterson,apeterson@tooeleschools.org,OFFLINE,CHEQUE,2022-01-26,100
 SCHOOL,Dina Winterton,dwinterton@sandi.net,OFFLINE,CHEQUE,2022-02-10,1400.0
 SCHOOL,Stephanie Avery,savery@centraldetroitchristian.org,OFFLINE,CHEQUE,2022-02-10,250.0
 SCHOOL,The Boys and Girls Club of Southeastern Michigan,NO EMAIL,OFFLINE,CHEQUE,2022-02-22,0.0
+SCHOOL,STACIA LEMOND,slemond@bostonpublicschools.org,OFFLINE,CHEQUE,2022-04-08,1000.0
 DONATION,JACQUELINE SAMUDA,jacquelinesamuda01@gmail.com,COMPASS,ONLINE,2021-07-31,51.099998474121094
 DONATION,EVELINE JOSEPH,ejoseph5@bostonpublicschools.org,COMPASS,ONLINE,2021-09-01,50.0
 DONATION,MATTHEW MORRISON,matthew.g.morrison@gmail.com,COMPASS,ONLINE,2021-09-23,25.549999237060547
@@ -310,6 +312,11 @@ DONATION,Samantha Allison,sallison@innerexplorer.org,CHEQUE,ONLINE,2022-03-11,25
 DONATION,Kristie DeLuca,kristiecotter@me.com,CHEQUE,ONLINE,2022-03-09,1500.0
 DONATION,Janine E Milakeve,NO EMAIL,CHEQUE,ONLINE,2022-03-23,100.0
 DONATION,Sherita Ceasar,sherita_ceasar@cable.comcast.com,NFG,ONLINE,2022-04-06,2500.0
+DONATION,John Houlihan,houlihan311@gmail.com,NFG,ONLINE,2022-01-30,102.2
+DONATION,John Houlihan,houlihan311@gmail.com,NFG,ONLINE,2022-02-28,102.2
+DONATION,Paul Sugar,paulsugar@cox.net,PAYPAL,ONLINE,2022-03-16,127.75
+DONATION,Kathi Kemper,kathi.kemper.md@gmail.com,PAYPAL,ONLINE,2022-03-29,50.0
+DONATION,John Houlihan,houlihan311@gmail.com,NFG,ONLINE,2022-03-30,102.2
 MOBILE,Mike,mike.pepperman@gmail.com,ANDROID,GOOGLE,2022-01-24,89.98999786376953
 MOBILE,Rollin Dubois,rdubois@englewoodcliffs.org,IOS,APPLE,2022-03-21,89.98999786376953
 MOBILE,Melissa Norwood ,mnorwood@mtrsd.org,IOS,APPLE,2021-08-13,89.98999786376953

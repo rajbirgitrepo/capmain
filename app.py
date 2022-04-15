@@ -79397,7 +79397,7 @@ def _21dayquest():
 
 
 @app.route("/insightcorner")
-def insights():
+def insights__():
     googleSheetId = '1OMpKtOM5RIN0Mjs9BcVYqRFLpyDa1CygxLEKloNa1I8'
     worksheetName = 'Sheet1'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)

@@ -274,3 +274,29 @@ $.ajax(settings).done(function(response) {
 // document.getElementById("unique_user_temp").title = dataa.Engagement_Dashboard.LOGIN_ANALYTICS[0].unique_user_temp;
 // document.getElementById("Sucessful_login_history").title = dataa.Engagement_Dashboard.LOGIN_ANALYTICS[0].Sucessful_login_history;
 // document.getElementById("Temporary_passcode_by_users").title = dataa.Engagement_Dashboard.LOGIN_ANALYTICS[0].Temporary_passcode_by_users;
+
+
+
+
+// API for showing insights inside dropdown
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": '/insightcorner',
+    "method": "GET"
+}
+$.ajax(settings).done(function(response){
+    var dataa = JSON.parse(response);
+    console.log(dataa); 
+    for(i = 0; i < dataa.length; i++){
+        var insights = dataa[i].Insights;
+        var observations = dataa[i].Observations;
+        // console.log(insights, observations);
+        $('#accordionExample').append('<div class="borderBottom"><a class="nav-link" data-toggle="collapse" data-target="#collapseOne'+i+'" aria-expanded="true" aria-controls="collapseOne"> <h4 class="insight-headings">'+insights+'</h4></a><div id="collapseOne'+i+'" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample"></div></div>');
+
+        for(j = 0; j < observations.length; j++){
+            // console.log(observations[j]);
+            $("#collapseOne"+i).append('<p class="insight-text">'+observations[j]+'</p>');    
+        }
+    }
+});
