@@ -1916,8 +1916,8 @@ span.avtr figure {
 /* Menka Kumari */
 .dropdown-insights{
     width: 38rem; 
-    border-radius: 10px !important; 
-    left: -136px !important; 
+    border-radius: 20px !important; 
+    left: -108px !important; 
     top: 60% !important;
 }
 .scroll-insights{
@@ -1929,7 +1929,7 @@ span.avtr figure {
     border-bottom: 1px solid #eee !important;
 }
 .insight-headings{
-    color: #000 !important;
+    color: #00A651 !important;
     font-size: 18px;
     padding-left: 2rem;
     padding-right: 2rem;
@@ -1937,7 +1937,7 @@ span.avtr figure {
 }
 .insight-text{
     font-size: 14px;
-    color: #000;
+    color: #000000;
 }
 
 .scroll-insights::-webkit-scrollbar {

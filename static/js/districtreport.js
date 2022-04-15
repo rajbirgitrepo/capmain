@@ -2370,6 +2370,7 @@ function distselect(distid) {
     modal.style.display = "none";
     console.log(distid)
     cardcount(c, a, b);
+    // cardcount2(c, a, b);
     charts(c, a, b);
     // OnlyschoolId(c, a, b);
     // ExportTable2(c, a, b);
@@ -2401,6 +2402,7 @@ function cardcount(id, a, b) {
         var dataa = JSON.parse(response);
         console.log("counts are fnctioning");
         console.log(URL);
+        console.log(dataa);
         $("#gifload").empty();
         $("#school").text(dataa.schoolcount);
         $("#teacher").text(dataa.teachercount);
@@ -2424,6 +2426,18 @@ function cardcount(id, a, b) {
         // $("#schoolcount").text(dataa.schoolcount);
         // $("#engd_teacher_csy").text(dataa.engd_teacher_csy);
         // $("#engd_teacher_lsy").text(dataa.engd_teacher_lsy);
+        $("#engaged_schoology_csy").text(dataa.schoology_eng_csy);
+        $("#engaged_schoology_lsy").text(dataa.schoology_eng_lsy);
+        $("#plabackCount_schoology").text(dataa.schoology_playback);
+        $("#mindful_minutes_schoology").text(dataa.Schoology_mindful);
+        $("#engaged_clever_csy").text(dataa.clever_eng_csy);
+        $("#engaged_clever_lsy").text(dataa.clever_eng_lsy);
+        $("#practiceCount_clever").text(dataa.clever_practice);
+        $("#mindful_minutes_clever").text(dataa.clever_mindful);
+        $("#engaged_canvas_csy").text(dataa.canvas_eng_csy);
+        $("#engaged_canvas_lsy").text(dataa.canvas_eng_lsy);
+        $("#practiceCount_canvas").text(dataa.canvas_practice);
+        $("#mindful_minutes_canvas").text(dataa.canvas_mindful);
 
     });
 
@@ -2938,3 +2952,5 @@ $(function () {
 //   $("#fromd").text(a);
 //   $("#tod").text(a);
 // }
+
+
