@@ -55696,6 +55696,500 @@ def BOARD_MEMBER_DONOR():
 
 
 #<<<<<<<--------------------------tune_in Analytics---------------------------------------->>>>>>>>>>>>>>>
+#  <<<<<<<<<<<<<<<<<<<-----------------Districtwise Tune_In_Graph --------------------------------------->>>>>>>>>>>>>>>>>>>>>
+
+@app.route('/districtwise_tuneingraph')
+def districtwise_tune_in_csy_lsy(district,startdate,enddate):
+    import datetime
+    from datetime import timedelta
+    from dateutil.relativedelta import relativedelta
+    def csy_first_date():
+        date_today =datetime.date.today()
+    #     print(date_today)
+    #     date_today='2024-07-01'
+    #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+        initial_date='2020-08-01'
+        day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+        # Check if leap year in the calculation
+        if ((day1.year+1) % 4) == 0:
+            if ((day1.year+1) % 100) == 0:
+                if ((day1.year+1) % 400) == 0:
+                    days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=1
+        else:
+            days_diff=0
+        if ((date_today-day1).days<(365+days_diff)):
+            day_1=day1
+        else:
+            day1=day1+timedelta(days=(365+days_diff))
+            day_1=day1
+
+        csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+        return csy_date
+        # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+    #     print("LSY", LSY_Date)
+    #     print("CSY",csy_first_date())
+    
+    a = int(csy_first_date().strftime("%Y"))
+    b = a+1
+
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
+    db=client.compass
+    
+    myDatetime1 = dateutil.parser.parse(startdate)
+    myDatetime2 = dateutil.parser.parse(enddate)
+    
+    df2=DataFrame(list(db.user_master.aggregate([{"$match":
+         {'$and': [
+#         {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"IS_DISABLED":{"$ne":"Y"}},
+                  {"IS_BLOCKED":{"$ne":"Y"}},
+                 {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+
+
+    # //               {'IS_ADMIN':'Y'},
+#              {'CREATED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
+
+                 {'EMAIL_ID':{'$ne':''}},
+                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+#             {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'date':{'$min':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}}},'country':{'$first':'$schoolId.COUNTRY'},
+#                       'State':{'$first':'$schoolId.STATE'},'city':{'$first':'$schoolId.CITY'}}},
+
+            {'$project':{'_id':1}},
+
+
+
+  
+                                            ])))
+#     print("df2",df2)
+    if df2.empty == True:
+        temp={"data":"No Result"}
+
+    else:
+        uid = df2["_id"].to_list()
+        collection = db.tune_in_audio_track_detail
+        query=[{"$match":{
+                 '$and':[
+                     {'USER_ID._id':{"$in":uid}},
+                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                  {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                  {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        #               {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),'$lte':datetime.datetime(2021,7,31)}},
+    #             {'MODIFIED_DATE':{'$gte': csy_first_date()}},
+                         {'MODIFIED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+
+                      {'INVITEE_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'INVITEE_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                     {'INVITEE_EMAIL':{"$not":{"$regex":"manoj.rayat5575@gmail.com",'$options':'i'}}},
+
+
+                      ]}},
+                  {'$group':{
+                      '_id': { 
+                      'month': {'$month' :"$MODIFIED_DATE" }, 
+                      'year': {'$year' :"$MODIFIED_DATE" }},
+                      'prac_parent':{'$addToSet':'$INVITEE_EMAIL'}
+                      }},
+
+                      {'$project':{
+                          '_id':0,
+                          'month':'$_id.month',
+                          'year':'$_id.year',
+                          'practicing_parent':{'$size':'$prac_parent'}
+                          }
+                          }]
+        tune_in_practice_CSY=list(collection.aggregate(query))
+        tune_in_practice_CSY_df=pd.DataFrame(tune_in_practice_CSY)
+
+        if "month" not in tune_in_practice_CSY_df.columns:
+            tune_in_practice_CSY_df["month"] = "NO INFO"
+        if "year" not in tune_in_practice_CSY_df.columns:
+            tune_in_practice_CSY_df["year"] = "NO INFO"
+        if "practicing_parent" not in tune_in_practice_CSY_df.columns:
+            tune_in_practice_CSY_df["practicing_parent"] = "NO INFO"
+
+        if tune_in_practice_CSY_df.empty:
+            tune_in_practice_CSY_df.loc[len(tune_in_practice_CSY_df)] = 0
+
+        collection1 = db.tune_in_master
+        query1=[{"$match":{
+                 '$and':[
+                     {'USER_ID._id':{"$in":uid}},
+                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+        # //           {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        #           {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                  {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                  {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        #               {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),'$lte':datetime.datetime(2021,7,31)}}
+    #             {'MODIFIED_DATE':{'$gte': csy_first_date()}},
+                         {'MODIFIED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+
+
+                  ]}},
+
+                  {'$group':{
+                      '_id': { 
+                      'month': {'$month' :"$MODIFIED_DATE" }, 
+                      'year': {'$year' :"$MODIFIED_DATE" }},
+                      'TUNE_IN_SEND':{'$sum':1},
+                       'OPTED_OUT' :  {'$sum' : {'$cond': [ {'$eq': [ '$IS_OPTED_OUT'
+             , 'Y' ] }, 1, 0 ] } },
+             'OPTED_IN' :  {'$sum' : {'$cond': [ {'$eq': [ '$IS_OPTED_OUT'
+             , 'N' ] }, 1, 0 ] } }
+                      }
+                      }
+                      ,{'$project':{
+                          '_id':0,
+                          'month':'$_id.month',
+                          'year':'$_id.year',
+                          'TuneIn_Send':'$TUNE_IN_SEND',
+                          'Opt_Out':'$OPTED_OUT',
+                          'Opt_In':'$OPTED_IN'
+                          }
+                          }]
+        tune_in_CSY=list(collection1.aggregate(query1))
+    #     print(tune_in_CSY)
+        tune_in_CSY_df=pd.DataFrame(tune_in_CSY)
+    #     print(tune_in_CSY_df)
+
+        if "month" not in tune_in_CSY_df.columns:
+            tune_in_CSY_df["month"] = "NO INFO"
+        if "year" not in tune_in_CSY_df.columns:
+            tune_in_CSY_df["year"] = "NO INFO"
+        if "TuneIn_Send" not in tune_in_CSY_df.columns:
+            tune_in_CSY_df["TuneIn_Send"] = "NO INFO"
+        if "Opt_Out" not in tune_in_CSY_df.columns:
+            tune_in_CSY_df["Opt_Out"] = "NO INFO"
+        if "Opt_In" not in tune_in_CSY_df.columns:
+            tune_in_CSY_df["Opt_In"] = "NO INFO"
+
+
+        if tune_in_CSY_df.empty:
+            tune_in_CSY_df.loc[len(tune_in_CSY_df)] = 0
+
+
+        month_df=pd.DataFrame({'month':list(range(1,13))})
+        monthname=[]
+        months=month_df.month.tolist()
+        for i in range(len(months)):    
+            monthname.append(calendar.month_abbr[months[i]])
+        month_df['month_name']=monthname
+        tune_in_data=tune_in_CSY_df.merge(tune_in_practice_CSY_df,on=['month','year'],how='left').fillna(0)
+        tune_in_Final_CSY=month_df.merge(tune_in_data[['month','TuneIn_Send', 'Opt_Out', 'Opt_In', 'practicing_parent']],how='left',on='month').fillna(0)
+
+        # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<----------------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+        query_LSY=[{"$match":{
+                 '$and':[
+                     {'USER_ID._id':{"$in":uid}},
+                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                  {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                  {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        #               {'MODIFIED_DATE':{'$gte':datetime.datetime(2019,8,1),'$lte':datetime.datetime(2020,7,31)}},
+#                   {'MODIFIED_DATE':{'$gte':LSY_Date,'$lt': csy_first_date()}},
+                     {'MODIFIED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+
+                      {'INVITEE_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'INVITEE_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                     {'INVITEE_EMAIL':{"$not":{"$regex":"manoj.rayat5575@gmail.com",'$options':'i'}}},
+
+
+                      ]}},
+                  {'$group':{
+                      '_id': { 
+                      'month': {'$month' :"$MODIFIED_DATE" }, 
+                      'year': {'$year' :"$MODIFIED_DATE" }},
+                      'prac_parent':{'$addToSet':'$INVITEE_EMAIL'}
+                      }},
+
+                      {'$project':{
+                          '_id':0,
+                          'month':'$_id.month',
+                          'year':'$_id.year',
+                          'practicing_parent':{'$size':'$prac_parent'}
+                          }
+                          }]
+        tune_in_practice_LSY=list(collection.aggregate(query_LSY))
+        tune_in_practice_LSY_df=pd.DataFrame(tune_in_practice_LSY)
+        if tune_in_practice_LSY_df.empty:
+            tune_in_practice_LSY_df=pd.DataFrame({'month':list(range(1,13)),'practicing_parent':0})
+        else:
+            tune_in_practice_LSY_df=tune_in_practice_LSY_df
+
+
+        query1_LSY=[{"$match":{
+                 '$and':[
+                     {'USER_ID._id':{"$in":uid}},
+                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+        # //           {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        #           {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                  {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                  {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        #               {'MODIFIED_DATE':{'$gte':datetime.datetime(2019,8,1),'$lte':datetime.datetime(2020,7,31)}}
+#                 {'MODIFIED_DATE':{'$gte':LSY_Date,'$lt': csy_first_date()}},
+                     {'MODIFIED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+
+                  ]}},
+
+                  {'$group':{
+                      '_id': { 
+                      'month': {'$month' :"$MODIFIED_DATE" }, 
+                      'year': {'$year' :"$MODIFIED_DATE" }},
+                      'TUNE_IN_SEND':{'$sum':1},
+                       'OPTED_OUT' :  {'$sum' : {'$cond': [ {'$eq': [ '$IS_OPTED_OUT'
+             , 'Y' ] }, 1, 0 ] } },
+             'OPTED_IN' :  {'$sum' : {'$cond': [ {'$eq': [ '$IS_OPTED_OUT'
+             , 'N' ] }, 1, 0 ] } }
+                      }
+                      }
+                      ,{'$project':{
+                          '_id':0,
+                          'month':'$_id.month',
+                          'year':'$_id.year',
+                          'TuneIn_Send':'$TUNE_IN_SEND',
+                          'Opt_Out':'$OPTED_OUT',
+                          'Opt_In':'$OPTED_IN'
+                          }
+                          }]
+        tune_in_LSY=list(collection1.aggregate(query1_LSY))
+        tune_in_LSY_df=pd.DataFrame(tune_in_LSY)
+        
+        if tune_in_LSY_df.empty == True:
+            tune_in_LSY_df = pd.DataFrame({'month':list(range(1,13)),'TuneIn_Send':0,'Opt_Out':0,'Opt_In':0})
+        
+        print(tune_in_LSY_df)
+        print(tune_in_practice_LSY_df)
+
+        tune_in_data_LSY=tune_in_LSY_df.merge(tune_in_practice_LSY_df,on=['month'],how='left').fillna(0)
+        tune_in_Final_LSY=month_df.merge(tune_in_data_LSY[['month','TuneIn_Send', 'Opt_Out', 'Opt_In', 'practicing_parent']],
+                                   how='left',on='month').fillna(0)
+
+        mon=pd.DataFrame({'month_name':[8,9,10,11,12,1,2,3,4,5,6,7]})
+        d = dict(enumerate(calendar.month_abbr))
+        mon['month_name'] = mon['month_name'].map(d)
+    #     print(mon)
+        tune_in_Final_CSY = pd.merge(mon,tune_in_Final_CSY, how="left",on = "month_name")
+        tune_in_Final_LSY = pd.merge(mon,tune_in_Final_LSY, how="left",on = "month_name")
+
+
+    #     print(tune_in_Final_CSY)
+    #     print("tune_in_Final_LSY \n",tune_in_Final_LSY)
+    #     print("data",data)
+        temp={'CSY':{
+                'monthname':tune_in_Final_CSY.month_name.tolist(),
+                'Tune_In_Send':tune_in_Final_CSY.TuneIn_Send.tolist(),
+                'Opt_Out':tune_in_Final_CSY.Opt_Out.tolist(),
+                'Opt_In':tune_in_Final_CSY.Opt_In.tolist(),
+                'practicing_parent':tune_in_Final_CSY.practicing_parent.tolist()
+
+            },
+                  'LSY':{
+                  'monthname':tune_in_Final_LSY.month_name.tolist(),
+                'Tune_In_Send':tune_in_Final_LSY.TuneIn_Send.tolist(),
+                'Opt_Out':tune_in_Final_LSY.Opt_Out.tolist(),
+                'Opt_In':tune_in_Final_LSY.Opt_In.tolist(),
+                'practicing_parent':tune_in_Final_LSY.practicing_parent.tolist()}
+                 }
+    return json.dumps(temp)
+
+
+
+@app.route('/districtwise_tuneincsycard')
+def districtwise_tunein_cards_csy(district,startdate,enddate):
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
+    db=client.compass
+    collection = db.tune_in_audio_track_detail
+    myDatetime1 = dateutil.parser.parse(startdate)
+    myDatetime2 = dateutil.parser.parse(enddate)
+    a = int(csy_first_date().strftime("%Y"))
+    b = a+1
+#     print(a,b)
+    
+    df2=DataFrame(list(db.user_master.aggregate([{"$match":
+         {'$and': [
+#         {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                {"IS_DISABLED":{"$ne":"Y"}},
+                  {"IS_BLOCKED":{"$ne":"Y"}},
+                 {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+
+
+    # //               {'IS_ADMIN':'Y'},
+#              {'CREATED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
+
+                 {'EMAIL_ID':{'$ne':''}},
+                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+#             {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'date':{'$min':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}}},'country':{'$first':'$schoolId.COUNTRY'},
+#                       'State':{'$first':'$schoolId.STATE'},'city':{'$first':'$schoolId.CITY'}}},
+
+            {'$project':{'_id':1}},
+
+
+
+  
+                                            ])))
+    print("df2",df2.shape)
+    if df2.empty == True:
+        temp={"data":"No Result"}
+        
+    else:
+        uid = df2["_id"].to_list()
+        tune_in_practice_CSY_df=pd.DataFrame(list(db.tune_in_audio_track_detail.aggregate([{"$match":{
+                 '$and':[
+                     { 'USER_ID._id':{"$in":uid}},                     
+                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                  {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                  {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#                   {'MODIFIED_DATE':{"$gte": LSY_Date(),"$lt":csy_first_date()}},
+                      {'MODIFIED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+                      {'INVITEE_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                       {'INVITEE_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                     {'INVITEE_EMAIL':{"$not":{"$regex":"manoj.rayat5575@gmail.com",'$options':'i'}}},
+
+
+                      ]}},
+                  {'$group':{
+                      '_id': { 
+                      'month': {'$month' :"$MODIFIED_DATE" }, 
+                      'year': {'$year' :"$MODIFIED_DATE" }},
+                      'prac_parent':{'$addToSet':'$INVITEE_EMAIL'}
+                      }},
+
+                      {'$project':{
+                          '_id':0,
+                          'month':'$_id.month',
+                          'year':'$_id.year',
+                          'practicing_parent':{'$size':'$prac_parent'}
+                          }
+                          }])))
+        print("tune_in_practice_CSY_df",tune_in_practice_CSY_df)
+        if tune_in_practice_CSY_df.empty == True:
+            tune_in_practice_CSY_df = pd.DataFrame({"month":[8,9,10,11,12,1,2,3,4,5,6,7], "year":[a,a,a,a,a,b,b,b,b,b,b,b],'practicing_parent': 0})
+#         print("tune_in_practice_CSY_df",tune_in_practice_CSY_df)
+
+     
+        tune_in_CSY_df=pd.DataFrame(list(db.tune_in_master.aggregate([{"$match":{
+                 '$and':[
+                     { 'USER_ID._id':{"$in":uid}},
+                     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                           {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                  {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                  {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+                  {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+        # //           {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+        #           {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+                  {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+                  {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+                  {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                  {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+#                   {'MODIFIED_DATE':{"$gte": LSY_Date(),"$lt":csy_first_date()}},
+                      {'MODIFIED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+                  ]}},
+
+                  {'$group':{
+                      '_id': { 
+                      'month': {'$month' :"$MODIFIED_DATE" }, 
+                      'year': {'$year' :"$MODIFIED_DATE" }},
+                      'TUNE_IN_SEND':{'$sum':1},
+                       'OPTED_OUT' :  {'$sum' : {'$cond': [ {'$eq': [ '$IS_OPTED_OUT'
+             , 'Y' ] }, 1, 0 ] } },
+             'OPTED_IN' :  {'$sum' : {'$cond': [ {'$eq': [ '$IS_OPTED_OUT'
+             , 'N' ] }, 1, 0 ] } }
+                      }
+                      }
+                      ,{'$project':{
+                          '_id':0,
+                          'month':'$_id.month',
+                          'year':'$_id.year',
+                          'TuneIn_Send':'$TUNE_IN_SEND',
+                          'Opt_Out':'$OPTED_OUT',
+                          'Opt_In':'$OPTED_IN'
+                          }
+                          }])))
+        print("tune_in_CSY_df",tune_in_CSY_df)
+        if tune_in_CSY_df.empty == True:
+            tune_in_CSY_df = pd.DataFrame({"month":[8,9,10,11,12,1,2,3,4,5,6,7], "year":[a,a,a,a,a,b,b,b,b,b,b,b],'TuneIn_Send':0,'Opt_Out':0,'Opt_In':0})
+#         print("tune_in_CSY_df",tune_in_CSY_df)
+        
+        month_df=pd.DataFrame({'month':list(range(1,13))})
+        monthname=[]
+        months=month_df.month.tolist()
+        for i in range(len(months)):    
+            monthname.append(calendar.month_abbr[months[i]])
+        month_df['month_name']=monthname
+        print("month_df",month_df)
+        tune_in_data=tune_in_CSY_df.merge(tune_in_practice_CSY_df,on=['month','year'],how='left').fillna(0)
+        print("tune_in_data",tune_in_data)
+        tune_in_Final_CSY=month_df.merge(tune_in_data[['month','TuneIn_Send', 'Opt_Out', 'Opt_In', 'practicing_parent']],how='left',on='month').fillna(0)
+        cardscount=[int(tune_in_Final_CSY.TuneIn_Send.sum()),int(tune_in_Final_CSY.Opt_In.sum()),int(tune_in_Final_CSY.Opt_Out.sum()),int(tune_in_Final_CSY.practicing_parent.sum())]
+        cardsname=['Tune_In_Send','Tune_In_Opt_In','Tune_In_Opt_Out','Parents_Practised']
+
+        data=[]
+        for i,j in zip(cardsname,cardscount):
+            data.append([i,j])
+        temp={'data':data}
+    return json.dumps(temp , default =str)
+# districtwise_tunein_cards_csy("Boston","2017-08-01","2022-8-31")
 
 #  <<<<<<<<<<<<<<<<<<<-----------------Tune_In_Graph--------------------------------------->>>>>>>>>>>>>>>>>>>>>
 
