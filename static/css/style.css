@@ -1914,6 +1914,16 @@ span.avtr figure {
 
 
 /* Menka Kumari */
+.insight img{
+    display: inline; 
+    width: 12px; 
+    vertical-align: baseline; 
+    margin-right: 5px;
+}
+.insight p{
+    display: inline-block; 
+    font-size: 16px;
+}
 .dropdown-insights{
     width: 38rem; 
     border-radius: 20px !important; 
