@@ -55698,7 +55698,7 @@ def BOARD_MEMBER_DONOR():
 #<<<<<<<--------------------------tune_in Analytics---------------------------------------->>>>>>>>>>>>>>>
 #  <<<<<<<<<<<<<<<<<<<-----------------Districtwise Tune_In_Graph --------------------------------------->>>>>>>>>>>>>>>>>>>>>
 
-@app.route('/districtwise_tuneingraph')
+@app.route('/districtwise_tuneingraph/<district>/<startdate>/<enddate>')
 def districtwise_tune_in_csy_lsy(district,startdate,enddate):
     import datetime
     from datetime import timedelta
@@ -56037,7 +56037,7 @@ def districtwise_tune_in_csy_lsy(district,startdate,enddate):
 
 
 
-@app.route('/districtwise_tuneincsycard')
+@app.route('/districtwise_tuneincsycard/<district>/<startdate>/<enddate>')
 def districtwise_tunein_cards_csy(district,startdate,enddate):
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
