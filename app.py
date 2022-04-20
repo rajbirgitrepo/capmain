@@ -79905,6 +79905,150 @@ def insights__():
     return json.dumps(temp)
 
 
+@app.route('/googleanalyticsinsights')
+def googleanlytics_():
+    from apiclient.discovery import build
+    from oauth2client.service_account import ServiceAccountCredentials
+    from textwrap import wrap
+
+    SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
+    KEY_FILE_LOCATION = 'api-access-347005-fb5071f3d0b0.json'
+    VIEW_ID = '116868648'
+
+
+    def initialize_analyticsreporting():
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(KEY_FILE_LOCATION, SCOPES)
+        analytics = build('analyticsreporting', 'v4', credentials=credentials)
+        return analytics
+
+    # Bounce rate in last 6 months
+    def bouncerate6m(analytics):    
+        return analytics.reports().batchGet(
+          body={
+            'reportRequests': [
+            {
+              'viewId': VIEW_ID,
+              'dateRanges': [{'startDate':(datetime.datetime.utcnow()-relativedelta(months=6)).strftime("%Y-%m-%d"), 'endDate': datetime.datetime.utcnow().strftime("%Y-%m-%d")}],
+                'samplingLevel':'LARGE',
+              'metrics': [{'expression': 'ga:bounceRate'}]
+                ,
+              'dimensions': [{'name': 'ga:yearMonth'}]                        
+            }]
+          }
+            ).execute()
+
+    bounce_rate_6m=pd.DataFrame(bouncerate6m(initialize_analyticsreporting())['reports'][0]['data']['rows'])
+
+    year=[]
+    month=[]
+    for i in range(len(bounce_rate_6m)):
+        splited_list=wrap(bounce_rate_6m['dimensions'][i][0],4)
+        year.append(splited_list[0])
+        month.append(splited_list[1])
+
+    month_name=[calendar.month_abbr[int(i)] for i in month]    
+
+    def extract_value(dicts):
+        value=dicts['values'][0]
+        return value
+
+    values=[round(float(extract_value(i[0])),2) for i in bounce_rate_6m['metrics']]
+
+    bounce_rate_6m['year']=year
+    bounce_rate_6m['month']=month_name
+    bounce_rate_6m['values']=values
+
+    def bouncerate7d(analytics):    
+        return analytics.reports().batchGet(
+          body={
+            'reportRequests': [
+            {
+              'viewId': VIEW_ID,
+              'dateRanges': [{'startDate':(datetime.datetime.utcnow()-relativedelta(days=6)).strftime("%Y-%m-%d"), 'endDate': datetime.datetime.utcnow().strftime("%Y-%m-%d")}],
+                'samplingLevel':'LARGE',
+              'metrics': [{'expression': 'ga:bounceRate'}]
+                ,
+              'dimensions': [{'name': 'ga:date'}]                        
+            }]
+          }
+            ).execute()
+
+    bounce_rate_7d=pd.DataFrame(bouncerate7d(initialize_analyticsreporting())['reports'][0]['data']['rows'])
+
+
+    date_7d=[pd.to_datetime(i[0]).strftime("%Y-%m-%d") for i in bounce_rate_7d['dimensions']]
+    values_7d=[round(float(extract_value(i[0])),2) for i in bounce_rate_7d['metrics']]
+
+
+    bounce_rate_7d['date']=date_7d
+    bounce_rate_7d['values_7d']=values_7d
+
+    def usertype_(analytics):    
+        return analytics.reports().batchGet(
+          body={
+            'reportRequests': [
+            {
+              'viewId': VIEW_ID,
+              'dateRanges': [{'startDate':(datetime.datetime.utcnow()-relativedelta(days=29)).strftime("%Y-%m-%d"), 'endDate': datetime.datetime.utcnow().strftime("%Y-%m-%d")}],
+                'samplingLevel':'LARGE',
+              'metrics': [{'expression': 'ga:users'}]
+                ,
+              'dimensions': [{'name': 'ga:userType'}]                        
+            }]
+          }
+            ).execute()
+
+    usertype_df=pd.DataFrame(usertype_(initialize_analyticsreporting())['reports'][0]['data']['rows'])
+
+    usertype=[i[0] for i in usertype_df['dimensions']]
+    values_usertype=[float(extract_value(i[0])) for i in usertype_df['metrics']]
+
+
+
+    usertype_df['User_Type']=usertype
+    usertype_df['Values']=values_usertype
+
+    def pageloadtime(analytics):    
+        return analytics.reports().batchGet(
+          body={
+            'reportRequests': [
+            {
+              'viewId': VIEW_ID,
+              'dateRanges': [{'startDate':(datetime.datetime.utcnow()-relativedelta(days=6)).strftime("%Y-%m-%d"), 'endDate': datetime.datetime.utcnow().strftime("%Y-%m-%d")}],
+                'samplingLevel':'LARGE',
+              'metrics': [{'expression': 'ga:avgPageLoadTime'}]
+                ,
+              'dimensions': [{'name': 'ga:date'}]                        
+            }]
+          }
+            ).execute()
+    pageloadtime_7d_df=pd.DataFrame(pageloadtime(initialize_analyticsreporting())['reports'][0]['data']['rows'])
+    date_pageload_7d=[pd.to_datetime(i[0]).strftime("%Y-%m-%d") for i in pageloadtime_7d_df['dimensions']]
+    values_pageload_7d=[round(float(extract_value(i[0])),2) for i in pageloadtime_7d_df['metrics']]
+    pageloadtime_7d_df['date']=date_pageload_7d
+    pageloadtime_7d_df['Values']=values_pageload_7d
+
+    temp=[{'Insights':'Show me the trend of bounce rate in last 6 months',
+         'x_axis':list(bounce_rate_6m['month']),
+          'y_axis':list(bounce_rate_6m['values'])
+         },    
+        {'Insights':'Show me the trend of bounce rate in last 7 days',
+         'x_axis':list(bounce_rate_7d['date']),
+          'y_axis':list(bounce_rate_7d['values_7d'])
+         },
+         {'Insights':'Show me the user breakdown of users in last 30 days',
+         'x_axis':list(usertype_df['User_Type']),
+          'y_axis':list(usertype_df['Values'])},
+
+          {'Insights':'Show me the trend of average page load time in last 7 days',
+         'x_axis':list(pageloadtime_7d_df['date']),
+          'y_axis':list(pageloadtime_7d_df['Values'])
+         }
+         ]
+    
+    return json.dumps(temp)
+
+
 
 
 @app.route('/Family_SURVEY')
