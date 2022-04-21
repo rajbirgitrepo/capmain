@@ -79202,7 +79202,7 @@ def active_teachers_schoolsearch(idd):
     
 @app.route('/active_teachers_on_SchoolSearch/<idd>/<chart_type>')
 def active_teachers_school_search(idd,chart_type):
-
+    
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
@@ -79312,132 +79312,139 @@ def active_teachers_school_search(idd,chart_type):
         { '$sort' : { '_id' : 1} }
 
         ])))
-
-        df6=df5.groupby(['_id','practice_date','week','school','schoolname'], as_index=False).sum()
-
-        df7=df6.sort_values(by=['school','week'], ascending=False)
-
-        df8=df7.groupby(['school','_id','week'], as_index=False).agg({'practice_date':'count'}).sort_values(['school','week'], ascending=False)
-
-
-        def legend(row):
-            if row['practice_date']==1:
-                return '1 x/week'
-            elif (row['practice_date']>=2) & (row['practice_date']<=4):
-                return '2-4 x/week'
-            else:
-                return 'Daily'
-
-
-        df8['legend']= df8.apply(legend, axis=1)
-
-        df9=df8.groupby(['school','week','legend'], as_index=False).agg({'_id':'count'})
-
-        df10=pd.merge(df9,df55, left_on='school', right_on='_id', how='left')
-
-        df11=df10.groupby(['school','week'], as_index=False).agg({'_id_x':'sum'})
-
-        df12=pd.merge(df11, df55, left_on='school', right_on='_id', how='left')
-        df12['diffrenece']=df12['active_users']-df12['_id_x']
-
-        def legend(row):
-            if row['diffrenece']!=0:
-                return ('Not Used')
-
-        df12['legend']=df12.apply(legend, axis=1)
-
-        df13=pd.concat([df10,df12]).sort_values(['school','week'])
-        df13=df13[['school','week','legend','_id_x','active_users','diffrenece']]
-
-        df13['diffrenece'].fillna(df13['_id_x'], inplace=True)
-
-
-        df13=df13.rename(columns={'diffrenece':'Teachers'})
-
-        df14=df13[['school', 'week', 'legend','Teachers']]
-        df14['Teachers']=df14['Teachers'].astype(int)
-
-        df15=df14.groupby(['school', 'week'], as_index=False).agg(list)
-
-        legenddd=['Daily', '2-4 x/week', '1 x/week','Not Used']
-
-        for i in range(len(df15)):
-            if legenddd != df15['legend'][i]:
-                missing=set(legenddd)-set(df15['legend'][i])
-                df15['legend'][i].extend(missing)
-
-        for j in range(len(df15)):
-            if len(df15['legend'][j]) != len(df15['Teachers'][j]):
-                diff=len(df15['legend'][j])- len(df15['Teachers'][j])
-                zeros=[0.0]*diff
-                str(zeros)
-                df15['Teachers'][j].extend(zeros)
-
-        df15['new_legend']=np.zeros(len(df15), dtype=int)
-        for w in range(len(df15)):
-            not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
-            df15['new_legend'][w]=not_none
-
-
-        legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
-
-        d={k:v for v,k in enumerate(legend_list)}
-        df15['empty_list'] = np.empty((len(df15), 0)).tolist()
-
-        for i in range(len(df15)):
-            dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
-            from collections import OrderedDict
-            dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
-            x=list(dictionary22.values())
-            df15['empty_list'][i]=x
-
-        for j in range(len(df15)):
-            given_list=df15['new_legend'][j]
-            given_list.sort(key=d.get)
-
-        df15['weeks_']= np.zeros(len(df15), dtype=int)
-
-        for k in range(len(df15)):
-            if (1<=df15['week'][k]<=30):
-                xx=22+df15['week'][k]
-                df15['weeks_'][k]=xx
-            elif(31<=df15['week'][k]<=52):
-                xy=30-df15['week'][k]
-                df15['weeks_'][k]=xy
-
-        df15['weeks_']=abs(df15['weeks_'])   
-        df15=df15.sort_values(by=['weeks_'], ascending=True)
-
-        df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
-
-        df15['new_legend']=df15['new_legend'].str.join(",")
-
-        df16=df15[['school','weeks_','new_legend','empty_list']]
-        df16['weeks_']='Week '+ df16['weeks_'].astype(str)
-
-        df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
-
-        dataa=[]
-        for l in range(len(df17)):
-            data=[df17['Schoolname'][l], df17['weeks_'][l], df17['empty_list'][l]]
-            dataa.append(data)
-
-        list1=[]
-        for ll in range(len(dataa)):
-            dataa[ll][2]=dataa[ll][2].split(',')
-            qq=[int(float(x)) for x in dataa[ll][2]]
-            m=dataa[ll][0:2]+qq
-            list1.append(m)
-
-            each_list=list1[0][2:]
-            total_teachers=sum(each_list)    
-
-            yscale=(total_teachers)+2    
-
-        temp={'data':list1, 'yscale':int(yscale)}
-#         print(temp)
-        return json.dumps(temp)
+        
+        
+        if df5.empty is True:
     
+            temp={'data':0,'yscale':0}
+        
+        else:
+
+            df6=df5.groupby(['_id','practice_date','week','school','schoolname'], as_index=False).sum()
+
+            df7=df6.sort_values(by=['school','week'], ascending=False)
+
+            df8=df7.groupby(['school','_id','week'], as_index=False).agg({'practice_date':'count'}).sort_values(['school','week'], ascending=False)
+
+
+            def legend(row):
+                if row['practice_date']==1:
+                    return '1 x/week'
+                elif (row['practice_date']>=2) & (row['practice_date']<=4):
+                    return '2-4 x/week'
+                else:
+                    return 'Daily'
+
+
+            df8['legend']= df8.apply(legend, axis=1)
+
+            df9=df8.groupby(['school','week','legend'], as_index=False).agg({'_id':'count'})
+
+            df10=pd.merge(df9,df55, left_on='school', right_on='_id', how='left')
+
+            df11=df10.groupby(['school','week'], as_index=False).agg({'_id_x':'sum'})
+
+            df12=pd.merge(df11, df55, left_on='school', right_on='_id', how='left')
+            df12['diffrenece']=df12['active_users']-df12['_id_x']
+
+            def legend(row):
+                if row['diffrenece']!=0:
+                    return ('Not Used')
+
+            df12['legend']=df12.apply(legend, axis=1)
+
+            df13=pd.concat([df10,df12]).sort_values(['school','week'])
+            df13=df13[['school','week','legend','_id_x','active_users','diffrenece']]
+
+            df13['diffrenece'].fillna(df13['_id_x'], inplace=True)
+
+
+            df13=df13.rename(columns={'diffrenece':'Teachers'})
+
+            df14=df13[['school', 'week', 'legend','Teachers']]
+            df14['Teachers']=df14['Teachers'].astype(int)
+
+            df15=df14.groupby(['school', 'week'], as_index=False).agg(list)
+
+            legenddd=['Daily', '2-4 x/week', '1 x/week','Not Used']
+
+            for i in range(len(df15)):
+                if legenddd != df15['legend'][i]:
+                    missing=set(legenddd)-set(df15['legend'][i])
+                    df15['legend'][i].extend(missing)
+
+            for j in range(len(df15)):
+                if len(df15['legend'][j]) != len(df15['Teachers'][j]):
+                    diff=len(df15['legend'][j])- len(df15['Teachers'][j])
+                    zeros=[0.0]*diff
+                    str(zeros)
+                    df15['Teachers'][j].extend(zeros)
+
+            df15['new_legend']=np.zeros(len(df15), dtype=int)
+            for w in range(len(df15)):
+                not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
+                df15['new_legend'][w]=not_none
+
+
+            legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
+
+            d={k:v for v,k in enumerate(legend_list)}
+            df15['empty_list'] = np.empty((len(df15), 0)).tolist()
+
+            for i in range(len(df15)):
+                dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
+                from collections import OrderedDict
+                dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
+                x=list(dictionary22.values())
+                df15['empty_list'][i]=x
+
+            for j in range(len(df15)):
+                given_list=df15['new_legend'][j]
+                given_list.sort(key=d.get)
+
+            df15['weeks_']= np.zeros(len(df15), dtype=int)
+
+            for k in range(len(df15)):
+                if (1<=df15['week'][k]<=30):
+                    xx=22+df15['week'][k]
+                    df15['weeks_'][k]=xx
+                elif(31<=df15['week'][k]<=52):
+                    xy=30-df15['week'][k]
+                    df15['weeks_'][k]=xy
+
+            df15['weeks_']=abs(df15['weeks_'])   
+            df15=df15.sort_values(by=['weeks_'], ascending=True)
+
+            df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
+
+            df15['new_legend']=df15['new_legend'].str.join(",")
+
+            df16=df15[['school','weeks_','new_legend','empty_list']]
+            df16['weeks_']='Week '+ df16['weeks_'].astype(str)
+
+            df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
+
+            dataa=[]
+            for l in range(len(df17)):
+                data=[df17['Schoolname'][l], df17['weeks_'][l], df17['empty_list'][l]]
+                dataa.append(data)
+
+            list1=[]
+            for ll in range(len(dataa)):
+                dataa[ll][2]=dataa[ll][2].split(',')
+                qq=[int(float(x)) for x in dataa[ll][2]]
+                m=dataa[ll][0:2]+qq
+                list1.append(m)
+
+                each_list=list1[0][2:]
+                total_teachers=sum(each_list)    
+
+                yscale=(total_teachers)+2    
+
+            temp={'data':list1, 'yscale':int(yscale)}
+    #         print(temp)
+        return json.dumps(temp)
+
 
     else:
         
@@ -79537,135 +79544,142 @@ def active_teachers_school_search(idd,chart_type):
 
         ])))
 
-        df6=df5.groupby(['_id','practice_date','week','school','schoolname'], as_index=False).sum()
+        if df5.empty is True:
+    
+            temp={'data':0,'yscale':0}
+        
+        else:
+    
+            df6=df5.groupby(['_id','practice_date','week','school','schoolname'], as_index=False).sum()
 
-        df7=df6.sort_values(by=['school','week'], ascending=False)
+            df7=df6.sort_values(by=['school','week'], ascending=False)
 
-        df8=df7.groupby(['school','_id','week'], as_index=False).agg({'practice_date':'count'}).sort_values(['school','week'], ascending=False)
-
-
-        def legend(row):
-            if row['practice_date']==1:
-                return '1 x/week'
-            elif (row['practice_date']>=2) & (row['practice_date']<=4):
-                return '2-4 x/week'
-            else:
-                return 'Daily'
+            df8=df7.groupby(['school','_id','week'], as_index=False).agg({'practice_date':'count'}).sort_values(['school','week'], ascending=False)
 
 
-        df8['legend']= df8.apply(legend, axis=1)
-
-        df9=df8.groupby(['school','week','legend'], as_index=False).agg({'_id':'count'})
-
-        df10=pd.merge(df9,df55, left_on='school', right_on='_id', how='left')
-
-        df11=df10.groupby(['school','week'], as_index=False).agg({'_id_x':'sum'})
-
-        df12=pd.merge(df11, df55, left_on='school', right_on='_id', how='left')
-        df12['diffrenece']=df12['active_users']-df12['_id_x']
-
-        def legend(row):
-            if row['diffrenece']!=0:
-                return ('Not Used')
-
-        df12['legend']=df12.apply(legend, axis=1)
-
-        df13=pd.concat([df10,df12]).sort_values(['school','week'])
-        df13=df13[['school','week','legend','_id_x','active_users','diffrenece']]
-
-        df13['diffrenece'].fillna(df13['_id_x'], inplace=True)
+            def legend(row):
+                if row['practice_date']==1:
+                    return '1 x/week'
+                elif (row['practice_date']>=2) & (row['practice_date']<=4):
+                    return '2-4 x/week'
+                else:
+                    return 'Daily'
 
 
-        df13=df13.rename(columns={'diffrenece':'Teachers'})
+            df8['legend']= df8.apply(legend, axis=1)
 
-        df14=df13[['school', 'week', 'legend','Teachers']]
-        df14['Teachers']=df14['Teachers'].astype(int)
+            df9=df8.groupby(['school','week','legend'], as_index=False).agg({'_id':'count'})
 
-        df15=df14.groupby(['school', 'week'], as_index=False).agg(list)
+            df10=pd.merge(df9,df55, left_on='school', right_on='_id', how='left')
 
-        legenddd=['Daily', '2-4 x/week', '1 x/week','Not Used']
+            df11=df10.groupby(['school','week'], as_index=False).agg({'_id_x':'sum'})
 
-        for i in range(len(df15)):
-            if legenddd != df15['legend'][i]:
-                missing=set(legenddd)-set(df15['legend'][i])
-                df15['legend'][i].extend(missing)
+            df12=pd.merge(df11, df55, left_on='school', right_on='_id', how='left')
+            df12['diffrenece']=df12['active_users']-df12['_id_x']
 
-        for j in range(len(df15)):
-            if len(df15['legend'][j]) != len(df15['Teachers'][j]):
-                diff=len(df15['legend'][j])- len(df15['Teachers'][j])
-                zeros=[0.0]*diff
-                str(zeros)
-                df15['Teachers'][j].extend(zeros)
+            def legend(row):
+                if row['diffrenece']!=0:
+                    return ('Not Used')
 
-        df15['new_legend']=np.zeros(len(df15), dtype=int)
-        for w in range(len(df15)):
-            not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
-            df15['new_legend'][w]=not_none
+            df12['legend']=df12.apply(legend, axis=1)
+
+            df13=pd.concat([df10,df12]).sort_values(['school','week'])
+            df13=df13[['school','week','legend','_id_x','active_users','diffrenece']]
+
+            df13['diffrenece'].fillna(df13['_id_x'], inplace=True)
 
 
+            df13=df13.rename(columns={'diffrenece':'Teachers'})
 
-        legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
+            df14=df13[['school', 'week', 'legend','Teachers']]
+            df14['Teachers']=df14['Teachers'].astype(int)
 
-        d={k:v for v,k in enumerate(legend_list)}
-        df15['empty_list'] = np.empty((len(df15), 0)).tolist()
+            df15=df14.groupby(['school', 'week'], as_index=False).agg(list)
 
-        for i in range(len(df15)):
-            dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
-            from collections import OrderedDict
-            dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
-            x=list(dictionary22.values())
-            df15['empty_list'][i]=x
+            legenddd=['Daily', '2-4 x/week', '1 x/week','Not Used']
 
-        for j in range(len(df15)):
-            given_list=df15['new_legend'][j]
-            given_list.sort(key=d.get)
+            for i in range(len(df15)):
+                if legenddd != df15['legend'][i]:
+                    missing=set(legenddd)-set(df15['legend'][i])
+                    df15['legend'][i].extend(missing)
 
-        df15['weeks_']= np.zeros(len(df15), dtype=int)
+            for j in range(len(df15)):
+                if len(df15['legend'][j]) != len(df15['Teachers'][j]):
+                    diff=len(df15['legend'][j])- len(df15['Teachers'][j])
+                    zeros=[0.0]*diff
+                    str(zeros)
+                    df15['Teachers'][j].extend(zeros)
 
-        for k in range(len(df15)):
-            if (1<=df15['week'][k]<=30):
-                xx=22+df15['week'][k]
-                df15['weeks_'][k]=xx
-            elif(31<=df15['week'][k]<=52):
-                xy=30-df15['week'][k]
-                df15['weeks_'][k]=xy
+            df15['new_legend']=np.zeros(len(df15), dtype=int)
+            for w in range(len(df15)):
+                not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
+                df15['new_legend'][w]=not_none
 
-        df15['weeks_']=abs(df15['weeks_'])   
-        df15=df15.sort_values(by=['weeks_'], ascending=True)
 
-        df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
 
-        df15['new_legend']=df15['new_legend'].str.join(",")
+            legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
 
-        df16=df15[['school','weeks_','new_legend','empty_list']]
-        df16['weeks_']='Week '+ df16['weeks_'].astype(str)
+            d={k:v for v,k in enumerate(legend_list)}
+            df15['empty_list'] = np.empty((len(df15), 0)).tolist()
 
-        df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
+            for i in range(len(df15)):
+                dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
+                from collections import OrderedDict
+                dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
+                x=list(dictionary22.values())
+                df15['empty_list'][i]=x
 
-        dataa=[]
-        for l in range(len(df17)):
-            data=[df17['Schoolname'][l], df17['weeks_'][l], df17['empty_list'][l]]
-            dataa.append(data)
+            for j in range(len(df15)):
+                given_list=df15['new_legend'][j]
+                given_list.sort(key=d.get)
 
-        list1=[]
-        for ll in range(len(dataa)):
-            dataa[ll][2]=dataa[ll][2].split(',')
-            qq=[int(float(x)) for x in dataa[ll][2]]
-            m=dataa[ll][0:2]+qq
-            list1.append(m)
+            df15['weeks_']= np.zeros(len(df15), dtype=int)
 
-        each_list=list1[0][2:]
-        total_teachers=sum(each_list)    
+            for k in range(len(df15)):
+                if (1<=df15['week'][k]<=30):
+                    xx=22+df15['week'][k]
+                    df15['weeks_'][k]=xx
+                elif(31<=df15['week'][k]<=52):
+                    xy=30-df15['week'][k]
+                    df15['weeks_'][k]=xy
 
-        yscale=(total_teachers)+2    
+            df15['weeks_']=abs(df15['weeks_'])   
+            df15=df15.sort_values(by=['weeks_'], ascending=True)
 
-        for i in range(len(list1)):
-            each_list=list1[i][2:]
-            total_teachers=sum(each_list)
-            list1[i][2:]=[round((x/total_teachers)*100) for x in each_list]
+            df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
 
-        temp={'data':list1, 'yscale':100}
+            df15['new_legend']=df15['new_legend'].str.join(",")
+
+            df16=df15[['school','weeks_','new_legend','empty_list']]
+            df16['weeks_']='Week '+ df16['weeks_'].astype(str)
+
+            df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
+
+            dataa=[]
+            for l in range(len(df17)):
+                data=[df17['Schoolname'][l], df17['weeks_'][l], df17['empty_list'][l]]
+                dataa.append(data)
+
+            list1=[]
+            for ll in range(len(dataa)):
+                dataa[ll][2]=dataa[ll][2].split(',')
+                qq=[int(float(x)) for x in dataa[ll][2]]
+                m=dataa[ll][0:2]+qq
+                list1.append(m)
+
+            each_list=list1[0][2:]
+            total_teachers=sum(each_list)    
+
+            yscale=(total_teachers)+2    
+
+            for i in range(len(list1)):
+                each_list=list1[i][2:]
+                total_teachers=sum(each_list)
+                list1[i][2:]=[round((x/total_teachers)*100) for x in each_list]
+
+            temp={'data':list1, 'yscale':100}
         return json.dumps(temp)
+
 
 
 
