@@ -56192,6 +56192,302 @@ def districtwise_tunein_cards_csy(district,startdate,enddate):
 
 #  <<<<<<<<<<<<<<<<<<<-----------------Tune_In_Graph--------------------------------------->>>>>>>>>>>>>>>>>>>>>
 
+@app.route('/districtwise_tunein')
+def districtwise_tune_in():
+    import datetime
+    from datetime import timedelta
+    from dateutil.relativedelta import relativedelta
+
+    a = int(csy_first_date().strftime("%Y"))
+    b = a+1
+
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
+    db=client.compass
+
+
+    # myDatetime1 = dateutil.parser.parse(startdate)
+    # myDatetime2 = dateutil.parser.parse(enddate)
+
+
+
+    df=DataFrame(list(db.school_master.aggregate([
+    # {"$match":{'$and': [
+    # {"CATEGORY":{"$regex":"Broward","$options":"i"}},
+    # {"IS_PORTAL":"Y"}
+    # ]}},
+    {'$project':{"sid" : "$_id",'NAME':1,"CATEGORY":1,"LOCAl_DISTRICT" :1}},])))
+    df = df[['sid','NAME',"CATEGORY"]]
+    df = df.fillna(0)
+    df["CATEGORY"] = df["CATEGORY"].replace('NULL',"NO_DISTRICT")
+    df["CATEGORY"] = df["CATEGORY"].replace('0',"NO_DISTRICT")
+    df["CATEGORY"] = df["CATEGORY"].replace(0,"NO_DISTRICT")
+    df["CATEGORY"] = df["CATEGORY"].replace("","NO_DISTRICT")
+    df["CATEGORY"] = df["CATEGORY"].replace('5fd89a86623b9c382a91037a',"NO_DISTRICT")
+#     print(df.CATEGORY.unique())
+
+    sid = df['sid'].to_list()
+
+    df2=DataFrame(list(db.user_master.aggregate([{"$match":
+    {'$and': [
+    # {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    {"IS_DISABLED":{"$ne":"Y"}},
+    {"IS_BLOCKED":{"$ne":"Y"}},
+    {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+    { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    # {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+    # {'IS_ADMIN':'Y'},
+    # {'CREATED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+
+    {'EMAIL_ID':{'$ne':''}},
+    {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+    #             {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'date':{'$min':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}}},'country':{'$first':'$schoolId.COUNTRY'},
+    #                       'State':{'$first':'$schoolId.STATE'},'city':{'$first':'$schoolId.CITY'}}},
+
+    {'$project':{'_id':"$_id", "sid":'$schoolId._id'}},  
+    ])))
+    dff=df.merge(df2,on="sid",how='left').fillna(0)
+    
+#     print("dff",dff)
+    
+    if dff.empty == True:
+        temp={"data":"No Result"}
+
+    else:
+        uid = dff["_id"].to_list()
+
+        tune_in_practice=pd.DataFrame(list(db.tune_in_audio_track_detail.aggregate([{"$match":{
+        '$and':[
+        {'USER_ID._id':{"$in":uid}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+        {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+        {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        #               {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),'$lte':datetime.datetime(2021,7,31)}},
+        #             {'MODIFIED_DATE':{'$gte': csy_first_date()}},
+        #                  {'MODIFIED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+
+        {'INVITEE_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'INVITEE_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'INVITEE_EMAIL':{"$not":{"$regex":"manoj.rayat5575@gmail.com",'$options':'i'}}},
+        ]}},
+        {'$group':{
+        '_id': "$USER_ID._id",'prac_parent':{'$addToSet':'$INVITEE_EMAIL'}
+        }},
+        {'$project':{
+        "_id":1,
+        'practicing_parent':{'$size':'$prac_parent'}
+        }
+        }])))
+
+
+        tune_in=pd.DataFrame(list(db.tune_in_master.aggregate([{"$match":{
+        '$and':[
+        {'USER_ID._id':{"$in":uid}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+    #     {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    #     {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+        {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+        {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    #     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),'$lte':datetime.datetime(2021,7,31)}}
+    #     {'MODIFIED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+        ]}},
+        {'$group':{
+        "_id":"$USER_ID._id",
+        'TUNE_IN_SEND':{'$sum':1},
+        'OPTED_OUT' :  {'$sum' : {'$cond': [ {'$eq': [ '$IS_OPTED_OUT', 'Y' ] }, 1, 0 ] } },
+        'OPTED_IN' :  {'$sum' : {'$cond': [ {'$eq': [ '$IS_OPTED_OUT', 'N' ] }, 1, 0 ] } }
+        }},
+        {'$project':{
+        '_id':1,
+        'TuneIn_Send':'$TUNE_IN_SEND',
+        'Opt_Out':'$OPTED_OUT',
+        'Opt_In':'$OPTED_IN'
+        }
+        }])))
+
+        finaldf = dff.merge(tune_in,on="_id",how='left').fillna(0)
+        finaldf = finaldf.merge(tune_in_practice,on="_id",how='left').fillna(0)
+        finaldf = finaldf.dropna()
+        finaldf = finaldf.groupby(['CATEGORY']).sum()
+        finaldf = finaldf.dropna()
+        finaldf = finaldf[(finaldf.T != 0).any()]
+        
+#         print(finaldf)
+        
+        temp={'CSY':{
+        'District_Name':finaldf.index.to_list(),
+        'Tune_In_Send':finaldf.TuneIn_Send.to_list(),
+        'Opt_Out':finaldf.Opt_Out.to_list(),
+        'Opt_In':finaldf.Opt_In.to_list(),
+        'practicing_parent':finaldf.practicing_parent.to_list()
+        }}
+
+        return json.dumps(temp)
+# districtwise_tune_in()
+
+
+
+@app.route('/programwise_tuneingraph')
+def programwise_tune_in():
+    import datetime
+    from datetime import timedelta
+    from dateutil.relativedelta import relativedelta
+
+    a = int(csy_first_date().strftime("%Y"))
+    b = a+1
+
+    username = urllib.parse.quote_plus('admin')
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
+    db=client.compass
+
+
+    # myDatetime1 = dateutil.parser.parse(startdate)
+    # myDatetime2 = dateutil.parser.parse(enddate)
+
+
+
+    df2=DataFrame(list(db.user_master.aggregate([{"$match":
+    {'$and': [
+    # {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    {"IS_DISABLED":{"$ne":"Y"}},
+    {"IS_BLOCKED":{"$ne":"Y"}},
+    {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+    { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    # {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+    # {'IS_ADMIN':'Y'},
+    # {'CREATED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+
+    {'EMAIL_ID':{'$ne':''}},
+    {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+    {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+
+    #             {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$_id'},'school_name':{'$first':'$schoolId.NAME'},'date':{'$min':{"$dateToString": { "format": "%Y-%m-%d", "date":'$CREATED_DATE'}}},'country':{'$first':'$schoolId.COUNTRY'},
+    #                       'State':{'$first':'$schoolId.STATE'},'city':{'$first':'$schoolId.CITY'}}},
+
+    {'$project':{'_id':"$_id", "sid":'$schoolId._id'}},  
+    ])))
+
+    #     print("dff",dff)
+
+    if df2.empty == True:
+        temp={"data":"No Result"}
+
+    else:
+        uid = df2["_id"].to_list()
+
+        tune_in_practice=pd.DataFrame(list(db.tune_in_audio_track_detail.aggregate([{"$match":{
+        '$and':[
+        {'USER_ID._id':{"$in":uid}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+        {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+        {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        #               {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),'$lte':datetime.datetime(2021,7,31)}},
+        #             {'MODIFIED_DATE':{'$gte': csy_first_date()}},
+        #                  {'MODIFIED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+
+        {'INVITEE_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'INVITEE_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'INVITEE_EMAIL':{"$not":{"$regex":"manoj.rayat5575@gmail.com",'$options':'i'}}},
+        ]}},
+        {'$group':{
+        '_id': "$USER_ID._id",'prac_parent':{'$addToSet':'$INVITEE_EMAIL'},
+        'PROGRAM':{'$first':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'},   
+        }},
+        {'$project':{
+        "_id":1,
+        'practicing_parent':{'$size':'$prac_parent'},
+        'PROGRAM':1
+        }
+        }])))
+
+
+        tune_in=pd.DataFrame(list(db.tune_in_master.aggregate([{"$match":{
+        '$and':[
+        {'USER_ID._id':{"$in":uid}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}},
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+    #     {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    #     {'USER_ID.DEVICE_USED':{"$regex":'webapp','$options':'i'}},
+        {'USER_ID.schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+        {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':0}},
+        {'EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    #     {'MODIFIED_DATE':{'$gte':datetime.datetime(2020,8,1),'$lte':datetime.datetime(2021,7,31)}}
+    #     {'MODIFIED_DATE':{"$gte": myDatetime1 ,"$lte":myDatetime2}},
+        ]}},
+        {'$group':{
+        "_id":"$USER_ID._id",
+        'TUNE_IN_SEND':{'$sum':1},
+        'OPTED_OUT' :  {'$sum' : {'$cond': [ {'$eq': [ '$IS_OPTED_OUT', 'Y' ] }, 1, 0 ] } },
+        'OPTED_IN' :  {'$sum' : {'$cond': [ {'$eq': [ '$IS_OPTED_OUT', 'N' ] }, 1, 0 ] } }
+        }},
+        {'$project':{
+        '_id':1,
+        'TuneIn_Send':'$TUNE_IN_SEND',
+        'Opt_Out':'$OPTED_OUT',
+        'Opt_In':'$OPTED_IN'
+        }
+        }])))
+
+        finaldf = df2.merge(tune_in,on="_id",how='left').fillna(0)
+        finaldf = finaldf.merge(tune_in_practice,on="_id",how='left').fillna(0)
+        finaldf["PROGRAM"] = finaldf["PROGRAM"].replace(0,"OTHER")
+        finaldf = finaldf.dropna()
+        finaldf = finaldf.groupby(['PROGRAM']).sum()
+        finaldf = finaldf.dropna()
+        finaldf = finaldf[(finaldf.T != 0).any()]
+
+    #     print(finaldf)
+
+        temp={'CSY':{
+        'Program':finaldf.index.to_list(),
+        'Tune_In_Send':finaldf.TuneIn_Send.to_list(),
+        'Opt_Out':finaldf.Opt_Out.to_list(),
+        'Opt_In':finaldf.Opt_In.to_list(),
+        'practicing_parent':finaldf.practicing_parent.to_list()
+        }}
+    #     print(temp)
+
+        return json.dumps(temp)
+# programwise_tune_in()
+
+
+
 @app.route('/tuneingraph')
 def tune_in_csy_lsy():
     import datetime
@@ -79202,7 +79498,7 @@ def active_teachers_schoolsearch(idd):
     
 @app.route('/active_teachers_on_SchoolSearch/<idd>/<chart_type>')
 def active_teachers_school_search(idd,chart_type):
-    
+
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
@@ -79312,139 +79608,132 @@ def active_teachers_school_search(idd,chart_type):
         { '$sort' : { '_id' : 1} }
 
         ])))
-        
-        
-        if df5.empty is True:
-    
-            temp={'data':0,'yscale':0}
-        
-        else:
 
-            df6=df5.groupby(['_id','practice_date','week','school','schoolname'], as_index=False).sum()
+        df6=df5.groupby(['_id','practice_date','week','school','schoolname'], as_index=False).sum()
 
-            df7=df6.sort_values(by=['school','week'], ascending=False)
+        df7=df6.sort_values(by=['school','week'], ascending=False)
 
-            df8=df7.groupby(['school','_id','week'], as_index=False).agg({'practice_date':'count'}).sort_values(['school','week'], ascending=False)
+        df8=df7.groupby(['school','_id','week'], as_index=False).agg({'practice_date':'count'}).sort_values(['school','week'], ascending=False)
 
 
-            def legend(row):
-                if row['practice_date']==1:
-                    return '1 x/week'
-                elif (row['practice_date']>=2) & (row['practice_date']<=4):
-                    return '2-4 x/week'
-                else:
-                    return 'Daily'
+        def legend(row):
+            if row['practice_date']==1:
+                return '1 x/week'
+            elif (row['practice_date']>=2) & (row['practice_date']<=4):
+                return '2-4 x/week'
+            else:
+                return 'Daily'
 
 
-            df8['legend']= df8.apply(legend, axis=1)
+        df8['legend']= df8.apply(legend, axis=1)
 
-            df9=df8.groupby(['school','week','legend'], as_index=False).agg({'_id':'count'})
+        df9=df8.groupby(['school','week','legend'], as_index=False).agg({'_id':'count'})
 
-            df10=pd.merge(df9,df55, left_on='school', right_on='_id', how='left')
+        df10=pd.merge(df9,df55, left_on='school', right_on='_id', how='left')
 
-            df11=df10.groupby(['school','week'], as_index=False).agg({'_id_x':'sum'})
+        df11=df10.groupby(['school','week'], as_index=False).agg({'_id_x':'sum'})
 
-            df12=pd.merge(df11, df55, left_on='school', right_on='_id', how='left')
-            df12['diffrenece']=df12['active_users']-df12['_id_x']
+        df12=pd.merge(df11, df55, left_on='school', right_on='_id', how='left')
+        df12['diffrenece']=df12['active_users']-df12['_id_x']
 
-            def legend(row):
-                if row['diffrenece']!=0:
-                    return ('Not Used')
+        def legend(row):
+            if row['diffrenece']!=0:
+                return ('Not Used')
 
-            df12['legend']=df12.apply(legend, axis=1)
+        df12['legend']=df12.apply(legend, axis=1)
 
-            df13=pd.concat([df10,df12]).sort_values(['school','week'])
-            df13=df13[['school','week','legend','_id_x','active_users','diffrenece']]
+        df13=pd.concat([df10,df12]).sort_values(['school','week'])
+        df13=df13[['school','week','legend','_id_x','active_users','diffrenece']]
 
-            df13['diffrenece'].fillna(df13['_id_x'], inplace=True)
-
-
-            df13=df13.rename(columns={'diffrenece':'Teachers'})
-
-            df14=df13[['school', 'week', 'legend','Teachers']]
-            df14['Teachers']=df14['Teachers'].astype(int)
-
-            df15=df14.groupby(['school', 'week'], as_index=False).agg(list)
-
-            legenddd=['Daily', '2-4 x/week', '1 x/week','Not Used']
-
-            for i in range(len(df15)):
-                if legenddd != df15['legend'][i]:
-                    missing=set(legenddd)-set(df15['legend'][i])
-                    df15['legend'][i].extend(missing)
-
-            for j in range(len(df15)):
-                if len(df15['legend'][j]) != len(df15['Teachers'][j]):
-                    diff=len(df15['legend'][j])- len(df15['Teachers'][j])
-                    zeros=[0.0]*diff
-                    str(zeros)
-                    df15['Teachers'][j].extend(zeros)
-
-            df15['new_legend']=np.zeros(len(df15), dtype=int)
-            for w in range(len(df15)):
-                not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
-                df15['new_legend'][w]=not_none
+        df13['diffrenece'].fillna(df13['_id_x'], inplace=True)
 
 
-            legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
+        df13=df13.rename(columns={'diffrenece':'Teachers'})
 
-            d={k:v for v,k in enumerate(legend_list)}
-            df15['empty_list'] = np.empty((len(df15), 0)).tolist()
+        df14=df13[['school', 'week', 'legend','Teachers']]
+        df14['Teachers']=df14['Teachers'].astype(int)
 
-            for i in range(len(df15)):
-                dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
-                from collections import OrderedDict
-                dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
-                x=list(dictionary22.values())
-                df15['empty_list'][i]=x
+        df15=df14.groupby(['school', 'week'], as_index=False).agg(list)
 
-            for j in range(len(df15)):
-                given_list=df15['new_legend'][j]
-                given_list.sort(key=d.get)
+        legenddd=['Daily', '2-4 x/week', '1 x/week','Not Used']
 
-            df15['weeks_']= np.zeros(len(df15), dtype=int)
+        for i in range(len(df15)):
+            if legenddd != df15['legend'][i]:
+                missing=set(legenddd)-set(df15['legend'][i])
+                df15['legend'][i].extend(missing)
 
-            for k in range(len(df15)):
-                if (1<=df15['week'][k]<=30):
-                    xx=22+df15['week'][k]
-                    df15['weeks_'][k]=xx
-                elif(31<=df15['week'][k]<=52):
-                    xy=30-df15['week'][k]
-                    df15['weeks_'][k]=xy
+        for j in range(len(df15)):
+            if len(df15['legend'][j]) != len(df15['Teachers'][j]):
+                diff=len(df15['legend'][j])- len(df15['Teachers'][j])
+                zeros=[0.0]*diff
+                str(zeros)
+                df15['Teachers'][j].extend(zeros)
 
-            df15['weeks_']=abs(df15['weeks_'])   
-            df15=df15.sort_values(by=['weeks_'], ascending=True)
+        df15['new_legend']=np.zeros(len(df15), dtype=int)
+        for w in range(len(df15)):
+            not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
+            df15['new_legend'][w]=not_none
 
-            df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
 
-            df15['new_legend']=df15['new_legend'].str.join(",")
+        legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
 
-            df16=df15[['school','weeks_','new_legend','empty_list']]
-            df16['weeks_']='Week '+ df16['weeks_'].astype(str)
+        d={k:v for v,k in enumerate(legend_list)}
+        df15['empty_list'] = np.empty((len(df15), 0)).tolist()
 
-            df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
+        for i in range(len(df15)):
+            dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
+            from collections import OrderedDict
+            dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
+            x=list(dictionary22.values())
+            df15['empty_list'][i]=x
 
-            dataa=[]
-            for l in range(len(df17)):
-                data=[df17['Schoolname'][l], df17['weeks_'][l], df17['empty_list'][l]]
-                dataa.append(data)
+        for j in range(len(df15)):
+            given_list=df15['new_legend'][j]
+            given_list.sort(key=d.get)
 
-            list1=[]
-            for ll in range(len(dataa)):
-                dataa[ll][2]=dataa[ll][2].split(',')
-                qq=[int(float(x)) for x in dataa[ll][2]]
-                m=dataa[ll][0:2]+qq
-                list1.append(m)
+        df15['weeks_']= np.zeros(len(df15), dtype=int)
 
-                each_list=list1[0][2:]
-                total_teachers=sum(each_list)    
+        for k in range(len(df15)):
+            if (1<=df15['week'][k]<=30):
+                xx=22+df15['week'][k]
+                df15['weeks_'][k]=xx
+            elif(31<=df15['week'][k]<=52):
+                xy=30-df15['week'][k]
+                df15['weeks_'][k]=xy
 
-                yscale=(total_teachers)+2    
+        df15['weeks_']=abs(df15['weeks_'])   
+        df15=df15.sort_values(by=['weeks_'], ascending=True)
 
-            temp={'data':list1, 'yscale':int(yscale)}
-    #         print(temp)
+        df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
+
+        df15['new_legend']=df15['new_legend'].str.join(",")
+
+        df16=df15[['school','weeks_','new_legend','empty_list']]
+        df16['weeks_']='Week '+ df16['weeks_'].astype(str)
+
+        df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
+
+        dataa=[]
+        for l in range(len(df17)):
+            data=[df17['Schoolname'][l], df17['weeks_'][l], df17['empty_list'][l]]
+            dataa.append(data)
+
+        list1=[]
+        for ll in range(len(dataa)):
+            dataa[ll][2]=dataa[ll][2].split(',')
+            qq=[int(float(x)) for x in dataa[ll][2]]
+            m=dataa[ll][0:2]+qq
+            list1.append(m)
+
+            each_list=list1[0][2:]
+            total_teachers=sum(each_list)    
+
+            yscale=(total_teachers)+2    
+
+        temp={'data':list1, 'yscale':int(yscale)}
+#         print(temp)
         return json.dumps(temp)
-
+    
 
     else:
         
@@ -79544,142 +79833,135 @@ def active_teachers_school_search(idd,chart_type):
 
         ])))
 
-        if df5.empty is True:
-    
-            temp={'data':0,'yscale':0}
-        
-        else:
-    
-            df6=df5.groupby(['_id','practice_date','week','school','schoolname'], as_index=False).sum()
+        df6=df5.groupby(['_id','practice_date','week','school','schoolname'], as_index=False).sum()
 
-            df7=df6.sort_values(by=['school','week'], ascending=False)
+        df7=df6.sort_values(by=['school','week'], ascending=False)
 
-            df8=df7.groupby(['school','_id','week'], as_index=False).agg({'practice_date':'count'}).sort_values(['school','week'], ascending=False)
+        df8=df7.groupby(['school','_id','week'], as_index=False).agg({'practice_date':'count'}).sort_values(['school','week'], ascending=False)
 
 
-            def legend(row):
-                if row['practice_date']==1:
-                    return '1 x/week'
-                elif (row['practice_date']>=2) & (row['practice_date']<=4):
-                    return '2-4 x/week'
-                else:
-                    return 'Daily'
+        def legend(row):
+            if row['practice_date']==1:
+                return '1 x/week'
+            elif (row['practice_date']>=2) & (row['practice_date']<=4):
+                return '2-4 x/week'
+            else:
+                return 'Daily'
 
 
-            df8['legend']= df8.apply(legend, axis=1)
+        df8['legend']= df8.apply(legend, axis=1)
 
-            df9=df8.groupby(['school','week','legend'], as_index=False).agg({'_id':'count'})
+        df9=df8.groupby(['school','week','legend'], as_index=False).agg({'_id':'count'})
 
-            df10=pd.merge(df9,df55, left_on='school', right_on='_id', how='left')
+        df10=pd.merge(df9,df55, left_on='school', right_on='_id', how='left')
 
-            df11=df10.groupby(['school','week'], as_index=False).agg({'_id_x':'sum'})
+        df11=df10.groupby(['school','week'], as_index=False).agg({'_id_x':'sum'})
 
-            df12=pd.merge(df11, df55, left_on='school', right_on='_id', how='left')
-            df12['diffrenece']=df12['active_users']-df12['_id_x']
+        df12=pd.merge(df11, df55, left_on='school', right_on='_id', how='left')
+        df12['diffrenece']=df12['active_users']-df12['_id_x']
 
-            def legend(row):
-                if row['diffrenece']!=0:
-                    return ('Not Used')
+        def legend(row):
+            if row['diffrenece']!=0:
+                return ('Not Used')
 
-            df12['legend']=df12.apply(legend, axis=1)
+        df12['legend']=df12.apply(legend, axis=1)
 
-            df13=pd.concat([df10,df12]).sort_values(['school','week'])
-            df13=df13[['school','week','legend','_id_x','active_users','diffrenece']]
+        df13=pd.concat([df10,df12]).sort_values(['school','week'])
+        df13=df13[['school','week','legend','_id_x','active_users','diffrenece']]
 
-            df13['diffrenece'].fillna(df13['_id_x'], inplace=True)
+        df13['diffrenece'].fillna(df13['_id_x'], inplace=True)
 
 
-            df13=df13.rename(columns={'diffrenece':'Teachers'})
+        df13=df13.rename(columns={'diffrenece':'Teachers'})
 
-            df14=df13[['school', 'week', 'legend','Teachers']]
-            df14['Teachers']=df14['Teachers'].astype(int)
+        df14=df13[['school', 'week', 'legend','Teachers']]
+        df14['Teachers']=df14['Teachers'].astype(int)
 
-            df15=df14.groupby(['school', 'week'], as_index=False).agg(list)
+        df15=df14.groupby(['school', 'week'], as_index=False).agg(list)
 
-            legenddd=['Daily', '2-4 x/week', '1 x/week','Not Used']
+        legenddd=['Daily', '2-4 x/week', '1 x/week','Not Used']
 
-            for i in range(len(df15)):
-                if legenddd != df15['legend'][i]:
-                    missing=set(legenddd)-set(df15['legend'][i])
-                    df15['legend'][i].extend(missing)
+        for i in range(len(df15)):
+            if legenddd != df15['legend'][i]:
+                missing=set(legenddd)-set(df15['legend'][i])
+                df15['legend'][i].extend(missing)
 
-            for j in range(len(df15)):
-                if len(df15['legend'][j]) != len(df15['Teachers'][j]):
-                    diff=len(df15['legend'][j])- len(df15['Teachers'][j])
-                    zeros=[0.0]*diff
-                    str(zeros)
-                    df15['Teachers'][j].extend(zeros)
+        for j in range(len(df15)):
+            if len(df15['legend'][j]) != len(df15['Teachers'][j]):
+                diff=len(df15['legend'][j])- len(df15['Teachers'][j])
+                zeros=[0.0]*diff
+                str(zeros)
+                df15['Teachers'][j].extend(zeros)
 
-            df15['new_legend']=np.zeros(len(df15), dtype=int)
-            for w in range(len(df15)):
-                not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
-                df15['new_legend'][w]=not_none
+        df15['new_legend']=np.zeros(len(df15), dtype=int)
+        for w in range(len(df15)):
+            not_none=list(filter(lambda a:a!= None, df15['legend'][w]))
+            df15['new_legend'][w]=not_none
 
 
 
-            legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
+        legend_list=['Daily','2-4 x/week','1 x/week','Not Used']
 
-            d={k:v for v,k in enumerate(legend_list)}
-            df15['empty_list'] = np.empty((len(df15), 0)).tolist()
+        d={k:v for v,k in enumerate(legend_list)}
+        df15['empty_list'] = np.empty((len(df15), 0)).tolist()
 
-            for i in range(len(df15)):
-                dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
-                from collections import OrderedDict
-                dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
-                x=list(dictionary22.values())
-                df15['empty_list'][i]=x
+        for i in range(len(df15)):
+            dictionary=dict(zip(df15['new_legend'][i], df15['Teachers'][i]))
+            from collections import OrderedDict
+            dictionary22=OrderedDict([(el,dictionary[el]) for el in legend_list])
+            x=list(dictionary22.values())
+            df15['empty_list'][i]=x
 
-            for j in range(len(df15)):
-                given_list=df15['new_legend'][j]
-                given_list.sort(key=d.get)
+        for j in range(len(df15)):
+            given_list=df15['new_legend'][j]
+            given_list.sort(key=d.get)
 
-            df15['weeks_']= np.zeros(len(df15), dtype=int)
+        df15['weeks_']= np.zeros(len(df15), dtype=int)
 
-            for k in range(len(df15)):
-                if (1<=df15['week'][k]<=30):
-                    xx=22+df15['week'][k]
-                    df15['weeks_'][k]=xx
-                elif(31<=df15['week'][k]<=52):
-                    xy=30-df15['week'][k]
-                    df15['weeks_'][k]=xy
+        for k in range(len(df15)):
+            if (1<=df15['week'][k]<=30):
+                xx=22+df15['week'][k]
+                df15['weeks_'][k]=xx
+            elif(31<=df15['week'][k]<=52):
+                xy=30-df15['week'][k]
+                df15['weeks_'][k]=xy
 
-            df15['weeks_']=abs(df15['weeks_'])   
-            df15=df15.sort_values(by=['weeks_'], ascending=True)
+        df15['weeks_']=abs(df15['weeks_'])   
+        df15=df15.sort_values(by=['weeks_'], ascending=True)
 
-            df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
+        df15['empty_list']=df15['empty_list'].astype(str).str.replace(r'\[|\]|', '')
 
-            df15['new_legend']=df15['new_legend'].str.join(",")
+        df15['new_legend']=df15['new_legend'].str.join(",")
 
-            df16=df15[['school','weeks_','new_legend','empty_list']]
-            df16['weeks_']='Week '+ df16['weeks_'].astype(str)
+        df16=df15[['school','weeks_','new_legend','empty_list']]
+        df16['weeks_']='Week '+ df16['weeks_'].astype(str)
 
-            df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
+        df17=pd.merge(df16, user_master, how='left', left_on='school', right_on='_id')
 
-            dataa=[]
-            for l in range(len(df17)):
-                data=[df17['Schoolname'][l], df17['weeks_'][l], df17['empty_list'][l]]
-                dataa.append(data)
+        dataa=[]
+        for l in range(len(df17)):
+            data=[df17['Schoolname'][l], df17['weeks_'][l], df17['empty_list'][l]]
+            dataa.append(data)
 
-            list1=[]
-            for ll in range(len(dataa)):
-                dataa[ll][2]=dataa[ll][2].split(',')
-                qq=[int(float(x)) for x in dataa[ll][2]]
-                m=dataa[ll][0:2]+qq
-                list1.append(m)
+        list1=[]
+        for ll in range(len(dataa)):
+            dataa[ll][2]=dataa[ll][2].split(',')
+            qq=[int(float(x)) for x in dataa[ll][2]]
+            m=dataa[ll][0:2]+qq
+            list1.append(m)
 
-            each_list=list1[0][2:]
-            total_teachers=sum(each_list)    
+        each_list=list1[0][2:]
+        total_teachers=sum(each_list)    
 
-            yscale=(total_teachers)+2    
+        yscale=(total_teachers)+2    
 
-            for i in range(len(list1)):
-                each_list=list1[i][2:]
-                total_teachers=sum(each_list)
-                list1[i][2:]=[round((x/total_teachers)*100) for x in each_list]
+        for i in range(len(list1)):
+            each_list=list1[i][2:]
+            total_teachers=sum(each_list)
+            list1[i][2:]=[round((x/total_teachers)*100) for x in each_list]
 
-            temp={'data':list1, 'yscale':100}
+        temp={'data':list1, 'yscale':100}
         return json.dumps(temp)
-
 
 
 
