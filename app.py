@@ -15342,7 +15342,6 @@ def district_count_cards(districtid,startdate,enddate):
     { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
     { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
     {'EMAIL_ID':{'$ne':''}},
-
     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
     {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
     {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
