@@ -80001,11 +80001,10 @@ def googleanlytics_():
 
     usertype=[i[0] for i in usertype_df['dimensions']]
     values_usertype=[float(extract_value(i[0])) for i in usertype_df['metrics']]
-
-
-
     usertype_df['User_Type']=usertype
     usertype_df['Values']=values_usertype
+    usertype_df['Percent']=round(usertype_df['Values']/sum(usertype_df['Values'])*100,2)
+
 
     def pageloadtime(analytics):    
         return analytics.reports().batchGet(
@@ -80037,7 +80036,7 @@ def googleanlytics_():
          },
          {'Insights':'Show me the user breakdown of users in last 30 days',
          'x_axis':list(usertype_df['User_Type']),
-          'y_axis':list(usertype_df['Values'])},
+          'y_axis':list(usertype_df['Percent'])},
 
           {'Insights':'Show me the trend of average page load time in last 7 days',
          'x_axis':list(pageloadtime_7d_df['date']),
