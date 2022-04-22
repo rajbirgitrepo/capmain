@@ -80343,6 +80343,59 @@ def googleanlytics_():
     return json.dumps(temp)
 
 
+#  ukraine donation data fetch api is added 
+
+@app.route('/downloadukrainedonation')
+def ukrainedonationdata():
+    from flask import Flask, make_response
+    import pyexcel as pe
+    from io import StringIO
+    client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
+    db_live=client_live.compass
+    ukraine_campaign_data=pd.DataFrame(list(db_live.campaign_payment.aggregate(
+    [{'$match':{'$and':[
+        {'CAMPAIGN_ID._id':ObjectId('6260122a91af2ca7047316dd')}
+        ]}},
+     {'$project':{
+         '_id':0,
+         'CAMPAIGN_ID':'$CAMPAIGN_ID._id',
+         'CREATED_DATE':'$CREATED_DATE',
+         'CONTRIBUTION_ID':'$CONTRIBUTION_ID._id',
+         'FIRST_NAME':'$CONTRIBUTION_ID.FIRST_NAME',
+         'LAST_NAME':'$CONTRIBUTION_ID.LAST_NAME',     
+         'EMAIL':'$CONTRIBUTION_ID.EMAIL',
+         'CONTRIBUTE_AMOUNT':'$CONTRIBUTION_ID.CONTRIBUTE_AMOUNT',
+         'IS_PAYMENT_SUCCESS':'$CONTRIBUTION_ID.IS_PAYMENT_SUCCESS',
+         'PAYMENT_TYPE':'$PAYMENT_TYPE',
+         'CONTRIBUITION_CREATED_DATE':'$CONTRIBUTION_ID.CREATED_DATE',
+         'PAYPAL_TRX_ID':'$PAYPAL_TRX_ID',
+         'PAYPAL_PAYERID':'$PAYPAL_PAYERID'
+
+         }}   
+
+        ]
+
+    )))    
+
+    ukraine_campaign_data
+    ukraine_campaign_data['DONATION_TIME']=[i.strftime("%Y-%m-%d %H:%M:%S") for i in ukraine_campaign_data['CONTRIBUITION_CREATED_DATE']]
+    ukraine_campaign_data['CONTRIBUTOR_NAME']=ukraine_campaign_data['FIRST_NAME']+" "+ukraine_campaign_data['LAST_NAME']
+
+
+    ukraine_campaign_data=ukraine_campaign_data[['CONTRIBUTOR_NAME', 'EMAIL', 'CONTRIBUTE_AMOUNT', 'IS_PAYMENT_SUCCESS',
+           'PAYMENT_TYPE', 'CONTRIBUITION_CREATED_DATE', 'PAYPAL_TRX_ID',
+           'PAYPAL_PAYERID', 'DONATION_TIME']]
+
+    data=ukraine_campaign_data.values.tolist()
+    data.insert(0,list(ukraine_campaign_data.columns))
+    
+    sheet = pe.Sheet(data)
+    io = StringIO()
+    sheet.save_to_memory("csv", io)
+    output = make_response(io.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename=export.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
 
 
 @app.route('/Family_SURVEY')
