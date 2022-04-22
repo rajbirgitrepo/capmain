@@ -80355,7 +80355,7 @@ def ukrainedonationdata():
     ukraine_campaign_data=pd.DataFrame(list(db_live.campaign_payment.aggregate(
     [{'$match':{'$and':[
         {'CAMPAIGN_ID._id':ObjectId('6260122a91af2ca7047316dd')}
-        ]}},
+        ]}},    
      {'$project':{
          '_id':0,
          'CAMPAIGN_ID':'$CAMPAIGN_ID._id',
@@ -80385,6 +80385,8 @@ def ukrainedonationdata():
     ukraine_campaign_data=ukraine_campaign_data[['CONTRIBUTOR_NAME', 'EMAIL', 'CONTRIBUTE_AMOUNT', 'IS_PAYMENT_SUCCESS',
            'PAYMENT_TYPE', 'CONTRIBUITION_CREATED_DATE', 'PAYPAL_TRX_ID',
            'PAYPAL_PAYERID', 'DONATION_TIME']]
+           
+    ukraine_campaign_data=ukraine_campaign_data.fillna('')
 
     data=ukraine_campaign_data.values.tolist()
     data.insert(0,list(ukraine_campaign_data.columns))
