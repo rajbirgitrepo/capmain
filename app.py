@@ -56192,8 +56192,8 @@ def districtwise_tunein_cards_csy(district,startdate,enddate):
 
 #  <<<<<<<<<<<<<<<<<<<-----------------Tune_In_Graph--------------------------------------->>>>>>>>>>>>>>>>>>>>>
 
-@app.route('/districtwise_tunein')
-def districtwise_tune_in():
+@app.route('/Top20district_tunein')
+def Top20district_tune_in():
     import datetime
     from datetime import timedelta
     from dateutil.relativedelta import relativedelta
@@ -56331,6 +56331,7 @@ def districtwise_tune_in():
         finaldf = finaldf.groupby(['CATEGORY']).sum()
         finaldf = finaldf.dropna()
         finaldf = finaldf[(finaldf.T != 0).any()]
+        finaldf = finaldf.sort_values(['TuneIn_Send','Opt_In', 'Opt_Out'], ascending=[False, False, False]).iloc[0:20]
         
 #         print(finaldf)
         
@@ -56343,7 +56344,6 @@ def districtwise_tune_in():
         }}
 
         return json.dumps(temp)
-# districtwise_tune_in()
 
 
 
