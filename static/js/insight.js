@@ -292,104 +292,174 @@ $.ajax(settings).done(function(response){
         var insights = dataa[i].Insights;
         var observations = dataa[i].Observations;
         // console.log(insights, observations);
-        $('#accordionExample').append('<div class="borderBottom"><a class="nav-link" data-toggle="collapse" data-target="#collapseOne'+i+'" aria-expanded="true" aria-controls="collapseOne"> <h4 class="insight-headings">'+insights+'</h4></a><div id="collapseOne'+i+'" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample"></div></div>');
+        $('#accordionExample').append('<div class="borderBottom present"><a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseOne'+i+'" aria-expanded="true" aria-controls="collapseOne"> <h4 class="insight-headings">'+insights+'</h4></a><div id="collapseOne'+i+'" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample"></div></div>');
 
         for(j = 0; j < observations.length; j++){
             // console.log(observations[j]);
             $("#collapseOne"+i).append('<p class="insight-text">'+observations[j]+'</p>');  
-            // $("#collapseOne"+i).append('<div id="ChartContainer"></div>');      
+    
         }
     }
 });
 
 
-
-
 // charts to show inside insight dropdown
 var settings = {
-  async: true,
-  crossDomain: true,
-  url: "/averagetrend/",
-  method: "GET",
-}
-$.ajax(settings).done(function(response) {
-  var dataa = JSON.parse(response);
-  console.log(dataa[0].bar, "data")
+    async: true,
+    crossDomain: true,
+    url: "/googleanalyticsinsights",
+    method: "GET",
+  }
+  $.ajax(settings).done(function(response) {
+    var dataa = JSON.parse(response);
+    console.log(dataa, "Menka");
+    for(i = 0; i < dataa.length; i++){
+        var insights = dataa[i].Insights;
+        // var x_Axis = dataa[i].x_axis;
+        // var y_Axis = dataa[i].y_axis;
+        // console.log(insights, x_Axis, y_Axis);
+        $('#accordionExample').append('<div class="borderBottom present"><a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseOneDiv'+i+'" aria-expanded="true" aria-controls="collapseOne"> <h4 class="insight-headings">'+insights+'</h4></a><div id="collapseOneDiv'+i+'" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample"></div></div>');
+        $("#collapseOneDiv"+i).append('<div id="ChartContainer'+i+'"></div>'); 
+        // $("#collapseOneDiv2").append('<div id="ChartContainerDiv2"></div>'); 
+        // console.log('Show insight data');
 
-  Highcharts.chart('ChartContainer', {
-      chart: {
-          type: 'column'
-      },
-      credits: {
-          enabled: false,
-      },
-      title: {
-          text: " Average Playback Trend"
+        // for(j = 0; j < x_Axis.length; j++){
+        //     // console.log(x_Axis[j]);
+        //     // $("#collapseOneDiv"+i).append('<p class="insight-text">'+x_Axis[j]+'</p>');  
+        // }
 
-      },
-      colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
-      xAxis: {
-          categories: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
-      },
-      yAxis: {
-          lineWidth: 1,
-          min: 0,
-          title: {
-              text: "Playback Count"
-          },
-          stackLabels: {
-              enabled: false,
-              style: {
-                  fontWeight: 'bold',
-                  color: ( // theme
-                      Highcharts.defaultOptions.title.style &&
-                      Highcharts.defaultOptions.title.style.color
-                  ) || 'gray'
-              }
-          }
-      },
-      tooltip: {
-          headerFormat: '<b>{point.x}</b><br/>',
-          pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-      },
-      plotOptions: {
-          series: {
-              point: {
+        // for(k = 0; k < y_Axis.length; k++){
+            // console.log(y_Axis[k]);
+            // $("#collapseOneDiv"+i).append('<div id="ChartContainer"></div>'); 
+            // $("#collapseOneDiv"+i).append('<p class="insight-text">'+y_Axis[k]+'</p>');  
 
-              }
-          },
-          column: {
-              stacking: 'normal',
-              dataLabels: {
-                  enabled: false
-              }
-          }
-      },
-      legend: {
-          enabled: true,
-          itemStyle: {
-              fontSize: '10px',
-              fontWeight: '200'
-          }
-      },
-      series: [{
-              name: 'Playback User Count(CSY 2021-2022)',
-              color: '#02A45A',
-              data: dataa[0].bar
-          },
+            Highcharts.chart('ChartContainer'+i, {
+                chart: {
+                    type: 'spline'
+                },
+                credits: {
+                    enabled: false,
+                },
+                // title: {
+                //     text: " Insights Chart Data"
+                // },
+                colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
+                xAxis: {
+                    categories: dataa[i].x_axis
+                },
+                yAxis: {
+                    lineWidth: 1,
+                    // min: 0,
+                    // title: {
+                    //     text: "Insights"
+                    // },
+                    stackLabels: {
+                        enabled: false,
+                        style: {
+                            fontWeight: 'bold',
+                            color: ( // theme
+                                Highcharts.defaultOptions.title.style &&
+                                Highcharts.defaultOptions.title.style.color
+                            ) || 'gray'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.x}</b><br/>',
+                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                },
+                plotOptions: {
+                    series: {
+                        point: {
+          
+                        }
+                    },
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }
+                },
+                legend: {
+                    enabled: true,
+                    itemStyle: {
+                        fontSize: '10px',
+                        fontWeight: '200'
+                    }
+                },
+                series: [{
+                        // name: 'Count',
+                        color: '#02A45A',
+                        data: dataa[i].y_axis
+                    },
+          
+                   
+                ]
+            });
 
-          {
-              type: 'spline',
-              color: '#FFFF00',
-              name: '(LSY 2019-2020)',
-              data: dataa[0].curve_LYTOLY
-          },
-          {
-              type: 'spline',
-              color: '#FF8300',
-              name: '(LSY 2020-2021)',
-              data: dataa[0].curve
-          }
-      ]
+
+            // Highcharts.chart('ChartContainerDiv2', {
+            //     chart: {
+            //         plotBackgroundColor: null,
+            //         plotBorderWidth: null,
+            //         plotShadow: false,
+            //         type: 'pie',
+            //         credits: {
+            //             enabled: false,
+            //         },
+            //     },
+            //     // title: {
+            //     //     text: 'Sentiment Percentage CSY'
+            //     // },
+            //     credits: {
+            //         enabled: false,
+            //     },
+            //     tooltip: {
+            //         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            //     },
+            //     accessibility: {
+            //         point: {
+            //             valueSuffix: '%'
+            //         }
+            //     },
+            //     plotOptions: {
+            //         pie: {
+            //             allowPointSelect: true,
+            //             cursor: 'pointer',
+            //             dataLabels: {
+            //                 enabled: false,
+            //                 format: '<b>{point.name}</b>: {point.y}'
+            //             },
+            //             colors: [
+            //                 "#02A45A", "#ff9933", '#8AE02B'
+            //             ]
+            //         }
+            //     },
+            //     series: [{
+            //         data: dataa[i].y_axis,
+            //         // name: 'Sentiment CSY',
+            //         colorByPoint: true,
+            //         // data: [{
+            //         //         name: 'Positive',
+            //         //         y: dataa.donut.pos,
+            //         //         sliced: true,
+            //         //         selected: true
+            //         //     }, {
+            //         //         name: 'Negative',
+            //         //         y: dataa.donut.neg,
+            //         //     },
+            //         //     {
+            //         //         name: 'Neutral',
+            //         //         y: dataa.donut.neu,
+            //         //     },
+            //         // ]
+            //     }]
+            // });
+        // }
+    }
   });
-});
+
+
+
+
