@@ -20,6 +20,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css'>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
@@ -128,6 +129,11 @@ svg#d3plus {
         margin-top: 4px;
         margin-right: 10px;
     }
+
+    /* .ui-datepicker {
+        width: 26em !important;
+        z-index: 6 !important;
+    } */
 </style>
 
 <body onload="P3()" class="body">
@@ -449,6 +455,17 @@ svg#d3plus {
 
                         </div>
                     </div>
+                    <!-- <div class="col-md-4">
+                      <div class="ui-widget" style="display: flex; padding-top: 10px; margin-top: 6px; margin-left: 0px;">
+                        <input class="Date" style="width: 15%; margin-left: 61%; padding: 10px; background-color: #fff;
+                          border-radius: 20px 0 0 20px;" type="text" id="datepicker" size="30">
+                        <input class="Date" style="width: 15%;margin-left: 0px !important; padding: 10px;
+                          background-color: #fff; border-radius: 0;" type="text" id="datepicker2" size="30">
+                        <p style="display: none;" id="stardate"></p>
+                        <p style="display: none;" id="finaldate"></p>
+                        <button class="search_Bt" onclick="dateSub()">Submit</button>
+                      </div>
+                    </div> -->
 
 
 
@@ -474,6 +491,10 @@ svg#d3plus {
             </div>
             <div class="col-md-10" style="margin-top: 40px;">
                 <div id="container2" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
+            </div>
+
+            <div class="col-md-10" style="margin-top: 40px;">
+              <div id="container3" style="height: 400px; width: 120%; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1); border-radius: 20px;"></div>
             </div>
 
             <div class="col-md-12" style="margin-top: 40px;">

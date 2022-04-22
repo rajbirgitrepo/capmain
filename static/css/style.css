@@ -1927,7 +1927,7 @@ span.avtr figure {
 .dropdown-insights{
     width: 38rem; 
     border-radius: 20px !important; 
-    left: -108px !important; 
+    left: -78px !important; 
     top: 60% !important;
 }
 .scroll-insights{
@@ -1956,6 +1956,31 @@ span.avtr figure {
   }
 
 .scroll-insights::-webkit-scrollbar-thumb {
-    background: linear-gradient(#d8d8d8, #5c7291) !important;
+    background: #888; 
     border-radius: 3px !important;
 }
+
+.accordion .borderBottom .nav-link{
+    position: relative;
+}
+.accordion .borderBottom .nav-link:after{
+    content: "\f107";
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;   
+    float: right;
+    color: #00A651;
+    font-size: 14px;
+    position: absolute;
+    right: 4px;
+    top: 12px;
+}
+.accordion .borderBottom .nav-link.collapsed:after{
+    content: "\f106";
+    font-size: 14px;
+    color: #00A651;
+    position: absolute;
+    right: 4px;
+    top: 12px;
+}
+
+

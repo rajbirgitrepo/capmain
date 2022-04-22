@@ -248,3 +248,80 @@ return text.toUpperCase()}
 .draw()    });
 
 }
+
+
+
+
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "/programwise_tuneingraph",
+  "method": "GET"
+ }
+  $.ajax(settings).done(function (response) {
+  var dataa = JSON.parse(response);
+   console.log(dataa);
+
+Highcharts.chart('container3', {
+    chart: {
+      type: 'column'
+    },title:{text:"Tune-In By Program"},
+    colors: [
+              '#00a651',
+              '#8ae02b',
+              '#0000FF',
+              '#FF5F1F'   
+              ],
+    xAxis: {
+      categories: dataa.CSY.Program,
+      crosshair: true
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: 'Count'
+      }
+    },
+tooltip: {
+  headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+  pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+  footerFormat: '</table>',
+  shared: true,
+  useHTML: true
+},
+plotOptions: {
+  column: {
+    stacking: 'normal',
+  },series: {
+             point: {
+              events: {
+                  click: function () {
+                    // console.log("hellooooo",this.category);
+             
+                    URL = '/tuneintable/CSY/'+this.category+"/"+this.series.name;
+                   
+                    console.log(URL);
+                    
+                  }}}
+          }
+},
+series: [{
+  name: 'Tune-in Send',
+  data:   dataa.CSY.Tune_In_Send, 
+  stack: 0
+}, {
+  name: 'Opt In',
+  data:   dataa.CSY.Opt_In,
+  stack: 0
+}, {
+  name: 'Opt Out',
+  data:  dataa.CSY.Opt_Out,
+  stack: 0
+}, {
+  name: 'Playback',
+  data:  dataa.CSY.practicing_parent,
+  stack: 0
+}]
+});
+});
