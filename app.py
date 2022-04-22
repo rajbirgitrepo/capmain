@@ -80388,12 +80388,13 @@ def ukrainedonationdata():
 
     data=ukraine_campaign_data.values.tolist()
     data.insert(0,list(ukraine_campaign_data.columns))
+    todays=datetime.datetime.now().strftime("%Y_%b_%d")
     
     sheet = pe.Sheet(data)
     io = StringIO()
     sheet.save_to_memory("csv", io)
     output = make_response(io.getvalue())
-    output.headers["Content-Disposition"] = "attachment; filename=export.csv"
+    output.headers["Content-Disposition"] = "attachment; filename="+str(todays)+"_Ukraine_Donation_Data.csv"
     output.headers["Content-type"] = "text/csv"
     return output
 
