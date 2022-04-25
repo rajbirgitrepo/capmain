@@ -52,7 +52,7 @@ from sort_dataframeby_monthorweek import *
 from pytz import timezone
 from six.moves import urllib
 from numpyencoder import NumpyEncoder
-xx``
+from flask import Response
 from flask import Flask, make_response
 
 from flask import Flask,json, request, jsonify
@@ -34772,8 +34772,7 @@ def schoolsearch_em_id(schoolid):
         except:
             return jsonify("Unauthorized Access")
 
-
-    else:
+    else:        
         data={'user_count':str(df00['user_count'][0]),'actual_admin':actual_admin, 'ADMIN_ID':ADMIN_ID,
             'Star_5_Ratings_Recieved':str(int(round(df5['rating'][0]))),'DISTRICT':df1['district_name'][0],
             'SCHOOL_MINDFUL_MINUTES_csy':str(int(Mindful_Minutes_csy)),
