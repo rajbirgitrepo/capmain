@@ -52,7 +52,7 @@ from sort_dataframeby_monthorweek import *
 from pytz import timezone
 from six.moves import urllib
 from numpyencoder import NumpyEncoder
-from flask import Response
+xx``
 from flask import Flask, make_response
 
 from flask import Flask,json, request, jsonify
@@ -34759,24 +34759,32 @@ def schoolsearch_em_id(schoolid):
         if i not in df5.columns:
             df5[i] = 'No info'
 
-    
-   
+    if "export" in request.args:
+        try:
+            DFF=DFF.rename(columns={'user':'USER NAME','email_id':'EMAIL ID','CREATED_DATE':'SIGNUP DATE','last_practice_date':'LAST PRACTICE DATE','Renewal_date':'RENEWAL DATE','pc_overall':'PLAYBACK COUNT','pc':'PLAYBACK COUNT(CSY)'})
+            schoolname=db.school_master.find_one({'_id':ObjectId(str(schoolid))})['NAME']
+            csv = DFF.to_csv(index=False)
+            return Response(
+                csv,
+                mimetype="text/csv",
+                headers={"Content-disposition":
+                        "attachment; filename="+str(schoolname)+".csv"})
+        except:
+            return jsonify("Unauthorized Access")
 
 
-
-    data={'user_count':str(df00['user_count'][0]),'actual_admin':actual_admin, 'ADMIN_ID':ADMIN_ID,
-        'Star_5_Ratings_Recieved':str(int(round(df5['rating'][0]))),'DISTRICT':df1['district_name'][0],
-        'SCHOOL_MINDFUL_MINUTES_csy':str(int(Mindful_Minutes_csy)),
-                   'SCHOOL_MINDFUL_MINUTES_overall':str(int(Mindful_Minutes_overall)),
-           'school_name':df1['school_name'][0],'address':df1['Address'][0],'state':df1['STATE'][0],'city':df1['CITY'][0],'country':df1['COUNTRY'][0],
-           'admin_email':ADMIN_EMAIL,'admin_name':ADMIN_NAME,'PRACTICE_COUNT_csy':str(int(pc)),'school_practice_count':str(int(pc_overall)),
-           'RENEWAL_DATE':max(DF['Renewal_date']),
-          'plan':df4['PLAN'][0],'data':table
-                  }
-
-
-    return json.dumps(data, default=str)
-# schoolsearch_em_id('5f2bcad6ba0be61b0c1e98fa')
+    else:
+        data={'user_count':str(df00['user_count'][0]),'actual_admin':actual_admin, 'ADMIN_ID':ADMIN_ID,
+            'Star_5_Ratings_Recieved':str(int(round(df5['rating'][0]))),'DISTRICT':df1['district_name'][0],
+            'SCHOOL_MINDFUL_MINUTES_csy':str(int(Mindful_Minutes_csy)),
+                    'SCHOOL_MINDFUL_MINUTES_overall':str(int(Mindful_Minutes_overall)),
+            'school_name':df1['school_name'][0],'address':df1['Address'][0],'state':df1['STATE'][0],'city':df1['CITY'][0],'country':df1['COUNTRY'][0],
+            'admin_email':ADMIN_EMAIL,'admin_name':ADMIN_NAME,'PRACTICE_COUNT_csy':str(int(pc)),'school_practice_count':str(int(pc_overall)),
+            'RENEWAL_DATE':max(DF['Renewal_date']),
+            'plan':df4['PLAN'][0],'data':table
+                    }
+        return json.dumps(data, default=str)
+    # schoolsearch_em_id('5f2bcad6ba0be61b0c1e98fa')
 
 
 
@@ -80385,7 +80393,7 @@ def ukrainedonationdata():
     ukraine_campaign_data=ukraine_campaign_data[['CONTRIBUTOR_NAME', 'EMAIL', 'CONTRIBUTE_AMOUNT', 'IS_PAYMENT_SUCCESS',
            'PAYMENT_TYPE', 'CONTRIBUITION_CREATED_DATE', 'PAYPAL_TRX_ID',
            'PAYPAL_PAYERID', 'DONATION_TIME']]
-           
+
     ukraine_campaign_data=ukraine_campaign_data.fillna('')
 
     data=ukraine_campaign_data.values.tolist()
