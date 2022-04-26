@@ -55,6 +55,7 @@ function createDynamic(url) {
     };
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
+        console.log(url)
 
         $("#next").prepend(
             '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th> <th>RENEWAL DATE</th> <th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th></tr ></thead ><tbody>'
@@ -130,7 +131,7 @@ function createDynamic2(url) {
     };
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
-
+        console.log(data1);
         $("#next").prepend(
             '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th> <th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
         );

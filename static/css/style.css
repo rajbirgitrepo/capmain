@@ -1982,5 +1982,9 @@ span.avtr figure {
     right: 4px;
     top: 12px;
 }
-
+#averageRatingCard{
+    right: 0;
+    position: absolute;
+    top: 380px;
+}
 

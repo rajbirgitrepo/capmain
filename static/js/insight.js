@@ -340,12 +340,15 @@ var settings = {
                 credits: {
                     enabled: false,
                 },
-                // title: {
-                //     text: " Insights Chart Data"
-                // },
+                title: {
+                    text: ""
+                },
                 colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                 xAxis: {
-                    categories: dataa[i].x_axis
+                    categories: dataa[i].x_axis,
+                    labels: {
+                        staggerLines: 2
+                    }
                 },
                 yAxis: {
                     lineWidth: 1,
@@ -389,8 +392,8 @@ var settings = {
                     }
                 },
                 series: [{
-                        // name: 'Count',
-                        color: '#02A45A',
+                        name: '',
+                        color: '#01A451',
                         data: dataa[i].y_axis
                     },
           

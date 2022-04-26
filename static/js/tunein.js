@@ -36,12 +36,9 @@ chart: {
 },title:{text:"Tune-In CSY"},
 colors: [
             '#00a651',
-             '#8ae02b',
-
-  '#0000FF',
-  '#FF5F1F'
-             
-             
+            '#8ae02b',
+            '#0000FF',
+            '#FF5F1F',    
           ],
 xAxis: {
   categories: dataa.CSY.monthname,
@@ -80,20 +77,23 @@ plotOptions: {
 series: [{
   name: 'Tune-in Send',
   data:   dataa.CSY.Tune_In_Send, 
-  stack: 0
+  stack: 0,
+  color: '#4F1FAF'
 }, {
   name: 'Opt In',
   data:   dataa.CSY.Opt_In,
-  stack: 0
+  stack: 0,
+  color: '#0000FF'
 }, {
   name: 'Opt Out',
   data:  dataa.CSY.Opt_Out,
-  stack: 0
+  stack: 0,
+  color: '#8ae02b'
 }, {
   name: 'Playback',
   data:  dataa.CSY.practicing_parent,
   stack: 0,
-  color: '#4F1FAF'
+  color: '#00a651'
 }]
 });
 });
@@ -159,20 +159,23 @@ plotOptions: {
 series: [{
   name: 'Tune-in Send',
   data:   dataa.LSY.Tune_In_Send, 
-  stack: 0
+  stack: 0,
+  color: '#4F1FAF'
 }, {
   name: 'Opt In',
   data:   dataa.LSY.Opt_In,
-  stack: 0
+  stack: 0,
+  color: '#0000FF'
 }, {
   name: 'Opt Out',
   data:  dataa.LSY.Opt_Out,
-  stack: 0
+  stack: 0,
+  color: '#8ae02b'
 }, {
   name: 'Playback',
   data:  dataa.LSY.practicing_parent,
   stack: 0,
-  color: '#4F1FAF'
+  color: '#00a651'
 }]
 });
 });
@@ -264,7 +267,7 @@ var settings = {
   var dataa = JSON.parse(response);
    console.log(dataa);
 
-Highcharts.chart('container3', {
+Highcharts.chart('container3', {  
     chart: {
       type: 'column'
     },title:{text:"Tune-In By Program"},
@@ -311,20 +314,23 @@ plotOptions: {
 series: [{
   name: 'Tune-in Send',
   data:   dataa.CSY.Tune_In_Send, 
-  stack: 0
+  stack: 0,
+  color: '#4F1FAF'
 }, {
   name: 'Opt In',
   data:   dataa.CSY.Opt_In,
-  stack: 0
+  stack: 0,
+  color: '#0000FF'
 }, {
   name: 'Opt Out',
   data:  dataa.CSY.Opt_Out,
-  stack: 0
+  stack: 0,
+  color: '#8ae02b'
 }, {
   name: 'Playback',
   data:  dataa.CSY.practicing_parent,
   stack: 0,
-  color: '#4F1FAF'
+  color: '#00a651'
 }]
 });
 });
@@ -333,83 +339,90 @@ series: [{
 
 
 // charts for showing district wise data
-// var settings = {
-//   "async": true,
-//   "crossDomain": true,
-//   "url": "/Top20district_tunein",
-//   "method": "GET"
-//  }
-//   $.ajax(settings).done(function (response) {
-//   var dataa = JSON.parse(response);
-//    console.log(dataa);
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "/Top20district_tunein",
+  "method": "GET"
+ }
+  $.ajax(settings).done(function (response) {
+  var dataa = JSON.parse(response);
+   console.log(dataa);
 
-// Highcharts.chart('container4', {
-//     chart: {
-//       type: 'column'
-//     },title:{text:"Tune-In By District"},
-//     colors: [
-//               '#00a651',
-//               '#8ae02b',
-//               '#0000FF',
-//               '#FF5F1F'   
-//               ],
-//     xAxis: {
-//       categories: dataa.CSY.District_Name,
-//       // crosshair: true,
-//       labels: {
-//         style: {
-//             fontSize: "10px",
-//             rotation: 180,
-//         },
-//       }
-//     },
-//     yAxis: {
-//       min: 0,
-//       title: {
-//         text: 'Count'
-//       }
-//     },
-// tooltip: {
-//   headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-//   pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-//     '<td style="padding:0"><b>{point.y}</b></td></tr>',
-//   footerFormat: '</table>',
-//   shared: true,
-//   useHTML: true
-// },
-// plotOptions: {
-//   column: {
-//     stacking: 'normal',
-//   },series: {
-//              point: {
-//               events: {
-//                   click: function () {
-//                     // console.log("hellooooo",this.category);
+Highcharts.chart('container4', {
+    chart: {
+      type: 'bar'
+    },
+    title:{
+      text:"Tune-In By District"
+    },
+    colors: [
+              '#00a651',
+              '#8ae02b',
+              '#0000FF',
+              '#FF5F1F'   
+              ],
+    xAxis: {
+      categories: dataa.CSY.District_Name,
+      // crosshair: true,
+      labels: {
+        style: {
+            fontSize: "8px",
+            rotation: 90,
+        },
+      }
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: 'Count'
+      }
+    },
+tooltip: {
+  headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+  pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+  footerFormat: '</table>',
+  shared: true,
+  useHTML: true
+},
+plotOptions: {
+  column: {
+    stacking: 'normal',
+  },series: {
+             point: {
+              events: {
+                  click: function () {
+                    // console.log("hellooooo",this.category);
              
-//                     URL = '/tuneintable/CSY/'+this.category+"/"+this.series.name;
+                    URL = '/tuneintable/CSY/'+this.category+"/"+this.series.name;
                    
-//                     console.log(URL);
+                    console.log(URL);
                     
-//                   }}}
-//           }
-// },
-// series: [{
-//   name: 'Tune-in Send',
-//   data:   dataa.CSY.Tune_In_Send, 
-//   stack: 0
-// }, {
-//   name: 'Opt In',
-//   data:   dataa.CSY.Opt_In,
-//   stack: 0
-// }, {
-//   name: 'Opt Out',
-//   data:  dataa.CSY.Opt_Out,
-//   stack: 0
-// }, {
-//   name: 'Playback',
-//   data:  dataa.CSY.practicing_parent,
-//   stack: 0
-// }]
-// });
-// });
+                  }}}
+          }
+},
+series: [{
+  name: 'Tune-in Send',
+  data:   dataa.CSY.Tune_In_Send, 
+  stack: 0,
+  color: '#4F1FAF'
+}, {
+  name: 'Opt In',
+  data:   dataa.CSY.Opt_In,
+  stack: 0,
+  color: '#0000FF'
+}, {
+  name: 'Opt Out',
+  data:  dataa.CSY.Opt_Out,
+  stack: 0,
+  color: '#8ae02b'
+}, {
+  name: 'Playback',
+  data:  dataa.CSY.practicing_parent,
+  stack: 0,
+  color: '#00a651'
+}]
+});
+});
 
