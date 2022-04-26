@@ -2438,6 +2438,9 @@ function cardcount(id, a, b) {
         $("#engaged_canvas_lsy").text(dataa.canvas_eng_lsy);
         $("#practiceCount_canvas").text(dataa.canvas_practice);
         $("#mindful_minutes_canvas").text(dataa.canvas_mindful);
+        // $("#schoology").text(dataa);
+        // $("#clever").text(dataa);
+        // $("#canvas").text(dataa);
 
     });
 
