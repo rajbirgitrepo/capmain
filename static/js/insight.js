@@ -335,7 +335,8 @@ var settings = {
 
             Highcharts.chart('ChartContainer'+i, {
                 chart: {
-                    type: 'spline'
+                    type: 'spline',
+                    inverted: true
                 },
                 credits: {
                     enabled: false,
@@ -347,7 +348,11 @@ var settings = {
                 xAxis: {
                     categories: dataa[i].x_axis,
                     labels: {
-                        staggerLines: 2
+                        staggerLines: 2,
+                        style: {
+                            fontSize: "10px",
+                            rotation: 90,
+                        },
                     }
                 },
                 yAxis: {

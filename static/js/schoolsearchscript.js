@@ -7,6 +7,9 @@ if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1
 } else if (urlid !== '') {
 
     URL = "/schoolsearchid/" + urlid
+    var Exportpage = "/schoolsearchid/" + urlid + "?export"
+    console.log(Exportpage)
+    $("#exportLink").text(Exportpage);
     $("#schoolname").empty();
     $("#practice").empty();
     $("#container43").empty();
@@ -204,6 +207,9 @@ function schoolsearch() {
     if (a !== '') {
         
         URL = "/schoolsearchid/" + a
+        var Exportpage = "/schoolsearchid/" + a + "?export"
+        console.log(Exportpage)
+        $("#exportLink").text(Exportpage);
         $("#schoolname").empty();
         $("#practice").empty();
         $("#state").empty();
@@ -1919,4 +1925,19 @@ function clickableTable(userEmail) {
     usersearch();
     activaTab('messages')
     window.scrollTo(0, 0);
+}
+
+
+
+
+// Export functionality
+$("#btnExport").click('load', function () {
+    var p = document.getElementById("exportLink").innerText;
+    console.log(p);
+    exportNew(p)
+});
+
+function exportNew(p) {
+    window.location.assign(p);
+    console.log(p);
 }

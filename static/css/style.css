@@ -1982,20 +1982,5 @@ span.avtr figure {
     right: 4px;
     top: 12px;
 }
-/* #averageRatingCard{
-    right: 0;
-    position: absolute;
-    top: 385px;
-} */
-.boxExecutive div{
-    position: relative;
-    padding-top: 20px;
-}
-.boxExecutive img{
-    padding-top: 0px;
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    margin-top: 5px;
-}
+
 
