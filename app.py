@@ -80389,9 +80389,10 @@ def ukrainedonationdata():
     # ukraine_campaign_data['DONATION_TIME']=[i.strftime("%Y-%m-%d %H:%M:%S") for i in ukraine_campaign_data['CONTRIBUITION_CREATED_DATE']]
     ukraine_campaign_data.fillna('',inplace=True)
     ukraine_campaign_data['CONTRIBUTOR_NAME']=ukraine_campaign_data['FIRST_NAME']+" "+ukraine_campaign_data['LAST_NAME']
+    ukraine_campaign_data['DONATION_TIME']=[i.strftime("%Y-%m-%d %H:%M:%S") for i in ukraine_campaign_data['PAYMENT_DATE']]
     ukraine_campaign_data=ukraine_campaign_data[['CONTRIBUTOR_NAME', 'EMAIL', 'CONTRIBUTE_AMOUNT', 'IS_PAYMENT_SUCCESS',
         'PAYMENT_TYPE', 'CONTRIBUITION_CREATED_DATE', 'PAYPAL_TRX_ID',
-        'PAYPAL_PAYERID','SQUARE_TRX_ID', 'PAYMENT_DATE']]
+        'PAYPAL_PAYERID','SQUARE_TRX_ID', 'DONATION_TIME']]
 
     data=ukraine_campaign_data.values.tolist()
     data.insert(0,list(ukraine_campaign_data.columns))
