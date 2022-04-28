@@ -38353,12 +38353,15 @@ def parents_anal_hourly_comparison():
     print(todaydate)
     
     dfyes=df[df['date']==yesterdaydate]
+#     print("\n dfyes \n",dfyes)
     dftod=df[df['date']==todaydate]
+#     print("\n dftod \n",dftod)
 
     times = pd.to_datetime(dfyes.sign_upn)
+#     print("\n times1 \n",times)
     times['hour'] = times.map( lambda x: pd.to_datetime(x).hour )
+#     print("\n times2 \n",times)
     timedfyes=times.groupby(['hour']).size().to_frame('count').reset_index()
-#     print(timedfyes)
     
     if len(dftod) != 0:
         times2 = pd.to_datetime(dftod.sign_upn)
@@ -38369,15 +38372,27 @@ def parents_anal_hourly_comparison():
         timedftod = pd.DataFrame(index=[0], columns=['hour','count'])
         timedftod = timedftod.fillna(0) 
         
-    timedfyes = timedftod.astype(int)
-#     print(timedfyes)
+        
+    if len(dfyes) != 0:
+        times2 = pd.to_datetime(dfyes.sign_upn)
+        times2['hour'] = times2.map( lambda x: pd.to_datetime(x).hour )
+        timedfyes=times2.groupby(['hour']).size().to_frame('count').reset_index()
+    
+    else:
+        timedfyes = pd.DataFrame(index=[0], columns=['hour','count'])
+        timedfyes = timedfyes.fillna(0) 
+        
+    timedfyes = timedfyes.astype(int)
+#     print("\n\n timedfyes \n",timedfyes)
     hour=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
     count=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     dftest = pd.DataFrame({'hour':hour,'count':count})
 
     result = pd.merge(timedfyes , dftest,how='right', on='hour')
+    
     result=result.fillna(0)
     result= result.astype(int)
+#     print("result \n",result)
 
     result = result.sort_values(["hour", "count_x"], ascending = (True,False))
     #yesterday count
