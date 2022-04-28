@@ -72058,13 +72058,13 @@ def schoolscoresnew(trackid,scoretype):
 @app.route('/escoresnew/<trackid>/')
 
 def dis_escore(trackid):
-    df=pd.read_csv(r""+ str(trackid)+'_E_SCORE_DATA.csv')
+    df=pd.read_csv(trackid+'_E_SCORE_DATA.csv')
     df1=df[['DISTRICT_NAME', 'ACTIVE_USER_SCORE',
            'USAGE_SCORE', 'CWP_SCORE', 'RE_SCORE', 'ACTIVE_SCHOOL_SCORE',
            'E_SCORE']]
     
     
-    df_table=pd.read_csv(r""+str(trackid)+'_school_e_scores.csv',sep=',')
+    df_table=pd.read_csv(str(trackid)+'_school_e_scores.csv',sep=',')
 
 
     new_df_table=df_table.groupby('SCORE_TYPE')['SCHOOL_ID'].count().reset_index().rename(columns={'SCHOOL_ID':'School_Count'})
@@ -72075,12 +72075,12 @@ def dis_escore(trackid):
     new_df1=score_type.merge(new_df_table,how='left',on='SCORE_TYPE').fillna(0)    
     p=df1.to_dict('records')[0]    
     
-    df_monthwise=pd.read_csv(r""+str(trackid)+'_school_e_scores.csv',sep=',')
+    df_monthwise=pd.read_csv(str(trackid)+'_school_e_scores.csv',sep=',')
     
     p['columchart']={'axis':new_df1['SCORE_TYPE'].tolist(),
                            'schoolcount':new_df1['School_Count'].tolist()}
     
-    df_monthwise=pd.read_csv(r""+str(trackid)+'_monthwise_e_score.csv',sep=',')
+    df_monthwise=pd.read_csv(str(trackid)+'_monthwise_e_score.csv',sep=',')
     
     
     p['mothwise_col_chart']={'months':df_monthwise['TIME_PERIOD'].tolist(),
@@ -72098,7 +72098,7 @@ def dis_escore(trackid):
 
 @app.route('/escoreheatmap/<trackid>')
 def escore_heatmap(trackid):
-    school_level=pd.read_csv(r""+str(trackid)+'_school_e_scores.csv')
+    school_level=pd.read_csv(str(trackid)+'_school_e_scores.csv')
     school_level=school_level.drop(columns=['SCHOOL_NAME'],axis=1)
     if len(list(db_live.district_master.find({'_id':ObjectId(str(trackid))})))>0:
         district_id=trackid
