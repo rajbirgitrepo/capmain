@@ -37357,12 +37357,13 @@ def parents__table__program(d,charttype):
 
 
 @app.route('/newcardpar')
-
 def programwise_card():   
+
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass
+
     collection = db.audio_track_master
     query=[
         {"$match":{"$and":[{'USER_ID.ROLE_ID._id':{"$eq":ObjectId("5f155b8a3b6800007900da2b")}},                  
@@ -38311,6 +38312,7 @@ def parents_anal_hourly_comparison():
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass
+
     collection = db.user_master
     dateStr = "2020-03-17T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -39465,10 +39467,11 @@ def mitpracweek():
 def Par_analytics_signup_daywise_and_hourly_():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus("I#L@teST^m0NGO_2o20!")
-
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass
+
+
     collection = db.user_master
 
     dateStr = "2020-03-17T00:00:00.000Z"
@@ -42701,10 +42704,10 @@ def parents_table():
 def parcount__():
 
     username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
-
+    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+    client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass
+
     collection = db.user_master
     collection2 = db.audio_track_detail_backup
     dateStr = "2020-03-17T00:00:00.000Z"
