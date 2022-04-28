@@ -42934,7 +42934,7 @@ def miitsignupnew():
 
     cdate=[]
     for i in df2.index:
-        x=i.strftime('%s')
+        x=i.strftime('%S')
         cdate.append(float(x)*1000)
     count=[]
     for i in df2['sign_up'] :
