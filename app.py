@@ -80407,6 +80407,13 @@ def ukrainedonationdata():
     return output
 
 
+@app.route("/readcsvfileapi")
+def readcsv____():
+    df=pd.read_csv(r"/root/5f2609807a1c0000950bb475_monthwise_e_score.csv",sep=",")
+    temp={'data':df.values.tolist()}
+    return json.dumps(temp)
+
+
 @app.route('/Family_SURVEY')
 def Family_SURVEY():
     if not g.user:
