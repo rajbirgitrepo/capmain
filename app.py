@@ -39000,7 +39000,7 @@ def mitpracnew():
     df2 = df.groupby([df['date'].dt.date]).sum()
     cdate=[]
     for i in df2.index:
-        x=i.strftime('%s')
+        x=i.strftime('%S')
         cdate.append(float(x)*1000)
     count=[]
     for i in df2['count'] :
