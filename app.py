@@ -38397,12 +38397,17 @@ def parents_anal_hourly_comparison():
     result = result.sort_values(["hour", "count_x"], ascending = (True,False))
     #yesterday count
     yescount=list(result['count_x'])
+    print("yescount",yescount)
     timedftod = timedftod.astype(int)
+    print("timedftod \n",timedftod)
+    print("dftest \n",dftest)
     result12 = pd.merge(timedftod, dftest,how='right', on='hour')
+    
 
     result12=result12.fillna(0)
     result12= result12.astype(int)
     result12 = result12.sort_values(["hour", "count_x"], ascending = (True,False))
+    print("\n result12 \n",result12)
     #todays count
     todcount=list(result12['count_x'])
     totaly=sum(yescount)
