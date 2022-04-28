@@ -38392,9 +38392,6 @@ def parents_anal_hourly_comparison():
     yescount=list(result['count'])
     totaly=sum(yescount)
 
-
-
-
     result2 = pd.merge(dftest,timedftod , how='left', on='hour')
     result2=result2.fillna(0)
     result2= result2.astype(int)
