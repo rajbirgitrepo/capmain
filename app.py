@@ -38390,7 +38390,7 @@ def parents_anal_hourly_comparison():
     result = result.sort_values(["hour", "count"], ascending = (True,False))
 #     print("result \n",result)
     yescount=list(result['count'])
-#     totaly=sum(yescount)
+    totaly=sum(yescount)
 
 
 
@@ -38401,7 +38401,7 @@ def parents_anal_hourly_comparison():
     result2 = result2.sort_values(["hour", "count"], ascending = (True,False))
 #     print("result2 \n",result2)
     todcount=list(result2['count'])
-#     totalt=sum(todcount)
+    totalt=sum(todcount)
 
     temp={"tod":todcount,"yes":yescount,"totaly":[str(totaly)],"totalt":[str(totalt)]}
 
