@@ -45,7 +45,7 @@ function createboxes() {
     };
     $.ajax(settings).done(function (response) {
         var data1 = JSON.parse(response);
-        console.log("datain");
+        console.log(data1, "datain");
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
             console.log(datain);

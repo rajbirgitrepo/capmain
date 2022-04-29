@@ -279,7 +279,7 @@ $.ajax(settings).done(function(response) {
             "data": dataa.playback.Family_Playback
         },
          {
-            "name": "Users",
+            "name": "Teacher",
             "type": "column",
             "xAxis": 1,
             "color": "#01A451",
@@ -434,7 +434,7 @@ $.ajax(settings).done(function(response) {
             "data": dataa.growth.Family_Users
         },
          {
-            "name": "School",
+            "name": "Teacher",
             "type": "column",
             "xAxis": 1,
             "color": "#01A451",
@@ -444,7 +444,7 @@ $.ajax(settings).done(function(response) {
             "name": "Clever",
             "type": "column",
             "xAxis": 1,
-            "color": "#00a651",
+            "color": "#4bbf5b",
             "data": dataa.growth.Clever_users
         },
          {

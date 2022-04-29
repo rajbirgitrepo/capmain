@@ -153,7 +153,7 @@ $.ajax(settings).done(function(response) {
         xAxis: {
             categories: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
         },
-        yAxis: {
+        yAxis: {    
             lineWidth: 1,
             min: 0,
             title: {

@@ -1,5 +1,6 @@
 TYPE_OF_PAYMENT,USER_NAME,EMAIL_ID,DEVICE_USED,MODE_OF_PAYMENT,Last_Payment_Date,Payment_Amount
 SCHOOL,Tracy Schenk,tschenk@pagosa.k12.co.us,WEBAPP,SQUARE PAYMENT,2021-09-23,1000.0
+SCHOOL,Shelly,shelly_swanson@bismarckschools.org,WEBAPP,SQUARE PAYMENT,2022-04-27,1400.0
 SCHOOL,Kim Aman,KIm.F.Aman@k12.sd.us,WEBAPP,SQUARE PAYMENT,2021-08-12,1000.0
 SCHOOL,Gracie MacDonald,gracie.macdonald@sd71.bc.ca,WEBAPP,NO INFO,2021-07-31,450.0
 SCHOOL,Paula Moujallip,moujallip@unitedwaymiami.org,WEBAPP,SQUARE PAYMENT,2021-08-25,1000.0
