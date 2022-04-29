@@ -7701,21 +7701,10 @@ def schoolexectable():
 
 @app.route('/_executive_dashbaord_')
 def _excecutivecount_():
-
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
-    client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
-
-    database = client["compass"]
-
-    collection1 = database["user_master"]
-    collection5 = database["school_master"]
-
-
-    df1=DataFrame(list(collection1.aggregate([{"$match":
-         {'$and': [
-
-                {"IS_DISABLED":{"$ne":"Y"}},
+    
+    client= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
+    db=client.compass
+    school_um=db.user_master.distinct('schoolId._id',{'$and':[{"IS_DISABLED":{"$ne":"Y"}},
                   {"IS_BLOCKED":{"$ne":"Y"}},
                  {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -7728,58 +7717,33 @@ def _excecutivecount_():
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]})
 
-            {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$schoolId._id'},'name':{'$first':'$schoolId.NAME'}}},
-                  {'$project':{'_id':1,'schools':'$ID','name':'$name'}},
-
-                  ])))
-
-    df20=DataFrame(list(collection5.aggregate([{"$match":    {'$and': [{ 'CATEGORY':{"$regex":"LAUSD",'$options':'i'}},
-                                                { "_id":{'$exists': True} }]}},
-                       {'$group':{'_id':'$_id','ID':{'$addToSet':'$_id'},'name':{'$first':'$NAME'}}},
-                  {'$project':{'_id':1,'school':'$ID',"name":'$name'}},
-
-                  ])))
+    total_school=len(set(school_um+db.school_master.distinct('_id',{'CATEGORY':{'$regex':'LAUSD','$options':'i'}})))
 
 
-    
-    df25=pd.merge(df1,df20, on='_id',how='outer')
-    total_school=df25['_id'].count()
-    
-
-
-
-
-    df = DataFrame(list(collection1.aggregate([{"$match":
-    {'$and':[
-        {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-
-        {"IS_DISABLED":{"$ne":"Y"}},
+    users=db.user_master.distinct('_id',{'$and':[{"IS_DISABLED":{"$ne":"Y"}},
                   {"IS_BLOCKED":{"$ne":"Y"}},
                  {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
                 { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    #     {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "CAP_PROGRAM":{'$exists': True} })}},
 
+    #                 { "schoolId._id":{'$exists': True} },
     # //               {'IS_ADMIN':'Y'},
                  {'EMAIL_ID':{'$ne':''}},
                  {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
              {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]})
 
+    Total_user=len(users)
 
-
-     {"$group":{'_id':{},'distincts': {'$addToSet': "$_id"}}},
-        {"$project":{'_id':0,'Total_user':{'$size':'$distincts'}}}])))
-
-    Total_user=df['Total_user'][0]
-
-    # print(Total_user)
 
     Total_classroom=Total_user+total_school
+
     # print(Total_classroom)
-    df_cap=pd.DataFrame(list(collection5.aggregate([{"$group":{"_id":"$CAP_PROGRAM","TOTAL_SCHOOLS":{"$sum":1}}},
+    df_cap=pd.DataFrame(list(db.school_master.aggregate([{"$group":{"_id":"$CAP_PROGRAM","TOTAL_SCHOOLS":{"$sum":1}}},
     {"$project":{"_id":0,"CAP_PROGRAM":"$_id","SCHOOL_COUNT":"$TOTAL_SCHOOLS"}}])))
     data={"CAP_PROGRAM":['PRE-K','ELEMENTARY','MIDDLE','HIGH','OTHER'],"IE_REACH":[99,297,396,594,264]}
     df_students = pd.DataFrame(data)
@@ -7790,179 +7754,59 @@ def _excecutivecount_():
     total=df_cap["TOTAL_STUDENTS"].to_list()
     total1 = int(sum(total))
 
-
     Total_students=total1
-    # print(Total_students)
-    
-    # print(Total_mindful_minutes)
 
+    Never_logged_in=Total_user-len(db.login_logs.distinct('USER_ID._id',{'$and':[{'USER_ID._id':{'$in':users}}]}))
 
-    df2 = DataFrame(list(collection1.aggregate([{"$match":
-        {'$and':[ {"IS_DISABLED":{"$ne":"Y"}},
-                  {"IS_BLOCKED":{"$ne":"Y"}},
-                 {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
-    # //               {'IS_ADMIN':'Y'},
-                 {'EMAIL_ID':{'$ne':''}},
-                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
-    {"_id":{"$nin":database.login_logs.distinct("USER_ID._id")}}                       
-                                 ]}},
-    {"$group":{'_id':{},'distincts': {'$addToSet': "$_id"}}},
-    {"$project":{'_id':0,'never_loggedin':{'$size':'$distincts'}}}])))
-
-    Never_logged_in=df2['never_loggedin'][0]
-    # print(Never_logged_in)
-
-    collection2 = database["audio_track_master"]
-
-
-    df3 = DataFrame(list(collection2.aggregate([
-    {"$match":
-     {
-        '$and':[
-            {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-            {'USER_ID.EMAIL_ID':{'$ne':''}},
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
-
-     }},
-    {'$group':{'_id':{},'auc':{'$addToSet':'$USER_ID.schoolId._id'}}},
-    {'$project':{'_id':0, 'active_schools':{'$size':'$auc'}}}
-
-    ])))
-
-    active_school=df3['active_schools'][0]
-    # print(active_school)
-    
-    df4 = DataFrame(list(collection2.aggregate([
-    {"$match":
-     {
-        '$and':[
-#             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
-          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-            {'USER_ID.EMAIL_ID':{'$ne':''}},  
-             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-            {'MODIFIED_DATE':{'$gte':csy_first_date()}},
-                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
-
-     }},
-    {'$group':{'_id':{},'pc':{'$sum':1}}},
-    {'$project':{'_id':0, 'practice_count':'$pc'}}
-
-    ])))
-    practice_count=df4['practice_count'][0]
+    practice_count=db.audio_track_master.find({
+        'USER_ID._id':{'$in':users},'MODIFIED_DATE':{'$gte':csy_first_date()}                  
+                        }).count()
     Total_mindful_minutes=int(practice_count*7.5)
-    
-    
-    
-    
-    df5 = DataFrame(list(collection1.aggregate([{"$match":
-    {'$and':[
-        {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-
-        {"IS_DISABLED":{"$ne":"Y"}},
-                  {"IS_BLOCKED":{"$ne":"Y"}},
-                 {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
-    # //               {'IS_ADMIN':'Y'},
-                 {'EMAIL_ID':{'$ne':''}},
-                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
 
 
+    active_user_ever=db.audio_track_master.distinct('USER_ID._id',{'$and':[
+        {'USER_ID._id':{'$in':users}}]})
 
-     {"$group":{'_id':{},'distincts': {'$addToSet': "$_id"}}},
-        {"$project":{'_id':0,'teachers':{'$size':'$distincts'}}}])))
-
-    Teachers=df5['teachers'][0]
-    
-    df6 = DataFrame(list(collection1.aggregate([{"$match":
-    {'$and':[
-        {'ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-
-        {"IS_DISABLED":{"$ne":"Y"}},
-                  {"IS_BLOCKED":{"$ne":"Y"}},
-                 {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-                { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-                { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-
-    # //               {'IS_ADMIN':'Y'},
-                 {'EMAIL_ID':{'$ne':''}},
-                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-             {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+    active_school=len(db.user_master.distinct('schoolId._id',{'_id':{'$in':active_user_ever}}))
 
 
+    Teachers=len(db.user_master.distinct('_id',{'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")},
+                                                           '_id':{'$in':users}}))
 
-     {"$group":{'_id':{},'distincts': {'$addToSet': "$_id"}}},
-        {"$project":{'_id':0,'parents':{'$size':'$distincts'}}}])))
 
-    Parents=df6['parents'][0]
-    df44 = DataFrame(list(database.audio_feedback.aggregate([
+    Parents=len(db.user_master.distinct('_id',{'ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")},
+                                                           '_id':{'$in':users}}))
+
+    df44 = DataFrame(list(db.audio_feedback.aggregate([
     {"$match":
-     {
-        '$and':[
-#             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-         {"USER.IS_DISABLED":{"$ne":"Y"}},
-          {"USER.IS_BLOCKED":{"$ne":"Y"}},
-         {"USER.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
-            {'USER.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
-            {'USER.EMAIL_ID':{'$ne':''}},  
-             {'USER.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-         { 'USER.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
-     { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'$and':[
             {'MODIFIED_DATE':{'$gte':csy_first_date()}},
-                       {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
-                         {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]
+            {'USER._id':{'$in':users}},
+         {'RATING':{'$nin':[0]}}
+
+                      ]
 
      }},
     {'$group':{'_id':{},'rating':{'$avg':'$RATING'}}},
     {'$project':{'_id':0, 'rating':'$rating'}}
 
     ])))
+
     avg_rating=df44['rating'][0]
 
-
-
-
-
     temp={"total_school":str(total_school),
-         "user_count":str(Total_user),
-        "total_classrooms":str(Total_classroom),
-          "total_students":str(Total_students),
-          "mindful_minutes":str(Total_mindful_minutes),
-          "active_school":str(active_school),
-         "never_logged_in":str(Never_logged_in),
-         "practice_count":str(practice_count),
-         'Techers':str(Teachers),
-          'avg_rating':str(round(avg_rating)),
-          'Homeappusers':str(Parents)}
-
-    # print(temp)
-    return json.dumps(temp)
+             "user_count":str(Total_user),
+            "total_classrooms":str(Total_classroom),
+              "total_students":str(Total_students),
+              "mindful_minutes":str(Total_mindful_minutes),
+              "active_school":str(active_school),
+             "never_logged_in":str(Never_logged_in),
+             "practice_count":str(practice_count),
+             'Techers':str(Teachers),
+              'avg_rating':str(round(avg_rating)),
+              'Homeappusers':str(Parents)}
+    
+    return json.dumps(temp,sort_keys=False)
 
 
 @app.route('/proguserexclusively')
