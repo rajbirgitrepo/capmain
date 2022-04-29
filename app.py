@@ -38195,49 +38195,59 @@ def parents_anal_hourly_comparison():
     yesterdaydate=yesterday.strftime("%Y-%m-%d")
     print(yesterdaydate)
     print(todaydate)
-    
-    dfyes=df[df['date']==yesterdaydate]
-    dftod=df[df['date']==todaydate]
 
-    times = pd.to_datetime(dfyes.sign_upn)
-    times['hour'] = times.map( lambda x: pd.to_datetime(x).hour )
-    timedfyes=times.groupby(['hour']).size().to_frame('count').reset_index()
-    
+    dfyes=df[df['date']==yesterdaydate]
+    print("\n dfyes \n",dfyes)
+    dftod=df[df['date']==todaydate]
+    print("\n dftod \n",dftod)
+
     if len(dftod) != 0:
         times2 = pd.to_datetime(dftod.sign_upn)
         times2['hour'] = times2.map( lambda x: pd.to_datetime(x).hour )
         timedftod=times2.groupby(['hour']).size().to_frame('count').reset_index()
-    
+
     else:
         timedftod = pd.DataFrame(index=[0], columns=['hour','count'])
-        timedftod = timedftod.fillna(0)        
-        
-    timedfyes = timedftod.astype(int)
-    hour=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
-    count=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    dftest = pd.DataFrame({'hour':hour,'count':count})
+        timedftod = timedftod.fillna(0) 
 
-    result = pd.merge(timedfyes , dftest,how='right', on='hour')
+
+    if len(dfyes) != 0:
+        times = pd.to_datetime(dfyes.sign_upn)
+        times['hour'] = times.map( lambda x: pd.to_datetime(x).hour )
+        timedfyes=times2.groupby(['hour']).size().to_frame('count').reset_index()
+
+    else:
+        timedfyes = pd.DataFrame(index=[0], columns=['hour','count'])
+        timedfyes = timedfyes.fillna(0) 
+
+
+    timedfyes = timedfyes.astype(int)
+    timedftod = timedftod.astype(int)
+
+    hour=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+    countdf=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    dftest = pd.DataFrame({'hour':hour,'countdf':countdf})
+
+    result = pd.merge(dftest,timedfyes , how='left', on='hour')
     result=result.fillna(0)
     result= result.astype(int)
-
-    result = result.sort_values(["hour", "count_x"], ascending = (True,False))
-    #yesterday count
-    yescount=list(result['count_x'])
-    timedftod = timedftod.astype(int)
-    result12 = pd.merge(timedftod, dftest,how='right', on='hour')
-
-    result12=result12.fillna(0)
-    result12= result12.astype(int)
-    result12 = result12.sort_values(["hour", "count_x"], ascending = (True,False))
-    #todays count
-    todcount=list(result12['count_x'])
+    result = result.sort_values(["hour", "count"], ascending = (True,False))
+#     print("result \n",result)
+    yescount=list(result['count'])
     totaly=sum(yescount)
+
+    result2 = pd.merge(dftest,timedftod , how='left', on='hour')
+    result2=result2.fillna(0)
+    result2= result2.astype(int)
+    result2 = result2.sort_values(["hour", "count"], ascending = (True,False))
+#     print("result2 \n",result2)
+    todcount=list(result2['count'])
     totalt=sum(todcount)
 
     temp={"tod":todcount,"yes":yescount,"totaly":[str(totaly)],"totalt":[str(totalt)]}
-    return json.dumps(temp)
 
+    return json.dumps(temp)
+# parents_anal_hourly_comparison()
 
 @app.route('/mitsignupdaycompp')
 
@@ -38834,7 +38844,7 @@ def mitpracnew():
     df2 = df.groupby([df['date'].dt.date]).sum()
     cdate=[]
     for i in df2.index:
-        x=i.strftime('%s')
+        x=i.strftime('%S')
         cdate.append(float(x)*1000)
     count=[]
     for i in df2['count'] :
@@ -42768,7 +42778,7 @@ def miitsignupnew():
 
     cdate=[]
     for i in df2.index:
-        x=i.strftime('%s')
+        x=i.strftime('%S')
         cdate.append(float(x)*1000)
     count=[]
     for i in df2['sign_up'] :
