@@ -14712,17 +14712,21 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
     pnews_headlines=0
     nnews_headlines=0
     nenews_headlines = 0
-    # date1=startdate
-    # date2=enddate
+    date1=startdate
+    date2=enddate
     today = date.today()
     d1 = today.strftime("%Y-%m-%d")
-    # myDatetimestrt = dateutil.parser.parse(date1)
-    # myDatetimeend = dateutil.parser.parse(date2)
+    myDatetimestrt = dateutil.parser.parse(date1)
+    myDatetimeend = dateutil.parser.parse(date2)
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass
     collection = db.audio_feedback
+#     district="Broward"
+#     startdate='2022-01-01'
+#     enddate='2022-04-01'
+
     district=disdic[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
@@ -14731,7 +14735,7 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
         {"$match":
          {
             '$and':[
-#                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    #                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"IS_DISABLED":{"$ne":"Y"}},
               {"IS_BLOCKED":{"$ne":"Y"}},
              {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -14757,9 +14761,9 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
                        {'COMMENT':{'$ne':''}},
                        {'COMMENT':{'$ne':None}},
                         {'COMMENT':{'$nin':x}},
-                       
-                       
-                       
+
+
+
     #         {'RATING':{'$ne':0}},
          {'MODIFIED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}
@@ -14772,13 +14776,32 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
     update=list(collection.aggregate(user))
     df=pd.DataFrame(update).fillna("no info")
     text=df["COMMENT"].tolist()
-#     df=df[['COMMENT']]
+    #     df=df[['COMMENT']]
     df = df.sample(frac=1.0).reset_index(drop=True)
     df['RATING']=df['RATING'].replace({0:'NO RATING'})
     for i in df['COMMENT'].tolist():
         df = df[df.COMMENT.str.len()!=1] 
-    
+
+
+    # to remove giberish on 1 gram words    
     import nltk
+    words = set(nltk.corpus.words.words())
+
+    df=df.reset_index(drop=True)
+    words = set(nltk.corpus.words.words())
+    f= lambda x:" ".join(w for w in nltk.wordpunct_tokenize(x) if w.lower() in words or not w.isalnum())   
+    df['Clean_comment']=df['COMMENT'].apply(f)
+
+
+    commentss=[]
+    for i in range(len(df)):    
+        splitt=df['COMMENT'][i].split() 
+        if len(splitt)==1:  
+            df['COMMENT'].replace({df['COMMENT'][i]:df['Clean_comment'][i]}, inplace=True)
+
+    df= df[df['COMMENT']!='']        
+
+
     nltk.download('vader_lexicon')
 
     from nltk.sentiment.vader import SentimentIntensityAnalyzer
@@ -14812,6 +14835,7 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
         temp = {"table":table.to_numpy().tolist()}
         return json.dumps(temp, default=str)
 #     return df
+
 # dis_sentiment_pie_table('5f2609807a1c0000950bb45d','neg','2021-08-01','2021-12-17')
 
 
