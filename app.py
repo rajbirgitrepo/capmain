@@ -30,6 +30,7 @@ from flask_cors import CORS
 from geolite2 import geolite2
 import time
 from textblob import TextBlob
+import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
@@ -54,6 +55,7 @@ from six.moves import urllib
 from numpyencoder import NumpyEncoder
 from flask import Response
 from flask import Flask, make_response
+
 
 from flask import Flask,json, request, jsonify
 from dateutil.relativedelta import relativedelta
@@ -14784,7 +14786,6 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
 
 
     # to remove giberish on 1 gram words    
-    import nltk
     words = set(nltk.corpus.words.words())
 
     df=df.reset_index(drop=True)
