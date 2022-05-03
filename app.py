@@ -14756,7 +14756,7 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
         ])))
 
     userid=df1['_id'].tolist() 
-    x=['NA','N/A','n.a','.\n',"a\\n","a\n","v\n","v\\n","0-",'na\n','na','Write a feedback (optional)','Na','k,n/l','[pppppppppppsz']
+    x=['NA',';',';.',',','N/A','n.a','.\n',"a\\n","a\n","v\n","v\\n","0-",'na\n','na','Write a feedback (optional)','Na','k,n/l','[pppppppppppsz']
     user=[
     {"$match":{'$and':[ {'USER._id':{'$in':userid}},
                     {'COMMENT':{'$exists':1}},
