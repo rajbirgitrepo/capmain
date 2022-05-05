@@ -297,8 +297,8 @@ $.ajax(settings).done(function(response){
         for(j = 0; j < observations.length; j++){
             // console.log(observations[j]);
             $("#collapseOne"+i).append('<p class="insight-text">'+observations[j]+'</p>');  
-    
         }
+        $("#collapseOne"+i).append('<div class="text-right"><a href="#section-1'+i+'" class="anchor-link">View Charts</a></div>');
     }
 });
 
@@ -336,7 +336,6 @@ var settings = {
             Highcharts.chart('ChartContainer'+i, {
                 chart: {
                     type: 'spline',
-                    inverted: true
                 },
                 credits: {
                     enabled: false,
@@ -347,13 +346,13 @@ var settings = {
                 colors: ['#4F1FAF', '#462CEE', '#8AE02B', '#01A451'],
                 xAxis: {
                     categories: dataa[i].x_axis,
-                    labels: {
-                        staggerLines: 2,
-                        style: {
-                            fontSize: "10px",
-                            rotation: 90,
-                        },
-                    }
+                    // labels: {
+                    //     staggerLines: 2,
+                    //     style: {
+                    //         fontSize: "10px",
+                    //         rotation: 90,
+                    //     },
+                    // }
                 },
                 yAxis: {
                     lineWidth: 1,

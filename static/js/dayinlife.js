@@ -1266,10 +1266,10 @@ function cardscount(a) {
         $("#updownfbcomment").text(parseFloat(dataa.PARENTSCHANGE[0]).toFixed(0) + "%");
         $("#updownfbper").text(parseFloat(dataa.TEACHERSCHANGE[0]).toFixed(0) + "%");
         $("#avgfb").text(dataa.total_playback_24hr);
-        $("#comments").text(dataa.parents_playback_24hr);
-        $("#comments2").text(dataa.teachers_playback_24hr);
+        $("#comments").text(dataa.teachers_playback_24hr);
+        $("#comments2").text(dataa.parents_playback_24hr);
     });
-
+    
 
     console.log("this is average");
     var settings = {
