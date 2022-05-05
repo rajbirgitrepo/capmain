@@ -30,7 +30,6 @@ from flask_cors import CORS
 from geolite2 import geolite2
 import time
 from textblob import TextBlob
-import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
@@ -55,7 +54,6 @@ from six.moves import urllib
 from numpyencoder import NumpyEncoder
 from flask import Response
 from flask import Flask, make_response
-
 
 from flask import Flask,json, request, jsonify
 from dateutil.relativedelta import relativedelta
@@ -111,9 +109,6 @@ users.append(User(id=18,username='ccassisa@innerexplorer.org',password='capxp202
 users.append(User(id=19,username='arice@innerexplorer.org',password='capxp2020',name='Anitra',nameinitial='A'))
 users.append(User(id=20,username='vgonzalez@innerexplorer.org',password='capxp2020',name='Victoria',nameinitial='V'))
 users.append(User(id=21,username='nina@innerexplorer.org',password='capxp2020',name='Nina',nameinitial='N'))
-users.append(User(id=22,username='ssugar@innerexplorer.org',password='capxp2020',name='Samantha',nameinitial='S'))
-
-
 
 app = Flask(__name__)
 app.secret_key = 'cap4g2020version10date8272020'
@@ -203,145 +198,26 @@ practice_cond_dictonary_list=[{'$project':{
 
 
 #changesdonebysadhna
-disdic={
-    '6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '616d2865c35ee7525fb145d9':'Addison Northwest School District',
-    '6167fe41282c502e1077c12f':'Anchorage',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '619268dd81f00a4319a65a52':'Access Community',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Learning Centers',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '617949a0fc72b63e0d1dc7d3':'Burlington School District',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '617fae53ccd2dd76541ed5e7':'Glasgow Independent Schools',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '61af3b75870dba387bcd86cd':'Holyoke Public Schools',
-    '61aa08a4afeab44256f54074':'Benton Harbor',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '6177e72d108b6ebefcfc1014':'Pasco County Schools',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '617fc552ccd2dd76541ed5eb': 'Shah Family Foundation & BPS',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
+# Global district id code
+disdic1={
+'789':'Attendance works', 
+'5f2609807a1c0000950bb45a':'LAUSD',
+'123':'Skillman',
+'456':'UWBA',
+}
+username = urllib.parse.quote_plus('admin')
+password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
+db=client.compass
+df2 = DataFrame(list(db.district_master.aggregate([
+{'$project':{'_id':1,'DISTRICT_NAME':1 }}
+])))
+disdic2 = dict(df2.values)
+# if districtid in disdic1:
+#     district=disdic1[districtid]
+# else:   
+#     district=disdic2[ObjectId(districtid)]
+
 
 def csy_first_date():
         date_today =datetime.date.today()
@@ -3540,7 +3416,7 @@ def partner_count_cards():
     collection1 = db.user_master
     collection2=db.audio_track_master
     collection3=db.login_logs
-#     district=disdic[districtid]
+
 #     print(district)
     df1 = DataFrame(list(collection1.aggregate([
      {"$match":
@@ -3910,7 +3786,7 @@ def PARTNER_schppcfamily():
     db=client.compass  
     collection = db.audio_track_master
     collection1 = db.user_master
-#     district=disdic[districtid]
+
     df1 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -3991,7 +3867,7 @@ def partner__schpuc():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection=db.user_master
-#     district=disdic[districtid]
+
     df = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -4052,7 +3928,7 @@ def partnerschwisepc():
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
-#     district=disdic[districtid]
+
     df1 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -4125,7 +4001,7 @@ def partner_topusers_practice():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
-#     district=disdic[districtid]
+
 
 
     collection1 = db.user_master
@@ -4216,7 +4092,7 @@ def partner__schwiseuc():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass  
     collection = db.user_master
-#     district=disdic[districtid]
+
     df = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -6436,77 +6312,7 @@ def averagecompletion():
 
 @app.route('/bubble/<disid>/csv')
 def schdistrictghgh(disid):  
-    disdic={
-    '60a7b03831afdba383052726' : "United Way Of Santa Barbara",    
-    '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',}
-
+    
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
@@ -6514,7 +6320,10 @@ def schdistrictghgh(disid):
     dateStr = "2020-01-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
     collection = db.user_master
-    district=disdic[disid]
+    if disid in disdic1:
+        district=disdic1[disid]
+    else:
+        district=disdic2[ObjectId(disid)]
     qraaa=[
         {"$match":{'$and':[
         {'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -11292,7 +11101,10 @@ def heat_district(districtid,startdate,enddate):
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -11443,7 +11255,10 @@ def heat_district_family_active(districtid,startdate,enddate):
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -11592,7 +11407,10 @@ def heat_district_teachers_active(districtid,startdate,enddate):
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -11742,7 +11560,10 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -11892,7 +11713,10 @@ def heat_district_family_prac(districtid,startdate,enddate):
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -12042,7 +11866,10 @@ def heatmap_prac_district(districtid,startdate,enddate):
     db=client.compass 
     collection = db.audio_track_master
     collection2=db.user_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -12288,7 +12115,10 @@ def schwiseucc(districtid,startdate,enddate):
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.user_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
@@ -12534,7 +12364,10 @@ def schwisepc(districtid,startdate,enddate):
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.user_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
@@ -12731,7 +12564,7 @@ def partner__monthwisepc():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
-#     district=disdic[districtid]
+
     df = DataFrame(list(collection.aggregate([
     {"$match":
     {'$and': [
@@ -12925,7 +12758,7 @@ def attendance_schppcfamily():
     db=client.compass  
     collection = db.audio_track_master
     collection1 = db.user_master
-#     district=disdic[districtid]
+
     df1 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -12998,7 +12831,7 @@ def attendance__schpuc():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection= db.user_master
-#     district=disdic[districtid]
+
     df = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -13057,7 +12890,7 @@ def Attendancechwisepc():
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
-#     district=disdic[districtid]
+
     df1 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -13130,7 +12963,7 @@ def attendance__topusers_practice():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
-#     district=disdic[districtid]
+
 
 
     collection1 = db.user_master
@@ -13219,7 +13052,7 @@ def attendance__schwiseuc():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass  
     collection = db.user_master
-#     district=disdic[districtid]
+
     df = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -13273,7 +13106,7 @@ def attendance__monthwisepc():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
-#     district=disdic[districtid]
+
     df = DataFrame(list(collection.aggregate([
     {"$match":
     {'$and': [
@@ -13347,7 +13180,7 @@ def attend_count_cards():
     collection1 = db.user_master
     collection2=db.audio_track_master
     collection3=db.login_logs
-#     district=disdic[districtid]
+
 #     print(district)
     df1 = DataFrame(list(collection1.aggregate([
      {"$match":
@@ -13575,7 +13408,10 @@ def monthwisepc(districtid,startdate,enddate):
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
     pre_start= myDatetime1 - relativedelta(years=1)
@@ -13855,7 +13691,10 @@ def user_practice_90days(districtid,startdate,enddate):
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
@@ -14094,7 +13933,10 @@ def last_practice_90days_(districtid):
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     
 #     myDatetime1 = dateutil.parser.parse(startdate)
 #     myDatetime2 = dateutil.parser.parse(enddate)
@@ -14305,79 +14147,6 @@ def last_practice_90days_(districtid):
 
 @app.route('/90daysuserloggedindetail/<districtid>')
 def user_logins_90days(districtid):
-    disdic={'5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF-Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '123':'Skillman',
-    '456':'UWBA',
-    '789':'Attendance works'}
     from datetime import datetime
     from datetime import timedelta
     today1= datetime.utcnow()
@@ -14389,7 +14158,10 @@ def user_logins_90days(districtid):
     client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
     db=client.compass 
     collection = db.login_logs
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     df = DataFrame(list(collection.aggregate([
     {"$match":
      {'$and': [
@@ -14457,7 +14229,10 @@ def topusers_practice(districtid,startdate,enddate):
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -14555,7 +14330,10 @@ def dis_schoolrating_csy__(districtid,startdate,enddate):
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass
     collection = db.audio_feedback
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -14632,7 +14410,10 @@ def dis_sentiment_pie(districtid,startdate,enddate):
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass
     collection = db.audio_feedback
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -14717,22 +14498,21 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
     pnews_headlines=0
     nnews_headlines=0
     nenews_headlines = 0
-    date1=startdate
-    date2=enddate
+    # date1=startdate
+    # date2=enddate
     today = date.today()
     d1 = today.strftime("%Y-%m-%d")
-    myDatetimestrt = dateutil.parser.parse(date1)
-    myDatetimeend = dateutil.parser.parse(date2)
+    # myDatetimestrt = dateutil.parser.parse(date1)
+    # myDatetimeend = dateutil.parser.parse(date2)
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass
     collection = db.audio_feedback
-#     district="Broward"
-#     startdate='2022-01-01'
-#     enddate='2022-04-01'
-
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -14740,7 +14520,7 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
         {"$match":
          {
             '$and':[
-    #                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+#                 {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
              {"IS_DISABLED":{"$ne":"Y"}},
               {"IS_BLOCKED":{"$ne":"Y"}},
              {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -14766,9 +14546,9 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
                        {'COMMENT':{'$ne':''}},
                        {'COMMENT':{'$ne':None}},
                         {'COMMENT':{'$nin':x}},
-
-
-
+                       
+                       
+                       
     #         {'RATING':{'$ne':0}},
          {'MODIFIED_DATE':{"$gte": myDatetime1 ,
                              "$lte":myDatetime2}}
@@ -14781,31 +14561,13 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
     update=list(collection.aggregate(user))
     df=pd.DataFrame(update).fillna("no info")
     text=df["COMMENT"].tolist()
-    #     df=df[['COMMENT']]
+#     df=df[['COMMENT']]
     df = df.sample(frac=1.0).reset_index(drop=True)
     df['RATING']=df['RATING'].replace({0:'NO RATING'})
     for i in df['COMMENT'].tolist():
         df = df[df.COMMENT.str.len()!=1] 
-
-
-    # to remove giberish on 1 gram words    
-    words = set(nltk.corpus.words.words())
-
-    df=df.reset_index(drop=True)
-    words = set(nltk.corpus.words.words())
-    f= lambda x:" ".join(w for w in nltk.wordpunct_tokenize(x) if w.lower() in words or not w.isalnum())   
-    df['Clean_comment']=df['COMMENT'].apply(f)
-
-
-    commentss=[]
-    for i in range(len(df)):    
-        splitt=df['COMMENT'][i].split() 
-        if len(splitt)==1:  
-            df['COMMENT'].replace({df['COMMENT'][i]:df['Clean_comment'][i]}, inplace=True)
-
-    df= df[df['COMMENT']!='']        
-
-
+    
+    import nltk
     nltk.download('vader_lexicon')
 
     from nltk.sentiment.vader import SentimentIntensityAnalyzer
@@ -14839,7 +14601,6 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
         temp = {"table":table.to_numpy().tolist()}
         return json.dumps(temp, default=str)
 #     return df
-
 # dis_sentiment_pie_table('5f2609807a1c0000950bb45d','neg','2021-08-01','2021-12-17')
 
 
@@ -14868,7 +14629,7 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
 #     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
 #     db=client.compass
 #     collection = db.audio_feedback
-#     district=disdic[districtid]
+
 #     myDatetime1 = dateutil.parser.parse(startdate)
 #     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -15038,7 +14799,10 @@ def district_Date_table(districtid,startdate):
     collection=db.user_master
     collection1=db.audio_track_master
     collection3=db.subscription_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     print(district)
     startdate= dateutil.parser.parse(str(startdate))
     enddat= dateutil.parser.parse(str(startdate))
@@ -15199,7 +14963,10 @@ def district_count_cards(districtid,startdate,enddate):
     collection3=db.login_logs
     collection4=db.school_master
     
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
@@ -15966,7 +15733,10 @@ def district_user_table_teacher(districtid,startdate,enddate):
     collection=db.user_master
     collection1=db.audio_track_master
     collection3=db.subscription_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -16200,7 +15970,10 @@ def district_user_table_parent(districtid,startdate,enddate):
     collection=db.user_master
     collection1=db.audio_track_master
     collection3=db.subscription_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -16435,7 +16208,10 @@ def district_school_table(districtid,startdate,enddate):
     collection=db.user_master
     collection1=db.audio_track_master
     collection3=db.subscription_master
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
     
@@ -19603,7 +19379,7 @@ def UWBA_schppcfamily():
     db=client.compass  
     collection = db.audio_track_master
     collection1 = db.user_master
-#     district=disdic[districtid]
+
     df1 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -19676,7 +19452,7 @@ def uwba__schpuc():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection= db.user_master
-#     district=disdic[districtid]
+
     df = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -19735,7 +19511,7 @@ def uwbachwisepc():
     db=client.compass 
     collection = db.audio_track_master
     collection1 = db.user_master
-#     district=disdic[districtid]
+
     df1 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -19808,7 +19584,7 @@ def uwba__topusers_practice():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
-#     district=disdic[districtid]
+
 
 
     collection1 = db.user_master
@@ -19897,7 +19673,7 @@ def uwba__schwiseuc():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass  
     collection = db.user_master
-#     district=disdic[districtid]
+
     df = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -19951,7 +19727,7 @@ def uwba__monthwisepc():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass 
     collection = db.audio_track_master
-#     district=disdic[districtid]
+
     df = DataFrame(list(collection.aggregate([
     {"$match":
     {'$and': [
@@ -20025,7 +19801,7 @@ def uwba_count_cards():
     collection1 = db.user_master
     collection2=db.audio_track_master
     collection3=db.login_logs
-#     district=disdic[districtid]
+
 #     print(district)
     df1 = DataFrame(list(collection1.aggregate([
      {"$match":
@@ -43197,7 +42973,7 @@ def sentiment_pie():
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass
     collection = db.audio_feedback
-#     district=disdic[districtid]
+
 #     myDatetime1 = dateutil.parser.parse(startdate)
 #     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -57284,77 +57060,11 @@ def billmelateranalysis():
 @app.route('/districtddtcard/<districtid>')
 def ddt_card(districtid):
     
-    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-            '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-            '5f2609807a1c0000950bb475':'Agawam School district',
-            '5f2609807a1c0000950bb481':'Alameda Unified School District',
-            '5f2609807a1c0000950bb47a':'Alpine School District',
-            '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-            '5f2609807a1c0000950bb463':'Austin Independent School District',
-            '5f59e4836451a9089d7d4007':'Belleville School District',
-            '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-            '5f2609807a1c0000950bb46c':'Chico Unified School District',
-            '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-            '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-            '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-            '5f2609807a1c0000950bb480':'Dell Texas',
-            '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-            '5f895191609e08b76029f641':'Early learning Sarasota',
-            '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-            '5f2609807a1c0000950bb461':'Englewood Public School District',
-            '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-            '5f2609807a1c0000950bb47d':'Flint Public Schools',
-            '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-            '5f2609807a1c0000950bb450':'Goleta District',
-            '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
-            '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-            '5f2609807a1c0000950bb476':'Hillsborough County',
-            '5f2609807a1c0000950bb455':'Krum Independent School District',
-            '5f2609807a1c0000950bb47e':'La Joya School District',
-            '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-            '5f2609807a1c0000950bb45a':'LAUSD',
-            '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-            '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-            '5fbcdf0ba84e48a64412a798':'Needham School District',
-            '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-            '5f6994386451a9089d7d4009':'Ogden school district',
-            '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-            '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-            '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-            '5f2609807a1c0000950bb466':'Pinellas County Schools',
-            '5f2609807a1c0000950bb471':'Racine Unified Schools',
-            '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-            '5f2609807a1c0000950bb478':'San Diego Unified School District',
-            '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-            '5f2609807a1c0000950bb477':'Sarasota County',
-            '5f2609807a1c0000950bb473':'Skillman Foundation',
-            '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-            '5f2609807a1c0000950bb468':'Utah Board of Education',
-            '5f698b826451a9089d7d4008':'Wayne Metro',
-            '5f2609807a1c0000950bb45b':'Westfield Public School District',
-            '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-            '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',}
-
-    district=disdic[districtid]
+    
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
 
     #school summary df
     username = urllib.parse.quote_plus('admin')
@@ -57627,78 +57337,12 @@ def ddt_card(districtid):
 
 @app.route('/districtddtchart/<districtid>')
 def ddt_chart(districtid):
-    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-        '5f2609807a1c0000950bb475':'Agawam School district',
-        '5f2609807a1c0000950bb481':'Alameda Unified School District',
-        '5f2609807a1c0000950bb47a':'Alpine School District',
-        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-        '5f2609807a1c0000950bb463':'Austin Independent School District',
-        '5f59e4836451a9089d7d4007':'Belleville School District',
-        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-        '5f2609807a1c0000950bb46c':'Chico Unified School District',
-        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-        '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-        '5f2609807a1c0000950bb480':'Dell Texas',
-        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-        '5f895191609e08b76029f641':'Early learning Sarasota',
-        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-        '5f2609807a1c0000950bb461':'Englewood Public School District',
-        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-        '5f2609807a1c0000950bb47d':'Flint Public Schools',
-        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-        '5f2609807a1c0000950bb450':'Goleta District',
-        '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
-        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-        '5f2609807a1c0000950bb476':'Hillsborough County',
-        '5f2609807a1c0000950bb455':'Krum Independent School District',
-        '5f2609807a1c0000950bb47e':'La Joya School District',
-        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-        '5f2609807a1c0000950bb45a':'LAUSD',
-        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-        '5fbcdf0ba84e48a64412a798':'Needham School District',
-        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-        '5f6994386451a9089d7d4009':'Ogden school district',
-        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-        '5f2609807a1c0000950bb466':'Pinellas County Schools',
-        '5f2609807a1c0000950bb471':'Racine Unified Schools',
-        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-        '5f2609807a1c0000950bb478':'San Diego Unified School District',
-        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-        '5f2609807a1c0000950bb477':'Sarasota County',
-        '5f2609807a1c0000950bb473':'Skillman Foundation',
-        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-        '5f2609807a1c0000950bb468':'Utah Board of Education',
-        '5f698b826451a9089d7d4008':'Wayne Metro',
-        '5f2609807a1c0000950bb45b':'Westfield Public School District',
-        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-        '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',}
+    
 
-
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
 
     #school summary df
     username = urllib.parse.quote_plus('admin')
@@ -57997,76 +57641,10 @@ def ddt_chart(districtid):
 
 def ddt_overall_table(districtid,practype):    
     practice=str(practype).lower()    
-    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-        '5f2609807a1c0000950bb475':'Agawam School district',
-        '5f2609807a1c0000950bb481':'Alameda Unified School District',
-        '5f2609807a1c0000950bb47a':'Alpine School District',
-        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-        '5f2609807a1c0000950bb463':'Austin Independent School District',
-        '5f59e4836451a9089d7d4007':'Belleville School District',
-        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-        '5f2609807a1c0000950bb46c':'Chico Unified School District',
-        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-        '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-        '5f2609807a1c0000950bb480':'Dell Texas',
-        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-        '5f895191609e08b76029f641':'Early learning Sarasota',
-        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-        '5f2609807a1c0000950bb461':'Englewood Public School District',
-        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-        '5f2609807a1c0000950bb47d':'Flint Public Schools',
-        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-        '5f2609807a1c0000950bb450':'Goleta District',
-        '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
-        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-        '5f2609807a1c0000950bb476':'Hillsborough County',
-        '5f2609807a1c0000950bb455':'Krum Independent School District',
-        '5f2609807a1c0000950bb47e':'La Joya School District',
-        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-        '5f2609807a1c0000950bb45a':'LAUSD',
-        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-        '5fbcdf0ba84e48a64412a798':'Needham School District',
-        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-        '5f6994386451a9089d7d4009':'Ogden school district',
-        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-        '5f2609807a1c0000950bb466':'Pinellas County Schools',
-        '5f2609807a1c0000950bb471':'Racine Unified Schools',
-        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-        '5f2609807a1c0000950bb478':'San Diego Unified School District',
-        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-        '5f2609807a1c0000950bb477':'Sarasota County',
-        '5f2609807a1c0000950bb473':'Skillman Foundation',
-        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-        '5f2609807a1c0000950bb468':'Utah Board of Education',
-        '5f698b826451a9089d7d4008':'Wayne Metro',
-        '5f2609807a1c0000950bb45b':'Westfield Public School District',
-        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-        '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',}
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
@@ -58544,76 +58122,10 @@ def MONGO_CLE_SCH_CARD():
 @app.route('/districtddtCSYtable/<districtid>/<practype>')
 def ddt_CSY_table(districtid,practype):    
     practice=str(practype).lower()    
-    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-        '5f2609807a1c0000950bb475':'Agawam School district',
-        '5f2609807a1c0000950bb481':'Alameda Unified School District',
-        '5f2609807a1c0000950bb47a':'Alpine School District',
-        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-        '5f2609807a1c0000950bb463':'Austin Independent School District',
-        '5f59e4836451a9089d7d4007':'Belleville School District',
-        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-        '5f2609807a1c0000950bb46c':'Chico Unified School District',
-        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-        '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-        '5f2609807a1c0000950bb480':'Dell Texas',
-        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-        '5f895191609e08b76029f641':'Early learning Sarasota',
-        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-        '5f2609807a1c0000950bb461':'Englewood Public School District',
-        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-        '5f2609807a1c0000950bb47d':'Flint Public Schools',
-        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-        '5f2609807a1c0000950bb450':'Goleta District',
-        '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
-        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-        '5f2609807a1c0000950bb476':'Hillsborough County',
-        '5f2609807a1c0000950bb455':'Krum Independent School District',
-        '5f2609807a1c0000950bb47e':'La Joya School District',
-        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-        '5f2609807a1c0000950bb45a':'LAUSD',
-        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-        '5fbcdf0ba84e48a64412a798':'Needham School District',
-        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-        '5f6994386451a9089d7d4009':'Ogden school district',
-        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-        '5f2609807a1c0000950bb466':'Pinellas County Schools',
-        '5f2609807a1c0000950bb471':'Racine Unified Schools',
-        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-        '5f2609807a1c0000950bb478':'San Diego Unified School District',
-        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-        '5f2609807a1c0000950bb477':'Sarasota County',
-        '5f2609807a1c0000950bb473':'Skillman Foundation',
-        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-        '5f2609807a1c0000950bb468':'Utah Board of Education',
-        '5f698b826451a9089d7d4008':'Wayne Metro',
-        '5f2609807a1c0000950bb45b':'Westfield Public School District',
-        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-        '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',}
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
@@ -61990,76 +61502,10 @@ def new2(name,name1):
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
         
-        disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-        '5f2609807a1c0000950bb475':'Agawam School district',
-        '5f2609807a1c0000950bb481':'Alameda Unified School District',
-        '5f2609807a1c0000950bb47a':'Alpine School District',
-        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-        '5f2609807a1c0000950bb463':'Austin Independent School District',
-        '5f59e4836451a9089d7d4007':'Belleville School District',
-        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-        '5f2609807a1c0000950bb46c':'Chico Unified School District',
-        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-        '5f2609807a1c0000950bb45c':'Comox Valley School District',
-        '5f2609807a1c0000950bb480':'Dell Texas',
-        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-        '5f895191609e08b76029f641':'Early learning Sarasota',
-        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-        '5f2609807a1c0000950bb461':'Englewood Public School District',
-        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-        '5f2609807a1c0000950bb47d':'Flint Public Schools',
-        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-        '5f2609807a1c0000950bb450':'Goleta District',
-        '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-        '5f2609807a1c0000950bb476':'Hillsborough County',
-        '5f2609807a1c0000950bb455':'Krum Independent School District',
-        '5f2609807a1c0000950bb47e':'La Joya School District',
-        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-        '5f2609807a1c0000950bb45a':'LAUSD',
-        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-        '5fbcdf0ba84e48a64412a798':'Needham School District',
-        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-        '5f6994386451a9089d7d4009':'Ogden school district',
-        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-        '5f2609807a1c0000950bb466':'Pinellas County Schools',
-        '5f2609807a1c0000950bb471':'Racine Unified Schools',
-        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-        '5f2609807a1c0000950bb478':'San Diego Unified School District',
-        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-        '5f2609807a1c0000950bb477':'Sarasota County',
-        '5f2609807a1c0000950bb473':'Skillman Foundation',
-        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-        '5f2609807a1c0000950bb468':'Utah Board of Education',
-        '5f698b826451a9089d7d4008':'Wayne Metro',
-        '5f2609807a1c0000950bb45b':'Westfield Public School District',
-        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-        '5f2609807a1c0000950bb45d':'Youngstown',
-        '5f2609807a1c0000950bb464':'Equity Education',
-        '5f2609807a1c0000950bb469':'LSF -  Head Start',
-        '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-        '5f2609807a1c0000950bb46f':'Paradise Schools',
-        '5f2609807a1c0000950bb479':'Panorama Education',
-        '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-        '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-        '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-        '5fe2e25d4d0ca68d7baf889d':'BGCA',
-        '5fe318b14d0ca68d7baf889e':'BLUE',
-        '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-        '6017ab3043ca9c39151838d4':'Oswego School District',
-        '60239a84e57dc27613699d57':'Austin Independent School District',
-        '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-        '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-        '6023a7269e8e623753fc305e':'Fulton County School System',
-        '6023a7499e8e623753fc305f':'Manatee County School District',
-        '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-        '6023a7949e8e623753fc3061':'Wasatch County School District'}
-        district=disdic[name]
+        if name in disdic1:
+            district=disdic1[name]
+        else:
+            district=disdic2[ObjectId(name)]
        
         
         collection = db.school_master
@@ -62233,76 +61679,10 @@ def new2(name,name1):
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
         
-        disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-        '5f2609807a1c0000950bb475':'Agawam School district',
-        '5f2609807a1c0000950bb481':'Alameda Unified School District',
-        '5f2609807a1c0000950bb47a':'Alpine School District',
-        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-        '5f2609807a1c0000950bb463':'Austin Independent School District',
-        '5f59e4836451a9089d7d4007':'Belleville School District',
-        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-        '5f2609807a1c0000950bb46c':'Chico Unified School District',
-        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-        '5f2609807a1c0000950bb45c':'Comox Valley School District',
-        '5f2609807a1c0000950bb480':'Dell Texas',
-        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-        '5f895191609e08b76029f641':'Early learning Sarasota',
-        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-        '5f2609807a1c0000950bb461':'Englewood Public School District',
-        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-        '5f2609807a1c0000950bb47d':'Flint Public Schools',
-        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-        '5f2609807a1c0000950bb450':'Goleta District',
-        '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-        '5f2609807a1c0000950bb476':'Hillsborough County',
-        '5f2609807a1c0000950bb455':'Krum Independent School District',
-        '5f2609807a1c0000950bb47e':'La Joya School District',
-        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-        '5f2609807a1c0000950bb45a':'LAUSD',
-        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-        '5fbcdf0ba84e48a64412a798':'Needham School District',
-        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-        '5f6994386451a9089d7d4009':'Ogden school district',
-        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-        '5f2609807a1c0000950bb466':'Pinellas County Schools',
-        '5f2609807a1c0000950bb471':'Racine Unified Schools',
-        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-        '5f2609807a1c0000950bb478':'San Diego Unified School District',
-        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-        '5f2609807a1c0000950bb477':'Sarasota County',
-        '5f2609807a1c0000950bb473':'Skillman Foundation',
-        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-        '5f2609807a1c0000950bb468':'Utah Board of Education',
-        '5f698b826451a9089d7d4008':'Wayne Metro',
-        '5f2609807a1c0000950bb45b':'Westfield Public School District',
-        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-        '5f2609807a1c0000950bb45d':'Youngstown',
-        '5f2609807a1c0000950bb464':'Equity Education',
-        '5f2609807a1c0000950bb469':'LSF -  Head Start',
-        '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-        '5f2609807a1c0000950bb46f':'Paradise Schools',
-        '5f2609807a1c0000950bb479':'Panorama Education',
-        '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-        '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-        '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-        '5fe2e25d4d0ca68d7baf889d':'BGCA',
-        '5fe318b14d0ca68d7baf889e':'BLUE',
-        '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-        '6017ab3043ca9c39151838d4':'Oswego School District',
-        '60239a84e57dc27613699d57':'Austin Independent School District',
-        '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-        '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-        '6023a7269e8e623753fc305e':'Fulton County School System',
-        '6023a7499e8e623753fc305f':'Manatee County School District',
-        '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-        '6023a7949e8e623753fc3061':'Wasatch County School District'}
-        district=disdic[name]
+        if disid in disdic1:
+            district=disdic1[disid]
+        else:
+            district=disdic2[ObjectId(disid)]
         
     
         collection1 = db.school_master
@@ -62406,76 +61786,10 @@ def new2(name,name1):
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
 
-        disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-        '5f2609807a1c0000950bb475':'Agawam School district',
-        '5f2609807a1c0000950bb481':'Alameda Unified School District',
-        '5f2609807a1c0000950bb47a':'Alpine School District',
-        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-        '5f2609807a1c0000950bb463':'Austin Independent School District',
-        '5f59e4836451a9089d7d4007':'Belleville School District',
-        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-        '5f2609807a1c0000950bb46c':'Chico Unified School District',
-        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-        '5f2609807a1c0000950bb45c':'Comox Valley School District',
-        '5f2609807a1c0000950bb480':'Dell Texas',
-        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-        '5f895191609e08b76029f641':'Early learning Sarasota',
-        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-        '5f2609807a1c0000950bb461':'Englewood Public School District',
-        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-        '5f2609807a1c0000950bb47d':'Flint Public Schools',
-        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-        '5f2609807a1c0000950bb450':'Goleta District',
-        '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-        '5f2609807a1c0000950bb476':'Hillsborough County',
-        '5f2609807a1c0000950bb455':'Krum Independent School District',
-        '5f2609807a1c0000950bb47e':'La Joya School District',
-        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-        '5f2609807a1c0000950bb45a':'LAUSD',
-        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-        '5fbcdf0ba84e48a64412a798':'Needham School District',
-        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-        '5f6994386451a9089d7d4009':'Ogden school district',
-        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-        '5f2609807a1c0000950bb466':'Pinellas County Schools',
-        '5f2609807a1c0000950bb471':'Racine Unified Schools',
-        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-        '5f2609807a1c0000950bb478':'San Diego Unified School District',
-        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-        '5f2609807a1c0000950bb477':'Sarasota County',
-        '5f2609807a1c0000950bb473':'Skillman Foundation',
-        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-        '5f2609807a1c0000950bb468':'Utah Board of Education',
-        '5f698b826451a9089d7d4008':'Wayne Metro',
-        '5f2609807a1c0000950bb45b':'Westfield Public School District',
-        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-        '5f2609807a1c0000950bb45d':'Youngstown',
-        '5f2609807a1c0000950bb464':'Equity Education',
-        '5f2609807a1c0000950bb469':'LSF -  Head Start',
-        '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-        '5f2609807a1c0000950bb46f':'Paradise Schools',
-        '5f2609807a1c0000950bb479':'Panorama Education',
-        '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-        '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-        '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-        '5fe2e25d4d0ca68d7baf889d':'BGCA',
-        '5fe318b14d0ca68d7baf889e':'BLUE',
-        '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-        '6017ab3043ca9c39151838d4':'Oswego School District',
-        '60239a84e57dc27613699d57':'Austin Independent School District',
-        '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-        '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-        '6023a7269e8e623753fc305e':'Fulton County School System',
-        '6023a7499e8e623753fc305f':'Manatee County School District',
-        '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-        '6023a7949e8e623753fc3061':'Wasatch County School District'}
-        district=disdic[name1]
+        if name1 in disdic1:
+            district=disdic1[name1]
+        else:
+            district=disdic2[ObjectId(name1)]
 
         collection = db.school_master
         user=[
@@ -62645,76 +61959,10 @@ def new2(name,name1):
         dateStr = "2020-08-01T00:00:00.000Z"
         myDatetime = dateutil.parser.parse(dateStr)
         
-        disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-        '5f2609807a1c0000950bb475':'Agawam School district',
-        '5f2609807a1c0000950bb481':'Alameda Unified School District',
-        '5f2609807a1c0000950bb47a':'Alpine School District',
-        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-        '5f2609807a1c0000950bb463':'Austin Independent School District',
-        '5f59e4836451a9089d7d4007':'Belleville School District',
-        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-        '5f2609807a1c0000950bb46c':'Chico Unified School District',
-        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-        '5f2609807a1c0000950bb45c':'Comox Valley School District',
-        '5f2609807a1c0000950bb480':'Dell Texas',
-        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-        '5f895191609e08b76029f641':'Early learning Sarasota',
-        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-        '5f2609807a1c0000950bb461':'Englewood Public School District',
-        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-        '5f2609807a1c0000950bb47d':'Flint Public Schools',
-        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-        '5f2609807a1c0000950bb450':'Goleta District',
-        '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-        '5f2609807a1c0000950bb476':'Hillsborough County',
-        '5f2609807a1c0000950bb455':'Krum Independent School District',
-        '5f2609807a1c0000950bb47e':'La Joya School District',
-        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-        '5f2609807a1c0000950bb45a':'LAUSD',
-        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-        '5fbcdf0ba84e48a64412a798':'Needham School District',
-        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-        '5f6994386451a9089d7d4009':'Ogden school district',
-        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-        '5f2609807a1c0000950bb466':'Pinellas County Schools',
-        '5f2609807a1c0000950bb471':'Racine Unified Schools',
-        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-        '5f2609807a1c0000950bb478':'San Diego Unified School District',
-        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-        '5f2609807a1c0000950bb477':'Sarasota County',
-        '5f2609807a1c0000950bb473':'Skillman Foundation',
-        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-        '5f2609807a1c0000950bb468':'Utah Board of Education',
-        '5f698b826451a9089d7d4008':'Wayne Metro',
-        '5f2609807a1c0000950bb45b':'Westfield Public School District',
-        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-        '5f2609807a1c0000950bb45d':'Youngstown',
-        '5f2609807a1c0000950bb464':'Equity Education',
-        '5f2609807a1c0000950bb469':'LSF -  Head Start',
-        '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-        '5f2609807a1c0000950bb46f':'Paradise Schools',
-        '5f2609807a1c0000950bb479':'Panorama Education',
-        '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-        '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-        '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-        '5fe2e25d4d0ca68d7baf889d':'BGCA',
-        '5fe318b14d0ca68d7baf889e':'BLUE',
-        '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-        '6017ab3043ca9c39151838d4':'Oswego School District',
-        '60239a84e57dc27613699d57':'Austin Independent School District',
-        '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-        '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-        '6023a7269e8e623753fc305e':'Fulton County School System',
-        '6023a7499e8e623753fc305f':'Manatee County School District',
-        '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-        '6023a7949e8e623753fc3061':'Wasatch County School District'}
-        district=disdic[name1]
+        if name1 in disdic1:
+            district=disdic1[name1]
+        else:
+            district=disdic2[ObjectId(name1)]
         
         collection1 = db.school_master
         user1=[
@@ -65886,77 +65134,10 @@ def dailyyy_feedback_table_PARENTS__(datestr):
 @app.route('/districtddtcard/<datestr>/<districtid>')
 def feedback_district_chart__(datestr,districtid):
     
-    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-            '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-            '5f2609807a1c0000950bb475':'Agawam School district',
-            '5f2609807a1c0000950bb481':'Alameda Unified School District',
-            '5f2609807a1c0000950bb47a':'Alpine School District',
-            '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-            '5f2609807a1c0000950bb463':'Austin Independent School District',
-            '5f59e4836451a9089d7d4007':'Belleville School District',
-            '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-            '5f2609807a1c0000950bb46c':'Chico Unified School District',
-            '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-            '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-            '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-            '5f2609807a1c0000950bb480':'Dell Texas',
-            '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-            '5f895191609e08b76029f641':'Early learning Sarasota',
-            '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-            '5f2609807a1c0000950bb461':'Englewood Public School District',
-            '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-            '5f2609807a1c0000950bb47d':'Flint Public Schools',
-            '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-            '5f2609807a1c0000950bb450':'Goleta District',
-            '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
-            '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-            '5f2609807a1c0000950bb476':'Hillsborough County',
-            '5f2609807a1c0000950bb455':'Krum Independent School District',
-            '5f2609807a1c0000950bb47e':'La Joya School District',
-            '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-            '5f2609807a1c0000950bb45a':'LAUSD',
-            '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-            '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-            '5fbcdf0ba84e48a64412a798':'Needham School District',
-            '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-            '5f6994386451a9089d7d4009':'Ogden school district',
-            '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-            '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-            '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-            '5f2609807a1c0000950bb466':'Pinellas County Schools',
-            '5f2609807a1c0000950bb471':'Racine Unified Schools',
-            '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-            '5f2609807a1c0000950bb478':'San Diego Unified School District',
-            '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-            '5f2609807a1c0000950bb477':'Sarasota County',
-            '5f2609807a1c0000950bb473':'Skillman Foundation',
-            '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-            '5f2609807a1c0000950bb468':'Utah Board of Education',
-            '5f698b826451a9089d7d4008':'Wayne Metro',
-            '5f2609807a1c0000950bb45b':'Westfield Public School District',
-            '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-            '5f2609807a1c0000950bb45d':'Youngstown',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '5f2609807a1c0000950bb469':'LSF -  Head Start',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '60239a84e57dc27613699d57':'Austin Independent School District',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',}
-
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
     
     username=urllib.parse.quote_plus('admin')
     password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -68257,76 +67438,10 @@ def relic_weekly_response():
 
 @app.route('/districtescore/<disid>')
 def districtescore(disid):
-    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-        '5f2609807a1c0000950bb475':'Agawam School district',
-        '5f2609807a1c0000950bb481':'Alameda Unified School District',
-        '5f2609807a1c0000950bb47a':'Alpine School District',
-        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-        '5f2609807a1c0000950bb463':'Austin Independent School District',
-        '5f59e4836451a9089d7d4007':'Belleville School District',
-        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-        '5f2609807a1c0000950bb46c':'Chico Unified School District',
-        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-        '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-        '5f2609807a1c0000950bb480':'Dell Texas',
-        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-        '5f895191609e08b76029f641':'Early learning Sarasota',
-        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-        '5f2609807a1c0000950bb461':'Englewood Public School District',
-        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-        '5f2609807a1c0000950bb47d':'Flint Public Schools',
-        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-        '5f2609807a1c0000950bb450':'Goleta District',
-        '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
-        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-        '5f2609807a1c0000950bb476':'Hillsborough County',
-        '5f2609807a1c0000950bb455':'Krum Independent School District',
-        '5f2609807a1c0000950bb47e':'La Joya School District',
-        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-        '5f2609807a1c0000950bb45a':'LAUSD',
-        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-        '5fbcdf0ba84e48a64412a798':'Needham School District',
-        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-        '5f6994386451a9089d7d4009':'Ogden school district',
-        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-        '5f2609807a1c0000950bb466':'Pinellas County Schools',
-        '5f2609807a1c0000950bb471':'Racine Unified Schools',
-        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-        '5f2609807a1c0000950bb478':'San Diego Unified School District',
-        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-        '5f2609807a1c0000950bb477':'Sarasota County',
-        '5f2609807a1c0000950bb473':'Skillman Foundation',
-        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-        '5f2609807a1c0000950bb468':'Utah Board of Education',
-        '5f698b826451a9089d7d4008':'Wayne Metro',
-        '5f2609807a1c0000950bb45b':'Westfield Public School District',
-        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-        '5f2609807a1c0000950bb45d':'Youngstown',
-        '5f2609807a1c0000950bb464':'Equity Education',
-        '5f2609807a1c0000950bb469':'LSF -  Head Start',
-        '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-        '5f2609807a1c0000950bb46f':'Paradise Schools',
-        '5f2609807a1c0000950bb479':'Panorama Education',
-        '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-        '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-        '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-        '5fe2e25d4d0ca68d7baf889d':'BGCA',
-        '5fe318b14d0ca68d7baf889e':'BLUE',
-        '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-        '6017ab3043ca9c39151838d4':'Oswego School District',
-        '60239a84e57dc27613699d57':'Austin Independent School District',
-        '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-        '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-        '6023a7269e8e623753fc305e':'Fulton County School System',
-        '6023a7499e8e623753fc305f':'Manatee County School District',
-        '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-        '6023a7949e8e623753fc3061':'Wasatch County School District'}
-    district=disdic[disid]
+    if disid in disdic1:
+        district=disdic1[disid]
+    else:
+        district=disdic2[ObjectId(disid)]
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
@@ -68879,136 +67994,10 @@ def dis_streak_report(districtid):
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
     db=client.compass
 
-    disdic={'6045e4d007ead7744b125848':'Adams 12 Five Star Schools',
-    '6045e4d707ead7744b125854':'Adams County School District 14',
-    '5f2609807a1c0000950bb475':'Agawam School district',
-    '5f2609807a1c0000950bb481':'Alameda Unified School District',
-    '5f2609807a1c0000950bb47a':'Alpine School District',
-    '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-    '6045e4c907ead7744b12583d':'Apple Valley Unified School District',
-    '789':'Attendance works',
-    '6045e4d707ead7744b125855':'Aurora Public Schools',
-    '5f2609807a1c0000950bb463':'Austin Independent School District',
-    '5f59e4836451a9089d7d4007':'Belleville School District',
-    '6045e4d107ead7744b125849':'Berkeley Public Schools',
-    '5fe2e25d4d0ca68d7baf889d':'BGCA',
-    '6045e4ca07ead7744b12583e':'Bishop Unified School District',
-    '6045e4d107ead7744b12584a':'Bismarck Public Schools',
-    '5fe318b14d0ca68d7baf889e':'BLUE',
-    '6045e4c807ead7744b12583b':'Boston Public Schools',
-    '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-    '60f7bf747cc8db72d772e465':'Bright Horizons Early Learning Centers',
-    '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-    '6045e4ca07ead7744b12583f':'Canyons School District',
-    '60473f8823e88e242074ebd2':'Champlain Valley School District',
-    '6045e4d907ead7744b125858':'Chicago Public Schools',
-    '5f2609807a1c0000950bb46c':'Chico Unified School District',
-    '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-    '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-    '6045e4d907ead7744b125857':'Colton Joint Unified School District',
-    '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-    '5f2609807a1c0000950bb45c':'Comox Valley School District',
-    '5f2609807a1c0000950bb480':'Dell Texas',
-    '6045e4da07ead7744b125859':'Dennis-Yarmouth Regional School District',
-    '6045e4cb07ead7744b125840':'Denver Public Schools',
-    '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-    '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-    '6045e4c707ead7744b12583a':'Durham Public Schools',
-    '5f895191609e08b76029f641':'Early learning Sarasota',
-    '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-    '5f2609807a1c0000950bb461':'Englewood Public School District',
-    '5f2609807a1c0000950bb464':'Equity Education',
-    '6045e4cc07ead7744b125841':'Fairfax County Public Schools',
-    '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-    '6045e4cd07ead7744b125843':'Falmouth Public Schools',
-    '6045e4da07ead7744b12585a':'FITCHBURG PUBLIC SCHOOLS',
-    '5f2609807a1c0000950bb47d':'Flint Public Schools',
-    '6023a7269e8e623753fc305e':'Fulton County School System',
-    '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-    '6045e4d207ead7744b12584b':'Glenbard District 87',
-    '5f2609807a1c0000950bb450':'Goleta District',
-    '6045e4cd07ead7744b125844':'Granite School District',
-    '5f2609807a1c0000950bb474':'Greenburgh North Castle Union Free School District',
-    '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-    '60cb8971c5b0e89ed7ac0aa1':'Hall County School District',
-    '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-    '6045e4c707ead7744b125839':'Hartford Public Schools',
-    '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-    '6045e4ce07ead7744b125845':'Helena Public Schools',
-    '6045e4db07ead7744b12585b':'HidalgoIndependent School district',
-    '5f2609807a1c0000950bb476':'Hillsborough County',
-    '6045e4db07ead7744b12585c':'Hopedale Public Schools',
-    '6045e4cc07ead7744b125842':'Houston Independent School District',
-    '60b872ce826cab06ebdf044e':'Kalamazoo Public Schools',
-    '6045e4dc07ead7744b12585d':'Kearsarge Regional School District',
-    '6045e4d307ead7744b12584d':'KIPP Public Schools',
-    '5f2609807a1c0000950bb455':'Krum Independent School District',
-    '5f2609807a1c0000950bb47e':'La Joya School District',
-    '6045e4cf07ead7744b125846':'Lamar Consolidated Independent School District',
-    '5f2609807a1c0000950bb45a':'LAUSD',
-    '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-    '6045e4dc07ead7744b12585e':'Littleton Public Schools',
-    '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-    '6023a7499e8e623753fc305f':'Manatee County School District',
-    '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-    '6077e1b5eaa8bae0e2e04a64':'Medfield School District',
-    '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-    '5f2609807a1c0000950bb465':'Middleton-Cross Plains Area School District',
-    '6045e4d407ead7744b12584f':'Mill Valley School District',
-    '6045e4d307ead7744b12584e':'Millard School District',
-    '610d0837931db8cfdf500fef':'Mission Consolidated Independent School District',
-    '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-    '6045e4cf07ead7744b125847':'Muscatine Community School District',
-    '5fbcdf0ba84e48a64412a798':'Needham School District',
-    '5f2609807a1c0000950bb459':'North Special School District',
-    '6045e4c907ead7744b12583c':'Northside Independent School District',
-    '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-    '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-    '5f6994386451a9089d7d4009':'Ogden school district',
-    '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-    '6017ab3043ca9c39151838d4':'Oswego School District',
-    '6045e4dd07ead7744b12585f':'Palm Beach County School District',
-    '60913aaea5fd4b56a4bafa70':'Palm Springs Unified',
-    '5f2609807a1c0000950bb479':'Panorama Education',
-    '5f2609807a1c0000950bb46f':'Paradise Schools',
-    '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-    '6045e4de07ead7744b125860':'Paterson School District',
-    '5f2609807a1c0000950bb466':'Pinellas County Schools',
-    '5f2609807a1c0000950bb471':'Racine Unified Schools',
-    '6045e4d507ead7744b125850':'Rich School District',
-    '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-    '5f2609807a1c0000950bb478':'San Diego Unified School District',
-    '6045e4d507ead7744b125851':'San Francisco Unified School District',
-    '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-    '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-    '6045e4df07ead7744b125862':'San Marcos Unified School District',
-    '6045e4df07ead7744b125863':'San Marino Unified School District',
-    '5f2609807a1c0000950bb477':'Sarasota County',
-    '602e60e567d3e6c0a4eb4d99':'School District of Palm Beach County',
-    '6045e4d807ead7744b125856':'School District of the Chathams',
-    '6045e4de07ead7744b125861':'Sevier School District',
-    '5f2609807a1c0000950bb473':'Skillman Foundation',
-    '123':'Skillman',
-    '6045e4e007ead7744b125864':'South Summit School District',
-    '60eea965ae7de54f57abf234':'Southfield Public Schools',
-    '5f2609807a1c0000950bb46a':'Springfield Public School',
-    '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-    '6045e4e007ead7744b125865':'Sudbury Public Schools',
-    '6045e4e107ead7744b125866':'Tooele County School District',
-    '60a7b03831afdba383052726':'United Way Of Santa Barbara',
-    '6045e4d607ead7744b125852':'Upland Unified School District',
-    '5f2609807a1c0000950bb468':'Utah Board of Education',
-    '456':'UWBA',
-    '6023a7949e8e623753fc3061':'Wasatch County School District',
-    '6045e4e207ead7744b125867':'Washoe County School District',
-    '5f698b826451a9089d7d4008':'Wayne Metro',
-    '6045e4d607ead7744b125853':'West Contra Costa Unified School District',
-    '5f2609807a1c0000950bb45b':'Westfield Public School District',
-    '6045e4e207ead7744b125868':'Westford Public Schools',
-    '6045e4d207ead7744b12584c':'White River School District',
-    '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-    '5f2609807a1c0000950bb45d':'Youngstown'}
-    district=disdic[districtid]
+    if districtid in disdic1:
+        district=disdic1[districtid]
+    else:
+        district=disdic2[ObjectId(districtid)]
 #     collection = db.school_master.aggregate([
 #     {"$match":
 #         {"$and":[
@@ -70830,76 +69819,10 @@ def old_escores():
 
 @app.route('/escoreinsites/<disid>')
 def escore_insites(disid):
-    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-        '5f2609807a1c0000950bb475':'Agawam School district',
-        '5f2609807a1c0000950bb481':'Alameda Unified School District',
-        '5f2609807a1c0000950bb47a':'Alpine School District',
-        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-        '5f2609807a1c0000950bb463':'Austin Independent School District',
-        '5f59e4836451a9089d7d4007':'Belleville School District',
-        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-        '5f2609807a1c0000950bb46c':'Chico Unified School District',
-        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-        '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-        '5f2609807a1c0000950bb480':'Dell Texas',
-        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-        '5f895191609e08b76029f641':'Early learning Sarasota',
-        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-        '5f2609807a1c0000950bb461':'Englewood Public School District',
-        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-        '5f2609807a1c0000950bb47d':'Flint Public Schools',
-        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-        '5f2609807a1c0000950bb450':'Goleta District',
-        '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
-        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-        '5f2609807a1c0000950bb476':'Hillsborough County',
-        '5f2609807a1c0000950bb455':'Krum Independent School District',
-        '5f2609807a1c0000950bb47e':'La Joya School District',
-        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-        '5f2609807a1c0000950bb45a':'LAUSD',
-        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-        '5fbcdf0ba84e48a64412a798':'Needham School District',
-        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-        '5f6994386451a9089d7d4009':'Ogden school district',
-        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-        '5f2609807a1c0000950bb466':'Pinellas County Schools',
-        '5f2609807a1c0000950bb471':'Racine Unified Schools',
-        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-        '5f2609807a1c0000950bb478':'San Diego Unified School District',
-        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-        '5f2609807a1c0000950bb477':'Sarasota County',
-        '5f2609807a1c0000950bb473':'Skillman Foundation',
-        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-        '5f2609807a1c0000950bb468':'Utah Board of Education',
-        '5f698b826451a9089d7d4008':'Wayne Metro',
-        '5f2609807a1c0000950bb45b':'Westfield Public School District',
-        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-        '5f2609807a1c0000950bb45d':'Youngstown',
-        '5f2609807a1c0000950bb464':'Equity Education',
-        '5f2609807a1c0000950bb469':'LSF -  Head Start',
-        '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-        '5f2609807a1c0000950bb46f':'Paradise Schools',
-        '5f2609807a1c0000950bb479':'Panorama Education',
-        '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-        '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-        '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-        '5fe2e25d4d0ca68d7baf889d':'BGCA',
-        '5fe318b14d0ca68d7baf889e':'BLUE',
-        '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-        '6017ab3043ca9c39151838d4':'Oswego School District',
-        '60239a84e57dc27613699d57':'Austin Independent School District',
-        '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-        '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-        '6023a7269e8e623753fc305e':'Fulton County School System',
-        '6023a7499e8e623753fc305f':'Manatee County School District',
-        '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-        '6023a7949e8e623753fc3061':'Wasatch County School District'}
-    district=disdic[disid]
+    if disid in disdic1:
+        district=disdic1[disid]
+    else:
+        district=disdic2[ObjectId(disid)]
     googleSheetId = '1gs1CqiYPAMhHWbelBU7o3GRAk7o3QeqYY-OJz_MUYZw'
     worksheetName = 'newescore'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
@@ -70918,76 +69841,10 @@ def escore_insites(disid):
 
 @app.route('/escorepolar/<disid>')
 def escore_polar(disid):
-    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-        '5f2609807a1c0000950bb475':'Agawam School district',
-        '5f2609807a1c0000950bb481':'Alameda Unified School District',
-        '5f2609807a1c0000950bb47a':'Alpine School District',
-        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-        '5f2609807a1c0000950bb463':'Austin Independent School District',
-        '5f59e4836451a9089d7d4007':'Belleville School District',
-        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-        '5f2609807a1c0000950bb46c':'Chico Unified School District',
-        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-        '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-        '5f2609807a1c0000950bb480':'Dell Texas',
-        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-        '5f895191609e08b76029f641':'Early learning Sarasota',
-        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-        '5f2609807a1c0000950bb461':'Englewood Public School District',
-        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-        '5f2609807a1c0000950bb47d':'Flint Public Schools',
-        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-        '5f2609807a1c0000950bb450':'Goleta District',
-        '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
-        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-        '5f2609807a1c0000950bb476':'Hillsborough County',
-        '5f2609807a1c0000950bb455':'Krum Independent School District',
-        '5f2609807a1c0000950bb47e':'La Joya School District',
-        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-        '5f2609807a1c0000950bb45a':'LAUSD',
-        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-        '5fbcdf0ba84e48a64412a798':'Needham School District',
-        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-        '5f6994386451a9089d7d4009':'Ogden school district',
-        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-        '5f2609807a1c0000950bb466':'Pinellas County Schools',
-        '5f2609807a1c0000950bb471':'Racine Unified Schools',
-        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-        '5f2609807a1c0000950bb478':'San Diego Unified School District',
-        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-        '5f2609807a1c0000950bb477':'Sarasota County',
-        '5f2609807a1c0000950bb473':'Skillman Foundation',
-        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-        '5f2609807a1c0000950bb468':'Utah Board of Education',
-        '5f698b826451a9089d7d4008':'Wayne Metro',
-        '5f2609807a1c0000950bb45b':'Westfield Public School District',
-        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-        '5f2609807a1c0000950bb45d':'Youngstown',
-        '5f2609807a1c0000950bb464':'Equity Education',
-        '5f2609807a1c0000950bb469':'LSF -  Head Start',
-        '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-        '5f2609807a1c0000950bb46f':'Paradise Schools',
-        '5f2609807a1c0000950bb479':'Panorama Education',
-        '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-        '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-        '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-        '5fe2e25d4d0ca68d7baf889d':'BGCA',
-        '5fe318b14d0ca68d7baf889e':'BLUE',
-        '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-        '6017ab3043ca9c39151838d4':'Oswego School District',
-        '60239a84e57dc27613699d57':'Austin Independent School District',
-        '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-        '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-        '6023a7269e8e623753fc305e':'Fulton County School System',
-        '6023a7499e8e623753fc305f':'Manatee County School District',
-        '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-        '6023a7949e8e623753fc3061':'Wasatch County School District'}
-    district=disdic[disid]
+    if disid in disdic1:
+        district=disdic1[disid]
+    else:
+        district=disdic2[ObjectId(disid)]
     googleSheetId = '1gs1CqiYPAMhHWbelBU7o3GRAk7o3QeqYY-OJz_MUYZw'
     worksheetName = 'newescore'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
@@ -71001,76 +69858,10 @@ def escore_polar(disid):
 
 @app.route('/escorestack/<disid>')
 def escore_stack(disid):
-    disdic={'60a7b03831afdba383052726' : "United Way Of Santa Barbara",
-        '5f2609807a1c0000950bb465':'Middleton - Cross Plains Area School District',
-        '5f2609807a1c0000950bb475':'Agawam School district',
-        '5f2609807a1c0000950bb481':'Alameda Unified School District',
-        '5f2609807a1c0000950bb47a':'Alpine School District',
-        '5f2609807a1c0000950bb47b':'Ann Arbor Public Schools',
-        '5f2609807a1c0000950bb463':'Austin Independent School District',
-        '5f59e4836451a9089d7d4007':'Belleville School District',
-        '5f2609807a1c0000950bb46d':'Broward County Public Schools',
-        '5f2609807a1c0000950bb46c':'Chico Unified School District',
-        '5f2609807a1c0000950bb460':'Clarksville-Montgomery County School System',
-        '5f2609807a1c0000950bb47f':'Community Consolidated School District 89',
-        '5f2609807a1c0000950bb45c':'Comox Valley School District(sd71)',
-        '5f2609807a1c0000950bb480':'Dell Texas',
-        '5f7413ef9387fd71ce6387cb':'Douglas County School District',
-        '5f895191609e08b76029f641':'Early learning Sarasota',
-        '5f2609807a1c0000950bb462':'Englewood Cliffs Public Schools',
-        '5f2609807a1c0000950bb461':'Englewood Public School District',
-        '5f2609807a1c0000950bb45e':'Fairfield-Suisun Unified School District',
-        '5f2609807a1c0000950bb47d':'Flint Public Schools',
-        '5f2609807a1c0000950bb46b':'FundaciÃ³n La Puerta',
-        '5f2609807a1c0000950bb450':'Goleta District',
-        '5f2609807a1c0000950bb474':'Greenburgh-North Castle (GNC) Union Free School District',
-        '5f2609807a1c0000950bb45f':'Griffin-Spalding County School System',
-        '5f2609807a1c0000950bb476':'Hillsborough County',
-        '5f2609807a1c0000950bb455':'Krum Independent School District',
-        '5f2609807a1c0000950bb47e':'La Joya School District',
-        '5f2609807a1c0000950bb467':'Lincolnshire Schools',
-        '5f2609807a1c0000950bb45a':'LAUSD',
-        '5f2609807a1c0000950bb482':'Massachusetts Institute of Technology',
-        '5fb4efce4139b9d4c5a86a69':'Mt. Lebanon School District',
-        '5fbcdf0ba84e48a64412a798':'Needham School District',
-        '5f7c01fa9387fd71ce6387cc':'NYC - Queens South',
-        '5f6994386451a9089d7d4009':'Ogden school district',
-        '5f2609807a1c0000950bb472':'Oroville City Elementary School District',
-        '5fd704da04a848e368de5dc6':'Oakland Unified School District',
-        '5f8fcd33609e08b76029f644':'Paradise Unified School District',
-        '5f2609807a1c0000950bb466':'Pinellas County Schools',
-        '5f2609807a1c0000950bb471':'Racine Unified Schools',
-        '5f6d7cbce6452eb06384db20':'Salt Lake City School District',
-        '5f2609807a1c0000950bb478':'San Diego Unified School District',
-        '5f2609807a1c0000950bb470':'San Leandro Unified School District',
-        '5f2609807a1c0000950bb477':'Sarasota County',
-        '5f2609807a1c0000950bb473':'Skillman Foundation',
-        '5f2609807a1c0000950bb46a':'Springfield Public Schools',
-        '5f2609807a1c0000950bb468':'Utah Board of Education',
-        '5f698b826451a9089d7d4008':'Wayne Metro',
-        '5f2609807a1c0000950bb45b':'Westfield Public School District',
-        '5f2609807a1c0000950bb368':'Wichita Falls Independent School District',
-        '5f2609807a1c0000950bb45d':'Youngstown',
-        '5f2609807a1c0000950bb464':'Equity Education',
-        '5f2609807a1c0000950bb469':'LSF -  Head Start',
-        '5f2609807a1c0000950bb46e':'District 25 New York Schools',
-        '5f2609807a1c0000950bb46f':'Paradise Schools',
-        '5f2609807a1c0000950bb479':'Panorama Education',
-        '5f2609807a1c0000950bb47c':'Hawaii Public Schools',
-        '5f9aa5e526edbed399d56c92':'Hamilton-Wenham Regional School District',
-        '5fe2e1ee4d0ca68d7baf889c':'LSF-Head Start',
-        '5fe2e25d4d0ca68d7baf889d':'BGCA',
-        '5fe318b14d0ca68d7baf889e':'BLUE',
-        '5ffd8176469a86e28635f512':'Chula Vista Elementary School District',
-        '6017ab3043ca9c39151838d4':'Oswego School District',
-        '60239a84e57dc27613699d57':'Austin Independent School District',
-        '6023a6d79e8e623753fc305c':'Boulder Valley School District',
-        '6023a7019e8e623753fc305d':'Miami-Dade County Public Schools',
-        '6023a7269e8e623753fc305e':'Fulton County School System',
-        '6023a7499e8e623753fc305f':'Manatee County School District',
-        '6023a76f9e8e623753fc3060':'San Jose Unified School District',
-        '6023a7949e8e623753fc3061':'Wasatch County School District'}
-    district=disdic[disid]
+    if disid in disdic1:
+        district=disdic1[disid]
+    else:
+        district=disdic2[ObjectId(disid)]
     googleSheetId = '1gs1CqiYPAMhHWbelBU7o3GRAk7o3QeqYY-OJz_MUYZw'
     worksheetName = 'newescore'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
@@ -76517,7 +75308,7 @@ def mini_district_table_parent(LOCAl_DISTRICT,startdate,enddate):
     collection=db.user_master
     collection1=db.audio_track_master
     collection3=db.subscription_master
-#     district=disdic[districtid]
+
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -76751,7 +75542,7 @@ def mini_district_user_table_teacher(LOCAl_DISTRICT,startdate,enddate):
     collection=db.user_master
     collection1=db.audio_track_master
     collection3=db.subscription_master
-#     district=disdic[districtid]
+
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -78919,7 +77710,7 @@ def mini_district_heat_district_Overall_prac(LOCAl_DISTRICT,startdate,enddate):
 #     db=client.compass
 #     collection= db.audio_track_master
 
-#     district=disdic[districtid]
+
 #     school=idd
 # #     school='5f2bca28ba0be61b0c1cd54f'
 #     myDatetime1 = dateutil.parser.parse(startdate)
@@ -79155,7 +77946,7 @@ def active_teachers_schoolsearch(idd):
     db=client.compass
     collection= db.audio_track_master
 
-#     district=disdic[districtid]
+
     school=idd
 #     school='5f2bca28ba0be61b0c1cd54f'
 #     myDatetime1 = dateutil.parser.parse(startdate)
@@ -79398,7 +78189,7 @@ def active_teachers_school_search(idd,chart_type):
     db=client.compass
     collection= db.audio_track_master
     school=idd
-    #     district=disdic[districtid]    
+        
     #     myDatetime1 = dateutil.parser.parse(startdate)
     #     myDatetime2 = dateutil.parser.parse(enddate)
 
