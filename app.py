@@ -37454,9 +37454,7 @@ def mitpracticeprog2():
 
 @app.route('/parpracticeprogg')
 def parpracticeprogram():
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
     db=client.compass
     collection = db.audio_track_master
     query=[
@@ -37517,7 +37515,7 @@ def parpracticeprogram():
       'sound':Soundcompdf.Count.tolist(),'soundt':Soundcompdf.Count.sum(),
        'transition':Bonuscompdf.Count.tolist(),'trant':Bonuscompdf.Count.sum()}
 
-    return json.dumps(temp)
+    return json.dumps(temp, default=str)
 
 #>>>>>>>>>>>>------------ PRACTICE BIFURCATION API-------------------
 @app.route('/parpracticeprogg_new/<charttype>')
@@ -37669,9 +37667,7 @@ def parpractice__program___(charttype):
 
 @app.route('/parpracprog')
 def parpracticeprogram_unique():
-    username = urllib.parse.quote_plus('admin')
-    password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
-    client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
     db=client.compass
     collection = db.audio_track_master
     query=[
@@ -37731,7 +37727,7 @@ def parpracticeprogram_unique():
     temp={'daily':dailycompdf.Count.tolist(),'dtotal':dailycompdf.Count.sum(),'prog':age_group_df.AGE_GROUP.tolist(),
       'sound':Soundcompdf.Count.tolist(),'soundt':Soundcompdf.Count.sum(),
        'transition':Bonuscompdf.Count.tolist(),'trant':Bonuscompdf.Count.sum()}
-    return json.dumps(temp)
+    return json.dumps(temp, default=str)
 
 #>>>>>>>>>>>>>>----------- PRACTICE BIFURCATION API--------------->>>>>>>>>>>>
 @app.route('/parpracprog/<charttype>')
