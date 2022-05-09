@@ -309,29 +309,80 @@ var settings = {
     crossDomain: true,
     url: "/googleanalyticsinsights",
     method: "GET",
-  }
-  $.ajax(settings).done(function(response) {
+}
+$.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
     console.log(dataa, "Menka");
     for(i = 0; i < dataa.length; i++){
         var insights = dataa[i].Insights;
-        // var x_Axis = dataa[i].x_axis;
-        // var y_Axis = dataa[i].y_axis;
-        // console.log(insights, x_Axis, y_Axis);
-        $('#accordionExample').append('<div class="borderBottom present"><a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseOneDiv'+i+'" aria-expanded="true" aria-controls="collapseOne"> <h4 class="insight-headings">'+insights+'</h4></a><div id="collapseOneDiv'+i+'" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample"></div></div>');
-        $("#collapseOneDiv"+i).append('<div id="ChartContainer'+i+'"></div>'); 
-        // $("#collapseOneDiv2").append('<div id="ChartContainerDiv2"></div>'); 
-        // console.log('Show insight data');
-
-        // for(j = 0; j < x_Axis.length; j++){
-        //     // console.log(x_Axis[j]);
-        //     // $("#collapseOneDiv"+i).append('<p class="insight-text">'+x_Axis[j]+'</p>');  
-        // }
-
-        // for(k = 0; k < y_Axis.length; k++){
-            // console.log(y_Axis[k]);
-            // $("#collapseOneDiv"+i).append('<div id="ChartContainer"></div>'); 
-            // $("#collapseOneDiv"+i).append('<p class="insight-text">'+y_Axis[k]+'</p>');  
+        if(i == 2){
+            // console.log(i, "Pie chart");
+            $('#accordionExample').append('<div class="borderBottom present"><a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseOneDiv'+i+'" aria-expanded="true" aria-controls="collapseOne"> <h4 class="insight-headings">'+insights+'</h4></a><div id="collapseOneDiv'+i+'" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample"></div></div>');
+            $("#collapseOneDiv"+i).append('<div id="ChartContainer'+i+'"></div>');
+            // console.log("id provided collapseOneDiv2");
+            piedata=[]
+            console.log({
+                data: dataa[i].y_axis,
+                name: dataa[i].x_axis,
+                colorByPoint: true,
+            })
+            
+            Highcharts.chart('ChartContainer'+i, {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie',
+                    credits: {
+                        enabled: false,
+                    },
+                },
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false,
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false,
+                            format: '{point.y}'
+                        },
+                        colors: [
+                            "#02A45A", "#ff9933", '#8AE02B'
+                        ]
+                    }
+                },
+                series: [{"name":"",
+                colorByPoint: true,
+                data:[{
+                    y: dataa[i].y_axis[0],
+                    name: dataa[i].x_axis[0],
+                },
+                {
+                    y: dataa[i].y_axis[1],
+                    name: dataa[i].x_axis[1],
+                }]
+                }
+                ]
+            });
+         
+        }
+        else{
+            $('#accordionExample').append('<div class="borderBottom present"><a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseOneDiv'+i+'" aria-expanded="true" aria-controls="collapseOne"> <h4 class="insight-headings">'+insights+'</h4></a><div id="collapseOneDiv'+i+'" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample"></div></div>');
+            $("#collapseOneDiv"+i).append('<div id="ChartContainer'+i+'"></div>'); 
+            // console.log('Show insight data');
 
             Highcharts.chart('ChartContainer'+i, {
                 chart: {
@@ -404,69 +455,15 @@ var settings = {
                    
                 ]
             });
-
-
-            // Highcharts.chart('ChartContainerDiv2', {
-            //     chart: {
-            //         plotBackgroundColor: null,
-            //         plotBorderWidth: null,
-            //         plotShadow: false,
-            //         type: 'pie',
-            //         credits: {
-            //             enabled: false,
-            //         },
-            //     },
-            //     // title: {
-            //     //     text: 'Sentiment Percentage CSY'
-            //     // },
-            //     credits: {
-            //         enabled: false,
-            //     },
-            //     tooltip: {
-            //         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-            //     },
-            //     accessibility: {
-            //         point: {
-            //             valueSuffix: '%'
-            //         }
-            //     },
-            //     plotOptions: {
-            //         pie: {
-            //             allowPointSelect: true,
-            //             cursor: 'pointer',
-            //             dataLabels: {
-            //                 enabled: false,
-            //                 format: '<b>{point.name}</b>: {point.y}'
-            //             },
-            //             colors: [
-            //                 "#02A45A", "#ff9933", '#8AE02B'
-            //             ]
-            //         }
-            //     },
-            //     series: [{
-            //         data: dataa[i].y_axis,
-            //         // name: 'Sentiment CSY',
-            //         colorByPoint: true,
-            //         // data: [{
-            //         //         name: 'Positive',
-            //         //         y: dataa.donut.pos,
-            //         //         sliced: true,
-            //         //         selected: true
-            //         //     }, {
-            //         //         name: 'Negative',
-            //         //         y: dataa.donut.neg,
-            //         //     },
-            //         //     {
-            //         //         name: 'Neutral',
-            //         //         y: dataa.donut.neu,
-            //         //     },
-            //         // ]
-            //     }]
-            // });
-        // }
+        }
     }
-  });
+});
 
 
 
 
+
+
+// pie chart
+
+   
