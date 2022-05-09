@@ -45931,18 +45931,18 @@ def cards_data():
 
 @app.route('/modetype/<startdate>/<enddate>')
 # @app.route('/modetype/<startdate>/<enddate>')
-def Payment_Mode(startdate,enddate):
+def Payment_Mode(startdate,enddate):    
     date1=startdate
     date2=enddate
     today = date.today()
     d1 = today.strftime("%Y-%m-%d")
-    if(len(date1) == 0): 
+    if(len(date1) == 0):
         startdate1='2020-07-01'
-    else : 
+    else :
         startdate1=date1
     if(len(date2) == 0):
         enddate1=d1
-    else : 
+    else :
         enddate1=date2
     googleSheetId = '1ydZC5Q5cNBlPb2rI_lzcdL0lh7r7rvuSzDYxCDNseyw'
     worksheetName = 'Payment'
@@ -45953,7 +45953,8 @@ def Payment_Mode(startdate,enddate):
     db = client.compass
     datestr7 = "2021-04-19T20:12:46.000Z"
     myDatetim0 = dateutil.parser.parse(datestr7)
-    collection1 = db.campaign_data.aggregate([ {"$match":{"$and":[{"EMAIL":{"$not":{ "$regex":"1gen",'$options':'i'}}},
+    collection1 = db.campaign_data.aggregate([ {"$match":{"$and":[
+        #{"EMAIL":{"$not":{ "$regex":"1gen",'$options':'i'}}},
             {"EMAIL":{"$not":{ "$regex":"TEST",'$options':'i'}}},
             {"FIRST_NAME":{"$not":{ "$regex":"Rajbir Kaur",'$options':'i'}}},
                 {"FIRST_NAME":{"$not":{ "$regex":"1gen",'$options':'i'}}},
@@ -45961,10 +45962,9 @@ def Payment_Mode(startdate,enddate):
                 {"IS_PAYMENT_SUCCESS" :{"$eq":"Y"}},
                 {"CREATED_DATE":{"$gt":myDatetim0}},
                 { "CAMPAIGN_ID._id":{"$ne":ObjectId("5f5933f122a9de32555fceb4")}}
-            
             ]
         }}
-    ,{"$project":{"_id":1,"FIRST_NAME":1,"LAST_NAME":1,"EMAIL_ID":"$EMAIL","PHONE_NO":1,"IP_ADDRESS":1,
+    ,{"$project":{"_id":1,"FIRST_NAME":1,"LAST_NAME":1,"CAMPAIGN":"$CAMPAIGN_ID.H_TEXT","EMAIL_ID":"$EMAIL","PHONE_NO":1,"IP_ADDRESS":1,
         "Payment_Amount":"$AMOUNT","Last_Payment_Date": { "$dateToString": { "format": "%Y-%m-%d", "date": "$CREATED_DATE" } },"Total_Amount":"$AMOUNT"}}
     ] )
     dfd= DataFrame(list(collection1))
@@ -45975,12 +45975,10 @@ def Payment_Mode(startdate,enddate):
     # IP_ADDRESS=dfd["IP_ADDRESS"].tolist()
     # IP_ADDRESS="100.15.128.147"
     # STATE1=[]
-
     # for i in IP_ADDRESS:
     #     url = 'http://ipinfo.io/'+i+'/json'
     #     response = urlopen(url)
     #     data = json.load(response)
-
     #     IP=data['ip']
     #     org=data['org']
     #     city = data['city']
@@ -45988,7 +45986,6 @@ def Payment_Mode(startdate,enddate):
     #     region=data['region']
     #     # print ('IP : {4} \nState : {1} \nCountry : {2} \nCity : {3} \nOrg : {0}'.format(org,region,country,city,IP))
     #     STATE1.append(region)
-
     # dfd["STATE"]=STATE1
     # us_state_shot = {
     #     'Alabama': 'AL',
@@ -46048,11 +46045,10 @@ def Payment_Mode(startdate,enddate):
     #     'Wisconsin': 'WI',
     #     'Wyoming': 'WY'
     # }
-    # dfd["STATE_SHOT"] = dfd["STATE"].map(us_state_shot) 
-    dfd['USER_NAME'] = dfd['FIRST_NAME'].str.cat(dfd['LAST_NAME'], sep =" ") 
+    # dfd["STATE_SHOT"] = dfd["STATE"].map(us_state_shot)
+    dfd['USER_NAME'] = dfd['FIRST_NAME'].str.cat(dfd['LAST_NAME'], sep =" ")
     dfd['USER_NAME'] = dfd['USER_NAME'].str.upper()
-    dfd1=dfd[["USER_NAME","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","EMAIL_ID","MODE_OF_PAYMENT","Total_Amount"]]
-    
+    dfd1=dfd[["USER_NAME","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","EMAIL_ID","MODE_OF_PAYMENT","Total_Amount","CAMPAIGN"]]
     # dfd1=dfd[["USER_NAME","DEVICE_USED","TYPE_OF_PAYMENT","Last_Payment_Date","Payment_Amount","EMAIL_ID","MODE_OF_PAYMENT","STATE","STATE_SHOT","Total_Amount"]]
     dateStr = "2020-07-01T00:00:00.000Z"
     myDatetime = dateutil.parser.parse(dateStr)
@@ -46061,7 +46057,7 @@ def Payment_Mode(startdate,enddate):
         {"USER_ID.USER_NAME":{"$not":{ "$regex":"test",'$options':'i'}}},
             {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"1gen",'$options':'i'}}},
             {"USER_ID.EMAIL_ID":{"$not":{ "$regex":"test",'$options':'i'}}},
-                     {'USER_ID':{'$exists':1}}  ,  
+                     {'USER_ID':{'$exists':1}}  ,
             {"LAST_PAYMENT_DATE":{"$gte":myDatetime}},
             {"IS_PAYMENT_SUCCESS" : "Y"},
             {"LAST_PAYMENT_AMOUNT":{"$ne":0}}]
@@ -46072,15 +46068,15 @@ def Payment_Mode(startdate,enddate):
     ,{"$unwind":"$Last_Payment_Date"}
     ])
     payment_df1= DataFrame(list(mydoc))
-#     payment_df1= payment_df1.fillna('NO INFO')
+    #     payment_df1= payment_df1.fillna('NO INFO')
     payment_df1['Payment_Amount']= payment_df1['Payment_Amount'].fillna(0)
     payment_df1['DEVICE_USED']= payment_df1['DEVICE_USED'].fillna('NO INFO')
     payment_df1['MODE_OF_PAYMENT']= payment_df1['MODE_OF_PAYMENT'].fillna('NO INFO')
     payment_df1['SCHOOL']= payment_df1['SCHOOL'].fillna('NO INFO')
     payment_df1['USER_NAME']= payment_df1['USER_NAME'].fillna('NO INFO')
     payment_df1['EMAIL_ID']= payment_df1['EMAIL_ID'].fillna('NO INFO')
-#     payment_df1= payment_df1.fillna('NO INFO')
-#     payment_df1= payment_df1.fillna('')
+    #     payment_df1= payment_df1.fillna('NO INFO')
+    #     payment_df1= payment_df1.fillna('')
     payment_df1.replace(to_replace="NULL",value="NO INFO",inplace=True)
     SCHOOL_LIST=['LYDIKSEN ELEMENTARY SCHOOOL',
         'MONTGOMERY UPPER MIDDLE SCHOOL',
@@ -46124,6 +46120,7 @@ def Payment_Mode(startdate,enddate):
         'WEST ZONE ELC']
     payment_df1 = payment_df1[~payment_df1['SCHOOL'].isin(SCHOOL_LIST)]
     payment_df1['TYPE_OF_PAYMENT'] = 'SCHOOL'
+    payment_df1['CAMPAIGN'] = 'NO_INFO'
     payment_df1= payment_df1[payment_df1['MODE_OF_PAYMENT']!='payLater']
     payment_df1= payment_df1[payment_df1['DEVICE_USED']!='OTHERS']
     payment_df1.loc[(payment_df1['DEVICE_USED'] == "ios"), 'TYPE_OF_PAYMENT'] = 'MOBILE'
@@ -46132,9 +46129,8 @@ def Payment_Mode(startdate,enddate):
     payment_df3=payment_df1.drop(payment_df1[(payment_df1['Payment_Amount'] < 100) & (payment_df1['DEVICE_USED'] == "WEBAPP")].index)
     payment_df1=payment_df3.append(dfd1)
     payment_df=payment_df1.append(payment_df2)
-
     # payment_df.Payment_Amount = payment_df.Payment_Amount.round()
-    payment_df['DEVICE_USED'] = payment_df['DEVICE_USED'].str.upper() 
+    payment_df['DEVICE_USED'] = payment_df['DEVICE_USED'].str.upper()
     payment_df['MODE_OF_PAYMENT'] = payment_df['MODE_OF_PAYMENT'].str.upper()
     payment_df['DEVICE_USED'] = payment_df['DEVICE_USED'].str.upper()
     payment_df['MODE_OF_PAYMENT'] = payment_df['MODE_OF_PAYMENT'].str.replace("POMOCODE", "PROMOCODE")
@@ -46144,7 +46140,7 @@ def Payment_Mode(startdate,enddate):
     payment_df['Last_Payment_Date'] =  pd.to_datetime(payment_df['Last_Payment_Date'])
     newdf1=payment_df[(payment_df.Last_Payment_Date >= startdate1) & (payment_df.Last_Payment_Date <= enddate1)]
     dm=pd.DataFrame({"TYPE_OF_PAYMENT": ["FOUNDATION", "DISTRICT", "SCHOOL", "DONATION", "MOBILE"]})
-    df1web=newdf1[['USER_NAME',"EMAIL_ID",'DEVICE_USED','MODE_OF_PAYMENT','TYPE_OF_PAYMENT','Last_Payment_Date','Payment_Amount']]
+    df1web=newdf1[['USER_NAME',"EMAIL_ID",'DEVICE_USED','MODE_OF_PAYMENT','TYPE_OF_PAYMENT','Last_Payment_Date','Payment_Amount','CAMPAIGN']]
     df1web['Last_Payment_Date'] = pd.to_datetime(df1web['Last_Payment_Date'])
     df1web=pd.merge(dm,df1web, on='TYPE_OF_PAYMENT',how='left').fillna(0)
     df1web=df1web.fillna(0)
@@ -46158,12 +46154,20 @@ def Payment_Mode(startdate,enddate):
     donation=df4web.get_group('DONATION')
     donation.to_csv("donation.csv",index=False)
     school=df4web.get_group('SCHOOL')
+    school=school[['TYPE_OF_PAYMENT', 'USER_NAME', 'EMAIL_ID', 'DEVICE_USED',
+                   'MODE_OF_PAYMENT', 'Last_Payment_Date', 'Payment_Amount']]
     school.to_csv("school.csv",index=False)
     foundation=df4web.get_group('FOUNDATION')
+    foundation=foundation[['TYPE_OF_PAYMENT', 'USER_NAME', 'EMAIL_ID', 'DEVICE_USED',
+                           'MODE_OF_PAYMENT', 'Last_Payment_Date', 'Payment_Amount']]
     foundation.to_csv("foundation.csv",index=False)
     district=df4web.get_group('DISTRICT')
+    district=district[['TYPE_OF_PAYMENT', 'USER_NAME', 'EMAIL_ID', 'DEVICE_USED',
+                       'MODE_OF_PAYMENT', 'Last_Payment_Date', 'Payment_Amount']]
     district.to_csv("district.csv",index=False)
     mobile=df4web.get_group('MOBILE')
+    mobile=mobile[['TYPE_OF_PAYMENT', 'USER_NAME', 'EMAIL_ID', 'DEVICE_USED',
+                   'MODE_OF_PAYMENT', 'Last_Payment_Date', 'Payment_Amount']]
     mobile.to_csv("mobile.csv",index=False)
     df3web.sort_values(by=['Payment_Amount'], inplace=True, ascending=False)
     df2web.sort_values(by=['Payment_Amount'], inplace=True, ascending=False)
