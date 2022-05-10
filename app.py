@@ -15670,9 +15670,9 @@ def district_count_cards(districtid,startdate,enddate):
 
     clever_practice=[0]
     try:
-        schoology_practice=df6_clever_practice['practice_sessions_t']
+        clever_practice=df6_clever_practice['practice_sessions_t']
     except:
-        schoology_practice=[0]   
+        clever_practice=[0]   
 
     canvas_practice=[0]
     try:
