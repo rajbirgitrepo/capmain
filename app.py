@@ -48519,7 +48519,8 @@ def Donation_cards():
     googleSheetId = '1OnsKEyX4guTg--LWsfFM2neF1L6auLH3DWGrgEt8wXk'
     worksheetName = 'Payment'
     URL = 'https://docs.google.com/spreadsheets/d/{0}/gviz/tq?tqx=out:csv&sheet={1}'.format(googleSheetId,worksheetName)
-    dff=pd.read_csv(URL).fillna("NO INFO.")
+    dff=pd.read_csv(URL)
+    # .fillna("NO INFO.")
     df=dff.append(dfd1)
     df1=df[["Last_Payment_Date","Payment_Amount","Total_Amount"]]
     liftimedonation=df1["Total_Amount"].sum().tolist()
