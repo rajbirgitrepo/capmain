@@ -4,15 +4,9 @@
 # In[ ]:
 #checking
 
-import importlib
-import dependency
-import executive
+
 from dependency import *
-
-importlib.reload(dependency)
-
-importlib.reload(executive)
-
+from executive import *
 
 app = Flask(__name__)
 CORS(app)
@@ -54,6 +48,7 @@ users.append(User(id=20,username='vgonzalez@innerexplorer.org',password='capxp20
 users.append(User(id=21,username='nina@innerexplorer.org',password='capxp2020',name='Nina',nameinitial='N'))
 users.append(User(id=22,username='ssugar@innerexplorer.org',password='capxp2020',name='Samantha',nameinitial='S'))
 
+app = Flask(__name__)
 app.secret_key = 'cap4g2020version10date8272020'
 
 @app.before_request
@@ -95,87 +90,66 @@ def homepage():
     
     return render_template('homepage.html')
 
-
-
-#changesdonebysadhna
-# Global district id code
-disdic1={
-'789':'Attendance works', 
-'5f2609807a1c0000950bb45a':'LAUSD',
-'123':'Skillman',
-'456':'UWBA',
-}
-
-df2 = DataFrame(list(db.district_master.aggregate([
-{'$project':{'_id':1,'DISTRICT_NAME':1 }}
-])))
-disdic2 = dict(df2.values)
-# if districtid in disdic1:
-#     district=disdic1[districtid]
-# else:   
-#     district=disdic2[ObjectId(districtid)]
-
-
 # <<<<<<<<<<<<<<<<<<<<<<<<<<<<EXECUTIVE 1st PAGE APIS using executive module-------------------->>>>>>>>>>>>>>>>>
-
 
 @app.route('/executivecount_productwise')
 def schoolcount_totalstudentscard():
-    returnval=executive.executive_count_productwise()
+    returnval=executive_count_productwise()
     return returnval
 
 
 @app.route('/_executive_dashbaord_')
 def totalusercount_card():
-    returnval=executive._excecutivecount_()
+    returnval=_excecutivecount_()
     return returnval
 
 
 @app.route('/practicetrendnew/<charttype>')
 def practice_trendnew__(charttype):
-    returnval=executive.practice_trendnew_(charttype)
+    returnval=practice_trendnew_(charttype)
     return returnval
 
 
 @app.route('/activetrendnew/<charttype>')
 def active_trend_new__(charttype):
-    returnval=executive.active_trend_new_(charttype)
+    returnval=active_trend_new_(charttype)
     return returnval
 
 @app.route('/practicehistorychartlatest/<charttype>')
 def practice___history___new___latest_(charttype):
-    returnval=executive.practice___history___new___latest(charttype)
+    returnval=practice___history___new___latest(charttype)
     return returnval
 
 @app.route('/averagetrend/')
 def average_trend_new__():
-    returnval=executive.average_trend_new_()
+    returnval=average_trend_new_()
     return returnval
 
 
 @app.route('/topdistrictplayback')
 def topdistrict_playback_():
-    returnval=executive.topdistrict_playback()
+    returnval=topdistrict_playback()
     return returnval
 
 
 @app.route('/feedbackrating_csy')
 def schoolrating_csy_():
-    returnval=executive.schoolrating_csy()
+    returnval=schoolrating_csy()
     return returnval
 
 
 @app.route('/sentimentdonut_csy')
 def sentiment_pie_():
-    returnval=executive.sentiment_pie()
+    returnval=sentiment_pie()
     return returnval
+
     
 
 @app.route('/questtimeseries')
 def questtimeseries():
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-    db_live=client_live.compass
-    QUEST_OBTAINED_USER=pd.DataFrame(list(db_live.user_master.aggregate([{"$match":{
+    db=client_live.compass
+    QUEST_OBTAINED_USER=pd.DataFrame(list(db.user_master.aggregate([{"$match":{
             '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -194,7 +168,7 @@ def questtimeseries():
                 }}
             ])))
     QUEST_OBTAINED_USER=QUEST_OBTAINED_USER[QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].notnull()].reset_index(drop=True)
-    quest_history=pd.DataFrame(list(db_live.user_quest_history.aggregate([{"$match":{
+    quest_history=pd.DataFrame(list(db.user_quest_history.aggregate([{"$match":{
             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -222,7 +196,7 @@ def questtimeseries():
     qh_no_entry=list(set(QUEST_OBTAINED_USER['USER_ID'])-set(quest_history['USER_ID']))
     quest_data=pd.concat([QUEST_OBTAINED_USER,quest_history],ignore_index=True)
     quest_data_final=quest_data.drop_duplicates(subset=['USER_ID','QUEST_START_DAY'],keep='first').reset_index(drop=True)
-    qh_um=pd.DataFrame(list(db_live.user_master.aggregate([{'$match':{'$and':[
+    qh_um=pd.DataFrame(list(db.user_master.aggregate([{'$match':{'$and':[
         {'_id':{'$in':list(quest_data_final['USER_ID'])}}
         ]}},{'$project':{'_id':0,
                         'USER_ID':'$_id',
@@ -1279,8 +1253,8 @@ def questusercounts():
 @app.route('/executive_count_productwise_lelo')
 def executive_count_productwise_d3():    
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-    db_live=client_live.compass
-    d3_users=pd.DataFrame(list(db_live.user_master.aggregate([
+    db=client_live.compass
+    d3_users=pd.DataFrame(list(db.user_master.aggregate([
         {"$match":{
              '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -1291,7 +1265,7 @@ def executive_count_productwise_d3():
               {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
               {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
                     {'schoolId._id':{'$in':
-                                    db_live.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
+                                    db.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
 
                                     }}
 
@@ -1312,7 +1286,7 @@ def executive_count_productwise_d3():
 
                                })
 
-    d3_user_sub_master=pd.DataFrame(list(db_live.subscription_master.aggregate([{'$match':{'$and':[
+    d3_user_sub_master=pd.DataFrame(list(db.subscription_master.aggregate([{'$match':{'$and':[
         {'USER_ID._id':{'$in':list(d3_users['userid'])}}
 
 
@@ -1347,7 +1321,7 @@ def executive_count_productwise_d3():
 
 
     if len(xx[(xx['School_Count']>=1) & (xx['max_plan']==16)])>1:
-        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==16)]['schoolid'])}},
+        db.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==16)]['schoolid'])}},
                                          {'$set':{
                                              'DASH_CATEGORY':'Schoolapp'
 
@@ -1357,7 +1331,7 @@ def executive_count_productwise_d3():
                                          )
 
     elif len(xx[(xx['School_Count']==1) & (xx['max_plan']==17)])>1:
-        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
+        db.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
                                          {'$set':{
                                              'DASH_CATEGORY':'Homeapp'
 
@@ -1380,8 +1354,8 @@ def executive_count_productwise_d3():
 @app.route('/communitytabled3')
 def communityexectable_D3():
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-    db_live=client_live.compass
-    d3_users=pd.DataFrame(list(db_live.user_master.aggregate([
+    db=client_live.compass
+    d3_users=pd.DataFrame(list(db.user_master.aggregate([
         {"$match":{
              '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -1392,7 +1366,7 @@ def communityexectable_D3():
               {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
               {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
                     {'schoolId._id':{'$in':
-                                    db_live.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
+                                    db.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
                                     }}
                     ]}},
         {'$project':{'_id':0,
@@ -1408,7 +1382,7 @@ def communityexectable_D3():
     user_masterd3=pd.DataFrame({'schoolid':list(set(d3_users['schoolid'])),
                                'status':1
                                })
-    d3_user_sub_master=pd.DataFrame(list(db_live.subscription_master.aggregate([{'$match':{'$and':[
+    d3_user_sub_master=pd.DataFrame(list(db.subscription_master.aggregate([{'$match':{'$and':[
         {'USER_ID._id':{'$in':list(d3_users['userid'])}}
     ]}},                                  {'$project':{'_id':0,
                                            'userid':'$USER_ID._id',
@@ -1437,13 +1411,13 @@ def communityexectable_D3():
         elif (xx['School_Count'][i]>1) &(xx['max_plan'][i]==17):
             xx['PLAN_NAME'][i]='Schoolapp'
     if len(xx[(xx['School_Count']>1) & (xx['max_plan']==17)])>1:
-        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==17)]['schoolid'])}},
+        db.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==17)]['schoolid'])}},
                                          {'$set':{
                                              'DASH_CATEGORY':'Schoolapp'
                                          }}
                                          )
     elif len(xx[(xx['School_Count']==1) & (xx['max_plan']==17)])>1:
-        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
+        db.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
                                          {'$set':{
                                              'DASH_CATEGORY':'Homaapp'
                                          }}
@@ -1569,8 +1543,8 @@ def communityexectable_D3():
 @app.route('/explorertabled3')
 def explorerexectable_D3():
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-    db_live=client_live.compass
-    d3_users=pd.DataFrame(list(db_live.user_master.aggregate([
+    db=client_live.compass
+    d3_users=pd.DataFrame(list(db.user_master.aggregate([
         {"$match":{
              '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -1581,7 +1555,7 @@ def explorerexectable_D3():
               {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
               {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
                     {'schoolId._id':{'$in':
-                                    db_live.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
+                                    db.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
                                     }}
                     ]}},
         {'$project':{'_id':0,
@@ -1597,7 +1571,7 @@ def explorerexectable_D3():
     user_masterd3=pd.DataFrame({'schoolid':list(set(d3_users['schoolid'])),
                                'status':1
                                })
-    d3_user_sub_master=pd.DataFrame(list(db_live.subscription_master.aggregate([{'$match':{'$and':[
+    d3_user_sub_master=pd.DataFrame(list(db.subscription_master.aggregate([{'$match':{'$and':[
         {'USER_ID._id':{'$in':list(d3_users['userid'])}}
     ]}},                                  {'$project':{'_id':0,
                                            'userid':'$USER_ID._id',
@@ -1626,13 +1600,13 @@ def explorerexectable_D3():
         elif (xx['School_Count'][i]>1) &(xx['max_plan'][i]==17):
             xx['PLAN_NAME'][i]='Schoolapp'
     if len(xx[(xx['School_Count']>1) & (xx['max_plan']==17)])>1:
-        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==17)]['schoolid'])}},
+        db.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==17)]['schoolid'])}},
                                          {'$set':{
                                              'DASH_CATEGORY':'Schoolapp'
                                          }}
                                          )
     elif len(xx[(xx['School_Count']==1) & (xx['max_plan']==17)])>1:
-        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
+        db.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
                                          {'$set':{
                                              'DASH_CATEGORY':'Homaapp'
                                          }}
@@ -1758,8 +1732,8 @@ def explorerexectable_D3():
 @app.route('/cloudtabled3')
 def cloud_table_d3():
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-    db_live=client_live.compass
-    d3_users=pd.DataFrame(list(db_live.user_master.aggregate([
+    db=client_live.compass
+    d3_users=pd.DataFrame(list(db.user_master.aggregate([
         {"$match":{
              '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -1770,7 +1744,7 @@ def cloud_table_d3():
               {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
               {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
                     {'schoolId._id':{'$in':
-                                    db_live.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
+                                    db.school_master.distinct('_id',{'DASH_CATEGORY':'D3'})                               
                                     }}
                     ]}},
         {'$project':{'_id':0,
@@ -1786,7 +1760,7 @@ def cloud_table_d3():
     user_masterd3=pd.DataFrame({'schoolid':list(set(d3_users['schoolid'])),
                                'status':1
                                })
-    d3_user_sub_master=pd.DataFrame(list(db_live.subscription_master.aggregate([{'$match':{'$and':[
+    d3_user_sub_master=pd.DataFrame(list(db.subscription_master.aggregate([{'$match':{'$and':[
         {'USER_ID._id':{'$in':list(d3_users['userid'])}}
     ]}},                                  {'$project':{'_id':0,
                                            'userid':'$USER_ID._id',
@@ -1815,13 +1789,13 @@ def cloud_table_d3():
         elif (xx['School_Count'][i]>1) &(xx['max_plan'][i]==17):
             xx['PLAN_NAME'][i]='Schoolapp'
     if len(xx[(xx['School_Count']>1) & (xx['max_plan']==17)])>1:
-        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==17)]['schoolid'])}},
+        db.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']>=1) & (xx['max_plan']==17)]['schoolid'])}},
                                          {'$set':{
                                              'DASH_CATEGORY':'Schoolapp'
                                          }}
                                          )
     elif len(xx[(xx['School_Count']==1) & (xx['max_plan']==17)])>1:
-        db_live.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
+        db.school_master.update_many({'_id':{'$in':list(xx[(xx['School_Count']==1) & (xx['max_plan']==17)]['schoolid'])}},
                                          {'$set':{
                                              'DASH_CATEGORY':'Homaapp'
                                          }}
@@ -3244,8 +3218,8 @@ def date_wise_login():
 def new_dash_count_():
     
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-    db_live=client_live.compass
-    schools=pd.DataFrame(list(db_live.school_master.aggregate([{'$match':{'$and':[
+    db=client_live.compass
+    schools=pd.DataFrame(list(db.school_master.aggregate([{'$match':{'$and':[
             {'DASH_CATEGORY':{'$exists':1}},
         {'BLOCKED_BY_CAP':{'$exists':0}},
         {'NAME':{'$not':{'$regex':'test','$options':'i'}}}
@@ -3262,7 +3236,7 @@ def new_dash_count_():
         }}])))
 
 
-    total_schools_wo_D_category=pd.DataFrame(list(db_live.user_master.aggregate(
+    total_schools_wo_D_category=pd.DataFrame(list(db.user_master.aggregate(
     [{"$match":{
              '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -3274,7 +3248,7 @@ def new_dash_count_():
               {'schoolId.NAME':{'$not':{"$regex":'TEST','$options':'i'}}},
               {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
                      {'schoolId._id':{'$in':
-                                     db_live.school_master.distinct('_id',{
+                                     db.school_master.distinct('_id',{
                                          'DASH_CATEGORY':{'$exists':0}
 
                                      })
@@ -6836,8 +6810,8 @@ def communityexectable():
 @app.route('/executive_explorer')
 def explorerexectable():
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-    db_live=client_live.compass    
-    schools=pd.DataFrame(list(db_live.school_master.aggregate([{'$match':{'$and':[
+    db=client_live.compass    
+    schools=pd.DataFrame(list(db.school_master.aggregate([{'$match':{'$and':[
         
         {'DASH_CATEGORY':{'$exists':1}},
     {'BLOCKED_BY_CAP':{'$exists':0}},
@@ -6856,7 +6830,7 @@ def explorerexectable():
 
     lifetimelist=lifelist
 
-    overallum=pd.DataFrame(list(db_live.user_master.aggregate([{'$match':{'$and':[{
+    overallum=pd.DataFrame(list(db.user_master.aggregate([{'$match':{'$and':[{
 
         "schoolId._id": {
         "$in":lifetimelist
@@ -6897,7 +6871,7 @@ def explorerexectable():
     schoolid=list(overallum["UMSCHOOLID"])
 
 
-    overall=pd.DataFrame(list(db_live.subscription_master.aggregate([
+    overall=pd.DataFrame(list(db.subscription_master.aggregate([
     {"$match":{"$and":[{'USER_ID._id':{"$in":email}},
     ]}},
     {"$project":{"_id":0,
@@ -6910,7 +6884,7 @@ def explorerexectable():
     overall["RENEWAL_DATE"]=overall["RENEWAL_DATE"].dt.strftime('%d %b %Y')
 
     mergeddf=pd.merge(overallum, overall, how='left', left_on='UMUSER_ID', right_on='SMUSER_ID')
-    atd=pd.DataFrame(list(db_live.audio_track_master.aggregate([
+    atd=pd.DataFrame(list(db.audio_track_master.aggregate([
         {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -6953,8 +6927,8 @@ def explorerexectable():
 
 def cloudexectable():
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-    db_live=client_live.compass
-    schools=pd.DataFrame(list(db_live.school_master.aggregate([{'$match':{'$and':[
+    db=client_live.compass
+    schools=pd.DataFrame(list(db.school_master.aggregate([{'$match':{'$and':[
         {'DASH_CATEGORY':{'$exists':1}},
     {'BLOCKED_BY_CAP':{'$exists':0}},
     {'NAME':{'$not':{'$regex':'test','$options':'i'}}},
@@ -6972,7 +6946,7 @@ def cloudexectable():
 
     lifetimelist=lifelist
 
-    overallum=pd.DataFrame(list(db_live.user_master.aggregate([{'$match':{'$and':[{
+    overallum=pd.DataFrame(list(db.user_master.aggregate([{'$match':{'$and':[{
 
         "schoolId._id": {
         "$in":lifetimelist
@@ -7014,7 +6988,7 @@ def cloudexectable():
     schoolid=list(overallum["UMSCHOOLID"])
 
 
-    overall=pd.DataFrame(list(db_live.subscription_master.aggregate([
+    overall=pd.DataFrame(list(db.subscription_master.aggregate([
     {"$match":{"$and":[{'USER_ID._id':{"$in":email}},
     ]}},
     {"$project":{"_id":0,
@@ -7027,7 +7001,7 @@ def cloudexectable():
     overall["RENEWAL_DATE"]=overall["RENEWAL_DATE"].dt.strftime('%d %b %Y')
 
     mergeddf=pd.merge(overallum, overall, how='left', left_on='UMUSER_ID', right_on='SMUSER_ID')
-    atd=pd.DataFrame(list(db_live.audio_track_master.aggregate([
+    atd=pd.DataFrame(list(db.audio_track_master.aggregate([
         {"$match":{'$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -55674,7 +55648,7 @@ def questtimeseriestable():
 @app.route('/heatmap_activation_streak')
 def quest_activation_heatmap():
     from collections import OrderedDict
-    QUEST_OBTAINED_USER=pd.DataFrame(list(db_live.user_master.aggregate([{"$match":{
+    QUEST_OBTAINED_USER=pd.DataFrame(list(db.user_master.aggregate([{"$match":{
         '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                 {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                     {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -55694,7 +55668,7 @@ def quest_activation_heatmap():
         ])))
 
     QUEST_OBTAINED_USER=QUEST_OBTAINED_USER[QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].notnull()].reset_index(drop=True)
-    quest_history=pd.DataFrame(list(db_live.user_quest_history.aggregate([{"$match":{
+    quest_history=pd.DataFrame(list(db.user_quest_history.aggregate([{"$match":{
             '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -55722,7 +55696,7 @@ def quest_activation_heatmap():
     qh_no_entry=list(set(QUEST_OBTAINED_USER['USER_ID'])-set(quest_history['USER_ID']))
     quest_data=pd.concat([QUEST_OBTAINED_USER,quest_history],ignore_index=True)
     quest_data_final=quest_data.drop_duplicates(subset=['USER_ID','QUEST_START_DAY'],keep='first').reset_index(drop=True)
-    qh_um=pd.DataFrame(list(db_live.user_master.aggregate([{'$match':{'$and':[
+    qh_um=pd.DataFrame(list(db.user_master.aggregate([{'$match':{'$and':[
         {'_id':{'$in':list(quest_data_final['USER_ID'])}}
         ]}},{'$project':{'_id':0,
                         'USER_ID':'$_id',
@@ -67203,14 +67177,14 @@ def dashboard_insights(dashtype):
 def escore_overall(trackid):
     # live server credentials    
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-    db_live=client_live.compass   
+    db=client_live.compass   
     pd.options.mode.chained_assignment = None
     def escore_school(trackid):
         schoolcond_um={'schoolId._id':ObjectId(trackid)}
-        school_name_list=list(db_live.school_master.find({'_id':ObjectId(trackid)}))
+        school_name_list=list(db.school_master.find({'_id':ObjectId(trackid)}))
         school_name=school_name_list[0].get('NAME')
 
-        user_master_df=pd.DataFrame(list(db_live.user_master.aggregate(
+        user_master_df=pd.DataFrame(list(db.user_master.aggregate(
         [{"$match":{'$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                              {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -67249,7 +67223,7 @@ def escore_overall(trackid):
 
             return score_output
 
-        audio_track_master_df=pd.DataFrame(list(db_live.audio_track_master.aggregate(
+        audio_track_master_df=pd.DataFrame(list(db.audio_track_master.aggregate(
         [{"$match":{
                  '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -67637,7 +67611,7 @@ def escore_overall(trackid):
 
         return score_output
 
-    if len(list(db_live.district_master.find({'_id':ObjectId(str(trackid))})))>0:
+    if len(list(db.district_master.find({'_id':ObjectId(str(trackid))})))>0:
         district_id=trackid
         districtinfo={
             '5f2609807a1c0000950bb45a':'LAUSD',
@@ -67650,14 +67624,14 @@ def escore_overall(trackid):
 #         if district_id=='5f2609807a1c0000950bb45a':
 #             district_name='LAUSD'
         else:
-            districtname=list(db_live.district_master.find({'_id':ObjectId(district_id)}))
+            districtname=list(db.district_master.find({'_id':ObjectId(district_id)}))
             district_name=districtname[0].get('DISTRICT_NAME')
             
-#         districtname=list(db_live.district_master.find({'_id':ObjectId(district_id)}))
+#         districtname=list(db.district_master.find({'_id':ObjectId(district_id)}))
         
-        schoolids=db_live.user_master.distinct('schoolId._id',
+        schoolids=db.user_master.distinct('schoolId._id',
                                                
-                                               {'schoolId._id':{'$in':db_live.school_master.distinct('_id',                                               
+                                               {'schoolId._id':{'$in':db.school_master.distinct('_id',                                               
                                                {'CATEGORY':{'$regex':district_name,'$options':'i'}})}
                                                })
         df_s=[]
@@ -67812,7 +67786,7 @@ def dis_escore(trackid):
 def escore_heatmap(trackid):
     school_level=pd.read_csv(r"/root/" + str(trackid)+'_school_e_scores.csv',sep=",")
     school_level=school_level.drop(columns=['SCHOOL_NAME'],axis=1)
-    if len(list(db_live.district_master.find({'_id':ObjectId(str(trackid))})))>0:
+    if len(list(db.district_master.find({'_id':ObjectId(str(trackid))})))>0:
         district_id=trackid
         districtinfo={
             '5f2609807a1c0000950bb45a':'LAUSD',
@@ -67825,12 +67799,12 @@ def escore_heatmap(trackid):
 #         if district_id=='5f2609807a1c0000950bb45a':
 #             district_name='LAUSD'
         else:
-            districtname=list(db_live.district_master.find({'_id':ObjectId(district_id)}))
+            districtname=list(db.district_master.find({'_id':ObjectId(district_id)}))
             district_name=districtname[0].get('DISTRICT_NAME')
 
-#         districtname=list(db_live.district_master.find({'_id':ObjectId(district_id)}))
+#         districtname=list(db.district_master.find({'_id':ObjectId(district_id)}))
 
-        all_schools=pd.DataFrame(list(db_live.school_master.aggregate([{'$match':{'$and':[
+        all_schools=pd.DataFrame(list(db.school_master.aggregate([{'$match':{'$and':[
                                         {'CATEGORY':{'$regex':district_name,'$options':'i'}},
             {'IS_PORTAL':'Y'}]}},
                                 {'$project':{
@@ -75687,7 +75661,7 @@ def active_teachers_school_search(idd,chart_type):
 
 @app.route('/questcardschart')
 def _21dayquest():
-    QUEST_OBTAINED_USER=pd.DataFrame(list(db_live.user_master.aggregate([{"$match":{
+    QUEST_OBTAINED_USER=pd.DataFrame(list(db.user_master.aggregate([{"$match":{
              '$and':[{ 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -75710,7 +75684,7 @@ def _21dayquest():
 
     QUEST_OBTAINED_USER=QUEST_OBTAINED_USER[QUEST_OBTAINED_USER['QUEST_OBTAIN_DATE'].notnull()].reset_index(drop=True)
 
-    quest_history=pd.DataFrame(list(db_live.user_quest_history.aggregate([{"$match":{
+    quest_history=pd.DataFrame(list(db.user_quest_history.aggregate([{"$match":{
              '$and':[{ 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -75754,7 +75728,7 @@ def _21dayquest():
         quest_data_final['POSSIBLE_PRACTICE_DAYS'][i]=all_practice_dates(quest_data_final['QUEST_START_DAY'][i],quest_data_final['QUEST_FINISH_DAY'][i])
 
 
-    practice_info=pd.DataFrame(list(db_live.audio_track_master.aggregate([{"$match":{
+    practice_info=pd.DataFrame(list(db.audio_track_master.aggregate([{"$match":{
              '$and':[
              {'USER_ID._id':{'$in':list(quest_data_final['USER_ID'])}},
              {'MODIFIED_DATE':{'$gte':datetime.datetime(2021,1,1)}}
@@ -75838,7 +75812,7 @@ def _21dayquest():
     quest_data_final_1.loc[quest_data_final_1['NEW_QUEST_STATUS'].isnull(),'NEW_QUEST_STATUS']=quest_data_final_1['QUEST_COMPLETED_STATUS']
 
 
-    qh_um=pd.DataFrame(list(db_live.user_master.aggregate([{'$match':{'$and':[
+    qh_um=pd.DataFrame(list(db.user_master.aggregate([{'$match':{'$and':[
         {'_id':{'$in':list(quest_data_final_1['USER_ID'])}}
 
 
@@ -76071,8 +76045,8 @@ def ukrainedonationdata():
     import pyexcel as pe
     from io import StringIO
     client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-    db_live=client_live.compass
-    ukraine_campaign_data=pd.DataFrame(list(db_live.campaign_payment.aggregate(
+    db=client_live.compass
+    ukraine_campaign_data=pd.DataFrame(list(db.campaign_payment.aggregate(
     [{'$match':{'$and':[
         {'CAMPAIGN_ID._id':ObjectId('6260122a91af2ca7047316dd')}
         ]}},

@@ -1,50 +1,6 @@
-import importlib
-import dependency
+
 from dependency import *
-importlib.reload(dependency)
 
-practice_cond_dictonary_list=[{'$project':{
-            '_id':0,
-            'USER_ID':'$USER_ID._id',
-            'CREATED_DATE' :'$CREATED_DATE',
-            'USER_EMAIL':'$USER_ID.EMAIL_ID',
-            'SCHOOL_ID':'$USER_ID.schoolId._id',
-            'SCHOOL_NAME':'$USER_ID.schoolId.NAME',
-            'MODIFIED_DATE':'$MODIFIED_DATE',
-            'AUDIO_LENGTH':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH',
-            "DISTRICT_NAME":'$USER_ID.DISTRICT_ID.DISTRICT_NAME',
-            'cursorStart':'$cursorStart',
-            'CURSOR_END':'$CURSOR_END',
-            'IS_DONE':'$IS_DONE',
-            'LAST_EVENT':'$LAST_EVENT',
-            'AUDIO_ID':'$PROGRAM_AUDIO_ID._id',
-            'AUDIO_NAME':'$PROGRAM_AUDIO_ID.AUDIO_NAME',
-            'PROGRAM_ID':'$PROGRAM_AUDIO_ID.PROGRAM_ID._id',
-            'PROGRAM_NAME':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}},
-
-
-           {'$project': { '_id':0,
-            'USER_ID':'$USER_ID',
-            'CREATED_DATE' :'$CREATED_DATE',
-            'USER_EMAIL':'$USER_EMAIL',
-            'SCHOOL_ID':'$SCHOOL_ID',
-            'SCHOOL_NAME':'$SCHOOL_NAME',
-            'MODIFIED_DATE':'$MODIFIED_DATE',
-            'AUDIO_LENGTH':'$AUDIO_LENGTH',
-            "DISTRICT_NAME":"$DISTRICT_NAME",
-            'cursorStart':'$cursorStart',
-            'CURSOR_END':'$CURSOR_END',
-            'IS_DONE':'$IS_DONE',
-            'LAST_EVENT':'$LAST_EVENT',
-            'AUDIO_ID':'$AUDIO_ID',
-            'AUDIO_NAME':'$AUDIO_NAME',
-            'PROGRAM_ID':'$PROGRAM_ID',
-            'PROGRAM_NAME':'$PROGRAM_NAME',
-            'Completion_Percentage':{'$round':
-                [{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']},
-                '$AUDIO_LENGTH']},0]}
-                }}
-           ]
 
 def executive_count_productwise():
     collection1 = db.school_master
@@ -70,7 +26,7 @@ def executive_count_productwise():
     
     collection2 = db.user_master
     qr=[
-    {"$match":{"$and":dependency.testcommon_cond()['usermaster_cond']+[
+    {"$match":{"$and":testcommon_cond()['usermaster_cond']+[
     {'schoolId._id':{'$exists':1}}]
     }},
 
@@ -157,13 +113,13 @@ def executive_count_productwise():
     return json.dumps(execount)
 
 def _excecutivecount_():
-    school_um=db.user_master.distinct('schoolId._id',{'$and':dependency.testcommon_cond()['usermaster_cond']+    
+    school_um=db.user_master.distinct('schoolId._id',{'$and':testcommon_cond()['usermaster_cond']+    
     [{ "schoolId._id":{'$exists': True}}]})
 
     total_school=len(set(school_um+db.school_master.distinct('_id',{'CATEGORY':{'$regex':'LAUSD','$options':'i'}})))
 
 
-    users=db.user_master.distinct('_id',{'$and':dependency.testcommon_cond()['usermaster_cond']})
+    users=db.user_master.distinct('_id',{'$and':testcommon_cond()['usermaster_cond']})
 
     Total_user=len(users)
 
@@ -249,7 +205,7 @@ def practice_trendnew_(charttype):
         df0 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':
-             dependency.testcommon_cond()['sub_master_cond']+[{"MODIFIED_DATE":{"$gte": LSYTOLSY_Date(),"$lt":LSY_Date()}}]
+             testcommon_cond()['sub_master_cond']+[{"MODIFIED_DATE":{"$gte": LSYTOLSY_Date(),"$lt":LSY_Date()}}]
          }},
             practice_cond_dictonary_list[0],
             practice_cond_dictonary_list[1],
@@ -265,7 +221,7 @@ def practice_trendnew_(charttype):
 
         df1 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[{"MODIFIED_DATE":{"$gte": LSY_Date(),"$lt":csy_first_date()}}]}},
+         '$and':testcommon_cond()['sub_master_cond']+[{"MODIFIED_DATE":{"$gte": LSY_Date(),"$lt":csy_first_date()}}]}},
             practice_cond_dictonary_list[0],
             practice_cond_dictonary_list[1],
              threshcond[0],      
@@ -278,7 +234,7 @@ def practice_trendnew_(charttype):
 
         df2 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
@@ -302,7 +258,7 @@ def practice_trendnew_(charttype):
 
         dfschoology = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[{"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         '$and':testcommon_cond()['sub_master_cond']+[{"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
                  {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
             practice_cond_dictonary_list[0],
@@ -323,7 +279,7 @@ def practice_trendnew_(charttype):
 
         dfclever = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
              {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
@@ -343,7 +299,7 @@ def practice_trendnew_(charttype):
         
         dfcanvas = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
@@ -365,7 +321,7 @@ def practice_trendnew_(charttype):
 
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+         '$and':testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
@@ -412,7 +368,7 @@ def practice_trendnew_(charttype):
     else:
         df0 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
             {"MODIFIED_DATE":{"$gte": LSYTOLSY_Date(),"$lt":LSY_Date()}}]}},
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
@@ -425,7 +381,7 @@ def practice_trendnew_(charttype):
 
         df1 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[         
+         '$and':testcommon_cond()['sub_master_cond']+[         
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
                     {"MODIFIED_DATE":{"$gte": LSY_Date(),
                                             "$lt":csy_first_date()}}]}},
@@ -437,7 +393,7 @@ def practice_trendnew_(charttype):
 
         df2 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
@@ -483,7 +439,7 @@ def practice_trendnew_(charttype):
 
         dfclever = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
              {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
@@ -501,7 +457,7 @@ def practice_trendnew_(charttype):
         
         dfcanvas = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
@@ -520,7 +476,7 @@ def practice_trendnew_(charttype):
 
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+         '$and':testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
                  {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
@@ -569,7 +525,7 @@ def active_trend_new_(charttype):
     if charttype=='Practice':
     #     threshold=int(threshold)/100
         threshold= 0.5
-        threshcond=dependency.testcommon_cond()['sub_master_cond']+[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        threshcond=testcommon_cond()['sub_master_cond']+[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
         df0 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[{'USER_ID.EMAIL_ID':{'$ne':''}},  
@@ -585,7 +541,7 @@ def active_trend_new_(charttype):
          
         df1 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':''}},
+         '$and':testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':''}},
             {"MODIFIED_DATE":{"$gte": LSY_Date(),"$lt":csy_first_date()}}]}},
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
@@ -600,7 +556,7 @@ def active_trend_new_(charttype):
         # print(df1)
         df2 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         '$and':testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
@@ -626,7 +582,7 @@ def active_trend_new_(charttype):
 
         dfschoology = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
                 {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
@@ -650,7 +606,7 @@ def active_trend_new_(charttype):
 
         dfclever = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
              {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
@@ -673,7 +629,7 @@ def active_trend_new_(charttype):
         
         dfcanvas = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
              {"USER_ID._id":{"$in":db.canvas_user_master.distinct("USER_ID._id")}},
              {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
              {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
@@ -696,7 +652,7 @@ def active_trend_new_(charttype):
 
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+         '$and':testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                  {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
@@ -743,7 +699,7 @@ def active_trend_new_(charttype):
     else:
         df0 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
              {"MODIFIED_DATE":{"$gte": LSYTOLSY_Date(),
                                             "$lt":LSY_Date()}}]}},
@@ -756,7 +712,7 @@ def active_trend_new_(charttype):
          
         df1 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
             {"MODIFIED_DATE":{"$gte": LSY_Date(),
                                             "$lt":csy_first_date()}}]}},
@@ -770,7 +726,7 @@ def active_trend_new_(charttype):
         # print(df1)
         df2 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
                  {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                  {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
@@ -794,7 +750,7 @@ def active_trend_new_(charttype):
 
         dfschoology = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[{"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+         '$and':testcommon_cond()['sub_master_cond']+[{"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
@@ -814,7 +770,7 @@ def active_trend_new_(charttype):
 
         dfclever = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
              {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
@@ -834,7 +790,7 @@ def active_trend_new_(charttype):
         
         dfcanvas = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':dependency.testcommon_cond()['sub_master_cond']+[
+         '$and':testcommon_cond()['sub_master_cond']+[
              {"USER_ID._id":{"$in":db.canvas_user_master.distinct("USER_ID._id")}},
              {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
              {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
@@ -922,7 +878,7 @@ def practice___history___new___latest(charttype):
         ######################  USER PRACTICE 2019-2020(LSY) ############################################
         df1 = DataFrame(list(collection2.aggregate([
             {"$match":
-            {"$and" :dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
+            {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
@@ -941,7 +897,7 @@ def practice___history___new___latest(charttype):
             {"$sort":{'Practice_date':1}}])))
 
         df2 = DataFrame(list(collection2.aggregate([{"$match":
-            {"$and" :dependency.testcommon_cond()['sub_master_cond']+[
+            {"$and" :testcommon_cond()['sub_master_cond']+[
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
@@ -962,7 +918,7 @@ def practice___history___new___latest(charttype):
 
         schoology = DataFrame(list(collection2.aggregate([
                     {"$match":
-                    {"$and" :dependency.testcommon_cond()['sub_master_cond']+[
+                    {"$and" :testcommon_cond()['sub_master_cond']+[
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
                              { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
@@ -984,7 +940,7 @@ def practice___history___new___latest(charttype):
                        ########clever################################
 
         clever = DataFrame(list(collection2.aggregate([{"$match":
-                    {"$and" :dependency.testcommon_cond()['sub_master_cond']+[
+                    {"$and" :testcommon_cond()['sub_master_cond']+[
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
                              { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
                            {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
@@ -1002,7 +958,7 @@ def practice___history___new___latest(charttype):
             {"$sort":{'Practice_date':1}}])))
         
         canvas = DataFrame(list(collection2.aggregate([{"$match":
-                    {"$and" :dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
+                    {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
                         { "USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},
                            { "USER_ID._id":{"$nin":db.clever_master.distinct( "USER_ID._id")}},
                            {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
@@ -1022,7 +978,7 @@ def practice___history___new___latest(charttype):
         
 
         df3 = DataFrame(list(collection2.aggregate([{"$match":{'$and':
-        dependency.testcommon_cond()['sub_master_cond']+[{'MODIFIED_DATE':{"$gte":myDatetime,"$lt": myDatetime1}}]}},
+        testcommon_cond()['sub_master_cond']+[{'MODIFIED_DATE':{"$gte":myDatetime,"$lt": myDatetime1}}]}},
                         practice_cond_dictonary_list[0],
                             practice_cond_dictonary_list[1],
                              threshcond[0],
@@ -1039,7 +995,7 @@ def practice___history___new___latest(charttype):
 
 
 
-        df_last_to_lsy = DataFrame(list(collection2.aggregate([{"$match":{'$and':dependency.testcommon_cond()['sub_master_cond']+[
+        df_last_to_lsy = DataFrame(list(collection2.aggregate([{"$match":{'$and':testcommon_cond()['sub_master_cond']+[
                             {'MODIFIED_DATE':{"$gte":myDatetime-relativedelta(years=1),"$lt": myDatetime}}]}},
                         practice_cond_dictonary_list[0],
                             practice_cond_dictonary_list[1],
@@ -1168,7 +1124,7 @@ def practice___history___new___latest(charttype):
         
         df1 = DataFrame(list(collection2.aggregate([
             {"$match":
-            {"$and" :dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
+            {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
@@ -1184,7 +1140,7 @@ def practice___history___new___latest(charttype):
             {"$sort":{'Practice_date':1}}])))
 
         df2 = DataFrame(list(collection2.aggregate([{"$match":
-            {"$and" :dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
+            {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
@@ -1201,7 +1157,7 @@ def practice___history___new___latest(charttype):
 
         schoology = DataFrame(list(collection2.aggregate([
                     {"$match":
-                    {"$and" :dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
+                    {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
                              { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
                            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
                             {"MODIFIED_DATE":{"$gte": myDatetime2}}]}},
@@ -1215,7 +1171,7 @@ def practice___history___new___latest(charttype):
                                       ########clever################################
 
         clever = DataFrame(list(collection2.aggregate([{"$match":
-                    {"$and" :dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
+                    {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
                              { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
                            {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
                             {"MODIFIED_DATE":{"$gte": myDatetime2}}]}},
@@ -1228,7 +1184,7 @@ def practice___history___new___latest(charttype):
             {"$sort":{'Practice_date':1}}])))
         
         canvas = DataFrame(list(collection2.aggregate([{"$match":
-                    {"$and" :dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
+                    {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
                         { "USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},
                            { "USER_ID._id":{"$nin":db.clever_master.distinct( "USER_ID._id")}},
                            {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
@@ -1241,7 +1197,7 @@ def practice___history___new___latest(charttype):
                         'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
             {"$sort":{'Practice_date':1}}])))
 
-        df3 = DataFrame(list(collection2.aggregate([{"$match":{'$and':dependency.testcommon_cond()['sub_master_cond']+
+        df3 = DataFrame(list(collection2.aggregate([{"$match":{'$and':testcommon_cond()['sub_master_cond']+
                     [{'MODIFIED_DATE':{"$gte":myDatetime,"$lt": myDatetime1}}]}},
                     {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
                                     'month':{'$month':'$MODIFIED_DATE'}},
@@ -1252,7 +1208,7 @@ def practice___history___new___latest(charttype):
                     {"$sort":{'Practice_date':1}}])))
 
 
-        df_last_to_lsy = DataFrame(list(collection2.aggregate([{"$match":{'$and':dependency.testcommon_cond()['sub_master_cond']+[
+        df_last_to_lsy = DataFrame(list(collection2.aggregate([{"$match":{'$and':testcommon_cond()['sub_master_cond']+[
                             {'MODIFIED_DATE':{"$gte":myDatetime-relativedelta(years=1),"$lt": myDatetime}}]}},
                     {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
                                     'month':{'$month':'$MODIFIED_DATE'}},
@@ -1375,7 +1331,7 @@ def average_trend_new_():
     collection = db.audio_track_master
     df0 = DataFrame(list(collection.aggregate([
         {"$match":{
-     '$and':dependency.testcommon_cond()['sub_master_cond']+
+     '$and':testcommon_cond()['sub_master_cond']+
             [{"MODIFIED_DATE":{"$gte": LSYTOLSY_Date(),"$lt":LSY_Date()}}]}},
        {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
     'TOTAL_USERS_PRACTICING':{'$sum':1},
@@ -1392,7 +1348,7 @@ def average_trend_new_():
 
     df1 = DataFrame(list(collection.aggregate([
         {"$match":{
-     '$and':dependency.testcommon_cond()['sub_master_cond']+[{"MODIFIED_DATE":{"$gte": LSY_Date(),
+     '$and':testcommon_cond()['sub_master_cond']+[{"MODIFIED_DATE":{"$gte": LSY_Date(),
                                         "$lt":csy_first_date()}}]}},
        {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
     'TOTAL_USERS_PRACTICING':{'$sum':1},
@@ -1410,7 +1366,7 @@ def average_trend_new_():
     # print(df1)
     df2 = DataFrame(list(collection.aggregate([
         {"$match":{
-     '$and':dependency.testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':''}},  
+     '$and':testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':''}},  
         {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
        {'$group':{'_id':{'$month':"$MODIFIED_DATE"},
     'TOTAL_USERS_PRACTICING':{'$sum':1},
@@ -1464,7 +1420,7 @@ def topdistrict_playback():
     DF2=DataFrame(list(db.user_master.aggregate([
         {"$match":
          {
-            '$and':dependency.testcommon_cond()['sub_master_cond']+[{'EMAIL_ID':{'$ne':''}},
+            '$and':testcommon_cond()['sub_master_cond']+[{'EMAIL_ID':{'$ne':''}},
                 {'schoolId._id':{'$in':school}},
                  {'schoolId._id':{'$in':db.school_master.distinct('_id', {'CATEGORY':{'$ne':"Null"}})}},
 
@@ -1514,7 +1470,7 @@ def schoolrating_csy():
     collection = db.audio_feedback
     df1=DataFrame(list(db.user_master.aggregate([
         {"$match":
-         {'$and':dependency.testcommon_cond()['usermaster_cond']+[{'EMAIL_ID':{'$ne':''}}]}},
+         {'$and':testcommon_cond()['usermaster_cond']+[{'EMAIL_ID':{'$ne':''}}]}},
         {'$project':{'_id':'$_id','school':'$schoolId._id' }}
         ])))
 
@@ -1538,7 +1494,6 @@ def schoolrating_csy():
     temp={'rating':rating,'count':count}
     return json.dumps(temp)
 
-@app.route('/sentimentdonut_csy')
 def sentiment_pie():
     clean_list=[]
     news_headlines_senti = []
@@ -1564,7 +1519,7 @@ def sentiment_pie():
     df1=DataFrame(list(db.user_master.aggregate([
         {"$match":
          {
-            '$and':dependency.testcommon_cond()['usermaster_cond']+[{'EMAIL_ID':{'$ne':''}}]
+            '$and':testcommon_cond()['usermaster_cond']+[{'EMAIL_ID':{'$ne':''}}]
          }},
         {'$project':{'_id':'$_id','school':'$schoolId._id' }}
         ])))

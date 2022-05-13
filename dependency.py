@@ -66,12 +66,67 @@ from sklearn.preprocessing import StandardScaler
 import collections
 import os
 
-client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-db_live=client_live.compass
+username = urllib.parse.quote_plus('admin')
+password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
+client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
+db=client.compass
+
+# Global district id code
+disdic1={
+'789':'Attendance works', 
+'5f2609807a1c0000950bb45a':'LAUSD',
+'123':'Skillman',
+'456':'UWBA',
+}
+
+df2 = DataFrame(list(db.district_master.aggregate([
+{'$project':{'_id':1,'DISTRICT_NAME':1 }}
+])))
+disdic2 = dict(df2.values)
+
+practice_cond_dictonary_list=[{'$project':{
+            '_id':0,
+            'USER_ID':'$USER_ID._id',
+            'CREATED_DATE' :'$CREATED_DATE',
+            'USER_EMAIL':'$USER_ID.EMAIL_ID',
+            'SCHOOL_ID':'$USER_ID.schoolId._id',
+            'SCHOOL_NAME':'$USER_ID.schoolId.NAME',
+            'MODIFIED_DATE':'$MODIFIED_DATE',
+            'AUDIO_LENGTH':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH',
+            "DISTRICT_NAME":'$USER_ID.DISTRICT_ID.DISTRICT_NAME',
+            'cursorStart':'$cursorStart',
+            'CURSOR_END':'$CURSOR_END',
+            'IS_DONE':'$IS_DONE',
+            'LAST_EVENT':'$LAST_EVENT',
+            'AUDIO_ID':'$PROGRAM_AUDIO_ID._id',
+            'AUDIO_NAME':'$PROGRAM_AUDIO_ID.AUDIO_NAME',
+            'PROGRAM_ID':'$PROGRAM_AUDIO_ID.PROGRAM_ID._id',
+            'PROGRAM_NAME':'$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME'}},
 
 
-client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
-db=client_live.compass
+           {'$project': { '_id':0,
+            'USER_ID':'$USER_ID',
+            'CREATED_DATE' :'$CREATED_DATE',
+            'USER_EMAIL':'$USER_EMAIL',
+            'SCHOOL_ID':'$SCHOOL_ID',
+            'SCHOOL_NAME':'$SCHOOL_NAME',
+            'MODIFIED_DATE':'$MODIFIED_DATE',
+            'AUDIO_LENGTH':'$AUDIO_LENGTH',
+            "DISTRICT_NAME":"$DISTRICT_NAME",
+            'cursorStart':'$cursorStart',
+            'CURSOR_END':'$CURSOR_END',
+            'IS_DONE':'$IS_DONE',
+            'LAST_EVENT':'$LAST_EVENT',
+            'AUDIO_ID':'$AUDIO_ID',
+            'AUDIO_NAME':'$AUDIO_NAME',
+            'PROGRAM_ID':'$PROGRAM_ID',
+            'PROGRAM_NAME':'$PROGRAM_NAME',
+            'Completion_Percentage':{'$round':
+                [{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']},
+                '$AUDIO_LENGTH']},0]}
+                }}
+           ]
+
 
 def csy_first_date():
         date_today =datetime.date.today()
@@ -124,7 +179,6 @@ def testcommon_cond():
     {'schoolId.NAME':{'$not':{"$regex":'test','$options':'i'}}},
     {'schoolId.NAME':{'$not':{"$regex":'TEST','$options':'i'}}},
     {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},
-    {'schoolId._id':{'$exists':1}},
     {'schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}]
 
     condsub=[{"USER_ID.IS_DISABLED":{"$ne":"Y"}},
