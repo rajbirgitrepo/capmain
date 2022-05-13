@@ -100,7 +100,7 @@ def schoolcount_totalstudentscard():
 
 @app.route('/_executive_dashbaord_')
 def totalusercount_card():
-    returnval=_excecutivecount_()
+    returnval=excecutivecount___()
     return returnval
 
 
