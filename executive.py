@@ -112,7 +112,7 @@ def executive_count_productwise():
     
     return json.dumps(execount)
 
-def _excecutivecount_():
+def excecutivecount___():
     school_um=db.user_master.distinct('schoolId._id',{'$and':testcommon_cond()['usermaster_cond']+    
     [{ "schoolId._id":{'$exists': True}}]})
 
