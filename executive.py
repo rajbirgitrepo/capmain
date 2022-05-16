@@ -525,10 +525,10 @@ def active_trend_new_(charttype):
     if charttype=='Practice':
     #     threshold=int(threshold)/100
         threshold= 0.5
-        threshcond=testcommon_cond()['sub_master_cond']+[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+        threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
         df0 = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':[{'USER_ID.EMAIL_ID':{'$ne':''}},  
+         '$and':testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':''}},  
              {"MODIFIED_DATE":{"$gte": LSYTOLSY_Date(),"$lt":LSY_Date()}}]}},
             practice_cond_dictonary_list[0],
                         practice_cond_dictonary_list[1],
