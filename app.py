@@ -76093,6 +76093,213 @@ def ukrainedonationdata():
     return output
 
 
+@app.route('/activeprogchart_all_users')
+def activeprogchartallusers(): 
+    #username = urllib.parse.quote_plus('admin')
+    #password = urllib.parse.quote_plus('I#L@teST^m0NGO_2o20!')
+    #client = MongoClient("mongodb://%s:%s@54.184.165.106:27017/" % (username, password))
+    #db=client.compass
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
+    db=client.compass
+    collection = db.audio_track_master
+    query=[
+        {"$match":{"$and":[
+    #            {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},                  
+                {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+                {'USER_ID.EMAIL_ID':{'$nin':['',' ',None]}},
+                ]}},
+
+    {"$project":{'USER_ID':'$USER_ID._id','PROGRAM_AUDIO_ID.AUDIO_ID':1,
+        'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_ID':1,
+        'AGE_GROUP':'$PROGRAM_AUDIO_ID.PROGRAM_ID.AGE_GROUP',
+        'AUDIO_NAME':1,'AUDIO_LENGTH':1,
+        'IS_DONE':1,'PROGRAM_AUDIO_ID.AUDIO_DAY':1,'PROGRAM_AUDIO_ID.AUDIO_LENGTH':1,
+                 'PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME':1,
+
+        'PlayBack_Time_Percent':{"$round":[{"$divide":[{"$subtract":
+            ['$CURSOR_END','$cursorStart']},'$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},2]}}},
+        {"$match":{'PlayBack_Time_Percent':{"$gte":.5}}},
+
+
+    { "$project": { 'USER_ID':1,'AGE_GROUP':1,
+
+        "status": {
+          "$cond": { "if": { "$regexMatch": { 
+                                    "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                    "regex": 'bonus','options': "i"  }}
+
+
+              , 
+          "then": 'Bonus', "else": {
+             "$cond": { "if": { "$regexMatch": { 
+                                    "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                    "regex": "sound",'options': "i" }}, 
+             "then": 'Sound', "else": {
+             "$cond": { "if": { "$regexMatch": { 
+                                    "input": "$PROGRAM_AUDIO_ID.AUDIO_DAY",
+                                    "regex": "counselor",'options': "i" }}, 
+             "then": 'counselor', "else":{
+             "$cond": { "if": { "$regexMatch": { 
+                                    "input": "$PROGRAM_AUDIO_ID.PROGRAM_ID.PROGRAM_NAME",
+                                    "regex": "wellness",'options': "i" }}, 
+             "then": 'educator', "else":'daily' 
+             }} 
+             }}
+             }}}}}}         
+
+             ]
+
+    x=list(collection.aggregate(query))
+    df=pd.DataFrame(x)
+
+    unique_uid=pd.DataFrame(df.groupby(['USER_ID'])).rename(columns={0:'USER_ID'})
+    unique_uid=unique_uid['USER_ID']
+
+    df_teachers=pd.DataFrame(list(db.audio_track_master.aggregate([
+                {"$match":{"$and":[
+                    {'USER_ID._id':{'$in':list(unique_uid)}},
+                    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                    {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                    {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                    {"USER_ID._id":{'$not':{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}}
+                    ]}},
+        {'$group':{
+            '_id':'$USER_ID._id'
+        }},
+        {'$project':{'USER_ID':'$_id','_id':0}}
+    ])))
+
+    df_teachers['CHANNEL']='TEACHERS'
+    teachers_progdf=pd.merge(df,df_teachers,on='USER_ID',how='right')
+
+
+
+    df_schoology=pd.DataFrame(list(db.audio_track_master.aggregate([
+                {"$match":{"$and":[
+                    {'USER_ID._id':{'$in':list(unique_uid)}},
+    #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                     {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                     {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                    {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}}
+                    ]}},
+        {'$group':{
+            '_id':'$USER_ID._id'
+        }},
+        {'$project':{'USER_ID':'$_id','_id':0}}
+    ])))
+
+    df_schoology['CHANNEL']='SCHOOLOGY'
+    schoology_progdf=pd.merge(df,df_schoology,on='USER_ID',how='right')
+
+
+
+    df_clever=pd.DataFrame(list(db.audio_track_master.aggregate([
+                {"$match":{"$and":[
+                    {'USER_ID._id':{'$in':list(unique_uid)}},
+    #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                     {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                     {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+                    {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}}
+
+                    ]}},
+        {'$group':{
+            '_id':'$USER_ID._id'
+        }},
+        {'$project':{'USER_ID':'$_id','_id':0}}
+    ])))
+
+    df_clever['CHANNEL']='CLEVER'
+    clever_progdf=pd.merge(df,df_clever,on='USER_ID',how='right')
+
+
+
+    df_canvas=pd.DataFrame(list(db.audio_track_master.aggregate([
+                {"$match":{"$and":[
+                    {'USER_ID._id':{'$in':list(unique_uid)}},
+    #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                     {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                     {"USER_ID._id":{"$in":db.canvas_user_master.distinct("USER_ID._id")}},
+                    {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}}
+                    ]}},
+        {'$group':{
+            '_id':'$USER_ID._id'
+        }},
+        {'$project':{'USER_ID':'$_id','_id':0}}
+    ])))
+
+    df_canvas['CHANNEL']='CANVAS'
+    canvas_progdf=pd.merge(df,df_canvas,on='USER_ID',how='right')
+
+
+    df_family=pd.DataFrame(list(db.audio_track_master.aggregate([
+                {"$match":{"$and":[
+                    {'USER_ID._id':{'$in':list(unique_uid)}},
+                    {'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
+                    {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
+                    {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                    {"USER_ID._id":{'$not':{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}}
+                    ]}},
+        {'$group':{
+            '_id':'$USER_ID._id'
+        }},
+        {'$project':{'USER_ID':'$_id','_id':0}}
+    ])))
+
+    df_family['CHANNEL']='FAMILY'
+    family_progdf=pd.merge(df,df_family,on='USER_ID',how='right')
+
+
+    total_progdf=teachers_progdf.append(family_progdf)
+    total_progdf=total_progdf.append(clever_progdf)
+    total_progdf=total_progdf.append(canvas_progdf)
+    total_progdf=total_progdf.append(schoology_progdf)
+    total_progdf.reset_index(drop=True,inplace=True)
+
+    teachers_actv=[]
+    family_actv=[]
+    schoology_actv=[]
+    canvas_actv=[]
+    clever_actv=[]
+
+    teachers_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'daily') & (total_progdf['CHANNEL'] == 'TEACHERS')]['USER_ID'].unique())))
+    teachers_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Bonus') & (total_progdf['CHANNEL'] == 'TEACHERS')]['USER_ID'].unique())))
+    teachers_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Sound') & (total_progdf['CHANNEL'] == 'TEACHERS')]['USER_ID'].unique())))
+    teachers_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'educator') & (total_progdf['CHANNEL'] == 'TEACHERS')]['USER_ID'].unique())))
+    teachers_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'counselor') & (total_progdf['CHANNEL'] == 'TEACHERS')]['USER_ID'].unique())))
+
+    family_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'daily') & (total_progdf['CHANNEL'] == 'FAMILY')]['USER_ID'].unique())))
+    family_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Bonus') & (total_progdf['CHANNEL'] == 'FAMILY')]['USER_ID'].unique())))
+    family_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Sound') & (total_progdf['CHANNEL'] == 'FAMILY')]['USER_ID'].unique())))
+    family_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'educator') & (total_progdf['CHANNEL'] == 'FAMILY')]['USER_ID'].unique())))
+    family_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'counselor') & (total_progdf['CHANNEL'] == 'FAMILY')]['USER_ID'].unique())))
+
+    schoology_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'daily') & (total_progdf['CHANNEL'] == 'SCHOOLOGY')]['USER_ID'].unique())))
+    schoology_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Bonus') & (total_progdf['CHANNEL'] == 'SCHOOLOGY')]['USER_ID'].unique())))
+    schoology_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Sound') & (total_progdf['CHANNEL'] == 'SCHOOLOGY')]['USER_ID'].unique())))
+    schoology_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'educator') & (total_progdf['CHANNEL'] == 'SCHOOLOGY')]['USER_ID'].unique())))
+    schoology_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'counselor') & (total_progdf['CHANNEL'] == 'SCHOOLOGY')]['USER_ID'].unique())))
+
+    clever_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'daily') & (total_progdf['CHANNEL'] == 'CLEVER')]['USER_ID'].unique())))
+    clever_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Bonus') & (total_progdf['CHANNEL'] == 'CLEVER')]['USER_ID'].unique())))
+    clever_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Sound') & (total_progdf['CHANNEL'] == 'CLEVER')]['USER_ID'].unique())))
+    clever_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'educator') & (total_progdf['CHANNEL'] == 'CLEVER')]['USER_ID'].unique())))
+    clever_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'counselor') & (total_progdf['CHANNEL'] == 'CLEVER')]['USER_ID'].unique())))
+
+    canvas_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'daily') & (total_progdf['CHANNEL'] == 'CANVAS')]['USER_ID'].unique())))
+    canvas_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Bonus') & (total_progdf['CHANNEL'] == 'CANVAS')]['USER_ID'].unique())))
+    canvas_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Sound') & (total_progdf['CHANNEL'] == 'CANVAS')]['USER_ID'].unique())))
+    canvas_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'educator') & (total_progdf['CHANNEL'] == 'CANVAS')]['USER_ID'].unique())))
+    canvas_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'counselor') & (total_progdf['CHANNEL'] == 'CANVAS')]['USER_ID'].unique())))
+
+    dm=["DAILY", "BONUS", "SOUND", "EDUCATOR", "COUNSELOR"]
+    temp=[{'PROGRAMS':dm, 'bart':teachers_actv},{'barf':family_actv},{'bars':schoology_actv},{'barc': clever_actv},{'barcan': canvas_actv}]
+    return json.dumps(temp)
+
+
 @app.route('/Family_SURVEY')
 def Family_SURVEY():
     if not g.user:
