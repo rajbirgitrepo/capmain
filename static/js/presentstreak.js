@@ -8,7 +8,7 @@ $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
  
 
-  Highcharts.chart("container1", {
+  Highcharts.chart("container7", {
     chart: {
       type: "column",
     },
@@ -80,7 +80,7 @@ $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
 
 
-  Highcharts.chart("container2", {
+  Highcharts.chart("container8", {
     chart: {
       type: "column",
     },
@@ -146,13 +146,13 @@ $.ajax(settings).done(function (response) {
 var settings = {
   "async": true,
   "crossDomain": true,
-  "url":             "/power_users_having_streaks",
+  "url": "/power_users_having_streaks",
   "method": "GET"
  }
   $.ajax(settings).done(function (response) {
   var dataa=JSON.parse(response); 
     console.log(dataa[0].bar,"data")
-Highcharts.chart('container3', {
+Highcharts.chart('container9', {
   chart: {
       type: 'column'
   },
@@ -235,13 +235,13 @@ Highcharts.setOptions({
   var settings = {
       "async": true,
       "crossDomain": true,
-      "url":             "/Business_days_streaks_classroom",
+      "url": "/Business_days_streaks_classroom",
       "method": "GET"
      }
       $.ajax(settings).done(function (response) {
       var dataa=JSON.parse(response); 
       console.log(dataa,"hello frnd")
-$('#container4').highcharts({
+  $('#container10').highcharts({
   chart: {
     type: 'column',
     backgroundColor: '#FFFFF'
@@ -315,7 +315,8 @@ $('#container4').highcharts({
     data: dataa.Practices_y
   }]
 });
-      });
+
+});
 
 
 
@@ -330,87 +331,87 @@ $('#container4').highcharts({
           }
         }
       }); 
-        var settings = {
+          var settings = {
             "async": true,
             "crossDomain": true,
-            "url":             "/Business_days_streaks_Family",
+            "url": "/Business_days_streaks_Family",
             "method": "GET"
            }
-            $.ajax(settings).done(function (response) {
+          $.ajax(settings).done(function (response) {
             var dataa=JSON.parse(response); 
             console.log(dataa,"hello frnd")
-      $('#container5').highcharts({
-        chart: {
-          type: 'column',
-          backgroundColor: '#FFFFF'
-        },
-        title: {
-          text: 'Business Days Streak (Home)',
-          style: {  
-           color: '#000000'
-          }
-        },
-        xAxis: {
-          title: {
-            text: 'Number of Streaks',
-            style: {
-             color: '#000000'
-             }
-          },
-          tickWidth: 0,
-          labels: {
-           style: {
-             color: '#000000',
-             }
-           },
-          categories: dataa.Number_of_streaks
-        },
-        yAxis: {
-          title: {
-            text: 'Playbacks',
-            style: {
-             color: '#000000'
-             }
-          },
-          labels: {
-            formatter: function() {
-              return Highcharts.numberFormat(this.value, 0, '', ',');
-            },
-            style: {
-              color: '#000000',
-            }
-          }
-        },
-        legend: {
-          enabled: false,
-        },
-        credits: {
-          enabled: false
-        },
-        tooltip: {
-          valuePrefix: ''
-        },
-        plotOptions: {
-          series: {point: {
-                    events: {
-                        click: function () {
-                            $('#next').empty();
-                            console.log(URL);
-                            $('#btnExport').show();
-                            
-                          
-                         URL = '/schoolsummaryprog/'+this.category ;
-              console.log(URL);               
-              createDynamic(URL)
-              cardscroll();
-                        }
-                    }
-                }}
-        },
-        series: [{
-            color: '#01a451',
-          name: 'Playbacks',
-          data: dataa.Practices
-        }]
-      });
+            $('#container11').highcharts({
+              chart: {
+                type: 'column',
+                backgroundColor: '#FFFFF'
+              },
+              title: {
+                text: 'Business Days Streak (Home)',
+                style: {  
+                color: '#000000'
+                }
+              },
+              xAxis: {
+                title: {
+                  text: 'Number of Streaks',
+                  style: {
+                  color: '#000000'
+                  }
+                },
+                tickWidth: 0,
+                labels: {
+                style: {
+                  color: '#000000',
+                  }
+                },
+                categories: dataa.Number_of_streaks
+              },
+              yAxis: {
+                title: {
+                  text: 'Playbacks',
+                  style: {
+                  color: '#000000'
+                  }
+                },
+                labels: {
+                  formatter: function() {
+                    return Highcharts.numberFormat(this.value, 0, '', ',');
+                  },
+                  style: {
+                    color: '#000000',
+                  }
+                }
+              },
+              legend: {
+                enabled: false,
+              },
+              credits: {
+                enabled: false
+              },
+              tooltip: {
+                valuePrefix: ''
+              },
+              plotOptions: {
+                series: {point: {
+                          events: {
+                              click: function () {
+                                  $('#next').empty();
+                                  console.log(URL);
+                                  $('#btnExport').show();
+                                  
+                                
+                              URL = '/schoolsummaryprog/'+this.category ;
+                    console.log(URL);               
+                    createDynamic(URL)
+                    cardscroll();
+                              }
+                          }
+                      }}
+              },
+              series: [{
+                  color: '#01a451',
+                name: 'Playbacks',
+                data: dataa.Practices
+              }]
             });
+          });

@@ -218,7 +218,7 @@
         <div class="">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="page_Heading" href="#">SCHOOL PLAYBACK ANALYTICS</a>
+                    <a class="page_Heading" href="#">PLAYBACK ANALYTICS</a>
                     <a href="homepage">
                         <img src="{{ url_for('static',filename='images/capwhite.png') }}" alt="" class="logo">
                     </a>
@@ -301,13 +301,13 @@
             </li>
             <li class="active"><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
                 <ul class="side-nav-dropdown">
-                    <li class="active2"><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
+                    <li class="active2"><a href="Practice_Analytics">PLAYBACK ANALYTICS</a></li>
                     <li class="active2"><a href="Scoology">SCHOOLOGY</a></li>
                     <li class="active2"><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
                     <li class="active2"><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
                     <!-- <li class="active2"><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
                     <li class="active2"><a href="tunein">TUNE_IN DASHBAORD</a></li>
-                    <li class="active2"><a href="Practice_streak">PLAYBACK STREAK</a></li>
+                    <!-- <li class="active2"><a href="Practice_streak">PLAYBACK STREAK</a></li> -->
                     <!-- <li class="active2"><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
                 </ul>
             </li>
@@ -582,11 +582,53 @@
 
                 <div class="col-md-12 px-0" style="margin: 20px 0 0 0;">
 
-                    <div style="width: 100%; float:center; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);" id="container5"></div>
+                    <div id="container5" style="width: 100%; float:center; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
 
                 </div>
             </div>
         </div>
+
+        <!-- Playback Streak dashboard charts -->
+        <section class="charts">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="container7" style=" border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="container8" style=" border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="welcome2">
+            <div class="container-fluid">
+                <div class="col-md-12 px-0" style="margin: 20px 0 0 0;">
+                    <div id="container9" style="width: 100%; float:center; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome2">
+            <div class="container-fluid">
+                <div class="col-md-12 px-0" style="margin: 20px 0 0 0;">
+                    <div id="container10" style="width: 100%; float:center; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome2">
+            <div class="container-fluid">
+                <div class="col-md-12 px-0" style="margin: 20px 0 0 0;">
+                    <div id="container11" style="width: 100%; float:center; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <!-- <div class="col-md-10" style="margin-bottom: 30px;  border-radius: 20px;">
                       <div id="containerhistory"style="height: 400px; width: 120%; border-radius: 20px; margin-top: 20px;  box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
                     </div> -->
@@ -785,6 +827,12 @@
     <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
     <script src="{{ url_for('static',filename='js/search.js') }}"></script>
     <script src="{{ url_for('static',filename='js/exscriptbar.js') }}"></script>
+
+    <!-- partial -->
+    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/counts.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/presentstreak.js') }}"></script>
 
     <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -1583,10 +1631,7 @@
 
 
 
-    <!-- partial -->
-    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/counts.js') }}"></script>
+    
 
 </body>
 

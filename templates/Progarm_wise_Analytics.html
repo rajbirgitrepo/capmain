@@ -211,13 +211,13 @@
             </li>
             <li class="active"><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
                 <ul class="side-nav-dropdown">
-                    <li class="active2"><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
+                    <li class="active2"><a href="Practice_Analytics">PLAYBACK ANALYTICS</a></li>
                     <li class="active2"><a href="Scoology">SCHOOLOGY</a></li>
                     <li class="active2"><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
                     <li class="active2"><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
                     <!-- <li class="active2"><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
                     <li class="active2"><a href="tunein">TUNE_IN DASHBAORD</a></li>
-                    <li class="active2"><a href="Practice_streak">PLAYBACK STREAK</a></li>
+                    <!-- <li class="active2"><a href="Practice_streak">PLAYBACK STREAK</a></li> -->
                     <!-- <li class="active2"><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
                 </ul>
             </li>
@@ -464,6 +464,37 @@
                                 </div>
                             </div>
                         </section>
+                        <section class="charts">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div id="container8" style=" border-radius: 20px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="container9" style=" border-radius: 20px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="charts">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div id="container10" style=" border-radius: 20px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="container11" style=" border-radius: 20px; box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+
                         <section>
                             <div class="welcome2">
                                 <div class="container-fluid">
@@ -692,7 +723,7 @@
         }
         $.ajax(settings).done(function(response) {
             var dataa = JSON.parse(response);
-
+            console.log(dataa, 'Program wise data');
 
 
             $(function() {
@@ -1442,10 +1473,404 @@
             });
         };
     </script>
-    <!-- partial -->
+
+    <script>
+        var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/activeprogchart_all_users",
+        method: "GET",
+    };
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa, "Program wise charts data1")
+
+        Highcharts.chart('container8', {
+            chart: {
+                type: 'column'
+            },
+            credits: {
+                enabled: false,
+            },
+            title: {
+                text: "Active User Trend by Program"
+
+            },
+           
+            colors: ['#6495ED', '#4F1FAF', '#462CEE', '#8AE02B','#01A451'],
+            xAxis: {
+                categories: dataa[0].PROGRAMS
+            },
+            yAxis: {
+                lineWidth: 1,
+                min: 0,
+                title: {
+                    text: ""
+                },
+                stackLabels: {
+                    enabled: false,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                series: {
+                    point: {
+
+                    }
+                },
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: false
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                itemStyle: {
+                    fontSize: '10px',
+                    fontWeight: '200'
+                }
+            },
+            series: [{
+                    name: "Canvas",
+                    data: dataa[4].barcan,
+                    color: '#d3373b'
+                },
+                {
+                    name: "Clever",
+                    data: dataa[3].barc,
+                    color: '#462CEE'
+                },
+                {
+                    name: 'Schoology',
+                    data: dataa[2].bars,
+                    color: '#4F1FAF'
+                }, 
+                {
+                    name: 'Family',
+                    fontSize: '8px',
+                    data: dataa[1].barf,
+                    color: '#8AE02B'
+
+                }, 
+                {
+                    name: 'Teacher',
+                    data: dataa[0].bart,
+                    color : '#01A451'
+                },
+            ]
+        });
+    });
 
 
-    <!--<script src="{{ url_for('static',filename='js/Information_icon.js') }}"></script>-->
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/activepracchart_all_users",
+        method: "GET",
+    };
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa, "Program wise charts data2")
+
+        Highcharts.chart('container9', {
+            chart: {
+                type: 'column'
+            },
+            credits: {
+                enabled: false,
+            },
+            title: {
+                text: "Active User Playback Trend by Program"
+
+            },
+           
+            colors: ['#6495ED', '#4F1FAF', '#462CEE', '#8AE02B','#01A451'],
+            xAxis: {
+                categories: dataa[0].PROGRAMS
+            },
+            yAxis: {
+                lineWidth: 1,
+                min: 0,
+                title: {
+                    text: ""
+                },
+                stackLabels: {
+                    enabled: false,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                series: {
+                    point: {
+
+                    }
+                },
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: false
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                itemStyle: {
+                    fontSize: '10px',
+                    fontWeight: '200'
+                }
+            },
+            series: [{
+                    name: "Canvas",
+                    data: dataa[4].barcan,
+                    color: '#d3373b'
+                },
+                {
+                    name: "Clever",
+                    data: dataa[3].barc,
+                    color: '#462CEE'
+                },
+                {
+                    name: 'Schoology',
+                    data: dataa[2].bars,
+                    color: '#4F1FAF'
+                }, 
+                {
+                    name: 'Family',
+                    fontSize: '8px',
+                    data: dataa[1].barf,
+                    color: '#8AE02B'
+
+                }, 
+                {
+                    name: 'Teacher',
+                    data: dataa[0].bart,
+                    color : '#01A451'
+                },
+            ]
+        });
+    });
+
+
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/summer_activechart_all_users",
+        method: "GET",
+    };
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa, "Program wise charts data3")
+
+        Highcharts.chart('container10', {
+            chart: {
+                type: 'column'
+            },
+            credits: {
+                enabled: false,
+            },
+            title: {
+                text: "Active User Trend Summer Series"
+
+            },
+           
+            colors: ['#6495ED', '#4F1FAF', '#462CEE', '#8AE02B','#01A451'],
+            xAxis: {
+                categories: dataa[0].PROGRAMS
+            },
+            yAxis: {
+                lineWidth: 1,
+                min: 0,
+                title: {
+                    text: ""
+                },
+                stackLabels: {
+                    enabled: false,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                series: {
+                    point: {
+
+                    }
+                },
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: false
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                itemStyle: {
+                    fontSize: '10px',
+                    fontWeight: '200'
+                }
+            },
+            series: [{
+                    name: "Canvas",
+                    data: dataa[4].barcan,
+                    color: '#d3373b'
+                },
+                {
+                    name: "Clever",
+                    data: dataa[3].barc,
+                    color: '#462CEE'
+                },
+                {
+                    name: 'Schoology',
+                    data: dataa[2].bars,
+                    color: '#4F1FAF'
+                }, 
+                {
+                    name: 'Family',
+                    fontSize: '8px',
+                    data: dataa[1].barf,
+                    color: '#8AE02B'
+
+                }, 
+                {
+                    name: 'Teacher',
+                    data: dataa[0].bart,
+                    color : '#01A451'
+                },
+            ]
+        });
+    });
+
+
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/summer_pracchart_all_users",
+        method: "GET",
+    };
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        console.log(dataa, "Program wise charts data4")
+
+        Highcharts.chart('container11', {
+            chart: {
+                type: 'column'
+            },
+            credits: {
+                enabled: false,
+            },
+            title: {
+                text: "Active User Playback Trend Summer Series"
+
+            },
+           
+            colors: ['#6495ED', '#4F1FAF', '#462CEE', '#8AE02B','#01A451'],
+            xAxis: {
+                categories: dataa[0].PROGRAMS
+            },
+            yAxis: {
+                lineWidth: 1,
+                min: 0,
+                title: {
+                    text: ""
+                },
+                stackLabels: {
+                    enabled: false,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray'
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                series: {
+                    point: {
+
+                    }
+                },
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: false
+                    }
+                }
+            },
+            legend: {
+                enabled: true,
+                itemStyle: {
+                    fontSize: '10px',
+                    fontWeight: '200'
+                }
+            },
+            series: [{
+                    name: "Canvas",
+                    data: dataa[4].barcan,
+                    color: '#d3373b'
+                },
+                {
+                    name: "Clever",
+                    data: dataa[3].barc,
+                    color: '#462CEE'
+                },
+                {
+                    name: 'Schoology',
+                    data: dataa[2].bars,
+                    color: '#4F1FAF'
+                }, 
+                {
+                    name: 'Family',
+                    fontSize: '8px',
+                    data: dataa[1].barf,
+                    color: '#8AE02B'
+
+                }, 
+                {
+                    name: 'Teacher',
+                    data: dataa[0].bart,
+                    color : '#01A451'
+                },
+            ]
+        });
+    });
+
+    </script>
 
 </body>
 
