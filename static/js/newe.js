@@ -142,6 +142,7 @@ function charts(a) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
+        $("#gifload").hide();
         $("#school").empty()
         $("#teacher").empty()
         $("#login").empty()
@@ -857,6 +858,9 @@ function distselect(distid) {
     $("#heat-map").empty();
     $("#chartname").empty();
     $("#disdetails").text(distid);
+    $("#gifload").empty();
+    $("#gifload").css("display", "block");
+    $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-3 mx-my-auto"><img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader"></div></div>');
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
     console.log(distid)

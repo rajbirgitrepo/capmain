@@ -236,6 +236,9 @@ function schoolsearch() {
         $("#renewal").empty();
         $("#status").empty();
          $("#output").empty();
+         $("#gifload").empty();
+         $("#gifload").css("display", "block");
+         $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-3 mx-my-auto"><img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader"></div></div>');
         console.log(URL);
         P(URL);
         schoolIDCharts(a)
@@ -314,6 +317,8 @@ function escore(a) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(URL)
+        $("#gifload").hide();
+
         $("#USAGE_SCORE").empty();
         $("#ACTIVE_USER_SCORE").empty();
         $("#CWP_SCORE").empty();
@@ -627,6 +632,7 @@ function schoolIDCharts(url1) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa[0].bar, "data")
+        $("#gifload").hide();
         Highcharts.chart('graph2', {
             chart: {
                 type: 'column'
@@ -718,6 +724,7 @@ function schoolIDCharts(url1) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa[0].bar, "data");
+        $("#gifload").hide();
 
         Highcharts.chart("graph1", {
             chart: {
@@ -981,7 +988,9 @@ function jou2(url1) {
 
 function familysearch() {
     $("#giffamily").empty();
-    $("#giffamily").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    $("#gifload").css("display", "block");
+    $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-3 mx-my-auto"><img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader"></div></div>');
+    // $("#giffamily").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
     var a = document.getElementById("fsearchinputdescription").innerText;
     console.log(a);
     if (a !== '') {
@@ -1015,6 +1024,10 @@ function familysearch() {
         $("#fsignup").empty();
         $("#frenewal").empty();
         $("#fstatus").empty();
+        // $("#gifload").empty();
+        //  $("#gifload").css("display", "block");
+        //  $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-3 mx-my-auto"><img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader"></div></div>');
+     
         console.log(URL);
         Pfam(URL);
         AudioUn(a);
@@ -1107,6 +1120,7 @@ function AudioUn(a) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
+        $("#gifload").hide();
         Highcharts.chart('container81', {
             chart: {
                 type: 'column'
@@ -1177,7 +1191,8 @@ function AudioUn(a) {
         var dataa = JSON.parse(response);
         console.log(dataa);
         console.log("/family_audio_completion/" + a, );
-
+        
+        $("#gifload").hide();
         Highcharts.chart('container82', {
             chart: {
                 type: 'column'
@@ -1260,6 +1275,7 @@ function Pfam(URL) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(URL)
+        $("#gifload").hide();
         $("#fschoolname").text("SCHOOL NAME: " + dataa.Info[0].SCHOOL_NAME);
         $("#fname").text("USER NAME: " + dataa.Info[0].USER_NAME);
         $("#fpractice").text("USER EMAIL: " + dataa.Info[0].USER_EMAIL);
@@ -1369,6 +1385,7 @@ function joufam(url1) {
     $.ajax(settings).done(function(response) {
         var datain = JSON.parse(response);
         console.log(datain);
+        $("#giffamily").hide();
 
         $("#fucount").text(datain[0].user_count);
         $("#fpcount").text(datain[0].school_practice_count);
@@ -1514,9 +1531,11 @@ function joufam(url1) {
 
 function usersearch() {
     $("#gif3").empty();
-    $("#gif3").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
-    var gif = document.getElementById("gif3");
-    gif.style.display = "block";
+    $("#gif3").css("display", "block");
+    $("#gif3").append('<div class="row gifloader-content"><div class="col-lg-3 mx-my-auto"><img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader"></div></div>');
+    // $("#gif3").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    // var gif = document.getElementById("gif3");
+    // gif.style.display = "block";
     $("#schoolname").empty();
     $("#upractice").empty();
     $("#ustate").empty();
@@ -1782,6 +1801,8 @@ function usersearch() {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
+        $("#giffamily").hide();
+
         Highcharts.chart('container17', {
             chart: {
                 type: 'column'
@@ -1853,6 +1874,7 @@ function usersearch() {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
+        $("#giffamily").hide();
 
         Highcharts.chart('container18', {
             chart: {

@@ -780,8 +780,34 @@
 
         <hr />
 
-
     </section>
+
+     <!-- loader -->
+    <div class="gifloader-spinner">
+        <div class="row gifloader-content">
+            <div class="col-lg-3 mx-my-auto">
+                <img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader">
+            </div>
+        </div>
+    </div>
+
+    <script>
+         $( document ).ready(function() {
+            setTimeout(function(){
+                var loader = document.getElementsByClassName("gifloader-spinner")[0];
+                loader.className="gifloader-spinner fadeout" ;
+                setTimeout(function(){loader.style.display="none"},1000)
+            },100000)
+        });
+
+        // $(window).on("load",function(){
+        //     setTimeout(function(){
+        //     var loader = document.getElementsByClassName("gifloader-spinner");
+        //     loader.className="gifloader-spinner fadeout" ;
+        //     setTimeout(function(){loader.style.display="none"},110000)
+        //     },110000)
+        // });
+    </script>
 
     <script>
          $("#navbarDropdown").click(function(){

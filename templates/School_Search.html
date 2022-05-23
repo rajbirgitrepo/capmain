@@ -385,13 +385,13 @@
             </li>
             <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
                 <ul class="side-nav-dropdown">
-                    <li><a href="Practice_Analytics">SCHOOL PLAYBACK ANALYTICS</a></li>
+                    <li><a href="Practice_Analytics">PLAYBACK ANALYTICS</a></li>
                     <li><a href="Scoology">SCHOOLOGY</a></li>
                     <li><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
                     <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
                     <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
                     <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
-                    <li><a href="Practice_streak">PLAYBACK STREAK</a></li>
+                    <!-- <li><a href="Practice_streak">PLAYBACK STREAK</a></li> -->
                     <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
                 </ul>
             </li>
@@ -442,7 +442,9 @@
 
         <!-- The Modal -->
 
-
+         <!-- loader -->
+         <div id="gifload" style="display: none;">
+        </div>
 
 
         <div id="error">
@@ -773,8 +775,8 @@
                         </div>
                     </div>
 
-
-                    <div id="giffamily"></div>
+                    <!-- loader -->
+                    <div id="giffamily" style="display: none;"></div>
 
                     <section class="mtsection">
                         <div class="col-md-12">
@@ -957,7 +959,7 @@
                     </div>
 
 
-                    <div id="gif3"></div>
+                    <div id="gif3" style="display: none;"></div>
 
                     <section class="mtsection">
                         <div class="col-md-12">
@@ -1374,6 +1376,7 @@
             }
             $.ajax(settings).done(function (response) {
                 var dataa = JSON.parse(response);
+                $("#gifload").hide();
                 chart = new Highcharts.StockChart({
                     chart: {
                         renderTo: 'containerprac',
@@ -1511,6 +1514,7 @@
                 var dataa = JSON.parse(response);
                 console.log('/wordcloud_schoolsearch/' + a,);
                 console.log(dataa);
+                $("#gifload").hide();
                 $("#avgrate").text(dataa.avg_rating);
 
 
@@ -1618,6 +1622,7 @@
                 var dataa = JSON.parse(response);
                 console.log(dataa);
                 console.log("/schoolseacrhprogram_chart/" + a);
+                $("#gifload").hide();
                 $(function () {
                     $("#container40").highcharts({
                         chart: {
@@ -1716,6 +1721,7 @@
                 var dataa = JSON.parse(response);
                 console.log(dataa);
                 console.log("/schoolseacrhprogram_chart/" + a);
+                $("#gifload").hide();
                 $(function () {
                     $("#container44").highcharts({
                         chart: {
@@ -1819,6 +1825,7 @@
                 var dataa = JSON.parse(response);
                 console.log(dataa);
                 console.log("/schoolaudio_completion/" + a);
+                $("#gifload").hide();
                 Highcharts.chart('container41', {
                     chart: {
                         type: 'column'
@@ -2333,6 +2340,7 @@
                 var dataa = data.data
                 var scaleValueGet = data.yscale;
                 console.log(scaleValueGet);
+                $("#gifload").hide();
                 //   var schoolonlyname = data.schools;
                 //  console.log(schoolonlyname);
                 //  let textschool = "";
