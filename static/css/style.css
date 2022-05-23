@@ -1988,7 +1988,7 @@ span.avtr figure {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #00A651;
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 700;
 }
 .gifloader-spinner {
@@ -1997,8 +1997,7 @@ span.avtr figure {
     left: 0;
     right: 0;
     bottom: 0;
-    /* background-color: rgba(0, 0, 0, 0.5); */
-    background-color: #00A651;
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 700;
 }
 .gifloader-content{
@@ -2008,6 +2007,10 @@ span.avtr figure {
 }
 .gifloader-content .mx-my-auto{
     margin: auto;
+}
+.gifloader-content p{
+    text-align: center;
+    color: #ffffff;
 }
 
 

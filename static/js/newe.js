@@ -860,7 +860,7 @@ function distselect(distid) {
     $("#disdetails").text(distid);
     $("#gifload").empty();
     $("#gifload").css("display", "block");
-    $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-3 mx-my-auto"><img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader"></div></div>');
+    $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-3 mx-my-auto"><img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
     console.log(distid)

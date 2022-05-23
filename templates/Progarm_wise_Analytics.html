@@ -40,6 +40,17 @@
         gtag('js', new Date());
         gtag('config', 'G-EWVQZSV89G');
     </script>
+
+<script>
+    $( document ).ready(function() {
+       setTimeout(function(){
+           var loader = document.getElementsByClassName("gifloader-spinner")[0];
+           loader.className="gifloader-spinner fadeout" ;
+           setTimeout(function(){loader.style.display="none"},1000)
+       },120000)
+   });
+</script>
+
 </head>
 <style>
     .c-dashboardInfo {
@@ -391,6 +402,16 @@
             </div>
 
         </div>
+         <!-- loader -->
+        <div class="gifloader-spinner">
+            <div class="row gifloader-content">
+                <div class="col-lg-3 mx-my-auto">
+                    <img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader">
+                    <p>Take a deep breath while we load your data</p>
+                </div>
+            </div>
+        </div>
+
         <section class="statistics">
             <div class="container-fluid">
                 <div class="row">
@@ -450,7 +471,7 @@
                                 </div>
                             </div>
                         </section>
-                        <section class="charts">
+                        <section class="charts" style="display: none;">
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-md-6">
