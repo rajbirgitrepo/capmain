@@ -2,7 +2,7 @@
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url":             "/d1_chart",
+    "url": "/d1_chart",
     "method": "GET"
    }
     $.ajax(settings).done(function (response) {
@@ -10,7 +10,7 @@ var settings = {
 
 
 $(function() {
-$("#container").highcharts({
+$("#container8").highcharts({
 chart: {
   zoomType: 'xy',
   type:'bar'
@@ -91,7 +91,7 @@ series: [{
 
 
 $(function() {
-    $("#container1").highcharts({
+    $("#container9").highcharts({
     chart: {
       zoomType: 'xy',
       type:'bar'

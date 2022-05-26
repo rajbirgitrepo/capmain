@@ -96,7 +96,7 @@ var settings = {
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-    console.log(dataa)
+    // console.log(dataa)
     if (params == "NameEScore") {
         document.getElementById("district_engagement_score").title = dataa.Engagement_Dashboard.DISTRICT_ENGAGEMENT[0].District_Engagement_Score;
         document.getElementById("active_users_percentage").title = dataa.Engagement_Dashboard.DISTRICT_ENGAGEMENT[0].Active_Users;
@@ -255,11 +255,6 @@ $.ajax(settings).done(function(response) {
 
 
 
-
-
-
-
-
 // document.getElementById("total_users").title = dataa.Engagement_Dashboard.DAY_STREAK_21[0].total_users;
 // document.getElementById("active_streak").title = dataa.Engagement_Dashboard.DAY_STREAK_21[0].active_streak;
 // document.getElementById("streak_count").title = dataa.Engagement_Dashboard.DAY_STREAK_21[0].streak_count;
@@ -274,7 +269,6 @@ $.ajax(settings).done(function(response) {
 // document.getElementById("unique_user_temp").title = dataa.Engagement_Dashboard.LOGIN_ANALYTICS[0].unique_user_temp;
 // document.getElementById("Sucessful_login_history").title = dataa.Engagement_Dashboard.LOGIN_ANALYTICS[0].Sucessful_login_history;
 // document.getElementById("Temporary_passcode_by_users").title = dataa.Engagement_Dashboard.LOGIN_ANALYTICS[0].Temporary_passcode_by_users;
-
 
 
 
@@ -312,7 +306,7 @@ var settings = {
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-    console.log(dataa, "Menka");
+    // console.log(dataa, "Menka");
     for(i = 0; i < dataa.length; i++){
         var insights = dataa[i].Insights;
         if(i == 2){
@@ -460,10 +454,5 @@ $.ajax(settings).done(function(response) {
 });
 
 
-
-
-
-
-// pie chart
 
    

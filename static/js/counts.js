@@ -7,7 +7,7 @@ var settings = {
 };
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
-  console.log("counts are fnctioning");
+  // console.log("counts are fnctioning");
 
   // $("#power").text(dataa.r4_count);
   // $("#active").text(dataa.r4_lifetime);
@@ -33,7 +33,7 @@ var settings = {
 };
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
-  console.log("counts are fnctioning");
+  // console.log("counts are fnctioning");
   $("#schoolcount").text(dataa.totalschool.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#trial").text(dataa.community.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#lsy").text(dataa.clound.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));

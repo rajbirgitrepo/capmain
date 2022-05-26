@@ -785,8 +785,8 @@
      <!-- loader -->
     <div class="gifloader-spinner">
         <div class="row gifloader-content">
-            <div class="col-lg-3 mx-my-auto">
-                <img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader">
+            <div class="col-lg-4 mx-my-auto">
+                <img src="/static/images/breath.gif" class="img-responsive" alt="loader">
                 <p>Take a deep breath while we load your data</p>
             </div>
         </div>
@@ -798,7 +798,7 @@
                 var loader = document.getElementsByClassName("gifloader-spinner")[0];
                 loader.className="gifloader-spinner fadeout" ;
                 setTimeout(function(){loader.style.display="none"},1000)
-            },100000)
+            },60000)
         });
 
         // $(window).on("load",function(){
@@ -822,7 +822,7 @@
     <script>
         function cards(URL) {
             $('#next').empty();
-            console.log(URL);
+            // console.log(URL);
             var modal2 = document.getElementById("myModal2");
             modal2.style.display = "block";
             $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
@@ -834,7 +834,7 @@
 
         function cards2(URL) {
             $('#next').empty();
-            console.log(URL);
+            // console.log(URL);
             var modal2 = document.getElementById("myModal2");
             modal2.style.display = "block";
             $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
@@ -863,25 +863,18 @@
 
                 for (var i = 0; i < data1.data.length; i++) {
 
-
                     var datain = data1.data[i];
                     var resultDiv = createDynamicDiv(datain);
 
                     $("#dataTable").append(resultDiv);
-
-
-
 
                 }
                 //$('#dataTable1').append('</tbody></table>');
                 $('#dataTable').append('</tbody></table>');
                 dataTab();
 
-
-
                 $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
                 for (var i = 0; i < data1.data.length; i++) {
-
 
                     var datain = data1.data[i];
 
@@ -903,11 +896,7 @@
 
         function createDynamicDiv(userList) {
             var dynamicDiv = '';
-            console.log(userList)
-
-
-
-
+            // console.log(userList)
 
             dynamicDiv += '<tr >' +
                 '<td class="tablelink"><a onclick="search22(\'' + userList[0] + '\')">' +
@@ -954,15 +943,10 @@
 
                     $("#dataTable").append(resultDiv);
 
-
-
-
                 }
                 //$('#dataTable1').append('</tbody></table>');
                 $('#dataTable').append('</tbody></table>');
                 dataTab();
-
-
 
                 $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
                 for (var i = 0; i < data1.data.length; i++) {
@@ -988,11 +972,7 @@
 
         function createDynamicDiv2(userList) {
             var dynamicDiv = '';
-            console.log(userList)
-
-
-
-
+            // console.log(userList)
 
             dynamicDiv += '<tr >' +
                 '<td>' + userList[0] + '</td>' +
@@ -1010,26 +990,18 @@
 
         }
     </script>
-    <!-- <script src="/static/js/sidemenu.js"></script> -->
-    <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
-    <script src="{{ url_for('static',filename='js/search.js') }}"></script>
-    <!--<script src="{{ url_for('static',filename='js/contact.js') }}"></script>-->
-    <script src="{{ url_for('static',filename='js/snapshot.js') }}"></script>
 
-    <script src="{{ url_for('static',filename='js/chatbot.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/search.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/counts.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/pie.js') }}"></script>
     <script src="{{ url_for('static',filename='js/exeactive.js') }}"></script>
     <script src="{{ url_for('static',filename='js/exscriptbar.js') }}"></script>
-    <!-- partial -->
-    <script src="{{ url_for('static',filename='js/pie.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
     <script src="{{ url_for('static',filename='js/script.js') }}"></script>
-    <!-- <script  src="{{ url_for('static',filename='js/excellentexport.js') }}"></script> -->
-    <script src="{{ url_for('static',filename='js/transactions.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/counts.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/snapshot.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/chatbot.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
     <script src="{{ url_for('static',filename='js/map-tablescript.js') }}"></script>
-
-    <!-- <script src="{{ url_for('static',filename='js/realtime.js') }}"></script> -->
 </body>
 <script>
     $('.anchor-link').click(function(e){

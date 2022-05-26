@@ -2,7 +2,7 @@ playbackTrendChart2('playback', 'Playback')
 $("#practice_trendChart").val('playback');
 $(document).on('change', '#practice_trendChart', function() {
     $('#container1').empty();
-    console.log(this.value)
+    // console.log(this.value)
     if (this.value == 'practice') {
         document.getElementById('Practice_trend_playback_trend').title = 'The bar graph compares the current school year\u0027s practice count of Clever, Schoology, Family, and User to the previous school year\u0027s practice trend, represented by an orange line graph, as well as last to last year\u0027s practice trend, represented by a yellow line graph.';
         playbackTrendChart2(this.value, 'Practice')
@@ -22,7 +22,7 @@ function playbackTrendChart2(selectValue2, t) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(dataa[0].bar, "data");
+        // console.log(dataa[0].bar, "data");
 
         Highcharts.chart("container1", {
             chart: {
@@ -132,81 +132,81 @@ function playbackTrendChart2(selectValue2, t) {
     });
 }
 
-$(function() {
-    var settings = {
-        async: true,
-        crossDomain: true,
-        url: "/progprac",
-        method: "GET",
-    };
-    $.ajax(settings).done(function(response) {
-        var dataa = JSON.parse(response);
-        console.log(dataa, "hello");
+// $(function() {
+//     var settings = {
+//         async: true,
+//         crossDomain: true,
+//         url: "/progprac",
+//         method: "GET",
+//     };
+//     $.ajax(settings).done(function(response) {
+//         var dataa = JSON.parse(response);
+//         console.log(dataa, "hello");
 
-        Highcharts.chart("container77", {
-            chart: {
-                type: "column",
-            },
-            colors: ["#00A651", "#2C9905", "#8AE02B", "#B9FF4F", "#FF8300"],
-            title: {
-                text: "PROGRAM WISE PLAYBACK TREND",
-            },
-            xAxis: {
-                categories: [
-                    "AUG",
-                    "SEP",
-                    "OCT",
-                    "NOV",
-                    "DEC",
-                    "JAN",
-                    "FEB",
-                    "MAR",
-                    "APR",
-                    "MAY",
-                    "JUN",
-                    "JUL",
-                ],
-                crosshair: false,
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: "Playback Count",
-                },
-            },
-            tooltip: {
-                headerFormat: "<span>{point.x}</span><br>",
-                pointFormat: "<span>{series.name}</span><span{point.name}></span>: <b>{point.y}<b>{series.data2}",
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0,
-                },
-            },
-            series: [{
-                    name: "PRE-K",
-                    data: dataa[0].prek,
-                },
+//         Highcharts.chart("container77", {
+//             chart: {
+//                 type: "column",
+//             },
+//             colors: ["#00A651", "#2C9905", "#8AE02B", "#B9FF4F", "#FF8300"],
+//             title: {
+//                 text: "PROGRAM WISE PLAYBACK TREND",
+//             },
+//             xAxis: {
+//                 categories: [
+//                     "AUG",
+//                     "SEP",
+//                     "OCT",
+//                     "NOV",
+//                     "DEC",
+//                     "JAN",
+//                     "FEB",
+//                     "MAR",
+//                     "APR",
+//                     "MAY",
+//                     "JUN",
+//                     "JUL",
+//                 ],
+//                 crosshair: false,
+//             },
+//             yAxis: {
+//                 min: 0,
+//                 title: {
+//                     text: "Playback Count",
+//                 },
+//             },
+//             tooltip: {
+//                 headerFormat: "<span>{point.x}</span><br>",
+//                 pointFormat: "<span>{series.name}</span><span{point.name}></span>: <b>{point.y}<b>{series.data2}",
+//             },
+//             plotOptions: {
+//                 column: {
+//                     pointPadding: 0.2,
+//                     borderWidth: 0,
+//                 },
+//             },
+//             series: [{
+//                     name: "PRE-K",
+//                     data: dataa[0].prek,
+//                 },
 
-                {
-                    name: "ELEMENTARY",
-                    data: dataa[0].elem,
-                },
+//                 {
+//                     name: "ELEMENTARY",
+//                     data: dataa[0].elem,
+//                 },
 
-                {
-                    name: "MIDDLE",
-                    data: dataa[0].mid,
-                },
-                {
-                    name: "HIGH",
-                    data: dataa[0].high,
-                },
-                {
-                    name: "SOUND PLAYBACK /TRANSITION/ ALL",
-                    data: dataa[0].all,
-                },
-            ],
-        });
-    });
-});
+//                 {
+//                     name: "MIDDLE",
+//                     data: dataa[0].mid,
+//                 },
+//                 {
+//                     name: "HIGH",
+//                     data: dataa[0].high,
+//                 },
+//                 {
+//                     name: "SOUND PLAYBACK /TRANSITION/ ALL",
+//                     data: dataa[0].all,
+//                 },
+//             ],
+//         });
+//     });
+// });

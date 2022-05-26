@@ -4,7 +4,7 @@ var currYear = d.getFullYear();
 var currDate = d.getDate();
 
 var startDate = new Date(currYear, currMonth, currDate);
-console.log(startDate);
+// console.log(startDate);
 var e = "2021-07-01";
 var f = currYear + "-" + currMonth + "-" + currDate;
 

@@ -238,7 +238,7 @@ function schoolsearch() {
          $("#output").empty();
          $("#gifload").empty();
          $("#gifload").css("display", "block");
-         $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-3 mx-my-auto"><img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
+         $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
         console.log(URL);
         P(URL);
         schoolIDCharts(a)
@@ -989,7 +989,7 @@ function jou2(url1) {
 function familysearch() {
     $("#giffamily").empty();
     $("#giffamily").css("display", "block");
-    $("#giffamily").append('<div class="row gifloader-content"><div class="col-lg-3 mx-my-auto"><img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
+    $("#giffamily").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
     // $("#giffamily").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
     var a = document.getElementById("fsearchinputdescription").innerText;
     console.log(a);
@@ -1024,10 +1024,6 @@ function familysearch() {
         $("#fsignup").empty();
         $("#frenewal").empty();
         $("#fstatus").empty();
-        // $("#gifload").empty();
-        //  $("#gifload").css("display", "block");
-        //  $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-3 mx-my-auto"><img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader"></div></div>');
-     
         console.log(URL);
         Pfam(URL);
         AudioUn(a);
@@ -1532,7 +1528,7 @@ function joufam(url1) {
 function usersearch() {
     $("#gif3").empty();
     $("#gif3").css("display", "block");
-    $("#gif3").append('<div class="row gifloader-content"><div class="col-lg-3 mx-my-auto"><img src="/static/images/mindful-minutes-loader.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
+    $("#gif3").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
     // $("#gif3").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
     // var gif = document.getElementById("gif3");
     // gif.style.display = "block";
