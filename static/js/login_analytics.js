@@ -1,4 +1,17 @@
-console.log('In login1')
+$( document ).ready(function(){
+    $("#passcodecount").empty();
+    $("#totaltempcount").empty();
+    $("#totalsuccesslogins").empty();
+    $("#uniqueusertemp").empty();
+    $("#container").empty();
+    $("#container2").empty();
+    $("#gifload").empty();
+    $("#gifload").css("display", "block");
+    $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
+  });
+
+
+// console.log('In login1')
 var settings = {
     "async": true,
     "crossDomain": true,
@@ -7,7 +20,7 @@ var settings = {
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-
+    $("#gifload").hide();
     $('#passcodecount').text(dataa.new_passcode_email_count);
     $('#totaltempcount').text(dataa.total_temp_count);
     $('#totalsuccesslogins').text(dataa.totalsuccesslogins);
@@ -17,103 +30,6 @@ $.ajax(settings).done(function(response) {
 
 
 var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": "/tempasscode_streak",
-    "method": "GET"
-}
-$.ajax(settings).done(function(response) {
-    var dataa = JSON.parse(response);
-
-
-
-
-
-
-    Highcharts.chart('container', {
-        chart: {
-            type: 'column'
-        },
-        credits: {
-            enabled: false,
-        },
-        title: {
-            text: 'Temporary Passcode by Users'
-
-        },
-        colors: ['#8ae02b'],
-        xAxis: {
-            categories: dataa.streak
-        },
-        yAxis: {
-            lineWidth: 1,
-            min: 0,
-            title: {
-                text: 'Streak Count'
-            },
-            stackLabels: {
-                enabled: false,
-                style: {
-                    fontWeight: 'bold',
-                    color: ( // theme
-                        Highcharts.defaultOptions.title.style &&
-                        Highcharts.defaultOptions.title.style.color
-                    ) || 'gray'
-                }
-            }
-        },
-        tooltip: {
-            headerFormat: '<b>{point.x}</b><br/>',
-            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-        },
-        plotOptions: {
-            series: {
-                point: {
-                    events: {
-                        click: function() {
-
-                            $('#next').empty();
-                            // console.log(a);
-                            var modal2 = document.getElementById("myModal2");
-                            modal2.style.display = "block";
-                            $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
-                            var gif = document.getElementById("gif");
-                            gif.style.display = "block";
-                            $('#btnExport').show();
-
-                            URL =
-                                "tempasscode_table/" + this.category;
-
-                            console.log(URL);
-                            createDynamic(URL);
-                        },
-                    },
-                }
-            },
-            column: {
-                stacking: 'normal',
-                dataLabels: {
-                    enabled: false
-                }
-            }
-        },
-        legend: {
-            enabled: true,
-            itemStyle: {
-                fontSize: '10px',
-                fontWeight: '200'
-            }
-        },
-        series: [{
-                name: 'Number of temp passcode',
-                data: dataa.streak_count
-            }
-
-        ]
-    });
-});
-
-var settings = {
     async: true,
     crossDomain: true,
     url: "/daily_logins",
@@ -121,7 +37,8 @@ var settings = {
 };
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-    console.log(dataa);
+    // console.log(dataa);
+    $("#gifload").hide();
     $(function() {
         $("#container2").highcharts({
             chart: {
@@ -219,6 +136,100 @@ $.ajax(settings).done(function(response) {
     });
 });
 
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "/tempasscode_streak",
+    "method": "GET"
+}
+$.ajax(settings).done(function(response) {
+    var dataa = JSON.parse(response);
+
+    $("#gifload").hide();
+    Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        credits: {
+            enabled: false,
+        },
+        title: {
+            text: 'Temporary Passcode by Users'
+
+        },
+        colors: ['#8ae02b'],
+        xAxis: {
+            categories: dataa.streak
+        },
+        yAxis: {
+            lineWidth: 1,
+            min: 0,
+            title: {
+                text: 'Streak Count'
+            },
+            stackLabels: {
+                enabled: false,
+                style: {
+                    fontWeight: 'bold',
+                    color: ( // theme
+                        Highcharts.defaultOptions.title.style &&
+                        Highcharts.defaultOptions.title.style.color
+                    ) || 'gray'
+                }
+            }
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+        },
+        plotOptions: {
+            series: {
+                point: {
+                    events: {
+                        click: function() {
+
+                            $('#next').empty();
+                            // console.log(a);
+                            var modal2 = document.getElementById("myModal2");
+                            modal2.style.display = "block";
+                            $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+                            var gif = document.getElementById("gif");
+                            gif.style.display = "block";
+                            $('#btnExport').show();
+
+                            URL =
+                                "tempasscode_table/" + this.category;
+
+                            // console.log(URL);
+                            createDynamic(URL);
+                        },
+                    },
+                }
+            },
+            column: {
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: false
+                }
+            }
+        },
+        legend: {
+            enabled: true,
+            itemStyle: {
+                fontSize: '10px',
+                fontWeight: '200'
+            }
+        },
+        series: [{
+                name: 'Number of temp passcode',
+                data: dataa.streak_count
+            }
+
+        ]
+    });
+});
+
+
 function createDynamic(url) {
 
     var settings = {
@@ -279,7 +290,7 @@ function dataTab() {
 
 function createDynamicDiv(userList) {
     var dynamicDiv = '';
-    console.log(userList)
+    // console.log(userList)
 
 
 

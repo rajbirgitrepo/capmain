@@ -496,6 +496,15 @@
 
         </div>
 
+         <!-- loader -->
+         <div class="gifloader-spinner">
+            <div class="row gifloader-content">
+                <div class="col-lg-4 mx-my-auto">
+                    <img src="/static/images/breath.gif" class="img-responsive" alt="loader">
+                    <p>Take a deep breath while we load your data</p>
+                </div>
+            </div>
+        </div>  
 
         <div id="myModal2" class="modal2">
             <!-- Modal content -->
@@ -517,6 +526,7 @@
                 </div>
             </div>
         </div>
+        
         <section class="statistics">
             <div class="container-fluid">
                 <div class="col-md-3" title="" id="school_count">
@@ -782,43 +792,43 @@
 
     </section>
 
-     <!-- loader -->
-    <div class="gifloader-spinner">
-        <div class="row gifloader-content">
-            <div class="col-lg-4 mx-my-auto">
-                <img src="/static/images/breath.gif" class="img-responsive" alt="loader">
-                <p>Take a deep breath while we load your data</p>
-            </div>
-        </div>
-    </div>
-
     <script>
-         $( document ).ready(function() {
+        $( document ).ready(function() {
             setTimeout(function(){
                 var loader = document.getElementsByClassName("gifloader-spinner")[0];
                 loader.className="gifloader-spinner fadeout" ;
                 setTimeout(function(){loader.style.display="none"},1000)
-            },60000)
+            },5000)
         });
 
         // $(window).on("load",function(){
         //     setTimeout(function(){
         //     var loader = document.getElementsByClassName("gifloader-spinner");
         //     loader.className="gifloader-spinner fadeout" ;
-        //     setTimeout(function(){loader.style.display="none"},110000)
-        //     },110000)
+        //     setTimeout(function(){loader.style.display="none"},1000)
+        //     },8000)
         // });
     </script>
-
     <script>
          $("#navbarDropdown").click(function(){
             $("#showFadeMenu").fadeToggle(400);
         });
     </script>
+
+    <script src="{{ url_for('static',filename='js/pie.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/counts.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/exeactive.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/exscriptbar.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/search.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/snapshot.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/chatbot.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/map-tablescript.js') }}"></script>
     <!--<script src="/static/js/accessdom.js"></script>-->
     <script src='/static/js/excellentexport.js'></script>
-    <script>
-    </script>
+  
     <script>
         function cards(URL) {
             $('#next').empty();
@@ -990,28 +1000,15 @@
 
         }
     </script>
-
-    <script src="{{ url_for('static',filename='js/search.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/counts.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/pie.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/exeactive.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/exscriptbar.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/snapshot.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/chatbot.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/map-tablescript.js') }}"></script>
+    <script>
+        $('.anchor-link').click(function(e){
+            e.preventDefault();
+            var target = $($(this).attr('href'));
+            if(target.length){
+                var scrollTo = target.offset().top;
+                $('body, html').animate({scrollTop: scrollTo+'px'}, 500);   
+            }
+        });
+    </script>
 </body>
-<script>
-    $('.anchor-link').click(function(e){
-        e.preventDefault();
-        var target = $($(this).attr('href'));
-        if(target.length){
-            var scrollTo = target.offset().top;
-            $('body, html').animate({scrollTop: scrollTo+'px'}, 500);   
-        }
-});
-</script>
-
 </html>

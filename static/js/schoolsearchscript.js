@@ -310,6 +310,7 @@ function escore(a) {
             $("#error").empty()
         },
         error: function() {
+            $("#gifload").hide();
             $("#error").empty()
             $("#error").append('<div style="background-color: #fff;color: #ff0033;width: 50%;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><button onclick="raisequery()" style="padding: 6px;background-color: #ff0033;color: #fff;float: right;border: 0;border-radius: 10px;font-size: 11px;">Raise Ticket</button><button onclick="dismiss()" style="padding: 6px;background-color: #fff;color: #ff0033;float: right;border: 0;border-radius: 10px;font-size: 11px;">Dismiss</button><p style="margin-top:4px;">Connection to this school data failed.</p></div>');
         }
@@ -1116,7 +1117,7 @@ function AudioUn(a) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
-        $("#gifload").hide();
+        $("#giffamily").hide();
         Highcharts.chart('container81', {
             chart: {
                 type: 'column'
@@ -1188,7 +1189,7 @@ function AudioUn(a) {
         console.log(dataa);
         console.log("/family_audio_completion/" + a, );
         
-        $("#gifload").hide();
+        $("#giffamily").hide();
         Highcharts.chart('container82', {
             chart: {
                 type: 'column'
@@ -1261,9 +1262,10 @@ function Pfam(URL) {
         method: "GET",
         success: function() {
             $("#error").empty()
-            $("#giffamily").empty();
+            $("#giffamily").hide();
         },
         error: function() {
+            $("#giffamily").hide();
             $("#error").empty()
             $("#error").append('<div style="background-color: #fff;color: #ff0033;width: 50%;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><button onclick="raisequery()" style="padding: 6px;background-color: #ff0033;color: #fff;float: right;border: 0;border-radius: 10px;font-size: 11px;">Raise Ticket</button><button onclick="dismiss()" style="padding: 6px;background-color: #fff;color: #ff0033;float: right;border: 0;border-radius: 10px;font-size: 11px;">Dismiss</button><p style="margin-top:4px;">Connection to this school data failed.</p></div>');
         }
@@ -1271,7 +1273,8 @@ function Pfam(URL) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(URL)
-        $("#gifload").hide();
+        // $("#gifload").hide();
+        $("#giffamily").hide();
         $("#fschoolname").text("SCHOOL NAME: " + dataa.Info[0].SCHOOL_NAME);
         $("#fname").text("USER NAME: " + dataa.Info[0].USER_NAME);
         $("#fpractice").text("USER EMAIL: " + dataa.Info[0].USER_EMAIL);
@@ -1518,14 +1521,7 @@ function joufam(url1) {
 };
 
 
-
-
-
-
-
-
-
-function usersearch() {
+function usersearch() {                                                                               
     $("#gif3").empty();
     $("#gif3").css("display", "block");
     $("#gif3").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
@@ -1578,6 +1574,7 @@ function usersearch() {
             gif.style.display = "none";
         },
         error: function() {
+            $("#gif3").hide()
             $("#error").empty()
             $("#error").append('<div style="background-color: #fff;color: #ff0033;width: 50%;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><button onclick="raisequery()" style="padding: 6px;background-color: #ff0033;color: #fff;float: right;border: 0;border-radius: 10px;font-size: 11px;">Raise Ticket</button><button onclick="dismiss()" style="padding: 6px;background-color: #fff;color: #ff0033;float: right;border: 0;border-radius: 10px;font-size: 11px;">Dismiss</button><p style="margin-top:4px;">Connection to this school data failed.</p></div>');
         }

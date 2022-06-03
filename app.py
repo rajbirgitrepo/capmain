@@ -77131,7 +77131,7 @@ def loginAnalytics():
     if not g.user:
         return redirect(url_for('login'))
         
-    return render_template('login_analytics.html')
+    return render_template('Login_analytics.html')
 
 @app.route('/Journey_score')
 def reportcard():

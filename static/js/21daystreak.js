@@ -13,6 +13,26 @@
 // $("#fromd").text(e);
 // $("#tod").text(f);
 
+
+$( document ).ready(function(){
+  $("#c1").empty();
+  $("#c4").empty();
+  $("#c5").empty();
+  $("#c6").empty();
+  $("#c7").empty();
+  $("#heat-map").empty();
+  $("#container").empty();
+  $("#container4").empty();
+  $("#container5").empty();
+  $("#container10").empty();
+  $("#gifload").empty();
+  $("#gifload").css("display", "block");
+  $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
+
+});
+
+
+
 var settings = {
   async: true,
   crossDomain: true,
@@ -22,7 +42,8 @@ var settings = {
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
   console.log(dataa);
- 
+  $("#gifload").hide();
+
   $(function () {
     $("#container4").highcharts({
       chart: {
@@ -111,7 +132,8 @@ var settings = {
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
   console.log(dataa);
-  
+  $("#gifload").hide();
+
   $(function () {
     $("#container5").highcharts({
       chart: {
@@ -205,6 +227,8 @@ var settings = {
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
   console.log(dataa);
+  $("#gifload").hide();
+
   $(function () {
       $("#container10").highcharts({
           chart: {
@@ -351,6 +375,7 @@ var settings = {
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
 console.log(dataa)
+$("#gifload").hide();
   $('#c1').text(dataa.TOTAL_QUEST);
   $('#c4').text(dataa.QUEST_COMPLETED);
   $('#c5').text(dataa.USER_ACTIVATED);
@@ -372,6 +397,7 @@ $.ajax(settings).done(function (response) {
   // $("#c1").text(dataa.total
   //     );
 
+  $("#gifload").hide();
   var chart = Highcharts.stockChart('container', {
     chart: {
       type: 'column'

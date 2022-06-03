@@ -133,10 +133,13 @@ $("#ssid").append('<button onclick=schoolsearch() style="background-color: #fff;
 
 
 function compare() {
-    $("#gif").empty();
-    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
-    var gif = document.getElementById("gif");
-    gif.style.display = "block";
+    $("#gifload").empty();
+    $("#gifload").css("display", "block");
+    $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
+    // $("#gif").empty();
+    // $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    // var gif = document.getElementById("gif");
+    // gif.style.display = "block";
     $("#schoolname").empty();
     $("#practice").empty();
     $("#state").empty();
@@ -174,10 +177,12 @@ function compare() {
         method: "GET",
         success: function() {
             $("#error").empty()
-            var gif = document.getElementById("gif");
+            // var gif = document.getElementById("gif");
+            var gif = document.getElementById("gifload");
             gif.style.display = "none";
         },
         error: function() {
+            $("#gifload").hide();
             $("#error").empty()
             $("#error").append('<div style="background-color: #fff;color: #ff0033;width: 50%;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><button onclick="raisequery()" style="padding: 6px;background-color: #ff0033;color: #fff;float: right;border: 0;border-radius: 10px;font-size: 11px;">Raise Ticket</button><button onclick="dismiss()" style="padding: 6px;background-color: #fff;color: #ff0033;float: right;border: 0;border-radius: 10px;font-size: 11px;">Dismiss</button><p style="margin-top:4px;">Connection to this school data failed.</p></div>');
         }
@@ -922,10 +927,13 @@ function distselect2(a) {
 }
 
 function compare2() {
-    $("#gif2").empty();
-    $("#gif2").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
-    var gif = document.getElementById("gif2");
-    gif.style.display = "block";
+    $("#gifload").empty();
+    $("#gifload").css("display", "block");
+    $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
+    // $("#gif2").empty();
+    // $("#gif2").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    // var gif = document.getElementById("gif2");
+    // gif.style.display = "block";
     $("#schoolname").empty();
     $("#practice").empty();
     $("#container").empty();
@@ -941,10 +949,12 @@ function compare2() {
         method: "GET",
         success: function() {
             $("#error").empty()
-            var gif = document.getElementById("gif2");
+            // var gif = document.getElementById("gif2");
+            var gif = document.getElementById("gifload");
             gif.style.display = "none";
         },
         error: function() {
+            $("#gifload").hide();
             $("#error").empty()
             $("#error").append('<div style="background-color: #fff;color: #ff0033;width: 50%;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><button onclick="raisequery()" style="padding: 6px;background-color: #ff0033;color: #fff;float: right;border: 0;border-radius: 10px;font-size: 11px;">Raise Ticket</button><button onclick="dismiss()" style="padding: 6px;background-color: #fff;color: #ff0033;float: right;border: 0;border-radius: 10px;font-size: 11px;">Dismiss</button><p style="margin-top:4px;">Connection to this school data failed.</p></div>');
         }
@@ -1110,7 +1120,7 @@ function compare2() {
 
 function compare3() {
     $("#gif3").empty();
-    $("#gif3").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    $("#gif3").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
     var gif = document.getElementById("gif3");
     gif.style.display = "block";
     $("#schoolname").empty();
@@ -1154,6 +1164,7 @@ function compare3() {
             gif.style.display = "none";
         },
         error: function() {
+            $("#gif3").hide();
             $("#error").empty()
             $("#error").append('<div style="background-color: #fff;color: #ff0033;width: 50%;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><button onclick="raisequery()" style="padding: 6px;background-color: #ff0033;color: #fff;float: right;border: 0;border-radius: 10px;font-size: 11px;">Raise Ticket</button><button onclick="dismiss()" style="padding: 6px;background-color: #fff;color: #ff0033;float: right;border: 0;border-radius: 10px;font-size: 11px;">Dismiss</button><p style="margin-top:4px;">Connection to this school data failed.</p></div>');
         }
@@ -1172,8 +1183,6 @@ function compare3() {
         $("#uucount").text(dataa.Info1[0].LAST_PRACTICE_DATE);
         $("#upcount").text(dataa.Info1[0].USER_PRACTICE_COUNT);
         $("#umindfulness_minutes").text(dataa.Info1[0].USER_MINDFUL_MINUTES);
-
-
         $("#u2schoolname").text("SCHOOL NAME: " + dataa.Info2[0].SCHOOL_NAME);
         $("#uname2").text("USER NAME: " + dataa.Info2[0].USER_NAME);
         $("#u2practice").text("USER EMAIL: " + dataa.Info2[0].USER_EMAIL);

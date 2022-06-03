@@ -2055,9 +2055,11 @@ function distselect(distid) {
   $("#myDiv2").empty();
   $("#disdetails").text(distid);
   $("#gifload").empty();
-  $("#gifload").append(
-    "<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>"
-  );
+  $("#gifload").css("display", "block");
+  $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
+  // $("#gifload").append(
+  //   "<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>"
+  // );
   var c = document.getElementById("disdetails").innerText;
   var modal = document.getElementById("myModal");
   modal.style.display = "none";
@@ -2092,7 +2094,7 @@ function cardcount(id, a, b) {
     var dataa = JSON.parse(response);
     console.log("counts are fnctioning");
     console.log(URL);
-    $("#gifload").empty();
+    $("#gifload").hide();
     $("#school").text(dataa.schoolcount);
     $("#teacher").text(dataa.teachercount);
     $("#login").text(dataa.logincount);
