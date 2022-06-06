@@ -1494,7 +1494,20 @@ def schoolrating_csy():
     temp={'rating':rating,'count':count}
     return json.dumps(temp)
 
+
 def sentiment_pie():
+    df=pd.read_csv("sentopt.csv")
+    neg=df[df['Compound']<0]
+    pos=df[df['Compound']>0]
+    neu=df[df['Compound']==0]
+    neg_sentiment=round(100*(len(neg)/(len(neu)+len(neg)+len(pos))),2)
+    pos_sentiment=round(100*(len(pos)/(len(neu)+len(neg)+len(pos))),2)
+    neu_sentiment=round(100*(len(neu)/(len(neu)+len(neg)+len(pos))),2)
+    word_chart={'donut':{'pos':pos_sentiment,'neg':neg_sentiment,'neu':neu_sentiment}}
+    return json.dumps(word_chart)
+
+
+def sentiment_pie2():
     clean_list=[]
     news_headlines_senti = []
     news_headlines_dict = {}
@@ -1559,6 +1572,8 @@ def sentiment_pie():
     df['Neutrality'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['neu'])
     df['Compound'] = df['COMMENT'].apply(lambda x: sia.polarity_scores(x)['compound'])
     pd.pandas.set_option('display.max_rows',None)  
+    df.to_csv('sentopt.csv')
+    
     neg=df[df['Compound']<0]
     pos=df[df['Compound']>0]
     neu=df[df['Compound']==0]
