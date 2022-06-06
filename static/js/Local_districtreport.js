@@ -1192,6 +1192,7 @@ function charts(a, b, c) {
   };
   $.ajax(settings).done(function (response) {
     var dataa = JSON.parse(response);
+    $("#gifload").hide();
 
     Highcharts.chart("container37", {
       chart: {
