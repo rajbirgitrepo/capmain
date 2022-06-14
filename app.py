@@ -77175,6 +77175,8 @@ def AMS_EmailCountPerDay():
     final_df = final_df[['PURPOSE','FINAL_DATES']]
     final_df.drop(final_df[final_df.PURPOSE == 0].index, inplace=True)
     data = dict(zip(final_df.PURPOSE, final_df.FINAL_DATES))
+    data = {x.replace(' ', '_'): v for x, v in data.items()}
+    data = {x.replace('-', '_'): v for x, v in data.items()}
     temp={'data':data}
     return json.dumps(temp, default =str)
 
