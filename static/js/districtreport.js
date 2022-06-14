@@ -1,3 +1,19 @@
+document.getElementById('generate1').onclick = function() {
+    // Your html2pdf code here.
+    var element = document.getElementById('element-to-print');
+    // var opt = {
+    //     margin:       1,
+    //     filename:     'myfile.pdf',
+    //     image:        { type: 'jpeg', quality: 0.98 },
+    //     html2canvas:  { scale: 2 },
+    //     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    //   };
+    //   html2pdf().set(opt).from(element).save();
+    html2pdf(element);
+  };
+
+
+
 function myFunction() {
     var input, filter, cards, cardContainer, title, i;
     input = document.getElementById("myFilter");
@@ -2958,5 +2974,7 @@ $(function () {
 //   $("#fromd").text(a);
 //   $("#tod").text(a);
 // }
+
+
 
 

@@ -7,6 +7,7 @@ var settings = {
 };
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
+  $("#gifload").hide();
   // console.log("counts are fnctioning");
 
   // $("#power").text(dataa.r4_count);
@@ -33,13 +34,12 @@ var settings = {
 };
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
+  $("#gifload").hide();
   // console.log("counts are fnctioning");
   $("#schoolcount").text(dataa.totalschool.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#trial").text(dataa.community.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#lsy").text(dataa.clound.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#next6").text(dataa.explorer.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
-
-
   // $("#after6").text(dataa.active_r3 + dataa.district_r3);
   // $("#power").text(dataa.r4_count);
   $("#active").text(dataa.lifetime.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));

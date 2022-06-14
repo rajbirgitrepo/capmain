@@ -1,7 +1,7 @@
 var url = window.location.href;
-console.log(url);
+// console.log(url);
 var params = url.split('/')[3];
-console.log(params);
+// console.log(params);
 var settings = {
     "async": true,
     "crossDomain": true,
@@ -281,7 +281,7 @@ var settings = {
 }
 $.ajax(settings).done(function(response){
     var dataa = JSON.parse(response);
-    console.log(dataa); 
+    // console.log(dataa); 
     for(i = 0; i < dataa.length; i++){
         var insights = dataa[i].Insights;
         var observations = dataa[i].Observations;
@@ -315,11 +315,11 @@ $.ajax(settings).done(function(response) {
             $("#collapseOneDiv"+i).append('<div id="ChartContainer'+i+'"></div>');
             // console.log("id provided collapseOneDiv2");
             piedata=[]
-            console.log({
-                data: dataa[i].y_axis,
-                name: dataa[i].x_axis,
-                colorByPoint: true,
-            })
+            // console.log({
+            //     data: dataa[i].y_axis,
+            //     name: dataa[i].x_axis,
+            //     colorByPoint: true,
+            // })
             
             Highcharts.chart('ChartContainer'+i, {
                 chart: {

@@ -367,6 +367,17 @@
             </li>
             <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
     </aside>
+
+     <!-- loader -->
+     <div class="gifloader-spinner" id="gifload">
+        <div class="row gifloader-content">
+            <div class="col-lg-4 mx-my-auto">
+                <img src="/static/images/breath.gif" class="img-responsive" alt="loader">
+                <p>Take a deep breath while we load your data</p>
+            </div>
+        </div>
+    </div>  
+
     <section id="contents">
         <!-- The Modal -->
         <div id="myModal" class="modal">
@@ -495,16 +506,6 @@
             </div>
 
         </div>
-
-         <!-- loader -->
-         <div class="gifloader-spinner">
-            <div class="row gifloader-content">
-                <div class="col-lg-4 mx-my-auto">
-                    <img src="/static/images/breath.gif" class="img-responsive" alt="loader">
-                    <p>Take a deep breath while we load your data</p>
-                </div>
-            </div>
-        </div>  
 
         <div id="myModal2" class="modal2">
             <!-- Modal content -->
@@ -793,13 +794,13 @@
     </section>
 
     <script>
-        $( document ).ready(function() {
-            setTimeout(function(){
-                var loader = document.getElementsByClassName("gifloader-spinner")[0];
-                loader.className="gifloader-spinner fadeout" ;
-                setTimeout(function(){loader.style.display="none"},1000)
-            },5000)
-        });
+        // $( document ).ready(function() {
+        //     setTimeout(function(){
+        //         var loader = document.getElementsByClassName("gifloader-spinner")[0];
+        //         loader.className="gifloader-spinner fadeout" ;
+        //         setTimeout(function(){loader.style.display="none"},1000)
+        //     },1000)
+        // });
 
         // $(window).on("load",function(){
         //     setTimeout(function(){
@@ -815,10 +816,10 @@
         });
     </script>
 
-    <script src="{{ url_for('static',filename='js/pie.js') }}"></script>
     <script src="{{ url_for('static',filename='js/counts.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/pie.js') }}"></script>
     <script src="{{ url_for('static',filename='js/exeactive.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/exscriptbar.js') }}"></script>
+    <!-- <script src="{{ url_for('static',filename='js/exscriptbar.js') }}"></script> -->
     <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
     <script src="{{ url_for('static',filename='js/search.js') }}"></script>
     <script src="{{ url_for('static',filename='js/script.js') }}"></script>

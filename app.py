@@ -76933,13 +76933,353 @@ def summer_prac_all_users():
     return json.dumps(temp)
 
 
+#==============  AMS API's =========================================================
+
+@app.route('/AMS_Cards')
+def AMS_CardsAPI(): 
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
+    db=client.compass
+
+    ams_phase2_data=pd.DataFrame(list(db.email_logging.aggregate([
+    {'$match':{'$and':[
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"octsignup21@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aaroramay11@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"ams2022@innerexplorer.org",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aarora@1gen.io",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"tech@innerexplorer.org",'$options':'i'}}},
+    {'MODULE_NAME':{'$regex':'phase 2','$options':'i'}} ]}},
+     {'$group':{
+        '_id':"$RECEIVER_EMAIL",
+        'PURPOSE':'$PURPOSE',
+        'Total_Emails_Sent':{'$sum':1},
+        'date':{'$first':'$CREATED_DATE'}, 
+        'PURPOSE':{'$first':'$PURPOSE'}, 
+        'SENDER_EMAIL':{'$first':"$SENDER_EMAIL"},
+        'DESCRIPTION':{'$first':"$DESCRIPTION"},
+        # 'PURPOSE':{'$first':"$PURPOSE"},
+    #     'RECEIVER_EMAIL':{'$first':"$RECEIVER_EMAIL"},
+        'MODULE_NAME':{'$first':"$MODULE_NAME"},
+        }},
+        {'$project':{
+        "_id" : 0,
+        'RECEIVER_EMAIL': "$_id",
+        "USER_EMAIL" : "$RECEIVER_EMAIL",
+        'Total_Emails_Sent':1,
+        "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$date'}},
+        "DESCRIPTION" :1,
+        "PURPOSE" : 1,
+        "SENDER_EMAIL" :1,
+        "MODULE_NAME" : 1
+        }},
+    ])))
+    ams_phase2_data=ams_phase2_data[ams_phase2_data['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
+    ams_emails=list(ams_phase2_data['RECEIVER_EMAIL'].unique())
+
+    TOTAL_EMAILS_SENT = ams_phase2_data['Total_Emails_Sent'].sum()
+    UNIQUE_USERS = len(ams_phase2_data['RECEIVER_EMAIL'].unique())
+
+    ams_user_master_data=pd.DataFrame(list(db.user_master.aggregate([
+    {'$match':{'$and':[
+    {'EMAIL_ID':{'$in':ams_emails}},
+    {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}
+    ]}},
+    {'$project':{
+    '_id':0,
+    'USER_ID':'$_id',
+    'EMAIL_ID':'$EMAIL_ID',
+    'sign_up':{"$dateToString":{"format": "%Y-%m-%d","date":'$CREATED_DATE'}},
+    "USER_NAME":1, 
+    "School_Name":"$schoolId.NAME", 
+    "CITY":"$schoolId.CITY",
+    "STATE":"$schoolId.STATE", 
+    "COUNTRY":"$schoolId.COUNTRY"
+    }}
+    ])))
+    ams_user_master_data_1 = ams_user_master_data.drop_duplicates(subset=['EMAIL_ID'], keep="first")
+    ams_user_master_data_1 = ams_user_master_data_1.fillna("NO_INFO")
+
+    ams_final=ams_phase2_data.merge(ams_user_master_data_1,how='left',left_on='RECEIVER_EMAIL',right_on='EMAIL_ID')
+    ams_final=ams_final[ams_final['USER_ID'].notnull()]
+
+    ams_practice_data=pd.DataFrame(list(db.audio_track_master.aggregate([{'$match':{'$and':[
+    {'USER_ID._id':{'$in':list(ams_final['USER_ID'])}},
+    {'MODIFIED_DATE':{'$gte':dateutil.parser.parse(str(pd.to_datetime(min(ams_final['CREATED_DATE']))))}}    
+    ]}},
+    {'$group':{
+    '_id':'$USER_ID._id',
+    "Last_Practice_Date":{"$max":{"$dateToString":{"format": "%Y-%m-%d","date":'$MODIFIED_DATE'}}},
+    'Practice_Count':{"$sum":1},
+    'Mindful_Minutes':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}},
+    }},
+    ])))
+
+    Active_users = len(ams_practice_data)
+    finaldf=ams_final.merge(ams_practice_data,how='left',left_on='USER_ID',right_on='_id').fillna("NO_INFO")
+    finaldf['Practice_Count'].replace("NO_INFO",0, inplace=True)
+    finaldf['Mindful_Minutes'].replace("NO_INFO",0, inplace=True)
+    finaldf = finaldf[[ 'USER_NAME','EMAIL_ID','Total_Emails_Sent', 'sign_up', 'School_Name', 'CITY', 'STATE', 'COUNTRY', 'Last_Practice_Date', 'Practice_Count', 'Mindful_Minutes']]
+    Playback_Count = finaldf.Practice_Count.sum()
+    Mindful_Minutes = finaldf.Mindful_Minutes.sum()
+    temp={"TOTAL_EMAILS_SENT":int(TOTAL_EMAILS_SENT),"UNIQUE_USERS":int(UNIQUE_USERS),"ACTIVE_USERS":int(Active_users),
+          "PLAYBACK_COUNT":Playback_Count,"MINDFUL_MINUTES":round(Mindful_Minutes,2)}
+    return json.dumps(temp, default =str)
+
+
+@app.route('/AMS_EmailCount_PerDay')
+def AMS_EmailCountPerDay():     
+    
+    import datetime
+    from datetime import timedelta
+    from dateutil.relativedelta import relativedelta
+    def csy_first_date():
+            date_today =datetime.date.today()
+        #     print(date_today)
+        #     date_today='2024-07-01'
+        #     day_end=datetime.datetime.strptime(date_today, '%Y-%m-%d').date()
+            initial_date='2020-08-01'
+            day1=datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
+            # Check if leap year in the calculation
+            if ((day1.year+1) % 4) == 0:
+                if ((day1.year+1) % 100) == 0:
+                    if ((day1.year+1) % 400) == 0:
+                        days_diff=1
+                    else:
+                        days_diff=1
+                else:
+                    days_diff=1
+            else:
+                days_diff=0
+            if ((date_today-day1).days<(365+days_diff)):
+                day_1=day1
+            else:
+                day1=day1+timedelta(days=(365+days_diff))
+                day_1=day1
+
+            csy_date=datetime.datetime.strptime((day_1.strftime('%Y-%m-%d')), '%Y-%m-%d')
+
+            return csy_date
+                # LSY logic:
+    LSY_Date=csy_first_date()-relativedelta(years=1)
+
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
+    db=client.compass
+
+    ########## FOR DF ###########################
+    dateStr = str(LSY_Date.date())
+    myDatetime = dateutil.parser.parse(dateStr)
+    datestr1 = str(csy_first_date())
+    myDatetime1 = dateutil.parser.parse(datestr1)
+    ########### FOR DF1 ############################
+    dateStr2 = str(csy_first_date().date())
+    myDatetime2 = dateutil.parser.parse(dateStr2)
+    ########################## FOR DF2 ###############
+    dateStr3 = "2020-03-17T00:00:00.000Z"
+    myDatetime3 = dateutil.parser.parse(dateStr3)
+    ##################################
+    ##################################
+    dateStr4 = str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1))
+    myDatetime4 = dateutil.parser.parse(dateStr4)
+
+
+    ams = pd.DataFrame(list(db.email_logging.aggregate([
+    {"$match":
+    {"$and":[
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"octsignup21@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aaroramay11@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"ams2022@innerexplorer.org",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aarora@1gen.io",'$options':'i'}}},
+
+    {'MODULE_NAME':{"$regex":'Phase 2', '$options':'i'}},
+    ]}},
+    {'$group':{
+    '_id':{
+    'day':{'$dayOfMonth':'$CREATED_DATE'}, 
+    'month':{'$month':'$CREATED_DATE'},
+    'PURPOSE':'$PURPOSE'},
+    'Total_Emails_Sent':{'$sum':1},
+    'date':{'$first':'$CREATED_DATE'}, 
+    'PURPOSE':{'$first':'$PURPOSE'}, 
+
+    'SENDER_EMAIL':{'$first':"$SENDER_EMAIL"},
+    'DESCRIPTION':{'$first':"$DESCRIPTION"},
+    # 'PURPOSE':{'$first':"$PURPOSE"},
+    'RECEIVER_EMAIL':{'$first':"$RECEIVER_EMAIL"},
+    'MODULE_NAME':{'$first':"$MODULE_NAME"},
+    }},
+    {'$project':{
+    "_id" : 0,
+    "USER_EMAIL" : "$RECEIVER_EMAIL",
+    'Total_Emails_Sent':1,
+    "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$date'}},
+    "DESCRIPTION" :1,
+    "PURPOSE" : 1,
+    "SENDER_EMAIL" :1,
+    'RECEIVER_EMAIL': 1,
+    "MODULE_NAME" : 1
+    }},
+    ])))
+    uemail = ams.USER_EMAIL.to_list()
+    ams=ams[ams['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
+    ams = ams[['PURPOSE','Total_Emails_Sent', 'CREATED_DATE']].sort_values(by='CREATED_DATE').reset_index(drop=True)
+    ams['CREATED_DATE'] = pd.to_datetime(ams['CREATED_DATE'])
+    cd = list(ams['CREATED_DATE'].unique().astype(np.int64)/int(1e6))
+
+    df7=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
+    df9 = pd.DataFrame(df7,columns = ["CREATED_DATE"])
+    df9['value'] = 0
+
+    uscy1= ams.merge(df9, on="CREATED_DATE", how='right').fillna(0).sort_values(by='CREATED_DATE')
+       
+ 
+    uscy1['Total_Emails_Sent'] = uscy1['Total_Emails_Sent'].astype(np.int64)
+    uscy1 = uscy1[uscy1["CREATED_DATE"] >= ams.CREATED_DATE[:1][0] ] 
+    
+    uscy1 = uscy1[uscy1["CREATED_DATE"] <= ams.CREATED_DATE[len(ams)-1:len(ams)+1].to_list()[0] ].reset_index(drop = True)
+#     print("\n\n uscy1 \n\n",len(uscy1['CREATED_DATE'].unique()))
+    uscy1['CREATED_DATE']=uscy1['CREATED_DATE'].astype(np.int64)/int(1e6)
+    cd = list(uscy1['CREATED_DATE'].unique())
+#     print("\n\ndata\n\n",len(cd))
+
+    dff1 = uscy1.groupby('PURPOSE').apply(lambda x: x['CREATED_DATE'].unique())
+    dff2 = uscy1.groupby('PURPOSE').apply(lambda x: x['Total_Emails_Sent'].unique())
+    dff1 = pd.DataFrame(dff1).reset_index(level=0).rename({0: 'CREATED_DATE'}, axis='columns')
+    dff2 = pd.DataFrame(dff2).reset_index(level=0).rename({0: 'Total_Emails_Sent'}, axis='columns')
+
+    final_df= dff1.merge(dff2, on="PURPOSE", how='left')
+    missing_purpose=[]
+    for i in range(len(final_df)):
+        mps=[]
+        for j in range(len(cd)):
+            if cd[j] not in final_df['CREATED_DATE'][i]:
+                mp=(cd[j],0)
+                mps.append(mp)
+            else:
+                pass
+
+        missing_purpose.append(mps)
+
+
+    final_df['MISSING_DATE']=missing_purpose
+    found_purpose=[]
+    for i in range(len(final_df)):
+        x=list(zip(final_df['CREATED_DATE'][i], final_df['Total_Emails_Sent'][i]))
+        found_purpose.append(x)
+
+    final_df['DATE_FOUND']=found_purpose
+    final_df["FINAL_DATES"] = final_df["MISSING_DATE"]+final_df["DATE_FOUND"]
+    final_df['FINAL_DATES'] = [list(map(list, lst)) for lst in final_df.FINAL_DATES]
+    final_df = final_df[['PURPOSE','FINAL_DATES']]
+    final_df.drop(final_df[final_df.PURPOSE == 0].index, inplace=True)
+    data = dict(zip(final_df.PURPOSE, final_df.FINAL_DATES))
+    temp={'data':data}
+    return json.dumps(temp, default =str)
+
+@app.route('/AMS_pracphasesecond')
+def AMS_phase2prac():
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
+    db=client.compass
+    ams_phase2_data=pd.DataFrame(list(db.email_logging.aggregate([{'$match':{'$and':[
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'RECEIVER_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"octsignup21@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aaroramay11@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"ams2022@innerexplorer.org",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aarora@1gen.io",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"tech@innerexplorer.org",'$options':'i'}}},
+    {'MODULE_NAME':{'$regex':'phase 2','$options':'i'}} ]}}])))
+    ams_emails=list(ams_phase2_data['RECEIVER_EMAIL'])
+    ams_user_master_data_1=pd.DataFrame(list(db.user_master.aggregate([{'$match':{'$and':[
+                                                      {'EMAIL_ID':{'$in':ams_emails}},
+                                                    {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}]}},
+                                                    {'$project':{
+                                                        '_id':0,
+                                                        'USER_ID':'$_id',
+                                                        'EMAIL_ID':'$EMAIL_ID'
+                                                    }}
+                                                    ])))
+    ams_final=ams_phase2_data.merge(ams_user_master_data_1,how='left',left_on='RECEIVER_EMAIL',right_on='EMAIL_ID')
+    ams_final=ams_final[ams_final['USER_ID'].notnull()]
+    ams_final=ams_final[ams_final['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
+    ams_practice_data=pd.DataFrame(list(db.audio_track_master.aggregate([{'$match':{'$and':[
+        {'USER_ID._id':{'$in':list(ams_final['USER_ID'])}},
+        {'MODIFIED_DATE':{'$gte':dateutil.parser.parse(str(pd.to_datetime(min(ams_final['CREATED_DATE']))))}}    
+    ]}},
+        {'$project':{
+            '_id':0,
+            'USER_ID':'$USER_ID._id',
+            'Practice_Date':'$MODIFIED_DATE'
+        }}
+                                         ])))
+    ams_practice_data['Practice_Date_only']=ams_practice_data['Practice_Date'].dt.date
+    ams_practice_data_df=ams_practice_data.groupby('Practice_Date_only')['USER_ID'].count().reset_index()
+    all_dates_since_ams_phase2=pd.date_range(min(ams_final['CREATED_DATE']).date(),datetime.datetime.utcnow().date()-timedelta(days=1),freq='d')
+    all_possible_prac_date_df_ams=pd.DataFrame({'Practice_Date_only':all_dates_since_ams_phase2})
+    all_possible_prac_date_df_ams['Practice_Date_only']=all_possible_prac_date_df_ams['Practice_Date_only'].dt.date
+    final_practice_ams2=all_possible_prac_date_df_ams.merge(ams_practice_data_df,how='left',on='Practice_Date_only').fillna(0)
+    final_practice_ams2['Practice_Dates']=pd.to_datetime(final_practice_ams2['Practice_Date_only']).astype(np.int64)/int(1e6)
+    final_practice_ams2.rename(columns={'USER_ID':'Playback_Count'},inplace=True)
+    print(final_practice_ams2.Playback_Count.sum())
+    ams2_prac=final_practice_ams2[['Practice_Dates','Playback_Count']].values.tolist()
+    print(len(ams2_prac))
+    temp={'data':{'ams2prac':ams2_prac}}
+    return json.dumps(temp)
+
+
+@app.route('/AMS_PurposeWise_EmailCount')
+def AMS_PurposeWiseemailsCount(): 
+
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
+    db=client.compass
+
+    ams = pd.DataFrame(list(db.email_logging.aggregate([
+    {"$match":
+    {"$and":[
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"octsignup21@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aaroramay11@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"ams2022@innerexplorer.org",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aarora@1gen.io",'$options':'i'}}},
+
+    {'MODULE_NAME':{"$regex":'Phase 2', '$options':'i'}},
+    ]}},
+    {'$group':{
+    '_id':"$PURPOSE",
+    'date':{'$first':'$CREATED_DATE'},
+    'Total_Emails_Sent':{'$sum':1},
+    'SENDER_EMAIL':{'$first':"$SENDER_EMAIL"},
+    'DESCRIPTION':{'$first':"$DESCRIPTION"},
+    'PURPOSE':{'$first':"$PURPOSE"},
+    'RECEIVER_EMAIL':{'$first':"$RECEIVER_EMAIL"},
+    'MODULE_NAME':{'$first':"$MODULE_NAME"},
+    }},
+    {'$project':{
+    "_id" : 0,
+    "USER_EMAIL" : "$RECEIVER_EMAIL",
+    'Total_Emails_Sent':1,
+    "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$date'}},
+    "DESCRIPTION" :1,
+    "PURPOSE" : 1,
+    "SENDER_EMAIL" :1,
+    'RECEIVER_EMAIL': 1,
+    "MODULE_NAME" : 1
+    }},
+    ])))
+    print(ams.Total_Emails_Sent.sum())
+    uemail = ams.USER_EMAIL.to_list()
+    ams=ams[ams['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
+    ams = ams[["PURPOSE","Total_Emails_Sent"]].values.tolist()
+    temp={'data':ams}
+
+    return json.dumps(temp)
 
 
 
-
-
-
-
+#========================= AMS API's END HERE ==============================================
 
 
 

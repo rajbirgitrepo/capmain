@@ -16,6 +16,7 @@ var settings = {
 };
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
+    $("#gifload").hide();
     const total =
         dataa.amount.Payment_Mode_Amount[0] +
         dataa.amount.Payment_Mode_Amount[1] +

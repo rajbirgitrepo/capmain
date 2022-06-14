@@ -23,6 +23,7 @@ function playbackTrendChart2(selectValue2, t) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         // console.log(dataa[0].bar, "data");
+        $("#gifload").hide();
 
         Highcharts.chart("container1", {
             chart: {
