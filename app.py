@@ -77243,6 +77243,9 @@ def AMS_EmailCountPerDay():
            df31.PURPOSE_x[0] : df31.FINAL_DATES.tolist(),}
     data = {x.replace(' ', '_'): v for x, v in data.items()}
     data = {x.replace('-', '_'): v for x, v in data.items()}
+    data = {x.replace("!", '_'): v for x, v in data.items()}
+    data["Start_Todays_Practice_With_Inner_Explorer_Now"] = data['Start_Today’s_Practice_With_Inner_Explorer_Now_']
+    del data['Start_Today’s_Practice_With_Inner_Explorer_Now_']
 #     print([len(x) for x in data.values()])
     temp = {"data" : data}
 
