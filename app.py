@@ -77274,8 +77274,10 @@ def AMS_PurposeWiseemailsCount():
     print(ams.Total_Emails_Sent.sum())
     uemail = ams.USER_EMAIL.to_list()
     ams=ams[ams['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
-    ams = ams[["PURPOSE","Total_Emails_Sent"]].values.tolist()
-    temp={'data':ams}
+    # ams = ams[["PURPOSE","Total_Emails_Sent"]].values.tolist()
+    purpose = ams["PURPOSE"].tolist()
+    email = ams["Total_Emails_Sent"].tolist()
+    temp={"PURPOSE":purpose,"TOTAL_EMAILS_SENT":email}
 
     return json.dumps(temp)
 
