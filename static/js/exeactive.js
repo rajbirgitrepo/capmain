@@ -284,6 +284,7 @@ function playbackTrendChart3(selectValue3, tx) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
+        console.log(dataa);
         $("#gifload").hide();
         chart = new Highcharts.StockChart({
             chart: {

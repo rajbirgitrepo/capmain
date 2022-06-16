@@ -77029,7 +77029,8 @@ def AMS_CardsAPI():
 
 @app.route('/AMS_EmailCount_PerDay')
 def AMS_EmailCountPerDay():     
-    
+
+
     import datetime
     from datetime import timedelta
     from dateutil.relativedelta import relativedelta
@@ -77133,52 +77134,124 @@ def AMS_EmailCountPerDay():
     df9['value'] = 0
 
     uscy1= ams.merge(df9, on="CREATED_DATE", how='right').fillna(0).sort_values(by='CREATED_DATE')
-       
- 
+
     uscy1['Total_Emails_Sent'] = uscy1['Total_Emails_Sent'].astype(np.int64)
     uscy1 = uscy1[uscy1["CREATED_DATE"] >= ams.CREATED_DATE[:1][0] ] 
-    
-    uscy1 = uscy1[uscy1["CREATED_DATE"] <= ams.CREATED_DATE[len(ams)-1:len(ams)+1].to_list()[0] ].reset_index(drop = True)
-#     print("\n\n uscy1 \n\n",len(uscy1['CREATED_DATE'].unique()))
+    uscy1 = uscy1[uscy1["CREATED_DATE"] <= datetime.datetime.now().strftime("%Y-%m-%d") ].reset_index(drop = True)
+    purpose = list(uscy1['PURPOSE'].unique())
+    purpose = [i for i in purpose if i != 0]
+    #     print("\n\n uscy1 \n\n",len(uscy1['CREATED_DATE'].unique()))
     uscy1['CREATED_DATE']=uscy1['CREATED_DATE'].astype(np.int64)/int(1e6)
     cd = list(uscy1['CREATED_DATE'].unique())
-#     print("\n\ndata\n\n",len(cd))
+    # print("\n\ndata\n\n",len(cd))
+
 
     dff1 = uscy1.groupby('PURPOSE').apply(lambda x: x['CREATED_DATE'].unique())
     dff2 = uscy1.groupby('PURPOSE').apply(lambda x: x['Total_Emails_Sent'].unique())
     dff1 = pd.DataFrame(dff1).reset_index(level=0).rename({0: 'CREATED_DATE'}, axis='columns')
     dff2 = pd.DataFrame(dff2).reset_index(level=0).rename({0: 'Total_Emails_Sent'}, axis='columns')
 
-    final_df= dff1.merge(dff2, on="PURPOSE", how='left')
-    missing_purpose=[]
-    for i in range(len(final_df)):
-        mps=[]
-        for j in range(len(cd)):
-            if cd[j] not in final_df['CREATED_DATE'][i]:
-                mp=(cd[j],0)
-                mps.append(mp)
-            else:
-                pass
 
-        missing_purpose.append(mps)
+    df1  = pd.DataFrame({'PURPOSE': purpose[0] ,'CREATED_DATE': cd})
+    df2  = pd.DataFrame({'PURPOSE': purpose[1] ,'CREATED_DATE': cd})
+    df3  = pd.DataFrame({'PURPOSE': purpose[2] ,'CREATED_DATE': cd})
+    df4  = pd.DataFrame({'PURPOSE': purpose[3] ,'CREATED_DATE': cd})
+    df5  = pd.DataFrame({'PURPOSE': purpose[4] ,'CREATED_DATE': cd})
+    df6  = pd.DataFrame({'PURPOSE': purpose[5] ,'CREATED_DATE': cd})
+    df7  = pd.DataFrame({'PURPOSE': purpose[6] ,'CREATED_DATE': cd})
+    df8  = pd.DataFrame({'PURPOSE': purpose[7] ,'CREATED_DATE': cd})
+    df9  = pd.DataFrame({'PURPOSE': purpose[8] ,'CREATED_DATE': cd})
+    df10  = pd.DataFrame({'PURPOSE': purpose[9] ,'CREATED_DATE': cd})
+    df11  = pd.DataFrame({'PURPOSE': purpose[10],'CREATED_DATE': cd})
 
 
-    final_df['MISSING_DATE']=missing_purpose
-    found_purpose=[]
-    for i in range(len(final_df)):
-        x=list(zip(final_df['CREATED_DATE'][i], final_df['Total_Emails_Sent'][i]))
-        found_purpose.append(x)
+    df21 = df1.merge(uscy1[uscy1.PURPOSE == purpose[0]], on="CREATED_DATE", how='left').fillna(0)
+    df22 = df2.merge(uscy1[uscy1.PURPOSE == purpose[1]], on="CREATED_DATE", how='left').fillna(0)
+    df23 = df3.merge(uscy1[uscy1.PURPOSE == purpose[2]], on="CREATED_DATE", how='left').fillna(0)
+    df24 = df4.merge(uscy1[uscy1.PURPOSE == purpose[3]], on="CREATED_DATE", how='left').fillna(0)
+    df25 = df5.merge(uscy1[uscy1.PURPOSE == purpose[4]], on="CREATED_DATE", how='left').fillna(0)
+    df26 = df6.merge(uscy1[uscy1.PURPOSE == purpose[5]], on="CREATED_DATE", how='left').fillna(0)
+    df27 = df7.merge(uscy1[uscy1.PURPOSE == purpose[6]], on="CREATED_DATE", how='left').fillna(0)
+    df28 = df8.merge(uscy1[uscy1.PURPOSE == purpose[7]], on="CREATED_DATE", how='left').fillna(0)
+    df29 = df9.merge(uscy1[uscy1.PURPOSE == purpose[8]], on="CREATED_DATE", how='left').fillna(0)
+    df30 = df10.merge(uscy1[uscy1.PURPOSE == purpose[8]], on="CREATED_DATE", how='left').fillna(0)
+    df31 = df11.merge(uscy1[uscy1.PURPOSE == purpose[10]], on="CREATED_DATE", how='left').fillna(0)
 
-    final_df['DATE_FOUND']=found_purpose
-    final_df["FINAL_DATES"] = final_df["MISSING_DATE"]+final_df["DATE_FOUND"]
-    final_df['FINAL_DATES'] = [list(map(list, lst)) for lst in final_df.FINAL_DATES]
-    final_df = final_df[['PURPOSE','FINAL_DATES']]
-    final_df.drop(final_df[final_df.PURPOSE == 0].index, inplace=True)
-    data = dict(zip(final_df.PURPOSE, final_df.FINAL_DATES))
+    a1 = list([x for i in list(zip(df21["CREATED_DATE"], df21["Total_Emails_Sent"])) for x in i])
+    df21["FINAL_DATES"] = [a1[x:x+2] for x in range(0, len(a1),2)]
+    df21 = df21[["PURPOSE_x","FINAL_DATES"]]
+
+
+    a2 = list([x for i in list(zip(df22["CREATED_DATE"], df22["Total_Emails_Sent"])) for x in i])
+    df22["FINAL_DATES"] = [a2[x:x+2] for x in range(0, len(a2),2)]
+    df22 = df22[["PURPOSE_x","FINAL_DATES"]]
+
+
+    a3 = list([x for i in list(zip(df23["CREATED_DATE"], df23["Total_Emails_Sent"])) for x in i])
+    df23["FINAL_DATES"] = [a3[x:x+2] for x in range(0, len(a3),2)]
+    df23 = df23[["PURPOSE_x","FINAL_DATES"]]
+
+
+    a4 = list([x for i in list(zip(df24["CREATED_DATE"], df24["Total_Emails_Sent"])) for x in i])
+    df24["FINAL_DATES"] = [a4[x:x+2] for x in range(0, len(a4),2)]
+    df24 = df24[["PURPOSE_x","FINAL_DATES"]]
+
+
+    a5 = list([x for i in list(zip(df25["CREATED_DATE"], df25["Total_Emails_Sent"])) for x in i])
+    df25["FINAL_DATES"] = [a5[x:x+2] for x in range(0, len(a5),2)]
+    df25 = df25[["PURPOSE_x","FINAL_DATES"]]
+
+    a6 = list([x for i in list(zip(df26["CREATED_DATE"], df26["Total_Emails_Sent"])) for x in i])
+    df26["FINAL_DATES"] = [a6[x:x+2] for x in range(0, len(a6),2)]
+    df26 = df26[["PURPOSE_x","FINAL_DATES"]]
+
+
+    a7 = list([x for i in list(zip(df27["CREATED_DATE"], df27["Total_Emails_Sent"])) for x in i])
+    df27["FINAL_DATES"] = [a7[x:x+2] for x in range(0, len(a7),2)]
+    df27 = df27[["PURPOSE_x","FINAL_DATES"]]
+
+
+    a8 = list([x for i in list(zip(df28["CREATED_DATE"], df28["Total_Emails_Sent"])) for x in i])
+    df28["FINAL_DATES"] = [a8[x:x+2] for x in range(0, len(a8),2)]
+    df28 = df28[["PURPOSE_x","FINAL_DATES"]]
+
+
+    a9 = list([x for i in list(zip(df29["CREATED_DATE"], df29["Total_Emails_Sent"])) for x in i])
+    df29["FINAL_DATES"] = [a9[x:x+2] for x in range(0, len(a9),2)]
+    df29 = df29[["PURPOSE_x","FINAL_DATES"]]
+
+
+    a10 = list([x for i in list(zip(df30["CREATED_DATE"], df30["Total_Emails_Sent"])) for x in i])
+    df30["FINAL_DATES"] = [a10[x:x+2] for x in range(0, len(a10),2)]
+    df30 = df30[["PURPOSE_x","FINAL_DATES"]]
+
+
+    a11 = list([x for i in list(zip(df31["CREATED_DATE"], df31["Total_Emails_Sent"])) for x in i])
+    df31["FINAL_DATES"] = [a11[x:x+2] for x in range(0, len(a11),2)]
+    df31 = df31[["PURPOSE_x","FINAL_DATES"]]
+
+    data = {df21.PURPOSE_x[0] : df21.FINAL_DATES.tolist(),
+           df22.PURPOSE_x[0] : df22.FINAL_DATES.tolist(),
+           df23.PURPOSE_x[0] : df23.FINAL_DATES.tolist(),
+           df24.PURPOSE_x[0] : df24.FINAL_DATES.tolist(),
+           df25.PURPOSE_x[0] : df25.FINAL_DATES.tolist(),
+           df26.PURPOSE_x[0] : df26.FINAL_DATES.tolist(),
+           df27.PURPOSE_x[0] : df27.FINAL_DATES.tolist(),
+           df28.PURPOSE_x[0] : df28.FINAL_DATES.tolist(),
+           df29.PURPOSE_x[0] : df29.FINAL_DATES.tolist(),
+           df30.PURPOSE_x[0] : df30.FINAL_DATES.tolist(),
+           df31.PURPOSE_x[0] : df31.FINAL_DATES.tolist(),}
     data = {x.replace(' ', '_'): v for x, v in data.items()}
     data = {x.replace('-', '_'): v for x, v in data.items()}
-    temp={'data':data}
-    return json.dumps(temp, default =str)
+#     print([len(x) for x in data.values()])
+    data = {x.replace("!", '_'): v for x, v in data.items()}
+    data["Start_Todays_Practice_With_Inner_Explorer_Now"] = data['Start_Today’s_Practice_With_Inner_Explorer_Now_']
+    del data['Start_Today’s_Practice_With_Inner_Explorer_Now_']
+    temp = {"data" : data}
+
+    # return temp
+    return json.dumps(temp)
+
 
 @app.route('/AMS_pracphasesecond')
 def AMS_phase2prac():
@@ -77274,8 +77347,10 @@ def AMS_PurposeWiseemailsCount():
     print(ams.Total_Emails_Sent.sum())
     uemail = ams.USER_EMAIL.to_list()
     ams=ams[ams['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
-    ams = ams[["PURPOSE","Total_Emails_Sent"]].values.tolist()
-    temp={'data':ams}
+    # ams = ams[["PURPOSE","Total_Emails_Sent"]].values.tolist()
+    purpose = ams["PURPOSE"].tolist()
+    email = ams["Total_Emails_Sent"].tolist()
+    temp={"PURPOSE":purpose,"TOTAL_EMAILS_SENT":email}
 
     return json.dumps(temp)
 
@@ -77287,6 +77362,13 @@ def AMS_PurposeWiseemailsCount():
 
 
 
+
+@app.route('/ams_dashboard')
+def AMS_dashboard():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('AMS_dashboard.html')
 
 
 @app.route('/Family_SURVEY')
