@@ -7,15 +7,7 @@ var settings = {
 };
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
-  $("#gifload").hide();
-  // console.log("counts are fnctioning");
-
-  // $("#power").text(dataa.r4_count);
-  // $("#active").text(dataa.r4_lifetime);
-  // $("#passive").text(dataa.green_app);
-  // $("#dormant").text(dataa.family_app);
   $("#yearmindful").text("12");
-
   $("#usercount").text(dataa.user_count.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#totalclassroom").text(dataa.total_classrooms.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#totalstudent").text(dataa.total_students.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
@@ -34,25 +26,29 @@ var settings = {
 };
 $.ajax(settings).done(function (response) {
   var dataa = JSON.parse(response);
-  $("#gifload").hide();
-  // console.log("counts are fnctioning");
   $("#schoolcount").text(dataa.totalschool.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#trial").text(dataa.community.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#lsy").text(dataa.clound.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#next6").text(dataa.explorer.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
-  // $("#after6").text(dataa.active_r3 + dataa.district_r3);
-  // $("#power").text(dataa.r4_count);
+
   $("#active").text(dataa.lifetime.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#passive").text(dataa.schoolapp.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#dormant").text(dataa.homeapp.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
 
+});
 
+  // $("#after6").text(dataa.active_r3 + dataa.district_r3);
+  // $("#power").text(dataa.r4_count);
+  // $("#power").text(dataa.r4_count);
+  // $("#active").text(dataa.r4_lifetime);
+  // $("#passive").text(dataa.green_app);
+  // $("#dormant").text(dataa.family_app);
   // $("#usercount").text(dataa.user_count);
   // $("#totalclassroom").text(dataa.total_classrooms);
   // $("#totalstudent").text(dataa.total_students);
   // $("#mindful").text(dataa.mindful_minutes);
   // $("#neverlogged").text(dataa.never_logged_in);
   // $("#activeschools").text(dataa.active_school);
-});
+
 //new
 

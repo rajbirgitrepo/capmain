@@ -13,17 +13,21 @@ $(document).on('change', '#practice_trendChart', function() {
 });
 
 function playbackTrendChart2(selectValue2, t) {
-
     var settings = {
         async: true,
         crossDomain: true,
         url: "/practicetrendnew/" + selectValue2,
         method: "GET",
+        success: function() {
+            // console.log("api success")
+        },
+        error: function(){
+            // console.log("Errors");
+        }
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         // console.log(dataa[0].bar, "data");
-        $("#gifload").hide();
 
         Highcharts.chart("container1", {
             chart: {
@@ -154,11 +158,17 @@ function playbackTrendChart(selectValue, t) {
         crossDomain: true,
         url: "/activetrendnew/" + selectValue,
         method: "GET",
+        success: function() {
+            console.log("Success");
+        },
+        error: function(){
+            // console.log("Errors");
+        }
+
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         // console.log(dataa[0], "data")
-        $("#gifload").hide();
 
         Highcharts.chart('container33', {
             chart: {
@@ -281,11 +291,17 @@ function playbackTrendChart3(selectValue3, tx) {
         crossDomain: true,
         url: "/practicehistorychartlatest/" + selectValue3,
         method: "GET",
+        success: function() {
+            $("#gifload").hide();
+            console.log("api success")
+        },
+        error: function(){
+            // console.log("error")
+        }
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log(dataa);
-        $("#gifload").hide();
         chart = new Highcharts.StockChart({
             chart: {
                 renderTo: 'containerhistory2',
@@ -453,7 +469,6 @@ var settings = {
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
     // console.log(dataa[0].bar, "data")
-    $("#gifload").hide();
 
     Highcharts.chart('container35', {
         chart: {
@@ -543,7 +558,6 @@ var settings = {
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
     // console.log(dataa.Playbacks, "data")
-    $("#gifload").hide();
 
     Highcharts.chart('container36', {
         chart: {
@@ -632,7 +646,6 @@ var settings = {
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
     // console.log(dataa);
-    $("#gifload").hide();
 
     Highcharts.chart('container37', {
         chart: {
@@ -701,7 +714,6 @@ var settings = {
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-    $("#gifload").hide();
 
     Highcharts.chart('container38', {
         chart: {

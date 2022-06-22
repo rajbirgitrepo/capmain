@@ -61,10 +61,10 @@ function createboxes() {
     };
     $.ajax(settings).done(function (response) {
         var data1 = JSON.parse(response);
-        console.log(data1, "datain");
+        // console.log(data1, "datain");
         for (var i = 0; i < data1.data.length; i++) {
             var datain = data1.data[i];
-            console.log(datain);
+            // console.log(datain);
             var resultDiv = createDynamicDivcards(datain);
             $("#myProducts2").append(resultDiv);
         }
@@ -74,7 +74,7 @@ function createboxes() {
 
 function createDynamicDivcards(userList) {
     var dynamicDiv = '';
-    console.log(userList)
+    // console.log(userList)
 
     dynamicDiv += '<div class="col-md-2 card " style="border: none !important;"><div class=" portalBox clearfix" ><div class=" d-sm-flex justify-content-sm-between align-items-sm-center"><div class=" card-title text-s"><div onclick="distselect(\'' + userList[0] + '\'),imgd(\'' + userList[3] + '\')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()"><img src="' + userList[3] + '" class="img-responsive card_img"  alt="School"><p class="text-s" style="border-radius: 20px;background-color: #fafafa;">' + userList[1] + '</p></div></div></div></div></div>'
 
@@ -90,7 +90,7 @@ var currYear = d.getFullYear();
 var currDate = d.getDate();
 
 var startDate = new Date(currYear, currMonth, currDate);
-console.log(startDate);
+// console.log(startDate);
 var e = "2021-08-01";
 var f = currYear + "-" + currMonth + "-" + currDate;
 $("#stardate").text(e);
@@ -101,16 +101,16 @@ $("#tod").text(f);
 //imgd('https://xp.innerexplorer.org/compass/styles/images/allnewportals/allnewportalsdistrict/sarasota.png');
 
 function imgd(a) {
-    console.log("iamge", a);
+    // console.log("iamge", a);
     $("#imgdis").empty();
     $("#imgdis").append('<img src=' + a + '  class="img-responsive" alt="School" style="color: #797979; width: 100%;">');
 }
 
 var iddate = []
 function selectschoolforchart(d) {
-    console.log(d)
+    // console.log(d)
 
-    console.log(d in heatSchoolId);
+    // console.log(d in heatSchoolId);
     if (d in heatSchoolId) {
         $('#container41').empty();
         var a = iddate[0];
@@ -345,7 +345,7 @@ function charts(a, b, c) {
 
     $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
+        // console.log(dataa);
         $(function () {
             $("#container2").highcharts({
                 chart: {
@@ -411,7 +411,7 @@ function charts(a, b, c) {
                                 click: function () {
                                     URL = "/90daystable/" + a + "/" + this.category;
                                     $('#next').empty();
-                                    console.log(URL);
+                                    // console.log(URL);
                                     var Exportpage = URL + "?export";
                                     console.log(Exportpage + "90days table");
                                     $("#exportLink").text(Exportpage);
@@ -457,7 +457,7 @@ function charts(a, b, c) {
     $(document).on('change', '#historyPlayback', function () {
         $('#container2').empty();
         // $("#waiting").append("<p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p>");
-        console.log(this.value)
+        // console.log(this.value)
         if (this.value == '2') {
             var settings = {
                 async: true,
@@ -467,7 +467,7 @@ function charts(a, b, c) {
             };
             $.ajax(settings).done(function (response) {
                 var dataa = JSON.parse(response);
-                console.log(dataa);
+                // console.log(dataa);
                 $(function () {
                     $("#container2").highcharts({
                         chart: {
@@ -533,7 +533,7 @@ function charts(a, b, c) {
                                         click: function () {
                                             URL = "/90daystable/" + a + "/" + this.category;
                                             $('#next').empty();
-                                            console.log(URL);
+                                            // console.log(URL);
                                             var Exportpage = URL + "?export";
                                             console.log(Exportpage + "90days table");
                                             $("#exportLink").text(Exportpage);
@@ -585,7 +585,7 @@ function charts(a, b, c) {
 
             $.ajax(settings).done(function (response) {
                 var dataa = JSON.parse(response);
-                console.log(dataa);
+                // console.log(dataa);
                 $(function () {
                     $("#container2").highcharts({
                         chart: {
@@ -651,10 +651,10 @@ function charts(a, b, c) {
                                         click: function () {
                                             URL = "/90daystable/" + a + "/" + this.category;
                                             $('#next').empty();
-                                            console.log(URL);
+                                            // console.log(URL);
                                             var modal2 = document.getElementById("myModal2");
                                             var Exportpage = URL + "?export";
-                                            console.log(Exportpage + "90days table");
+                                            // console.log(Exportpage + "90days table");
                                             $("#exportLink").text(Exportpage);
                                             modal2.style.display = "block";
                                             $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
@@ -701,13 +701,13 @@ function charts(a, b, c) {
 
     $("#export1").click('load', function () {
         var p = document.getElementById("exportLink").innerText;
-        console.log(p);
+        // console.log(p);
         exportNew(p)
     });
 
     function exportNew(p) {
         window.location.assign(p);
-        console.log(p);
+        // console.log(p);
     }
     var settings = {
         async: true,
@@ -720,8 +720,8 @@ function charts(a, b, c) {
     };
     $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
-        console.log("/monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c);
+        // console.log(dataa);
+        // console.log("/monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c);
         $(function () {
             const chart1 =
                 Highcharts.chart('container3', {
@@ -993,7 +993,7 @@ function charts(a, b, c) {
     };
     $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
+        // console.log(dataa);
         $(function () {
             $("#container5").highcharts({
                 chart: {
@@ -1139,7 +1139,7 @@ function charts(a, b, c) {
     };
     $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
+        // console.log(dataa);
         //console.log("/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c);
         $(function () {
             $("#container6").highcharts({
@@ -1239,8 +1239,8 @@ function charts(a, b, c) {
     };
     $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
-        console.log(url);
+        // console.log(dataa);
+        // console.log(url);
         //console.log("/schoolwisepracticecounttop20" + "/" + a + "/" + b + "/" + c);
         $(function () {
             $("#container10").highcharts({
@@ -1325,7 +1325,7 @@ function charts(a, b, c) {
     }
     $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
-        console.log(dataa)
+        // console.log(dataa)
         Highcharts.chart('container38', {
             chart: {
                 plotBackgroundColor: null,
@@ -1464,7 +1464,7 @@ function charts(a, b, c) {
                                 console.log(URL);
                                 var modal2 = document.getElementById("myModal2");
                                 var Exportpage = URL + "?export";
-                                console.log(Exportpage + "sentiment table");
+                                // console.log(Exportpage + "sentiment table");
                                 $("#exportLink").text(Exportpage);
                                 modal2.style.display = "block";
                                 $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
@@ -1795,8 +1795,8 @@ function charts(a, b, c) {
     };
     $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
-        console.log("/schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c);
+        // console.log(dataa);
+        // console.log("/schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c);
         $(function () {
             const chart =
                 Highcharts.chart('container4', {
@@ -2072,7 +2072,7 @@ function dataTab() {
 
 function createDynamicDiv4(userList) {
     var dynamicDiv = "";
-    console.log(userList);
+    // console.log(userList);
 
     dynamicDiv +=
         "<tr >" +
@@ -2165,7 +2165,7 @@ function dataTab() {
 
 function createDynamicDiv2(userList) {
     var dynamicDiv = "";
-    console.log(userList);
+    // console.log(userList);
 
     dynamicDiv +=
         "<tr >" +
@@ -2249,7 +2249,7 @@ function dataTab() {
 
 function createDynamicDiv5(userList) {
     var dynamicDiv = "";
-    console.log(userList);
+    // console.log(userList);
 
     dynamicDiv +=
         "<tr >" +
@@ -2290,7 +2290,7 @@ function cards(URL) {
     var Exportpage = URL + textContent + "/" + c + "/" + b + "?export";
     $("#exportLink").text(Exportpage);
     $('#next').empty();
-    console.log(a);
+    // console.log(a);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";
     $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
@@ -2308,7 +2308,7 @@ function cards4(URL) {
     var Exportpage = URL + textContent + "/" + c + "/" + b + "?export";
     $("#exportLink").text(Exportpage);
     $('#next').empty();
-    console.log(a);
+    // console.log(a);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";
     $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
@@ -2326,7 +2326,7 @@ function cards2(URL) {
     var Exportpage = URL + textContent + "/" + c + "/" + b + "?export";
     $("#exportLink").text(Exportpage);
     $('#next').empty();
-    console.log(a);
+    // console.log(a);
     var modal2 = document.getElementById("myModal2");
     modal2.style.display = "block";
     $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");

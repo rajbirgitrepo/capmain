@@ -128,7 +128,7 @@ $.ajax(settings).done(function(response) {
             {
                 "name": "Enhance Mental Health With Inner Explorer",
                 "type": "column",
-                "color": "#B87333",
+                "color": "#40B5AD",
                 "xAxis": 0,
                 "data": dataa.data.Enhance_Mental_Health_With_Inner_Explorer,
                 dataGrouping: {
@@ -149,7 +149,7 @@ $.ajax(settings).done(function(response) {
                 "name": "Mindful Michigan Initiative",
                 "type": "column",
                 "xAxis": 1,
-                "color": "#01A451",
+                "color": "#2E8B57",
                 "data": dataa.data.Mindful_Michigan_Initiative,
                 dataGrouping: {
                     enabled: false,
@@ -159,7 +159,7 @@ $.ajax(settings).done(function(response) {
                 "name": "Mindful Self Care For Students",
                 "type": "column",
                 "xAxis": 1,
-                "color": "#4f1faf",
+                "color": "#93C572",
                 "data": dataa.data.Mindful_Self_Care_For_Students,
                 dataGrouping: {
                     enabled: false,
@@ -169,7 +169,7 @@ $.ajax(settings).done(function(response) {
                 "name": "Mindfulness Fosters Empathy And Compassion",
                 "type": "column",
                 "xAxis": 1,
-                "color": "#462cee",
+                "color": "#4F7942",
                 "data": dataa.data.Mindfulness_Fosters_Empathy_And_Compassion,
                 dataGrouping: {
                     enabled: false,
@@ -179,7 +179,7 @@ $.ajax(settings).done(function(response) {
                 "name": "Respond Instead Of React With Daily Mindfulness",
                 "type": "column",
                 "xAxis": 1,
-                "color": "#d3373b",
+                "color": "#0FFF50",
                 "data": dataa.data.Respond_Instead_Of_React_With_Daily_Mindfulness,
                  dataGrouping: {
                         enabled: false,
@@ -199,7 +199,7 @@ $.ajax(settings).done(function(response) {
                 "name": "Slow Down A Busy Schedule With Inner Explorer",
                 "type": "column",
                 "xAxis": 1,
-                "color": "#045F5F",
+                "color": "#90EE90",
                 "data": dataa.data.Slow_Down_A_Busy_Schedule_With_Inner_Explorer,
                  dataGrouping: {
                         enabled: false,
@@ -209,7 +209,7 @@ $.ajax(settings).done(function(response) {
                 "name": "Start Today’s Practice With Inner Explorer Now!",
                 "type": "column",
                 "xAxis": 1,
-                "color": "#FED8B1",
+                "color": "#228B22",
                 "data": dataa.data.Start_Todays_Practice_With_Inner_Explorer_Now,
                  dataGrouping: {
                         enabled: false,
@@ -219,7 +219,7 @@ $.ajax(settings).done(function(response) {
                 "name": "Start Your Daily Mindfulness Practice With Inner Explorer",
                 "type": "column",
                 "xAxis": 1,
-                "color": "#556B2F",
+                "color": "#00A36C",
                 "data": dataa.data.Start_Your_Daily_Mindfulness_Practice_With_Inner_Explorer,
                  dataGrouping: {
                         enabled: false,
@@ -229,7 +229,7 @@ $.ajax(settings).done(function(response) {
                 "name": "Your Inner Explorer Mindfulness Journey Is Ready Now!",
                 "type": "column",
                 "xAxis": 1,
-                "color": "#EE9A4D",
+                "color": "#50C878",
                 "data": dataa.data.Your_Inner_Explorer_Mindfulness_Journey_Is_Ready_Now_,
                  dataGrouping: {
                         enabled: false,

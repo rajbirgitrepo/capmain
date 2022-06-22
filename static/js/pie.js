@@ -1,10 +1,10 @@
+
 var d = new Date();
 var currMonth = d.getMonth() + 1;
 var currYear = d.getFullYear();
 var currDate = d.getDate();
 
 var startDate = new Date(currYear, currMonth, currDate);
-// console.log(startDate);
 var e = "2021-07-01";
 var f = currYear + "-" + currMonth + "-" + currDate;
 
@@ -16,7 +16,6 @@ var settings = {
 };
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-    $("#gifload").hide();
     const total =
         dataa.amount.Payment_Mode_Amount[0] +
         dataa.amount.Payment_Mode_Amount[1] +
