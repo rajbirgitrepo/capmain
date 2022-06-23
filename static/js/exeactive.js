@@ -159,7 +159,7 @@ function playbackTrendChart(selectValue, t) {
         url: "/activetrendnew/" + selectValue,
         method: "GET",
         success: function() {
-            console.log("Success");
+            // console.log("Success");
         },
         error: function(){
             // console.log("Errors");
@@ -293,7 +293,7 @@ function playbackTrendChart3(selectValue3, tx) {
         method: "GET",
         success: function() {
             $("#gifload").hide();
-            console.log("api success")
+            // console.log("api success")
         },
         error: function(){
             // console.log("error")
@@ -301,7 +301,7 @@ function playbackTrendChart3(selectValue3, tx) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
+        // console.log(dataa);
         chart = new Highcharts.StockChart({
             chart: {
                 renderTo: 'containerhistory2',
@@ -793,6 +793,177 @@ $.ajax(settings).done(function(response) {
     });
 });
 
+
+// function call when click on card
+function cards(URL) {
+    $('#next').empty();
+    // console.log(URL);
+    var modal2 = document.getElementById("myModal2");
+    modal2.style.display = "block";
+    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    var gif = document.getElementById("gif");
+    gif.style.display = "block";
+    $('#btnExport').show();
+    createDynamic(URL)
+}
+
+function cards2(URL) {
+    $('#next').empty();
+    // console.log(URL);
+    var modal2 = document.getElementById("myModal2");
+    modal2.style.display = "block";
+    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    var gif = document.getElementById("gif");
+    gif.style.display = "block";
+    $('#btnExport').show();
+    createDynamic2(URL)
+}
+
+function createDynamic(url) {
+
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "GET",
+        success: function() {
+            var gif = document.getElementById("gif");
+            gif.style.display = "none";
+        },
+    }
+    $.ajax(settings).done(function(response) {
+        var data1 = JSON.parse(response);
+
+        $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
+
+        for (var i = 0; i < data1.data.length; i++) {
+
+            var datain = data1.data[i];
+            var resultDiv = createDynamicDiv(datain);
+
+            $("#dataTable").append(resultDiv);
+
+        }
+        //$('#dataTable1').append('</tbody></table>');
+        $('#dataTable').append('</tbody></table>');
+        dataTab();
+
+        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
+        for (var i = 0; i < data1.data.length; i++) {
+
+            var datain = data1.data[i];
+
+            var resultDiv = createDynamicDiv(datain);
+            $("#dataTable1").append(resultDiv);
+
+        }
+        $('#dataTable1').append('</tbody></table>');
+    })
+}
+
+function dataTab() {
+
+    $("#dataTable").DataTable({
+        "pageLength": 50
+    });
+
+}
+
+function createDynamicDiv(userList) {
+    var dynamicDiv = '';
+    // console.log(userList)
+
+    dynamicDiv += '<tr >' +
+        '<td class="tablelink"><a onclick="search22(\'' + userList[0] + '\')">' +
+        userList[0] +
+        "</td></a>" +
+        '<td>' + userList[1] + '</td>' +
+        '<td>' + userList[2] + '</td>' +
+        '<td>' + userList[3] + '</td>' +
+        '<td class="tablelink"><a onclick="schoolsearch22(\'' + userList[4] + '\')">' +
+        userList[4] +
+        "</td></a>" +
+        '<td>' + userList[5] + '</td>' +
+        '<td>' + userList[6] + '</td>' +
+        '<td>' + userList[7] + '</td>' +
+        '<td>' + userList[8] + '</td>' +
+
+        '</tr>'
+    return dynamicDiv;
+
+}
+
+function createDynamic2(url) {
+
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "GET",
+        success: function() {
+            var gif = document.getElementById("gif");
+            gif.style.display = "none";
+        },
+    }
+    $.ajax(settings).done(function(response) {
+        var data1 = JSON.parse(response);
+
+        $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
+
+        for (var i = 0; i < data1.data.length; i++) {
+
+
+            var datain = data1.data[i];
+            var resultDiv = createDynamicDiv2(datain);
+
+            $("#dataTable").append(resultDiv);
+
+        }
+        //$('#dataTable1').append('</tbody></table>');
+        $('#dataTable').append('</tbody></table>');
+        dataTab();
+
+        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>SCHOOL NAME</th><th>STATE</th><th>CITY</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
+        for (var i = 0; i < data1.data.length; i++) {
+
+
+            var datain = data1.data[i];
+
+            var resultDiv = createDynamicDiv2(datain);
+            $("#dataTable1").append(resultDiv);
+
+        }
+        $('#dataTable1').append('</tbody></table>');
+    })
+}
+
+function dataTab() {
+
+    $("#dataTable").DataTable({
+        "pageLength": 50
+    });
+
+}
+
+function createDynamicDiv2(userList) {
+    var dynamicDiv = '';
+    // console.log(userList)
+
+    dynamicDiv += '<tr >' +
+        '<td>' + userList[0] + '</td>' +
+        '<td>' + userList[1] + '</td>' +
+        '<td>' + userList[2] + '</td>' +
+        '<td>' + userList[3] + '</td>' +
+        '<td>' + userList[4] + '</td>' +
+        '<td>' + userList[5] + '</td>' +
+        '<td>' + userList[6] + '</td>' +
+        '<td>' + userList[7] + '</td>' +
+        '<td>' + userList[8] + '</td>' +
+
+        '</tr>'
+    return dynamicDiv;
+
+}
 
 
 // var settings = {

@@ -1,9 +1,9 @@
 var url = window.location.href;
- console.log(url);
+//  console.log(url);
  var params = url.split('/')[3];
- console.log(params);
+//  console.log(params);
  var pageName=params+'/?amount=1';
- console.log(pageName);
+//  console.log(pageName);
 
  const countEl = document.getElementById('count');
 updateVisitCount();
