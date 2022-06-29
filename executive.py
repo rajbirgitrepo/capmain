@@ -318,6 +318,33 @@ def practice_trendnew_(charttype):
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
         dfcanvas['Month'] = dfcanvas['Month'].map(d)
         dfcanvas=dfcanvas.fillna(0)
+        
+        
+        
+        dfgoogle = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':testcommon_cond()['sub_master_cond']+[
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
+            practice_cond_dictonary_list[0],
+            practice_cond_dictonary_list[1],
+             threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'google_CSY':'$pc'}}])))
+        if dfgoogle.empty == True:
+            dfgoogle=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'google_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfgoogle
+        dfgoogle.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfgoogle['Month'] = dfgoogle['Month'].map(d)
+        dfgoogle=dfgoogle.fillna(0)
+        
+        
 
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
@@ -346,6 +373,7 @@ def practice_trendnew_(charttype):
         practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfcanvas, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfgoogle, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
         mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
@@ -361,7 +389,9 @@ def practice_trendnew_(charttype):
         schoology_CSY=data['schoology_CSY'].tolist()
         clever_CSY=data['clever_CSY'].tolist()
         canvas_CSY=data['canvas_CSY'].tolist()
-        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY}]
+        google_CSY=data['google_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},
+              {'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY},{'bargoogle':google_CSY}]
 
         return json.dumps(temp)
     
@@ -473,6 +503,30 @@ def practice_trendnew_(charttype):
         d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
         dfcanvas['Month'] = dfcanvas['Month'].map(d)
         dfcanvas=dfcanvas.fillna(0)
+        
+        
+        
+        
+        dfgoogle = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':testcommon_cond()['sub_master_cond']+[
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+           {'$project':{'_id':1,'google_CSY':'$pc'}}])))
+        if dfgoogle.empty == True:
+            dfgoogle=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'google_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfgoogle
+        dfgoogle.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfgoogle['Month'] = dfgoogle['Month'].map(d)
+        dfgoogle=dfgoogle.fillna(0)
+        
 
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
@@ -499,6 +553,7 @@ def practice_trendnew_(charttype):
         practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfcanvas, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfgoogle, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
         mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
@@ -514,9 +569,14 @@ def practice_trendnew_(charttype):
         schoology_CSY=data['schoology_CSY'].tolist()
         clever_CSY=data['clever_CSY'].tolist()
         canvas_CSY=data['canvas_CSY'].tolist()
-        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY}]
+        google_CSY=data['google_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},
+              {'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY},{'bargoogle':google_CSY}]
 
         return json.dumps(temp)
+
+
+# practice_trendnew_("Playback")
 
 def active_trend_new_(charttype):
     collection = db.audio_track_master
@@ -557,9 +617,10 @@ def active_trend_new_(charttype):
         df2 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
         {'USER_ID.EMAIL_ID':{'$ne':''}},  
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
             practice_cond_dictonary_list[0],
@@ -583,9 +644,10 @@ def active_trend_new_(charttype):
         dfschoology = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':testcommon_cond()['sub_master_cond']+[
-                {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
          {'USER_ID.EMAIL_ID':{'$ne':''}},  
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
             practice_cond_dictonary_list[0],
@@ -607,9 +669,10 @@ def active_trend_new_(charttype):
         dfclever = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':testcommon_cond()['sub_master_cond']+[
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
-             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
             practice_cond_dictonary_list[0],
@@ -630,9 +693,10 @@ def active_trend_new_(charttype):
         dfcanvas = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':testcommon_cond()['sub_master_cond']+[
-             {"USER_ID._id":{"$in":db.canvas_user_master.distinct("USER_ID._id")}},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+       {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
             practice_cond_dictonary_list[0],
@@ -649,13 +713,41 @@ def active_trend_new_(charttype):
         dfcanvas['Month'] = dfcanvas['Month'].map(d)
         dfcanvas=dfcanvas.fillna(0)
         
+        
+        dfgoogle = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':testcommon_cond()['sub_master_cond']+[
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+            {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
+            practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
+           {'$project':{'_id':1,'google_CSY':{'$size':'$auc'}}}])))
+        if dfgoogle.empty == True:
+            dfgoogle=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'google_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfgoogle
+        dfgoogle.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfgoogle['Month'] = dfgoogle['Month'].map(d)
+        dfgoogle=dfgoogle.fillna(0)
+        
+        
+        
+        
 
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':testcommon_cond()['sub_master_cond']+[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
                   {"USER_ID.CREATED_DATE":{"$gte": datetime(2020,3,17)}},
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
@@ -677,6 +769,7 @@ def active_trend_new_(charttype):
         practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfcanvas, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfgoogle, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
         mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
@@ -692,7 +785,9 @@ def active_trend_new_(charttype):
         schoology_CSY=data['schoology_CSY'].tolist()
         clever_CSY=data['clever_CSY'].tolist()
         canvas_CSY=data['canvas_CSY'].tolist()
-        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY}]
+        google_CSY=data['google_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},
+              {'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY},{'bargoogle': google_CSY}]
 
         return json.dumps(temp)
     
@@ -728,9 +823,10 @@ def active_trend_new_(charttype):
             {"$match":{
          '$and':testcommon_cond()['sub_master_cond']+[
              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
@@ -750,9 +846,12 @@ def active_trend_new_(charttype):
 
         dfschoology = DataFrame(list(collection.aggregate([
             {"$match":{
-         '$and':testcommon_cond()['sub_master_cond']+[{"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+         '$and':testcommon_cond()['sub_master_cond']+[
+            
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID'}}},
@@ -771,9 +870,10 @@ def active_trend_new_(charttype):
         dfclever = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':testcommon_cond()['sub_master_cond']+[
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
-             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+       {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
@@ -791,9 +891,10 @@ def active_trend_new_(charttype):
         dfcanvas = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':testcommon_cond()['sub_master_cond']+[
-             {"USER_ID._id":{"$in":db.canvas_user_master.distinct("USER_ID._id")}},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+          {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
            {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
@@ -807,13 +908,38 @@ def active_trend_new_(charttype):
         dfcanvas['Month'] = dfcanvas['Month'].map(d)
         dfcanvas=dfcanvas.fillna(0)
         
+        
+        
+        
+        dfgoogle = DataFrame(list(collection.aggregate([
+            {"$match":{
+         '$and':testcommon_cond()['sub_master_cond']+[
+          {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+            {'USER_ID.EMAIL_ID':{'$ne':''}},  
+            {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
+           {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'auc':{'$addToSet':'$USER_ID._id'}}},
+           {'$project':{'_id':1,'google_CSY':{'$size':'$auc'}}}])))
+        if dfgoogle.empty == True:
+            dfgoogle=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'google_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        else:
+            dfgoogle
+        dfgoogle.rename(columns = { '_id': 'Month'}, inplace = True)
+        d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+        dfgoogle['Month'] = dfgoogle['Month'].map(d)
+        dfgoogle=dfgoogle.fillna(0)
+        
+        
 
         df4 = DataFrame(list(collection.aggregate([
             {"$match":{
          '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},                
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+       {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},              
             {'USER_ID.EMAIL_ID':{'$ne':''}},  
                   {"USER_ID.CREATED_DATE":{"$gte": datetime(2020,3,17)}},
             {"MODIFIED_DATE":{"$gte": csy_first_date()}}]}},
@@ -832,6 +958,7 @@ def active_trend_new_(charttype):
         practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, dfcanvas, on='Month', how='left')
+        practice_CSY =pd.merge(practice_CSY, dfgoogle, on='Month', how='left')
         practice_CSY =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
         mon=pd.DataFrame({'Month':[8,9,10,11,12,1,2,3,4,5,6,7]})
@@ -847,8 +974,14 @@ def active_trend_new_(charttype):
         schoology_CSY=data['schoology_CSY'].tolist()
         clever_CSY=data['clever_CSY'].tolist()
         canvas_CSY=data['canvas_CSY'].tolist()
-        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY}]
+        google_CSY=data['google_CSY'].tolist()
+        temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},
+              {'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY},{'bargoogle': google_CSY}]
         return json.dumps(temp)
+
+
+# active_trend_new_("Playback")
+
 
 
 def practice___history___new___latest(charttype):    
