@@ -13558,6 +13558,9 @@ def user_practice_90days(districtid,startdate,enddate):
     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+         
 #             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
 #             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -13626,12 +13629,16 @@ def user_practice_90days(districtid,startdate,enddate):
     if df3.empty:
         df3=pd.DataFrame({'_id':[],'parents':[]})
     
+    #========= CLEVER  =================
+    
     df4 = DataFrame(list(collection.aggregate([
     {"$match":
      {'$and': [
 #     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
          {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
 #             {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
 #             {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -13664,6 +13671,8 @@ def user_practice_90days(districtid,startdate,enddate):
     if df4.empty:
         df4=pd.DataFrame({'_id':[],'clever':[]})
     
+    #======= SCHOOLOGY  =======================
+    
     
     df5 = DataFrame(list(collection.aggregate([
     {"$match":
@@ -13671,6 +13680,8 @@ def user_practice_90days(districtid,startdate,enddate):
 #     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
          {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
          {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
 #             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
 #             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
             {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
@@ -13704,11 +13715,102 @@ def user_practice_90days(districtid,startdate,enddate):
         df5=pd.DataFrame({'_id':[],'scoology':[]})
         
         
+     #======= CANVAS  =======================
+    
+    
+    df66 = DataFrame(list(collection.aggregate([
+    {"$match":
+     {'$and': [
+#     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.schoolId._id':{'$ne':None}},
+# //               {'IS_ADMIN':'Y'},
+# //             {'USER_ID.IS_PORTAL':'Y'},
+             {'USER_ID.EMAIL_ID':{'$ne':''}},
+                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
+#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
+#              {'MODIFIED_DATE':{'$gte':start1}},
+         {'MODIFIED_DATE':{"$gte": myDatetime1 ,
+                             "$lte":myDatetime2}},
+# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
+              {'$project':{'_id':1,'canvas':'$pc'}},
+    { '$sort' : { '_id' : 1} }
+    
+
+# //               {'$count':'count'}
+              ])))
+    if df66.empty:
+        df66=pd.DataFrame({'_id':[],'canvas':[]})
+        
+        
+        #======= GOOGLE  =======================
+    
+    
+    df77 = DataFrame(list(collection.aggregate([
+    {"$match":
+     {'$and': [
+#     {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+#             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+#             {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+            {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+              {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+             {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+            { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.schoolId._id':{'$ne':None}},
+# //               {'IS_ADMIN':'Y'},
+# //             {'USER_ID.IS_PORTAL':'Y'},
+             {'USER_ID.EMAIL_ID':{'$ne':''}},
+                  {"USER_ID.schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,"CATEGORY":{'$regex':district, '$options':'i'}})}},
+#              {'USER_ID.DISTRICT_ID._id':{'$eq':ObjectId(""+districtid+"")}},
+#              {'USER_ID.DISTRICT_ID.DISTRICT_NAME':'Broward County Public Schools'},
+#              {'MODIFIED_DATE':{'$gte':start1}},
+         {'MODIFIED_DATE':{"$gte": myDatetime1 ,
+                             "$lte":myDatetime2}},
+# //              {'EMAIL_ID':{'$regex':'broward','$options':'i'}},
+             {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+         {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                       {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+        {'$group':{'_id':{"$dateToString": { "format": "%Y-%m-%d", "date": "$MODIFIED_DATE"}},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
+              {'$project':{'_id':1,'google':'$pc'}},
+    { '$sort' : { '_id' : 1} }
+    
+
+# //               {'$count':'count'}
+              ])))
+    if df77.empty:
+        df77=pd.DataFrame({'_id':[],'google':[]})
+        
+        
         
     df6= pd.merge(df1,df2,on='_id',how='left')
     df7= pd.merge(df6,df3,on='_id',how='left')
     df8= pd.merge(df7,df4,on='_id',how='left')
     DF= pd.merge(df8,df5,on='_id',how='left')
+    DF= pd.merge(DF,df66,on='_id',how='left')
+    DF= pd.merge(DF,df77,on='_id',how='left')
+    
     DF=DF.fillna(0)
     # df['SCH_CREATED_DATE']=pd.to_datetime(df['SCH_CREATED_DATE'])
     DF.rename(columns = { '_id': 'date'}, inplace = True)
@@ -13724,12 +13826,17 @@ def user_practice_90days(districtid,startdate,enddate):
         P=DF['parents'].tolist()
         C=DF['clever'].tolist()
         S=DF['scoology'].tolist()
+        CAN=DF['canvas'].tolist()
+        GOOGLE=DF['google'].tolist()
+        
         uc=DF['user_count'].tolist()
 
 
-    data={'Date':date,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S}
+    data={'Date':date,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S,'Canvas':CAN, 'Google':GOOGLE}
     return json.dumps(data)
 
+
+# user_practice_90days("6177e72d108b6ebefcfc1014","2021-08-01","2022-06-30")
 
 
 
