@@ -11827,8 +11827,8 @@ def schwiseucc(districtid,startdate,enddate):
     {"$match":
          {'$and': [
              {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                          {'UTM_MEDIUM':{'$not':{'$regex':'clever','$options':'i'}}},
-                    {'UTM_MEDIUM':{'$not':{'$regex':'schoology','$options':'i'}}},
+            {'UTM_MEDIUM':{'$not':{'$regex':'clever','$options':'i'}}},
+            {'UTM_MEDIUM':{'$not':{'$regex':'schoology','$options':'i'}}},
 #             {"_id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id",)}}},
 #             {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
 #              {'CREATED_DATE':{"$gte": myDatetime1 ,
@@ -11885,7 +11885,7 @@ def schwiseucc(districtid,startdate,enddate):
     if df3.empty:
         df3=pd.DataFrame({'_id':[],'parents':[]})
     
-    
+    #===========  CLEVER
     df4 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
@@ -11893,7 +11893,9 @@ def schwiseucc(districtid,startdate,enddate):
 #             {"_id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
 #             {"_id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
               {'UTM_MEDIUM':{'$regex':'clever','$options':'i'}},
-                    {'UTM_MEDIUM':{'$not':{'$regex':'schoology','$options':'i'}}},
+            {'UTM_MEDIUM':{'$not':{'$regex':'schoology','$options':'i'}}},
+             {'UTM_MEDIUM':{'$not':{'$regex':'canvas','$options':'i'}}},
+             {'UTM_MEDIUM':{'$not':{'$regex':'google','$options':'i'}}},
                 {"IS_DISABLED":{"$ne":"Y"}},
              
                   {"IS_BLOCKED":{"$ne":"Y"}},
@@ -11919,12 +11921,15 @@ def schwiseucc(districtid,startdate,enddate):
     if df4.empty:
         df4=pd.DataFrame({'_id':[],'clever':[]})
     
+    #= SCHOOLOGY ==============
     
     df5 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
 #              {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
               {'UTM_MEDIUM':{'$not':{'$regex':'clever','$options':'i'}}},
+             {'UTM_MEDIUM':{'$not':{'$regex':'canvas','$options':'i'}}},
+             {'UTM_MEDIUM':{'$not':{'$regex':'google','$options':'i'}}},
                     {'UTM_MEDIUM':{'$regex':'schoology','$options':'i'}},
 #             {"_id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
 #             {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
@@ -11951,6 +11956,81 @@ def schwiseucc(districtid,startdate,enddate):
                   ])))
     if df5.empty:
         df5=pd.DataFrame({'_id':[],'scoology':[]})
+        
+    #======= CANVAS =============
+    
+    df66 = DataFrame(list(collection.aggregate([
+    {"$match":
+         {'$and': [
+#              {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+              {'UTM_MEDIUM':{'$not':{'$regex':'clever','$options':'i'}}},
+             {'UTM_MEDIUM':{'$not':{'$regex':'schoology','$options':'i'}}},
+             {'UTM_MEDIUM':{'$not':{'$regex':'google','$options':'i'}}},
+                    {'UTM_MEDIUM':{'$regex':'canvas','$options':'i'}},
+#             {"_id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+#             {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"IS_DISABLED":{"$ne":"Y"}},
+                  {"IS_BLOCKED":{"$ne":"Y"}},
+#               {'CREATED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
+                 {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    # //               {'IS_ADMIN':'Y'},
+#                 {'IS_PORTAL':'Y'},
+                 {'EMAIL_ID':{'$ne':''}},
+#                       {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,'FULL_EXPERIENCE':'Y',"CATEGORY":{'$regex':district, '$options':'i'}})}},
+#                   
+                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+            {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$_id'},'NAME':{'$first':'$schoolId.NAME'},'district':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
+                  {'$project':{'_id':1,'canvas':{'$size':'$ID'}}},
+                   { '$sort' : { 'canvas' : -1}},
+#               {'$limit':20}
+                  ])))
+    if df66.empty:
+        df66=pd.DataFrame({'_id':[],'canvas':[]})
+    
+    
+  #==== GOOGLE =======  
+    df77 = DataFrame(list(collection.aggregate([
+    {"$match":
+         {'$and': [
+#              {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+              {'UTM_MEDIUM':{'$not':{'$regex':'clever','$options':'i'}}},
+             {'UTM_MEDIUM':{'$not':{'$regex':'schoology','$options':'i'}}},
+             {'UTM_MEDIUM':{'$not':{'$regex':'canvas','$options':'i'}}},
+                    {'UTM_MEDIUM':{'$regex':'google','$options':'i'}},
+#             {"_id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+#             {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                {"IS_DISABLED":{"$ne":"Y"}},
+                  {"IS_BLOCKED":{"$ne":"Y"}},
+#               {'CREATED_DATE':{"$gte": myDatetime1 ,
+#                              "$lte":myDatetime2}},
+                 {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    # //               {'IS_ADMIN':'Y'},
+#                 {'IS_PORTAL':'Y'},
+                 {'EMAIL_ID':{'$ne':''}},
+#                       {"schoolId._id":{"$in":db.school_master.distinct( "_id", { "IS_PORTAL": "Y" ,'FULL_EXPERIENCE':'Y',"CATEGORY":{'$regex':district, '$options':'i'}})}},
+#                   
+                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+            {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$_id'},'NAME':{'$first':'$schoolId.NAME'},'district':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
+                  {'$project':{'_id':1,'google':{'$size':'$ID'}}},
+                   { '$sort' : { 'google' : -1}},
+#               {'$limit':20}
+                  ])))
+    if df77.empty:
+        df77=pd.DataFrame({'_id':[],'google':[]})
+    
+    
+    
     
     
     df6= pd.merge(df1,df0,on='_id',how='left')
@@ -11958,6 +12038,8 @@ def schwiseucc(districtid,startdate,enddate):
     df7=pd.merge(df9,df3,on='_id',how='left')
     df8=pd.merge(df7,df4,on='_id',how='left')
     df=pd.merge(df8,df5,on='_id',how='left')
+    df=pd.merge(df,df66,on='_id',how='left')
+    df=pd.merge(df,df77,on='_id',how='left')
     
     df=df.fillna(0)
     df
@@ -11971,6 +12053,8 @@ def schwiseucc(districtid,startdate,enddate):
         parent=[]
         clever=[]
         scoology=[]
+        canvas=[]
+        google=[]
         active=[]
       
     else:
@@ -11979,14 +12063,17 @@ def schwiseucc(districtid,startdate,enddate):
         parent=df['parents'].tolist()
         clever=df['clever'].tolist()
         scoology=df['scoology'].tolist()
+        canvas=df['canvas'].tolist()
+        google=df['google'].tolist()
         active=df['active'].tolist()
    
-    data={'schname':schname,'Teachers':teacher,'Parents':parent,'Clever':clever,'Scoology':scoology,'active':active}
+    data={'schname':schname,'Teachers':teacher,'Parents':parent,'Clever':clever,'Scoology':scoology,
+          "Canvas":canvas,"Google":google,'active':active}
     
     return json.dumps(data)
 
 
-# schwiseucc('5f2609807a1c0000950bb46d','2021-08-01','2021-10-19')
+# schwiseucc('5f2609807a1c0000950bb46d','2021-08-01','2022-06-30')
 
 
 @app.route('/schoolwisepracticecounttop20/<districtid>/<startdate>/<enddate>')
