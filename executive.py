@@ -1012,9 +1012,12 @@ def practice___history___new___latest(charttype):
         df1 = DataFrame(list(collection2.aggregate([
             {"$match":
             {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                           
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                           
                 {"MODIFIED_DATE":{"$gte": myDatetime2}},
                 {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}]}},
         practice_cond_dictonary_list[0],
@@ -1032,9 +1035,12 @@ def practice___history___new___latest(charttype):
         df2 = DataFrame(list(collection2.aggregate([{"$match":
             {"$and" :testcommon_cond()['sub_master_cond']+[
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                     
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                        
                 {"MODIFIED_DATE":{"$gte": myDatetime2}},
                 {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}]}},
                                                 practice_cond_dictonary_list[0],
@@ -1053,9 +1059,12 @@ def practice___history___new___latest(charttype):
                     {"$match":
                     {"$and" :testcommon_cond()['sub_master_cond']+[
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
-                             { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                           {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-                        {"USER_ID._id":{"$nin":db.canvas_user_master.distinct( "USER_ID._id")}},
+                                                                                     
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                        
                             {"MODIFIED_DATE":{"$gte": myDatetime2}}
                         ]}},
 
@@ -1075,9 +1084,12 @@ def practice___history___new___latest(charttype):
         clever = DataFrame(list(collection2.aggregate([{"$match":
                     {"$and" :testcommon_cond()['sub_master_cond']+[
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
-                             { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
-                        {"USER_ID._id":{"$nin":db.canvas_user_master.distinct( "USER_ID._id")}},
+                                                                           
+                 {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                        
                             {"MODIFIED_DATE":{"$gte": myDatetime2}}]}},
         practice_cond_dictonary_list[0],
                     practice_cond_dictonary_list[1],
@@ -1092,9 +1104,34 @@ def practice___history___new___latest(charttype):
         
         canvas = DataFrame(list(collection2.aggregate([{"$match":
                     {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
-                        { "USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},
-                           { "USER_ID._id":{"$nin":db.clever_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                                                                                 
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                        
+                            {"MODIFIED_DATE":{"$gte": myDatetime2}}]}},
+        practice_cond_dictonary_list[0],
+                    practice_cond_dictonary_list[1],
+                     threshcond[0],
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+        
+        
+        
+        google = DataFrame(list(collection2.aggregate([{"$match":
+                    {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
+                                                                                 
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                        
                             {"MODIFIED_DATE":{"$gte": myDatetime2}}]}},
         practice_cond_dictonary_list[0],
                     practice_cond_dictonary_list[1],
@@ -1178,6 +1215,22 @@ def practice___history___new___latest(charttype):
             canvas=pd.DataFrame(dates,columns = ["Practice_date"])
             canvas['Parents_Practice_CSY'] = 0
             df6can=canvas.sort_values(by='Practice_date')
+            
+            
+        #google csy
+        if 'Practice_date' in list(google.columns):
+
+            google['Practice_date'] = pd.to_datetime(google['Practice_date'])
+            df6google=google.sort_values(by='Practice_date')
+        else:
+
+            dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+            google=pd.DataFrame(dates,columns = ["Practice_date"])
+            google['Parents_Practice_CSY'] = 0
+            df6google=google.sort_values(by='Practice_date')
+            
+            
+            
 
 
 
@@ -1222,12 +1275,21 @@ def practice___history___new___latest(charttype):
 
         cancsy1['Practice_date']=cancsy1['Practice_date'].astype(np.int64)/int(1e6)
         cancsy=cancsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+        
+        
+        ####google
+        googlecsy1= df6google.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+
+        googlecsy1['Practice_date']=googlecsy1['Practice_date'].astype(np.int64)/int(1e6)
+        googlecsy=googlecsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
 
 
         ####schoology
         scsy1= df6s.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
         scsy1['Practice_date']=scsy1['Practice_date'].astype(np.int64)/int(1e6)
         scsy=scsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+        
+        
         #practice_Lsy
         df3['Practice_date'] = pd.to_datetime(df3['Practice_date'])
         df4=df3.sort_values(by='Practice_date')
@@ -1249,7 +1311,8 @@ def practice___history___new___latest(charttype):
         plcy_lsy=plcy111[["Practice_date","Total_Practice_LSY"]].values.tolist()
 
 
-        temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'lsy_to_lsy':plcy_lsy,'clever':ccsy,'schoology':scsy, 'canvas': cancsy}}
+        temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'lsy_to_lsy':plcy_lsy,'clever':ccsy,'schoology':scsy, 
+                      'canvas': cancsy,'google': googlecsy}}
         return json.dumps(temp)
 
     else:
@@ -1258,9 +1321,12 @@ def practice___history___new___latest(charttype):
         df1 = DataFrame(list(collection2.aggregate([
             {"$match":
             {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                         
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                        
                 {"MODIFIED_DATE":{"$gte": myDatetime2}},
                 {'USER_ID.ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}]}},
 
@@ -1274,9 +1340,12 @@ def practice___history___new___latest(charttype):
 
         df2 = DataFrame(list(collection2.aggregate([{"$match":
             {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                         
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                        
                 {"MODIFIED_DATE":{"$gte": myDatetime2}},
                 {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}]}},
 
@@ -1291,8 +1360,12 @@ def practice___history___new___latest(charttype):
         schoology = DataFrame(list(collection2.aggregate([
                     {"$match":
                     {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
-                             { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                           {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                                                                                      
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                        
                             {"MODIFIED_DATE":{"$gte": myDatetime2}}]}},
                     {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
                                     'month':{'$month':'$MODIFIED_DATE'}},
@@ -1305,8 +1378,12 @@ def practice___history___new___latest(charttype):
 
         clever = DataFrame(list(collection2.aggregate([{"$match":
                     {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
-                             { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                                                                                       
+                 {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                        
                             {"MODIFIED_DATE":{"$gte": myDatetime2}}]}},
             {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
                             'month':{'$month':'$MODIFIED_DATE'}},
@@ -1318,9 +1395,12 @@ def practice___history___new___latest(charttype):
         
         canvas = DataFrame(list(collection2.aggregate([{"$match":
                     {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
-                        { "USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},
-                           { "USER_ID._id":{"$nin":db.clever_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                                                                                 
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                        
                             {"MODIFIED_DATE":{"$gte": myDatetime2}}]}},
             {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
                             'month':{'$month':'$MODIFIED_DATE'}},
@@ -1329,6 +1409,25 @@ def practice___history___new___latest(charttype):
             {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
                         'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
             {"$sort":{'Practice_date':1}}])))
+        
+        
+        google = DataFrame(list(collection2.aggregate([{"$match":
+                    {"$and" :testcommon_cond()['sub_master_cond']+[{'USER_ID.EMAIL_ID':{'$ne':""}},
+                                                                                 
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+                 {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+                {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+                {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                        
+                            {"MODIFIED_DATE":{"$gte": myDatetime2}}]}},
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+        
 
         df3 = DataFrame(list(collection2.aggregate([{"$match":{'$and':testcommon_cond()['sub_master_cond']+
                     [{'MODIFIED_DATE':{"$gte":myDatetime,"$lt": myDatetime1}}]}},
@@ -1391,6 +1490,21 @@ def practice___history___new___latest(charttype):
             canvas=pd.DataFrame(dates,columns = ["Practice_date"])
             canvas['Parents_Practice_CSY'] = 0
             df6can=canvas.sort_values(by='Practice_date')
+            
+            
+            
+         #google csy
+        if 'Practice_date' in list(google.columns):
+
+            google['Practice_date'] = pd.to_datetime(google['Practice_date'])
+            df6google=google.sort_values(by='Practice_date')
+        else:
+
+            dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+            google=pd.DataFrame(dates,columns = ["Practice_date"])
+            google['Parents_Practice_CSY'] = 0
+            df6google=google.sort_values(by='Practice_date')    
+        
 
         #schoology csy
 
@@ -1430,12 +1544,23 @@ def practice___history___new___latest(charttype):
 
         cancsy1['Practice_date']=cancsy1['Practice_date'].astype(np.int64)/int(1e6)
         cancsy=cancsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+        
+        
+        
+        ####google
+        googlecsy1= df6google.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        googlecsy1['Practice_date']=googlecsy1['Practice_date'].astype(np.int64)/int(1e6)
+        googlecsy=googlecsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
 
 
         ####schoology
         scsy1= df6s.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
         scsy1['Practice_date']=scsy1['Practice_date'].astype(np.int64)/int(1e6)
         scsy=scsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+        
+        
         #practice_Lsy
         df3['Practice_date'] = pd.to_datetime(df3['Practice_date'])
         df4=df3.sort_values(by='Practice_date')
@@ -1456,9 +1581,12 @@ def practice___history___new___latest(charttype):
         plcy111['Practice_date']=plcy111['Practice_date'].astype(np.int64)/int(1e6)
         plcy_lsy=plcy111[["Practice_date","Total_Practice_LSY"]].values.tolist()
 
-        temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'lsy_to_lsy':plcy_lsy,'clever':ccsy,'schoology':scsy, 'canvas': cancsy}}
+        temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'lsy_to_lsy':plcy_lsy,'clever':ccsy,'schoology':scsy, 
+                      'canvas': cancsy,'google': googlecsy}}
         return json.dumps(temp)
 
+    
+# practice___history___new___latest("Playback")
 
 def average_trend_new_():
     collection = db.audio_track_master
