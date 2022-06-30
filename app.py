@@ -70121,11 +70121,12 @@ def practice_per_minn_(charttype):
                     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
                     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
-
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
-                
+                                                       
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
                 {"MODIFIED_DATE":{"$gte": today_min
                                              ,"$lte" : today_max
                                     }},
@@ -70154,11 +70155,12 @@ def practice_per_minn_(charttype):
                     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
                     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
-
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
-                
+                                                       
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
                 {"MODIFIED_DATE":{"$gte": today_min
                                              ,"$lte" : today_max
                                     }},
@@ -70188,9 +70190,12 @@ def practice_per_minn_(charttype):
                         {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
-                            { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                            { "USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
-                            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                                                                                   
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
                             {"MODIFIED_DATE":{"$gte": today_min
                                                  ,"$lte" : today_max
                                             }},
@@ -70220,9 +70225,12 @@ def practice_per_minn_(charttype):
                         {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
-                             { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.canvas_user_master.distinct( "USER_ID._id")}},
+                                                                                   
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
                             {"MODIFIED_DATE":{"$gte": today_min
                                                  ,"$lte" : today_max
                                             }},
@@ -70250,9 +70258,12 @@ def practice_per_minn_(charttype):
                         {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
-                             { "USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.clever_master.distinct( "USER_ID._id")}},
+                                                                                   
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
                             {"MODIFIED_DATE":{"$gte": today_min
                                                  ,"$lte" : today_max
                                             }},
@@ -70272,6 +70283,40 @@ def practice_per_minn_(charttype):
             {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
                         'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
             {"$sort":{'Practice_date':1}}])))
+        
+        
+        google = DataFrame(list(collection2.aggregate([{"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                                                                                   
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+                            {"MODIFIED_DATE":{"$gte": today_min
+                                                 ,"$lte" : today_max
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+                ]}},
+        practice_cond_dictonary_list[0],
+                    practice_cond_dictonary_list[1],
+                     threshcond[0],
+           {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+
+        
 
         ########Ratingss################################
         collection4= db.audio_feedback
@@ -70422,6 +70467,30 @@ def practice_per_minn_(charttype):
             schoology=pd.DataFrame(time_range, columns=['Practice_date'])
             schoology['Parents_Practice_CSY'] = 0
             schoology_sort=schoology.sort_values(by='Practice_date')
+            
+            
+            
+        # Google
+
+        if 'Practice_date' in list(google.columns):
+            google['Practice_date']=pd.to_datetime(google['Practice_date'], format='%Y-%m-%d %H:%M')
+            google['Practice_date']=google['Practice_date']-timedelta(hours=4)
+            google_sort=google.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            google=pd.DataFrame(time_range, columns=['Practice_date'])
+            google['Parents_Practice_CSY'] = 0
+            google_sort=google.sort_values(by='Practice_date')
 
 
 
@@ -70477,10 +70546,21 @@ def practice_per_minn_(charttype):
 
         schoology_csy1['Practice_date']=schoology_csy1['Practice_date'].astype(np.int64)/int(1e6)
         schoology_parents_users=schoology_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+        
+        
+        # Google
+        google_sort['Practice_date']=pd.to_datetime(google_sort['Practice_date'])
+        google_csy1= pd.merge(google_sort,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+
+        google_csy1['Practice_date']=google_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        google_parents_users=google_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
 
 
 
-        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Canvas':canvas_parents_users,'Clever':clever_parents_users, 'schoology':schoology_parents_users, 'ratings':ratings}}
+        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Canvas':canvas_parents_users,
+                      'Clever':clever_parents_users, 'schoology':schoology_parents_users,
+                      "Google":google_parents_users,'ratings':ratings}}
 
         return json.dumps(temp)
 
@@ -70495,10 +70575,12 @@ def practice_per_minn_(charttype):
                     {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
                     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
-
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                       
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
                 
                 {"MODIFIED_DATE":{"$gte": today_min
                                              ,"$lte" : today_max
@@ -70529,9 +70611,12 @@ def practice_per_minn_(charttype):
                     {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
                 {'USER_ID.EMAIL_ID':{'$ne':""}},
 
-                {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                      
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
                 
                 {"MODIFIED_DATE":{"$gte": today_min
                                              ,"$lte" : today_max
@@ -70562,9 +70647,12 @@ def practice_per_minn_(charttype):
                         {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
-                            { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                            { "USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
-                            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                                                                                  
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
                             {"MODIFIED_DATE":{"$gte": today_min
                                                  ,"$lte" : today_max
                                             }},
@@ -70594,9 +70682,12 @@ def practice_per_minn_(charttype):
                         {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
-                             { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.canvas_user_master.distinct( "USER_ID._id")}},
+                                                                                   
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
                             {"MODIFIED_DATE":{"$gte": today_min
                                                  ,"$lte" : today_max
                                             }},
@@ -70624,9 +70715,12 @@ def practice_per_minn_(charttype):
                         {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
                             {'USER_ID.EMAIL_ID':{'$ne':""}},
-                             { "USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
-                           {"USER_ID._id":{"$nin":db.clever_master.distinct( "USER_ID._id")}},
+                                                                                    
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
                             {"MODIFIED_DATE":{"$gte": today_min
                                                  ,"$lte" : today_max
                                             }},
@@ -70646,6 +70740,39 @@ def practice_per_minn_(charttype):
             {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
                         'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
             {"$sort":{'Practice_date':1}}])))
+        
+        
+        google = DataFrame(list(collection2.aggregate([{"$match":
+                    {"$and" :[
+                        {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                            {'USER_ID.EMAIL_ID':{'$ne':""}},
+                                                                                    
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+                            {"MODIFIED_DATE":{"$gte": today_min
+                                                 ,"$lte" : today_max
+                                            }},
+                        {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                            {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                              {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                            {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+                ]}},
+#         practice_cond_dictonary_list[0],
+#                     practice_cond_dictonary_list[1],
+#                      threshcond[0],
+           {'$group':{'_id':{'day':{'$minute':'$MODIFIED_DATE'}, 'month':{'$month':'$MODIFIED_DATE'}},
+                        'date':{'$first':'$MODIFIED_DATE'},  
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d %H:%M","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+        
 
         ########Ratingss################################
         collection4= db.audio_feedback
@@ -70796,6 +70923,29 @@ def practice_per_minn_(charttype):
             schoology=pd.DataFrame(time_range, columns=['Practice_date'])
             schoology['Parents_Practice_CSY'] = 0
             schoology_sort=schoology.sort_values(by='Practice_date')
+            
+            
+        # Google
+
+        if 'Practice_date' in list(google.columns):
+            google['Practice_date']=pd.to_datetime(google['Practice_date'], format='%Y-%m-%d %H:%M')
+            google['Practice_date']=google['Practice_date']-timedelta(hours=4)
+            google_sort=google.sort_values(by='Practice_date')
+        else:
+            time_range=[]
+        #     start = '2021-10-12 00:00:00'
+        #     end = "2021-10-12 23:59:59"
+            delta = datetime.timedelta(seconds=60)
+            start = datetime.datetime.strptime(start_today,'%Y-%m-%d %H:%M:%S')
+            end = datetime.datetime.strptime(end_today,'%Y-%m-%d %H:%M:%S' )
+            t = start
+            while t <= end :
+                x=datetime.datetime.strftime(t,'%Y-%m-%d %H:%M:%S')
+                t += delta
+                time_range.append(x)
+            google=pd.DataFrame(time_range, columns=['Practice_date'])
+            google['Parents_Practice_CSY'] = 0
+            google_sort=google.sort_values(by='Practice_date')
 
 
 
@@ -70851,13 +71001,24 @@ def practice_per_minn_(charttype):
 
         schoology_csy1['Practice_date']=schoology_csy1['Practice_date'].astype(np.int64)/int(1e6)
         schoology_parents_users=schoology_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
+        
+        # Google
+        google_sort['Practice_date']=pd.to_datetime(google_sort['Practice_date'])
+        google_csy1= pd.merge(google_sort,parents_datetime, on='Practice_date', how='right').fillna(0).sort_values(by='Practice_date')
+
+        google_csy1['Practice_date']=google_csy1['Practice_date'].astype(np.int64)/int(1e6)
+        google_parents_users=google_csy1[["Practice_date","Parents_Practice_CSY"]].values.astype(int).tolist()
 
 
 
-        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Canvas':canvas_parents_users,'Clever':clever_parents_users, 'schoology':schoology_parents_users, 'ratings':ratings}}
+        temp={'data':{'teachers_practices':csy_users_list, 'Parents_practices':parents_final, 'Canvas':canvas_parents_users,
+                      'Clever':clever_parents_users, 'schoology':schoology_parents_users, 
+                      "Google":google_parents_users,'ratings':ratings}}
 
         return json.dumps(temp)
-
+    
+    
+# practice_per_minn_("Playback"), practice_per_minn_("Practice")
 
 
 @app.route('/Program_wise_per_minute_DAILD_updated/<charttype>')
