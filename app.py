@@ -60956,14 +60956,17 @@ def weekly__compare__chart__(datestr,charttype):
         threshold=.5
         threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
     
-        qr1=[{"$match":{
+        #=================== LAST WEEK PRACTICE======================
+        
+        LAST_WEEK_PRACTICE_parents = DataFrame(list(collection1.aggregate([{"$match":{
         '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
-
-                {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
-
+          {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+                                                               
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
@@ -60975,17 +60978,18 @@ def weekly__compare__chart__(datestr,charttype):
         }},
         ]}},
              practice_cond_dictonary_list[0],
-                        practice_cond_dictonary_list[1],
-                         threshcond[0],
+            practice_cond_dictonary_list[1],
+             threshcond[0],
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_parents':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list1= list(collection1.aggregate(qr1))
-        df_atm= DataFrame(list1)
-        df_atm
-        LAST_WEEK_PRACTICE_parents=df_atm[['_id','LAST_WEEK_PRACTICE_parents']]
-        qr2=[{"$match":{
+         ])))
+        
+        LAST_WEEK_PRACTICE_parents=LAST_WEEK_PRACTICE_parents[['_id','LAST_WEEK_PRACTICE_parents']]
+        
+        #=================== LAST TO LAST WEEK PRACTICE======================
+        
+        LAST_TO_LAST_WEEK_PRACTICE_parents = DataFrame( list(collection1.aggregate([{"$match":{
             '$and':[
                 {'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -60994,52 +60998,62 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
     #         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
                    {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},  
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                  
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
             ]}},
              practice_cond_dictonary_list[0],
-                        practice_cond_dictonary_list[1],
-                         threshcond[0],
+            practice_cond_dictonary_list[1],
+             threshcond[0],
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_parents':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list2= list(collection1.aggregate(qr2))
-        df_at2m= DataFrame(list2)
-        LAST_TO_LAST_WEEK_PRACTICE_parents=df_at2m[['_id','LAST_TO_LAST_WEEK_PRACTICE_parents']]
-        join_final1= pd.merge(LAST_WEEK_PRACTICE_parents, LAST_TO_LAST_WEEK_PRACTICE_parents, on='_id', how='left')    
-    # =========================================
-        qr3=[{"$match":{
+         ])))
+        LAST_TO_LAST_WEEK_PRACTICE_parents=LAST_TO_LAST_WEEK_PRACTICE_parents[['_id','LAST_TO_LAST_WEEK_PRACTICE_parents']]
+        
+        join_final1= pd.merge(LAST_WEEK_PRACTICE_parents, LAST_TO_LAST_WEEK_PRACTICE_parents, on='_id', how='left')   
+#### ===================================================================================================
+        
+  #=================== LAST WEEK PRACTICE TEACHERS======================
+  
+        LAST_WEEK_PRACTICE_TEACHERS= DataFrame(list(collection1.aggregate([{"$match":{
         '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-        {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}}, 
-        {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                  
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
         }},
         ]}},
              practice_cond_dictonary_list[0],
-                        practice_cond_dictonary_list[1],
-                         threshcond[0],
+            practice_cond_dictonary_list[1],
+             threshcond[0],
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_TEACHERS':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list3= list(collection1.aggregate(qr3))
-        df_atm3= DataFrame(list3)
-        df_atm3
-        LAST_WEEK_PRACTICE_TEACHERS=df_atm3[['_id','LAST_WEEK_PRACTICE_TEACHERS']]
-        qr4=[{"$match":{
+         ])))
+        LAST_WEEK_PRACTICE_TEACHERS=LAST_WEEK_PRACTICE_TEACHERS[['_id','LAST_WEEK_PRACTICE_TEACHERS']]
+        
+        #=================== LAST TO LAST WEEK PRACTICE TEACHERS======================
+
+        LAST_TO_LAST_WEEK_PRACTICE_teachers= DataFrame(list(collection1.aggregate([{"$match":{
             '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -61047,9 +61061,13 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},  
-             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                      
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -61060,25 +61078,29 @@ def weekly__compare__chart__(datestr,charttype):
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_teachers':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list4= list(collection1.aggregate(qr4))
-        df_atm4= DataFrame(list4)
-        LAST_TO_LAST_WEEK_PRACTICE_teachers=df_atm4[['_id','LAST_TO_LAST_WEEK_PRACTICE_teachers']]
+         ])))
+        LAST_TO_LAST_WEEK_PRACTICE_teachers=LAST_TO_LAST_WEEK_PRACTICE_teachers[['_id','LAST_TO_LAST_WEEK_PRACTICE_teachers']]
         join_final2= pd.merge(LAST_WEEK_PRACTICE_TEACHERS, LAST_TO_LAST_WEEK_PRACTICE_teachers, on='_id', how='left') 
 
 
+# ===================================================================================================
 
-    # =========================================
-        qr5=[{"$match":{
+ #=================== LAST WEEK SCHOOLOGY PRACTICE======================
+      
+        LAST_WEEK_PRACTICE_schoology= DataFrame(list(collection1.aggregate([{"$match":{
         '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
 #         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-         {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-         {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-         {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                   
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -61090,12 +61112,12 @@ def weekly__compare__chart__(datestr,charttype):
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_schoology':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list5= list(collection1.aggregate(qr5))
-        df_atm5= DataFrame(list5)
-        df_atm5
-        LAST_WEEK_PRACTICE_schoology=df_atm5[['_id','LAST_WEEK_PRACTICE_schoology']]
-        qr6=[{"$match":{
+         ])))
+        LAST_WEEK_PRACTICE_schoology=LAST_WEEK_PRACTICE_schoology[['_id','LAST_WEEK_PRACTICE_schoology']]
+        
+        #=================== LAST TO LAST WEEK SCHOOLOGY PRACTICE======================
+   
+        LAST_TO_LAST_WEEK_PRACTICE_schoology= DataFrame(list(collection1.aggregate([{"$match":{
             '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -61103,9 +61125,13 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
 #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}}, 
-             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                       
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -61116,23 +61142,30 @@ def weekly__compare__chart__(datestr,charttype):
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_schoology':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list6= list(collection1.aggregate(qr6))
-        df_atm6= DataFrame(list6)
-        LAST_TO_LAST_WEEK_PRACTICE_schoology=df_atm6[['_id','LAST_TO_LAST_WEEK_PRACTICE_schoology']]
+         ])))
+        LAST_TO_LAST_WEEK_PRACTICE_schoology=LAST_TO_LAST_WEEK_PRACTICE_schoology[['_id','LAST_TO_LAST_WEEK_PRACTICE_schoology']]
+        
+        
         join_final3= pd.merge(LAST_WEEK_PRACTICE_schoology, LAST_TO_LAST_WEEK_PRACTICE_schoology, on='_id', how='left') 
 
-    # =========================================
-        qr7=[{"$match":{
+# ===========================================================================================================
+
+      #=================== LAST WEEK CLEVER PRACTICE======================
+    
+        LAST_WEEK_PRACTICE_clever= DataFrame(list(collection1.aggregate([{"$match":{
         '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
 #         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-         {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},  
-        {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                    
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -61144,12 +61177,12 @@ def weekly__compare__chart__(datestr,charttype):
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_clever':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list7= list(collection1.aggregate(qr7))
-        df_atm7= DataFrame(list7)
-        print(df_atm7)
-        LAST_WEEK_PRACTICE_clever=df_atm7[['_id','LAST_WEEK_PRACTICE_clever']]
-        qr8=[{"$match":{
+         ])))
+        LAST_WEEK_PRACTICE_clever=LAST_WEEK_PRACTICE_clever[['_id','LAST_WEEK_PRACTICE_clever']]
+       
+    #=================== LAST TO LAST WEEK CLEVER PRACTICE======================
+        
+        LAST_TO_LAST_WEEK_PRACTICE_clever= DataFrame( list(collection1.aggregate([{"$match":{
             '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -61157,9 +61190,13 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
 #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}}, 
-             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                      
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -61170,27 +61207,30 @@ def weekly__compare__chart__(datestr,charttype):
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_clever':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list8= list(collection1.aggregate(qr8))
-        df_atm8= DataFrame(list8)
-        LAST_TO_LAST_WEEK_PRACTICE_clever=df_atm8[['_id','LAST_TO_LAST_WEEK_PRACTICE_clever']]
+         ])))
+        LAST_TO_LAST_WEEK_PRACTICE_clever=LAST_TO_LAST_WEEK_PRACTICE_clever[['_id','LAST_TO_LAST_WEEK_PRACTICE_clever']]
+        
         join_final4= pd.merge(LAST_WEEK_PRACTICE_clever, LAST_TO_LAST_WEEK_PRACTICE_clever, on='_id', how='left') 
         
-        
-        
-        
-        
-        # ========================================= CANVAS
-        qr77=[{"$match":{
+#===========================================================================================================
+
+
+ #=================== LAST WEEK CANVAS PRACTICE======================
+    
+        LAST_WEEK_PRACTICE_canvas= DataFrame(list(collection1.aggregate([{"$match":{
         '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
 #         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-         {"USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},  
-        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                                                                   
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -61202,15 +61242,15 @@ def weekly__compare__chart__(datestr,charttype):
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_canvas':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list77= list(collection1.aggregate(qr77))
-        df_atm77= DataFrame(list77)
-        if df_atm77.empty == True:
-            df_atm77 = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_WEEK_PRACTICE_canvas':0})
+         ])))
+        if LAST_WEEK_PRACTICE_canvas.empty == True:
+            LAST_WEEK_PRACTICE_canvas = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_WEEK_PRACTICE_canvas':0})
             
-        LAST_WEEK_PRACTICE_canvas=df_atm77[['_id','LAST_WEEK_PRACTICE_canvas']]
+        LAST_WEEK_PRACTICE_canvas=LAST_WEEK_PRACTICE_canvas[['_id','LAST_WEEK_PRACTICE_canvas']]
         
-        qr88=[{"$match":{
+     #=================== LAST TO LAST WEEK CANVAS PRACTICE======================   
+        
+        LAST_TO_LAST_WEEK_PRACTICE_canvas= DataFrame(list(collection1.aggregate([{"$match":{
             '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -61218,9 +61258,13 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
 #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}, 
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                                                                        
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -61231,19 +61275,87 @@ def weekly__compare__chart__(datestr,charttype):
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_canvas':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list88= list(collection1.aggregate(qr88))
-        df_atm88= DataFrame(list88)
-        if df_atm88.empty == True:
-            df_atm88 = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_TO_LAST_WEEK_PRACTICE_canvas':0})
-        LAST_TO_LAST_WEEK_PRACTICE_canvas=df_atm88[['_id','LAST_TO_LAST_WEEK_PRACTICE_canvas']]
+         ])))
+        if LAST_TO_LAST_WEEK_PRACTICE_canvas.empty == True:
+            LAST_TO_LAST_WEEK_PRACTICE_canvas = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_TO_LAST_WEEK_PRACTICE_canvas':0})
+        LAST_TO_LAST_WEEK_PRACTICE_canvas=LAST_TO_LAST_WEEK_PRACTICE_canvas[['_id','LAST_TO_LAST_WEEK_PRACTICE_canvas']]
+        
         join_final44= pd.merge(LAST_WEEK_PRACTICE_canvas, LAST_TO_LAST_WEEK_PRACTICE_canvas, on='_id', how='left') 
         
-        
-        
-        
+             
+
+#===========================================================================================================
+
+
+ #=================== LAST WEEK GOOGLE PRACTICE======================
     
+        LAST_WEEK_PRACTICE_google= DataFrame(list(collection1.aggregate([{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+#         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                                                                   
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_google':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ])))
+        if LAST_WEEK_PRACTICE_google.empty == True:
+            LAST_WEEK_PRACTICE_google = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_WEEK_PRACTICE_google':0})
+            
+        LAST_WEEK_PRACTICE_google=LAST_WEEK_PRACTICE_google[['_id','LAST_WEEK_PRACTICE_google']]
         
+     #=================== LAST TO LAST WEEK GOOGLE PRACTICE======================   
+        
+        LAST_TO_LAST_WEEK_PRACTICE_google = DataFrame(list(collection1.aggregate([{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+#             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                                                                        
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+             practice_cond_dictonary_list[0],
+                        practice_cond_dictonary_list[1],
+                         threshcond[0],
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_google':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ])))
+        if LAST_TO_LAST_WEEK_PRACTICE_google.empty == True:
+            LAST_TO_LAST_WEEK_PRACTICE_google = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_TO_LAST_WEEK_PRACTICE_google':0})
+        LAST_TO_LAST_WEEK_PRACTICE_google=LAST_TO_LAST_WEEK_PRACTICE_google[['_id','LAST_TO_LAST_WEEK_PRACTICE_google']]
+        
+        join_final55= pd.merge(LAST_WEEK_PRACTICE_google , LAST_TO_LAST_WEEK_PRACTICE_google, on='_id', how='left') 
+        
+             
+#=============================================================================
         
 
         days=pd.DataFrame({'_id':[1,2,3,4,5,6,7],'day':['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']})
@@ -61253,6 +61365,7 @@ def weekly__compare__chart__(datestr,charttype):
         df3=pd.merge(df2,join_final3, on='_id',how='left')
         df4=pd.merge(df3,join_final4, on='_id',how='left').fillna(0)
         df4=pd.merge(df4,join_final44, on='_id',how='left').fillna(0)
+        df4=pd.merge(df4,join_final55, on='_id',how='left').fillna(0)
         df4=df4.astype(int, errors='ignore')
         df4.columns
         lists=[]
@@ -61271,17 +61384,26 @@ def weekly__compare__chart__(datestr,charttype):
         'count_last_week_clever':lists[8],
         'count_last_to_last_week_clever':lists[9],
         'count_last_week_canvas':lists[10],
-        'count_last_to_last_week_canvas':lists[11]}
+        'count_last_to_last_week_canvas':lists[11],
+        'count_last_to_last_week_google':lists[12]}
         temp={'weekdata':weekdata}
         return json.dumps(temp)
+    
     else:
-        qr1=[{"$match":{
+        
+#============= PARENTS - LAST WEEK PRACTICE========================
+
+        LAST_WEEK_PRACTICE_parents= DataFrame( list(collection1.aggregate([{"$match":{
         '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
 
                 {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                           
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
 
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -61299,12 +61421,12 @@ def weekly__compare__chart__(datestr,charttype):
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_parents':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list1= list(collection1.aggregate(qr1))
-        df_atm= DataFrame(list1)
-        df_atm
-        LAST_WEEK_PRACTICE_parents=df_atm[['_id','LAST_WEEK_PRACTICE_parents']]
-        qr2=[{"$match":{
+         ])))
+        LAST_WEEK_PRACTICE_parents=LAST_WEEK_PRACTICE_parents[['_id','LAST_WEEK_PRACTICE_parents']]
+        
+        #============= PARENTS - LAST TO LAST WEEK PRACTICE========================
+        
+        LAST_TO_LAST_WEEK_PRACTICE_parents= DataFrame(list(collection1.aggregate([{"$match":{
             '$and':[
                 {'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
@@ -61313,9 +61435,13 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
     #         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
                    {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
-                 {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                 {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},  
-                {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                          
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -61326,22 +61452,27 @@ def weekly__compare__chart__(datestr,charttype):
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_parents':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list2= list(collection1.aggregate(qr2))
-        df_at2m= DataFrame(list2)
-        LAST_TO_LAST_WEEK_PRACTICE_parents=df_at2m[['_id','LAST_TO_LAST_WEEK_PRACTICE_parents']]
+         ])))
+        LAST_TO_LAST_WEEK_PRACTICE_parents=LAST_TO_LAST_WEEK_PRACTICE_parents[['_id','LAST_TO_LAST_WEEK_PRACTICE_parents']]
         join_final1= pd.merge(LAST_WEEK_PRACTICE_parents, LAST_TO_LAST_WEEK_PRACTICE_parents, on='_id', how='left')    
-    # =========================================
-        qr3=[{"$match":{
+# ===============================================================================
+
+ #============= TEACHERS - LAST WEEK PRACTICE========================
+       
+        LAST_WEEK_PRACTICE_TEACHERS= DataFrame(list(collection1.aggregate([{"$match":{
         '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-        {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}}, 
-        {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                 
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -61353,12 +61484,12 @@ def weekly__compare__chart__(datestr,charttype):
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_TEACHERS':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list3= list(collection1.aggregate(qr3))
-        df_atm3= DataFrame(list3)
-        df_atm3
-        LAST_WEEK_PRACTICE_TEACHERS=df_atm3[['_id','LAST_WEEK_PRACTICE_TEACHERS']]
-        qr4=[{"$match":{
+         ])))
+        LAST_WEEK_PRACTICE_TEACHERS=LAST_WEEK_PRACTICE_TEACHERS[['_id','LAST_WEEK_PRACTICE_TEACHERS']]
+        
+    #============= TEACHERS - LAST TO LAST WEEK PRACTICE========================
+      
+        LAST_TO_LAST_WEEK_PRACTICE_teachers= DataFrame(list(collection1.aggregate([{"$match":{
             '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -61366,9 +61497,13 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},  
-             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                       
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -61379,25 +61514,28 @@ def weekly__compare__chart__(datestr,charttype):
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_teachers':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list4= list(collection1.aggregate(qr4))
-        df_atm4= DataFrame(list4)
-        LAST_TO_LAST_WEEK_PRACTICE_teachers=df_atm4[['_id','LAST_TO_LAST_WEEK_PRACTICE_teachers']]
+         ])))
+        LAST_TO_LAST_WEEK_PRACTICE_teachers=LAST_TO_LAST_WEEK_PRACTICE_teachers[['_id','LAST_TO_LAST_WEEK_PRACTICE_teachers']]
         join_final2= pd.merge(LAST_WEEK_PRACTICE_TEACHERS, LAST_TO_LAST_WEEK_PRACTICE_teachers, on='_id', how='left') 
 
+ # ==================================================================================================================
 
-
-    # =========================================
-        qr5=[{"$match":{
+ #============= SCHOOLOGY - LAST WEEK PRACTICE========================
+       
+        LAST_WEEK_PRACTICE_schoology = DataFrame(list(collection1.aggregate([{"$match":{
         '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
 #         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-         {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-         {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-         {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                   
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -61409,12 +61547,12 @@ def weekly__compare__chart__(datestr,charttype):
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_schoology':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list5= list(collection1.aggregate(qr5))
-        df_atm5= DataFrame(list5)
-        df_atm5
-        LAST_WEEK_PRACTICE_schoology=df_atm5[['_id','LAST_WEEK_PRACTICE_schoology']]
-        qr6=[{"$match":{
+         ])))
+        LAST_WEEK_PRACTICE_schoology=LAST_WEEK_PRACTICE_schoology[['_id','LAST_WEEK_PRACTICE_schoology']]
+        
+ #============= SCHOOLOGY  - LAST TO LAST WEEK PRACTICE========================
+        
+        LAST_TO_LAST_WEEK_PRACTICE_schoology= DataFrame( list(collection1.aggregate([{"$match":{
             '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -61422,9 +61560,13 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
 #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}}, 
-             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                       
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -61435,23 +61577,29 @@ def weekly__compare__chart__(datestr,charttype):
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_schoology':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list6= list(collection1.aggregate(qr6))
-        df_atm6= DataFrame(list6)
-        LAST_TO_LAST_WEEK_PRACTICE_schoology=df_atm6[['_id','LAST_TO_LAST_WEEK_PRACTICE_schoology']]
+         ])))
+        LAST_TO_LAST_WEEK_PRACTICE_schoology=LAST_TO_LAST_WEEK_PRACTICE_schoology[['_id','LAST_TO_LAST_WEEK_PRACTICE_schoology']]
         join_final3= pd.merge(LAST_WEEK_PRACTICE_schoology, LAST_TO_LAST_WEEK_PRACTICE_schoology, on='_id', how='left') 
 
-    # =========================================
-        qr7=[{"$match":{
+# =======================================================================================================================
+
+#============= CLEVER  - LAST WEEK PRACTICE======================
+
+      
+        LAST_WEEK_PRACTICE_clever= DataFrame(list(collection1.aggregate([{"$match":{
         '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
 #         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-         {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},  
-        {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                   
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -61463,12 +61611,13 @@ def weekly__compare__chart__(datestr,charttype):
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_clever':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list7= list(collection1.aggregate(qr7))
-        df_atm7= DataFrame(list7)
+         ])))
 
-        LAST_WEEK_PRACTICE_clever=df_atm7[['_id','LAST_WEEK_PRACTICE_clever']]
-        qr8=[{"$match":{
+        LAST_WEEK_PRACTICE_clever=LAST_WEEK_PRACTICE_clever[['_id','LAST_WEEK_PRACTICE_clever']]
+        
+    #============= CLEVER  - LAST TO LAST WEEK PRACTICE======================
+     
+        LAST_TO_LAST_WEEK_PRACTICE_clever= DataFrame(list(collection1.aggregate([{"$match":{
             '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -61476,9 +61625,13 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
 #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}}, 
-             {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}},
+                                                                       
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -61489,27 +61642,28 @@ def weekly__compare__chart__(datestr,charttype):
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_clever':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list8= list(collection1.aggregate(qr8))
-        df_atm8= DataFrame(list8)
-        LAST_TO_LAST_WEEK_PRACTICE_clever=df_atm8[['_id','LAST_TO_LAST_WEEK_PRACTICE_clever']]
+         ])))
+        LAST_TO_LAST_WEEK_PRACTICE_clever=LAST_TO_LAST_WEEK_PRACTICE_clever[['_id','LAST_TO_LAST_WEEK_PRACTICE_clever']]
         join_final4= pd.merge(LAST_WEEK_PRACTICE_clever, LAST_TO_LAST_WEEK_PRACTICE_clever, on='_id', how='left') 
         
+#====================================================================================================================     
         
-        
-        
-        
-        # ========================================= CANVAS
-        qr77=[{"$match":{
+         #============= CANVAS  - LAST WEEK PRACTICE======================
+     
+        LAST_WEEK_PRACTICE_canvas = DataFrame(list(collection1.aggregate([{"$match":{
         '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
         {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
         {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
 #         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-         {"USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}},  
-        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                                                                   
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
         {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
         {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
         {'MODIFIED_DATE':{'$gte':start , '$lt':yester
@@ -61521,15 +61675,15 @@ def weekly__compare__chart__(datestr,charttype):
         {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_WEEK_PRACTICE_canvas':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list77= list(collection1.aggregate(qr77))
-        df_atm77= DataFrame(list77)
-        if df_atm77.empty == True:
-            df_atm77 = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_WEEK_PRACTICE_canvas':0})
+         ])))
+        if LAST_WEEK_PRACTICE_canvas.empty == True:
+            LAST_WEEK_PRACTICE_canvas = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_WEEK_PRACTICE_canvas':0})
             
-        LAST_WEEK_PRACTICE_canvas=df_atm77[['_id','LAST_WEEK_PRACTICE_canvas']]
+        LAST_WEEK_PRACTICE_canvas=LAST_WEEK_PRACTICE_canvas[['_id','LAST_WEEK_PRACTICE_canvas']]
         
-        qr88=[{"$match":{
+  #============= CANVAS  - LAST TO LAST WEEK PRACTICE======================
+         
+        LAST_TO_LAST_WEEK_PRACTICE_canvas= DataFrame(list(collection1.aggregate([{"$match":{
             '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
             {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -61537,9 +61691,13 @@ def weekly__compare__chart__(datestr,charttype):
             {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
             {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
 #             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}, 
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                                                                       
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
             {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
             {'MODIFIED_DATE':{'$gte':start_15day
                         , '$lt': start}}
@@ -61550,19 +61708,82 @@ def weekly__compare__chart__(datestr,charttype):
             {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
         'LAST_TO_LAST_WEEK_PRACTICE_canvas':{'$sum':1}
         }}, {'$sort':{'_id':1}}
-         ]
-        list88= list(collection1.aggregate(qr88))
-        df_atm88= DataFrame(list88)
-        if df_atm88.empty == True:
-            df_atm88 = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_TO_LAST_WEEK_PRACTICE_canvas':0})
-        LAST_TO_LAST_WEEK_PRACTICE_canvas=df_atm88[['_id','LAST_TO_LAST_WEEK_PRACTICE_canvas']]
+         ])))
+        if LAST_TO_LAST_WEEK_PRACTICE_canvas.empty == True:
+            LAST_TO_LAST_WEEK_PRACTICE_canvas = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_TO_LAST_WEEK_PRACTICE_canvas':0})
+        LAST_TO_LAST_WEEK_PRACTICE_canvas=LAST_TO_LAST_WEEK_PRACTICE_canvas[['_id','LAST_TO_LAST_WEEK_PRACTICE_canvas']]
         join_final44= pd.merge(LAST_WEEK_PRACTICE_canvas, LAST_TO_LAST_WEEK_PRACTICE_canvas, on='_id', how='left') 
         
+#=====================================================================================================================   
+
         
+         #============= GOOGLE  - LAST WEEK PRACTICE======================
+     
+        LAST_WEEK_PRACTICE_google = DataFrame(list(collection1.aggregate([{"$match":{
+        '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+#         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                                                                   
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
+        {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+        {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+        {'MODIFIED_DATE':{'$gte':start , '$lt':yester
+        }},
+        ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
+        {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_WEEK_PRACTICE_google':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ])))
+        if LAST_WEEK_PRACTICE_google.empty == True:
+            LAST_WEEK_PRACTICE_google = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_WEEK_PRACTICE_google':0})
+            
+        LAST_WEEK_PRACTICE_google=LAST_WEEK_PRACTICE_google[['_id','LAST_WEEK_PRACTICE_google']]
         
+  #============= GOOGLE  - LAST TO LAST WEEK PRACTICE======================
+         
+        LAST_TO_LAST_WEEK_PRACTICE_google= DataFrame(list(collection1.aggregate([{"$match":{
+            '$and':[{'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+            {'USER_ID.USER_NAME':{'$not':{'$regex':'1gen', '$options':'i'}}},
+            {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+            {'USER_ID.IS_BLOCKED':{"$ne":'Y'}}, 
+#             {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                                                                       
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+        {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+        {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+                                                   
+
+            {'USER_ID.IS_DISABLED':{"$ne":'Y'}}, {'USER_ID.schoolId.NAME':{'$not':{'$regex':'test', '$options':'i'}}},
+            {'MODIFIED_DATE':{'$gte':start_15day
+                        , '$lt': start}}
+            ]}},
+#              practice_cond_dictonary_list[0],
+#                         practice_cond_dictonary_list[1],
+#                          threshcond[0],
+            {'$group':{'_id':{'$dayOfWeek':'$MODIFIED_DATE'}, 
+        'LAST_TO_LAST_WEEK_PRACTICE_google':{'$sum':1}
+        }}, {'$sort':{'_id':1}}
+         ])))
+        if LAST_TO_LAST_WEEK_PRACTICE_google.empty == True:
+            LAST_TO_LAST_WEEK_PRACTICE_google = pd.DataFrame({'_id':[1,2,3,4,5,6,7],'LAST_TO_LAST_WEEK_PRACTICE_google':0})
+        LAST_TO_LAST_WEEK_PRACTICE_google=LAST_TO_LAST_WEEK_PRACTICE_google[['_id','LAST_TO_LAST_WEEK_PRACTICE_google']]
+        join_final55= pd.merge(LAST_WEEK_PRACTICE_google , LAST_TO_LAST_WEEK_PRACTICE_google, on='_id', how='left') 
         
-    
-        
+#=====================================================================================================================   
         
 
         days=pd.DataFrame({'_id':[1,2,3,4,5,6,7],'day':['Sunday', 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']})
@@ -61572,6 +61793,7 @@ def weekly__compare__chart__(datestr,charttype):
         df3=pd.merge(df2,join_final3, on='_id',how='left')
         df4=pd.merge(df3,join_final4, on='_id',how='left').fillna(0)
         df4=pd.merge(df4,join_final44, on='_id',how='left').fillna(0)
+        df4=pd.merge(df4,join_final55, on='_id',how='left').fillna(0)
         df4=df4.astype(int, errors='ignore')
 #         print("df4 \n",df4)
         df4.columns
@@ -61592,10 +61814,13 @@ def weekly__compare__chart__(datestr,charttype):
         'count_last_week_clever':lists[8],
         'count_last_to_last_week_clever':lists[9],
         'count_last_week_canvas':lists[10],
-        'count_last_to_last_week_canvas':lists[11]}
+        'count_last_to_last_week_canvas':lists[11],
+        'count_last_to_last_week_google':lists[12]}
         temp={'weekdata':weekdata}
         return json.dumps(temp)
 
+    
+# weekly__compare__chart__("2022-06-20","Playback")
 
 
 
