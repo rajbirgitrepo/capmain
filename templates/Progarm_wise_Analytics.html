@@ -40,17 +40,6 @@
         gtag('js', new Date());
         gtag('config', 'G-EWVQZSV89G');
     </script>
-
-<script>
-    $( document ).ready(function() {
-       setTimeout(function(){
-           var loader = document.getElementsByClassName("gifloader-spinner")[0];
-           loader.className="gifloader-spinner fadeout" ;
-           setTimeout(function(){loader.style.display="none"},1000)
-       },120000)
-   });
-</script>
-
 </head>
 <style>
     .c-dashboardInfo {
@@ -404,14 +393,14 @@
 
         </div>
          <!-- loader -->
-        <div class="gifloader-spinner">
+        <!-- <div id="gifload">
             <div class="row gifloader-content">
                 <div class="col-lg-4 mx-my-auto">
                     <img src="/static/images/breath.gif" class="img-responsive" alt="loader">
                     <p>Take a deep breath while we load your data</p>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <section class="statistics">
             <div class="container-fluid">
@@ -716,15 +705,14 @@
         });
     </script>
     <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
+     <!-- <script src="{{ url_for('static',filename='js/insight.js') }}"></script> -->
     <script src="{{ url_for('static',filename='js/search.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
     <!--<script src="{{ url_for('static',filename='js/contact.js') }}"></script>-->
     <script src="{{ url_for('static',filename='js/snapshot.js') }}"></script>
-
     <script src="{{ url_for('static',filename='js/chatbot.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
-
+   
     <button id="1"></button>
     <script type="text/javascript">
         function cards(URL) {
@@ -1893,7 +1881,5 @@
     });
 
     </script>
-
 </body>
-
 </html>

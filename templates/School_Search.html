@@ -382,6 +382,8 @@
                     <!-- <li class="active2"><a href="leadGeneration">LEAD GENERATION</a></li> -->
                     <li><a href="21daystreak">21 Day Streak</a></li>
                     <li><a href="ams_dashboard">AMS DAHSBOARD</a></li>
+                    <li><a href="summer_series">SUMMER SERIES DAHSBOARD</a></li>
+
                 </ul>
             </li>
             <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
@@ -1249,13 +1251,18 @@
     </div>
   </div> -->
     <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
+    <script src="{{ url_for('static',filename='js/schoolsearchscript.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/excellentexport.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/qrcode.js') }}"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
-    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
-
-    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js'></script>
+    <script src="//cdn.anychart.com/releases/8.0.1/js/anychart-base.min.js"></script>
+    <script src="//cdn.anychart.com/releases/8.0.1/js/anychart-polar.min.js"></script>
 
     <script>
         $("#searchschool").val(1);
@@ -1366,7 +1373,7 @@
         $("#usid").append('<button onclick=usersearch() style="background-color: #fff;border: 0;" id="hel">SEARCH</button>');
 
         function historychart(a) {
-            console.log("Playback hstory   " + a)
+            // console.log("Playback hstory   " + a)
             var settings = {
                 "async": true,
                 "crossDomain": true,
@@ -1514,9 +1521,9 @@
             }
             $.ajax(settings).done(function (response) {
                 var dataa = JSON.parse(response);
-                console.log('/wordcloud_schoolsearch/' + a,);
-                console.log(dataa);
-                $("#gifload").hide();
+                // console.log('/wordcloud_schoolsearch/' + a,);
+                // console.log(dataa);
+                // $("#gifload").hide();
                 $("#avgrate").text(dataa.avg_rating);
 
 
@@ -1622,9 +1629,9 @@
             }
             $.ajax(settings).done(function (response) {
                 var dataa = JSON.parse(response);
-                console.log(dataa);
-                console.log("/schoolseacrhprogram_chart/" + a);
-                $("#gifload").hide();
+                // console.log(dataa);
+                // console.log("/schoolseacrhprogram_chart/" + a);
+                // $("#gifload").hide();
                 $(function () {
                     $("#container40").highcharts({
                         chart: {
@@ -1721,9 +1728,9 @@
             }
             $.ajax(settings).done(function (response) {
                 var dataa = JSON.parse(response);
-                console.log(dataa);
-                console.log("/schoolseacrhprogram_chart/" + a);
-                $("#gifload").hide();
+                // console.log(dataa);
+                // console.log("/schoolseacrhprogram_chart/" + a);
+                // $("#gifload").hide();
                 $(function () {
                     $("#container44").highcharts({
                         chart: {
@@ -1825,9 +1832,9 @@
             }
             $.ajax(settings).done(function (response) {
                 var dataa = JSON.parse(response);
-                console.log(dataa);
-                console.log("/schoolaudio_completion/" + a);
-                $("#gifload").hide();
+                // console.log(dataa);
+                // console.log("/schoolaudio_completion/" + a);
+                // $("#gifload").hide();
                 Highcharts.chart('container41', {
                     chart: {
                         type: 'column'
@@ -1905,12 +1912,12 @@
         "url": "/active_teachers_on_SchoolSearch/" + a + "/Absolute_count",
         "method": "GET"
     }
-    console.log("/active_teachers_on_SchoolSearch/" + a + "/Absolute_count");
+    // console.log("/active_teachers_on_SchoolSearch/" + a + "/Absolute_count");
     $.ajax(settings).done(function (response) {
         var data = JSON.parse(response);
         var dataa = data.data
         var scaleValueGet = data.yscale;
-        console.log(scaleValueGet);
+        // console.log(scaleValueGet);
         //   var schoolonlyname = data.schools;
         //  console.log(schoolonlyname);
         //  let textschool = "";
@@ -2077,7 +2084,7 @@
 
             // adjust legend items
             legend.itemsFormatter(function (items) {
-                console.log(items[2].text)
+                // console.log(items[2].text)
                 if (items[0].text === "Series 0") {
                     items[0].text = 'Daily'
                 }
@@ -2112,7 +2119,7 @@
     });
    $(document).on('change', '#percentageCountNew', function () {
         $('#container43').empty();
-        console.log(this.value)
+        // console.log(this.value)
         if (this.value == '2') {
             document.getElementById("Weekly_Usage_CSY_Absolute_count").title = 'The graph shows the percentage of weekly usage for CSY.';
             
@@ -2122,12 +2129,12 @@
                 "url": "/active_teachers_on_SchoolSearch/" + a + "/Percentage",
                 "method": "GET"
             }
-            console.log("/active_teachers_on_SchoolSearch/" + a + "/Percentage");
+            // console.log("/active_teachers_on_SchoolSearch/" + a + "/Percentage");
             $.ajax(settings).done(function (response) {
                 var data = JSON.parse(response);
                 var dataa = data.data
                 var scaleValueGet = 0;
-                console.log(scaleValueGet);
+                // console.log(scaleValueGet);
                 //   var schoolonlyname = data.schools;
                 //  console.log(schoolonlyname);
                 //  let textschool = "";
@@ -2294,7 +2301,7 @@
         
                     // adjust legend items
                     legend.itemsFormatter(function (items) {
-                        console.log(items[2].text)
+                        // console.log(items[2].text)
                         if (items[0].text === "Series 0") {
                             items[0].text = 'Daily'
                         }
@@ -2336,13 +2343,13 @@
                 "url": "/active_teachers_on_SchoolSearch/" + a + "/Absolute_count",
                 "method": "GET"
             }
-            console.log("/active_teachers_on_SchoolSearch/" + a + "/Absolute_count");
+            // console.log("/active_teachers_on_SchoolSearch/" + a + "/Absolute_count");
             $.ajax(settings).done(function (response) {
                 var data = JSON.parse(response);
                 var dataa = data.data
                 var scaleValueGet = data.yscale;
-                console.log(scaleValueGet);
-                $("#gifload").hide();
+                // console.log(scaleValueGet);
+                // $("#gifload").hide();
                 //   var schoolonlyname = data.schools;
                 //  console.log(schoolonlyname);
                 //  let textschool = "";
@@ -2509,7 +2516,7 @@
         
                     // adjust legend items
                     legend.itemsFormatter(function (items) {
-                        console.log(items[2].text)
+                        // console.log(items[2].text)
                         if (items[0].text === "Series 0") {
                             items[0].text = 'Daily'
                         }
@@ -2548,7 +2555,7 @@
     $("#percentageCountNew").val('1');
         }
         function famhistorychart(a) {
-            console.log("Playback hstory   " + a)
+            // console.log("Playback hstory   " + a)
             var settings = {
                 "async": true,
                 "crossDomain": true,
@@ -2788,13 +2795,7 @@
             });
         }
     </script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js'></script>
-    <script src="{{ url_for('static',filename='js/schoolsearchscript.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/excellentexport.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/qrcode.js') }}"></script>
-    <script src="/static/js/mail.js"></script>
-    <script src="//cdn.anychart.com/releases/8.0.1/js/anychart-base.min.js"></script>
-    <script src="//cdn.anychart.com/releases/8.0.1/js/anychart-polar.min.js"></script>
+    
     <!-- partial -->
 
     <!-- <script>

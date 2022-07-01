@@ -248,7 +248,7 @@ var settings = {
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-    console.log(dataa, 'Playback Trend'); 
+    // console.log(dataa, 'Playback Trend'); 
     // $("#gifload").hide();
     chart = new Highcharts.StockChart({
         chart: {
@@ -367,7 +367,7 @@ var settings = {
 }
 $.ajax(settings).done(function (response) {
     var dataa = JSON.parse(response);
-    console.log(dataa, 'Purpose Wise Email Count');
+    // console.log(dataa, 'Purpose Wise Email Count');
     $(function () {
         const chart =
         Highcharts.chart('container3', {
@@ -442,113 +442,3 @@ $.ajax(settings).done(function (response) {
     });
 });
 
-
-// function cards(URL) {
-//     $('#next').empty();
-//     console.log(URL);
-//     cardscroll();
-//     $('#btnExport').show();
-//     createDynamic(URL)
-// }
-
-
-// function createDynamic(url) {
-
-//     var settings = {
-//         "async": true,
-//         "crossDomain": true,
-//         "url": url,
-//         "method": "GET"
-//     }
-//     $.ajax(settings).done(function(response) {
-//         var data1 = JSON.parse(response);
-
-//         $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><tr><th>USER NAME</th><th>USER EMAIL</th><th>PHONE</th><th>SCHOOL AFFILIATION</th><th>CITY</th><th>STATE</th><th>REGISTERED ON</th><th>LAST PLAYBACK</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
-
-//         for (var i = 0; i < data1.data.length; i++) {
-
-
-//             var datain = data1.data[i];
-//             var resultDiv = createDynamicDiv(datain);
-
-//             $("#dataTable").append(resultDiv);
-
-
-
-
-//         }
-//         //$('#dataTable1').append('</tbody></table>');
-//         $('#dataTable').append('</tbody></table>');
-//         dataTab();
-
-
-
-//         $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id = "dataTable1" ><thead ><tr><tr><th>USER NAME</th><th>USER EMAIL</th><th>PHONE</th><th>SCHOOL AFFILIATION</th><th>CITY</th><th>STATE</th><th>REGISTERED ON</th><th>LAST PLAYBACK</th><th>PLAYBACK COUNT</th></tr></thead ><tbody>');
-//         for (var i = 0; i < data1.data.length; i++) {
-
-
-//             var datain = data1.data[i];
-
-//             var resultDiv = createDynamicDiv(datain);
-//             $("#dataTable1").append(resultDiv);
-
-//         }
-//         $('#dataTable1').append('</tbody></table>');
-//     })
-// }
-
-
-// function dataTab() {
-
-//     $("#dataTable").DataTable({
-//         "pageLength": 50
-//     });
-
-// }
-
-
-// function createDynamicDiv(userList) {
-//     var dynamicDiv = '';
-//     console.log(userList)
-
-//     dynamicDiv += '<tr >' +
-//         '<td>' + userList[0] + '</td>' +
-//         '<td>' + userList[1] + '</td>' +
-//         '<td>' + userList[2] + '</td>' +
-//         '<td>' + userList[3] + '</td>' +
-//         '<td>' + userList[4] + '</td>' +
-//         '<td>' + userList[5] + '</td>' +
-//         '<td>' + userList[6] + '</td>' +
-//         '<td>' + userList[7] + '</td>' +
-//         '<td>' + userList[8] + '</td>' +
-
-//         '</tr>'
-
-//     return dynamicDiv;
-
-// }
-
-
-
-   // function P() {
-
-            //     var settings = {
-            //         "async": true,
-            //         "crossDomain": true,
-            //         "url": '/parcount',
-            //         "method": "GET"
-            //     }
-            //     $.ajax(settings).done(function(response) {
-            //         var dataa = JSON.parse(response);
-
-            //         $('#totalparents').text(dataa.totalparents[0]);
-
-            //         $('#minute').text(dataa.android[0] + ' (40%)');
-            //         $('#playback').text(dataa.ios[0] + ' (60%)');
-            //         $('#Approx').text('(Approx)');
-            //         $('#Approx2').text('(Approx)');
-            //         $('#totalparentsregis').text(+dataa.download[0] + ' (' + dataa.downloadper[0] + '%)');
-
-
-            //     });
-            // };

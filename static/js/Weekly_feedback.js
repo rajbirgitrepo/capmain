@@ -441,7 +441,7 @@ function charts(a) {
         };
         $.ajax(settings).done(function(response) {
                 var dataa = JSON.parse(response);
-                console.log(dataa, "hello frnd")
+                console.log(dataa, "Hello Menka");
                 var a = parseInt();
 
                 Highcharts.chart('container', {
@@ -529,7 +529,14 @@ function charts(a) {
 
                     //             }}}
                     //     }},
-                    series: [{
+                    series: [
+                        {
+                            name: 'Google ' + t + ' Count Last to Last week',
+                            data: dataa.weekdata.count_last_to_last_week_google,
+                            stack: 'Google',
+                            color: '#40B5AD'
+                        },
+                        {
                             name: 'Teacher ' + t + ' Count Last to Last week',
                             data: dataa.weekdata.count_last_to_last_week_teachers,
                             stack: 'Last to Last week',

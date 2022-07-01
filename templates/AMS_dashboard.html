@@ -115,7 +115,8 @@
                         <li><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
                         <!-- <li><a href="leadGeneration">LEAD GENERATION</a></li> -->
                         <li><a href="21daystreak">21 Day Streak</a></li>
-                        <li class="active2"><a href="ams_dashboard">AMS DAHSBOARD</a></li>
+                        <li><a href="ams_dashboard">AMS DAHSBOARD</a></li>
+                        <li><a href="Summer_Series_dashboard">SUMMER SERIES DAHSBOARD</a></li>
                     </ul>
                 </li>
                 <li><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
@@ -126,8 +127,6 @@
                         <li><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
                         <!-- <li><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
                         <li><a href="tunein">TUNE_IN DASHBOARD</a></li>
-                        <!-- <li><a href="Practice_streak">PLAYBACK STREAK</a></li> -->
-                        <!-- <li><a href="pracbifurcation">PLAYBACK BIFURCATION</a></li> -->
                     </ul>
                 </li>
                 <li>
@@ -173,7 +172,7 @@
 
                 <li style="margin-top:125px"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">6.0</span></a>
                 </li>
-                <!-- <li id="myBtn2"><i class="fa fa-envelope-open-o fa-fw"></i>Contact Us</li> -->
+            </ul>
         </aside>
         <section id="contents">
             <!-- The Modal -->
@@ -279,32 +278,32 @@
 
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-2" onclick="cards('/paroverall')" style="cursor:pointer;">
+                                <div class="col-md-2">
                                     <div class="box2">
                                         <p style="font-size: 10px;">TOTAL EMAILS SENT</p>
                                         <p id="total_email_sent" style="margin: 0 4px; font-size: 19px;"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-2" style="cursor:pointer;">
+                                <div class="col-md-2">
                                     <div class="box2 ">
                                         <p style="font-size: 10px;">TOTAL USERS</p>
                                         <p id="total_users" style="margin: 0 4px; font-size: 19px;"></p>
                                     </div>
                                 </div>
 
-                                <div class="col-md-2" style="cursor:pointer;">
+                                <div class="col-md-2">
                                     <div class="box2 ">
                                         <p style="font-size: 10px;">ACTIVE USERS</p>
                                         <p id="active_users" style="margin: 0 4px; font-size: 19px;"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-2" style="cursor:pointer;">
+                                <div class="col-md-2">
                                     <div class="box2">
                                         <p style="font-size: 10px;">PLAYBACK COUNT</p>
                                         <p id="playback_count" style="margin: 0 4px; font-size: 19px;"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-2" style="cursor:pointer;">
+                                <div class="col-md-2">
                                     <div class="box2">
                                         <p style="font-size: 10px;">MINDFUL MINUTES</p>
                                         <p id="mindful_minute" style="margin: 0 4px; font-size: 19px;"></p>
@@ -351,138 +350,7 @@
            
         </section>           
 
-        <!-- <section>
-            <hr/>
-            <div class="col-md-10">
-                <div id="container" style="height: 1000px; width: 120%; border-radius: 20px;   box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);"></div>
-            </div>
-            <section>
-                <div class="welcome2" id="scroll">
-                    <div class="container-fluid">
-                        <div class="col-md-12" style="background-color: white; margin-top: 50px; border-radius: 20px; margin-bottom: 20px;">
-                            <div class="row">
-                                <div id="admin" class="col-md-12">
-                                    <div class="card material-table">
-                                        <div class="table-header">
-                                            <span class="table-title"></span>
-
-                                            <a class="btn btn-success btn-logion" style="display:none; float: right;" download="Capdataschoolfamily.csv" id="btnExport" onclick="return ExcellentExport.csv(this, 'dataTable1');" style=" float: right;margin: 5px 15px;" href="">Export</a>
-
-                                            <div class="custyle" id="next"></div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </section> -->
-
-
-        <!-- <script>
-            $('#myselect').change(function() {
-                if (this.value == '1') {
-                    var availableTags = [
-                        "CAP SUMMARY"
-                    ];
-                    $("#tag").autocomplete({
-                        source: availableTags,
-                    });
-                    $("#sid").empty();
-                    $("#sid").append('<button onclick=search() id="hel">SEARCH</button>');
-
-                } else if (this.value == '2') {
-
-                    $("#sid").empty();
-                    var settings = {
-                        "async": true,
-                        "crossDomain": true,
-                        "url": "https://mongospider.herokuapp.com/schoolname/5f155b8a3b6800007900da2a",
-                        "method": "GET"
-                    }
-                    $.ajax(settings).done(function(response) {
-                        var dataa = JSON.parse(response);
-                        var availableTags = dataa;
-                        $("#tag").autocomplete({
-                            source: availableTags,
-                        });
-                    });
-                    $("#sid").append('<button onclick=search2() id="hel">SEARCH</button>');
-
-                }
-            });
-        </script> -->
-
-        <button id="1"></button>
-
-        <script type="text/javascript">
-            
-            // var settings = {
-            //     "async": true,
-            //     "crossDomain": true,
-            //     "url": "/schoolgraph",
-            //     "method": "GET"
-            // }
-            // $.ajax(settings).done(function(response) {
-            //     var dataa = JSON.parse(response);
-
-
-
-            //     $(function() {
-            //         $('#container').highcharts({
-            //             chart: {
-            //                 type: 'bar',
-            //                 zoomType: 'y'
-            //             },
-            //             title: {
-            //                 text: 'Family app Signups by School'
-            //             },
-            //             xAxis: {
-            //                 categories: dataa.schname,
-            //                 crosshair: false
-            //             },
-            //             yAxis: {
-            //                 lineWidth: 1,
-            //                 opposite: false,
-            //                 title: {
-            //                     text: 'Family App Signups'
-            //                 }
-            //             },
-            //             credits: {
-            //                 enabled: false
-            //             },
-            //             plotOptions: {
-            //                 series: {
-            //                     point: {
-            //                         events: {
-            //                             click: function() {
-
-            //                                 $('#next').empty();
-
-            //                                 URL = '/schoolgraph/' + this.category;
-            //                                 console.log(URL);
-            //                                 cardscroll();
-            //                                 $('#btnExport').show();
-            //                                 createDynamic(URL)
-            //                             }
-            //                         }
-            //                     }
-            //                 }
-            //             },
-            //             series: [{
-            //                 color: '#01a451',
-            //                 name: 'FAMILY APP SIGNUPS COUNT',
-            //                 data: dataa.parcount
-            //             }]
-            //         });
-            //     });
-            // });
-
-        </script>
-
-
+        <!-- <button id="1"></button> -->
         <script src="https://code.highcharts.com/stock/highstock.js"></script>
         <script src="{{ url_for('static',filename='js/ams_dashboard.js') }}"></script>
         <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>

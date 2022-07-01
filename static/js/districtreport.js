@@ -61,9 +61,7 @@ function createDynamicDivcards(userList) {
     var dynamicDiv = '';
     // console.log(userList)
 
-    dynamicDiv += '<div class="col-md-2 card " style="border: none !important;"><div class=" portalBox clearfix" ><div class=" d-sm-flex justify-content-sm-between align-items-sm-center"><div class=" card-title text-s"><div onclick="distselect(\'' + userList[0] + '\'),imgd(\'' + userList[3] + '\')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()"><img src="' + userList[3] + '" class="img-responsive card_img"  alt="School"><p class="text-s" style="border-radius: 20px;background-color: #fafafa;">' + userList[1] + '</p></div></div></div></div></div>'
-
-
+    dynamicDiv += '<div class="col-md-2 card" style="border: none !important;"><div class="portalBox clearfix" ><div class="d-sm-flex justify-content-sm-between align-items-sm-center"><div class="card-title text-s"><div onclick="distselect(\'' + userList[0] + '\'),imgd(\'' + userList[3] + '\')" class="box-outer-nw" style="color: #797979;border-radius: 20px;" onclick="mind()"><img src="' + userList[3] + '" class="img-responsive card_img"  alt="School"><p class="text-s" style="border-radius: 20px;background-color: #fafafa;">' + userList[1] + '</p></div></div></div></div></div>'
     return dynamicDiv;
 }
 
@@ -184,7 +182,7 @@ function charts(a, b, c) {
                                     $('#next').empty();
                                     // console.log(URL);
                                     var Exportpage = URL + "?export";
-                                    console.log(Exportpage + "90days table");
+                                    // console.log(Exportpage + "90days table");
                                     $("#exportLink").text(Exportpage);
                                     var modal2 = document.getElementById("myModal2");
                                     modal2.style.display = "block";
@@ -306,7 +304,7 @@ function charts(a, b, c) {
                                             $('#next').empty();
                                             // console.log(URL);
                                             var Exportpage = URL + "?export";
-                                            console.log(Exportpage + "90days table");
+                                            // console.log(Exportpage + "90days table");
                                             $("#exportLink").text(Exportpage);
                                             var modal2 = document.getElementById("myModal2");
                                             modal2.style.display = "block";
@@ -1181,7 +1179,7 @@ function charts(a, b, c) {
     }
     $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
-        $("#gifload").hide();
+        // $("#gifload").hide();
 
         Highcharts.chart('container37', {
             chart: {
@@ -1467,7 +1465,7 @@ function dataTab() {
 
 function createDynamicDiv(userList) {
     var dynamicDiv = "";
-    console.log(userList);
+    // console.log(userList);
 
     dynamicDiv +=
         "<tr >" +
@@ -1807,23 +1805,24 @@ function cards4(URL) {
     createDynamic4(a);
 }
 
-function cards2(URL) {
-    let textContent = document.getElementById('disdetails').innerText;
-    var c = document.getElementById("stardate").innerText;
-    var b = document.getElementById("finaldate").innerText;
-    var a = URL + textContent + "/" + c + "/" + b;
-    var Exportpage = URL + textContent + "/" + c + "/" + b + "?export";
-    $("#exportLink").text(Exportpage);
-    $('#next').empty();
-    // console.log(a);
-    var modal2 = document.getElementById("myModal2");
-    modal2.style.display = "block";
-    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
-    var gif = document.getElementById("gif");
-    gif.style.display = "block";
-    $('#btnExport').show();
-    createDynamic2(a);
-}
+// function cards2(URL) {
+//     let textContent = document.getElementById('disdetails').innerText;
+//     var c = document.getElementById("stardate").innerText;
+//     var b = document.getElementById("finaldate").innerText;
+//     var a = URL + textContent + "/" + c + "/" + b;
+//     var Exportpage = URL + textContent + "/" + c + "/" + b + "?export";
+//     $("#exportLink").text(Exportpage);
+//     $('#next').empty();
+//     // console.log(a);
+//     var modal2 = document.getElementById("myModal2");
+//     modal2.style.display = "block";
+//     $("#gif").append("<img style='width: 7%;margin-left: 45.2%;height:65px !important;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+//     var gif = document.getElementById("gif");
+//     gif.style.display = "block";
+//     $('#btnExport').show();
+//     createDynamic2(a);
+// }
+
 //distselect('5f2609807a1c0000950bb477');
 $("#disdetails").text('5f2609807a1c0000950bb477');  
 
@@ -1872,7 +1871,6 @@ function distselect(distid) {
     $("#gifload").empty();
     $("#gifload").css("display", "block");
     $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
-    // $("#gifload").append("<img style='' src='/static/images/mindful-minutes-loader.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
     var c = document.getElementById("disdetails").innerText;
     var modal = document.getElementById("myModal");
     modal.style.display = "none";
@@ -1911,7 +1909,7 @@ function cardcount(id, a, b) {
         // console.log("counts are fnctioning");
         // console.log(URL);
         // console.log(dataa);
-        // $("#gifload").hide();
+        $("#gifload").hide();
         $("#school").text(dataa.schoolcount);
         $("#teacher").text(dataa.teachercount);
         $("#login").text(dataa.logincount);
@@ -1974,7 +1972,7 @@ $("#btnPrint").on("click", function () {
 var heatSchoolId = []
 
 function schoolsearchHeat(a) {
-    console.log(a in heatSchoolId);
+    // console.log(a in heatSchoolId);
     if (a in heatSchoolId) {
         window.open(
             '/School_Search?' + heatSchoolId[a],
@@ -2024,7 +2022,7 @@ function schoolsearchHeat(a) {
 // }
 
 function heatnew(b) {
-    console.log(b);
+    // console.log(b);
     var min, max, colorScale, temps, tempsArr;
     var colors = ["#EFF7F2", "#DBEEE1", "#B3DFC1", "#8ECAA0", "#76C28D", "#65B87E", "#52AB6D", "#42A862", "#329B52", "#278845"]
     var months = ["", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"];

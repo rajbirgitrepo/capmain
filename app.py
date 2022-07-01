@@ -78252,6 +78252,14 @@ def AMS_dashboard():
     return render_template('AMS_dashboard.html')
 
 
+@app.route('/Summer_Series_dashboard')
+def summer_series_dashboard():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('summer_series.html')
+
+
 @app.route('/Family_SURVEY')
 def Family_SURVEY():
     if not g.user:
@@ -78460,7 +78468,389 @@ def Local_Disctrictfilter():
     if not g.user:
         return redirect(url_for('login'))
     return render_template('Local_Disctrictfilter.html')
+
+
+
+
+@app.route('/summer_series/')
+def summer_series():
+
+
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')     
+    db_live=client.compass
+    collection = db_live.audio_track_master
+    query=[
+        {"$match":{"$and":[
+    #            {'USER_ID.ROLE_ID._id':{'$eq':ObjectId("5f155b8a3b6800007900da2b")}}, 
+                {'LAST_PAGE':{'$regex':'summer','$options':'i'}},
+                {'USER_ID.EMAIL_ID':{"$not":{"$regex":'test','$options':'i'}}},
+                {'USER_ID.USER_NAME':{"$not":{"$regex":'test','$options':'i'}}},
+                {'USER_ID.IS_DISABLE':{"$ne":'Y'}},
+                {'USER_ID.IS_BLOCKED':{"$ne":'Y'}},
+                {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+                {'USER_ID.EMAIL_ID':{"$not":{"$regex":'1gen','$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'north2middle','$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'octsignup21','$options':'i'}}},
+
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'aaroramay11','$options':'i'}}},
+            {'USER_ID.EMAIL_ID':{"$not":{"$regex":'innerexplo','$options':'i'}}},
+                {'USER_ID.EMAIL_ID':{'$nin':['',' ',None]}},
+                ]}},
+
+        {"$project":{'USER_ID':'$USER_ID._id',
+                     'USER_NAME':'$USER_ID.USER_NAME',
+                     'EMAIL_ID':'$USER_ID.EMAIL_ID'
+                    }}
+
+    ]
+
+    x=list(collection.aggregate(query))
+    df=pd.DataFrame(x)
+    sm_user=list(set(df["USER_ID"]))
+    user_prac_info_Overall=pd.DataFrame(list(db_live.audio_track_master.aggregate([{"$match":{
+             '$and':[
+
+                 {'USER_ID._id':{'$in':sm_user}},
+                 {'LAST_PAGE':{'$regex':'summer','$options':'i'}},
+
+
+
+              ]}},
+
+      {'$project':{
+          '_id':0,
+          'USER_ID':'$USER_ID._id',
+          'audioid':'$PROGRAM_AUDIO_ID._id',
+          'Practice_Date':{'$dateToString': {'format': "%Y-%m-%d",'date': "$MODIFIED_DATE"}},
+          'cursorStart':'$cursorStart',
+        'CursorEnd':'$CURSOR_END',
+        'audiolength':'$PROGRAM_AUDIO_ID.AUDIO_LENGTH'
+          }}
+      ])))
+
+
+
+
+
+
+    user_prac_info_Overall=user_prac_info_Overall.groupby(['USER_ID','audioid','Practice_Date']).agg(cursorStart=('cursorStart','min'),
+                                                                      CursorEnd=('CursorEnd','max'),
+                                                                      audiolength=('audiolength','max'),
+                                                                      Practice_Count=('USER_ID','count')                                                                
+                                                                      ).reset_index()
+
+    user_prac_info_Overall.loc[(user_prac_info_Overall['CursorEnd']>user_prac_info_Overall['audiolength']),'audiolength'] = user_prac_info_Overall['CursorEnd']
+    user_prac_info_Overall['Mindful_Minutes']=round((user_prac_info_Overall['CursorEnd']-user_prac_info_Overall['cursorStart'])/60,0)
+
+
+    user_prac_info_Overall['Audio_Completion']=round((user_prac_info_Overall['CursorEnd']-user_prac_info_Overall['cursorStart'])/user_prac_info_Overall['audiolength'],0)*100
+
+    user_prac_info_Overall['Practice_Date']=pd.to_datetime(user_prac_info_Overall['Practice_Date'], format='%Y-%m-%d')
+
+    user_atm_summary_Overall=user_prac_info_Overall.groupby(['USER_ID']).agg(mindful_minutes=('Mindful_Minutes','sum'),
+                                                         practice_sessions=('Practice_Count','sum'),
+                                             first_practice_date=('Practice_Date','min'),
+                                             last_practice_date=('Practice_Date','max'),
+                                             Audio_Completion=('Audio_Completion','mean'),
+                                            audio_played=('audioid',pd.Series.nunique),
+                                          practised_days=('Practice_Date',pd.Series.nunique)
+
+                                            ).reset_index()
+    user_info_Overall=pd.DataFrame(list(db_live.user_master.aggregate(
+    [{"$match":{
+             '$and':[{'_id':{'$in':sm_user}},
+
+
+              ]}},
+
+
+     {'$project':{
+         '_id':0,
+         'USER_ID':'$_id',
+         'SCHOOL_ID':'$schoolId._id',
+         'SCHOOL_NAME':'$schoolId.NAME',
+         "USER_NAME":1,
+         "EMAIL_ID":1
+
+
+
+
+         }}
+              ])))
+    dis_info_Overall=pd.DataFrame(list(db_live.school_master.aggregate(
+    [{"$match":{
+             '$and':[{'_id':{'$in':list(set(user_info_Overall['SCHOOL_ID'].dropna()))}},
+
+
+              ]}},
+
+
+     {'$project':{
+         'SCHOOL_ID':'$_id',
+         'DISTRICT':'$CATEGORY', 
+         }}
+              ])))
+    # user_sch_dis_info=user_info_Overall.dis_info_Overall
+    user_sch_dis_info=user_info_Overall.merge(dis_info_Overall, on='SCHOOL_ID', how='left')
+
+    user_playback_info=user_atm_summary_Overall.merge(user_sch_dis_info, on='USER_ID', how='left')
+    # user_playback_info
+    summer_series_playback=user_playback_info[['DISTRICT','SCHOOL_NAME','USER_NAME','EMAIL_ID','practice_sessions','mindful_minutes','USER_ID','SCHOOL_ID']]
+    #len(set(summer_series_playback["DISTRICT"]))
+
+
+    summer_series_playback["DISTRICT"]=summer_series_playback["DISTRICT"].fillna("")
+    summer_series_playback.loc[summer_series_playback['DISTRICT'].str.contains('barbara',case=False), 'DISTRICT'] = 'United Way Of Santa Barbara'
+    summer_series_playback.loc[summer_series_playback['DISTRICT'].str.contains('goleta',case=False), 'DISTRICT'] = 'United Way Of Santa Barbara'
+    summer_series_playback.loc[summer_series_playback['DISTRICT'].str.contains('NULL',case=False), 'DISTRICT'] = 'NO INFO'
+    # summer_series_playback.loc[summer_series_playback['DISTRICT'].str.contains(' ',case=False), 'DISTRICT'] = 'NO INFO'
+    summer_series_playback['DISTRICT'].replace('', 'NO INFO', inplace=True)
+
+
+    dis_count=summer_series_playback[summer_series_playback['DISTRICT']!='NO INFO']
+    district_wise_playback=dis_count.groupby(['DISTRICT'])['practice_sessions'].sum().sort_values(ascending=False)
+    dis_playback=dis_count.groupby('DISTRICT', sort=True)["practice_sessions"].sum().reset_index(name ='Total playback')
+    dis_mm=dis_count.groupby('DISTRICT', sort=True)["mindful_minutes"].sum().reset_index(name ='Total mm')
+    dis_user=dis_count.groupby('DISTRICT')['EMAIL_ID'].nunique().reset_index(name ='playback user count')
+    import functools as ft
+    dfs=[dis_playback,dis_mm,dis_user]
+    dis_final = ft.reduce(lambda left, right: pd.merge(left, right, on='DISTRICT'), dfs)
+    summer_series_playback["SCHOOL_NAME"]=summer_series_playback["SCHOOL_NAME"].fillna("")
+    summer_series_playback.loc[summer_series_playback['SCHOOL_NAME'].str.contains('NULL',case=False), 'SCHOOL_NAME'] = 'NO INFO'
+    summer_series_playback['SCHOOL_NAME'].replace('', 'NO INFO', inplace=True)
+    sch_count=summer_series_playback[summer_series_playback['SCHOOL_NAME']!='NO INFO']
+    school_wise_playback=sch_count.groupby(['SCHOOL_NAME'])['practice_sessions'].sum().sort_values(ascending=False)
+    sch_playback=sch_count.groupby('SCHOOL_NAME', sort=True)["practice_sessions"].sum().reset_index(name ='Total playback')
+    sch_mm=sch_count.groupby('SCHOOL_NAME', sort=True)["mindful_minutes"].sum().reset_index(name ='Total mm')
+    sch_user=sch_count.groupby('SCHOOL_NAME')['EMAIL_ID'].nunique().reset_index(name ='playback user count')
+    import functools as ft
+    dfs1=[sch_playback,sch_mm,sch_user]
+    sch_final = ft.reduce(lambda left, right: pd.merge(left, right, on='SCHOOL_NAME'), dfs1)
+    user_playback=summer_series_playback.groupby('EMAIL_ID', sort=True)["practice_sessions"].sum().reset_index(name ='Total playback')
+    user_mm=summer_series_playback.groupby('EMAIL_ID', sort=True)["mindful_minutes"].sum().reset_index(name ='Total mm')
+    import functools as ft
+    dfs2=[user_playback,user_mm]
+    user_final = ft.reduce(lambda left, right: pd.merge(left, right, on='EMAIL_ID'), dfs2)
+    user_final['USER NAME'] = user_final['EMAIL_ID'].map(summer_series_playback.set_index('EMAIL_ID')['USER_NAME']).fillna('')
+
+    #district playback final data
+#     dis_final.to_csv("summer_district_playback.csv")
+    summer_district_playback=dis_final
+    #school playback final data
+#     sch_final.to_csv("summer_school_playback.csv")
+    summer_school_playback=sch_final
+    #user play back final
+#     user_final.to_csv("summer_user_playback.csv")
+    summer_user_playback=user_final
+    #summer series final data 
+#     summer_series_playback.to_csv("summer_overall_playback.csv")
+    summer_overall_playback=summer_series_playback
+    activity_overall1=pd.DataFrame(list(db_live.summer_activity_user_history.aggregate(
+    [{"$match":{
+             '$and':[{},
+
+
+
+              ]}},
+
+
+     {'$project':{
+         '_id':0,
+         'USER':1,
+         'ACTIVITY_ID':1,
+         'CREATED_DATE':1,
+
+
+
+
+
+         }}
+              ])))
+
+    act_view_user=list(set(activity_overall1['USER']))
+    act_view_user11=[]
+    for i in act_view_user:
+        act_view_user11.append(ObjectId(i))
+
+    user_info_act_view=pd.DataFrame(list(db_live.user_master.aggregate(
+    [{"$match":{
+             '$and':[{'_id':{'$in':act_view_user11}},
+                                         {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+              {'INCOMPLETE_SIGNUP':{"$ne":'Y'}},
+              {'IS_DISABLED':{"$ne":'Y'}},
+              {'IS_BLOCKED':{"$ne":'Y'}},
+    #           {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+              {'schoolId.NAME':{'$not':{"$regex":'Blocked','$options':'i'}}},
+              {'schoolId.BLOCKED_BY_CAP':{'$exists':0}},                 
+              {'EMAIL_ID':{"$nin":['',' ',None]}},
+             {'EMAIL_ID':{"$not":{"$regex":'north2middle','$options':'i'}}},
+            {'EMAIL_ID':{"$not":{"$regex":'octsignup21','$options':'i'}}},
+
+            {'EMAIL_ID':{"$not":{"$regex":'aaroramay11','$options':'i'}}},
+            {'EMAIL_ID':{"$not":{"$regex":'innerexplo','$options':'i'}}},         
+
+                     {'schoolId._id':{'$nin':
+
+                                    db_live.school_master.distinct('_id',{'NAME':{'$regex':'test','$options':'i'}})
+
+
+                                    }},
+
+
+              ]}},
+
+
+     {'$project':{
+         '_id':0,
+         'USER_ID':'$_id',
+         'SCHOOL_ID':'$schoolId._id',
+         'SCHOOL_NAME':'$schoolId.NAME',
+         "USER_NAME":1,
+         "EMAIL_ID":1
+
+
+
+
+         }}
+              ])))
+    user_info_act_view["USER_ID"]=user_info_act_view["USER_ID"].astype(str)
+    valid_act_view_user=list(user_info_act_view["USER_ID"])
+    final_act_view=activity_overall1[activity_overall1['USER'].isin(valid_act_view_user)]
+    #len(valid_act_view_user)
+    act_id=list(set(final_act_view["ACTIVITY_ID"]))
+    act_id11=[]
+    for i in act_id:
+        act_id11.append(ObjectId(i))
+
+
+    activity_name=pd.DataFrame(list(db_live.summer_activities.aggregate(
+    [{"$match":{
+             '$and':[{"_id":{"$in":act_id11}},
+     ]}}, 
+     {'$project':{
+         'ACTIVITY_ID':"$_id",
+
+         'ACTIVITY_NAME':1,
+         }}
+              ])))
+    activity_name["ACTIVITY_ID"]=activity_name["ACTIVITY_ID"].astype(str)
+    final_activity_data=final_act_view.merge(activity_name, on='ACTIVITY_ID')
+    final_activity_user_data=final_activity_data.merge(user_info_act_view, left_on='USER',right_on="USER_ID")
+    dis_info_Overall=pd.DataFrame(list(db_live.school_master.aggregate(
+    [{"$match":{
+             '$and':[{'_id':{'$in':list(set(final_activity_user_data['SCHOOL_ID']))}},
+
+
+              ]}},
+
+
+     {'$project':{
+         'SCHOOL_ID':'$_id',
+         'DISTRICT':'$CATEGORY', 
+         }}
+              ])))
+    final_act_data= final_activity_user_data.merge(dis_info_Overall, on='SCHOOL_ID', how='left')
+    final_act_data["DISTRICT"]=final_act_data["DISTRICT"].fillna("")
+    final_act_data.loc[final_act_data['DISTRICT'].str.contains('barbara',case=False), 'DISTRICT'] = 'United Way Of Santa Barbara'
+    final_act_data.loc[final_act_data['DISTRICT'].str.contains('goleta',case=False), 'DISTRICT'] = 'United Way Of Santa Barbara'
+    final_act_data.loc[final_act_data['DISTRICT'].str.contains('NULL',case=False), 'DISTRICT'] = 'NO INFO'
+    # summer_series_playback.loc[summer_series_playback['DISTRICT'].str.contains(' ',case=False), 'DISTRICT'] = 'NO INFO'
+    final_act_data['DISTRICT'].replace('', 'NO INFO', inplace=True)
+    dis_count=final_act_data[final_act_data['DISTRICT']!='NO INFO']
+    dis_act_count=dis_count.groupby('DISTRICT', sort=True)["DISTRICT"].count().reset_index(name ='Activity Count')
+    dis_user_user=dis_count.groupby('DISTRICT')['EMAIL_ID'].nunique().reset_index(name ='Activity User Count')
+    import functools as ft
+    dfs=[dis_act_count,dis_user_user]
+    dis_final = ft.reduce(lambda left, right: pd.merge(left, right, on='DISTRICT'), dfs)
+    final_act_data["SCHOOL_NAME"]=final_act_data["SCHOOL_NAME"].fillna("")
+    final_act_data.loc[final_act_data['SCHOOL_NAME'].str.contains('NULL',case=False), 'SCHOOL_NAME'] = 'NO INFO'
+    final_act_data['SCHOOL_NAME'].replace('', 'NO INFO', inplace=True)
+
+
+    sch_count=final_act_data[final_act_data['SCHOOL_NAME']!='NO INFO']
+    sch_act_count=sch_count.groupby('SCHOOL_NAME', sort=True)["SCHOOL_NAME"].count().reset_index(name ='Activity Count')
+    sch_user_user=sch_count.groupby('SCHOOL_NAME')['EMAIL_ID'].nunique().reset_index(name ='Activity User Count')
+    import functools as ft
+    dfs1=[sch_act_count,sch_user_user]
+    sch_final = ft.reduce(lambda left, right: pd.merge(left, right, on='SCHOOL_NAME'), dfs1)
+    user_act_count=sch_count.groupby('EMAIL_ID', sort=True)["EMAIL_ID"].count().reset_index(name ='Activity Count')
+    user_act_count['USER NAME'] = user_act_count['EMAIL_ID'].map(user_info_act_view.set_index('EMAIL_ID')['USER_NAME']).fillna('')
+    ####district wise activity data
+#     dis_final.to_csv("summer_district_activity.csv")
+    summer_district_activity=dis_final
+    ####school wise activity data
+#     sch_final.to_csv("summer_school_activity.csv")
+    summer_school_activity=sch_final
+    ##### user wise activity data
+#     user_act_count.to_csv("summer_user_activity.csv")
+    summer_user_activity=user_act_count
+    #####overall activity data
+#     final_act_data.to_csv("summer_overall_activity.csv")
+    summer_overall_activity=final_act_data
     
+#     dis_activity=pd.read_csv("summer_district_activity.csv")
+    dis_activity=summer_district_activity
+#     dis_playback=pd.read_csv("summer_district_playback.csv")
+    dis_playback=summer_district_playback
+    
+    overall_district_stats= pd.merge(dis_playback, dis_activity, on='DISTRICT', how='outer')
+    overall_district_stats=overall_district_stats.fillna(0)
+#     sch_activity=pd.read_csv("summer_school_activity.csv")
+    sch_activity=summer_school_activity
+#     sch_playback=pd.read_csv("summer_school_playback.csv")
+    sch_playback=summer_school_playback
+    overall_school_stats= pd.merge(sch_playback, sch_activity, on='SCHOOL_NAME', how='outer')
+    overall_school_stats=overall_school_stats.fillna(0)
+#     user_activity=pd.read_csv("summer_user_activity.csv")
+    user_activity=summer_user_activity
+#     user_playback=pd.read_csv("summer_user_playback.csv")
+    user_playback=summer_user_playback
+    overall_user_stats= pd.merge(user_playback, user_activity, on='EMAIL_ID', how='outer')
+    # overall_user_stats=overall_user_stats.fillna(0)
+    overall_user_stats['USER NAME_x'].fillna(overall_user_stats['USER NAME_y'],inplace=True)
+    # df['Col1'].fillna(df['Col2'])
+    overall_user_stats=overall_user_stats.fillna(0)
+    overall_user_stats.drop(columns=['USER NAME_y'],inplace=True)
+    
+#     activity_raw_data=pd.read_csv("summer_overall_activity.csv")
+    activity_raw_data=summer_overall_activity
+#     playback_raw_data=pd.read_csv("summer_overall_playback.csv")
+    playback_raw_data=summer_overall_playback
+    activity_raw_data
+    act_count=activity_raw_data.groupby('ACTIVITY_NAME', sort=True)["ACTIVITY_NAME"].count().reset_index(name ='Activity View')
+    act_user=activity_raw_data.groupby('ACTIVITY_NAME')['EMAIL_ID'].nunique().reset_index(name ='User Count')
+    import functools as ft
+    dfs=[act_count,act_user]
+    act_final = ft.reduce(lambda left, right: pd.merge(left, right, on='ACTIVITY_NAME'), dfs)
+    overall_district_stats_dict=overall_district_stats.sort_values('Activity Count',ascending=False).to_dict('list')
+    overall_school_stats_dict=overall_school_stats.sort_values('Activity Count',ascending=False).to_dict('list')
+    overall_user_stats_dict=overall_user_stats.sort_values('Activity Count',ascending=False).to_dict('list')
+    act_final_dict=act_final.sort_values('Activity View',ascending=False).to_dict('list')
+    activity_raw_data1=activity_raw_data[['DISTRICT','SCHOOL_NAME','USER_NAME','EMAIL_ID','ACTIVITY_NAME','CREATED_DATE']]
+    activity_raw_data1['CREATED_DATE']=pd.to_datetime(activity_raw_data1['CREATED_DATE'])
+    activity_raw_data1['CREATED_DATE']=activity_raw_data1['CREATED_DATE'].dt.strftime('%d %b %Y')
+    playback_raw_data1=playback_raw_data[['DISTRICT','SCHOOL_NAME','USER_NAME','EMAIL_ID','practice_sessions','mindful_minutes']]
+    data={"total_districts_activity_count":len(dis_activity),"total_district_playback_count":len(dis_playback),
+          "total_school_activity_count":len(sch_activity),
+          "total_school_playback_count":len(sch_playback),
+          "total_user_activity_count":len(user_activity),
+          "total_user_playback_count":len(user_playback),
+          "total_mindfulness":sum(overall_user_stats['Total mm']),
+          "total_playback":sum(overall_user_stats['Total playback']),
+          "total_activity_count":sum(overall_user_stats['Activity Count']),
+          
+           
+          'activity_table':activity_raw_data1.values.tolist(),
+          'playback_table':playback_raw_data1.values.tolist()
+          
+          
+          
+         }
+
+    return json.dumps(data)
+
+
+
 
 if __name__ == '__main__':
    app.run(debug=True)

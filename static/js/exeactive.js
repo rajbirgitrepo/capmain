@@ -94,7 +94,13 @@ function playbackTrendChart2(selectValue2, t) {
                     },
                 },
             },
-            series: [{
+            series: [
+                {
+                    name: "Google",
+                    data: dataa[5].bargoogle,
+                    color: '#40B5AD'
+                },
+                {
                     name: "Canvas",
                     data: dataa[4].barcan,
                     color: '#d3373b'
@@ -227,7 +233,13 @@ function playbackTrendChart(selectValue, t) {
                     fontWeight: '200'
                 }
             },
-            series: [{
+            series: [
+                {
+                    name: "Google",
+                    data: dataa[5].bargoogle,
+                    color: '#40B5AD'
+                },
+                {
                     name: "Canvas",
                     data: dataa[4].barcan,
                     color: '#d3373b'
@@ -450,6 +462,16 @@ function playbackTrendChart3(selectValue3, tx) {
                     "xAxis": 1,
                     "color": "#d3373b",
                     "data": dataa.data.canvas,
+                     dataGrouping: {
+                            enabled: false,
+                        }
+                },
+                {
+                    "name": "Google",
+                    "type": "column",
+                    "xAxis": 1,
+                    "color": "#40B5AD",
+                    "data": dataa.data.google,
                      dataGrouping: {
                             enabled: false,
                         }

@@ -1,14 +1,14 @@
 let str = window.location.href;
-console.log(str.substr(str.lastIndexOf("?") + 1));
+// console.log(str.substr(str.lastIndexOf("?") + 1));
 var urlid = str.substr(str.lastIndexOf("?") + 1);
 document.getElementById('searchinput').value = '';
 if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1:5000/School_Search#" || urlid == "https://testcapxp.innerexplorer.org/School_Search" || urlid == "https://testcapxp.innerexplorer.org/School_Search#" || urlid == "https://cap.innerexplorer.org/School_Search" || urlid == "https://cap.innerexplorer.org/School_Search#") {
-    console.log("noID")
+    // console.log("noID")
 } else if (urlid !== '') {
 
     URL = "/schoolsearchid/" + urlid
     var Exportpage = "/schoolsearchid/" + urlid + "?export"
-    console.log(Exportpage)
+    // console.log(Exportpage)
     $("#exportLink").text(Exportpage);
     $("#schoolname").empty();
     $("#practice").empty();
@@ -34,7 +34,7 @@ if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1
     $("#renewal").empty();
     $("#status").empty();
     $("#output").empty();
-    console.log(URL);
+    // console.log(URL);
     P(URL);
     escore(urlid);
     inviteLink(urlid);
@@ -46,7 +46,7 @@ if (urlid == "http://127.0.0.1:5000/School_Search" || urlid == "http://127.0.0.1
     $("#btnExport").show();
     createDynamic(URL);
 } else {
-    console.log("nohref");
+    // console.log("nohref");
 }
 
 function createDynamic(url) {
@@ -58,7 +58,7 @@ function createDynamic(url) {
     };
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
-        console.log(url)
+        // console.log(url)
 
         $("#next").prepend(
             '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th> <th>RENEWAL DATE</th> <th>PLAYBACK COUNT</th><th>PLAYBACK COUNT(CSY)</th></tr ></thead ><tbody>'
@@ -94,7 +94,7 @@ function dataTab() {
 
 function createDynamicDiv(userList) {
     var dynamicDiv = "";
-    console.log(userList);
+    // console.log(userList);
 
     dynamicDiv +=
         "<tr >" +
@@ -134,7 +134,7 @@ function createDynamic2(url) {
     };
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
-        console.log(data1);
+        // console.log(data1);
         $("#next").prepend(
             '<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>SCHOOL NAME</th><th>USER NAME</th><th>USER EMAIL</th><th>SIGNUP DATE</th><th>LAST PLAYBACK DATE</th><th>RENEWAL DATE</th> <th>PLAYBACK COUNT</th></tr ></thead ><tbody>'
         );
@@ -169,7 +169,7 @@ function dataTab() {
 
 function createDynamicDiv2(userList) {
     var dynamicDiv = "";
-    console.log(userList);
+    // console.log(userList);
 
     dynamicDiv +=
         "<tr >" +
@@ -203,12 +203,12 @@ function createDynamicDiv2(userList) {
 
 function schoolsearch() {
     var a = document.getElementById("searchinputdescription").innerText;
-    console.log(a);
+    // console.log(a);
     if (a !== '') {
         
         URL = "/schoolsearchid/" + a
         var Exportpage = "/schoolsearchid/" + a + "?export"
-        console.log(Exportpage)
+        // console.log(Exportpage)
         $("#exportLink").text(Exportpage);
         $("#schoolname").empty();
         $("#practice").empty();
@@ -239,7 +239,7 @@ function schoolsearch() {
          $("#gifload").empty();
          $("#gifload").css("display", "block");
          $("#gifload").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
-        console.log(URL);
+        // console.log(URL);
         P(URL);
         schoolIDCharts(a)
         escore(a);
@@ -283,7 +283,7 @@ function schoolsearch() {
         $("#renewal").empty();
         $("#status").empty();
         $("#output").empty();
-        console.log(URL);
+        // console.log(URL);
         P(URL);
         escore(a);
         inviteLink(a);
@@ -317,8 +317,8 @@ function escore(a) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(URL)
-        $("#gifload").hide();
+        // console.log(URL)
+        // $("#gifload").hide();
 
         $("#USAGE_SCORE").empty();
         $("#ACTIVE_USER_SCORE").empty();
@@ -376,7 +376,7 @@ function schoolsearch2() {
     $("#CWP_SCORE").empty();
     $("#E_SCORE").empty();
     $("#RE_SCORE").empty();
-    console.log(URL)
+    // console.log(URL)
     $("#next").empty();
     $("#next1").empty();
     $("#btnExport").show();
@@ -387,7 +387,7 @@ function schoolsearch2() {
 };
 
 function P(URL) {
-    console.log(URL)
+    // console.log(URL)
     var settings = {
         async: true,
         crossDomain: true,
@@ -403,7 +403,7 @@ function P(URL) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(URL)
+        // console.log(URL)
         $("#schoolname").empty();
         $("#practice").empty();
         $("#state").empty();
@@ -469,7 +469,7 @@ function dismiss() {
 function raisequery() {
     var e = document.getElementById("usname").textContent;
     var schoolname = document.getElementById("searchinput").value;
-    console.log(e);
+    // console.log(e);
 
     var newName = 'name=' + e;
     var newSubject = '&subject=School search ISSUE';
@@ -500,7 +500,7 @@ function jou(url1) {
     };
     $.ajax(settings).done(function(response) {
         var datain = JSON.parse(response);
-        console.log(datain);
+        // console.log(datain);
 
         $("#ucount").text(datain[0].user_count);
         $("#pcount").text(datain[0].school_practice_count);
@@ -632,8 +632,8 @@ function schoolIDCharts(url1) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(dataa[0].bar, "data")
-        $("#gifload").hide();
+        // console.log(dataa[0].bar, "data")
+        // $("#gifload").hide();
         Highcharts.chart('graph2', {
             chart: {
                 type: 'column'
@@ -724,8 +724,8 @@ function schoolIDCharts(url1) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(dataa[0].bar, "data");
-        $("#gifload").hide();
+        // console.log(dataa[0].bar, "data");
+        // $("#gifload").hide();
 
         Highcharts.chart("graph1", {
             chart: {
@@ -821,7 +821,7 @@ function schoolIDCharts(url1) {
 };
 
 function P2(URL) {
-    console.log(URL)
+    // console.log(URL)
     var settings = {
         async: true,
         crossDomain: true,
@@ -837,7 +837,7 @@ function P2(URL) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(URL)
+        // console.log(URL)
         $("#schoolname").text("SCHOOL NAME: " + dataa.school_name);
         $("#practice").text(dataa.school_practice_count);
         $("#state").text("STATE: " + dataa.state);
@@ -860,7 +860,7 @@ function jou2(url1) {
     };
     $.ajax(settings).done(function(response) {
         var datain = JSON.parse(response);
-        console.log(datain);
+        // console.log(datain);
 
         $("#ucount").text(datain[0].user_count);
         $("#pcount").text(datain[0].school_practice_count);
@@ -880,8 +880,8 @@ function jou2(url1) {
         $("#months").text(datain[0].month);
         var url2 = "/schoolsearchid/" + datain[0].schoolid;
         P2(url2);
-        console.log(datain[0].city);
-        console.log(datain[0].students_impacted);
+        // console.log(datain[0].city);
+        // console.log(datain[0].students_impacted);
 
         Highcharts.chart("graph1", {
             chart: {
@@ -993,7 +993,7 @@ function familysearch() {
     $("#giffamily").append('<div class="row gifloader-content"><div class="col-lg-4 mx-my-auto"><img src="/static/images/breath.gif" class="img-responsive" alt="loader"><p>Take a deep breath while we load your data</p></div></div>');
     // $("#giffamily").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
     var a = document.getElementById("fsearchinputdescription").innerText;
-    console.log(a);
+    // console.log(a);
     if (a !== '') {
         URL = "/family___journey_score/" + a
         $("#fschoolname").empty();
@@ -1025,7 +1025,7 @@ function familysearch() {
         $("#fsignup").empty();
         $("#frenewal").empty();
         $("#fstatus").empty();
-        console.log(URL);
+        // console.log(URL);
         Pfam(URL);
         AudioUn(a);
         $("#fnext").empty();
@@ -1056,7 +1056,7 @@ function familysearch() {
         $("#fsignup").empty();
         $("#frenewal").empty();
         $("#fstatus").empty();
-        console.log(URL);
+        // console.log(URL);
         Pfam(URL);
         AudioUn(a);
 
@@ -1074,7 +1074,7 @@ function inviteLink(urlid) {
         url: "/schoolsearchid/" + urlid,
         method: "GET",
     };
-    console.log(urlid);
+    // console.log(urlid);
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         var settings = {
@@ -1084,13 +1084,13 @@ function inviteLink(urlid) {
             method: "GET",
         };
         $.ajax(settings).done(function(response) {
-            console.log("https://i6.innerexplorer.org/compass/getEncryptedLink/" + dataa.actual_admin)
+            // console.log("https://i6.innerexplorer.org/compass/getEncryptedLink/" + dataa.actual_admin)
             var dataa1 = JSON.stringify(response);
-            console.log(dataa1);
+            // console.log(dataa1);
             $('#inviteLinkRe').on("click", function() {
                 this.href = response;
             });
-                 console.log(response + "scan QR");
+                //  console.log(response + "scan QR");
                  var qrcode = new QRCode("output");
                  qrcode.makeCode(response);        
         });
@@ -1116,7 +1116,7 @@ function AudioUn(a) {
     }
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
+        // console.log(dataa);
         $("#giffamily").hide();
         Highcharts.chart('container81', {
             chart: {
@@ -1186,8 +1186,8 @@ function AudioUn(a) {
     }
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
-        console.log("/family_audio_completion/" + a, );
+        // console.log(dataa);
+        // console.log("/family_audio_completion/" + a, );
         
         $("#giffamily").hide();
         Highcharts.chart('container82', {
@@ -1254,7 +1254,7 @@ function AudioUn(a) {
 }
 
 function Pfam(URL) {
-    console.log(URL)
+    // console.log(URL)
     var settings = {
         async: true,
         crossDomain: true,
@@ -1272,8 +1272,7 @@ function Pfam(URL) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(URL)
-        // $("#gifload").hide();
+        // console.log(URL)
         $("#giffamily").hide();
         $("#fschoolname").text("SCHOOL NAME: " + dataa.Info[0].SCHOOL_NAME);
         $("#fname").text("USER NAME: " + dataa.Info[0].USER_NAME);
@@ -1383,8 +1382,8 @@ function joufam(url1) {
     };
     $.ajax(settings).done(function(response) {
         var datain = JSON.parse(response);
-        console.log(datain);
-        $("#giffamily").hide();
+        // console.log(datain);
+        // $("#giffamily").hide();
 
         $("#fucount").text(datain[0].user_count);
         $("#fpcount").text(datain[0].school_practice_count);
@@ -1562,7 +1561,7 @@ function usersearch() {
     var a = document.getElementById("searchinputuser").value;
     // var b = document.getElementById("searchinputuser2").value;
     var URL = "/user_journey_score/" + a;
-    console.log(URL);
+    // console.log(URL);
     var settings = {
         async: true,
         crossDomain: true,
@@ -1570,8 +1569,8 @@ function usersearch() {
         method: "GET",
         success: function() {
             $("#error").empty()
-            var gif = document.getElementById("gif3");
-            gif.style.display = "none";
+            // var gif = document.getElementById("gif3");
+            // gif.style.display = "none";
         },
         error: function() {
             $("#gif3").hide()
@@ -1793,8 +1792,8 @@ function usersearch() {
     }
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
-        $("#giffamily").hide();
+        // console.log(dataa);
+        // $("#gif3").hide();
 
         Highcharts.chart('container17', {
             chart: {
@@ -1866,8 +1865,8 @@ function usersearch() {
     }
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
-        $("#giffamily").hide();
+        // console.log(dataa);
+        $("#gif3").hide();
 
         Highcharts.chart('container18', {
             chart: {
@@ -1948,11 +1947,11 @@ function clickableTable(userEmail) {
 // Export functionality
 $("#btnExport").click('load', function () {
     var p = document.getElementById("exportLink").innerText;
-    console.log(p);
+    // console.log(p);
     exportNew(p)
 });
 
 function exportNew(p) {
     window.location.assign(p);
-    console.log(p);
+    // console.log(p);
 }
