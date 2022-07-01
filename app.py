@@ -74332,8 +74332,12 @@ def mini_districtmonthwisepc(LOCAl_DISTRICT,startdate,enddate):
     {"$match":
     {'$and': [
       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+             
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -74361,6 +74365,12 @@ def mini_districtmonthwisepc(LOCAl_DISTRICT,startdate,enddate):
     {"$match":
     {'$and': [
       {'USER_ID.ROLE_ID._id' :{'$eq':ObjectId("5f155b8a3b6800007900da2b")}},
+     
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -74384,12 +74394,18 @@ def mini_districtmonthwisepc(LOCAl_DISTRICT,startdate,enddate):
     if df3.empty:
         df3=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'parents':[0,0,0,0,0,0,0,0,0,0,0,0]})
     
+#======= CLEVER ====================
+
     df4 = DataFrame(list(collection.aggregate([
     {"$match":
     {'$and': [
       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+         
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -74411,13 +74427,19 @@ def mini_districtmonthwisepc(LOCAl_DISTRICT,startdate,enddate):
               ])))
     if df4.empty:
         df4=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'clever':[0,0,0,0,0,0,0,0,0,0,0,0]})
-    
+
+#========== SCHOOLOGY ==============
+
     df5 = DataFrame(list(collection.aggregate([
     {"$match":
     {'$and': [
       {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct("USER_ID._id")}},
-            {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+            
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
         {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
           {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
          {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -74443,12 +74465,96 @@ def mini_districtmonthwisepc(LOCAl_DISTRICT,startdate,enddate):
     
     if df5.empty:
         df5=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'scoology':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        
+        
+    #========== CANVAS ==============
+
+    df666 = DataFrame(list(collection.aggregate([
+    {"$match":
+    {'$and': [
+      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+            
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
+        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.schoolId._id':{'$ne':None}},
+                 {"USER_ID.schoolId._id":{"$in":ids}},
+
+
+         {'USER_ID.EMAIL_ID':{'$ne':''}},
+        {'MODIFIED_DATE':{"$gte": myDatetime1 ,
+                             "$lte":myDatetime2}},
+
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
+          {'$project':{'_id':1,'canvas':'$pc'}},
+    { '$sort' : { '_id' : 1} }
+              ])))
+    
+    
+    if df666.empty:
+        df666=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'canvas':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        
+        
+        
+    #========== GOOGLE ==============
+
+    df77 = DataFrame(list(collection.aggregate([
+    {"$match":
+    {'$and': [
+      {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+            
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
+        {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+          {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+         {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+        { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {'USER_ID.schoolId._id':{'$ne':None}},
+                 {"USER_ID.schoolId._id":{"$in":ids}},
+
+
+         {'USER_ID.EMAIL_ID':{'$ne':''}},
+        {'MODIFIED_DATE':{"$gte": myDatetime1 ,
+                             "$lte":myDatetime2}},
+
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+    {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1},'district':{'$first':'$USER_ID.DISTRICT_ID.DISTRICT_NAME'}}},
+          {'$project':{'_id':1,'google':'$pc'}},
+    { '$sort' : { '_id' : 1} }
+              ])))
+    
+    
+    if df77.empty:
+        df77 =pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'google':[0,0,0,0,0,0,0,0,0,0,0,0]})
+        
+#=========================================
+        
     
     df6= pd.merge(df1,df2,on='_id',how='left')
     df66= pd.merge(df6,df0,on='_id',how='left')
     df7= pd.merge(df66,df3,on='_id',how='left')
     df8= pd.merge(df7,df4,on='_id',how='left')
     df= pd.merge(df8,df5,on='_id',how='left')
+    df= pd.merge(df,df666,on='_id',how='left')
+    df= pd.merge(df,df77,on='_id',how='left')
 
     df.rename(columns = { '_id': 'Month'}, inplace = True)
 
@@ -74473,12 +74579,15 @@ def mini_districtmonthwisepc(LOCAl_DISTRICT,startdate,enddate):
         P=DF['parents'].tolist()
         C=DF['clever'].tolist()
         S=DF['scoology'].tolist()
+        CAN=DF['canvas'].tolist()
+        GOOGLE=DF['google'].tolist()
         pc=DF['practice_count'].tolist()
         lsy=DF['practice_count_lsy'].tolist()
 
 
-    data={'monthname':Month,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S,'lsy':lsy}
+    data={'monthname':Month,'Teachers':T,'Parents':P,'Clever':C,'Scoology':S,"Canvas":CAN,"Google":GOOGLE,'lsy':lsy}
     return json.dumps(data)
+
 
 
 # Top 20 school user count
