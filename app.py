@@ -74671,8 +74671,12 @@ def mini_districtschwiseucc(LOCAl_DISTRICT,startdate,enddate):
     {"$match":
          {'$and': [
              {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"_id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                  
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
                 {"IS_DISABLED":{"$ne":"Y"}},
                   {"IS_BLOCKED":{"$ne":"Y"}},
                  {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -74714,14 +74718,20 @@ def mini_districtschwiseucc(LOCAl_DISTRICT,startdate,enddate):
                   ])))
     if df3.empty:
         df3=pd.DataFrame({'_id':[],'parents':[]})
+
+    #==================== CLEVER =================
     
     
     df4 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
              {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"_id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"_id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
+                  
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
                 {"IS_DISABLED":{"$ne":"Y"}},
              
                   {"IS_BLOCKED":{"$ne":"Y"}},
@@ -74742,13 +74752,18 @@ def mini_districtschwiseucc(LOCAl_DISTRICT,startdate,enddate):
     if df4.empty:
         df4=pd.DataFrame({'_id':[],'clever':[]})
     
-    
+#========== SCHOOLOGY ===============
+
     df5 = DataFrame(list(collection.aggregate([
     {"$match":
          {'$and': [
              {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"_id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"_id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                 
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
                 {"IS_DISABLED":{"$ne":"Y"}},
                   {"IS_BLOCKED":{"$ne":"Y"}},
                  {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -74767,12 +74782,77 @@ def mini_districtschwiseucc(LOCAl_DISTRICT,startdate,enddate):
     if df5.empty:
         df5=pd.DataFrame({'_id':[],'scoology':[]})
     
+
+#========== CANVAS ===============
+
+    df666 = DataFrame(list(collection.aggregate([
+    {"$match":
+         {'$and': [
+             {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                 
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
+                {"IS_DISABLED":{"$ne":"Y"}},
+                  {"IS_BLOCKED":{"$ne":"Y"}},
+                 {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                 {'EMAIL_ID':{'$ne':''}},
+                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+            {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$_id'},'NAME':{'$first':'$schoolId.NAME'},'district':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
+                  {'$project':{'_id':1,'canvas':{'$size':'$ID'}}},
+                   { '$sort' : { 'canvas' : -1}},
+#               {'$limit':20}
+                  ])))
+    if df666.empty:
+        df666=pd.DataFrame({'_id':[],'canvas':[]})
     
+#========== GOOGLE ===============
+
+    df77 = DataFrame(list(collection.aggregate([
+    {"$match":
+         {'$and': [
+             {'ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                 
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
+                {"IS_DISABLED":{"$ne":"Y"}},
+                  {"IS_BLOCKED":{"$ne":"Y"}},
+                 {"INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+                { 'USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                { 'USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                 {'EMAIL_ID':{'$ne':''}},
+                 {'schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+             {'schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+                           {'EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                             {'EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}]}},
+            {'$group':{'_id':'$schoolId._id','ID':{'$addToSet':'$_id'},'NAME':{'$first':'$schoolId.NAME'},'district':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
+                  {'$project':{'_id':1,'google':{'$size':'$ID'}}},
+                   { '$sort' : { 'google' : -1}},
+#               {'$limit':20}
+                  ])))
+    if df77.empty:
+        df77=pd.DataFrame({'_id':[],'google':[]})
+    
+
+#===========================================================
+
     df6= pd.merge(df1,df0,on='_id',how='left')
     df9= pd.merge(df6,df2,on='_id',how='left')
     df7=pd.merge(df9,df3,on='_id',how='left')
     df8=pd.merge(df7,df4,on='_id',how='left')
     df=pd.merge(df8,df5,on='_id',how='left')
+    df=pd.merge(df,df666,on='_id',how='left')
+    df=pd.merge(df,df77,on='_id',how='left')
     
     df=df.fillna(0)
     df
@@ -74786,6 +74866,8 @@ def mini_districtschwiseucc(LOCAl_DISTRICT,startdate,enddate):
         parent=[]
         clever=[]
         scoology=[]
+        canvas=[]
+        google=[]
         active=[]
       
     else:
@@ -74794,9 +74876,12 @@ def mini_districtschwiseucc(LOCAl_DISTRICT,startdate,enddate):
         parent=df['parents'].tolist()
         clever=df['clever'].tolist()
         scoology=df['scoology'].tolist()
+        canvas=df['canvas'].tolist()
+        google=df['google'].tolist()
         active=df['active'].tolist()
    
-    data={'schname':schname,'Teachers':teacher,'Parents':parent,'Clever':clever,'Scoology':scoology,'active':active}
+    data={'schname':schname,'Teachers':teacher,'Parents':parent,'Clever':clever,'Scoology':scoology,
+          'Canvas':canvas, 'Google':google, 'active':active}
     
     return json.dumps(data)
 
