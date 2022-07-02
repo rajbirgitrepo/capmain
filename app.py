@@ -31376,8 +31376,12 @@ def school_practice_trend(schoolid):
     df2 = DataFrame(list(collection.aggregate([
         {"$match":{
      '$and':[{'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-             {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                           
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
              {'USER_ID._id':{'$in':school}},
       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
@@ -31406,12 +31410,20 @@ def school_practice_trend(schoolid):
     practice_left= pd.merge(df1, df2,on='Month', how='outer')
     practice_left=practice_left.fillna(0)    
 
+    
+#========== SCHOOLOGY =========================    
+
+
     dfschoology = DataFrame(list(collection.aggregate([
         {"$match":{
      '$and':[
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-            {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                            
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -31439,13 +31451,18 @@ def school_practice_trend(schoolid):
     dfschoology['Month'] = dfschoology['Month'].map(d)
     dfschoology=dfschoology.fillna(0)
 
+#============ CLEVER ========================
 
     dfclever = DataFrame(list(collection.aggregate([
         {"$match":{
      '$and':[
 #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-            {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-            {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
+                            
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
      {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
       {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
      {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
@@ -31472,11 +31489,95 @@ def school_practice_trend(schoolid):
     dfclever['Month'] = dfclever['Month'].map(d)
     dfclever=dfclever.fillna(0)
 
+
+#============ CANVAS ========================
+
+    dfcanvas = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                            
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+          {'USER_ID._id':{'$in':school}},
+#          {'USER_ID.schoolId._id':ObjectId("5f2bcad8ba0be61b0c1e9d5e")},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+       {'$project':{'_id':1,'canvas_CSY':'$pc'}}])))
+    if dfcanvas.empty == True:
+        dfcanvas=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'canvas_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        dfcanvas
+    dfcanvas.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    dfcanvas['Month'] = dfcanvas['Month'].map(d)
+    dfcanvas=dfcanvas.fillna(0)
+    
+
+#============ GOOGLE ========================
+
+    dfgoogle = DataFrame(list(collection.aggregate([
+        {"$match":{
+     '$and':[
+#              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                            
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
+     {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+      {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+     {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+          {'USER_ID._id':{'$in':school}},
+#          {'USER_ID.schoolId._id':ObjectId("5f2bcad8ba0be61b0c1e9d5e")},
+             { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+          {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+        {'USER_ID.EMAIL_ID':{'$ne':''}},  
+         {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+     { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                   {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                     {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+        {"MODIFIED_DATE":{"$gte": csy_first_date(),
+#                                         "$lt":datetime.datetime(2021,8,1)
+                         }}]}},
+       {'$group':{'_id':{'$month':'$MODIFIED_DATE'},'pc':{'$sum':1}}},
+       {'$project':{'_id':1,'google_CSY':'$pc'}}])))
+    if dfgoogle.empty == True:
+        dfgoogle=pd.DataFrame({'_id':[1,2,3,4,5,6,7,8,9,10,11,12],'google_CSY':[0,0,0,0,0,0,0,0,0,0,0,0]})
+    else:
+        dfgoogle
+    dfgoogle.rename(columns = { '_id': 'Month'}, inplace = True)
+    d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
+    dfgoogle['Month'] = dfgoogle['Month'].map(d)
+    dfgoogle=dfgoogle.fillna(0)
+
+#========= PARENTS ========================    
+    
     df4 = DataFrame(list(collection.aggregate([
         {"$match":{
      '$and':[{'USER_ID.ROLE_ID._id':ObjectId("5f155b8a3b6800007900da2b")},
-             {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-           {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                            
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
              { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
                        {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
                          {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
@@ -31511,6 +31612,8 @@ def school_practice_trend(schoolid):
     practice_LSY= pd.merge(practice_LSYy, df2,on='Month', how='left')
     practice_CSY =pd.merge(practice_LSY, dfschoology, on='Month', how='left')
     practice_CSY =pd.merge(practice_CSY, dfclever, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, dfcanvas, on='Month', how='left')
+    practice_CSY =pd.merge(practice_CSY, dfgoogle, on='Month', how='left')
     data =pd.merge(practice_CSY, df4, on='Month', how='left').fillna(0)
 
     
@@ -31523,9 +31626,14 @@ def school_practice_trend(schoolid):
     parents_CSY=data['parents_CSY'].tolist()
     schoology_CSY=data['schoology_CSY'].tolist()
     clever_CSY=data['clever_CSY'].tolist()
-    temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},{'barc': clever_CSY}]
+    canvas_CSY=data['canvas_CSY'].tolist()
+    google_CSY=data['google_CSY'].tolist()
+    temp=[{'Month':Month,'curve':TOTAL_LSY,'bar':teacher_CSY},{'bar2':parents_CSY},{'bars':schoology_CSY},
+          {'barc': clever_CSY},{'barcan': canvas_CSY},{'bargoogle': google_CSY}]
 
     return  json.dumps(temp)
+
+
 # school_practice_trend('5f2bcad8ba0be61b0c1e9d5e')
 
 @app.route('/schoolactivetrendnew/<schoolid>')
