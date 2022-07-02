@@ -77928,9 +77928,12 @@ def activepracchartallusers():
                 {"$match":{"$and":[
                     {'USER_ID._id':{'$in':list(unique_uid)}},
                         {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                        {"USER_ID._id":{'$not':{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                        {"USER_ID._id":{'$not':{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                        {"USER_ID._id":{'$not':{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}}
+                                                                
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
                     ]}},
         {'$group':{
             '_id':'$USER_ID._id'
@@ -77947,9 +77950,12 @@ def activepracchartallusers():
                 {"$match":{"$and":[
                     {'USER_ID._id':{'$in':list(unique_uid)}},
         #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                         {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
-                         {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                        {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}}
+                                                                  
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
                     ]}},
         {'$group':{
             '_id':'$USER_ID._id'
@@ -77966,9 +77972,12 @@ def activepracchartallusers():
                 {"$match":{"$and":[
                     {'USER_ID._id':{'$in':list(unique_uid)}},
         #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                         {"USER_ID._id":{"$in":db.clever_master.distinct("USER_ID._id")}},
-                        {"USER_ID._id":{"$not":{"$in":db.canvas_user_master.distinct( "USER_ID._id")}}}
+                                                                 
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
                     ]}},
         {'$group':{
             '_id':'$USER_ID._id'
@@ -77985,9 +77994,12 @@ def activepracchartallusers():
                 {"$match":{"$and":[
                     {'USER_ID._id':{'$in':list(unique_uid)}},
        #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
-                         {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                         {"USER_ID._id":{"$in":db.canvas_user_master.distinct("USER_ID._id")}},
-                        {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}}
+                                                                  
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
                     ]}},
         {'$group':{
             '_id':'$USER_ID._id'
@@ -77999,6 +78011,28 @@ def activepracchartallusers():
     canvas_progdf=pd.merge(df,df_canvas,on='USER_ID',how='right')
 
 
+    df_google = pd.DataFrame(list(db.audio_track_master.aggregate([
+                {"$match":{"$and":[
+                    {'USER_ID._id':{'$in':list(unique_uid)}},
+       #              {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+                                                                  
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
+                    ]}},
+        {'$group':{
+            '_id':'$USER_ID._id'
+        }},
+        {'$project':{'USER_ID':'$_id','_id':0}}
+    ])))
+
+    df_google['CHANNEL']='GOOGLE'
+    google_progdf=pd.merge(df,df_google,on='USER_ID',how='right')
+
+
+    
     df_family=pd.DataFrame(list(db.audio_track_master.aggregate([
                 {"$match":{"$and":[
                         {'USER_ID._id':{'$in':list(unique_uid)}},
@@ -78021,6 +78055,7 @@ def activepracchartallusers():
     total_progdf=total_progdf.append(clever_progdf)
     total_progdf=total_progdf.append(canvas_progdf)
     total_progdf=total_progdf.append(schoology_progdf)
+    total_progdf=total_progdf.append(google_progdf)
     total_progdf.reset_index(drop=True,inplace=True)
 
     teachers_actv=[]
@@ -78028,6 +78063,7 @@ def activepracchartallusers():
     schoology_actv=[]
     canvas_actv=[]
     clever_actv=[]
+    google_actv=[]
 
     teachers_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'daily') & (total_progdf['CHANNEL'] == 'TEACHERS')]['USER_ID'])))
     teachers_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Bonus') & (total_progdf['CHANNEL'] == 'TEACHERS')]['USER_ID'])))
@@ -78059,10 +78095,22 @@ def activepracchartallusers():
     canvas_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'educator') & (total_progdf['CHANNEL'] == 'CANVAS')]['USER_ID'])))
     canvas_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'counselor') & (total_progdf['CHANNEL'] == 'CANVAS')]['USER_ID'])))
 
+    
+    google_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'daily') & (total_progdf['CHANNEL'] == 'GOOGLE')]['USER_ID'])))
+    google_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Bonus') & (total_progdf['CHANNEL'] == 'GOOGLE')]['USER_ID'])))
+    google_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'Sound') & (total_progdf['CHANNEL'] == 'GOOGLE')]['USER_ID'])))
+    google_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'educator') & (total_progdf['CHANNEL'] == 'GOOGLE')]['USER_ID'])))
+    google_actv.append(int(len(total_progdf.loc[(total_progdf['status'] == 'counselor') & (total_progdf['CHANNEL'] == 'GOOGLE')]['USER_ID'])))
+
+    
     dm=["DAILY", "BONUS", "SOUND", "EDUCATOR", "COUNSELOR"]
-    temp=[{'PROGRAMS':dm, 'bart':teachers_actv},{'barf':family_actv},{'bars':schoology_actv},{'barc': clever_actv},{'barcan': canvas_actv}]
+    temp=[{'PROGRAMS':dm, 'bart':teachers_actv},{'barf':family_actv},{'bars':schoology_actv},{'barc': clever_actv},
+          {'barcan': canvas_actv},{'bargoogle': google_actv}]
     return json.dumps(temp)
 
+
+
+# activepracchartallusers()
 
 @app.route('/summer_activechart_all_users')
 def summer_active_allusers():
