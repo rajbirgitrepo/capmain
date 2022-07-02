@@ -4814,8 +4814,12 @@ def journeyprachischart(schoolid):
             {'USER_ID.EMAIL_ID':{'$ne':""}},
             {'USER_ID._id':{'$in':ID}},
 
-            {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                                  
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
             {"MODIFIED_DATE":{"$gte": myDatetime2
 #                                      ,"$lte" : myDatetime4
                                 }},
@@ -4847,8 +4851,12 @@ def journeyprachischart(schoolid):
             {'USER_ID.EMAIL_ID':{'$ne':""}},
             {'USER_ID._id':{'$in':ID}},
 
-            {"USER_ID._id":{"$not":{"$in":db.schoology_master.distinct( "USER_ID._id")}}},
-                {"USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
+                                 
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
             {"MODIFIED_DATE":{"$gte": myDatetime2
 #                                      ,"$lte" : myDatetime4
                                 }},
@@ -4883,8 +4891,12 @@ def journeyprachischart(schoolid):
                     {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
                         {'USER_ID.EMAIL_ID':{'$ne':""}},
-                         { "USER_ID._id":{"$not":{"$in":db.clever_master.distinct( "USER_ID._id")}}},
-                       {"USER_ID._id":{"$in":db.schoology_master.distinct( "USER_ID._id")}},
+                                               
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
                         {"MODIFIED_DATE":{"$gte": myDatetime2
         #                                      ,"$lte" : myDatetime4
                                         }},
@@ -4908,14 +4920,21 @@ def journeyprachischart(schoolid):
     else:
         schoology
     #     print(schoology,"schoology")
+   
+
     ########clever################################
+    
     clever = DataFrame(list(collection2.aggregate([{"$match":
                 {"$and" :[
                     {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
                         {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
                         {'USER_ID.EMAIL_ID':{'$ne':""}},
-                         { "USER_ID._id":{"$in":db.clever_master.distinct( "USER_ID._id")}},
-                       {"USER_ID._id":{"$nin":db.schoology_master.distinct( "USER_ID._id")}},
+                                              
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
                         {"MODIFIED_DATE":{"$gte": myDatetime2
         #                                      ,"$lte" : myDatetime4
                                         }},
@@ -4940,6 +4959,81 @@ def journeyprachischart(schoolid):
         clever
 
 
+    ########  CANVAS  ################################
+    
+    canvas = DataFrame(list(collection2.aggregate([{"$match":
+                {"$and" :[
+                    {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                        {'USER_ID.EMAIL_ID':{'$ne':""}},
+                                              
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
+                        {"MODIFIED_DATE":{"$gte": myDatetime2
+        #                                      ,"$lte" : myDatetime4
+                                        }},
+                    {'USER_ID._id':{'$in':ID}},
+                    {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                          {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+            ]}},
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+    if canvas.empty == True:
+        canvas=pd.DataFrame({'Practice_date':[],'Parents_Practice_CSY':[]})
+    else:
+        canvas
+
+
+    ######## GOOGLE ################################
+    
+    google = DataFrame(list(collection2.aggregate([{"$match":
+                {"$and" :[
+                    {'USER_ID.IS_DISABLED':{'$ne':'Y'}},
+                        {'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}}, 
+                        {'USER_ID.EMAIL_ID':{'$ne':""}},
+                                              
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'clever', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'schoology', '$options':'i'}})}},
+         {"USER_ID._id":{"$nin":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'canvas', '$options':'i'}})}},
+         {"USER_ID._id":{"$in":db.user_master.distinct("_id",{"UTM_MEDIUM":{'$regex':'google', '$options':'i'}})}},
+        
+                        {"MODIFIED_DATE":{"$gte": myDatetime2
+        #                                      ,"$lte" : myDatetime4
+                                        }},
+                    {'USER_ID._id':{'$in':ID}},
+                    {'USER_ID.USER_NAME':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : 'test', '$options' : 'i'}}},
+                        {'USER_ID.EMAIL_ID':{"$not": {'$regex' : '1gen', '$options' : 'i'}}},
+                          {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                        {'USER_ID.schoolId.NAME':{"$not":{"$regex":'blocked', '$options':'i'}}}
+
+            ]}},
+            {'$group':{'_id':{'day':{'$dayOfMonth':'$MODIFIED_DATE'}, 
+                            'month':{'$month':'$MODIFIED_DATE'}},
+                    'date':{'$first':'$MODIFIED_DATE'}, 
+                    'Parents_Practice_CSY':{'$sum':1}}},
+            {'$project':{'_id':0, 'Practice_date':{"$dateToString":{"format":"%Y-%m-%d","date":'$date'}}, 
+                        'Parents_Practice_CSY':'$Parents_Practice_CSY'}}, 
+            {"$sort":{'Practice_date':1}}])))
+    if google.empty == True:
+        google=pd.DataFrame({'Practice_date':[],'Parents_Practice_CSY':[]})
+    else:
+        google
+
+
+
     ###################### TOTAL LSY ##############################
     df3 = DataFrame(list(collection2.aggregate([{"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
                     {'USER_ID.IS_DISABLED':{"$ne":'Y'}},{'USER_ID.INCOMPLETE_SIGNUP':{"$ne":'Y'}},
@@ -4958,7 +5052,7 @@ def journeyprachischart(schoolid):
     if df3.empty == True:
         df3=pd.DataFrame({'Practice_date':[],'Total_Practice_LSY':[]})
     else:
-        schoology
+        df3
 
 
     df_last_to_lsy = DataFrame(list(collection2.aggregate([{"$match":{'$and':[{'USER_ID.USER_NAME':{"$ne": {'$regex' : 'test', '$options' : 'i'}}},
@@ -4979,7 +5073,7 @@ def journeyprachischart(schoolid):
     if df_last_to_lsy.empty == True:
         df_last_to_lsy=pd.DataFrame({'Practice_date':[],'Total_Practice_LSY':[]})
     else:
-        schoology
+        df_last_to_lsy
 
 
     #user_CSY
@@ -5019,6 +5113,30 @@ def journeyprachischart(schoolid):
         schoology=pd.DataFrame(dates,columns = ["Practice_date"])
         schoology['Parents_Practice_CSY'] = 0
         df6s=schoology.sort_values(by='Practice_date')
+        
+        
+    #CANVAS csy
+
+    if 'Practice_date' in list(canvas.columns):
+        canvas['Practice_date'] = pd.to_datetime(canvas['Practice_date'])
+        df6can=canvas.sort_values(by='Practice_date')
+    else:
+        dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+        canvas=pd.DataFrame(dates,columns = ["Practice_date"])
+        canvas['Parents_Practice_CSY'] = 0
+        df6can=canvas.sort_values(by='Practice_date')
+        
+        
+    #GOOGLE csy
+
+    if 'Practice_date' in list(google.columns):
+        google['Practice_date'] = pd.to_datetime(google['Practice_date'])
+        df6google=google.sort_values(by='Practice_date')
+    else:
+        dates=pd.date_range(start=str(csy_first_date().date()), end=str(datetime.date.today()))
+        google=pd.DataFrame(dates,columns = ["Practice_date"])
+        google['Parents_Practice_CSY'] = 0
+        df6google=google.sort_values(by='Practice_date')
 
 
 
@@ -5037,18 +5155,26 @@ def journeyprachischart(schoolid):
 
     ####clever
     ccsy1= df6c.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
-
-
     ccsy1['Practice_date']=ccsy1['Practice_date'].astype(np.int64)/int(1e6)
     ccsy=ccsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
-
-
 
 
     ####schoology
     scsy1= df6s.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
     scsy1['Practice_date']=scsy1['Practice_date'].astype(np.int64)/int(1e6)
     scsy=scsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+    
+    ####CANVAS
+    cancsy1= df6can.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+    cancsy1['Practice_date']=cancsy1['Practice_date'].astype(np.int64)/int(1e6)
+    cancsy=cancsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+    
+    ####GOOGLE
+    googlecsy1= df6google.merge(dfp9, on="Practice_date", how='right').fillna(0).sort_values(by='Practice_date')
+    googlecsy1['Practice_date']=scsy1['Practice_date'].astype(np.int64)/int(1e6)
+    googlecsy=googlecsy1[["Practice_date","Parents_Practice_CSY"]].values.tolist()
+    
+    
     #practice_Lsy
     df3['Practice_date'] = pd.to_datetime(df3['Practice_date'])
     df4=df3.sort_values(by='Practice_date')
@@ -5070,10 +5196,13 @@ def journeyprachischart(schoolid):
     plcy111['Practice_date']=plcy111['Practice_date'].astype(np.int64)/int(1e6)
     plcy_lsy=plcy111[["Practice_date","Total_Practice_LSY"]].values.tolist()
 
-    temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'clever':ccsy,'schoology':scsy}}
+    temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'clever':ccsy,'schoology':scsy,"canvas":cancsy, "google":googlecsy}}
 
     return json.dumps(temp)
 
+
+
+# journeyprachischart("5f2bcad8ba0be61b0c1e9d5e")
 
 
 # @app.route('/journeyprachis/<email>')
