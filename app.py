@@ -78652,35 +78652,24 @@ def AMS_CardsAPI():
     {'RECEIVER_EMAIL':{"$not":{"$regex":"aarora@1gen.io",'$options':'i'}}},
     {'RECEIVER_EMAIL':{"$not":{"$regex":"tech@innerexplorer.org",'$options':'i'}}},
     {'MODULE_NAME':{'$regex':'phase 2','$options':'i'}} ]}},
-     {'$group':{
-        '_id':"$RECEIVER_EMAIL",
-        'PURPOSE':'$PURPOSE',
-        'Total_Emails_Sent':{'$sum':1},
-        'date':{'$first':'$CREATED_DATE'}, 
-        'PURPOSE':{'$first':'$PURPOSE'}, 
-        'SENDER_EMAIL':{'$first':"$SENDER_EMAIL"},
-        'DESCRIPTION':{'$first':"$DESCRIPTION"},
-        # 'PURPOSE':{'$first':"$PURPOSE"},
-    #     'RECEIVER_EMAIL':{'$first':"$RECEIVER_EMAIL"},
-        'MODULE_NAME':{'$first':"$MODULE_NAME"},
-        }},
-        {'$project':{
-        "_id" : 0,
-        'RECEIVER_EMAIL': "$_id",
-        "USER_EMAIL" : "$RECEIVER_EMAIL",
-        'Total_Emails_Sent':1,
-        "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$date'}},
-        "DESCRIPTION" :1,
-        "PURPOSE" : 1,
-        "SENDER_EMAIL" :1,
-        "MODULE_NAME" : 1
-        }},
+
+    {'$project':{
+    "_id" : 1,
+    'RECEIVER_EMAIL': 1,
+    'Total_Emails_Sent':1,
+    "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$CREATED_DATE'}},
+    "DESCRIPTION" :1,
+    "PURPOSE" : 1,
+    "SENDER_EMAIL" :1,
+    "MODULE_NAME" : 1
+    }},
     ])))
     ams_phase2_data=ams_phase2_data[ams_phase2_data['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
     ams_emails=list(ams_phase2_data['RECEIVER_EMAIL'].unique())
 
-    TOTAL_EMAILS_SENT = ams_phase2_data['Total_Emails_Sent'].sum()
+    TOTAL_EMAILS_SENT = len(ams_phase2_data)
     UNIQUE_USERS = len(ams_phase2_data['RECEIVER_EMAIL'].unique())
+
 
     ams_user_master_data=pd.DataFrame(list(db.user_master.aggregate([
     {'$match':{'$and':[
@@ -78693,6 +78682,7 @@ def AMS_CardsAPI():
     'EMAIL_ID':'$EMAIL_ID',
     'sign_up':{"$dateToString":{"format": "%Y-%m-%d","date":'$CREATED_DATE'}},
     "USER_NAME":1, 
+    "School_ID":"$schoolId._id",
     "School_Name":"$schoolId.NAME", 
     "CITY":"$schoolId.CITY",
     "STATE":"$schoolId.STATE", 
@@ -78721,13 +78711,12 @@ def AMS_CardsAPI():
     finaldf=ams_final.merge(ams_practice_data,how='left',left_on='USER_ID',right_on='_id').fillna("NO_INFO")
     finaldf['Practice_Count'].replace("NO_INFO",0, inplace=True)
     finaldf['Mindful_Minutes'].replace("NO_INFO",0, inplace=True)
-    finaldf = finaldf[[ 'USER_NAME','EMAIL_ID','Total_Emails_Sent', 'sign_up', 'School_Name', 'CITY', 'STATE', 'COUNTRY', 'Last_Practice_Date', 'Practice_Count', 'Mindful_Minutes']]
+    finaldf = finaldf[[ 'USER_NAME','EMAIL_ID','sign_up', 'School_Name', 'CITY', 'STATE', 'COUNTRY', 'Last_Practice_Date', 'Practice_Count', 'Mindful_Minutes']]
     Playback_Count = finaldf.Practice_Count.sum()
     Mindful_Minutes = finaldf.Mindful_Minutes.sum()
     temp={"TOTAL_EMAILS_SENT":int(TOTAL_EMAILS_SENT),"UNIQUE_USERS":int(UNIQUE_USERS),"ACTIVE_USERS":int(Active_users),
-          "PLAYBACK_COUNT":Playback_Count,"MINDFUL_MINUTES":round(Mindful_Minutes,2)}
+    "PLAYBACK_COUNT":Playback_Count,"MINDFUL_MINUTES":round(Mindful_Minutes,2)}
     return json.dumps(temp, default =str)
-
 
 @app.route('/AMS_EmailCount_PerDay')
 def AMS_EmailCountPerDay():     
