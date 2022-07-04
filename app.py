@@ -79281,7 +79281,6 @@ def Local_Disctrictfilter():
 
 
 
-
 @app.route('/summer_series/')
 def summer_series():
 
@@ -79604,13 +79603,17 @@ def summer_series():
     dis_playback=summer_district_playback
     
     overall_district_stats= pd.merge(dis_playback, dis_activity, on='DISTRICT', how='outer')
+    
     overall_district_stats=overall_district_stats.fillna(0)
+    overall_district_stats.columns = overall_district_stats.columns.str.replace(' ','_')
 #     sch_activity=pd.read_csv("summer_school_activity.csv")
     sch_activity=summer_school_activity
 #     sch_playback=pd.read_csv("summer_school_playback.csv")
     sch_playback=summer_school_playback
     overall_school_stats= pd.merge(sch_playback, sch_activity, on='SCHOOL_NAME', how='outer')
     overall_school_stats=overall_school_stats.fillna(0)
+    
+    overall_school_stats.columns=overall_school_stats.columns.str.replace(' ','_')
 #     user_activity=pd.read_csv("summer_user_activity.csv")
     user_activity=summer_user_activity
 #     user_playback=pd.read_csv("summer_user_playback.csv")
@@ -79620,7 +79623,9 @@ def summer_series():
     overall_user_stats['USER NAME_x'].fillna(overall_user_stats['USER NAME_y'],inplace=True)
     # df['Col1'].fillna(df['Col2'])
     overall_user_stats=overall_user_stats.fillna(0)
+    
     overall_user_stats.drop(columns=['USER NAME_y'],inplace=True)
+    overall_user_stats.columns=overall_user_stats.columns.str.replace(' ','_')
     
 #     activity_raw_data=pd.read_csv("summer_overall_activity.csv")
     activity_raw_data=summer_overall_activity
@@ -79632,10 +79637,22 @@ def summer_series():
     import functools as ft
     dfs=[act_count,act_user]
     act_final = ft.reduce(lambda left, right: pd.merge(left, right, on='ACTIVITY_NAME'), dfs)
-    overall_district_stats_dict=overall_district_stats.sort_values('Activity Count',ascending=False).to_dict('list')
-    overall_school_stats_dict=overall_school_stats.sort_values('Activity Count',ascending=False).to_dict('list')
-    overall_user_stats_dict=overall_user_stats.sort_values('Activity Count',ascending=False).to_dict('list')
-    act_final_dict=act_final.sort_values('Activity View',ascending=False).to_dict('list')
+    overall_district_stats_dict=overall_district_stats.sort_values('Activity_Count',ascending=False).to_dict('list')
+#     overall_district_stats
+    
+    
+    
+    act_final.columns=act_final.columns.str.replace(' ','_')
+    
+    overall_school_stats_dict=overall_school_stats.sort_values('Activity_Count',ascending=False).to_dict('list')
+    
+    overall_user_stats_dict=overall_user_stats.sort_values('Activity_Count',ascending=False).to_dict('list')
+    
+    
+    
+    
+    act_final_dict=act_final.sort_values('Activity_View',ascending=False).to_dict('list')
+    
     activity_raw_data1=activity_raw_data[['DISTRICT','SCHOOL_NAME','USER_NAME','EMAIL_ID','ACTIVITY_NAME','CREATED_DATE']]
     activity_raw_data1['CREATED_DATE']=pd.to_datetime(activity_raw_data1['CREATED_DATE'])
     activity_raw_data1['CREATED_DATE']=activity_raw_data1['CREATED_DATE'].dt.strftime('%d %b %Y')
@@ -79645,11 +79662,15 @@ def summer_series():
           "total_school_playback_count":len(sch_playback),
           "total_user_activity_count":len(user_activity),
           "total_user_playback_count":len(user_playback),
-          "total_mindfulness":sum(overall_user_stats['Total mm']),
-          "total_playback":sum(overall_user_stats['Total playback']),
-          "total_activity_count":sum(overall_user_stats['Activity Count']),
+          "total_mindfulness":sum(overall_user_stats['Total_mm']),
+          "total_playback":sum(overall_user_stats['Total_playback']),
+          "total_activity_count":sum(overall_user_stats['Activity_Count']),
           
-           
+          "overall_district_chart":overall_district_stats_dict,
+           "overall_school_chart":overall_school_stats_dict,
+           "user_chart":overall_user_stats_dict,
+          "act_chart":act_final_dict,
+          
           'activity_table':activity_raw_data1.values.tolist(),
           'playback_table':playback_raw_data1.values.tolist()
           
@@ -79658,6 +79679,7 @@ def summer_series():
          }
 
     return json.dumps(data)
+
 
 
 
