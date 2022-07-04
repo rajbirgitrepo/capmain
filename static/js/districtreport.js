@@ -202,22 +202,34 @@ function charts(a, b, c) {
                         }
                     }
                 },
-                series: [{
-                    name: 'Clever',
-                    data: dataa.Clever
-                },
-                {
-                    name: 'Schoology',
-                    data: dataa.Scoology
-                }, {
-                    name: 'Family',
-                    fontSize: '8px',
-                    data: dataa.Parents
-
-                }, {
-                    name: 'Teacher',
-                    data: dataa.Teachers
-                },
+                series: [
+                    {
+                        name: 'Google',
+                        "color": "#40B5AD",
+                        data: dataa.Google
+                    },
+                    {
+                        name: 'Canvas',
+                        "color": "#d3373b",
+                        data: dataa.Canvas
+                    },
+                    {
+                        name: 'Clever',
+                        data: dataa.Clever
+                    },
+                    {
+                        name: 'Schoology',
+                        data: dataa.Scoology
+                    }, 
+                    {
+                        name: 'Family',
+                        fontSize: '8px',
+                        data: dataa.Parents
+                    }, 
+                    {
+                        name: 'Teacher',
+                        data: dataa.Teachers
+                    },
                 ],
             });
         });
@@ -558,7 +570,21 @@ function charts(a, b, c) {
                             }
                         }
                     },
-                    series: [{
+                    series: [
+                    {
+                        name: 'Google',
+                        "color": "#40B5AD",
+                        data: dataa.Google,
+                        stack: 'male'
+                    },
+                    {
+                        name: 'Canvas',
+                        "color": "#d3373b",
+                        data: dataa.Canvas,
+                        stack: 'male'
+                    },
+
+                    {
                         name: 'Clever',
                         data: dataa.Clever,
                         stack: 'male'
@@ -1348,7 +1374,20 @@ function charts(a, b, c) {
                             stacking: 'normal',
                         }
                     },
-                    series: [{
+                    series: [
+                    {
+                        name: 'Google',
+                        "color": "#40B5AD",
+                        data: dataa.Google,
+                        stack: 0
+                    },
+                    {
+                        name: 'Canvas',
+                        "color": "#d3373b",
+                        data: dataa.canvas,
+                        stack: 0
+                    },
+                    {
                         name: 'Clever',
                         data: dataa.Clever,
                         stack: 0
