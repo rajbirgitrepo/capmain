@@ -5,13 +5,10 @@
 #checking
 
 
-
-
-
-
 from dependency import *
 from executive import *
-
+client_test = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+db_test=client_test.compass
 app = Flask(__name__)
 CORS(app)
 
@@ -95,59 +92,191 @@ def homepage():
     return render_template('homepage.html')
 
 # <<<<<<<<<<<<<<<<<<<<<<<<<<<<EXECUTIVE 1st PAGE APIS using executive module-------------------->>>>>>>>>>>>>>>>>
-
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<Pipeline changes-------------------->>>>>>>>>>>>>>>>>
 @app.route('/executivecount_productwise')
 def schoolcount_totalstudentscard():
-    returnval=executive_count_productwise()
-    return returnval
+    returnval=list(db_test.cap_pipeline.aggregate([
+            {"$match":
+             {
+                '$and':[{'dashboard':{'$eq':'executive'}},
+                       ]
+             }},
+            {'$project':{'_id':0 ,"executive_count_productwise":1}}
+            ]))
+    return returnval[0]
 
 
 @app.route('/_executive_dashbaord_')
 def totalusercount_card():
-    returnval=excecutivecount___()
-    return returnval
+    returnval=list(db_test.cap_pipeline.aggregate([
+            {"$match":
+             {
+                '$and':[{'dashboard':{'$eq':'executive'}},
+                        
+                       
+                       
+                       ]
+             }},
+            {'$project':{'_id':0 ,"excecutivecount":1}}
+            ]))
+    return returnval[0]
 
 
 @app.route('/practicetrendnew/<charttype>')
 def practice_trendnew__(charttype):
-    returnval=practice_trendnew_(charttype)
-    return returnval
+    if charttype.lower()=='practice':
+        returnval=list(db_test.cap_pipeline.aggregate([
+                {"$match":
+                 {
+                    '$and':[{'dashboard':{'$eq':'executive'}},
+
+
+
+                           ]
+                 }},
+                {'$project':{'_id':0 ,"data":"$practice_trendnew.practice"}}
+                ]))
+    else:
+        print("2")
+        returnval=list(db_test.cap_pipeline.aggregate([
+                {"$match":
+                 {
+                    '$and':[{'dashboard':{'$eq':'executive'}},
+
+
+
+                           ]
+                 }},
+                {'$project':{'_id':0 ,"data":"$practice_trendnew.else"}}
+                ]))
+    return returnval[0]
 
 
 @app.route('/activetrendnew/<charttype>')
 def active_trend_new__(charttype):
-    returnval=active_trend_new_(charttype)
-    return returnval
+    if charttype.lower()=='practice':
+        returnval=list(db_test.cap_pipeline.aggregate([
+                {"$match":
+                 {
+                    '$and':[{'dashboard':{'$eq':'executive'}},
+
+
+
+                           ]
+                 }},
+                {'$project':{'_id':0 ,"data":"$active_trend_new.practice"}}
+                ]))
+    else:
+        print("2")
+        returnval=list(db_test.cap_pipeline.aggregate([
+                {"$match":
+                 {
+                    '$and':[{'dashboard':{'$eq':'executive'}},
+
+
+
+                           ]
+                 }},
+                {'$project':{'_id':0 ,"data":"$active_trend_new.else"}}
+                ]))
+    return returnval[0]
 
 @app.route('/practicehistorychartlatest/<charttype>')
 def practice___history___new___latest_(charttype):
-    returnval=practice___history___new___latest(charttype)
-    return returnval
+    if charttype.lower()=='practice':
+        returnval=list(db_test.cap_pipeline.aggregate([
+                {"$match":
+                 {
+                    '$and':[{'dashboard':{'$eq':'executive'}},
+
+
+
+                           ]
+                 }},
+                {'$project':{'_id':0 ,"data":"$practice___history___new___latest.practice"}}
+                ]))
+    else:
+        print("2")
+        returnval=list(db_test.cap_pipeline.aggregate([
+                {"$match":
+                 {
+                    '$and':[{'dashboard':{'$eq':'executive'}},
+
+
+
+                           ]
+                 }},
+                {'$project':{'_id':0 ,"data":"$practice___history___new___latest.else"}}
+                ]))
+    return returnval[0]
 
 @app.route('/averagetrend/')
 def average_trend_new__():
-    returnval=average_trend_new_()
-    return returnval
-
+    returnval=list(db_test.cap_pipeline.aggregate([
+            {"$match":
+             {
+                '$and':[{'dashboard':{'$eq':'executive'}},
+                        
+                       
+                       
+                       ]
+             }},
+            {'$project':{'_id':0 ,"average_trend_new":1}}
+            ]))
+    return returnval[0]
 
 @app.route('/topdistrictplayback')
 def topdistrict_playback_():
-    returnval=topdistrict_playback()
-    return returnval
+    returnval=list(db_test.cap_pipeline.aggregate([
+            {"$match":
+             {
+                '$and':[{'dashboard':{'$eq':'executive'}},
+                        
+                       
+                       
+                       ]
+             }},
+            {'$project':{'_id':0 ,"topdistrict_playback":1}}
+            ]))
+    return returnval[0]
 
 
 @app.route('/feedbackrating_csy')
 def schoolrating_csy_():
-    returnval=schoolrating_csy()
-    return returnval
+    returnval=list(db_test.cap_pipeline.aggregate([
+            {"$match":
+             {
+                '$and':[{'dashboard':{'$eq':'executive'}},
+                        
+                       
+                       
+                       ]
+             }},
+            {'$project':{'_id':0 ,"schoolrating_csy":1}}
+            ]))
+    return returnval[0]
 
 
 @app.route('/sentimentdonut_csy')
 def sentiment_pie_():
-    returnval=sentiment_pie()
-    return returnval
+    returnval=list(db_test.cap_pipeline.aggregate([
+            {"$match":
+             {
+                '$and':[{'dashboard':{'$eq':'executive'}},
+                        
+                       
+                       
+                       ]
+             }},
+            {'$project':{'_id':0 ,"sentiment_pie":1}}
+            ]))
+    return returnval[0]
 
-    
+
+
+# <<<<<<<<<<<<<<<<<<<<<<<<<<<<Pipeline changes Complete-------------------->>>>>>>>>>>>>>>>>
+
+
 
 @app.route('/questtimeseries')
 def questtimeseries():
