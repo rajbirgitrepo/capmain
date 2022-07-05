@@ -90,7 +90,13 @@ function playbackTrendChart2(selectValue2, t) {
                     },
                 },
             },
-            series: [{
+            series: [
+                {
+                    name: "Google",
+                    data: dataa[4].bargoogle,
+                    color: '#40B5AD'
+                },
+                {
                     name: "Canvas",
                     data: dataa[4].barcan,
                     color: '#d3373b'

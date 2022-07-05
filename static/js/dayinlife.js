@@ -286,34 +286,35 @@ function charts(a) {
                     }
                 },
 
-                series: [{
-                        "name": "Rating",
-
-                        "type": "line",
-                        "color": "#FF9933",
-                        "xAxis": 0,
-                        "data": dataa.data.ratings,
-                        "yAxis": 1,
-                        dataGrouping: {
-                            enabled: false,
-                        }
-                    }, {
-                        "name": "Clever",
+                series: [
+                    {
+                        "name": "Google",
                         "type": "column",
                         "xAxis": 0,
-                        "color": "#462cee",
-                        "data": dataa.data.Clever,
+                        "color": "#40B5AD",
+                        "data": dataa.data.Google,
                         "yAxis": 0,
                         dataGrouping: {
                             enabled: false,
                         }
                     },
                     {
-                        "name": "Parents Practices",
+                        "name": "Canvas",
                         "type": "column",
                         "xAxis": 0,
-                        "color": "#01A451",
-                        "data": dataa.data.Parents_practices,
+                        "color": "#d3373b",
+                        "data": dataa.data.Canvas,
+                        "yAxis": 0,
+                        dataGrouping: {
+                            enabled: false,
+                        }
+                    },
+                    {
+                        "name": "Clever",
+                        "type": "column",
+                        "xAxis": 0,
+                        "color": "#462cee",
+                        "data": dataa.data.Clever,
                         "yAxis": 0,
                         dataGrouping: {
                             enabled: false,
@@ -331,6 +332,17 @@ function charts(a) {
                         }
                     },
                     {
+                        "name": "Parents Practices",
+                        "type": "column",
+                        "xAxis": 0,
+                        "color": "#01A451",
+                        "data": dataa.data.Parents_practices,
+                        "yAxis": 0,
+                        dataGrouping: {
+                            enabled: false,
+                        }
+                    },
+                    {
                         "name": "Teachers Practices",
                         "type": "column",
                         "xAxis": 0,
@@ -342,16 +354,16 @@ function charts(a) {
                         }
                     },
                     {
-                        "name": "Canvas",
-                        "type": "column",
+                        "name": "Rating",
+                        "type": "line",
+                        "color": "#FF9933",
                         "xAxis": 0,
-                        "color": "#6495ED",
-                        "data": dataa.data.Canvas,
-                        "yAxis": 0,
+                        "data": dataa.data.ratings,
+                        "yAxis": 1,
                         dataGrouping: {
                             enabled: false,
                         }
-                    }
+                    }, 
                 ]
 
             });
