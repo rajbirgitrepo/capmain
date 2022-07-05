@@ -82,7 +82,7 @@ function charts(a, b, c) {
 
   $.ajax(settings).done(function (response) {
     var dataa = JSON.parse(response);
-    console.log(dataa);
+    // console.log(dataa);
     $(function () {
       $("#container2").highcharts({
         chart: {
@@ -171,6 +171,16 @@ function charts(a, b, c) {
           },
         },
         series: [
+          {
+            name: 'Google',
+            "color": "#40B5AD",
+            data: dataa.Google
+          },
+        {
+            name: 'Canvas',
+            "color": "#d3373b",
+            data: dataa.Canvas
+        },
           {
             name: "Clever",
             data: dataa.Clever,
@@ -331,7 +341,7 @@ function charts(a, b, c) {
 
       $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
+        // console.log(dataa);
         $(function () {
           $("#container2").highcharts({
             chart: {
@@ -457,10 +467,10 @@ function charts(a, b, c) {
   };
   $.ajax(settings).done(function (response) {
     var dataa = JSON.parse(response);
-    console.log(dataa);
-    console.log(
-      "/mini_district_monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c
-    );
+    // console.log(dataa);
+    // console.log(
+    //   "/mini_district_monthwisepracticedistrict" + "/" + a + "/" + b + "/" + c
+    // );
     $(function () {
       $("#container3").highcharts({
         chart: {
@@ -529,6 +539,16 @@ function charts(a, b, c) {
           },
         },
         series: [
+          {
+            name: 'Google',
+            "color": "#40B5AD",
+            data: dataa.Google
+          },
+          {
+            name: 'Canvas',
+            "color": "#d3373b",
+            data: dataa.Canvas
+        },
           {
             name: "Clever",
             data: dataa.Clever,
@@ -636,10 +656,10 @@ function charts(a, b, c) {
   };
   $.ajax(settings).done(function (response) {
     var dataa = JSON.parse(response);
-    console.log(dataa);
-    console.log(
-      "/mini_district_schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c
-    );
+    // console.log(dataa);
+    // console.log(
+    //   "/mini_district_schoolwiseusercounttop20" + "/" + a + "/" + b + "/" + c
+    // );
     $(function () {
       $("#container4").highcharts({
         chart: {
@@ -707,6 +727,16 @@ function charts(a, b, c) {
           },
         },
         series: [
+          {
+            name: 'Google',
+            "color": "#40B5AD",
+            data: dataa.Google
+          },
+          {
+            name: 'Canvas',
+            "color": "#d3373b",
+            data: dataa.Canvas
+          },
           {
             name: "Clever",
             data: dataa.Clever,
@@ -1740,7 +1770,7 @@ function dataTab() {
 
 function createDynamicDiv4(userList) {
   var dynamicDiv = "";
-  console.log(userList);
+  // console.log(userList);
 
   dynamicDiv +=
     "<tr >" +
@@ -1921,7 +1951,7 @@ function dataTab() {
 
 function createDynamicDiv5(userList) {
   var dynamicDiv = "";
-  console.log(userList);
+  // console.log(userList);
 
   dynamicDiv +=
     "<tr >" +

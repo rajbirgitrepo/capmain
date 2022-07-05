@@ -37,7 +37,7 @@ var settings = {
 };
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-    // console.log(dataa);
+    console.log(dataa);
     $("#gifload").hide();
     $(function() {
         $("#container2").highcharts({
@@ -107,28 +107,40 @@ $.ajax(settings).done(function(response) {
                     }
                 }
             },
-            series: [{
+            series: [
+                // {
+                //     name: 'Google',
+                //     "color": "#40B5AD",
+                //     data: dataa.
+                // },
+                {
                     name: 'Canvas',
+                    "color": "#d3373b",
                     data: dataa.canvas_success_login
                 },
                 {
                     name: 'Clever',
+                    "color": "#4F1FAF",
                     data: dataa.clever_success_login
                 },
                 {
                     name: 'Schoology',
+                    "color": "#462CEE",
                     data: dataa.schoology_success_login
                 }, {
                     name: 'Homeapp',
+                    "color": "#8ae02b",
                     fontSize: '8px',
                     data: dataa.homeapp_success_login
 
                 }, {
                     name: 'Webapp',
+                    "color": "#6495ED",
                     data: dataa.webapp_success_login
                 },
                 {
                     name: 'Classroom',
+                    "color": "#FF9933",
                     data: dataa.classroom_success_login
                 },
             ],
