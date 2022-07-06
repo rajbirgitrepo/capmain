@@ -537,13 +537,17 @@ function charts(a) {
                             color: '#40B5AD'
                         },
                         {
+                            name: 'Google ' + t + ' Count Last week',
+                            data: dataa.weekdata.count_last_week_google,
+                            stack: 'Google',
+                            color: '#FF9933'
+                        },
+                        {
                             name: 'Teacher ' + t + ' Count Last to Last week',
                             data: dataa.weekdata.count_last_to_last_week_teachers,
                             stack: 'Last to Last week',
                             color: '#909497'
                         },
-
-
                         {
                             name: 'Teacher ' + t + ' Count Last Week',
                             data: dataa.weekdata.count_last_week_teachers,
@@ -556,7 +560,6 @@ function charts(a) {
                             stack: 'Last to Last week',
                             color: '#4f1faf'
                         },
- 
                         {
                             name: 'Clever ' + t + ' Count Last Week',
                             data: dataa.weekdata.ount_last_week_clever,
@@ -575,21 +578,18 @@ function charts(a) {
                             stack: 'Last week',
                             color: '#6252c9'
                         },
-
                         {
                             name: 'Parents ' + t + ' Count Last to Last week',
                             data: dataa.weekdata.count_last_to_lastweek_parents,
                             stack: 'Last to Last week',
                             color : '#01a451'
                         },
-
                         {
                             name: 'Parent ' + t + ' Count Last Week',
                             data: dataa.weekdata.count_last_week_parents,
                             stack: 'Last week',
                             color : '#8ae02b'
                         },
-                       
                         {
                             name: 'Canvas ' + t + ' Count Last Week',
                             data: dataa.weekdata.count_last_week_canvas,
