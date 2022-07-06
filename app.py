@@ -31458,7 +31458,7 @@ def school_engagement12():
     #dicnry
     
     return json.dumps(dicnry)
-# comments
+
 @app.route('/schoolpracticetrendnew/<schoolid>')
 def school_practice_trend(schoolid):
     username = urllib.parse.quote_plus('admin')
@@ -62126,7 +62126,8 @@ def weekly__compare__chart__(datestr,charttype):
         'count_last_to_last_week_clever':lists[9],
         'count_last_week_canvas':lists[10],
         'count_last_to_last_week_canvas':lists[11],
-        'count_last_to_last_week_google':lists[12]}
+        'count_last_week_google':lists[12],
+        'count_last_to_last_week_google':lists[13]}
         temp={'weekdata':weekdata}
         return json.dumps(temp)
     
@@ -62556,7 +62557,8 @@ def weekly__compare__chart__(datestr,charttype):
         'count_last_to_last_week_clever':lists[9],
         'count_last_week_canvas':lists[10],
         'count_last_to_last_week_canvas':lists[11],
-        'count_last_to_last_week_google':lists[12]}
+        'count_last_week_google':lists[12],
+        'count_last_to_last_week_google':lists[13]}
         temp={'weekdata':weekdata}
         return json.dumps(temp)
 
