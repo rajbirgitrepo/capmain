@@ -219,7 +219,7 @@ function charts(a, b, c) {
       };
       $.ajax(settings).done(function (response) {
         var dataa = JSON.parse(response);
-        console.log(dataa);
+        console.log(dataa, a);
         $(function () {
           $("#container2").highcharts({
             chart: {
@@ -308,6 +308,16 @@ function charts(a, b, c) {
               },
             },
             series: [
+              {
+                name: 'Google',
+                "color": "#40B5AD",
+                data: dataa.Google
+              },
+              {
+                name: 'Canvas',
+                "color": "#d3373b",
+                data: dataa.Canvas
+              },
               {
                 name: "Clever",
                 data: dataa.Clever,

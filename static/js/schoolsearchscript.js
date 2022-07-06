@@ -735,7 +735,7 @@ function schoolIDCharts(url1) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        console.log(dataa, "data");
+        console.log(dataa, url1, "data");
         // $("#gifload").hide();
 
         Highcharts.chart("graph1", {
