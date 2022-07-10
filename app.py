@@ -78691,7 +78691,9 @@ def AMS_CardsAPI():
     "COUNTRY":"$schoolId.COUNTRY"
     }}
     ])))
+#     ams_user_master_data_1 = ams_user_master_data
     ams_user_master_data_1 = ams_user_master_data.drop_duplicates(subset=['EMAIL_ID'], keep="first")
+#     print(ams_user_master_data_1)
     ams_user_master_data_1 = ams_user_master_data_1.fillna("NO_INFO")
 
     ams_final=ams_phase2_data.merge(ams_user_master_data_1,how='left',left_on='RECEIVER_EMAIL',right_on='EMAIL_ID')
@@ -78713,12 +78715,18 @@ def AMS_CardsAPI():
     finaldf=ams_final.merge(ams_practice_data,how='left',left_on='USER_ID',right_on='_id').fillna("NO_INFO")
     finaldf['Practice_Count'].replace("NO_INFO",0, inplace=True)
     finaldf['Mindful_Minutes'].replace("NO_INFO",0, inplace=True)
-    finaldf = finaldf[[ 'USER_NAME','EMAIL_ID','sign_up', 'School_Name', 'CITY', 'STATE', 'COUNTRY', 'Last_Practice_Date', 'Practice_Count', 'Mindful_Minutes']]
+    finaldf = finaldf[[ "USER_ID",'USER_NAME','EMAIL_ID','sign_up', 'School_Name', 'CITY', 'STATE', 'COUNTRY', 'Last_Practice_Date', 'Practice_Count', 'Mindful_Minutes']]
+    finaldf = finaldf.drop_duplicates(subset=["USER_ID", "EMAIL_ID"],keep='first')
     Playback_Count = finaldf.Practice_Count.sum()
     Mindful_Minutes = finaldf.Mindful_Minutes.sum()
     temp={"TOTAL_EMAILS_SENT":int(TOTAL_EMAILS_SENT),"UNIQUE_USERS":int(UNIQUE_USERS),"ACTIVE_USERS":int(Active_users),
     "PLAYBACK_COUNT":Playback_Count,"MINDFUL_MINUTES":round(Mindful_Minutes,2)}
     return json.dumps(temp, default =str)
+
+# AMS_CardsAPI()
+
+
+
 
 @app.route('/AMS_EmailCount_PerDay')
 def AMS_EmailCountPerDay():     
@@ -78972,6 +78980,7 @@ def AMS_phase2prac():
     ams_final=ams_phase2_data.merge(ams_user_master_data_1,how='left',left_on='RECEIVER_EMAIL',right_on='EMAIL_ID')
     ams_final=ams_final[ams_final['USER_ID'].notnull()]
     ams_final=ams_final[ams_final['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
+    ams_final = ams_final.drop_duplicates(subset=['EMAIL_ID'], keep="first")
     ams_practice_data=pd.DataFrame(list(db.audio_track_master.aggregate([{'$match':{'$and':[
         {'USER_ID._id':{'$in':list(ams_final['USER_ID'])}},
         {'MODIFIED_DATE':{'$gte':dateutil.parser.parse(str(pd.to_datetime(min(ams_final['CREATED_DATE']))))}}    
@@ -79687,4 +79696,4 @@ def summer_series():
 
 
 if __name__ == '__main__':
-   app.run(debug=True, port=5001)
+   app.run(debug=True)
