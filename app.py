@@ -79024,38 +79024,31 @@ def AMS_PurposeWiseemailsCount():
 
     {'MODULE_NAME':{"$regex":'Phase 2', '$options':'i'}},
     ]}},
-    {'$group':{
-    '_id':"$PURPOSE",
-    'date':{'$first':'$CREATED_DATE'},
-    'Total_Emails_Sent':{'$sum':1},
-    'SENDER_EMAIL':{'$first':"$SENDER_EMAIL"},
-    'DESCRIPTION':{'$first':"$DESCRIPTION"},
-    'PURPOSE':{'$first':"$PURPOSE"},
-    'RECEIVER_EMAIL':{'$first':"$RECEIVER_EMAIL"},
-    'MODULE_NAME':{'$first':"$MODULE_NAME"},
-    }},
     {'$project':{
-    "_id" : 0,
-    "USER_EMAIL" : "$RECEIVER_EMAIL",
-    'Total_Emails_Sent':1,
-    "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$date'}},
+    "_id" : 1,
+    'RECEIVER_EMAIL': 1,
+    'Total_Emails_Sent':{"$sum":1},
+    'User_Count':{"$sum":1},
+    "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$CREATED_DATE'}},
     "DESCRIPTION" :1,
     "PURPOSE" : 1,
     "SENDER_EMAIL" :1,
-    'RECEIVER_EMAIL': 1,
     "MODULE_NAME" : 1
     }},
     ])))
-    print(ams.Total_Emails_Sent.sum())
-    uemail = ams.USER_EMAIL.to_list()
+    
+    uemail = ams.RECEIVER_EMAIL.to_list()
     ams=ams[ams['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
-    # ams = ams[["PURPOSE","Total_Emails_Sent"]].values.tolist()
+    ams = ams.groupby(['PURPOSE'])[['Total_Emails_Sent']].sum().sort_values(by ="Total_Emails_Sent",ascending = False ).reset_index()
     purpose = ams["PURPOSE"].tolist()
     email = ams["Total_Emails_Sent"].tolist()
+    print(sum(email))
     temp={"PURPOSE":purpose,"TOTAL_EMAILS_SENT":email}
 
     return json.dumps(temp)
 
+
+# AMS_PurposeWiseemailsCount()
 
 
 #========================= AMS API's END HERE ==============================================
