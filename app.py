@@ -79007,6 +79007,8 @@ def AMS_phase2prac():
 
 
 @app.route('/AMS_PurposeWise_EmailCount')
+
+# @app.route('/AMS_PurposeWise_EmailCount')
 def AMS_PurposeWiseemailsCount(): 
 
     client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
@@ -79036,20 +79038,54 @@ def AMS_PurposeWiseemailsCount():
     "MODULE_NAME" : 1
     }},
     ])))
-    
-    uemail = ams.RECEIVER_EMAIL.to_list()
-    ams=ams[ams['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
-    ams = ams.groupby(['PURPOSE'])[['Total_Emails_Sent']].sum().sort_values(by ="Total_Emails_Sent",ascending = False ).reset_index()
-    purpose = ams["PURPOSE"].tolist()
-    email = ams["Total_Emails_Sent"].tolist()
-    print(sum(email))
-    temp={"PURPOSE":purpose,"TOTAL_EMAILS_SENT":email}
 
+    ams=ams[ams['DESCRIPTION']=='Email Sent'].fillna("NO_INFO").reset_index(drop=True)
+    ams=ams[ams['RECEIVER_EMAIL'].notnull()]
+
+    ams_emails=list(ams['RECEIVER_EMAIL'].unique())
+    email_freq  = ams.groupby(['RECEIVER_EMAIL','User_Count', 'PURPOSE'])[['Total_Emails_Sent']].sum().reset_index()
+
+
+    ams_user_master_data=pd.DataFrame(list(db.user_master.aggregate([
+    {'$match':{'$and':[
+    {'EMAIL_ID':{'$in':ams_emails}},
+    {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}
+    ]}},
+    {'$project':{
+    '_id':0,
+    'USER_ID':'$_id',
+    'EMAIL_ID':'$EMAIL_ID',
+    'sign_up':{"$dateToString":{"format": "%Y-%m-%d","date":'$CREATED_DATE'}},
+    "USER_NAME":1, 
+    "School_ID":"$schoolId._id",
+    "School_Name":"$schoolId.NAME", 
+    "CITY":"$schoolId.CITY",
+    "STATE":"$schoolId.STATE", 
+    "COUNTRY":"$schoolId.COUNTRY"
+    }}
+    ])))
+    # ams_user_master_data_1 = ams_user_master_data.drop_duplicates(keep='first')
+    ams_user_master_data_1 = ams_user_master_data
+    ams_user_master_data_1 = ams_user_master_data_1.fillna("NO_INFO")
+    ams_user_master_data_1=ams_user_master_data_1[ams_user_master_data_1['EMAIL_ID'].notnull()]
+
+    ams_final = ams.merge(ams_user_master_data_1,how='left',left_on='RECEIVER_EMAIL',right_on='EMAIL_ID').fillna(0)
+
+    ams_final = ams_final.drop_duplicates(subset=["EMAIL_ID"],keep='first')
+
+    ams_final = ams_final[['RECEIVER_EMAIL','USER_NAME','EMAIL_ID']]
+    ams_final = email_freq.merge(ams_final,how='left',left_on='RECEIVER_EMAIL',right_on='EMAIL_ID').fillna(0)
+    finaldf = ams_final.groupby(['PURPOSE'])['Total_Emails_Sent', "User_Count"].sum().sort_values(by ="Total_Emails_Sent",ascending = False ).reset_index()
+    purpose = finaldf["PURPOSE"].tolist()
+    email_count = finaldf["Total_Emails_Sent"].tolist()
+    # print(sum(email_count))
+    User_Count = finaldf["User_Count"].tolist()
+    # print(sum(User_Count))
+    temp={"PURPOSE":purpose,"TOTAL_EMAILS_SENT":email_count, "USER_COUNT":User_Count}
     return json.dumps(temp)
 
 
 # AMS_PurposeWiseemailsCount()
-
 
 #========================= AMS API's END HERE ==============================================
 
