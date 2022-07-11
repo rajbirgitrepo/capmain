@@ -79007,8 +79007,6 @@ def AMS_phase2prac():
 
 
 @app.route('/AMS_PurposeWise_EmailCount')
-
-# @app.route('/AMS_PurposeWise_EmailCount')
 def AMS_PurposeWiseemailsCount(): 
 
     client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
@@ -79086,6 +79084,154 @@ def AMS_PurposeWiseemailsCount():
 
 
 # AMS_PurposeWiseemailsCount()
+
+
+@app.route('/AMS_TotalEmailsSent_TableAPI')
+def AMS_Total_Emails_Sent_TableAPI(): 
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
+    db=client.compass
+
+    ams_phase2_data=pd.DataFrame(list(db.email_logging.aggregate([
+    {'$match':{'$and':[
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"octsignup21@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aaroramay11@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"ams2022@innerexplorer.org",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aarora@1gen.io",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"tech@innerexplorer.org",'$options':'i'}}},
+    {'MODULE_NAME':{'$regex':'phase 2','$options':'i'}} ]}},
+
+    {'$project':{
+    "_id" : 1,
+    'RECEIVER_EMAIL': 1,
+    'Total_Emails_Sent':1,
+    "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$CREATED_DATE'}},
+    "DESCRIPTION" :1,
+    "PURPOSE" : 1,
+    "SENDER_EMAIL" :1,
+    "MODULE_NAME" : 1
+    }},
+    ])))
+    ams_phase2_data=ams_phase2_data[ams_phase2_data['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
+    if "export" in request.args:
+        try:
+            df1=ams_phase2_data[[ 'RECEIVER_EMAIL','DESCRIPTION', 'PURPOSE','SENDER_EMAIL','MODULE_NAME', 'CREATED_DATE']]
+            csv = df1.to_csv(index=False)
+            return Response(
+                csv,
+                mimetype="text/csv",
+                headers={"Content-disposition":
+                        "attachment; filename=SchoolData.csv"})
+        except:
+            return jsonify("Unauthorized Access")   
+    else:
+        temp={"data":ams_phase2_data.values.tolist()}
+    return json.dumps(temp, default = str)
+# AMS_Total_Emails_Sent_TableAPI()
+
+
+@app.route('/AMS_UniqueUsers_TableAPI')
+def AMS_Unique_Users_TableAPI():
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
+    db=client.compass
+
+    ams_phase2_data=pd.DataFrame(list(db.email_logging.aggregate([
+    {'$match':{'$and':[
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"octsignup21@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aaroramay11@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"ams2022@innerexplorer.org",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aarora@1gen.io",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"tech@innerexplorer.org",'$options':'i'}}},
+    {'MODULE_NAME':{'$regex':'phase 2','$options':'i'}} ]}},
+
+    {'$project':{
+    "_id" : 1,
+    'RECEIVER_EMAIL': 1,
+    'Total_Emails_Sent':1,
+    "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$CREATED_DATE'}},
+    "DESCRIPTION" :1,
+    "PURPOSE" : 1,
+    "SENDER_EMAIL" :1,
+    "MODULE_NAME" : 1
+    }},
+    ])))
+    ams_phase2_data=ams_phase2_data[ams_phase2_data['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
+    ams_emails=list(ams_phase2_data['RECEIVER_EMAIL'].unique())
+
+    TOTAL_EMAILS_SENT = len(ams_phase2_data)
+    UNIQUE_USERS = len(ams_phase2_data['RECEIVER_EMAIL'].unique())
+
+
+    ams_user_master_data=pd.DataFrame(list(db.user_master.aggregate([
+    {'$match':{'$and':[
+    {'EMAIL_ID':{'$in':ams_emails}},
+    {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}
+    ]}},
+    {'$project':{
+    '_id':0,
+    'USER_ID':'$_id',
+    'EMAIL_ID':'$EMAIL_ID',
+    'sign_up':{"$dateToString":{"format": "%Y-%m-%d","date":'$CREATED_DATE'}},
+    "USER_NAME":1, 
+    "School_ID":"$schoolId._id",
+    "School_Name":"$schoolId.NAME", 
+    "CITY":"$schoolId.CITY",
+    "STATE":"$schoolId.STATE", 
+    "COUNTRY":"$schoolId.COUNTRY"
+    }}
+    ])))
+    #     ams_user_master_data_1 = ams_user_master_data
+    ams_user_master_data_1 = ams_user_master_data.drop_duplicates(subset=['EMAIL_ID'], keep="first")
+    #     print(ams_user_master_data_1)
+    ams_user_master_data_1 = ams_user_master_data_1.fillna("NO_INFO")
+
+    ams_final=ams_phase2_data.merge(ams_user_master_data_1,how='left',left_on='RECEIVER_EMAIL',right_on='EMAIL_ID')
+    ams_final=ams_final[ams_final['USER_ID'].notnull()]
+
+    ams_practice_data=pd.DataFrame(list(db.audio_track_master.aggregate([{'$match':{'$and':[
+    {'USER_ID._id':{'$in':list(ams_final['USER_ID'])}},
+    {'MODIFIED_DATE':{'$gte':dateutil.parser.parse(str(pd.to_datetime(min(ams_final['CREATED_DATE']))))}}    
+    ]}},
+    {'$group':{
+    '_id':'$USER_ID._id',
+    "Last_Practice_Date":{"$max":{"$dateToString":{"format": "%Y-%m-%d","date":'$MODIFIED_DATE'}}},
+    'Practice_Count':{"$sum":1},
+    'Mindful_Minutes':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}},
+    }},
+    ])))
+
+    Active_users = len(ams_practice_data)
+    finaldf=ams_final.merge(ams_practice_data,how='left',left_on='USER_ID',right_on='_id').fillna("NO_INFO")
+    finaldf['Practice_Count'].replace("NO_INFO",0, inplace=True)
+    finaldf['Mindful_Minutes'].replace("NO_INFO",0, inplace=True)
+    finaldf = finaldf[[ "USER_ID",'USER_NAME','EMAIL_ID','sign_up', 'School_Name', 'CITY', 'STATE', 'COUNTRY', 'Last_Practice_Date', 'Practice_Count', 'Mindful_Minutes']]
+    finaldf = finaldf.drop_duplicates(subset=["USER_ID", "EMAIL_ID"],keep='first')
+    Playback_Count = finaldf.Practice_Count.sum()
+    Mindful_Minutes = finaldf.Mindful_Minutes.sum()
+    finaldf['Practice_Count'].replace(0,"NO PRACTICE", inplace=True)
+    temp={"TOTAL_EMAILS_SENT":int(TOTAL_EMAILS_SENT),"UNIQUE_USERS":int(UNIQUE_USERS),"ACTIVE_USERS":int(Active_users),
+    "PLAYBACK_COUNT":Playback_Count,"MINDFUL_MINUTES":round(Mindful_Minutes,2)}
+
+    if "export" in request.args:
+        try:
+            df1=finaldf[['USER_NAME', 'EMAIL_ID', 'sign_up', 'School_Name', 'CITY','STATE', 'COUNTRY', 'Last_Practice_Date',
+                         'Practice_Count','Mindful_Minutes']]
+            csv = df1.to_csv(index=False)
+            return Response(
+                csv,
+                mimetype="text/csv",
+                headers={"Content-disposition":
+                        "attachment; filename=SchoolData.csv"})
+        except:
+            return jsonify("Unauthorized Access")   
+    else:
+        temp={"data":finaldf.values.tolist()}
+    return json.dumps(temp, default = str)
+
+# AMS_Unique_Users_TableAPI()
 
 #========================= AMS API's END HERE ==============================================
 
