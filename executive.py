@@ -1755,15 +1755,13 @@ def schoolrating_csy():
     temp={'rating':rating,'count':count}
     return json.dumps(temp)
 
-
-def sentiment_pie():
-    df=pd.read_csv("sentopt.csv")
-    neg=df[df['Compound']<0]
-    pos=df[df['Compound']>0]
-    neu=df[df['Compound']==0]
-    neg_sentiment=round(100*(len(neg)/(len(neu)+len(neg)+len(pos))),2)
-    pos_sentiment=round(100*(len(pos)/(len(neu)+len(neg)+len(pos))),2)
-    neu_sentiment=round(100*(len(neu)/(len(neu)+len(neg)+len(pos))),2)
+def sentiment_pie():    
+    df=pd.read_json(r"/root/"+'sentiment_json_data.json')
+    neg=df[df['Final_Sentiment']=='Negative']
+    pos=df[df['Final_Sentiment']=='Positive']
+    neg_sentiment=round(len(neg)/len(df),2)*100
+    pos_sentiment=round(len(pos)/len(df),2)*100
+    neu_sentiment=0
     word_chart={'donut':{'pos':pos_sentiment,'neg':neg_sentiment,'neu':neu_sentiment}}
     return json.dumps(word_chart)
 
