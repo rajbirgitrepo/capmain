@@ -79231,239 +79231,115 @@ def AMS_Unique_Users_TableAPI():
         temp={"data":finaldf.values.tolist()}
     return json.dumps(temp, default = str)
 
-# AMS_Unique_Users_TableAPI()
+
+@app.route('/AMS_ActiveUsers_TableAPI')
+def AMS_Actice_Users_TableAPI():
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
+    db=client.compass
+
+    ams_phase2_data=pd.DataFrame(list(db.email_logging.aggregate([
+    {'$match':{'$and':[
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"octsignup21@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aaroramay11@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"ams2022@innerexplorer.org",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aarora@1gen.io",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"tech@innerexplorer.org",'$options':'i'}}},
+    {'MODULE_NAME':{'$regex':'phase 2','$options':'i'}} ]}},
+
+    {'$project':{
+    "_id" : 1,
+    'RECEIVER_EMAIL': 1,
+    'Total_Emails_Sent':1,
+    "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$CREATED_DATE'}},
+    "DESCRIPTION" :1,
+    "PURPOSE" : 1,
+    "SENDER_EMAIL" :1,
+    "MODULE_NAME" : 1
+    }},
+    ])))
+    ams_phase2_data=ams_phase2_data[ams_phase2_data['DESCRIPTION']=='Email Sent'].reset_index(drop=True)
+    ams_emails=list(ams_phase2_data['RECEIVER_EMAIL'].unique())
+
+    TOTAL_EMAILS_SENT = len(ams_phase2_data)
+    UNIQUE_USERS = len(ams_phase2_data['RECEIVER_EMAIL'].unique())
+
+
+    ams_user_master_data=pd.DataFrame(list(db.user_master.aggregate([
+    {'$match':{'$and':[
+    {'EMAIL_ID':{'$in':ams_emails}},
+    {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}
+    ]}},
+    {'$project':{
+    '_id':0,
+    'USER_ID':'$_id',
+    'EMAIL_ID':'$EMAIL_ID',
+    'sign_up':{"$dateToString":{"format": "%Y-%m-%d","date":'$CREATED_DATE'}},
+    "USER_NAME":1, 
+    "School_ID":"$schoolId._id",
+    "School_Name":"$schoolId.NAME", 
+    "CITY":"$schoolId.CITY",
+    "STATE":"$schoolId.STATE", 
+    "COUNTRY":"$schoolId.COUNTRY"
+    }}
+    ])))
+    #     ams_user_master_data_1 = ams_user_master_data
+    ams_user_master_data_1 = ams_user_master_data.drop_duplicates(subset=['EMAIL_ID'], keep="first")
+    #     print(ams_user_master_data_1)
+    ams_user_master_data_1 = ams_user_master_data_1.fillna("NO_INFO")
+
+    ams_final=ams_phase2_data.merge(ams_user_master_data_1,how='left',left_on='RECEIVER_EMAIL',right_on='EMAIL_ID')
+    ams_final=ams_final[ams_final['USER_ID'].notnull()]
+
+    ams_practice_data=pd.DataFrame(list(db.audio_track_master.aggregate([{'$match':{'$and':[
+    {'USER_ID._id':{'$in':list(ams_final['USER_ID'])}},
+    {'MODIFIED_DATE':{'$gte':dateutil.parser.parse(str(pd.to_datetime(min(ams_final['CREATED_DATE']))))}}    
+    ]}},
+    {'$group':{
+    '_id':'$USER_ID._id',
+    "Last_Practice_Date":{"$max":{"$dateToString":{"format": "%Y-%m-%d","date":'$MODIFIED_DATE'}}},
+    'Practice_Count':{"$sum":1},
+    'Mindful_Minutes':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}},
+    }},
+    ])))
+
+    Active_users = len(ams_practice_data)
+    finaldf=ams_final.merge(ams_practice_data,how='left',left_on='USER_ID',right_on='_id').fillna("NO_INFO")
+    finaldf['Practice_Count'].replace("NO_INFO",0, inplace=True)
+    finaldf['Mindful_Minutes'].replace("NO_INFO",0, inplace=True)
+    finaldf = finaldf[[ "USER_ID",'USER_NAME','EMAIL_ID','sign_up', 'School_Name', 'CITY', 'STATE', 'COUNTRY', 'Last_Practice_Date', 'Practice_Count', 'Mindful_Minutes']]
+    finaldf = finaldf.drop_duplicates(subset=["USER_ID", "EMAIL_ID"],keep='first')
+    Playback_Count = finaldf.Practice_Count.sum()
+    Mindful_Minutes = finaldf.Mindful_Minutes.sum()
+    finaldf['Practice_Count'].replace(0,"NO PRACTICE", inplace=True)
+    finaldf = finaldf[finaldf['Practice_Count']!="NO PRACTICE" ].reset_index(drop=True)
+#     print(finaldf)
+#     temp={"TOTAL_EMAILS_SENT":int(TOTAL_EMAILS_SENT),"UNIQUE_USERS":int(UNIQUE_USERS),"ACTIVE_USERS":int(Active_users),
+#     "PLAYBACK_COUNT":Playback_Count,"MINDFUL_MINUTES":round(Mindful_Minutes,2)}
+
+    if "export" in request.args:
+        try:
+            df1=finaldf[['USER_NAME', 'EMAIL_ID', 'sign_up', 'School_Name', 'CITY','STATE', 'COUNTRY', 'Last_Practice_Date',
+                         'Practice_Count','Mindful_Minutes']]
+            csv = df1.to_csv(index=False)
+            return Response(
+                csv,
+                mimetype="text/csv",
+                headers={"Content-disposition":
+                        "attachment; filename=SchoolData.csv"})
+        except:
+            return jsonify("Unauthorized Access")   
+    else:
+        temp={"data":finaldf.values.tolist()}
+    return json.dumps(temp, default = str)
+
+
+
 
 #========================= AMS API's END HERE ==============================================
 
 
-
-
-
-
-@app.route('/ams_dashboard')
-def AMS_dashboard():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('AMS_dashboard.html')
-
-
-@app.route('/Summer_Series_dashboard')
-def summer_series_dashboard():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('summer_series.html')
-
-
-@app.route('/Family_SURVEY')
-def Family_SURVEY():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('Family_SURVEY.html')
-@app.route('/Bill_later')
-def Bill_later():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('Bill_later.html')
-
-@app.route('/Weekly_Analytics')
-def Weekly_Analytics12():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('Weekly_Analytics.html')
-
-@app.route('/School_Revenue')
-def School_Revenue():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('School_Revenue.html')
-
-@app.route('/feedback_Analyitcs_family')
-def feedbackfamily():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('feedback_Analyitcs_family.html')
-
-
-@app.route('/dailyweekly')
-def dailyweekly():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('dailyweekly.html')
-
-@app.route('/pracbifurcation')
-def pracbifurcation():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('pracbifurcation.html')
-
-@app.route('/Practice_streak')
-def Practice_streak():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('Practice_streak.html')
-
-@app.route('/schoolsummary')
-def schoolsummary():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('schoolsummary.html')
-
-@app.route('/Donation')
-def Donation():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('Donation.html')
-    
-@app.route('/Disctrictfilter')
-def Disctrictfilter():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('Disctrictfilter.html')
-
-@app.route('/district _race')
-def district_race():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('district _race.html')
-@app.route('/familycard')
-def Journey_score2():
-    if not g.user:
-        return redirect(url_for('login'))
-    
-    return render_template('familycard.html')
-
-@app.route('/audio_analytics')
-def audio_analytics():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('audio_analytics.html')
-
-@app.route('/tunein')
-def tunein():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('tunein.html')
-
-@app.route('/ddt')
-def ddt():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('ddt.html')
-
-@app.route('/mobile_sub')
-def mobile_sub():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('mobile_sub.html')
-
-
-@app.route('/partner')
-def partner():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('partner.html')
-
-@app.route('/fastt')
-def fastt():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('fastt.html')
-
-@app.route('/21daystreak')
-def daystreak():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('21daystreak.html')
-
-@app.route('/sentiment')
-def sentiment():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('sentiment.html')
-
-@app.route('/School_Search_comparison')
-def School_Search_comparison():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('School_Search_comparison.html')
-
-@app.route('/NameEScore')
-def NameEScore():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('NameEScore.html')
-
-@app.route('/d1districts')
-def d1districts():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('d1districts.html')
-
-@app.route('/schoolengagement')
-def schoolengagement():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('schoolengagement.html')
-
-@app.route('/awsmain')
-def awsmain():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('awsmain.html')
-@app.route('/callibration')
-def callibration():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('callibration.html')
-
-@app.route('/Login_analytics')
-def loginAnalytics():
-    if not g.user:
-        return redirect(url_for('login'))
-        
-    return render_template('Login_analytics.html')
-
-@app.route('/Journey_score')
-def reportcard():
-    if not g.user:
-        return redirect(url_for('login'))
-    
-    return render_template('Journey_score.html')
-@app.route("/logout")
-def logout():
-    session.pop('user_id', None)
-    return render_template('login.html')
-
-@app.route('/Day_In_Life')
-def Day_In_Life():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('dayinlife.html')
-
-@app.route('/Local_Disctrictfilter')
-def Local_Disctrictfilter():
-    if not g.user:
-        return redirect(url_for('login'))
-    return render_template('Local_Disctrictfilter.html')
 
 
 
@@ -79865,6 +79741,235 @@ def summer_series():
          }
 
     return json.dumps(data)
+
+#=====================================================================================================
+
+
+@app.route('/ams_dashboard')
+def AMS_dashboard():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('AMS_dashboard.html')
+
+
+@app.route('/Summer_Series_dashboard')
+def summer_series_dashboard():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('summer_series.html')
+
+
+@app.route('/Family_SURVEY')
+def Family_SURVEY():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('Family_SURVEY.html')
+@app.route('/Bill_later')
+def Bill_later():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('Bill_later.html')
+
+@app.route('/Weekly_Analytics')
+def Weekly_Analytics12():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('Weekly_Analytics.html')
+
+@app.route('/School_Revenue')
+def School_Revenue():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('School_Revenue.html')
+
+@app.route('/feedback_Analyitcs_family')
+def feedbackfamily():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('feedback_Analyitcs_family.html')
+
+
+@app.route('/dailyweekly')
+def dailyweekly():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('dailyweekly.html')
+
+@app.route('/pracbifurcation')
+def pracbifurcation():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('pracbifurcation.html')
+
+@app.route('/Practice_streak')
+def Practice_streak():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('Practice_streak.html')
+
+@app.route('/schoolsummary')
+def schoolsummary():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('schoolsummary.html')
+
+@app.route('/Donation')
+def Donation():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('Donation.html')
+    
+@app.route('/Disctrictfilter')
+def Disctrictfilter():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('Disctrictfilter.html')
+
+@app.route('/district _race')
+def district_race():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('district _race.html')
+@app.route('/familycard')
+def Journey_score2():
+    if not g.user:
+        return redirect(url_for('login'))
+    
+    return render_template('familycard.html')
+
+@app.route('/audio_analytics')
+def audio_analytics():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('audio_analytics.html')
+
+@app.route('/tunein')
+def tunein():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('tunein.html')
+
+@app.route('/ddt')
+def ddt():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('ddt.html')
+
+@app.route('/mobile_sub')
+def mobile_sub():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('mobile_sub.html')
+
+
+@app.route('/partner')
+def partner():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('partner.html')
+
+@app.route('/fastt')
+def fastt():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('fastt.html')
+
+@app.route('/21daystreak')
+def daystreak():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('21daystreak.html')
+
+@app.route('/sentiment')
+def sentiment():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('sentiment.html')
+
+@app.route('/School_Search_comparison')
+def School_Search_comparison():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('School_Search_comparison.html')
+
+@app.route('/NameEScore')
+def NameEScore():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('NameEScore.html')
+
+@app.route('/d1districts')
+def d1districts():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('d1districts.html')
+
+@app.route('/schoolengagement')
+def schoolengagement():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('schoolengagement.html')
+
+@app.route('/awsmain')
+def awsmain():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('awsmain.html')
+@app.route('/callibration')
+def callibration():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('callibration.html')
+
+@app.route('/Login_analytics')
+def loginAnalytics():
+    if not g.user:
+        return redirect(url_for('login'))
+        
+    return render_template('Login_analytics.html')
+
+@app.route('/Journey_score')
+def reportcard():
+    if not g.user:
+        return redirect(url_for('login'))
+    
+    return render_template('Journey_score.html')
+@app.route("/logout")
+def logout():
+    session.pop('user_id', None)
+    return render_template('login.html')
+
+@app.route('/Day_In_Life')
+def Day_In_Life():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('dayinlife.html')
+
+@app.route('/Local_Disctrictfilter')
+def Local_Disctrictfilter():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('Local_Disctrictfilter.html')
+
 
 
 
