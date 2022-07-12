@@ -115,7 +115,7 @@
                         <li><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
                         <!-- <li><a href="leadGeneration">LEAD GENERATION</a></li> -->
                         <li><a href="21daystreak">21 Day Streak</a></li>
-                        <li><a href="ams_dashboard">AMS DASHBOARD</a></li>
+                        <li><a href="ams_dashboard" id="AMS_dashboard">AMS DASHBOARD</a></li>
                         <li><a href="Summer_Series_dashboard">SUMMER SERIES DASHBOARD</a></li>
                     </ul>
                 </li>
@@ -175,116 +175,19 @@
             </ul>
         </aside>
         <section id="contents">
-            <!-- The Modal -->
-            <!-- <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <button onclick="cose()">Close X</button>
-                    <section class="mtsection">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-header no-border">
-                                            <h4 class="card-title">Information<a href="#popup1"><i class="fa fa-pencil" aria-hidden="true" style="float: right;cursor: pointer;" ></i></a></h4>
-                                        </div>
-                                        <div class="card-body card-contentt">
-                                            <div class="card-block">
-                                                <p id="schoolname"></p>
-                                                <p id="admin"></p>
-                                                <p id="email"></p>
-                                                <p id="adress"></p>
-                                                <p id="city"></p>
-                                                <p id="state"></p>
-                                                <p id="country"></p>
-                                                <p style="float: left;margin-right: 9px;"><b>Renewal Date:</b>
-                                                    <p id="renewal"></p>
-                                                </p>
-                                                </a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <section class="mtsection">
-                                        <div class="">
-                                            <div class="pcard">
-                                                <div class="col-md-6 col-sm-6">
-                                                    <div class="card card-stats">
-                                                        <div class="card-header" data-background-color="rose1">
-                                                            <img src="{{ url_for('static',filename='images/capuser.png') }}" style="width: 54px;" class="img-responsive">
-                                                        </div>
-                                                        <div class="card-content">
-                                                            <p class="category">Total Users</p>
-                                                            <h3 class="card-title" id="ucount"></h3>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-sm-6">
-                                                    <div class="card card-stats">
-                                                        <div class="card-header" data-background-color="rose">
-                                                            <img src="{{ url_for('static',filename='images/capminute.png') }}" style="width: 54px;" class="img-responsive">
-                                                        </div>
-                                                        <div class="card-content">
-                                                            <p class="category">Playback Count</p>
-                                                            <h3 class="card-title" id="pcount"></h3>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-sm-6">
-                                                    <div class="card card-stats">
-                                                        <div class="card-header" data-background-color="green">
-                                                            <img src="{{ url_for('static',filename='images/capstudy.png') }}" style="width: 54px;" class="img-responsive">
-                                                        </div>
-                                                        <div class="card-content">
-                                                            <p class="category"> Mindful Minutes</p>
-                                                            <h3 class="card-title" id="mindfulness_minutes"></h3>
-                                                        </div>
-                                                    
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6 col-sm-6">
-                                                    <div class="card card-stats">
-                                                        <div class="card-header" data-background-color="blue">
-                                                            <img src="{{ url_for('static',filename='images/cappractice.png') }}" style="width: 54px;" class="img-responsive">
-                                                        </div>
-                                                        <div class="card-content">
-                                                            <p class="category">5 Star Ratings</p>
-                                                            <h3 class="card-title" id="ratings"></h3>
-                                                        </div>
-                
-                                                    </div>
-                                                </div>
-                                                <button class="ex_Button" onclick="explore()">Explore School</button>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div> -->
-
             <section class="statistics">
                 <div class="container-fluid">
                     <div class="row">
 
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-2" onclick="cards('/AMS_TotalEmailsSent_TableAPI')" style="cursor: pointer;">
                                     <div class="box2">
                                         <p style="font-size: 10px;">TOTAL EMAILS SENT</p>
                                         <p id="total_email_sent" style="margin: 0 4px; font-size: 19px;"></p>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2" onclick="card2('/AMS_UniqueUsers_TableAPI')" style="cursor: pointer;">
                                     <div class="box2 ">
                                         <p style="font-size: 10px;">TOTAL USERS</p>
                                         <p id="total_users" style="margin: 0 4px; font-size: 19px;"></p>
@@ -348,9 +251,35 @@
                 </div>
             </section>
            
-        </section>           
+        </section>  
+        
+        <div id="myModal2" class="modal2" style="display: none;">
+            <!-- Modal content -->
+            <div class="modal2-content">
+                <div id="admin" class="col-md-12">
+                    <div class="card material-table" style="border: 0 !important; box-shadow: none !important;">
+                        <div class="table-header">
+                            <span class="table-title" style="margin: 0 !important;">EMAILS DETAILS</span>
+                            <button onclick="gif2()" class="btn close-btn-design btn-logion">
+                                <i class="fa fa-times-circle-o" aria-hidden="true"></i>
+                            </button>
+                            <button class="btn btn-success btn-logion" style="float: right;margin-bottom: 10px;" id="export1" href="">
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                            </button>
+                            <p id="exportLink" style="display: none;"></p>
+                        </div>
+                        <div id="gif" style="display: none;"></div>
+                        <div class="custyle" id="next"></div>
+                        <div class="custyle" id="next1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+
+        <p id="UserEmailId" style="display: none;">{{g.user}}</p>
         <!-- <button id="1"></button> -->
+
         <script src="https://code.highcharts.com/stock/highstock.js"></script>
         <script src="{{ url_for('static',filename='js/ams_dashboard.js') }}"></script>
         <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
