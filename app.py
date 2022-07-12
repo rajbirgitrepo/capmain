@@ -79971,9 +79971,11 @@ def Local_Disctrictfilter():
     return render_template('Local_Disctrictfilter.html')
 
 
-
-
-
-
-if __name__ == '__main__':
-   app.run(debug=True)
+if __name__ == '__main__':   
+    sched = BackgroundScheduler(timezone=str(tzlocal.get_localzone()),daemon=True)
+    trigger = CronTrigger(
+         year="*", month="*", day="*", hour="6", minute="1", second="1"
+      )
+    sched.add_job(sentimentfile_update,trigger=trigger)
+    sched.start()
+    app.run(debug=True,use_reloader=False)
