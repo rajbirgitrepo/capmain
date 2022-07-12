@@ -509,7 +509,7 @@ function createDynamic(url) {
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
 
-        $('#next').prepend('<table class="table table-striped custab table-fixed" id="dataTable"><thead><tr><tr><th>PURPOSE</th><th>RECEIVER EMAIL</th><th>SENDER EMAIL</th><th>SIGNUP DATE</th></tr></thead><tbody>');
+        $('#next').prepend('<table class="table table-striped custab table-fixed" id="dataTable"><thead><tr><th>PURPOSE</th><th>RECEIVER EMAIL</th><th>SENDER EMAIL</th><th>SIGNUP DATE</th></tr></thead><tbody>');
 
         for (var i = 0; i < data1.data.length; i++) {
 
@@ -523,7 +523,7 @@ function createDynamic(url) {
         $('#dataTable').append('</tbody></table>');
         dataTab();
 
-        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id="dataTable1"><thead><thead><tr><tr><th>PURPOSE</th><th>RECEIVER EMAIL</th><th>SENDER EMAIL</th><th>SIGNUP DATE</th></tr></thead>><tbody>');
+        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id="dataTable1"><thead><thead><tr><th>PURPOSE</th><th>RECEIVER EMAIL</th><th>SENDER EMAIL</th><th>SIGNUP DATE</th></tr></thead>><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
             var datain = data1.data[i];
@@ -585,7 +585,7 @@ function createDynamic2(url) {
     $.ajax(settings).done(function(response) {
         var data1 = JSON.parse(response);
 
-        $('#next').prepend('<table class="table table-striped custab table-fixed" id="dataTable"><thead><tr><tr><th>USER ID</th><th>EMAIL</th><th>PURPOSE</th><th>EMAIL ID</th><th>EMAIL ID2</th><th>AMS phase2</th><th>DATE</th><th>STATE1</th><th>STATE2</th><th>STATE3</th><th>STATE4</th></tr></thead><tbody>');
+        $('#next').prepend('<table class="table table-striped custab table-fixed" id="dataTable"><thead><tr><th>USER NAME</th><th>EMAIL ID</th><th>SIGN UP DATE</th><th>SCHOOL_NAME</th><th>CITY</th><th>STATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th><th>MINDFUL MINUTES</th></tr></thead><tbody>');
 
         for (var i = 0; i < data1.data.length; i++) {
 
@@ -599,7 +599,7 @@ function createDynamic2(url) {
         $('#dataTable').append('</tbody></table>');
         dataTab();
 
-        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id="dataTable1"><thead><tr><tr><th>USER ID</th><th>EMAIL</th><th>PURPOSE</th><th>EMAIL ID</th><th>EMAIL ID2</th><th>AMS phase2</th><th>DATE</th><th>STATE1</th><th>STATE2</th><th>STATE3</th><th>STATE4</th></tr></thead><tbody>');
+        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id="dataTable1"><thead><tr><th>USER NAME</th><th>EMAIL ID</th><th>SIGN UP DATE</th><th>SCHOOL_NAME</th><th>CITY</th><th>STATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th><th>MINDFUL MINUTES</th></tr></thead><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
             var datain = data1.data[i];
@@ -625,14 +625,93 @@ function createDynamicDiv2(userList) {
     // console.log(userList);
 
     dynamicDiv += '<tr >' +
-        '<td>' + userList[0] + '</td>' +
         '<td>' + userList[1] + '</td>' +
         '<td>' + userList[2] + '</td>' +
         '<td>' + userList[3] + '</td>' +
         '<td>' + userList[4] + '</td>' +
         '<td>' + userList[5] + '</td>' +
         '<td>' + userList[6] + '</td>' +
-        '<td>' + userList[7] + '</td>' +
+        '<td>' + userList[8] + '</td>' +
+        '<td>' + userList[9] + '</td>' +
+        '<td>' + userList[10] + '</td>' +
+        '</tr>'
+    return dynamicDiv;
+}
+
+
+function card3(URL) {
+    $('#next').empty();
+    console.log(URL);
+    var modal2 = document.getElementById("myModal2");
+    modal2.style.display = "block";
+    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    var gif = document.getElementById("gif");
+    gif.style.display = "block";
+    $('#btnExport').show();
+    createDynamic3(URL)
+}
+
+function createDynamic3(url) {
+
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "GET",
+        success: function() {
+            var gif = document.getElementById("gif");
+            gif.style.display = "none";
+        },
+    }
+    $.ajax(settings).done(function(response) {
+        var data1 = JSON.parse(response);
+
+        $('#next').prepend('<table class="table table-striped custab table-fixed" id="dataTable"><thead><tr><th>USER NAME</th><th>EMAIL ID</th><th>SIGN UP DATE</th><th>SCHOOL_NAME</th><th>CITY</th><th>STATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th><th>MINDFUL MINUTES</th></tr></thead><tbody>');
+
+        for (var i = 0; i < data1.data.length; i++) {
+
+            var datain = data1.data[i];
+            var resultDiv = createDynamicDiv3(datain);
+
+            $("#dataTable").append(resultDiv);
+
+        }
+        //$('#dataTable1').append('</tbody></table>');
+        $('#dataTable').append('</tbody></table>');
+        dataTab();
+
+        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id="dataTable1"><thead><tr><th>USER NAME</th><th>EMAIL ID</th><th>SIGN UP DATE</th><th>SCHOOL_NAME</th><th>CITY</th><th>STATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th><th>MINDFUL MINUTES</th></tr></thead><tbody>');
+        for (var i = 0; i < data1.data.length; i++) {
+
+            var datain = data1.data[i];
+
+            var resultDiv = createDynamicDiv3(datain);
+            $("#dataTable1").append(resultDiv);
+
+        }
+        $('#dataTable1').append('</tbody></table>');
+    })
+}
+
+function dataTab() {
+
+    $("#dataTable").DataTable({
+        "pageLength": 50
+    });
+
+}
+
+function createDynamicDiv3(userList) {
+    var dynamicDiv = '';
+    // console.log(userList);
+
+    dynamicDiv += '<tr >' +
+        '<td>' + userList[1] + '</td>' +
+        '<td>' + userList[2] + '</td>' +
+        '<td>' + userList[3] + '</td>' +
+        '<td>' + userList[4] + '</td>' +
+        '<td>' + userList[5] + '</td>' +
+        '<td>' + userList[6] + '</td>' +
         '<td>' + userList[8] + '</td>' +
         '<td>' + userList[9] + '</td>' +
         '<td>' + userList[10] + '</td>' +

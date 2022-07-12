@@ -79742,22 +79742,6 @@ def summer_series():
 
     return json.dumps(data)
 
-
-@app.route('/cap_profile_tracking', methods=['POST'])
-def profile_tracking():
-    client_test = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
-    db_test=client_test.compass
-    data=request.json
-    today= datetime.datetime.utcnow()
-    data["created_date"]=today
-    collection = db_test.CAP_login_logs
-    x = collection.insert_one(data)
-    y=str(x.inserted_id)
-    return json.dumps({'status' :"ok","updated":"yes","log_id":y})
-
-
-
-
 #=====================================================================================================
 
 
@@ -79985,6 +79969,21 @@ def Local_Disctrictfilter():
     if not g.user:
         return redirect(url_for('login'))
     return render_template('Local_Disctrictfilter.html')
+
+
+@app.route('/cap_profile_tracking', methods=['POST'])
+def profile_tracking():
+    client_test = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+    db_test=client_test.compass
+    data=request.json
+    
+    today= datetime.datetime.utcnow()
+    data["created_date"]=today
+    collection = db_test.CAP_login_logs
+    x = collection.insert_one(data)
+    y=str(x.inserted_id)
+    return json.dumps({'status' :"ok","updated":"yes","log_id":y})
+
 
 
 if __name__ == '__main__':   
