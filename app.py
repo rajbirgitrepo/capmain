@@ -103,6 +103,12 @@ def totalusercount_card():
     returnval=excecutivecount___()
     return returnval
 
+@app.route('/excecutivecount_refresh')
+def excecutivecount_refresh1():
+    returnval=excecutivecount_refresh()
+    return returnval
+
+
 
 @app.route('/practicetrendnew/<charttype>')
 def practice_trendnew__(charttype):
@@ -79992,5 +79998,6 @@ if __name__ == '__main__':
          year="*", month="*", day="*", hour="6", minute="1", second="1"
       )
     sched.add_job(sentimentfile_update,trigger=trigger)
+    sched.add_job(excecutivecount_refresh,trigger=trigger)
     sched.start()
     app.run(debug=True,use_reloader=False)
