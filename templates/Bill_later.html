@@ -160,7 +160,7 @@
                     <li class="active2"><a href="Transaction_Reporting">REVENUE OVERVIEW</a></li>
                     <li class="active2"><a href="Donation">DONATION DASHBOARD</a></li>
                     <li class="active2"><a href="School_Revenue">SCHOOL REVENUE</a></li>
-                    <li class="active2"><a href="Bill_later">BILL ME LATER</a></li>
+                    <li class="active2"><a href="Bill_later" id="Billmelater_dashboard">BILL ME LATER</a></li>
                     <!-- <li class="active2"><a href="oms_dashboard">OMS DASHBAORD</a></li> -->
                 </ul>
             </li>
@@ -518,6 +518,9 @@
     </div>
   </div>
 </div>  -->
+
+<p id="UserEmailId" style="display: none;">{{g.user}}</p>
+
             <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
             <script src="{{ url_for('static',filename='js/search.js') }}"></script>
             <!--<script src="{{ url_for('static',filename='js/contact.js') }}"></script>-->
@@ -536,6 +539,38 @@
 
             </script>
             <script>
+                $(document).ready(function(){
+                    var url = window.location.href;
+                    var dashboard_name = document.getElementById('Billmelater_dashboard').innerText;
+                    var user_email_id = document.getElementById('UserEmailId').innerText;
+                    console.log(url, dashboard_name, user_email_id);
+                    
+                    var settings = {
+                        url: "/cap_profile_tracking",
+                        method: "POST",
+                        timeout: 0,
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        data: JSON.stringify({
+                            "dashboard_name": dashboard_name,
+                            "user_name": user_email_id,
+                            "url": url
+                        }),
+                        success: function() {
+                            console.log("Success")
+                        },
+                        error: function() {
+                            console.log("Error")
+                        }
+                    };
+                    $.ajax(settings).done(function(response) {
+                        console.log(response);
+                    });
+                });
+
+
+
                 function createDynamic(url) {
 
                     var settings = {

@@ -271,6 +271,16 @@ $.ajax(settings).done(function(response) {
 // document.getElementById("Temporary_passcode_by_users").title = dataa.Engagement_Dashboard.LOGIN_ANALYTICS[0].Temporary_passcode_by_users;
 
 
+var modal3 = document.getElementById("myModal3");
+
+function close(){
+    modal3.style.display = "none";
+}
+
+function ShowInsights(){
+    modal3.style.display = "block";
+}
+
 
 // API for showing insights inside dropdown
 var settings = {
@@ -286,7 +296,7 @@ $.ajax(settings).done(function(response){
         var insights = dataa[i].Insights;
         var observations = dataa[i].Observations;
         // console.log(insights, observations);
-        $('#accordionExample').append('<div class="borderBottom present"><a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseOne'+i+'" aria-expanded="true" aria-controls="collapseOne"> <h4 class="insight-headings">'+insights+'</h4></a><div id="collapseOne'+i+'" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample"></div></div>');
+        $('#accordionExample').append('<div class="col-md-6"><div class="borderBottom present"><a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseOne'+i+'" aria-expanded="true" aria-controls="collapseOne"> <h4 class="insight-headings">'+insights+'</h4></a><div id="collapseOne'+i+'" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample"></div></div></div>');
 
         for(j = 0; j < observations.length; j++){
             // console.log(observations[j]);

@@ -263,7 +263,7 @@
             <li class="active"><i class="fa fa-bolt"></i><a href="#">FEEDBACK AND SURVEY</a>
                 <ul class="side-nav-dropdown">
                     <li class="active2"><a href="feedback_Analyitcs">FEEDBACK ANAYLTICS</a></li>
-                    <li class="active2"><a href="sentiment">SENTIMENT ANALYTICS</a></li>
+                    <li class="active2"><a href="sentiment" id="sentiment_dashboard">SENTIMENT ANALYTICS</a></li>
                     <li class="active2"><a href="feedback_Trends">FEEDBACK TRENDS</a></li>
                     <li class="active2"><a href="Family_SURVEY">HOME SURVEY ANALYTICS</a></li>
                     <li class="active2"><a href="feedback_Analyitcs_family">HOME FEEDBACK ANALYTICS</a></li>
@@ -802,6 +802,8 @@
       </div>
     </div>
   </div> -->
+  <p id="UserEmailId" style="display: none;">{{g.user}}</p>
+
     <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
     <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
     <script src="{{ url_for('static',filename='js/search.js') }}"></script>

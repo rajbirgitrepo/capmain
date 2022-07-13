@@ -199,7 +199,7 @@
                 <ul class="side-nav-dropdown">
                     <li class="active2"><a href="feedback_Analyitcs">FEEDBACK ANAYLTICS</a></li>
                     <li class="active2"><a href="sentiment">SENTIMENT ANALYTICS</a></li>
-                    <li class="active2"><a href="feedback_Trends">FEEDBACK TRENDS</a></li>
+                    <li class="active2"><a href="feedback_Trends" id="feedback_trends_dashboard">FEEDBACK TRENDS</a></li>
                     <li class="active2"><a href="Family_SURVEY">HOME SURVEY ANALYTICS</a></li>
                     <li class="active2"><a href="feedback_Analyitcs_family">HOME FEEDBACK ANALYTICS</a></li>
                 </ul>
@@ -565,6 +565,8 @@
       </div>
     </div>
   </div> -->
+  <p id="UserEmailId" style="display: none;">{{g.user}}</p>
+
     <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
     <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
     <script src="{{ url_for('static',filename='js/search.js') }}"></script>
@@ -573,6 +575,38 @@
 
 
     <script>
+        $(document).ready(function(){
+          var url = window.location.href;
+          var dashboard_name = document.getElementById('feedback_trends_dashboard').innerText;
+          var user_email_id = document.getElementById('UserEmailId').innerText;
+          console.log(url, dashboard_name, user_email_id);
+          
+          var settings = {
+              url: "/cap_profile_tracking",
+              method: "POST",
+              timeout: 0,
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              data: JSON.stringify({
+                  "dashboard_name": dashboard_name,
+                  "user_name": user_email_id,
+                  "url": url
+              }),
+              success: function() {
+                  console.log("Success")
+              },
+              error: function() {
+                  console.log("Error")
+              }
+          };
+          $.ajax(settings).done(function(response) {
+              console.log(response);
+          });
+        });
+
+
+
         var settings = {
             "async": true,
             "crossDomain": true,

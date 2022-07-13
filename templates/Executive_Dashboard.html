@@ -202,37 +202,13 @@
                 <div class="navbar-right">
                     <ul class="nav navbar-nav">
                         <li class="nav-item dropdown" style="top: 17px; left: 2px; color: #fff;">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <div class="insight">
+                            <!-- <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> -->
+                            <a class="nav-link dropdown-toggle">
+                                <div class="insight" onclick="ShowInsights()">
                                     <img src="/static/images/insights(2).png" alt="" class="img-responsive">
                                     <p>Insights</p>
                                 </div>
                             </a>
-                            <div class="dropdown-menu dropdown-insights" id="showFadeMenu" aria-labelledby="navbarDropdown">
-                                <div class="col-12 scroll-insights">
-                                    <form class="accordion" id="accordionExample">
-                                        <!-- <div class="borderBottom">
-                                            <a class="nav-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                <h4 class="insight-headings">Topic 1</h4>
-                                            </a>
-                                            <div id="collapseOne" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                                <p class="insight-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                            </div>
-                                        </div> -->
-
-                                        <!-- <div class="borderBottom">
-                                            <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                <h4 class="insight-headings up-down-arrow toggle-btn">Charts Text
-                                                </h4>   
-                                            </a>
-                                            <div id="collapseOne" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                                <div id="ChartContainer">
-                                                </div>
-                                            </div>
-                                        </div> -->
-                                    </form>
-                                </div>
-                            </div>
                         </li>
 
                         <li style="left: 2px;
@@ -276,7 +252,7 @@
                 <a href="#">EXECUTIVE SUMMARY</a>
                 <ul class="side-nav-dropdown">
                     <li class="active2">
-                        <a href="Executive_Dashboard">CAP SUMMARY</a>
+                        <a href="Executive_Dashboard" id="cap_dashboard">CAP SUMMARY</a>
                     </li>
                     <li class="active2"><a href="Day_In_Life">DAY IN LIFE OF...</a></li>
                     <li class="active2"><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
@@ -497,6 +473,40 @@
                 </div>
             </div>
         </div>
+
+        <div id="myModal3" class="modal">
+            <div class="modal-content">
+                <button onclick="close()" style="float: right;">X</button>
+                <section class="mtsection">
+                    <div class="scroll-insights">
+                        <!-- <form class="accordion"> -->
+                        <div class="row accordion" id="accordionExample">
+                            <!-- <div class="borderBottom">
+                                <a class="nav-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <h4 class="insight-headings">Topic 1</h4>
+                                </a>
+                                <div id="collapseOne" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <p class="insight-text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                                </div>
+                            </div> -->
+
+                            <!-- <div class="borderBottom">
+                                <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <h4 class="insight-headings up-down-arrow toggle-btn">Charts Text
+                                    </h4>   
+                                </a>
+                                <div id="collapseOne" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div id="ChartContainer">
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>    
+                           
+                        <!-- </form> -->
+                    </div>
+                </section>
+            </div>
+        </div>
        
         <section class="statistics">
             <div class="container-fluid">
@@ -522,7 +532,7 @@
                             <p class="boxHeading2">Explorer<br /></p>
                             <p class="boxvalue" id="next6" style="cursor: pointer;" onclick="cards('/executive_explorer')"></p>
                             <br />
-                            <hr />
+                            <hr />  
                             <a href="Transaction_Reporting">
                                 <p class="boxvalue" style="color: green;font-size: 11px !important;">View Upcoming Renewal <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 </p>
@@ -632,6 +642,9 @@
                             </div>
                             <div id="container1"></div>
                             <hr />
+                            <!-- <button id="refresh" style="border: none; background: transparent;">
+                                <i class="fa fa-refresh" style="color: #00A651;" aria-hidden="true"></i>
+                            </button> -->
                             <a href="Practice_Analytics">
                                 <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
               float: right;">View PLAYBACK ANALYTICS <i class="fa fa-chevron-right" aria-hidden="true"></i>
@@ -716,7 +729,7 @@
         <hr />
 
     </section>
-
+    <p id="UserEmailId" style="display: none;">{{g.user}}</p>
      <!-- <script>
         $( document ).ready(function() {
             setTimeout(function(){
@@ -749,6 +762,11 @@
     <!--<script src="/static/js/accessdom.js"></script>-->
     <script src='/static/js/excellentexport.js'></script>
     <script>
+        $("#refresh").click(function () {
+            $("#container1").load(" #container1");
+        });
+
+
         $("#navbarDropdown").click(function(){
            $("#showFadeMenu").fadeToggle(400);
        });

@@ -1,3 +1,34 @@
+$(document).ready(function(){
+    var url = window.location.href;
+    var dashboard_name = document.getElementById('school_search_dashboard').innerText;
+    var user_email_id = document.getElementById('UserEmailId').innerText;
+    console.log(url, dashboard_name, user_email_id);
+    
+    var settings = {
+        url: "/cap_profile_tracking",
+        method: "POST",
+        timeout: 0,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            "dashboard_name": dashboard_name,
+            "user_name": user_email_id,
+            "url": url
+        }),
+        success: function() {
+            console.log("Success")
+        },
+        error: function() {
+            console.log("Error")
+        }
+    };
+    $.ajax(settings).done(function(response) {
+        console.log(response);
+    });
+});
+
+
 let str = window.location.href;
 // console.log(str.substr(str.lastIndexOf("?") + 1));
 var urlid = str.substr(str.lastIndexOf("?") + 1);

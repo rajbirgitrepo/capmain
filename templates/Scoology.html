@@ -140,7 +140,7 @@
             <li class="active"><i class="fa fa-history"></i><a href="#">PLAYBACK ANALYTICS</a>
                 <ul class="side-nav-dropdown">
                     <li class="active2"><a href="Practice_Analytics">PLAYBACK ANALYTICS</a></li>
-                    <li class="active2"><a href="Scoology">SCHOOLOGY</a></li>
+                    <li class="active2"><a href="Scoology" id="schoology_dashboard">SCHOOLOGY</a></li>
                     <li class="active2"><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
                     <li class="active2"><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
                     <!-- <li class="active2"><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
@@ -566,35 +566,29 @@
       </div>
     </div>
   </div> -->
+  <p id="UserEmailId" style="display: none;">{{g.user}}</p>
+
     <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
     <script>
     </script>
     <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
-    <script src="{{ url_for('static',filename='js/search.js') }}"></script>
-
-    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
-
-
-
-
-    <script src='js/main.js'></script>
-
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
-
     <script src='https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js'></script>
-    <script src="./js/feedbacktablescript.js"></script>
+    <script src="/static/js/feedbacktablescript.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.js'></script>
     <script src='https://cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.13/xlsx.full.min.js'></script>
-    <script src="./js/Clickscript.js"></script>
+    <script src="/static/js/Clickscript.js"></script>
     <script src="{{ url_for('static',filename='js/scoology1.js') }}"></script>
-
     <script src="{{ url_for('static',filename='js/scoology2.js') }}"></script>
     <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
     <script src="{{ url_for('static',filename='js/script.js') }}"></script>
-
+    <script src="{{ url_for('static',filename='js/search.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
+    <script src='js/main.js'></script>
+    
     <script>
         P();
 
@@ -615,17 +609,9 @@
                 $('#complete').text(dataa.data[4][1]);
                 $('#practice').text(dataa.data[3][1]);
                 $('#minutesch').text(dataa.data[5][1]);
-
-
-
             });
         };
     </script>
 
-
-    <!-- partial -->
-
-
 </body>
-
 </html>

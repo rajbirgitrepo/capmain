@@ -220,7 +220,7 @@
                 <ul class="side-nav-dropdown">
                     <li class="active2"><a href="Practice_Analytics">PLAYBACK ANALYTICS</a></li>
                     <li class="active2"><a href="Scoology">SCHOOLOGY</a></li>
-                    <li class="active2"><a href="Family_practice_analytics">APP PLAYBACK ANALYTICS</a></li>
+                    <li class="active2"><a href="Family_practice_analytics" id="app_playback_dashboard">APP PLAYBACK ANALYTICS</a></li>
                     <li class="active2"><a href="Progarm_wise_Analytics">PROGRAM WISE ANALYTICS</a></li>
                     <!-- <li class="active2"><a href="audio_analytics">AUDIO ANALYTICS</a></li> -->
                     <li class="active2"><a href="tunein">TUNE_IN DASHBAORD</a></li>
@@ -697,16 +697,52 @@
       </div>
     </div>
   </div> -->
-                        <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
-                        <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
-                        <script src="{{ url_for('static',filename='js/search.js') }}"></script>
-                        <script src="{{ url_for('static',filename='js/contact.js') }}"></script>
-                        <script src="{{ url_for('static',filename='js/snapshot.js') }}"></script>
 
-                        <script src="{{ url_for('static',filename='js/chatbot.js') }}"></script>
-                        <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
+    <p id="UserEmailId" style="display: none;">{{g.user}}</p>
 
-                        <script type="text/javascript">
+    <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
+    <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
+    <script src="{{ url_for('static',filename='js/search.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/contact.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/snapshot.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/chatbot.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/mail.js') }}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var url = window.location.href;
+            var dashboard_name = document.getElementById('app_playback_dashboard').innerText;
+            var user_email_id = document.getElementById('UserEmailId').innerText;
+            console.log(url, dashboard_name, user_email_id);
+    
+            var settings = {
+                url: "/cap_profile_tracking",
+                method: "POST",
+                timeout: 0,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify({
+                    "dashboard_name": dashboard_name,
+                    "user_name": user_email_id,
+                    "url": url
+                }),
+                success: function() {
+                    console.log("Success")
+                },
+                error: function() {
+                    console.log("Error")
+                }
+            };
+            $.ajax(settings).done(function(response) {
+                console.log(response);
+            });
+        });
+
+
+
                             function cards(URL) {
                                 $('#next').empty();
                                 // console.log(a);
@@ -1599,9 +1635,6 @@
                         <!-- partial -->
 
                         <!--<script src="{{ url_for('static',filename='js/Information_icon.js') }}"></script>-->
-                        <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
-                        <script src="{{ url_for('static',filename='js/script.js') }}"></script>
-
+                       
 </body>
-
 </html>

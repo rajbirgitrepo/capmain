@@ -179,7 +179,7 @@
             <li class="active"><i class="fa fa-star"></i><a href="#">APP ANALYTICS</a>
                 <ul class="side-nav-dropdown">
                     <li class="active2"><a href="Parents_Analytics">HOME APP OVERVIEW</a></li>
-                    <li class="active2"><a href="Familyapp_school">HOME APP SCHOOL</a></li>
+                    <li class="active2"><a href="Familyapp_school" id="homeAppSchool">HOME APP SCHOOL</a></li>
                     <!-- <li class="active2"><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
                     <!--<li><a href="Parents_map_view">HOME APP GEO</a></li>-->
                     <!--<li class="active2"><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
@@ -521,7 +521,42 @@
       </div>
     </div>
   </div> -->
-                                <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
+  <p id="UserEmailId" style="display: none;">{{g.user}}</p>
+
+<!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
+<script>
+    $(document).ready(function(){
+        var url = window.location.href;
+        var dashboard_name = document.getElementById('homeAppSchool').innerText;
+        var user_email_id = document.getElementById('UserEmailId').innerText;
+        console.log(url, dashboard_name, user_email_id);
+        
+        var settings = {
+            url: "/cap_profile_tracking",
+            method: "POST",
+            timeout: 0,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({
+                "dashboard_name": dashboard_name,
+                "user_name": user_email_id,
+                "url": url
+            }),
+            success: function() {
+                console.log("Success")
+            },
+            error: function() {
+                console.log("Error")
+            }
+        };
+        $.ajax(settings).done(function(response) {
+            console.log(response);
+        });
+    });
+</script>
+
+
                                 <script>
                                     $('#myselect').change(function() {
                                         if (this.value == '1') {

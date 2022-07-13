@@ -238,7 +238,7 @@
             <li class="active">
                 <i class="fa fa-dollar"></i><a href="#">REVENUE DASHBOARDS</a>
                 <ul class="side-nav-dropdown">
-                    <li class="active2"><a href="Transaction_Reporting">REVENUE OVERVIEW</a></li>
+                    <li class="active2"><a href="Transaction_Reporting" id="revenue_dashboard">REVENUE OVERVIEW</a></li>
                     <li class="active2"><a href="Donation">DONATION DASHBOARD</a></li>
                     <li class="active2"><a href="School_Revenue">SCHOOL REVENUE</a></li>
                     <li class="active2"><a href="Bill_later">BILL ME LATER</a></li>
@@ -687,6 +687,8 @@
       </div>
     </div>
   </div> -->
+  <p id="UserEmailId" style="display: none;">{{g.user}}</p>
+
     <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
     <script src="{{ url_for('static',filename='js/insight.js') }}"></script>
     <script src="{{ url_for('static',filename='js/script.js') }}"></script>

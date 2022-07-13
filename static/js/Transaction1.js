@@ -1,3 +1,34 @@
+$(document).ready(function(){
+    var url = window.location.href;
+    var dashboard_name = document.getElementById('revenue_dashboard').innerText;
+    var user_email_id = document.getElementById('UserEmailId').innerText;
+    console.log(url, dashboard_name, user_email_id);
+    
+    var settings = {
+        url: "/cap_profile_tracking",
+        method: "POST",
+        timeout: 0,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            "dashboard_name": dashboard_name,
+            "user_name": user_email_id,
+            "url": url
+        }),
+        success: function() {
+            console.log("Success")
+        },
+        error: function() {
+            console.log("Error")
+        }
+    };
+    $.ajax(settings).done(function(response) {
+        console.log(response);
+    });
+});
+
+
 $("#gifcards").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
 //$("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
 var gif = document.getElementById("gifcards");

@@ -1,3 +1,35 @@
+$(document).ready(function(){
+    var url = window.location.href;
+    var dashboard_name = document.getElementById('school_search_comp_dashboard').innerText;
+    var user_email_id = document.getElementById('UserEmailId').innerText;
+    console.log(url, dashboard_name, user_email_id);
+    
+    var settings = {
+        url: "/cap_profile_tracking",
+        method: "POST",
+        timeout: 0,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            "dashboard_name": dashboard_name,
+            "user_name": user_email_id,
+            "url": url
+        }),
+        success: function() {
+            console.log("Success")
+        },
+        error: function() {
+            console.log("Error")
+        }
+    };
+    $.ajax(settings).done(function(response) {
+        console.log(response);
+    });
+});
+
+
+
 // $("#error").append('<div style="background-color: #fff;color: #000;width: 46%;float: left;margin-left: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><button onclick="changetofield1()" style="padding: 6px;background-color: #fff;color: green;float: right;border: 0;border-radius: 10px;font-size: 11px;">Change</button><p style="margin-top:4px;" id="searchinputname">Please search first school</p></div>');
 // $("#error").append('<div style="background-color: #fff;color: #000;width: 46%;float: right;margin-right: 19px;margin-top: 20px;padding: 10px;border-radius: 10px;"><button onclick="changetofield2()" style="padding: 6px;background-color: #fff;color: green;float: right;border: 0;border-radius: 10px;font-size: 11px;">Change</button><p style="margin-top:4px;" id="searchinput2name">Please search second school</p></div>');
 

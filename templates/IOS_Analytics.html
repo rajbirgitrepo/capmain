@@ -253,7 +253,7 @@
                     <!-- <li class="active2"><a href="Family_School_Search"> HOME APP SCHOOL SEARCH</a></li>-->
                     <!--<li class="active2"><a href="Parents_map_view">HOME APP GEO</a></li>-->
                     <!--<li class="active2"><a href="Android_analytics">ANDROID ANALYTICS</a></li>-->
-                    <li class="active2"><a href="IOS_Analytics">IOS ANALYTICS</a></li>
+                    <li class="active2"><a href="IOS_Analytics" id="ios_analytics">IOS ANALYTICS</a></li>
                 </ul>
             </li>
             <li style="margin-top:125px"><i class="fa fa-code-fork"></i><a href="#">CAP VERSION<span style="margin: 0 5px 0 5px !important; cursor: default !important;" id="version">6.0</span></a>
@@ -607,6 +607,39 @@
 	      </div>
 	    </div>
 	  </div> -->
+      <p id="UserEmailId" style="display: none;">{{g.user}}</p>
+    <script>
+        $(document).ready(function(){
+            var url = window.location.href;
+            var dashboard_name = document.getElementById('ios_analytics').innerText;
+            var user_email_id = document.getElementById('UserEmailId').innerText;
+            console.log(url, dashboard_name, user_email_id);
+            
+            var settings = {
+                url: "/cap_profile_tracking",
+                method: "POST",
+                timeout: 0,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify({
+                    "dashboard_name": dashboard_name,
+                    "user_name": user_email_id,
+                    "url": url
+                }),
+                success: function() {
+                    console.log("Success")
+                },
+                error: function() {
+                    console.log("Error")
+                }
+            };
+            $.ajax(settings).done(function(response) {
+                console.log(response);
+            });
+        });
+    </script>
+
 
                         <script type="text/javascript">
                             function P() {

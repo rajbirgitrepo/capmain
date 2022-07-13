@@ -172,7 +172,7 @@
                     <li class="active2"><a href="Daily_Analytics">DAILY ANALYTICS</a></li>
                     <li class="active2"><a href="Weekly_Analytics">WEEKLY ANALYTICS</a></li>
                     <li class="active2"><a href="aws_releases">COMPASS RELEASES</a></li>
-                    <li class="active2"><a href="schoolsummary">SCHOOL SUMMARY</a></li>
+                    <li class="active2"><a href="schoolsummary" id="school_summary_dashboard">SCHOOL SUMMARY</a></li>
                     <li class="active2"><a href="awsmain">AWS ANALYTICS</a></li>
                     <!-- <li class="active2"><a href="aws">DATABASE PERFROMANCE ANALYTICS</a></li> -->
 
@@ -555,6 +555,8 @@
             </div>
         </div>
     </section>
+    <p id="UserEmailId" style="display: none;">{{g.user}}</p>
+
     <!-- <script src="{{ url_for('static',filename='js/countapi.js') }}"></script> -->
     <script src="{{ url_for('static',filename='js/search.js') }}"></script>
     <script src="{{ url_for('static',filename='js/mail.js') }}"></script>

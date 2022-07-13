@@ -382,7 +382,7 @@
             <li class="active">
                 <i class="fa fa-users "></i><a href="#">SUBSCRIPTION DASHBOARDS</a>
                 <ul class="side-nav-dropdown">
-                    <li class="active2"><a href="Upcoming_Renewals">UPCOMING RENEWAL</a></li>
+                    <li class="active2"><a href="Upcoming_Renewals" id="upcoming_renewals">UPCOMING RENEWAL</a></li>
                     <!-- <li class="active2"><a href="d1districts">D1 Districts</a></li> -->
                     <li class="active2"><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
                     <li class="active2"><a href="Sms_analytics">SMS ANALYTICS</a></li>
@@ -879,6 +879,8 @@
       </div>
     </div>
   </div> -->
+  <p id="UserEmailId" style="display: none;">{{g.user}}</p>
+
     <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
     <script src="{{ url_for('static',filename='js/excellentexport.js') }}"></script>
     <script>

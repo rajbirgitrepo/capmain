@@ -173,7 +173,7 @@
                     <li class="active2"><a href="Upcoming_Renewals">UPCOMING RENEWAL</a></li>
                     <!-- <li class="active2"><a href="d1districts">D1 Districts</a></li> -->
                     <li class="active2"><a href="mobile_sub">MOBILE SUBSCRIPTION</a></li>
-                    <li class="active2"><a href="Sms_analytics">SMS ANALYTICS</a></li>
+                    <li class="active2"><a href="Sms_analytics" id="sms_analytics">SMS ANALYTICS</a></li>
                     <!-- <li class="active2"><a href="Bill_later">BILL ME LATER</a></li>
                     <li class="active2"><a href="oms_dashboard">OMS DASHBAORD</a></li> -->
                 </ul>
@@ -503,7 +503,40 @@
       </div>
     </div>
   </div> -->
+  <p id="UserEmailId" style="display: none;">{{g.user}}</p>
+
     <!--<script src="{{ url_for('static',filename='js/accessdom.js') }}"></script>-->
+<script>
+    $(document).ready(function(){
+        var url = window.location.href;
+        var dashboard_name = document.getElementById('sms_analytics').innerText;
+        var user_email_id = document.getElementById('UserEmailId').innerText;
+        console.log(url, dashboard_name, user_email_id);
+    
+        var settings = {
+            url: "/cap_profile_tracking",
+            method: "POST",
+            timeout: 0,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({
+                "dashboard_name": dashboard_name,
+                "user_name": user_email_id,
+                "url": url
+            }),
+            success: function() {
+                console.log("Success")
+            },
+            error: function() {
+                console.log("Error")
+            }
+        };
+        $.ajax(settings).done(function(response) {
+            console.log(response);
+        });
+    });
+</script>
     <script>
         $('#myselect').change(function() {
             if (this.value == '1') {

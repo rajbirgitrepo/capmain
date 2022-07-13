@@ -1,3 +1,35 @@
+$(document).ready(function(){
+    var url = window.location.href;
+    var dashboard_name = document.getElementById('weekly_analytics_dashboard').innerText;
+    var user_email_id = document.getElementById('UserEmailId').innerText;
+    console.log(url, dashboard_name, user_email_id);
+    
+    var settings = {
+        url: "/cap_profile_tracking",
+        method: "POST",
+        timeout: 0,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            "dashboard_name": dashboard_name,
+            "user_name": user_email_id,
+            "url": url
+        }),
+        success: function() {
+            console.log("Success")
+        },
+        error: function() {
+            console.log("Error")
+        }
+    };
+    $.ajax(settings).done(function(response) {
+        console.log(response);
+    });
+});
+
+
+
 $(function() {
     $("#datepicker").datepicker({
         changeMonth: true,
