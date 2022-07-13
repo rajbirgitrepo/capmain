@@ -2,7 +2,9 @@
 from dependency import *
 
 
-def executive_count_productwise():
+
+
+def executive_count_productwise_refresh():
     collection1 = db.school_master
     qr=[
     {"$match":{"$and":[
@@ -109,9 +111,52 @@ def executive_count_productwise():
     DFsch.to_csv("sch_exec1.csv")
     DFhom=pd.DataFrame(final_home4)
     DFhom.to_csv("hom_exec1.csv")
+    client = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+    import timeago, datetime
+    now = datetime.datetime.now()# + datetime.timedelta(seconds = 60 * 3.4)
+    x=now.strftime("%Y-%m-%d %H:%M:%S")
+    update_date={"date":x}
+    execount["update_date"]=update_date['date']
     
-    return json.dumps(execount)
+    mydb = client["compass"]
+    mycol = mydb["cap_pipeline"]
+    
+    myquery = {"dashboard":"executive"}
+    newvalues = { "$set": { "executive_count_productwise_refresh":execount} }
 
+    mycol.update_one(myquery, newvalues)
+    
+    
+    
+    
+    return json.dumps({"success":"ok","updated":"true"})
+
+
+
+
+
+def executive_count_productwise():
+    client_test = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+    db_test=client_test.compass
+#     db_test.cap_pipeline('schoolId._id',{'$and':testcommon_cond()['usermaster_cond']+    
+#     [{ "schoolId._id":{'$exists': True}}]})
+    
+    data=list(db_test.cap_pipeline.aggregate([
+    {"$match":
+     {'$and':[
+            {'dashboard':"executive"},
+                      ]}},
+    {'$project':{'_id':0, 'executive_count_productwise_refresh':1}}
+
+    ]))
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    x=now.strftime("%Y-%m-%d %H:%M:%S")
+    print(x)
+    
+    dd=timeago.format(x,data[0]['executive_count_productwise_refresh']['update_date'])
+    data[0]['executive_count_productwise_refresh']['update']="Updated "+dd
+    return json.dumps(data[0]['executive_count_productwise_refresh'])
+    
 
 def excecutivecount_refresh():
     school_um=db.user_master.distinct('schoolId._id',{'$and':testcommon_cond()['usermaster_cond']+    
