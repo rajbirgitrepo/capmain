@@ -97,6 +97,13 @@ def schoolcount_totalstudentscard():
     returnval=executive_count_productwise()
     return returnval
 
+@app.route('/executivecount_productwise_refresh')
+def schoolcount_totalstudentscard_refresh():
+    returnval=executive_count_productwise_refresh()
+    return returnval
+
+
+
 
 @app.route('/_executive_dashbaord_')
 def totalusercount_card():
