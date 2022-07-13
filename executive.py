@@ -112,7 +112,8 @@ def executive_count_productwise():
     
     return json.dumps(execount)
 
-def excecutivecount___():
+
+def excecutivecount_refresh():
     school_um=db.user_master.distinct('schoolId._id',{'$and':testcommon_cond()['usermaster_cond']+    
     [{ "schoolId._id":{'$exists': True}}]})
 
@@ -178,7 +179,7 @@ def excecutivecount___():
 
     avg_rating=df44['rating'][0]
 
-    temp={"total_school":str(total_school),
+    excecutivecount___temp={"total_school":str(total_school),
              "user_count":str(Total_user),
             "total_classrooms":str(Total_classroom),
               "total_students":str(Total_students),
@@ -190,8 +191,45 @@ def excecutivecount___():
               'avg_rating':str(round(avg_rating)),
               'Homeappusers':str(Parents)}
     
-    return json.dumps(temp,sort_keys=False)
+    
+    client = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+    
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    x=now.strftime("%Y-%m-%d %H:%M:%S")
+    update_date={"date":x}
+    excecutivecount___temp["update_date"]=update_date['date']
+    mydb = client["compass"]
+    mycol = mydb["cap_pipeline"]
+    
+    myquery = {"dashboard":"executive"}
+    newvalues = { "$set": { "excecutivecount_refresh":excecutivecount___temp} }
 
+    mycol.update_one(myquery, newvalues)
+    
+
+    return json.dumps({"success":"True","Updated":"True"})
+
+
+
+def excecutivecount___():
+    client_test = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+    db_test=client_test.compass
+#     db_test.cap_pipeline('schoolId._id',{'$and':testcommon_cond()['usermaster_cond']+    
+#     [{ "schoolId._id":{'$exists': True}}]})
+    
+    data=list(db_test.cap_pipeline.aggregate([
+    {"$match":
+     {'$and':[
+            {'dashboard':"executive"},
+                      ]}},
+    {'$project':{'_id':0, 'excecutivecount_refresh':1}}
+
+    ]))
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    x=now.strftime("%Y-%m-%d %H:%M:%S")
+    dd=timeago.format(x,data[0]['excecutivecount_refresh']['update_date'])
+    data[0]['excecutivecount_refresh']['update']=dd
+    return json.dumps(data[0]['excecutivecount_refresh'])
 
 def practice_trendnew_(charttype):
     collection = db.audio_track_master
