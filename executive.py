@@ -153,7 +153,7 @@ def executive_count_productwise():
     x=now.strftime("%Y-%m-%d %H:%M:%S")
     print(x)
     
-    dd=timeago.format(x,data[0]['executive_count_productwise_refresh']['update_date'])
+    dd=timeago.format(data[0]['executive_count_productwise_refresh']['update_date'],x)
     data[0]['executive_count_productwise_refresh']['update']="Updated "+dd
     return json.dumps(data[0]['executive_count_productwise_refresh'])
     
@@ -272,7 +272,7 @@ def excecutivecount___():
     ]))
     now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
     x=now.strftime("%Y-%m-%d %H:%M:%S")
-    dd=timeago.format(x,data[0]['excecutivecount_refresh']['update_date'])
+    dd=timeago.format(data[0]['excecutivecount_refresh']['update_date'],x)
     data[0]['excecutivecount_refresh']['update']=dd
     return json.dumps(data[0]['excecutivecount_refresh'])
 
