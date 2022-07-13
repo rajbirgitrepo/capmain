@@ -381,8 +381,8 @@
                     <li class="active2"><a href="School_Search_comparison">SCHOOL COMPARISON</a></li>
                     <!-- <li class="active2"><a href="leadGeneration">LEAD GENERATION</a></li> -->
                     <li><a href="21daystreak">21 Day Streak</a></li>
-                    <li><a href="ams_dashboard">AMS DAHSBOARD</a></li>
-                    <li><a href="Summer_Series_dashboard">SUMMER SERIES DAHSBOARD</a></li>
+                    <li><a href="ams_dashboard">AMS DASHBOARD</a></li>
+                    <li><a href="Summer_Series_dashboard">SUMMER SERIES DASHBOARD</a></li>
 
                 </ul>
             </li>
@@ -1385,6 +1385,7 @@
             }
             $.ajax(settings).done(function (response) {
                 var dataa = JSON.parse(response);
+                console.log(dataa);
                 $("#gifload").hide();
                 chart = new Highcharts.StockChart({
                     chart: {
@@ -1479,37 +1480,55 @@
                             }
                         }
                     },
-                    series: [{
-                        "name": "Last SY",
-                        "type": "line",
-                        "color": "#FF9933",
-                        "xAxis": 0,
-                        "data": dataa.data.lsy
-                    }, {
-                        "name": "Family",
+                    series: [
+                    {
+                        "name": "Google",
                         "type": "column",
-                        "color": "#8AE02B",
-                        "xAxis": 1,
-                        "data": dataa.data.pcsy
-                    }, {
-                        "name": "School",
+                        "color": '#40B5AD',
+                        "data": dataa.data.google,
+                    },
+                    {
+                        "name": "Canvas",
                         "type": "column",
-                        "xAxis": 1,
-                        "color": "#01A451",
-                        "data": dataa.data.csy
-                    }, {
+                        "color": '#d3373b',
+                        "data": dataa.data.canvas,
+                    },
+                    {
                         "name": "Clever",
                         "type": "column",
                         "xAxis": 1,
                         "color": "#4f1faf",
                         "data": dataa.data.clever
-                    }, {
+                    }, 
+                    {
                         "name": "Scoology",
                         "type": "column",
                         "xAxis": 1,
                         "color": "#462cee",
                         "data": dataa.data.schoology
-                    }]
+                    },
+                    {
+                        "name": "School",
+                        "type": "column",
+                        "xAxis": 1,
+                        "color": "#01A451",
+                        "data": dataa.data.csy
+                    },
+                    {
+                        "name": "Family",
+                        "type": "column",
+                        "color": "#8AE02B",
+                        "xAxis": 1,
+                        "data": dataa.data.pcsy
+                    }, 
+                    {
+                        "name": "Last SY",
+                        "type": "line",
+                        "color": "#FF9933",
+                        "xAxis": 0,
+                        "data": dataa.data.lsy
+                    },  
+                    ]
                 });
             });
 

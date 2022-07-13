@@ -1755,15 +1755,13 @@ def schoolrating_csy():
     temp={'rating':rating,'count':count}
     return json.dumps(temp)
 
-
-def sentiment_pie():
-    df=pd.read_csv("sentopt.csv")
-    neg=df[df['Compound']<0]
-    pos=df[df['Compound']>0]
-    neu=df[df['Compound']==0]
-    neg_sentiment=round(100*(len(neg)/(len(neu)+len(neg)+len(pos))),2)
-    pos_sentiment=round(100*(len(pos)/(len(neu)+len(neg)+len(pos))),2)
-    neu_sentiment=round(100*(len(neu)/(len(neu)+len(neg)+len(pos))),2)
+def sentiment_pie():    
+    df=pd.read_json(r"/root/"+'sentiment_json_data.json')
+    neg=df[df['Final_Sentiment']=='Negative']
+    pos=df[df['Final_Sentiment']=='Positive']
+    neg_sentiment=round(len(neg)/len(df),2)*100
+    pos_sentiment=round(len(pos)/len(df),2)*100
+    neu_sentiment=0
     word_chart={'donut':{'pos':pos_sentiment,'neg':neg_sentiment,'neu':neu_sentiment}}
     return json.dumps(word_chart)
 
@@ -1844,3 +1842,120 @@ def sentiment_pie2():
     word_chart={'donut':{'pos':pos_sentiment,'neg':neg_sentiment,'neu':neu_sentiment}}
 #     word_chart={"donut":{"pos":round(pos, 2),"neg":round(neg, 2)}}
     return json.dumps(word_chart)
+
+
+
+# <<<<<<<<---------sentiment_json_data.json file update code---------------->>>>>>>>>>>>>>
+
+
+def sentimentfile_update():    
+    tfidf_vec=pickle.load(open(r'C:\Users\anil\Desktop\Advance_analytics\App_Reviews\tfidf_vec.pkl','rb'))
+    sentiment_model=pickle.load(open(r"C:\Users\anil\Desktop\Advance_analytics\App_Reviews\sentiment_model.pkl",'rb'))
+    data=pd.read_json(r'C:\Users\anil\Desktop\Advance_analytics\App_Reviews\sentiment_json_data.json')
+    client_live= MongoClient('mongodb://admin:F5tMazRj47cYqm33e@54.202.61.130:27017/')
+    db_live=client_live.compass
+    max_date=max(data['COMMENT_DATE'])
+    def detectlanguage(val):        
+        try:
+            lang=detect(val)
+        except:
+            lang='none'
+        return lang
+    new_comments_data=pd.DataFrame(list(db_live.audio_feedback.aggregate([{"$match":{'$and':[
+                    { 'USER.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'USER.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+                    {'USER.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}},
+                    {'USER.INCOMPLETE_SIGNUP':{"$ne":'Y'}},                
+                    {'USER.IS_DISABLED':{"$ne":'Y'}},
+                {'COMMENT':{'$nin':['',' ',None,"NULL",'N/A','n/a','null','n/A','N/a','.',',','',' ','Write a feedback (optional)']}},
+        {'MODIFIED_DATE':{'$gt':dateutil.parser.parse(str(max_date))}}
+                    ]}},
+               {'$project':{
+                   '_id':0,
+                   'USER':'$USER._id',
+                   'EMAIL_ID':'$USER.EMAIL_ID',
+                   'SCHOOL_ID':'$USER.schoolId._id',
+                   'SCHOOL_NAME':'$USER.schoolId.NAME',
+                   'STATE':'$USER.schoolId.STATE',
+                   'COMMENT':'$COMMENT',
+                   'MOOD':'$MOOD_CARD',
+                   'RATING':'$RATING',
+                   'COMMENT_DATE':'$MODIFIED_DATE',
+                   'AUDIO_NAME':'$AUDIO_ID.AUDIO_NAME',
+                   'AUDIO_DAY':'$AUDIO_ID.AUDIO_DAY',
+                   'NARRATOR':'$AUDIO_ID.NARRATEDBY'
+                   }} 
+                    ])))
+    if new_comments_data.empty:
+        print("empty")
+        pass
+    else:
+        new_comments_data['Language_Detected']=[detectlanguage(i) for i in new_comments_data['COMMENT']]
+        new_comments_data=new_comments_data[new_comments_data['Language_Detected']!='none'].reset_index(drop=True)
+        translated_comments=[]
+        for i in range(len(new_comments_data)):
+            if new_comments_data['Language_Detected'][i]=='en':
+                translated_comments.append(new_comments_data['COMMENT'][i])
+            else:
+                ts=GoogleTranslator(source='auto', target='en').translate(new_comments_data['COMMENT'][i])
+                translated_comments.append(ts)
+        new_comments_data['Translated_Eng']=translated_comments
+        #clean the data
+        no_use_words=list(STOPWORDS)+list(string.ascii_lowercase)
+        no_use_words.remove('not')
+        # no_use_words.remove('no')
+        stop = set(no_use_words)
+        exclude = list(set(string.punctuation))
+        spec_chars = ["!",'"',"#","%","&","'","(",")",
+                                    "*","+",",","-",".","/",":",";","<",
+                                    "=",">","?","@","[","\\","]","^","_",
+                                    "`","{","|","}","~","–","\n","'"]
+        exclude=exclude+spec_chars
+        exclude=set(exclude)
+        lemma = WordNetLemmatizer()
+        def first_round_cleaning(text):
+            new_text=text.lower()
+            new_text = re.sub(r'[^\w\s]',' ',new_text)
+            new_text=new_text.strip()
+            new_text= re.sub('[''""…]', '', new_text)
+            new_text = re.sub('\n', '', new_text)
+            new_text = re.sub('[%s]' % re.escape(string.punctuation), '', new_text)
+            new_text=re.sub(r'\d+', '',new_text)
+            new_text=" ".join(new_text.split())
+            return new_text
+        def round_2_cleaning(text):
+            new_text=word_tokenize(text)
+            new_text=[word for word in new_text if word not in stop]
+            new_text=[word for word in new_text if word not in exclude]
+            new_text=new_text=[lemma.lemmatize(word) for word in new_text]
+            new_text=" ".join(new_text)
+            return new_text
+        def extra_char_removal(text):
+        #     new_text=text.lower()
+            new_text = re.sub(r'[^\w\s]',' ',text)
+            new_text=new_text.replace(","," ")
+            new_text=new_text.strip()
+            new_text= re.sub('[''""…]', '', new_text)
+            new_text = re.sub('\n', '', new_text)
+            new_text = re.sub('[%s]' % re.escape(string.punctuation), '', new_text)
+            new_text=re.sub(r'\d+', '',new_text)
+            new_text=" ".join(new_text.split())
+            return new_text
+        new_comments_data['R1_Cleaned_Comments']=new_comments_data['Translated_Eng'].apply(first_round_cleaning)
+        new_comments_data['R2_Cleaned_Comments']=new_comments_data['R1_Cleaned_Comments'].apply(round_2_cleaning)
+        new_comments_data['Cleaned_Comments']=new_comments_data['R2_Cleaned_Comments'].apply(extra_char_removal)
+        new_comments_data=new_comments_data[new_comments_data['R2_Cleaned_Comments']!=''].reset_index(drop=True)
+        new_comments_data['Final_Sentiment']=sentiment_model.predict(tfidf_vec.transform(new_comments_data['Cleaned_Comments']))
+        new_comments_data['Final_Sentiment']=sentiment_model.predict(tfidf_vec.transform(new_comments_data['Cleaned_Comments']))
+        new_comments_data.fillna('',inplace=True)
+        new_comments_data_final=new_comments_data[['USER', 'EMAIL_ID', 'SCHOOL_ID', 'SCHOOL_NAME', 'STATE', 'COMMENT',
+               'RATING', 'COMMENT_DATE','Final_Sentiment']]
+        new_comments_data_final['COMMENT_ISO_DATE']=[i.isoformat() + 'Z' for i in new_comments_data_final['COMMENT_DATE']]
+        new_comments_data_final['COMMENT_ISO_DATE']=[i.isoformat() + 'Z' for i in new_comments_data_final['COMMENT_DATE']]
+        new_comments_data_final.drop(columns=['COMMENT_DATE'],inplace=True)
+        new_comments_data_final.rename(columns={'COMMENT_ISO_DATE':'COMMENT_DATE'},inplace=True)
+        updated_data=data.append(new_comments_data_final,ignore_index=True)   
+#         with open('sentiment_json_data.json', "w") as file:
+#             json.dump(updated_data, file, indent=4)
+        updated_data.to_json("sentiment_json_data.json",default_handler=str, orient = 'records',date_format='iso')
+        return {'Status':"File updated"}

@@ -1,3 +1,35 @@
+$(document).ready(function(){
+    var url = window.location.href;
+    var dashboard_name = document.getElementById('AMS_dashboard').innerText;
+    var user_email_id = document.getElementById('UserEmailId').innerText;
+    console.log(url, dashboard_name, user_email_id);
+    
+    var settings = {
+        url: "/cap_profile_tracking",
+        method: "POST",
+        timeout: 0,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            "dashboard_name": dashboard_name,
+            "user_name": user_email_id,
+            "url": url
+        }),
+        success: function() {
+            console.log("Success")
+        },
+        error: function() {
+            console.log("Error")
+        }
+    };
+    $.ajax(settings).done(function(response) {
+        console.log(response);
+    });
+});
+
+
+
 var settings = {
     "async": true,
     "crossDomain": true,
@@ -432,13 +464,259 @@ $.ajax(settings).done(function (response) {
                     stacking: 'normal',
                 }
             },
-            series: [{
+            series: [
+            {
                 color: "#01A451",
                 name: 'Email Count',
                 data: dataa.TOTAL_EMAILS_SENT
+            },
+            {
+                color: "#8AE02B",
+                name: 'User Count',
+                data: dataa.USER_COUNT
             },
             ],
         });
     });
 });
+
+
+// shows tables data when click on cards
+function cards(URL) {
+    $('#next').empty();
+    console.log(URL);
+    var modal2 = document.getElementById("myModal2");
+    modal2.style.display = "block";
+    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    var gif = document.getElementById("gif");
+    gif.style.display = "block";
+    $('#btnExport').show();
+    createDynamic(URL)
+}
+
+function createDynamic(url) {
+
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "GET",
+        success: function() {
+            var gif = document.getElementById("gif");
+            gif.style.display = "none";
+        },
+    }
+    $.ajax(settings).done(function(response) {
+        var data1 = JSON.parse(response);
+
+        $('#next').prepend('<table class="table table-striped custab table-fixed" id="dataTable"><thead><tr><th>PURPOSE</th><th>RECEIVER EMAIL</th><th>SENDER EMAIL</th><th>SIGNUP DATE</th></tr></thead><tbody>');
+
+        for (var i = 0; i < data1.data.length; i++) {
+
+            var datain = data1.data[i];
+            var resultDiv = createDynamicDiv(datain);
+
+            $("#dataTable").append(resultDiv);
+
+        }
+        //$('#dataTable1').append('</tbody></table>');
+        $('#dataTable').append('</tbody></table>');
+        dataTab();
+
+        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id="dataTable1"><thead><thead><tr><th>PURPOSE</th><th>RECEIVER EMAIL</th><th>SENDER EMAIL</th><th>SIGNUP DATE</th></tr></thead>><tbody>');
+        for (var i = 0; i < data1.data.length; i++) {
+
+            var datain = data1.data[i];
+
+            var resultDiv = createDynamicDiv(datain);
+            $("#dataTable1").append(resultDiv);
+
+        }
+        $('#dataTable1').append('</tbody></table>');
+    })
+}
+
+function dataTab() {
+
+    $("#dataTable").DataTable({
+        "pageLength": 50
+    });
+
+}
+
+function createDynamicDiv(userList) {
+    var dynamicDiv = '';
+    // console.log(userList);
+
+    dynamicDiv += '<tr >' +
+        '<td>' + userList[2] + '</td>' +
+        '<td>' + userList[3] + '</td>' +
+        '<td>' + userList[4] + '</td>' +
+        '<td>' + userList[6] + '</td>' +
+        '</tr>'
+    return dynamicDiv;
+}
+
+
+function card2(URL) {
+    $('#next').empty();
+    console.log(URL);
+    var modal2 = document.getElementById("myModal2");
+    modal2.style.display = "block";
+    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    var gif = document.getElementById("gif");
+    gif.style.display = "block";
+    $('#btnExport').show();
+    createDynamic2(URL)
+}
+
+function createDynamic2(url) {
+
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "GET",
+        success: function() {
+            var gif = document.getElementById("gif");
+            gif.style.display = "none";
+        },
+    }
+    $.ajax(settings).done(function(response) {
+        var data1 = JSON.parse(response);
+
+        $('#next').prepend('<table class="table table-striped custab table-fixed" id="dataTable"><thead><tr><th>USER NAME</th><th>EMAIL ID</th><th>SIGN UP DATE</th><th>SCHOOL_NAME</th><th>CITY</th><th>STATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th><th>MINDFUL MINUTES</th></tr></thead><tbody>');
+
+        for (var i = 0; i < data1.data.length; i++) {
+
+            var datain = data1.data[i];
+            var resultDiv = createDynamicDiv2(datain);
+
+            $("#dataTable").append(resultDiv);
+
+        }
+        //$('#dataTable1').append('</tbody></table>');
+        $('#dataTable').append('</tbody></table>');
+        dataTab();
+
+        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id="dataTable1"><thead><tr><th>USER NAME</th><th>EMAIL ID</th><th>SIGN UP DATE</th><th>SCHOOL_NAME</th><th>CITY</th><th>STATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th><th>MINDFUL MINUTES</th></tr></thead><tbody>');
+        for (var i = 0; i < data1.data.length; i++) {
+
+            var datain = data1.data[i];
+
+            var resultDiv = createDynamicDiv2(datain);
+            $("#dataTable1").append(resultDiv);
+
+        }
+        $('#dataTable1').append('</tbody></table>');
+    })
+}
+
+function dataTab() {
+
+    $("#dataTable").DataTable({
+        "pageLength": 50
+    });
+
+}
+
+function createDynamicDiv2(userList) {
+    var dynamicDiv = '';
+    // console.log(userList);
+
+    dynamicDiv += '<tr >' +
+        '<td>' + userList[1] + '</td>' +
+        '<td>' + userList[2] + '</td>' +
+        '<td>' + userList[3] + '</td>' +
+        '<td>' + userList[4] + '</td>' +
+        '<td>' + userList[5] + '</td>' +
+        '<td>' + userList[6] + '</td>' +
+        '<td>' + userList[8] + '</td>' +
+        '<td>' + userList[9] + '</td>' +
+        '<td>' + userList[10] + '</td>' +
+        '</tr>'
+    return dynamicDiv;
+}
+
+
+function card3(URL) {
+    $('#next').empty();
+    console.log(URL);
+    var modal2 = document.getElementById("myModal2");
+    modal2.style.display = "block";
+    $("#gif").append("<img style='width: 7%;margin-left: 45.2%;' src='https://cap.innerexplorer.org/static/images/loading.gif'><div><p style=' text-align: center;margin-top:5px;'>Please wait while we fetch your data.</p></div>");
+    var gif = document.getElementById("gif");
+    gif.style.display = "block";
+    $('#btnExport').show();
+    createDynamic3(URL)
+}
+
+function createDynamic3(url) {
+
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": url,
+        "method": "GET",
+        success: function() {
+            var gif = document.getElementById("gif");
+            gif.style.display = "none";
+        },
+    }
+    $.ajax(settings).done(function(response) {
+        var data1 = JSON.parse(response);
+
+        $('#next').prepend('<table class="table table-striped custab table-fixed" id="dataTable"><thead><tr><th>USER NAME</th><th>EMAIL ID</th><th>SIGN UP DATE</th><th>SCHOOL_NAME</th><th>CITY</th><th>STATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th><th>MINDFUL MINUTES</th></tr></thead><tbody>');
+
+        for (var i = 0; i < data1.data.length; i++) {
+
+            var datain = data1.data[i];
+            var resultDiv = createDynamicDiv3(datain);
+
+            $("#dataTable").append(resultDiv);
+
+        }
+        //$('#dataTable1').append('</tbody></table>');
+        $('#dataTable').append('</tbody></table>');
+        dataTab();
+
+        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id="dataTable1"><thead><tr><th>USER NAME</th><th>EMAIL ID</th><th>SIGN UP DATE</th><th>SCHOOL_NAME</th><th>CITY</th><th>STATE</th><th>LAST PRACTICE DATE</th><th>PRACTICE COUNT</th><th>MINDFUL MINUTES</th></tr></thead><tbody>');
+        for (var i = 0; i < data1.data.length; i++) {
+
+            var datain = data1.data[i];
+
+            var resultDiv = createDynamicDiv3(datain);
+            $("#dataTable1").append(resultDiv);
+
+        }
+        $('#dataTable1').append('</tbody></table>');
+    })
+}
+
+function dataTab() {
+
+    $("#dataTable").DataTable({
+        "pageLength": 50
+    });
+
+}
+
+function createDynamicDiv3(userList) {
+    var dynamicDiv = '';
+    // console.log(userList);
+
+    dynamicDiv += '<tr >' +
+        '<td>' + userList[1] + '</td>' +
+        '<td>' + userList[2] + '</td>' +
+        '<td>' + userList[3] + '</td>' +
+        '<td>' + userList[4] + '</td>' +
+        '<td>' + userList[5] + '</td>' +
+        '<td>' + userList[6] + '</td>' +
+        '<td>' + userList[8] + '</td>' +
+        '<td>' + userList[9] + '</td>' +
+        '<td>' + userList[10] + '</td>' +
+        '</tr>'
+    return dynamicDiv;
+}
+
 

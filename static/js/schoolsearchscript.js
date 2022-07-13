@@ -500,7 +500,7 @@ function jou(url1) {
     };
     $.ajax(settings).done(function(response) {
         var datain = JSON.parse(response);
-        // console.log(datain);
+        console.log(datain, url);
 
         $("#ucount").text(datain[0].user_count);
         $("#pcount").text(datain[0].school_practice_count);
@@ -690,7 +690,18 @@ function schoolIDCharts(url1) {
                     fontWeight: '200'
                 }
             },
-            series: [{
+            series: [
+                {
+                    name: "Google",
+                    data: dataa[5].bargoogle,
+                    color: '#40B5AD'
+                },
+                {
+                    name: "Canvas",
+                    data: dataa[4].barcan,
+                    color: '#d3373b'
+                },
+                {
                     name: 'Clever',
                     data: dataa[3].barc
                 },
@@ -724,7 +735,7 @@ function schoolIDCharts(url1) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
-        // console.log(dataa[0].bar, "data");
+        console.log(dataa, url1, "data");
         // $("#gifload").hide();
 
         Highcharts.chart("graph1", {
@@ -792,7 +803,18 @@ function schoolIDCharts(url1) {
                     },
                 },
             },
-            series: [{
+            series: [
+                {
+                    name: "Google",
+                    data: dataa[5].bargoogle,
+                    color: '#40B5AD'
+                },
+                {
+                    name: "Canvas",
+                    data: dataa[4].barcan,
+                    color: '#d3373b'
+                },
+                {
                     name: "Clever",
                     data: dataa[3].barc,
                 },
