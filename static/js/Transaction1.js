@@ -63,7 +63,7 @@ $(function() {
         {
             changeMonth: true,
             changeYear: true,
-            yearRange: "2018:2021",
+            yearRange: "2018:2022",
             dateFormat: "yy-mm-dd",
             onSelect: function(dateText, inst) {
                 $("#stardate").text(dateText);
@@ -77,7 +77,7 @@ $(function() {
     $("#datepicker2").datepicker({
         changeMonth: true,
         changeYear: true,
-        yearRange: "2018:2021",
+        yearRange: "2018:2022",
         dateFormat: "yy-mm-dd",
         maxDate: new Date(),
         onSelect: function(dateText, inst) {
@@ -96,6 +96,7 @@ $(function() {
 function sub() {
     var a = document.getElementById("stardate").innerText;
     var b = document.getElementById("finaldate").innerText;
+    console.log(a, b);
     $("#PAYLATER").empty();
     $("#PROMOCODE").empty();
     $("#SQUARE_PAYMENT").empty();
@@ -148,6 +149,7 @@ function cardscount(a, b) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log("this is total");
+        console.log("/modetype/" + a + "/" + b);
         const total =
             dataa.amount.Payment_Mode_Amount[0] +
             dataa.amount.Payment_Mode_Amount[1] +

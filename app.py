@@ -47,6 +47,7 @@ users.append(User(id=19,username='arice@innerexplorer.org',password='capxp2020',
 users.append(User(id=20,username='vgonzalez@innerexplorer.org',password='capxp2020',name='Victoria',nameinitial='V'))
 users.append(User(id=21,username='nina@innerexplorer.org',password='capxp2020',name='Nina',nameinitial='N'))
 users.append(User(id=22,username='ssugar@innerexplorer.org',password='capxp2020',name='Samantha',nameinitial='S'))
+users.append(User(id=23,username='dmetler@innerexplorer.org', password='capxp2020',name='David',nameinitial='D'))
 
 app = Flask(__name__)
 app.secret_key = 'cap4g2020version10date8272020'
@@ -97,24 +98,11 @@ def schoolcount_totalstudentscard():
     returnval=executive_count_productwise()
     return returnval
 
-@app.route('/executivecount_productwise_refresh')
-def schoolcount_totalstudentscard_refresh():
-    returnval=executive_count_productwise_refresh()
-    return returnval
-
-
-
 
 @app.route('/_executive_dashbaord_')
 def totalusercount_card():
     returnval=excecutivecount___()
     return returnval
-
-@app.route('/excecutivecount_refresh')
-def excecutivecount_refresh1():
-    returnval=excecutivecount_refresh()
-    return returnval
-
 
 
 @app.route('/practicetrendnew/<charttype>')
@@ -80005,6 +79993,5 @@ if __name__ == '__main__':
          year="*", month="*", day="*", hour="6", minute="1", second="1"
       )
     sched.add_job(sentimentfile_update,trigger=trigger)
-    sched.add_job(excecutivecount_refresh,trigger=trigger)
     sched.start()
     app.run(debug=True,use_reloader=False)

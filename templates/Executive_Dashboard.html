@@ -533,10 +533,17 @@
                             <p class="boxvalue" id="next6" style="cursor: pointer;" onclick="cards('/executive_explorer')"></p>
                             <br />
                             <hr />  
+                            <button id="refresh" style="border: none; background: transparent;">
+                                <i class="fa fa-refresh" style="color: #00A651;" aria-hidden="true"></i>
+                            </button>
                             <a href="Transaction_Reporting">
                                 <p class="boxvalue" style="color: green;font-size: 11px !important;">View Upcoming Renewal <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 </p>
                             </a>
+                            <p style="font-size:11px; float:right; margin-top:8px;">
+                                <span><strong>Update:</strong></span>
+                                <span id="updateCard1" style="margin-left:0px;"></span>
+                            </p>
                             <br />
                         </div>
                     </div>
@@ -570,12 +577,16 @@
                                 <p class="boxvalue" style="color: green;font-size: 11px !important;">View Upcoming Renewal <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 </p>
                             </a>
+                            <p style="font-size:11px; float:right; margin-top:8px;">
+                                <span><strong>Update:</strong></span>
+                                <span id="updateCard2" style="margin-left:0px;"></span>
+                            </p>
                             <br />
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3" title="" id="total_usercount">
-                    <div class="boxExecutive">
+                    <div class="boxExecutive" style="padding-bottom: 5px;">
                         <div>
                             <img src="/static/images/Bar_Chartnew.png" class="image">
                             <p style="font-size: 11px;">Total Usercount</p>
@@ -599,6 +610,10 @@
                             <img src="/static/images/green.png" class="image2">
                             <p class="boxHeading2">Playback Count</p>
                             <p class="boxvalue" id="neverlogged"></p>
+                            <p style="font-size:11px; float:right;">
+                                <span><strong>Update:</strong></span>
+                                <span id="updateCard3" style="margin-left:0px;"></span>
+                            </p>
                             <br />
                             <br />
                         </div>
@@ -642,9 +657,6 @@
                             </div>
                             <div id="container1"></div>
                             <hr />
-                            <!-- <button id="refresh" style="border: none; background: transparent;">
-                                <i class="fa fa-refresh" style="color: #00A651;" aria-hidden="true"></i>
-                            </button> -->
                             <a href="Practice_Analytics">
                                 <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
               float: right;">View PLAYBACK ANALYTICS <i class="fa fa-chevron-right" aria-hidden="true"></i>
@@ -730,17 +742,11 @@
 
     </section>
     <p id="UserEmailId" style="display: none;">{{g.user}}</p>
-     <!-- <script>
-        $( document ).ready(function() {
-            setTimeout(function(){
-                var loader = document.getElementsByClassName("gifloader-spinner")[0];
-                loader.className="gifloader-spinner fadeout" ;
-                setTimeout(function(){loader.style.display="none"},1000)
-            },50000)
-        });
 
+    <!-- <script>
         $(window).on("load",function(){
             setTimeout(function(){
+            var loader = document.getElementsByClassName("gifloader-spinner")[0];
             var loader = document.getElementsByClassName("gifloader-spinner");
             loader.className="gifloader-spinner fadeout" ;
             setTimeout(function(){loader.style.display="none"},1000)

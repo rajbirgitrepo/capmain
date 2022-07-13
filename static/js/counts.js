@@ -16,6 +16,7 @@ $.ajax(settings).done(function (response) {
   $("#activeschools").text(dataa.active_school.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#tcount").text(dataa.Techers.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#p22count").text(dataa.Homeappusers.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+  $("#updateCard3").text(dataa.update);
 });
 
 var settings = {
@@ -30,7 +31,9 @@ $.ajax(settings).done(function (response) {
   $("#trial").text(dataa.community.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#lsy").text(dataa.clound.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#next6").text(dataa.explorer.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
-
+  $("#updateCard1").text(dataa.update);
+  $("#updateCard2").text(dataa.update);
+  
   $("#active").text(dataa.lifetime.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#passive").text(dataa.schoolapp.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
   $("#dormant").text(dataa.homeapp.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
