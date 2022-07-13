@@ -99,6 +99,16 @@ def schoolcount_totalstudentscard():
     return returnval
 
 
+@app.route('/executivecount_productwise_refresh')
+def schoolcount_totalstudentscard_refresh():
+    returnval=executive_count_productwise_refresh()
+    return returnval
+
+@app.route('/excecutivecount_refresh')
+def excecutivecount_refresh1():
+    returnval=excecutivecount_refresh()
+    return returnval
+
 @app.route('/_executive_dashbaord_')
 def totalusercount_card():
     returnval=excecutivecount___()
@@ -79989,9 +79999,19 @@ def profile_tracking():
 
 if __name__ == '__main__':   
     sched = BackgroundScheduler(timezone=str(tzlocal.get_localzone()),daemon=True)
+    
     trigger = CronTrigger(
          year="*", month="*", day="*", hour="6", minute="1", second="1"
       )
+    trigger2 = CronTrigger(
+         year="*", month="*", day="*", hour="1", minute="1", second="1"
+      )
+    trigger3 = CronTrigger(
+         year="*", month="*", day="*", hour="1", minute="1", second="1"
+      )
     sched.add_job(sentimentfile_update,trigger=trigger)
+    sched.add_job(executive_count_productwise_refresh,trigger=trigger2)
+    sched.add_job(excecutivecount_refresh,trigger=trigger3)
+
     sched.start()
     app.run(debug=True,use_reloader=False)
