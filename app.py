@@ -120,53 +120,22 @@ def practice_trendnew__(charttype):
     returnval=practice_trendnew_(charttype)
     return returnval
 
-@app.route('/practicetrendnew_refresh')
-def practice_trendnew__refresh():
-    returnval=practice_trendnew_refresh("Practice")
-    returnval=practice_trendnew_refresh("Playback")
-    return returnval
-
 
 @app.route('/activetrendnew/<charttype>')
 def active_trend_new__(charttype):
     returnval=active_trend_new_(charttype)
     return returnval
 
-@app.route('/activetrendnew_refresh')
-def active_trend_new__refresh():
-    returnval=active_trend_new_refresh("Practice")
-    returnval2=active_trend_new_refresh("Playback")
-    return returnval2
-
-
 @app.route('/practicehistorychartlatest/<charttype>')
 def practice___history___new___latest_(charttype):
     returnval=practice___history___new___latest(charttype)
     return returnval
-
-@app.route('/practicehistorychartlatest_refresh')
-def practice___history___new___latest__refresh_():
-    
-    returnval=practice___history___new___latest_refresh("Practice")
-    returnval2=practice___history___new___latest_refresh("Playback")
-    return returnval2
-
-
 
 @app.route('/averagetrend/')
 def average_trend_new__():
     returnval=average_trend_new_()
     return returnval
 
-@app.route('/averagetrend_refresh/')
-def average_trend_new__refresh():
-    returnval=average_trend_new_refresh()
-    return returnval
-
-@app.route('/topdistrictplayback_refresh')
-def topdistrict_playback_refresh():
-    returnval=topdistrict_playback_refresh()
-    return returnval
 
 @app.route('/topdistrictplayback')
 def topdistrict_playback_():
@@ -43976,16 +43945,14 @@ def Payment_Mode(startdate,enddate):
 
 @app.route('/revenauetable/<type>')
 def revenue_table(type):
-    print("1")
-    df2=pd.read_csv(""+type+".csv").fillna("")
+    df2=pd.read_csv(""+type+".csv")
     df2.sort_values(by=['Last_Payment_Date'], inplace=True, ascending=False)
     if "export" in request.args:
-        print("Happyif")
         try:
-            df1=df2[['TYPE_OF_PAYMENT', 'USER_NAME', 'EMAIL_ID', 'DEVICE_USED',
-                   'MODE_OF_PAYMENT', 'Last_Payment_Date', 'Payment_Amount']]
+            df1=df2[['school_name','country','State','city','Practice_Count',
+                    'Practice_Count_csy','Practice_Count_lsy','usercount',
+                    'Created_date','last_practice_date','Subscription_expire_date','label']]
             csv = df1.to_csv(index=False)
-            
             return Response(
                 csv,
                 mimetype="text/csv",
@@ -43994,9 +43961,7 @@ def revenue_table(type):
         except:
             return jsonify("Unauthorized Access")   
     else:
-        print("Happy else")
         temp={"data":df2.values.tolist()}
-    print(temp)
     return json.dumps(temp)
 
 
@@ -79383,6 +79348,185 @@ def AMS_Actice_Users_TableAPI():
 
 
 
+@app.route('/AMS_Playback_HistoryAPI')
+def AMS_PlaybackHistoryAPI(charttype): 
+
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
+    db=client.compass
+
+
+    ams_phase2_data=pd.DataFrame(list(db.email_logging.aggregate([
+    {'$match':{'$and':[
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"octsignup21@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aaroramay11@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"ams2022@innerexplorer.org",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aarora@1gen.io",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"tech@innerexplorer.org",'$options':'i'}}},
+    {'MODULE_NAME':{'$regex':'phase 2','$options':'i'}} ]}},
+
+    {'$project':{
+    "_id" : 1,
+    'RECEIVER_EMAIL': 1,
+    'Total_Emails_Sent':1,
+    "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$CREATED_DATE'}},
+    "DESCRIPTION" :1,
+    "PURPOSE" : 1,
+    "SENDER_EMAIL" :1,
+    "MODULE_NAME" : 1
+    }},
+    ])))
+    ams_phase2_data=ams_phase2_data[ams_phase2_data['DESCRIPTION']=='Email Sent'].fillna("NO_INFO").reset_index(drop=True)
+    ams_phase2_data=ams_phase2_data[ams_phase2_data['RECEIVER_EMAIL'].notnull()]
+
+    ams_emails=list(ams_phase2_data['RECEIVER_EMAIL'].unique())
+
+    TOTAL_EMAILS_SENT = len(ams_phase2_data)
+    UNIQUE_USERS = len(ams_phase2_data['RECEIVER_EMAIL'].unique())
+
+
+    ams_user_master_data=pd.DataFrame(list(db.user_master.aggregate([
+    {'$match':{'$and':[
+    {'EMAIL_ID':{'$in':ams_emails}},
+    {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}
+    ]}},
+    {'$project':{
+    '_id':0,
+    'USER_ID':'$_id',
+    'EMAIL_ID':'$EMAIL_ID',
+    'sign_up':{"$dateToString":{"format": "%Y-%m-%d","date":'$CREATED_DATE'}},
+    "USER_NAME":1, 
+    "School_ID":"$schoolId._id",
+    "School_Name":"$schoolId.NAME", 
+    "CITY":"$schoolId.CITY",
+    "STATE":"$schoolId.STATE", 
+    "COUNTRY":"$schoolId.COUNTRY"
+    }}
+    ])))
+    #     ams_user_master_data_1 = ams_user_master_data.drop_duplicates(keep='first')
+    ams_user_master_data_1 = ams_user_master_data
+    ams_user_master_data_1 = ams_user_master_data_1.fillna("NO_INFO")
+
+    ams_final=ams_phase2_data.merge(ams_user_master_data_1,how='left',left_on='RECEIVER_EMAIL',right_on='EMAIL_ID')
+    ams_final=ams_final[ams_final['USER_ID'].notnull()]
+
+    uid = ams_final.USER_ID.to_list()
+
+
+    charttype=str(charttype).title()
+
+    if charttype=='Practice':
+        threshold=.5    
+    #         threshcond=[{'$match':{'Completion_Percentage':{'$gte':threshold}}}]
+
+        ams_practice_data=pd.DataFrame(list(db.audio_track_master.aggregate([{'$match':{'$and':[
+    #             {'USER_ID._id':{'$in':uid}},
+        {'USER_ID.EMAIL_ID':{'$in':ams_emails}},
+        {'MODIFIED_DATE':{'$gte':dateutil.parser.parse(str(pd.to_datetime(min(ams_final['CREATED_DATE']))))}}    
+        ]}},
+
+        {'$group':{
+        '_id':'$USER_ID._id',
+    #     "active_users": {"$sum":1},
+        "USERNAME":{"$first":'$USER_ID.USER_NAME'},
+        "EMAIL":{"$first":'$USER_ID.EMAIL_ID'},
+        "Last_Practice_Date":{"$max":{"$dateToString":{"format": "%Y-%m-%d","date":'$MODIFIED_DATE'}}},
+        'Practice_Count':{"$sum":1},
+        'Mindful_Minutes':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}},
+        'Completion_Percentage':{"$sum":{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']},
+                            '$PROGRAM_AUDIO_ID.AUDIO_LENGTH']},0]}},
+        }},
+        {'$match':{'Completion_Percentage':{'$gte':threshold}}}                                                                    
+        ])))
+
+        Active_users = len(ams_practice_data)
+    #     print(ams_practice_data)
+    #     Playback_Count = ams_practice_data.Practice_Count.sum()
+    #     Mindful_Minutes = ams_practice_data.Mindful_Minutes.sum()
+        finaldf=ams_final.merge(ams_practice_data,how='left',left_on='USER_ID',right_on='_id')
+    #     print(finaldf.shape)
+
+        finaldf = finaldf[["PURPOSE",'USER_ID','_id_y','USER_NAME','EMAIL_ID','sign_up', 'School_Name', 'CITY', 'STATE',
+                           'COUNTRY', 'Last_Practice_Date',
+                           'Practice_Count', 'Mindful_Minutes','Completion_Percentage']]
+
+        finaldf = finaldf.drop_duplicates(subset=["EMAIL_ID"],keep='first')
+    #     print(finaldf.Practice_Count.sum())
+        finaldf['Last_Practice_Date']= pd.to_datetime(finaldf['Last_Practice_Date'], errors='coerce')
+    #     print(finaldf.Practice_Count.sum())
+        finaldf=finaldf.groupby('Last_Practice_Date')['Practice_Count'].sum().reset_index()
+
+        finaldf['Last_Practice_Date'] = pd.to_datetime(finaldf['Last_Practice_Date'])
+
+        df7=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
+        df9 = pd.DataFrame(df7,columns = ["Last_Practice_Date"])
+        df9['value'] = 0
+
+        uscy1= finaldf.merge(df9, on="Last_Practice_Date", how='right').fillna(0).sort_values(by='Last_Practice_Date')
+
+        uscy1 = uscy1[uscy1["Last_Practice_Date"] >= min(finaldf['Last_Practice_Date']).strftime('%Y-%m-%d')] 
+        uscy1 = uscy1[uscy1["Last_Practice_Date"] <= datetime.datetime.now().strftime("%Y-%m-%d") ].reset_index(drop = True)
+        uscy1['Last_Practice_Date'] = uscy1['Last_Practice_Date'].astype(np.int64)
+        uscy1['Last_Practice_Date']=uscy1['Last_Practice_Date'].astype(np.int64)/int(1e6)
+        cd = list(uscy1['Last_Practice_Date'].unique())
+        uscy1 = uscy1[["Last_Practice_Date","Practice_Count"]]
+    #     print(uscy1.values.tolist())
+    #     print(len(uscy1))
+        temp={'data':uscy1.values.tolist()}
+
+    else:
+
+        ams_practice_data=pd.DataFrame(list(db.audio_track_master.aggregate([{'$match':{'$and':[
+        #         {'USER_ID._id':{'$in':uid}},
+        {'USER_ID.EMAIL_ID':{'$in':ams_emails}},
+        {'MODIFIED_DATE':{'$gte':dateutil.parser.parse(str(pd.to_datetime(min(ams_final['CREATED_DATE']))))}}    
+        ]}},
+        {'$group':{
+        '_id':'$USER_ID._id',
+        "USERNAME":{"$first":'$USER_ID.USER_NAME'},
+        "EMAIL":{"$first":'$USER_ID.EMAIL_ID'},
+        "Last_Practice_Date":{"$max":{"$dateToString":{"format": "%Y-%m-%d","date":'$MODIFIED_DATE'}}},
+        'Practice_Count':{"$sum":1},
+        'Mindful_Minutes':{'$sum':{'$round':[{'$divide':[{'$subtract':['$CURSOR_END','$cursorStart']}, 60]},2]}},
+        }},
+        ])))
+
+
+        Active_users = len(ams_practice_data)
+        #     Playback_Count = ams_practice_data.Practice_Count.sum()
+        #     Mindful_Minutes = ams_practice_data.Mindful_Minutes.sum()
+        finaldf=ams_final.merge(ams_practice_data,how='left',left_on='USER_ID',right_on='_id')
+
+        finaldf = finaldf[["PURPOSE",'USER_ID','_id_y', 'USER_NAME','EMAIL_ID','sign_up', 'School_Name', 'CITY', 'STATE', 'COUNTRY', 'Last_Practice_Date', 'Practice_Count', 'Mindful_Minutes']]
+        finaldf = finaldf.drop_duplicates(subset=["EMAIL_ID"],keep='first')
+        finaldf['Last_Practice_Date']= pd.to_datetime(finaldf['Last_Practice_Date'], errors='coerce')
+        finaldf=finaldf.groupby('Last_Practice_Date')['Practice_Count'].sum().reset_index()
+
+        finaldf['Last_Practice_Date'] = pd.to_datetime(finaldf['Last_Practice_Date'])
+
+        df7=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
+        df9 = pd.DataFrame(df7,columns = ["Last_Practice_Date"])
+        df9['value'] = 0
+
+        uscy1= finaldf.merge(df9, on="Last_Practice_Date", how='right').fillna(0).sort_values(by='Last_Practice_Date')
+
+        uscy1 = uscy1[uscy1["Last_Practice_Date"] >= min(finaldf['Last_Practice_Date']).strftime('%Y-%m-%d')] 
+        uscy1 = uscy1[uscy1["Last_Practice_Date"] <= datetime.datetime.now().strftime("%Y-%m-%d") ].reset_index(drop = True)
+        uscy1['Last_Practice_Date'] = uscy1['Last_Practice_Date'].astype(np.int64)
+        uscy1['Last_Practice_Date']=uscy1['Last_Practice_Date'].astype(np.int64)/int(1e6)
+        cd = list(uscy1['Last_Practice_Date'].unique())
+        uscy1 = uscy1[["Last_Practice_Date","Practice_Count"]]
+       
+        temp={'data':uscy1.values.tolist()}
+    print(uscy1.Practice_Count.sum())
+    print(len(uscy1))
+    return json.dumps(temp, default =str)
+
+# AMS_PlaybackHistoryAPI("Practice")
+
+
+
 #========================= AMS API's END HERE ==============================================
 
 
@@ -80044,30 +80188,9 @@ if __name__ == '__main__':
     trigger3 = CronTrigger(
          year="*", month="*", day="*", hour="1", minute="1", second="1"
       )
-    trigger4 = CronTrigger(
-         year="*", month="*", day="*", hour="1", minute="1", second="1"
-      )
-    trigger5 = CronTrigger(
-         year="*", month="*", day="*", hour="1", minute="1", second="1"
-      )
-    trigger6 = CronTrigger(
-         year="*", month="*", day="*", hour="1", minute="1", second="1"
-      )
-
-    trigger7 = CronTrigger(
-         year="*", month="*", day="*", hour="1", minute="1", second="1"
-      )
-    trigger8 = CronTrigger(
-         year="*", month="*", day="*", hour="1", minute="1", second="1"
-      )
     sched.add_job(sentimentfile_update,trigger=trigger)
     sched.add_job(executive_count_productwise_refresh,trigger=trigger2)
     sched.add_job(excecutivecount_refresh,trigger=trigger3)
-    sched.add_job(average_trend_new_refresh,trigger=trigger4)
-    sched.add_job(topdistrict_playback_refresh,trigger=trigger5)  
-    sched.add_job(practice___history___new___latest__refresh_,trigger=trigger6)
-    sched.add_job(active_trend_new__refresh,trigger=trigger7)
-    sched.add_job(practice_trendnew__refresh,trigger=trigger8)
-    
+
     sched.start()
     app.run(debug=True,use_reloader=False)
