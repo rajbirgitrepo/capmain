@@ -1065,9 +1065,7 @@ def active_trend_new_(charttype):
 
 # active_trend_new_("Playback")
 
-
-
-def practice___history___new___latest(charttype):    
+def practice___history___new___latest_refresh(charttype):    
     collection = db.audio_track_master_all
     collection2 = db.audio_track_master
     ########## FOR DF ###########################
@@ -1396,7 +1394,25 @@ def practice___history___new___latest(charttype):
 
         temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'lsy_to_lsy':plcy_lsy,'clever':ccsy,'schoology':scsy, 
                       'canvas': cancsy,'google': googlecsy}}
-        return json.dumps(temp)
+        
+        
+#         practice___history___new___latest
+        client = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+        import timeago, datetime
+        now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+        x=now.strftime("%Y-%m-%d %H:%M:%S")
+        update_date={"date":x}
+        temp["update_date"]=update_date['date']
+        mydb = client["compass"]
+        mycol = mydb["cap_pipeline"]
+
+        myquery = {"dashboard":"executive"}
+        newvalues = { "$set": { "practice___history___new___latest."+charttype:temp} }
+
+        mycol.update_one(myquery, newvalues)
+        
+        
+        return json.dumps({"updated":"true","success":1})
 
     else:
                         ######################  USER PRACTICE 2019-2020(LSY) ############################################
@@ -1666,7 +1682,45 @@ def practice___history___new___latest(charttype):
 
         temp={'data':{'csy':uscy,'pcsy':pscy,'lsy':plcy,'lsy_to_lsy':plcy_lsy,'clever':ccsy,'schoology':scsy, 
                       'canvas': cancsy,'google': googlecsy}}
-        return json.dumps(temp)
+        
+        client = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+        import timeago, datetime
+        now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+        x=now.strftime("%Y-%m-%d %H:%M:%S")
+        update_date={"date":x}
+        temp["update_date"]=update_date['date']
+        mydb = client["compass"]
+        mycol = mydb["cap_pipeline"]
+
+        myquery = {"dashboard":"executive"}
+        newvalues = { "$set": { "practice___history___new___latest."+charttype:temp} }
+
+        mycol.update_one(myquery, newvalues)
+        
+        
+        return json.dumps({"updated":"true","success":1})
+
+    
+
+def practice___history___new___latest(charttype):
+    client_test = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+    db_test=client_test.compass
+    data=list(db_test.cap_pipeline.aggregate([
+    {"$match":
+     {'$and':[
+            {'dashboard':"executive"},
+                      ]}},
+    {'$project':{'_id':0, 'practice___history___new___latest.'+charttype:1}}
+
+    ]))
+
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    x=now.strftime("%Y-%m-%d %H:%M:%S")    
+    dd=timeago.format(data[0]['practice___history___new___latest'][charttype]['update_date'],x)
+    data[0]['practice___history___new___latest'][charttype]['update']="Updated "+dd
+    return json.dumps(data[0]['practice___history___new___latest'][charttype])
+    
+
 
     
 # practice___history___new___latest("Playback")
