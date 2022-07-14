@@ -126,6 +126,13 @@ def active_trend_new__(charttype):
     returnval=active_trend_new_(charttype)
     return returnval
 
+@app.route('/activetrendnew_refresh')
+def active_trend_new__refresh():
+    returnval=active_trend_new_refresh("practice")
+    returnval2=active_trend_new_refresh("Playback")
+    return returnval2
+
+
 @app.route('/practicehistorychartlatest/<charttype>')
 def practice___history___new___latest_(charttype):
     returnval=practice___history___new___latest(charttype)
@@ -136,7 +143,7 @@ def practice___history___new___latest__refresh_():
     
     returnval=practice___history___new___latest_refresh("Practice")
     returnval2=practice___history___new___latest_refresh("Playback")
-    return returnval
+    return returnval2
 
 
 
@@ -80040,14 +80047,17 @@ if __name__ == '__main__':
     trigger6 = CronTrigger(
          year="*", month="*", day="*", hour="1", minute="1", second="1"
       )
-    
-    
+
+    trigger7 = CronTrigger(
+         year="*", month="*", day="*", hour="1", minute="1", second="1"
+      )
+
     sched.add_job(sentimentfile_update,trigger=trigger)
-    
     sched.add_job(executive_count_productwise_refresh,trigger=trigger2)
     sched.add_job(excecutivecount_refresh,trigger=trigger3)
     sched.add_job(average_trend_new_refresh,trigger=trigger4)
     sched.add_job(topdistrict_playback_refresh,trigger=trigger5)  
     sched.add_job(practice___history___new___latest__refresh_,trigger=trigger6)
+    sched.add_job(active_trend_new__refresh,trigger=trigger7)
     sched.start()
     app.run(debug=True,use_reloader=False)
