@@ -1703,6 +1703,7 @@ def practice___history___new___latest_refresh(charttype):
     
 
 def practice___history___new___latest(charttype):
+    charttype=charttype.capitalize() 
     client_test = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
     db_test=client_test.compass
     data=list(db_test.cap_pipeline.aggregate([
