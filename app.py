@@ -79470,7 +79470,8 @@ def AMS_PlaybackHistoryAPI(charttype):
         uscy1['Last_Practice_Date'] = uscy1['Last_Practice_Date'].astype(np.int64)
         uscy1['Last_Practice_Date']=uscy1['Last_Practice_Date'].astype(np.int64)/int(1e6)
         cd = list(uscy1['Last_Practice_Date'].unique())
-        uscy1 = uscy1[["Last_Practice_Date","Practice_Count"]]
+        uscy1['Practice_Count_Cumsum'] = uscy1['Practice_Count'].cumsum()
+        uscy1 = uscy1[["Last_Practice_Date","Practice_Count",'Practice_Count_Cumsum']]
     #     print(uscy1.values.tolist())
     #     print(len(uscy1))
         temp={'data':uscy1.values.tolist()}
@@ -79516,7 +79517,8 @@ def AMS_PlaybackHistoryAPI(charttype):
         uscy1['Last_Practice_Date'] = uscy1['Last_Practice_Date'].astype(np.int64)
         uscy1['Last_Practice_Date']=uscy1['Last_Practice_Date'].astype(np.int64)/int(1e6)
         cd = list(uscy1['Last_Practice_Date'].unique())
-        uscy1 = uscy1[["Last_Practice_Date","Practice_Count"]]
+        uscy1['Practice_Count_Cumsum'] = uscy1['Practice_Count'].cumsum()
+        uscy1 = uscy1[["Last_Practice_Date","Practice_Count",'Practice_Count_Cumsum']]
        
         temp={'data':uscy1.values.tolist()}
     print(uscy1.Practice_Count.sum())
@@ -79524,6 +79526,150 @@ def AMS_PlaybackHistoryAPI(charttype):
     return json.dumps(temp, default =str)
 
 # AMS_PlaybackHistoryAPI("Practice")
+
+
+
+@app.route('/AMS_Login_HistoryAPI')
+def AMS_LoginHistoryAPI():
+    
+    client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
+    db=client.compass
+
+
+    ams_phase2_data=pd.DataFrame(list(db.email_logging.aggregate([
+    {'$match':{'$and':[
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"octsignup21@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aaroramay11@gmail.com",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"ams2022@innerexplorer.org",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"aarora@1gen.io",'$options':'i'}}},
+    {'RECEIVER_EMAIL':{"$not":{"$regex":"tech@innerexplorer.org",'$options':'i'}}},
+    {'MODULE_NAME':{'$regex':'phase 2','$options':'i'}} ]}},
+
+    {'$project':{
+    "_id" : 1,
+    'RECEIVER_EMAIL': 1,
+    'Total_Emails_Sent':{"$sum":1},
+    'User_Count':{"$sum":1},
+    "CREATED_DATE" : {"$dateToString":{"format":"%Y-%m-%d","date":'$CREATED_DATE'}},
+    "DESCRIPTION" :1,
+    "PURPOSE" : 1,
+    "SENDER_EMAIL" :1,
+    "MODULE_NAME" : 1
+    }},
+    ])))
+    ams_phase2_data=ams_phase2_data[ams_phase2_data['DESCRIPTION']=='Email Sent'].fillna("NO_INFO").reset_index(drop=True)
+    ams_phase2_data=ams_phase2_data[ams_phase2_data['RECEIVER_EMAIL'].notnull()]
+    email_freq = ams_phase2_data.groupby(['RECEIVER_EMAIL','User_Count', 'PURPOSE'])[['Total_Emails_Sent']].sum().reset_index()
+
+
+    ams_emails=list(ams_phase2_data['RECEIVER_EMAIL'].unique())
+    # ams_phase2_data.to_excel("ams_emails.xlsx")
+
+    TOTAL_EMAILS_SENT = len(ams_phase2_data)
+    UNIQUE_USERS = len(ams_phase2_data['RECEIVER_EMAIL'].unique())
+
+
+    ams_user_master_data=pd.DataFrame(list(db.user_master.aggregate([
+    {'$match':{'$and':[
+    {'EMAIL_ID':{'$in':ams_emails}},
+    {'ROLE_ID._id':{'$ne':ObjectId("5f155b8a3b6800007900da2b")}}
+    ]}},
+    {'$project':{
+    '_id':0,
+    'USER_ID':'$_id',
+    'EMAIL_ID':'$EMAIL_ID',
+    'sign_up':{"$dateToString":{"format": "%Y-%m-%d","date":'$CREATED_DATE'}},
+    "USER_NAME":1, 
+    "School_ID":"$schoolId._id",
+    "School_Name":"$schoolId.NAME", 
+    "CITY":"$schoolId.CITY",
+    "STATE":"$schoolId.STATE", 
+    "COUNTRY":"$schoolId.COUNTRY"
+    }}
+    ])))
+    # ams_user_master_data_1 = ams_user_master_data.drop_duplicates(keep='first')
+    ams_user_master_data_1 = ams_user_master_data
+    ams_user_master_data_1 = ams_user_master_data_1.fillna("NO_INFO")
+
+    ams_final=ams_phase2_data.merge(ams_user_master_data_1,how='left',left_on='RECEIVER_EMAIL',right_on='EMAIL_ID')
+    ams_final=ams_final[ams_final['USER_ID'].notnull()]
+    purpose_ams_final= ams_final
+
+    ams_final = ams_final.drop_duplicates(subset=["USER_ID", "EMAIL_ID"],keep='first')
+    TOTAL_EMAILS_USER_COUNT = len(ams_final.USER_ID.unique())
+    NUMBER_EMAIL_TYPES = len(purpose_ams_final.PURPOSE.unique())
+    uid = ams_final.USER_ID.to_list()
+    TOTAL_EMAILS_SENT,UNIQUE_USERS, TOTAL_EMAILS_USER_COUNT, NUMBER_EMAIL_TYPES
+
+    user_login =DataFrame(list(db.login_tracking.aggregate([
+    {"$match":
+    {
+    '$and':[
+    {'USER_ID.ROLE_ID._id' :{'$ne':ObjectId("5f155b8a3b6800007900da2b")}},
+    {'USER_ID._id':{'$in':uid}},
+    # {'USER_ID.EMAIL_ID':{'$in':ams_emails}},
+
+    {'CREATED_DATE':{'$gte':dateutil.parser.parse(str(pd.to_datetime(min(ams_final['CREATED_DATE']))))}},
+    {"USER_ID.IS_DISABLED":{"$ne":"Y"}},
+    {"USER_ID.DEVICE_USED" : {'$regex':"webApp",'$options':'i'}},
+    {"USER_ID.IS_BLOCKED":{"$ne":"Y"}},
+    {"USER_ID.INCOMPLETE_SIGNUP":{"$ne":"Y"}},
+    {'USER_ID.schoolId.BLOCKED_BY_CAP':{'$exists':False}},
+    {'USER_ID.EMAIL_ID':{'$ne':''}},
+    {'USER_ID.EMAIL_ID':{'$nin':['north5special@gmail.com','north4prek@gmail.com',
+    'north1high@gmail.com',
+    'north3ele@gmail.com',
+    'north4prek@gmail.com',
+    'north2middle@gmail.com']}},
+
+    {'USER_ID.schoolId.NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    { 'USER_ID.USER_NAME':{"$not":{"$regex":"1gen",'$options':'i'}}},
+    { 'USER_ID.USER_NAME':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"test",'$options':'i'}}},
+    {'USER_ID.EMAIL_ID':{"$not":{"$regex":"1gen",'$options':'i'}}}
+    ]}},
+    {'$group':{'_id':"$USER_ID._id",'pc':{'$sum':1},'uc':{'$addToSet':'$USER_ID._id'},
+      "LAST_LOGIN_DATE":{"$max":{"$dateToString":{"format": "%Y-%m-%d","date":'$CREATED_DATE'}}},}},
+    {'$project':{'_id':1, 'login_count':'$pc','login_user_count':{'$size':'$uc'}, "LAST_LOGIN_DATE":1}},
+    {'$sort':{'_id':1}}])))
+    user_login.sum()
+
+    login = ams_final.merge(user_login,how='right',left_on='USER_ID',right_on='_id')
+    login.shape
+
+    login = login.drop_duplicates(subset=["EMAIL_ID"],keep='first')
+
+    login = login[['PURPOSE','USER_ID', 'EMAIL_ID','sign_up', 'School_ID', 'School_Name', 'CITY', 'STATE', 
+                   'COUNTRY','login_count', 'login_user_count',"LAST_LOGIN_DATE"]]
+
+    login['LAST_LOGIN_DATE']= pd.to_datetime(login['LAST_LOGIN_DATE'], errors='coerce')
+    login=login.groupby('LAST_LOGIN_DATE')['login_count','login_user_count'].sum().reset_index()
+    login['LAST_LOGIN_DATE'] = pd.to_datetime(login['LAST_LOGIN_DATE'])
+
+    df7=pd.date_range(start=str(csy_first_date().date()), end=str(csy_first_date().date()+relativedelta(years=1)-relativedelta(days=1)))
+    df9 = pd.DataFrame(df7,columns = ["LAST_LOGIN_DATE"])
+    df9['value'] = 0
+
+    uscy1= login.merge(df9, on="LAST_LOGIN_DATE", how='right').fillna(0).sort_values(by='LAST_LOGIN_DATE')
+
+    uscy1 = uscy1[uscy1["LAST_LOGIN_DATE"] >= min(login['LAST_LOGIN_DATE']).strftime('%Y-%m-%d')] 
+    uscy1 = uscy1[uscy1["LAST_LOGIN_DATE"] <= datetime.datetime.now().strftime("%Y-%m-%d") ].reset_index(drop = True)
+    uscy1['LAST_LOGIN_DATE'] = uscy1['LAST_LOGIN_DATE'].astype(np.int64)
+    uscy1['LAST_LOGIN_DATE']=uscy1['LAST_LOGIN_DATE'].astype(np.int64)/int(1e6)
+    cd = list(uscy1['LAST_LOGIN_DATE'].unique())
+    uscy1['login_cum_sum'] = uscy1['login_count'].cumsum()
+    uscy1['usercount_cum_sum'] = uscy1['login_user_count'].cumsum()
+    uscy1 = uscy1[["LAST_LOGIN_DATE","login_user_count",'login_count','usercount_cum_sum','login_cum_sum']]
+    # print(uscy1.login_user_count.sum())
+    # print(uscy1.login_count.sum())
+    # print(len(uscy1.LAST_LOGIN_DATE))
+    temp={'data':uscy1.values.tolist()}
+# AMS_LoginHistoryAPI()
+
+
+
 
 
 
