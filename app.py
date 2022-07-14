@@ -43945,14 +43945,16 @@ def Payment_Mode(startdate,enddate):
 
 @app.route('/revenauetable/<type>')
 def revenue_table(type):
-    df2=pd.read_csv(""+type+".csv")
+    print("1")
+    df2=pd.read_csv(""+type+".csv").fillna("")
     df2.sort_values(by=['Last_Payment_Date'], inplace=True, ascending=False)
     if "export" in request.args:
+        print("Happyif")
         try:
-            df1=df2[['school_name','country','State','city','Practice_Count',
-                    'Practice_Count_csy','Practice_Count_lsy','usercount',
-                    'Created_date','last_practice_date','Subscription_expire_date','label']]
+            df1=df2[['TYPE_OF_PAYMENT', 'USER_NAME', 'EMAIL_ID', 'DEVICE_USED',
+                   'MODE_OF_PAYMENT', 'Last_Payment_Date', 'Payment_Amount']]
             csv = df1.to_csv(index=False)
+            
             return Response(
                 csv,
                 mimetype="text/csv",
@@ -43961,7 +43963,9 @@ def revenue_table(type):
         except:
             return jsonify("Unauthorized Access")   
     else:
+        print("Happy else")
         temp={"data":df2.values.tolist()}
+    print(temp)
     return json.dumps(temp)
 
 

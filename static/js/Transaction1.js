@@ -544,6 +544,7 @@ function createDynamic(url) {
         },
     }
     $.ajax(settings).done(function(response) {
+        console.log(response);
         var data1 = JSON.parse(response);
 
         $('#next').prepend('<table class="table table-striped custab table-fixed" id = "dataTable" ><thead ><tr><th>TYPE OF PAYMENT</th><th>USER NAME</th><th>EMAIL ID</th><th>DEVICE USED</th><th>MODE OF PAYMENT</th><th>PAYMENT DATE</th><th>AMOUNT</th></tr ></thead ><tbody></tbody>');
