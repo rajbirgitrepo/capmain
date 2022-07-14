@@ -80329,11 +80329,30 @@ if __name__ == '__main__':
          year="*", month="*", day="*", hour="6", minute="1", second="1"
       )
     trigger2 = CronTrigger(
-         year="*", month="*", day="*", hour="1", minute="1", second="1"
+         year="*", month="*", day="*", hour="1", minute="10", second="1"
       )
     trigger3 = CronTrigger(
-         year="*", month="*", day="*", hour="1", minute="1", second="1"
+         year="*", month="*", day="*", hour="1", minute="20", second="1"
       )
+<<<<<<< Updated upstream
+=======
+    trigger4 = CronTrigger(
+         year="*", month="*", day="*", hour="1", minute="30", second="1"
+      )
+    trigger5 = CronTrigger(
+         year="*", month="*", day="*", hour="1", minute="40", second="1"
+      )
+    trigger6 = CronTrigger(
+         year="*", month="*", day="*", hour="1", minute="50", second="1"
+      )
+
+    trigger7 = CronTrigger(
+         year="*", month="*", day="*", hour="1", minute="55", second="40"
+      )
+    trigger8 = CronTrigger(
+         year="*", month="*", day="*", hour="1", minute="35", second="20"
+      )
+>>>>>>> Stashed changes
     sched.add_job(sentimentfile_update,trigger=trigger)
     sched.add_job(executive_count_productwise_refresh,trigger=trigger2)
     sched.add_job(excecutivecount_refresh,trigger=trigger3)
