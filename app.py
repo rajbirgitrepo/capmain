@@ -136,6 +136,15 @@ def average_trend_new__():
     returnval=average_trend_new_()
     return returnval
 
+@app.route('/averagetrend_refresh/')
+def average_trend_new__refresh():
+    returnval=average_trend_new_refresh()
+    return returnval
+
+@app.route('/topdistrictplayback_refresh')
+def topdistrict_playback_refresh():
+    returnval=topdistrict_playback_refresh()
+    return returnval
 
 @app.route('/topdistrictplayback')
 def topdistrict_playback_():
@@ -80013,9 +80022,16 @@ if __name__ == '__main__':
     trigger3 = CronTrigger(
          year="*", month="*", day="*", hour="1", minute="1", second="1"
       )
+    trigger4 = CronTrigger(
+         year="*", month="*", day="*", hour="1", minute="1", second="1"
+      )
+    trigger5 = CronTrigger(
+         year="*", month="*", day="*", hour="1", minute="1", second="1"
+      )
     sched.add_job(sentimentfile_update,trigger=trigger)
     sched.add_job(executive_count_productwise_refresh,trigger=trigger2)
     sched.add_job(excecutivecount_refresh,trigger=trigger3)
-
+    sched.add_job(average_trend_new_refresh,trigger=trigger4)
+    sched.add_job(topdistrict_playback_refresh,trigger=trigger5)  
     sched.start()
     app.run(debug=True,use_reloader=False)

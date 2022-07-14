@@ -1671,7 +1671,9 @@ def practice___history___new___latest(charttype):
     
 # practice___history___new___latest("Playback")
 
-def average_trend_new_():
+
+
+def average_trend_new_refresh():
     collection = db.audio_track_master
     df0 = DataFrame(list(collection.aggregate([
         {"$match":{
@@ -1705,8 +1707,8 @@ def average_trend_new_():
     df1.rename(columns = { '_id': 'Month'}, inplace = True)
     d = dict(enumerate(calendar.month_abbr))    # to convert monthnumber of dataframe into monthname
     df1['Month'] = df1['Month'].map(d)
-    print('LSY:', LSY_Date)
-    print('CSY',csy_first_date())
+#     print('LSY:', LSY_Date)
+#     print('CSY',csy_first_date())
     # print(df1)
     df2 = DataFrame(list(collection.aggregate([
         {"$match":{
@@ -1742,10 +1744,52 @@ def average_trend_new_():
     teacher_CSY=data['teacher_CSY'].tolist()
    
     temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY}]
+    
+    client = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+    import timeago, datetime
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    x=now.strftime("%Y-%m-%d %H:%M:%S")
+    update_date={"date":x}
+    temp[0]["update_date"]=update_date['date']
+    mydb = client["compass"]
+    mycol = mydb["cap_pipeline"]
+    
+    myquery = {"dashboard":"executive"}
+    newvalues = { "$set": { "average_trend_new":temp} }
 
-    return json.dumps(temp)
+    mycol.update_one(myquery, newvalues)
+    
+    
+    
 
-def topdistrict_playback():
+    return json.dumps({"success":1,"updated":"True"})
+
+
+
+def average_trend_new_():
+    client_test = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+    db_test=client_test.compass
+#     db_test.cap_pipeline('schoolId._id',{'$and':testcommon_cond()['usermaster_cond']+    
+#     [{ "schoolId._id":{'$exists': True}}]})
+    
+    data=list(db_test.cap_pipeline.aggregate([
+    {"$match":
+     {'$and':[
+            {'dashboard':"executive"},
+                      ]}},
+    {'$project':{'_id':0, 'average_trend_new':1}}
+
+    ]))
+#     print(data)
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    x=now.strftime("%Y-%m-%d %H:%M:%S")
+#     print(x)
+    
+    dd=timeago.format(data[0]['average_trend_new'][0]['update_date'],x)
+    data[0]['average_trend_new'][0]['update']="Updated "+dd
+    return json.dumps(data[0]['average_trend_new'])
+
+def topdistrict_playback_refresh():
     from datetime import datetime
     DF1=DataFrame(list(db.school_master.aggregate([
         {"$match":
@@ -1807,8 +1851,49 @@ def topdistrict_playback():
     Playbacks=dfff['complete practice'].tolist()
 
     data={'District':District,'Playbacks':Playbacks}
-    return json.dumps(data)
+    
+    client = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+    import timeago, datetime
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    x=now.strftime("%Y-%m-%d %H:%M:%S")
+    update_date={"date":x}
+    data["update_date"]=update_date['date']
+    mydb = client["compass"]
+    mycol = mydb["cap_pipeline"]
+    
+    myquery = {"dashboard":"executive"}
+    newvalues = { "$set": { "topdistrict_playback":data} }
 
+    mycol.update_one(myquery, newvalues)
+    
+    
+    
+    
+    return json.dumps({"success":1,"updated":"True"})
+
+
+def topdistrict_playback():
+    client_test = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+    db_test=client_test.compass
+#     db_test.cap_pipeline('schoolId._id',{'$and':testcommon_cond()['usermaster_cond']+    
+#     [{ "schoolId._id":{'$exists': True}}]})
+    
+    data=list(db_test.cap_pipeline.aggregate([
+    {"$match":
+     {'$and':[
+            {'dashboard':"executive"},
+                      ]}},
+    {'$project':{'_id':0, 'topdistrict_playback':1}}
+
+    ]))
+#     print(data)
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    x=now.strftime("%Y-%m-%d %H:%M:%S")
+#     print(x)
+    
+    dd=timeago.format(data[0]['topdistrict_playback']['update_date'],x)
+    data[0]['topdistrict_playback']['update']="Updated "+dd
+    return json.dumps(data[0]['topdistrict_playback'])
 
 def schoolrating_csy():
     collection = db.audio_feedback
