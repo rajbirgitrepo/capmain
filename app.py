@@ -120,6 +120,12 @@ def practice_trendnew__(charttype):
     returnval=practice_trendnew_(charttype)
     return returnval
 
+@app.route('/practicetrendnew_refresh')
+def practice_trendnew__refresh():
+    returnval=practice_trendnew_refresh("Practice")
+    returnval=practice_trendnew_refresh("Playback")
+    return returnval
+
 
 @app.route('/activetrendnew/<charttype>')
 def active_trend_new__(charttype):
@@ -128,7 +134,7 @@ def active_trend_new__(charttype):
 
 @app.route('/activetrendnew_refresh')
 def active_trend_new__refresh():
-    returnval=active_trend_new_refresh("practice")
+    returnval=active_trend_new_refresh("Practice")
     returnval2=active_trend_new_refresh("Playback")
     return returnval2
 
@@ -80051,7 +80057,9 @@ if __name__ == '__main__':
     trigger7 = CronTrigger(
          year="*", month="*", day="*", hour="1", minute="1", second="1"
       )
-
+    trigger8 = CronTrigger(
+         year="*", month="*", day="*", hour="1", minute="1", second="1"
+      )
     sched.add_job(sentimentfile_update,trigger=trigger)
     sched.add_job(executive_count_productwise_refresh,trigger=trigger2)
     sched.add_job(excecutivecount_refresh,trigger=trigger3)
@@ -80059,5 +80067,7 @@ if __name__ == '__main__':
     sched.add_job(topdistrict_playback_refresh,trigger=trigger5)  
     sched.add_job(practice___history___new___latest__refresh_,trigger=trigger6)
     sched.add_job(active_trend_new__refresh,trigger=trigger7)
+    sched.add_job(practice_trendnew__refresh,trigger=trigger8)
+    
     sched.start()
     app.run(debug=True,use_reloader=False)
