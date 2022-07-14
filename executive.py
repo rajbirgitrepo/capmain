@@ -661,7 +661,7 @@ def practice_trendnew_(charttype):
 
 # practice_trendnew_("Playback")
 
-def active_trend_new_(charttype):
+def active_trend_new_refresh(charttype):
     collection = db.audio_track_master
     from datetime import datetime
     
@@ -872,7 +872,26 @@ def active_trend_new_(charttype):
         temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},
               {'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY},{'bargoogle': google_CSY}]
 
-        return json.dumps(temp)
+        
+        
+        client = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+        import timeago, datetime
+        now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+        x=now.strftime("%Y-%m-%d %H:%M:%S")
+        update_date={"date":x}
+        temp[0]["update_date"]=update_date['date']
+        mydb = client["compass"]
+        mycol = mydb["cap_pipeline"]
+
+        myquery = {"dashboard":"executive"}
+        newvalues = { "$set": { "active_trend_new_."+charttype:temp} }
+
+        mycol.update_one(myquery, newvalues)
+        
+        
+        return json.dumps({"updated":"true","success":1})
+        
+#         return json.dumps(temp)
     
     else:
         df0 = DataFrame(list(collection.aggregate([
@@ -1060,7 +1079,48 @@ def active_trend_new_(charttype):
         google_CSY=data['google_CSY'].tolist()
         temp=[{'Month':Month,'curve':TOTAL_LSY,'curve_LYTOLY':TOTAL_LSYTOLSY,'bar':teacher_CSY},{'bar2':parents_CSY},
               {'bars':schoology_CSY},{'barc': clever_CSY},{'barcan': canvas_CSY},{'bargoogle': google_CSY}]
+        
+        client = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+        import timeago, datetime
+        now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+        x=now.strftime("%Y-%m-%d %H:%M:%S")
+        update_date={"date":x}
+        temp[0]["update_date"]=update_date['date']
+        mydb = client["compass"]
+        mycol = mydb["cap_pipeline"]
+
+        myquery = {"dashboard":"executive"}
+        newvalues = { "$set": { "active_trend_new_."+charttype:temp} }
+
+        mycol.update_one(myquery, newvalues)
+        
+        
+        return json.dumps({"updated":"true","success":1})
+        
+        
         return json.dumps(temp)
+
+def active_trend_new_(charttype):
+    charttype=charttype.lower() 
+    client_test = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
+    db_test=client_test.compass
+    data=list(db_test.cap_pipeline.aggregate([
+    {"$match":
+     {'$and':[
+            {'dashboard':"executive"},
+                      ]}},
+    {'$project':{'_id':0, 'active_trend_new_.'+charttype:1}}
+
+    ]))
+#     print(data)
+    now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
+    x=now.strftime("%Y-%m-%d %H:%M:%S")    
+    dd=timeago.format(data[0]['active_trend_new_'][charttype][0]['update_date'],x)
+    data[0]['active_trend_new_'][charttype][0]['update']="Updated "+dd
+    return json.dumps(data[0]['active_trend_new_'][charttype])    
+    
+    
+
 
 
 # active_trend_new_("Playback")
