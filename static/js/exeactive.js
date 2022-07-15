@@ -17,16 +17,89 @@ $(document).ready(function(){
             "url": url
         }),
         success: function() {
-            console.log("Success")
+            // console.log("Success")
         },
         error: function() {
-            console.log("Error")
+            // console.log("Error")
         }
     };
     $.ajax(settings).done(function(response) {
-        console.log(response);
+        // console.log(response);
     });
 });
+
+
+function refreshCard1(){
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "executivecount_productwise_refresh",
+        method: "GET",
+        success: function() {
+            // console.log("api success")
+        },
+        error: function(){
+            // console.log("Errors");
+        }
+    };
+    $.ajax(settings).done(function(response){
+        console.log(response);
+    });
+}
+
+function refreshCard3(){
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "excecutivecount_refresh",
+        method: "GET",
+        success: function() {
+            // console.log("api success")
+        },
+        error: function(){
+            // console.log("Errors");
+        }
+    };
+    $.ajax(settings).done(function(response){
+        console.log(response);
+    });
+}
+
+function refreshPlaybackTrend(){
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "practicetrendnew_refresh",
+        method: "GET",
+        success: function() {
+            // console.log("api success")
+        },
+        error: function(){
+            // console.log("Errors");
+        }
+    };
+    $.ajax(settings).done(function(response){
+        console.log(response);
+    });
+}
+
+function refreshPlaybackActive(){
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "activetrendnew_refresh",
+        method: "GET",
+        success: function() {
+            // console.log("api success")
+        },
+        error: function(){
+            // console.log("Errors");
+        }
+    };
+    $.ajax(settings).done(function(response){
+        console.log(response);
+    });
+}
 
 
 playbackTrendChart2('playback', 'Playback')

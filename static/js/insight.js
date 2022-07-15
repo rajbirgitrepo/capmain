@@ -281,7 +281,6 @@ function ShowInsights(){
     modal3.style.display = "block";
 }
 
-
 // API for showing insights inside dropdown
 var settings = {
     "async": true,

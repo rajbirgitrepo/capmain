@@ -56,7 +56,7 @@ function cards2(URL) {
     $('#btnExport').show();
     createDynamic2(URL);
 }
-cards2('/revenauetable/revenaue');
+// cards2('/revenauetable/revenaue');
 $(function() {
     $("#datepicker").datepicker(
 
@@ -126,6 +126,7 @@ var e = "2021-07-01";
 var f = currYear + "-" + currMonth + "-" + currDate;
 var gif = document.getElementById("gifcards");
 gif.style.display = "block";
+console.log(e,f)
 charts(e, f);
 cardscount(e, f);
 $("#stardate").text(e);
@@ -135,7 +136,7 @@ $("#tod").text(f);
 
 
 function cardscount(a, b) {
-    console.log("/modetype/" + a + "/" + b)
+    // console.log("/modetype/" + a + "/" + b)
     var settings = {
         async: true,
         crossDomain: true,
@@ -149,7 +150,7 @@ function cardscount(a, b) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log("this is total");
-        console.log("/modetype/" + a + "/" + b);
+        // console.log("/modetype/" + a + "/" + b);
         const total =
             dataa.amount.Payment_Mode_Amount[0] +
             dataa.amount.Payment_Mode_Amount[1] +
