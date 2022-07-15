@@ -273,12 +273,12 @@ $.ajax(settings).done(function(response) {
 
 var modal3 = document.getElementById("myModal3");
 
-function close(){
-    modal3.style.display = "none";
-}
-
 function ShowInsights(){
     modal3.style.display = "block";
+}
+
+function closed(){
+    modal3.style.display = "none";
 }
 
 // API for showing insights inside dropdown
@@ -295,13 +295,13 @@ $.ajax(settings).done(function(response){
         var insights = dataa[i].Insights;
         var observations = dataa[i].Observations;
         // console.log(insights, observations);
-        $('#accordionExample').append('<div class="col-md-6"><div class="borderBottom present"><a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseOne'+i+'" aria-expanded="true" aria-controls="collapseOne"> <h4 class="insight-headings">'+insights+'</h4></a><div id="collapseOne'+i+'" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample"></div></div></div>');
+        $('#accordionExample').append('<div class="borderBottom present"><a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseOne'+i+'" aria-expanded="true" aria-controls="collapseOne"> <h4 class="insight-headings">'+insights+'</h4></a><div id="collapseOne'+i+'" class="collapse px-3" aria-labelledby="headingOne" data-parent="#accordionExample"></div></div>');
 
         for(j = 0; j < observations.length; j++){
             // console.log(observations[j]);
             $("#collapseOne"+i).append('<p class="insight-text">'+observations[j]+'</p>');  
         }
-        $("#collapseOne"+i).append('<div class="text-right"><a href="#section-1'+i+'" class="anchor-link">View Charts</a></div>');
+        // $("#collapseOne"+i).append('<div class="text-right"><a href="#section-1'+i+'" class="anchor-link">View Charts</a></div>');
     }
 });
 
