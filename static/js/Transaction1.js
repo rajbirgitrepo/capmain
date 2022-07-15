@@ -56,7 +56,7 @@ function cards2(URL) {
     $('#btnExport').show();
     createDynamic2(URL);
 }
-// cards2('/revenauetable/revenaue');
+cards2('/revenauetable/revenaue');
 $(function() {
     $("#datepicker").datepicker(
 
@@ -150,7 +150,7 @@ function cardscount(a, b) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         console.log("this is total");
-        // console.log("/modetype/" + a + "/" + b);
+        console.log("/modetype/" + a + "/" + b);
         const total =
             dataa.amount.Payment_Mode_Amount[0] +
             dataa.amount.Payment_Mode_Amount[1] +
