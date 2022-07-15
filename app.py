@@ -15173,11 +15173,24 @@ def district_count_cards(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
-
+    
+    
+    df000 = DataFrame(list(db.school_master.aggregate([
+    {"$match":
+    {'$and': [
+    {"IS_PORTAL": "Y"},
+    {"CATEGORY":{'$regex':district, '$options':'i'}},
+    ]}},
+    {'$project':{'_id':'$_id','schoolName':"$NAME",'CATEGORY':1}},
+    ])))
+    schoolCount = len(df000._id.to_list())
+    print(schoolCount)
+    
+    
 
     df1_1 = DataFrame(list(collection1.aggregate([
     {"$match":
@@ -15218,6 +15231,7 @@ def district_count_cards(districtid,startdate,enddate):
     {'$group':{'_id':'','ID':{'$addToSet':'$schoolId._id'},'dn':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
     {'$project':{'_id':1,'school_count':{'$size':'$ID'},'district':'$dn'}}
     ])))
+    print(df1)
 
 
     df10 = DataFrame(list(collection4.aggregate([ {"$match":{"CATEGORY":{'$regex':district, '$options':'i'}}},
@@ -15750,7 +15764,7 @@ def district_count_cards(districtid,startdate,enddate):
         engdschool_csy=[0]
     sc=[0]
     try:
-        sc=df1['school_count']
+        sc=schoolCount
     except:
         sc=[0]
 
@@ -15909,7 +15923,7 @@ def district_count_cards(districtid,startdate,enddate):
         mmt_canvas=[0]  
 
 
-    data={"schoolcount":str(sc[0]),"engd_teacher_lsy":str(engd_teacher_lsy[0]),"engd_teacher_csy":str(engd_teacher_csy[0]),
+    data={"schoolcount":str(sc),"engd_teacher_lsy":str(engd_teacher_lsy[0]),"engd_teacher_csy":str(engd_teacher_csy[0]),
           "engd_parent_csy":str(engd_parent_csy[0]),"engd_parent_lsy":str(engd_parent_lsy[0]),
           "schoology_eng_csy":str(schoology_eng_csy[0]), "clever_eng_csy":str(clever_eng_csy[0]),
           "canvas_eng_csy":str(canvas_eng_csy[0]),
