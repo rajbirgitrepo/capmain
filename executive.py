@@ -273,7 +273,7 @@ def excecutivecount___():
     now = datetime.datetime.now() + datetime.timedelta(seconds = 60 * 3.4)
     x=now.strftime("%Y-%m-%d %H:%M:%S")
     dd=timeago.format(data[0]['excecutivecount_refresh']['update_date'],x)
-    data[0]['excecutivecount_refresh']['update']=dd
+    data[0]['excecutivecount_refresh']['update']="Updated"+dd
     return json.dumps(data[0]['excecutivecount_refresh'])
 
 def practice_trendnew_refresh(charttype):
