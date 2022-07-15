@@ -30,12 +30,17 @@ $(document).ready(function(){
 
 
 function refreshCard1(){
+    var RefreshBtn1 = document.getElementById("refresh1");
+    RefreshBtn1.classList.add("loading");
+    
     var settings = {
         async: true,
         crossDomain: true,
-        url: "executivecount_productwise_refresh",
+        url: "/executivecount_productwise_refresh",
         method: "GET",
-        success: function() {
+        success: function(){
+            RefreshBtn1.classList.remove("loading");
+            location.reload(true);
             // console.log("api success")
         },
         error: function(){
@@ -47,13 +52,41 @@ function refreshCard1(){
     });
 }
 
-function refreshCard3(){
+function refreshCard2(){
+    var RefreshBtn2 = document.getElementById("refresh2");
+    RefreshBtn2.classList.add("loading");
+    
     var settings = {
         async: true,
         crossDomain: true,
-        url: "excecutivecount_refresh",
+        url: "/executivecount_productwise_refresh",
+        method: "GET",
+        success: function(){
+            RefreshBtn2.classList.remove("loading");
+            location.reload(true);
+            // console.log("api success")
+        },
+        error: function(){
+            // console.log("Errors");
+        }
+    };
+    $.ajax(settings).done(function(response){
+        console.log(response);
+    });
+}
+
+
+function refreshCard3(){
+    var RefreshBtn3 = document.getElementById("refresh3");
+    RefreshBtn3.classList.add("loading");
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/excecutivecount_refresh",
         method: "GET",
         success: function() {
+            RefreshBtn2.classList.remove("loading");
+            location.reload(true);
             // console.log("api success")
         },
         error: function(){
@@ -66,12 +99,16 @@ function refreshCard3(){
 }
 
 function refreshPlaybackTrend(){
+    var RefreshBtn = document.getElementById("refreshChart1");
+    RefreshBtn.classList.add("loading");
     var settings = {
         async: true,
         crossDomain: true,
-        url: "practicetrendnew_refresh",
+        url: "/practicetrendnew_refresh",
         method: "GET",
         success: function() {
+            RefreshBtn.classList.remove("loading");
+            location.reload(true);
             // console.log("api success")
         },
         error: function(){
@@ -84,12 +121,16 @@ function refreshPlaybackTrend(){
 }
 
 function refreshPlaybackActive(){
+    var RefreshBtn = document.getElementById("refreshChart2");
+    RefreshBtn.classList.add("loading");
     var settings = {
         async: true,
         crossDomain: true,
-        url: "activetrendnew_refresh",
+        url: "/activetrendnew_refresh",
         method: "GET",
         success: function() {
+            RefreshBtn.classList.remove("loading");
+            location.reload(true);
             // console.log("api success")
         },
         error: function(){
@@ -100,6 +141,74 @@ function refreshPlaybackActive(){
         console.log(response);
     });
 }
+
+function refreshHistoryChart(){
+    var RefreshBtn = document.getElementById("refreshChart3");
+    RefreshBtn.classList.add("loading");
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/practicehistorychartlatest_refresh",
+        method: "GET",
+        success: function() {
+            RefreshBtn.classList.remove("loading");
+            location.reload(true);
+            // console.log("api success")
+        },
+        error: function(){
+            // console.log("Errors");
+        }
+    };
+    $.ajax(settings).done(function(response){
+        console.log(response);
+    });
+}
+
+function refreshAveragePlaybackChart(){
+    var RefreshBtn = document.getElementById("refreshChart4");
+    RefreshBtn.classList.add("loading");
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/averagetrend_refresh",
+        method: "GET",
+        success: function() {
+            RefreshBtn.classList.remove("loading");
+            location.reload(true);
+            // console.log("api success")
+        },
+        error: function(){
+            // console.log("Errors");
+        }
+    };
+    $.ajax(settings).done(function(response){
+        console.log(response);
+    });
+}
+
+
+function refreshTopDistrictChart(){
+    var RefreshBtn = document.getElementById("refreshChart5");
+    RefreshBtn.classList.add("loading");
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "/topdistrictplayback_refresh",
+        method: "GET",
+        success: function() {
+            RefreshBtn.classList.remove("loading");
+            location.reload(true);
+            // console.log("api success")
+        },
+        error: function(){
+            // console.log("Errors");
+        }
+    };
+    $.ajax(settings).done(function(response){
+        console.log(response);
+    });
+}
+
 
 
 playbackTrendChart2('playback', 'Playback')
@@ -408,7 +517,6 @@ function playbackTrendChart3(selectValue3, tx) {
         url: "/practicehistorychartlatest/" + selectValue3,
         method: "GET",
         success: function() {
-            $("#gifload").hide();
             // console.log("api success")
         },
         error: function(){
@@ -784,7 +892,7 @@ $.ajax(settings).done(function(response) {
             },
         },
         title: {
-            text: 'Sentiment Percentage CSY'
+            text: 'Sentiment Percentage'
         },
         credits: {
             enabled: false,
