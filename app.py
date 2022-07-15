@@ -44004,19 +44004,22 @@ def revenue_table(type):
 
 @app.route('/revenaueyearly')
 def revenue_yearly():
+    from datetime import date
+
     today = date.today()
+
+# dd/mm/YY
     d1 = today.strftime("%Y-%m-%d")
     print("d1 =", d1)
 
-    Payment_Mode_Yearly('2017-07-01',d1)
-    df=pd.read_csv("revenaue_overall_.csv")
+    Payment_Mode('2017-07-01',d1)
+    df=pd.read_csv("revenaue.csv")
 #     df = df[df.TYPE_OF_PAYMENT != 'MOBILE']
     df['Last_Payment_Date'] = pd.to_datetime(df['Last_Payment_Date'])
     df['Payment_Amount'] = (df['Payment_Amount']).round()
 
 
-    df['label'] = np.where(df['Last_Payment_Date']>= '2022-07-01', '2022-2023', '2021-2022')
-    df.loc[(df['Last_Payment_Date']>='2020-07-01') & (df['Last_Payment_Date']< '2021-07-01'), 'label']='2020-2021'
+    df['label'] = np.where(df['Last_Payment_Date']>= '2021-07-01', '2021-2022', '2020-2021')
     df.loc[(df['Last_Payment_Date']>='2019-07-01') & (df['Last_Payment_Date']< '2020-07-01'), 'label']='2019-2020'
     df.loc[(df['Last_Payment_Date']>='2018-07-01') & (df['Last_Payment_Date']< '2019-07-01'), 'label']='2018-2019'
     df.loc[(df['Last_Payment_Date']>='2017-07-01') & (df['Last_Payment_Date']< '2018-07-01'), 'label']='2017-2018'
@@ -79699,6 +79702,7 @@ def AMS_LoginHistoryAPI():
     # print(uscy1.login_count.sum())
     # print(len(uscy1.LAST_LOGIN_DATE))
     temp={'data':uscy1.values.tolist()}
+    return json.dumps(temp, default =str)
 # AMS_LoginHistoryAPI()
 
 
