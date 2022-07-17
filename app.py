@@ -79524,7 +79524,9 @@ def AMS_PlaybackHistoryAPI(charttype):
         uscy1 = uscy1[["Last_Practice_Date","Practice_Count",'Practice_Count_Cumsum']]
     #     print(uscy1.values.tolist())
     #     print(len(uscy1))
-        temp={'data':uscy1.values.tolist()}
+        temp={'Practice_Count':uscy1[["Last_Practice_Date","Practice_Count"]].values.tolist(),
+              'Practice_Count_Cumsum':uscy1[["Last_Practice_Date",'Practice_Count_Cumsum']].values.tolist()
+             }
 
     else:
 
@@ -79570,9 +79572,11 @@ def AMS_PlaybackHistoryAPI(charttype):
         uscy1['Practice_Count_Cumsum'] = uscy1['Practice_Count'].cumsum()
         uscy1 = uscy1[["Last_Practice_Date","Practice_Count",'Practice_Count_Cumsum']]
        
-        temp={'data':uscy1.values.tolist()}
-    print(uscy1.Practice_Count.sum())
-    print(len(uscy1))
+        temp={'Practice_Count':uscy1[["Last_Practice_Date","Practice_Count"]].values.tolist(),
+              'Practice_Count_Cumsum':uscy1[["Last_Practice_Date",'Practice_Count_Cumsum']].values.tolist()
+             }
+    # print(uscy1.Practice_Count.sum())
+    # print(len(uscy1))
     return json.dumps(temp, default =str)
 
 # AMS_PlaybackHistoryAPI("Practice")
