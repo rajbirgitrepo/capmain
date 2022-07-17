@@ -79715,7 +79715,10 @@ def AMS_LoginHistoryAPI():
     # print(uscy1.login_user_count.sum())
     # print(uscy1.login_count.sum())
     # print(len(uscy1.LAST_LOGIN_DATE))
-    temp={'data':uscy1.values.tolist()}
+    temp={'login_user_count':uscy1[["LAST_LOGIN_DATE","login_user_count"]].values.tolist(),
+         'login_count':uscy1[["LAST_LOGIN_DATE",'login_count']].values.tolist(),
+         'usercount_cum_sum':uscy1[["LAST_LOGIN_DATE",'usercount_cum_sum']].values.tolist(),
+         'login_cum_sum':uscy1[["LAST_LOGIN_DATE",'login_cum_sum']].values.tolist()}
     return json.dumps(temp, default =str)
 # AMS_LoginHistoryAPI()
 
