@@ -15173,11 +15173,24 @@ def district_count_cards(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
-
+    
+    
+    df000 = DataFrame(list(db.school_master.aggregate([
+    {"$match":
+    {'$and': [
+    {"IS_PORTAL": "Y"},
+    {"CATEGORY":{'$regex':district, '$options':'i'}},
+    ]}},
+    {'$project':{'_id':'$_id','schoolName':"$NAME",'CATEGORY':1}},
+    ])))
+    schoolCount = len(df000._id.to_list())
+    print(schoolCount)
+    
+    
 
     df1_1 = DataFrame(list(collection1.aggregate([
     {"$match":
@@ -15218,6 +15231,7 @@ def district_count_cards(districtid,startdate,enddate):
     {'$group':{'_id':'','ID':{'$addToSet':'$schoolId._id'},'dn':{'$first':'$DISTRICT_ID.DISTRICT_NAME'}}},
     {'$project':{'_id':1,'school_count':{'$size':'$ID'},'district':'$dn'}}
     ])))
+    print(df1)
 
 
     df10 = DataFrame(list(collection4.aggregate([ {"$match":{"CATEGORY":{'$regex':district, '$options':'i'}}},
@@ -15750,7 +15764,7 @@ def district_count_cards(districtid,startdate,enddate):
         engdschool_csy=[0]
     sc=[0]
     try:
-        sc=df1['school_count']
+        sc=schoolCount
     except:
         sc=[0]
 
@@ -15909,7 +15923,7 @@ def district_count_cards(districtid,startdate,enddate):
         mmt_canvas=[0]  
 
 
-    data={"schoolcount":str(sc[0]),"engd_teacher_lsy":str(engd_teacher_lsy[0]),"engd_teacher_csy":str(engd_teacher_csy[0]),
+    data={"schoolcount":str(sc),"engd_teacher_lsy":str(engd_teacher_lsy[0]),"engd_teacher_csy":str(engd_teacher_csy[0]),
           "engd_parent_csy":str(engd_parent_csy[0]),"engd_parent_lsy":str(engd_parent_lsy[0]),
           "schoology_eng_csy":str(schoology_eng_csy[0]), "clever_eng_csy":str(clever_eng_csy[0]),
           "canvas_eng_csy":str(canvas_eng_csy[0]),
@@ -44004,19 +44018,22 @@ def revenue_table(type):
 
 @app.route('/revenaueyearly')
 def revenue_yearly():
+    from datetime import date
+
     today = date.today()
+
+# dd/mm/YY
     d1 = today.strftime("%Y-%m-%d")
     print("d1 =", d1)
 
-    Payment_Mode_Yearly('2017-07-01',d1)
-    df=pd.read_csv("revenaue_overall_.csv")
+    Payment_Mode('2017-07-01',d1)
+    df=pd.read_csv("revenaue.csv")
 #     df = df[df.TYPE_OF_PAYMENT != 'MOBILE']
     df['Last_Payment_Date'] = pd.to_datetime(df['Last_Payment_Date'])
     df['Payment_Amount'] = (df['Payment_Amount']).round()
 
 
-    df['label'] = np.where(df['Last_Payment_Date']>= '2022-07-01', '2022-2023', '2021-2022')
-    df.loc[(df['Last_Payment_Date']>='2020-07-01') & (df['Last_Payment_Date']< '2021-07-01'), 'label']='2020-2021'
+    df['label'] = np.where(df['Last_Payment_Date']>= '2021-07-01', '2021-2022', '2020-2021')
     df.loc[(df['Last_Payment_Date']>='2019-07-01') & (df['Last_Payment_Date']< '2020-07-01'), 'label']='2019-2020'
     df.loc[(df['Last_Payment_Date']>='2018-07-01') & (df['Last_Payment_Date']< '2019-07-01'), 'label']='2018-2019'
     df.loc[(df['Last_Payment_Date']>='2017-07-01') & (df['Last_Payment_Date']< '2018-07-01'), 'label']='2017-2018'
@@ -79381,7 +79398,7 @@ def AMS_Actice_Users_TableAPI():
 
 
 
-@app.route('/AMS_Playback_HistoryAPI')
+@app.route('/AMS_Playback_HistoryAPI/<charttype>')
 def AMS_PlaybackHistoryAPI(charttype): 
 
     client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
@@ -79507,7 +79524,9 @@ def AMS_PlaybackHistoryAPI(charttype):
         uscy1 = uscy1[["Last_Practice_Date","Practice_Count",'Practice_Count_Cumsum']]
     #     print(uscy1.values.tolist())
     #     print(len(uscy1))
-        temp={'data':uscy1.values.tolist()}
+        temp={'Practice_Count':uscy1[["Last_Practice_Date","Practice_Count"]].values.tolist(),
+              'Practice_Count_Cumsum':uscy1[["Last_Practice_Date",'Practice_Count_Cumsum']].values.tolist()
+             }
 
     else:
 
@@ -79553,9 +79572,11 @@ def AMS_PlaybackHistoryAPI(charttype):
         uscy1['Practice_Count_Cumsum'] = uscy1['Practice_Count'].cumsum()
         uscy1 = uscy1[["Last_Practice_Date","Practice_Count",'Practice_Count_Cumsum']]
        
-        temp={'data':uscy1.values.tolist()}
-    print(uscy1.Practice_Count.sum())
-    print(len(uscy1))
+        temp={'Practice_Count':uscy1[["Last_Practice_Date","Practice_Count"]].values.tolist(),
+              'Practice_Count_Cumsum':uscy1[["Last_Practice_Date",'Practice_Count_Cumsum']].values.tolist()
+             }
+    # print(uscy1.Practice_Count.sum())
+    # print(len(uscy1))
     return json.dumps(temp, default =str)
 
 # AMS_PlaybackHistoryAPI("Practice")
@@ -79698,7 +79719,11 @@ def AMS_LoginHistoryAPI():
     # print(uscy1.login_user_count.sum())
     # print(uscy1.login_count.sum())
     # print(len(uscy1.LAST_LOGIN_DATE))
-    temp={'data':uscy1.values.tolist()}
+    temp={'login_user_count':uscy1[["LAST_LOGIN_DATE","login_user_count"]].values.tolist(),
+         'login_count':uscy1[["LAST_LOGIN_DATE",'login_count']].values.tolist(),
+         'usercount_cum_sum':uscy1[["LAST_LOGIN_DATE",'usercount_cum_sum']].values.tolist(),
+         'login_cum_sum':uscy1[["LAST_LOGIN_DATE",'login_cum_sum']].values.tolist()}
+    return json.dumps(temp, default =str)
 # AMS_LoginHistoryAPI()
 
 

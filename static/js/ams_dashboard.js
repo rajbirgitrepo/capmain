@@ -275,12 +275,12 @@ $.ajax(settings).done(function(response) {
 var settings = {
     "async": true,
     "crossDomain": true,
-    "url": '/AMS_pracphasesecond',
+    "url": '/AMS_Playback_HistoryAPI',
     "method": "GET"
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
-    // console.log(dataa, 'Playback Trend'); 
+    console.log(dataa, 'Playback Trend'); 
     // $("#gifload").hide();
     chart = new Highcharts.StockChart({
         chart: {
@@ -288,7 +288,7 @@ $.ajax(settings).done(function(response) {
             zoomType: 'x'
         },
         title: {
-            text: 'Playback Trend'
+            text: 'Playback History'
         },
         subtitle: {
             text: ''
@@ -381,7 +381,17 @@ $.ajax(settings).done(function(response) {
                 "type": "column",
                 "color": "#01A451",
                 "xAxis": 0,
-                "data": dataa.data.ams2prac,
+                "data": dataa.data.Practice_Count,
+                dataGrouping: {
+                    enabled: false,
+                }
+            },
+            {
+                "name": "Cumulative Practice Count",
+                "type": "line",
+                "color": "#FF9933",
+                "xAxis": 0,
+                "data": dataa.data.Practice_Count_Cumsum,
                 dataGrouping: {
                     enabled: false,
                 }
@@ -479,6 +489,156 @@ $.ajax(settings).done(function (response) {
         });
     });
 });
+
+
+var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": '/AMS_Login_HistoryAPI',
+    "method": "GET"
+}
+$.ajax(settings).done(function (response) {
+    var dataa = JSON.parse(response);
+    console.log(dataa);
+    chart = new Highcharts.StockChart({
+        chart: {
+            renderTo: 'container4',
+            zoomType: 'x'
+        },
+        title: {
+            text: 'Login History'
+        },
+        subtitle: {
+            text: ''
+        },
+        credits: {
+            enabled: false,
+        },
+        xAxis: [{
+            type: 'datetime',
+            events: {
+                afterSetExtremes() {
+                    let bottomAxis = this,
+                        topAxis = this.chart.xAxis[1],
+                        diferenciaMin = Math.abs(bottomAxis.dataMin - bottomAxis.min),
+                        diferenciaMax = Math.abs(bottomAxis.dataMax - bottomAxis.max);
+                    topAxis.setExtremes(topAxis.dataMin + diferenciaMin, topAxis.dataMax - diferenciaMax, true)
+                }
+            },
+            labels: {
+                formatter: function() {
+                    return Highcharts.dateFormat(' %e,%b', this.value);
+                }
+
+            }
+        }, {
+            type: 'datetime',
+            labels: {
+                formatter: function() {
+                    return Highcharts.dateFormat(' %e,%b', this.value);
+                }
+
+            },
+            opposite: true,
+            visible: false
+        }],
+        yAxis: {
+            title: {
+                text: ''
+            },
+            visible: true,
+            opposite: false,
+            showLastLabel: true,
+            labels: {
+                enabled: true,
+                format: "{value}",
+                align: "right"
+            },
+        },
+        tooltip: {
+            pointFormatter: function(){
+                return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
+            }
+        },
+        legend: {
+            enabled: true,
+            itemStyle: {
+                fontSize: '10px',
+                fontWeight: '500'
+            }
+        },
+        navigator: {
+            enabled: true
+        },
+        rangeSelector: {
+            inputEnabled: false,
+            enabled: true
+        },
+        scrollbar: {
+            enabled: true
+        },
+        navigation: {
+            buttonOptions: {
+                enabled: true
+            }
+        },
+        plotOptions: {
+            column: {
+                stacking: 'normal'
+
+            },
+            series: {
+                marker: {
+                    enabled: false
+                }
+            }
+        },
+        series: [
+            {
+                "name": "Login User Count",
+                "type": "column",
+                "color": "#01A451",
+                "xAxis": 0,
+                "data": dataa.login_user_count,
+                dataGrouping: {
+                    enabled: false,
+                }
+            },
+            {
+                "name": "Login Count",
+                "type": "column",
+                "color": "#8AE02B",
+                "xAxis": 0,
+                "data": dataa.login_count,
+                dataGrouping: {
+                    enabled: false,
+                }
+            },
+            {
+                "name": "Cumulative Login User Count",
+                "type": "line",
+                "color": "#FF8300",
+                "xAxis": 0,
+                "data": dataa.usercount_cum_sum,
+                dataGrouping: {
+                    enabled: false,
+                }
+            },
+            {
+                "name": "Cumulative Login Count",
+                "type": "line",
+                "color": "#C35214",
+                "xAxis": 0,
+                "data": dataa.login_cum_sum,
+                dataGrouping: {
+                    enabled: false,
+                }
+            },
+        ]
+    });
+
+});
+
 
 
 // shows tables data when click on cards

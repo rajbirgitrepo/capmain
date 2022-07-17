@@ -209,7 +209,7 @@
   height: 1.2em;
   position: absolute;
   left: calc(4% - 0.75em);
-  top: calc(99% - 0.75em);
+  top: calc(97% - 0.75em);
   border: 0.15em solid transparent;
   border-right-color: #00A651;
   border-radius: 50%;
@@ -585,7 +585,7 @@
         <section class="statistics">
             <div class="container-fluid">
                 <div class="col-md-3" title="" id="school_count">
-                    <div class="boxExecutive" style="padding-bottom: 35px;">
+                    <div class="boxExecutive" style="padding-bottom: 20px;">
                         <div>
                             <img src="/static/images/Bar_Chartnew.png" class="image">
                             <p style="font-size: 11px;">School Count</p>
@@ -614,10 +614,12 @@
                                 <p class="boxvalue" style="color: green;font-size: 11px !important;">View Upcoming Renewal <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 </p>
                             </a>
-                            <p style="font-size:11px; float:right; margin-top:8px;">
-                                <!-- <span><strong>Update:</strong></span> -->
-                                <span id="updateCard1" style="margin-left:0px;"></span>
-                            </p>
+                            <div>
+                                <p style="font-size:11px; float:right; margin-top:8px;">
+                                    <span id="updateCard1" style="margin-left:0px;"></span>
+                                </p>
+                            </div>
+                            
                             <br />
                         </div>
                     </div>
@@ -625,7 +627,7 @@
 
 
                 <div class="col-md-3" title="" id="total_students">
-                    <div class="boxExecutive" style="padding-bottom: 35px;">
+                    <div class="boxExecutive" style="padding-bottom: 20px;">
                         <div>
                             <img src="/static/images/Bar_Chartnew.png" class="image">
                             <p style="font-size: 11px;">Total Students</p>
@@ -654,16 +656,18 @@
                                 <p class="boxvalue" style="color: green;font-size: 11px !important;">View Upcoming Renewal <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 </p>
                             </a>
-                            <p style="font-size:11px; float:right; margin-top:8px;">
-                                <!-- <span><strong>Update:</strong></span> -->
-                                <span id="updateCard2" style="margin-left:0px;"></span>
-                            </p>
+                            <div>
+                                <p style="font-size:11px; float:right; margin-top:8px;">
+                                    <span id="updateCard2" style="margin-left:0px;"></span>
+                                </p>
+                            </div>
+                            
                             <br />
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3" title="" id="total_usercount">
-                    <div class="boxExecutive" style="padding-bottom: 16px;">
+                    <div class="boxExecutive" style="padding-bottom: 20px;">
                         <div>
                             <img src="/static/images/Bar_Chartnew.png" class="image">
                             <p style="font-size: 11px;">Total Usercount</p>
@@ -688,13 +692,14 @@
                             <p class="boxHeading2">Playback Count</p>
                             <p class="boxvalue" id="neverlogged"></p>
                             <button onclick="refreshCard3()" style="border: none; background: transparent; 
-                                position: absolute; left: 32px; bottom: 8px;">
+                                position: absolute; left: 35px; bottom: 8px;">
                                 <i class="fa fa-refresh refresh-btn" id="refresh3" aria-hidden="true"></i>
                             </button>
-                            <p style="font-size:11px; float:right;">
-                                <!-- <span><strong>Update:</strong></span> -->
-                                <span id="updateCard3" style="margin-left:0px;"></span>
-                            </p>
+                            <div style="position:absolute; bottom:2px; right: 30px;">
+                                <p style="font-size:11px; float:right;">
+                                    <span id="updateCard3" style="margin-left:0px;"></span>
+                                </p>
+                            </div>
                             <br />
                             <br />
                         </div>
@@ -746,6 +751,9 @@
                                      float: right;">View PLAYBACK ANALYTICS <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 </p>
                             </a>
+                            <p style="font-size:11px; float:right; color: #000;">
+                                <span id="updatePlaybackTrend"></span>
+                            </p>
                             <br />
                         </div>
                   
@@ -769,6 +777,9 @@
                                     float: right;">View PLAYBACK ANALYTICS <i class="fa fa-chevron-right" aria-hidden="true"></i>
                                 </p>
                             </a>
+                            <p style="font-size:11px; float:right; color: #000;">
+                                <span id="updatePlaybackActiveUser"></span>
+                            </p>
                             <br />
                         </div>
                     </div>
@@ -797,9 +808,12 @@
                     </button>
                     <a href="Practice_Analytics">
                         <p class="boxvalue" style="color: green;font-size: 11px !important;margin: 0 4px;
-        float: right;">View PLAYBACK ANALYTICS <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                            float: right;">View PLAYBACK ANALYTICS <i class="fa fa-chevron-right" aria-hidden="true"></i>
                         </p>
                     </a>
+                    <p style="font-size:11px; float:right; color: #000;">
+                        <span id="updatePlaybackHistory"></span>
+                    </p>
                     <br />
                 </div>
             </div>
@@ -814,18 +828,26 @@
                         <div style="height: 630px; width: 100%; border-radius: 20px; margin-top:20px; background-color: #ffffff;
                                 box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
                             <div id="container35" title="" style="height: 600px; border-radius: 20px;"></div>
+                            
                             <button onclick="refreshAveragePlaybackChart()" style="border: none; background: transparent; margin-left: 38px;">
                                 <i class="fa fa-refresh refresh-btn-chart4" id="refreshChart4" aria-hidden="true"></i>
                             </button>
+                            <p style="font-size:11px; float:right; color:#000; margin-right: 20px;">
+                                <span id="updateAverageTrend"></span>
+                            </p>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div style="height: 630px; width: 100%; border-radius: 20px; margin-top:20px; background-color: #ffffff;
                             box-shadow: 2px 10px 20px rgba(0, 0, 0, 0.1);">
                         <div id="container36" title="" style="height: 600px; border-radius: 20px;"></div>
+
                         <button onclick="refreshTopDistrictChart()" style="border: none; background: transparent; margin-left: 38px;">
                             <i class="fa fa-refresh refresh-btn-chart5" id="refreshChart5" aria-hidden="true"></i>
                         </button>
+                        <p style="font-size:11px; float:right; color:#000; margin-right: 20px;">
+                            <span id="updateTopDistrictChart"></span>
+                        </p>
                     </div>
                         
                     </div>

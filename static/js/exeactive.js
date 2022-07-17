@@ -85,7 +85,7 @@ function refreshCard3(){
         url: "/excecutivecount_refresh",
         method: "GET",
         success: function() {
-            RefreshBtn2.classList.remove("loading");
+            RefreshBtn3.classList.remove("loading");
             location.reload(true);
             // console.log("api success")
         },
@@ -241,6 +241,9 @@ function playbackTrendChart2(selectValue2, t) {
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
         // console.log(dataa[0].bar, "data");
+        // console.log(dataa);
+        // console.log(dataa[0].update);
+        $("#updatePlaybackTrend").text(dataa[0].update);
 
         Highcharts.chart("container1", {
             chart: {
@@ -387,7 +390,9 @@ function playbackTrendChart(selectValue, t) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
+        $("#updatePlaybackActiveUser").text(dataa[0].update);
         // console.log(dataa[0], "data")
+        // console.log(dataa[0].update);
 
         Highcharts.chart('container33', {
             chart: {
@@ -525,6 +530,7 @@ function playbackTrendChart3(selectValue3, tx) {
     };
     $.ajax(settings).done(function(response) {
         var dataa = JSON.parse(response);
+        $("#updatePlaybackHistory").text(dataa.update);
         // console.log(dataa);
         chart = new Highcharts.StockChart({
             chart: {
@@ -702,6 +708,8 @@ var settings = {
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
+    // console.log(dataa);
+    $("#updateAverageTrend").text(dataa[0].update);
     // console.log(dataa[0].bar, "data")
 
     Highcharts.chart('container35', {
@@ -791,6 +799,8 @@ var settings = {
 }
 $.ajax(settings).done(function(response) {
     var dataa = JSON.parse(response);
+    $("#updateTopDistrictChart").text(dataa.update);
+    // console.log(dataa);
     // console.log(dataa.Playbacks, "data")
 
     Highcharts.chart('container36', {
