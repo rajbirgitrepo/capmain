@@ -79398,7 +79398,7 @@ def AMS_Actice_Users_TableAPI():
 
 
 
-@app.route('/AMS_Playback_HistoryAPI/charttype')
+@app.route('/AMS_Playback_HistoryAPI/<charttype>')
 def AMS_PlaybackHistoryAPI(charttype): 
 
     client = MongoClient('mongodb://admin:F5tMazRj47cYqm33e@35.88.43.45:27017/')
