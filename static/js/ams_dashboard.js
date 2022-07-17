@@ -272,133 +272,153 @@ $.ajax(settings).done(function(response) {
 });
 
 
-var settings = {
-    "async": true,
-    "crossDomain": true,
-    "url": '/AMS_Playback_HistoryAPI',
-    "method": "GET"
-}
-$.ajax(settings).done(function(response) {
-    var dataa = JSON.parse(response);
-    console.log(dataa, 'Playback Trend'); 
-    // $("#gifload").hide();
-    chart = new Highcharts.StockChart({
-        chart: {
-            renderTo: 'container2',
-            zoomType: 'x'
+playbackHistoryChart('Playback', 'Playback')
+$("#playback_historyChart").val('Playback');
+$(document).on('change', '#playback_historyChart', function() {
+    $('#container2').empty();
+    // console.log(this.value)
+    if (this.value == 'Practice') {
+        playbackHistoryChart(this.value, 'Practice');
+    } else {
+        playbackHistoryChart(this.value, 'Playback');
+    }
+});
+function playbackHistoryChart(selectValue, t) {
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "/AMS_Playback_HistoryAPI/" + selectValue,
+        "method": "GET",
+        success: function() {
+            // console.log("Success");
         },
-        title: {
-            text: 'Playback History'
-        },
-        subtitle: {
-            text: ''
-        },
-        credits: {
-            enabled: false,
-        },
-        xAxis: [{
-            type: 'datetime',
-            events: {
-                afterSetExtremes() {
-                    let bottomAxis = this,
-                        topAxis = this.chart.xAxis[1],
-                        diferenciaMin = Math.abs(bottomAxis.dataMin - bottomAxis.min),
-                        diferenciaMax = Math.abs(bottomAxis.dataMax - bottomAxis.max);
-                    topAxis.setExtremes(topAxis.dataMin + diferenciaMin, topAxis.dataMax - diferenciaMax, true)
-                }
+        error: function(){
+            // console.log("Errors");
+        }
+    }
+    $.ajax(settings).done(function(response) {
+        var dataa = JSON.parse(response);
+        // console.log(dataa, 'Playback History'); 
+        // $("#gifload").hide();
+        chart = new Highcharts.StockChart({
+            chart: {
+                renderTo: 'container2',
+                zoomType: 'x'
             },
-            labels: {
-                formatter: function() {
-                    return Highcharts.dateFormat(' %e,%b', this.value);
-                }
-
-            }
-        }, {
-            type: 'datetime',
-            labels: {
-                formatter: function() {
-                    return Highcharts.dateFormat(' %e,%b', this.value);
-                }
-
-            },
-            opposite: true,
-            visible: false
-        }],
-        yAxis: {
             title: {
+                text: t + " History",
+            },
+            subtitle: {
                 text: ''
             },
-            visible: true,
-            opposite: false,
-            showLastLabel: true,
-            labels: {
+            credits: {
+                enabled: false,
+            },
+            xAxis: [{
+                type: 'datetime',
+                events: {
+                    afterSetExtremes() {
+                        let bottomAxis = this,
+                            topAxis = this.chart.xAxis[1],
+                            diferenciaMin = Math.abs(bottomAxis.dataMin - bottomAxis.min),
+                            diferenciaMax = Math.abs(bottomAxis.dataMax - bottomAxis.max);
+                        topAxis.setExtremes(topAxis.dataMin + diferenciaMin, topAxis.dataMax - diferenciaMax, true)
+                    }
+                },
+                labels: {
+                    formatter: function() {
+                        return Highcharts.dateFormat(' %e,%b', this.value);
+                    }
+    
+                }
+            }, {
+                type: 'datetime',
+                labels: {
+                    formatter: function() {
+                        return Highcharts.dateFormat(' %e,%b', this.value);
+                    }
+    
+                },
+                opposite: true,
+                visible: false
+            }],
+            yAxis: {
+                title: {
+                    text: ''
+                },
+                visible: true,
+                opposite: false,
+                showLastLabel: true,
+                labels: {
+                    enabled: true,
+                    format: "{value}",
+                    align: "right"
+                },
+            },
+            tooltip: {
+                pointFormatter: function() {
+                    return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
                 enabled: true,
-                format: "{value}",
-                align: "right"
+                itemStyle: {
+                    fontSize: '10px',
+                    fontWeight: '500'
+                }
             },
-        },
-        tooltip: {
-            pointFormatter: function() {
-                return '<span style="color:' + this.series.color + '">' + this.series.name + '</span>: <b>' + Highcharts.numberFormat(this.y, 2);
-            }
-        },
-        legend: {
-            enabled: true,
-            itemStyle: {
-                fontSize: '10px',
-                fontWeight: '500'
-            }
-        },
-        navigator: {
-            enabled: true
-        },
-        rangeSelector: {
-            inputEnabled: false,
-            enabled: true
-        },
-        scrollbar: {
-            enabled: true
-        },
-        navigation: {
-            buttonOptions: {
+            navigator: {
                 enabled: true
-            }
-        },
-        plotOptions: {
-            column: {
-                stacking: 'normal'
-
             },
-            series: {
-                marker: {
-                    enabled: false
-                }
-            }
-        },
-        series: [
-            {
-                "name": "Practice Count",
-                "type": "column",
-                "color": "#01A451",
-                "xAxis": 0,
-                "data": dataa.data.Practice_Count,
-                dataGrouping: {
-                    enabled: false,
+            rangeSelector: {
+                inputEnabled: false,
+                enabled: true
+            },
+            scrollbar: {
+                enabled: true
+            },
+            navigation: {
+                buttonOptions: {
+                    enabled: true
                 }
             },
-            {
-                "name": "Cumulative Practice Count",
-                "type": "line",
-                "color": "#FF9933",
-                "xAxis": 0,
-                "data": dataa.data.Practice_Count_Cumsum,
-                dataGrouping: {
-                    enabled: false,
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+    
+                },
+                series: {
+                    marker: {
+                        enabled: false
+                    }
                 }
             },
-        ]
+            series: [
+                {
+                    "name": "Practice Count",
+                    "type": "column",
+                    "color": "#01A451",
+                    "xAxis": 0,
+                    "data": dataa.Practice_Count,
+                    dataGrouping: {
+                        enabled: false,
+                    }
+                },
+                {
+                    "name": "Cumulative Practice Count",
+                    "type": "line",
+                    "color": "#FF9933",
+                    "xAxis": 0,
+                    "data": dataa.Practice_Count_Cumsum,
+                    dataGrouping: {
+                        enabled: false,
+                    }
+                },
+            ]
+        });
     });
-});
+
+}
 
 
 var settings = {
