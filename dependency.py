@@ -91,6 +91,7 @@ disdic1={
 df2 = DataFrame(list(db.district_master.aggregate([
 {'$project':{'_id':1,'DISTRICT_NAME':1 }}
 ])))
+df2["_id"] = df2._id.astype(str)
 disdic2 = dict(df2.values)
 
 practice_cond_dictonary_list=[{'$project':{
