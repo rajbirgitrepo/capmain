@@ -10913,7 +10913,7 @@ def heat_district(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -11067,7 +11067,7 @@ def heat_district_family_active(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -11219,7 +11219,7 @@ def heat_district_teachers_active(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -11372,7 +11372,7 @@ def heat_district_teachers_prac(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -11525,7 +11525,7 @@ def heat_district_family_prac(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -11678,7 +11678,7 @@ def heatmap_prac_district(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -11927,7 +11927,7 @@ def schwiseucc(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
@@ -12263,7 +12263,7 @@ def schwisepc(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
@@ -13307,7 +13307,7 @@ def monthwisepc(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
     pre_start= myDatetime1 - relativedelta(years=1)
@@ -13688,7 +13688,7 @@ def user_practice_90days(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
@@ -14037,7 +14037,7 @@ def last_practice_90days_(districtid):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     
 #     myDatetime1 = dateutil.parser.parse(startdate)
 #     myDatetime2 = dateutil.parser.parse(enddate)
@@ -14368,7 +14368,7 @@ def user_logins_90days(districtid):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     df = DataFrame(list(collection.aggregate([
     {"$match":
      {'$and': [
@@ -14439,7 +14439,7 @@ def topusers_practice(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -14540,7 +14540,7 @@ def dis_schoolrating_csy__(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -14620,7 +14620,7 @@ def dis_sentiment_pie(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -14719,7 +14719,7 @@ def dis_sentiment_pie_table(districtid,table_type,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -15009,7 +15009,7 @@ def district_Date_table(districtid,startdate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     print(district)
     startdate= dateutil.parser.parse(str(startdate))
     enddat= dateutil.parser.parse(str(startdate))
@@ -15957,7 +15957,7 @@ def district_user_table_teacher(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -16194,7 +16194,7 @@ def district_user_table_parent(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
 
@@ -16432,7 +16432,7 @@ def district_school_table(districtid,startdate,enddate):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     myDatetime1 = dateutil.parser.parse(startdate)
     myDatetime2 = dateutil.parser.parse(enddate)
     
@@ -54875,7 +54875,7 @@ def ddt_card(districtid):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
 
     #school summary df
     username = urllib.parse.quote_plus('admin')
@@ -55153,7 +55153,7 @@ def ddt_chart(districtid):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
 
     #school summary df
     username = urllib.parse.quote_plus('admin')
@@ -55455,7 +55455,7 @@ def ddt_overall_table(districtid,practype):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
@@ -55936,7 +55936,7 @@ def ddt_CSY_table(districtid,practype):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     username = urllib.parse.quote_plus('admin')
     password = urllib.parse.quote_plus('F5tMazRj47cYqm33e')
     client = MongoClient("mongodb://%s:%s@35.88.43.45:27017/" % (username, password))
@@ -63175,7 +63175,7 @@ def feedback_district_chart__(datestr,districtid):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
     
     username=urllib.parse.quote_plus('admin')
     password=urllib.parse.quote_plus('F5tMazRj47cYqm33e')
@@ -66035,7 +66035,7 @@ def dis_streak_report(districtid):
     if districtid in disdic1:
         district=disdic1[districtid]
     else:
-        district=disdic2[ObjectId(districtid)]
+        district=disdic2[districtid]
 #     collection = db.school_master.aggregate([
 #     {"$match":
 #         {"$and":[
