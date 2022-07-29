@@ -1,0 +1,22 @@
+.custom-card{
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%);
+    border-radius: 10px;
+}
+.schoolCount{font-size: 12px;}
+.refreshBtn{
+    color: #00A651;
+    border: none;
+    background-color: transparent;
+}
+.refreshBtn{vertical-align: top;}
+.refreshBtn .fa-refresh{font-size: 12px;}
+.updatedText{font-size: 10px; color: #a5a5a5;}
+.dropdown-divider{margin: 0;}
+.counts{ 
+    margin-left: 5px;
+    margin-right: 5px;
+    font-weight: 700;
+    color: #00A651;
+}
+
+  

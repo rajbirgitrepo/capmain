@@ -703,7 +703,7 @@ function createDynamic(url) {
         $('#dataTable').append('</tbody></table>');
         dataTab();
 
-        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id="dataTable1"><thead><thead><tr><th>PURPOSE</th><th>RECEIVER EMAIL</th><th>SENDER EMAIL</th><th>SIGNUP DATE</th></tr></thead>><tbody>');
+        $('#next1').prepend('<table class="table table-striped custab table-fixed" style="display:none;" id="dataTable1"><thead><thead><tr><th>PURPOSE</th><th>RECEIVER EMAIL</th><th>SENDER EMAIL</th><th>SIGNUP DATE</th></tr></thead><tbody>');
         for (var i = 0; i < data1.data.length; i++) {
 
             var datain = data1.data[i];

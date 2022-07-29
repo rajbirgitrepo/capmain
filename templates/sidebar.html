@@ -1,0 +1,168 @@
+
+{% block sidebar %}
+<nav class="navbar navbar-inverse navbar-fixed-left sidenavbar">
+    <div class="container">
+        <!-- <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-controls="navbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+        </div> -->
+        <div class="logo_img">
+            <a href="homepage">
+                <img src="/static/images/compasslogo.png" alt="logo image">
+            </a>
+        </div>
+        <div id="navbar" class="navbar-collapse">
+            <ul class="nav navbar-nav categories">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true">
+                        <!-- <i class="fa fa-home" aria-hidden="true"></i> -->
+                        <i class="fa-solid fa-house"></i>
+                        <br>Overall
+                    </a>
+                    <ul class="dropdown-menu overall fade" id="showFadeMenu">    
+                        <li><a href="Executive_Dashboard">Summary</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Daily</a></li>  
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Weekly</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Live</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="navbarDropdown2" data-toggle="dropdown" aria-haspopup="true">
+                        <!-- <i class="fa fa-home" aria-hidden="true"></i> -->
+                        <i class="fa-solid fa-briefcase"></i>
+                        <br>Districts
+                    </a>
+                    <ul class="dropdown-menu districts" id="showFadeMenu2">
+                        <li><a href="#">DP-360</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Mini 360</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">E Score</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="navbarDropdown3" data-toggle="dropdown" aria-haspopup="true">
+                        <i class="fa-solid fa-award-simple"></i>
+                        <!-- <i class="fa-thin fa-award-simple"></i> -->
+                        <br>School
+                    </a>
+                    <ul class="dropdown-menu schools" id="showFadeMenu3">
+                        <li><a href="#">School Search</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">School Summary</a></li>
+                        <div class="dropdown-divider"></div>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="navbarDropdown4" data-toggle="dropdown" aria-haspopup="true">
+                        <i class="fa-solid fa-circle-play"></i>
+                        <br>Playback
+                    </a>
+                    <ul class="dropdown-menu playback" id="showFadeMenu4">
+                        <li><a href="#">Playbak Analytics</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">App Playbak Analytics</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Program Wise Analytics</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="navbarDropdown5" data-toggle="dropdown" aria-haspopup="true">
+                        <i class="fa-solid fa-dollar-sign"></i>
+                        <br>Revenue
+                    </a>
+                    <ul class="dropdown-menu revenue"  id="showFadeMenu5">
+                        <li><a href="#">Revenue Overview</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Donation</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">School</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Bill Me Later</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="navbarDropdown6" data-toggle="dropdown" aria-haspopup="true">
+                        <!-- <i class="fa fa-home" aria-hidden="true"></i> -->
+                        <i class="fa-regular fa-comment"></i>
+                        <br>Feedback
+                    </a>
+                    <ul class="dropdown-menu feedbacks" id="showFadeMenu6">
+                        <li><a href="#">Feedback Ananlytics</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Sentiment Analysis</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Feedback Trends</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="navbarDropdown7" data-toggle="dropdown" aria-haspopup="true">
+                        <!-- <i class="fa fa-home" aria-hidden="true"></i> -->
+                        <i class="fa-regular fa-star"></i>
+                        <br>Home App
+                    </a>
+                    <ul class="dropdown-menu homeapp" id="showFadeMenu7">
+                        <li><a href="#">Home App Overview</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Home App School</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Home App Analytics</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a href="#">Home Survey Analysis</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+   
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    // $("#navbarDropdown").click(function(){
+    //     $("#showFadeMenu").fadeToggle(300);
+    // });
+    // $("#navbarDropdown2").click(function(){
+    //     $("#showFadeMenu2").slideToggle(500);
+    // });
+    // $("#navbarDropdown3").click(function(){
+    //     $("#showFadeMenu3").slideToggle(500);
+    // });
+    // $("#navbarDropdown4").click(function(){
+    //     $("#showFadeMenu4").slideToggle(500);
+    // });
+    // $("#navbarDropdown5").click(function(){
+    //     $("#showFadeMenu5").slideToggle(500);
+    // });
+    // $("#navbarDropdown6").click(function(){
+    //     $("#showFadeMenu6").slideToggle(500);
+    // });
+    // $("#navbarDropdown7").click(function(){
+    //     $("#showFadeMenu7").slideToggle(500);
+    // });
+
+
+    var selector = '.dropdown a';
+
+    $(selector).on('click', function(){
+        $(selector).removeClass('show');
+        $(this).addClass('show');
+    });
+
+    // $(".dropdown").click(function(){
+    //     $("#main_contents").addClass("margin-left");
+    //     $(this).removeClass("margin-left");
+    // });
+
+</script>
+
+{% endblock extra_js %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %} 
+{% block title %}Cap i7{% endblock %} 
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/card.css') }}">
+{% endblock extra_css %}
+
+{% block content %} {% include 'header.html' %}
+{% include 'sidebar.html' %}
+
+<section id="main_contents" class="bg_lightgray" style="display: none;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row p-4">
+                    <div class="col-md-3">
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div class="schoolCount"><strong>School Count</strong>
+                                        <button class="refreshBtn">
+                                            <i class="fa fa-refresh refresh-btn" id="refresh1" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <p class="updatedText">Updated 1hrs ago</p>
+                                    </div> 
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="d-flex justify-content-between">
+                                    <p class="">Community</p>
+                                    <p>07</p>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="d-flex justify-content-between">
+                                    <p class="">Districts</p>
+                                    <p>10</p>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="d-flex justify-content-between">
+                                    <p class="">Explorer</p>
+                                    <p>06</p>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="d-flex">
+                                    <p class="noti" style="color: #00A651;">N</p>
+                                    <p class="counts" style="color: #00A651;"><span>206</span>Schools are expiring this month</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+<script>
+    $("#overAll").click(function(){
+        $("#sidebar_items").css("display", "block");
+        $("#Overall_dashbaord").css("display", "block");
+        $("#sidebar_items").toggleClass("d-none");
+        // $("#sidebar_items").css("width", "100%");
+        
+    });
+</script>
+{% endblock extra_js %}
+
+
+

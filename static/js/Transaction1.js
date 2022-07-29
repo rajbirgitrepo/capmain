@@ -173,22 +173,22 @@ function cardscount(a, b) {
         $("#t7").text(dataa.amount.Payment_Mode[6]);
         $("#t8").text(dataa.amount.Payment_Mode[7]);
         $("#PAYLATER").text(
-            "$ " + parseFloat(dataa.amount.Payment_Mode_Amount[0]).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+            "$ " + parseFloat(dataa.amount_new.DISTRICT).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
         );
         $("#PROMOCODE").text(
-            "$ " + parseFloat(dataa.amount.Payment_Mode_Amount[1]).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+            "$ " + parseFloat(dataa.amount_new.FOUNDATION).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
         );
         $("#SQUARE_PAYMENT").text(
-            "$ " + parseFloat(dataa.amount.Payment_Mode_Amount[2]).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+            "$ " + parseFloat(dataa.amount_new.SCHOOL).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
         );
         $("#PAYPAL").text(
-            "$ " + parseFloat(dataa.amount.Payment_Mode_Amount[3]).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+            "$ " + parseFloat(dataa.amount_new.DONATION).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
         );
         $("#GRANT").text(
-            "$ " + parseFloat(dataa.amount.Payment_Mode_Amount[4]).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+            "$ " + parseFloat(dataa.amount_new.MOBILE).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
         );
         $("#").text(
-            "$ " + parseFloat(dataa.amount.Payment_Mode_Amount[5]).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
+            "$ " + parseFloat(dataa.amount_new.Payment_Mode_Amount[5]).toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")
         );
     });
 }

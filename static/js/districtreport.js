@@ -1965,6 +1965,7 @@ function distselect(distid) {
     // bubble2(c);
     idtype(c, a, b);
 }
+
 $("#heat").val(4);
 
 function idtype(a) {
@@ -2025,6 +2026,20 @@ function cardcount(id, a, b) {
         $("#engaged_canvas_lsy").text(dataa.canvas_eng_lsy);
         $("#practiceCount_canvas").text(dataa.canvas_practice);
         $("#mindful_minutes_canvas").text(dataa.canvas_mindful);
+        var update = (dataa.update);
+        // console.log(update);
+        if(update == update){
+            // console.log("Success", update);
+            $("#update1").text(dataa.update);
+            $("#update2").text(dataa.update);
+            $("#update3").text(dataa.update);
+            $("#update4").text(dataa.update);
+            $("#update5").text(dataa.update);
+            $("#update6").text(dataa.update);
+        }
+        else{}
+       
+
         // $("#schoology").text(dataa);
         // $("#clever").text(dataa);
         // $("#canvas").text(dataa);

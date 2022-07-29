@@ -80366,6 +80366,13 @@ def Local_Disctrictfilter():
     return render_template('Local_Disctrictfilter.html')
 
 
+@app.route('/mydashboard')
+def my_dashboard():
+    if not g.user:
+        return redirect(url_for('login'))
+    return render_template('my_dashboard.html')    
+
+
 @app.route('/cap_profile_tracking', methods=['POST'])
 def profile_tracking():
     client_test = MongoClient('mongodb://admin:test!_2o20@52.37.152.224:27017/')
@@ -80423,4 +80430,4 @@ if __name__ == '__main__':
 
 
     sched.start()
-    app.run(debug=True,use_reloader=False)
+    app.run(debug=True,use_reloader=False, port=5001)
