@@ -1,19 +1,92 @@
 {% extends "base.html" %} 
 {% block title %}Cap i7{% endblock %} 
 {% block extra_css %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/card.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/card.css') }}">  
 {% endblock extra_css %}
 
 {% block content %} {% include 'header.html' %}
 {% include 'sidebar.html' %}
 
-<section id="main_contents" class="bg_lightgray" style="display: none;">
+<section id="main_contents" class="bg_lightgray">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                <div class="row p-4">
+            <div class="col-md-2 pl-0" id="show_list_items" style="display: none;">
+                <div class="nav-dropdown">
+                    <div id="dropdown1" style="display: none;">
+                        <ul class="side-nav-dropdown">    
+                            <li><a href="Executive_Dashboard">Summary</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Daily</a></li>  
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Weekly</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Live</a></li>
+                        </ul>
+                    </div>
+                    <div id="dropdown2" style="display: none;">
+                        <ul class="side-nav-dropdown">
+                            <li><a href="#">DP-360</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Mini 360</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">E Score</a></li>
+                        </ul>
+                    </div>
+                    <div id="dropdown3" style="display: none;">
+                        <ul class="side-nav-dropdown">
+                            <li><a href="#">School Search</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">School Summary</a></li>
+                            <div class="dropdown-divider"></div>
+                        </ul>
+                    </div>
+                    <div id="dropdown4" style="display: none;">
+                        <ul class="side-nav-dropdown">
+                            <li><a href="#">Playbak Analytics</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">App Playbak Analytics</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Program Wise Analytics</a></li>
+                        </ul>
+                    </div>
+                    <div id="dropdown5" style="display: none;">
+                        <ul class="side-nav-dropdown">
+                            <li><a href="#">Revenue Overview</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Donation</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">School</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Bill Me Later</a></li>
+                        </ul>
+                    </div>
+                    <div id="dropdown6" style="display: none;">
+                        <ul class="side-nav-dropdown">
+                            <li><a href="#">Feedback Ananlytics</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Sentiment Analysis</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Feedback Trends</a></li>
+                        </ul>
+                    </div>
+                    <div id="dropdown7" style="display: none;">
+                        <ul class="side-nav-dropdown">
+                            <li><a href="#">Home App Overview</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Home App School</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Home App Analytics</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a href="#">Home Survey Analysis</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-10">
+                <div class="row py-4 pr-4">
                     <div class="col-md-3">
-                        <div class="card custom-card">
+                       <div class="card custom-card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <div class="schoolCount"><strong>School Count</strong>
@@ -27,23 +100,23 @@
                                 </div>
                                 <div class="dropdown-divider"></div>
                                 <div class="d-flex justify-content-between">
-                                    <p class="">Community</p>
-                                    <p>07</p>
+                                    <p class="" style="font-size: 12px;">Community</p>
+                                    <p style="font-weight: 700;">07</p>
                                 </div>
                                 <div class="dropdown-divider"></div>
                                 <div class="d-flex justify-content-between">
-                                    <p class="">Districts</p>
-                                    <p>10</p>
+                                    <p class="" style="font-size: 12px;">Districts</p>
+                                    <p style="font-weight: 700;">10</p>
                                 </div>
                                 <div class="dropdown-divider"></div>
                                 <div class="d-flex justify-content-between">
-                                    <p class="">Explorer</p>
-                                    <p>06</p>
+                                    <p class="" style="font-size: 12px;">Explorer</p>
+                                    <p style="font-weight: 700;">06</p>
                                 </div>
                                 <div class="dropdown-divider"></div>
                                 <div class="d-flex">
-                                    <p class="noti" style="color: #00A651;">N</p>
-                                    <p class="counts" style="color: #00A651;"><span>206</span>Schools are expiring this month</p>
+                                    <p class="noti">N</p>
+                                    <p class="counts"><span>206</span>Schools are expiring this month</p>
                                 </div>
                             </div>
                         </div>
@@ -58,17 +131,8 @@
 {% endblock %}
 
 
-
 {% block extra_js %}
-<script>
-    $("#overAll").click(function(){
-        $("#sidebar_items").css("display", "block");
-        $("#Overall_dashbaord").css("display", "block");
-        $("#sidebar_items").toggleClass("d-none");
-        // $("#sidebar_items").css("width", "100%");
-        
-    });
-</script>
+
 {% endblock extra_js %}
 
 

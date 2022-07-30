@@ -19,6 +19,7 @@
   text-decoration: none;
   padding-top: 5px;
   padding-bottom: 5px;
+  display: block;
 }
 
 .navbar-inverse .navbar-nav > .open > a,
@@ -63,8 +64,7 @@ body {
   z-index: 1030;
 }
 
-.dropdown-menu {
-    /* margin-left:  17px; */
+/* .dropdown-menu {
     background-color: #ffffff;
     border-radius: 0px;
     border: none;
@@ -72,62 +72,86 @@ body {
     padding-left: 0px;
     box-shadow: 0 3px 10px rgb(0 0 0 / 5%);
     height: 100vh;
- }
- .dropdown-menu li{
+ } */
+
+ /* .dropdown-menu li{
     padding: 10px;
- }
- 
- .dropdown-menu.overall{
+ } */
+
+ /* .dropdown-menu.overall{
     top: -26px !important;
   }
   .dropdown-menu.districts{
-    top: -92px !important;
+    top: -97px !important;
   }
   .dropdown-menu.schools{
-    top: -158px !important;
+    top: -168px !important;
   }
   .dropdown-menu.playback{
-    top: -222px !important;
+    top: -239px !important;
   }
   .dropdown-menu.revenue{
-    top: -288px !important;
+    top: -310px !important;
   }
   .dropdown-menu.feedbacks{
-    top: -354px !important;
+    top: -381px !important;
   }
   .dropdown-menu.homeapp{
-    top: -420px !important;
-  }
+    top: -438px !important;
+  } */
+
+ul.categories li{
+  margin-bottom: 20px;
+}
+
+.nav-dropdown{
+    background-color: #ffffff;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 5%);
+    height: 100vh;
+}
+
+.side-nav-dropdown{
+  padding-left: 0px;
+  list-style: none;
+}
+.side-nav-dropdown li {
+  padding: 10px;
+}
+.side-nav-dropdown li a{
+  padding-bottom: 10px;
+  color: #7d7d81;
+  width: 180px;
+  font-size: 12px;
+  padding-left: 15px;
+  text-decoration: none;
+}
  
-.show{
+.active{
   background-color: #ffffff;
   color: #28282a !important;
 }
-.show a .fa-regular, .show a .fa-solid{
+.active a, .active a .fa-regular, .active a .fa-solid{
   color: #28282a !important;
 }
 
-/* .show .dropdown-toggle{
-  color: #28282a !important;
-} */
 
-/* .margin-left{margin-left: 150px;} */
-
- .dropdown-menu>li>a {
+ /* .dropdown-menu>li>a {
      padding-bottom: 10px;
      color: #7d7d81;
      width: 180px;
      font-size: 12px;
      padding-left: 15px;
-  }
-  .dropdown-menu>li>a:hover {
+  } */
+
+  /* .dropdown-menu>li>a:hover {
      background-color: transparent;
      color: #7d7d81;
      text-decoration: none;
-  }
- .dropdown-toggle {
+  } */
+
+ /* .dropdown-toggle {
      position: relative;
- }
+ } */
  
  .navbar-fixed-left,
  .navbar-fixed-right {
