@@ -88,11 +88,12 @@ ul.categories li{
   color: #28282a !important;
 }
 
-.margins{
-  margin-left: 150px; 
+#main_contents{
   -webkit-transition: .5s; 
   transition: .5s;
 }
+
+.margins{ margin-left: 150px; }
 
 #show_list_items{
   position: absolute; 
