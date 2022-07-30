@@ -24,4 +24,11 @@
 }
 .noti{color: #00A651;}
 
-  
+.flexItems{padding: 6px 0px;}
+.flexItems p:nth-child(1) {
+    font-size: 12px;
+}
+.flexItems p:nth-child(2) {
+    font-size: 14px;
+    font-weight: 700;
+}
