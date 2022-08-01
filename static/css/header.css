@@ -36,7 +36,7 @@
 .navbar.topnavbar{box-shadow: 0 3px 10px rgb(0 0 0 / 8%);}
 .navbar-brand span{color: #01A451; font-weight: 800;}
 .navbar.topnavbar .navbar-brand{margin-left: 1.5rem;}
-
+.logo-img {width: 72px;}
 
 /* search bar code */
 .form-inline{
@@ -70,7 +70,8 @@
   box-shadow: 0 3px 10px rgb(0 0 0 / 6%);
   border-radius: 10px;
   width: 110px;
-  height: 36px;
+  padding-top: 5px;
+  /* height: 36px; */
 }
 .insightNoti .notification, .insightNoti .insights{padding: 5px;}
 .insightNoti .insights{font-size: 12px; font-weight: 500; color: #717070;}
@@ -80,14 +81,15 @@
 }
 
 .red-notification-icon{
-background-color: #e84242;
-width: 8px;
-height: 8px;
-border-radius: 50%;
-position: absolute;
-top: 10px;
-right: 68px;
+  background-color: #e84242;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  right: 68px;
 }
+.notification{width: 28px; height: 28px;}
 
 
 

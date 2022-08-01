@@ -4,12 +4,13 @@
 }
 .schoolCount{font-size: 12px;}
 .refreshBtn{
-    color: #00A651;
+    /* color: #01A451; */
     border: none;
     background-color: transparent;
 }
 .refreshBtn{vertical-align: top;}
-.refreshBtn .fa-refresh{font-size: 12px;}
+.refreshBtn img{width: 12px;}
+/* .refreshBtn .fa-refresh{font-size: 12px;} */
 .updatedText{font-size: 10px; color: #a5a5a5;}
 .dropdown-divider{margin: 0;}
 .counts{ 
@@ -22,7 +23,8 @@
     font-weight: 700;
     margin-right: 5px;
 }
-.noti{color: #00A651;}
+.noti{width: 20px; height: 20px;}
+/* .noti{color: #00A651;} */
 
 .flexItems{padding: 6px 0px;}
 .flexItems p:nth-child(1) {
@@ -32,3 +34,15 @@
     font-size: 14px;
     font-weight: 700;
 }
+.schoolCountNumber p{
+    font-size: 24px;
+    font-weight: 600;
+}
+.percent{
+    background-color: #e9f7f0;
+    padding: 2px 5px;
+    border-radius: 3px;
+    margin-left: 5px;
+}
+.percent p{font-size: 10px; color: #01A451; font-weight: 700;}
+
