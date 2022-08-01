@@ -3,13 +3,9 @@
     border-radius: 10px;
 }
 .schoolCount{font-size: 12px;}
-.refreshBtn{
-    /* color: #01A451; */
-    border: none;
-    background-color: transparent;
-}
-.refreshBtn{vertical-align: top;}
-.refreshBtn img{width: 12px;}
+
+/* .refreshBtn{vertical-align: top;} */
+.refreshBtn{width: 12px; margin-left: 3px;}
 /* .refreshBtn .fa-refresh{font-size: 12px;} */
 .updatedText{font-size: 10px; color: #a5a5a5;}
 .dropdown-divider{margin: 0;}
